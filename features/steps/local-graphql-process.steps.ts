@@ -14,27 +14,18 @@ import {
   When,
 } from "@cucumber/cucumber";
 
+import {
+  isGraphqlProxyAvailable,
+  requireGraphqlProxyDir,
+  resolvePlexusCli,
+  resolvePythonForPlexus,
+} from "./plexus-runtime";
+
 setDefaultTimeout(60_000);
 
 const repoRoot = join(__dirname, "..", "..");
 const startScript = join(repoRoot, "scripts", "start-local-graphql.sh");
 const STDERR_CAPTURE_LIMIT = 8_000;
-
-const PLEXUS_ROOT_ERROR =
-  "PLEXUS_ROOT must be set to a Plexus checkout containing services/private-graphql-proxy";
-
-function requirePlexusRoot(): string {
-  const plexusRoot = process.env.PLEXUS_ROOT?.trim();
-  if (!plexusRoot) {
-    throw new Error(PLEXUS_ROOT_ERROR);
-  }
-  return plexusRoot;
-}
-
-function pythonInterpreter(): string {
-  const configured = process.env.PYTHON?.trim();
-  return configured || "python3";
-}
 
 function appendBoundedCapture(current: string, chunk: Buffer, limit: number): string {
   const next = current + chunk.toString();
@@ -142,13 +133,13 @@ async function startLocalGraphqlProcess(w: LocalGraphqlWorld): Promise<void> {
   assert.ok(w.dataDir, "data directory must be configured before starting");
   assert.ok(w.port, "port must be configured before starting");
 
-  const plexusRoot = requirePlexusRoot();
-  const python = pythonInterpreter();
+  const proxyDir = requireGraphqlProxyDir();
+  const python = resolvePythonForPlexus();
   const stderrCapture = { text: "" };
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    PLEXUS_ROOT: plexusRoot,
+    PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
     PLEXUS_DATA_DIR: w.dataDir,
     PLEXUS_GRAPHQL_HOST: "127.0.0.1",
     PLEXUS_GRAPHQL_PORT: String(w.port),
@@ -200,6 +191,15 @@ async function graphqlRequest(
 }
 
 Before(function (this: LocalGraphqlWorld) {
+  if (!isGraphqlProxyAvailable()) {
+    return "skipped";
+  }
+  try {
+    resolvePlexusCli();
+  } catch {
+    return "skipped";
+  }
+
   const w = getWorld(this);
   w.dataDir = undefined;
   w.port = undefined;
@@ -221,12 +221,13 @@ After(async function (this: LocalGraphqlWorld) {
 });
 
 Given("Plexus and Virtuus installed in the Python environment", async function () {
-  const plexusRoot = requirePlexusRoot();
-  const python = pythonInterpreter();
+  resolvePlexusCli();
+  const python = resolvePythonForPlexus();
+  const proxyDir = requireGraphqlProxyDir();
 
   const virtuusCheck = spawn(python, [
     "-c",
-    "import virtuus; import sys; print(virtuus.__version__)",
+    "import virtuus; print(virtuus.__version__)",
   ]);
   const virtuusOutput = await new Promise<string>((resolve, reject) => {
     let stdout = "";
@@ -244,20 +245,16 @@ Given("Plexus and Virtuus installed in the Python environment", async function (
   });
   assert.ok(virtuusOutput.length > 0, "virtuus must be importable");
 
-  const proxyDir = join(
-    plexusRoot,
-    "services",
-    "private-graphql-proxy",
-  );
-  const proxyCheck = spawn(python, [
-    "-c",
-    "from proxy.app import app; print('ok')",
-  ], {
-    env: {
-      ...process.env,
-      PYTHONPATH: proxyDir,
+  const proxyCheck = spawn(
+    python,
+    ["-c", "from proxy.app import app; print('ok')"],
+    {
+      env: {
+        ...process.env,
+        PYTHONPATH: proxyDir,
+      },
     },
-  });
+  );
   await new Promise<void>((resolve, reject) => {
     proxyCheck.on("error", reject);
     proxyCheck.on("close", (code) => {

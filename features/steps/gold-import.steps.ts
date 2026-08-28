@@ -29,6 +29,10 @@ import type {
   BenchmarkManifest,
 } from "../../tests/benchmark/schema";
 import { resolveAccountId } from "../../scripts/import-gold-annotations";
+import {
+  requireGraphqlProxyDir,
+  resolvePythonForPlexus,
+} from "./plexus-runtime";
 
 setDefaultTimeout(60_000);
 
@@ -39,9 +43,6 @@ const rejectedAnnotationId = "gold-import-fixture-rejected-positive";
 const startScript = join(repoRoot, "scripts", "start-local-graphql.sh");
 const importScript = join(repoRoot, "scripts", "import-gold-annotations.ts");
 const STDERR_CAPTURE_LIMIT = 8_000;
-
-const PLEXUS_ROOT_ERROR =
-  "PLEXUS_ROOT must be set to a Plexus checkout containing services/private-graphql-proxy";
 
 interface ItemMetadata {
   groundTruth?: string;
@@ -76,19 +77,6 @@ interface GoldImportWorld {
 
 function getWorld(context: unknown): GoldImportWorld {
   return context as GoldImportWorld;
-}
-
-function requirePlexusRoot(): string {
-  const plexusRoot = process.env.PLEXUS_ROOT?.trim();
-  if (!plexusRoot) {
-    throw new Error(PLEXUS_ROOT_ERROR);
-  }
-  return plexusRoot;
-}
-
-function pythonInterpreter(): string {
-  const configured = process.env.PYTHON?.trim();
-  return configured || "python3";
 }
 
 function appendBoundedCapture(current: string, chunk: Buffer, limit: number): string {
@@ -207,13 +195,13 @@ async function startLocalGraphqlProcess(w: GoldImportWorld): Promise<void> {
   assert.ok(w.dataDir, "data directory must be configured before starting");
   assert.ok(w.port, "port must be configured before starting");
 
-  const plexusRoot = requirePlexusRoot();
-  const python = pythonInterpreter();
+  const proxyDir = requireGraphqlProxyDir();
+  const python = resolvePythonForPlexus();
   const stderrCapture = { text: "" };
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    PLEXUS_ROOT: plexusRoot,
+    PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
     PLEXUS_DATA_DIR: w.dataDir,
     PLEXUS_GRAPHQL_HOST: "127.0.0.1",
     PLEXUS_GRAPHQL_PORT: String(w.port),

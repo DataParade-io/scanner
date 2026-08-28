@@ -62,26 +62,27 @@ Gherkin feature specs live under `features/` and are the source of truth for Ple
 
 See `features/README.md` and `tests/eval/README.md` for layout and metrics.
 
-### Local Plexus GraphQL (`PLEXUS_ROOT`)
+### Plexus evaluation
 
-Scenarios that start a local GraphQL host require `PLEXUS_ROOT` pointing at a Plexus checkout containing `services/private-graphql-proxy`. Optionally set `PYTHON` to select the interpreter.
+Feature specs and corpus eval use the installed **`plexus` CLI on PATH** (not `python -m plexus` and not `PLEXUS_ROOT`).
 
 ```bash
-export PLEXUS_ROOT=/path/to/Plexus
-export PLEXUS_DATA_DIR=/tmp/plexus-data   # optional
+command -v plexus   # must resolve
 pnpm run test:features
 ```
+
+Scenarios that start a local GraphQL host auto-discover `private-graphql-proxy` under `~/projects/Plexus` or `~/Projects/Plexus`. Override with `PLEXUS_GRAPHQL_PROXY_DIR` when needed.
 
 Start GraphQL manually:
 
 ```bash
-PLEXUS_ROOT=/path/to/Plexus ./scripts/start-local-graphql.sh
+PLEXUS_DATA_DIR=/tmp/plexus-data ./scripts/start-local-graphql.sh
 ```
 
 Corpus recall against materialized benchmark repos:
 
 ```bash
-PLEXUS_ROOT=/path/to/Plexus ./scripts/run-corpus-eval.sh
+./scripts/run-corpus-eval.sh
 ```
 
 ## CI and releases

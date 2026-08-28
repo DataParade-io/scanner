@@ -19,6 +19,12 @@ import {
   When,
 } from "@cucumber/cucumber";
 
+import {
+  requireGraphqlProxyDir,
+  resolvePlexusCli,
+  resolvePythonForPlexus,
+} from "./plexus-runtime";
+
 setDefaultTimeout(120_000);
 
 const repoRoot = join(__dirname, "..", "..");
@@ -40,9 +46,6 @@ const ACCOUNT_KEY = "local-eval";
 const SCORECARD_ID = "local-eval-scorecard";
 const SECTION_ID = "local-eval-section";
 const SCORE_ID = "local-eval-span-overlap";
-
-const PLEXUS_ROOT_ERROR =
-  "PLEXUS_ROOT must be set to a Plexus checkout containing services/private-graphql-proxy";
 
 const STDERR_CAPTURE_LIMIT = 8_000;
 
@@ -77,18 +80,6 @@ interface ScannerRecallWorld {
 
 function getWorld(context: unknown): ScannerRecallWorld {
   return context as ScannerRecallWorld;
-}
-
-function requirePlexusRoot(): string {
-  const plexusRoot = process.env.PLEXUS_ROOT?.trim();
-  if (!plexusRoot) {
-    throw new Error(PLEXUS_ROOT_ERROR);
-  }
-  return plexusRoot;
-}
-
-function pythonInterpreter(): string {
-  return process.env.PYTHON?.trim() || "python3";
 }
 
 function appendBoundedCapture(current: string, chunk: Buffer, limit: number): string {
@@ -201,13 +192,13 @@ async function startLocalGraphqlProcess(w: ScannerRecallWorld): Promise<void> {
   assert.ok(w.dataDir, "data directory must be configured before starting");
   assert.ok(w.port, "port must be configured before starting");
 
-  const plexusRoot = requirePlexusRoot();
-  const python = pythonInterpreter();
+  const proxyDir = requireGraphqlProxyDir();
+  const python = resolvePythonForPlexus();
   const stderrCapture = { text: "" };
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    PLEXUS_ROOT: plexusRoot,
+    PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
     PLEXUS_DATA_DIR: w.dataDir,
     PLEXUS_GRAPHQL_HOST: "127.0.0.1",
     PLEXUS_GRAPHQL_PORT: String(w.port),
@@ -428,14 +419,12 @@ async function runPlexusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
   assert.ok(w.datasetFile, "dataset file must be set");
   assert.ok(w.evalWorkDir, "evaluation work directory must be set");
 
-  const plexusRoot = requirePlexusRoot();
-  const python = pythonInterpreter();
+  const plexusCli = resolvePlexusCli();
   const findingsCommand =
     `cd ${repoRoot} && node -r ts-node/register scripts/scan-findings.ts --root {root}`;
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    PYTHONPATH: plexusRoot,
     PLEXUS_API_URL: `${w.baseUrl}/graphql`,
     PLEXUS_GRAPHQL_AUTH_MODE: "api_key",
     PLEXUS_API_KEY: "local-eval-key",
@@ -445,10 +434,8 @@ async function runPlexusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
   };
 
   const result = spawnSync(
-    python,
+    plexusCli,
     [
-      "-m",
-      "plexus",
       "evaluate",
       "accuracy",
       "--yaml",

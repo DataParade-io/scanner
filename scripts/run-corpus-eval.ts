@@ -4,8 +4,7 @@
  * persist an Evaluation record in local Plexus GraphQL (Virtuus).
  *
  * Usage:
- *   PLEXUS_ROOT=/path/to/Plexus \
- *   npx ts-node scripts/run-corpus-eval.ts \
+ *   pnpm exec ts-node scripts/run-corpus-eval.ts \
  *     --corpus-dir /path/to/tests/benchmark \
  *     --graphql-url http://127.0.0.1:8000
  */
@@ -25,6 +24,10 @@ import {
   importGoldAnnotations,
   shouldImportAnnotation,
 } from "./import-gold-annotations";
+import {
+  requireGraphqlProxyDir,
+  resolvePlexusCli,
+} from "../features/steps/plexus-runtime";
 import {
   loadAnnotations,
   loadBenchmarkManifest,
@@ -320,13 +323,13 @@ async function waitForReady(baseUrl: string, timeoutMs = 45_000): Promise<void> 
   throw new Error(`Timed out waiting for ${baseUrl}/readyz: ${lastError}`);
 }
 
-function startGraphql(plexusRoot: string, dataDir: string, port: number): ChildProcess {
+function startGraphql(proxyDir: string, dataDir: string, port: number): ChildProcess {
   mkdirSync(dataDir, { recursive: true });
   const child = spawn("bash", [startScript], {
     cwd: repoRoot,
     env: {
       ...process.env,
-      PLEXUS_ROOT: plexusRoot,
+      PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
       PLEXUS_DATA_DIR: dataDir,
       PLEXUS_GRAPHQL_HOST: "127.0.0.1",
       PLEXUS_GRAPHQL_PORT: String(port),
@@ -402,7 +405,7 @@ async function main(): Promise<void> {
       "corpus-dir": { type: "string" },
       "graphql-url": { type: "string" },
       "work-dir": { type: "string" },
-      "plexus-root": { type: "string" },
+      "graphql-proxy-dir": { type: "string" },
       port: { type: "string" },
       "start-graphql": { type: "boolean", default: false },
     },
@@ -413,11 +416,10 @@ async function main(): Promise<void> {
     throw new Error("--corpus-dir is required (tests/benchmark of the corpus checkout)");
   }
 
-  const plexusRoot =
-    values["plexus-root"]?.trim() || process.env.PLEXUS_ROOT?.trim();
-  if (!plexusRoot) {
-    throw new Error("PLEXUS_ROOT or --plexus-root is required");
-  }
+  const proxyDir =
+    values["graphql-proxy-dir"]?.trim() ||
+    process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
+    requireGraphqlProxyDir();
 
   const workDir =
     values["work-dir"]?.trim() || join(repoRoot, ".plexus-corpus-eval");
@@ -432,13 +434,13 @@ async function main(): Promise<void> {
   try {
     await waitForReady(graphqlUrl, 2_000);
   } catch {
-    if (!values["start-graphql"] && !process.env.PLEXUS_ROOT) {
+    if (!values["start-graphql"]) {
       throw new Error(
         `GraphQL is not reachable at ${graphqlUrl}. Start it with --start-graphql or scripts/start-local-graphql.sh`,
       );
     }
     console.log(`Starting local GraphQL on port ${port}...`);
-    startGraphql(plexusRoot, dataDir, port);
+    startGraphql(proxyDir, dataDir, port);
     await waitForReady(graphqlUrl);
   }
 
@@ -456,13 +458,11 @@ async function main(): Promise<void> {
   const itemCount = await countItems(graphqlUrl);
   console.log(`Imported gold Items: ${imported}; GraphQL evaluation Items: ${itemCount}`);
 
-  const python = process.env.PYTHON?.trim() || "python3";
+  const plexusCli = resolvePlexusCli();
   const findingsCommand = `cd ${repoRoot} && node -r ts-node/register scripts/scan-findings.ts --root {root}`;
   const result = spawnSync(
-    python,
+    plexusCli,
     [
-      "-m",
-      "plexus",
       "evaluate",
       "accuracy",
       "--yaml",
@@ -479,7 +479,6 @@ async function main(): Promise<void> {
       cwd: workDir,
       env: {
         ...process.env,
-        PYTHONPATH: plexusRoot,
         PLEXUS_API_URL: `${graphqlUrl}/graphql`,
         PLEXUS_GRAPHQL_AUTH_MODE: "api_key",
         PLEXUS_API_KEY: "local-eval-key",

@@ -7,13 +7,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-: "${PLEXUS_ROOT:?Set PLEXUS_ROOT to a Plexus checkout with Virtuus + SourceSpanOverlapScore}"
+if ! command -v plexus >/dev/null 2>&1; then
+  echo "error: plexus CLI not found on PATH" >&2
+  exit 1
+fi
+
 CORPUS_DIR="${CORPUS_DIR:-${REPO_ROOT}/tests/benchmark}"
 PORT="${PLEXUS_GRAPHQL_PORT:-8000}"
 
 cd "${REPO_ROOT}"
 exec pnpm exec ts-node scripts/run-corpus-eval.ts \
   --corpus-dir "${CORPUS_DIR}" \
-  --plexus-root "${PLEXUS_ROOT}" \
   --port "${PORT}" \
   --start-graphql
