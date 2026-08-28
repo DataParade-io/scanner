@@ -6,6 +6,14 @@ module.exports = {
   testMatch: ["**/tests/**/*.spec.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
   collectCoverageFrom: ["src/**/*.ts"],
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      branches: 65,
+      functions: 85,
+      lines: 85,
+    },
+  },
   transform: {
     "^.+\\.ts$": [
       "ts-jest",
