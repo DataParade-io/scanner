@@ -16,7 +16,7 @@ export type {
 
 export { buildDiagramGraphFromScanResult } from "./core/pipeline/graph-mapping";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
-export { stableComponentKey } from "./core/pipeline/stable-component-ids";
+export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
 export type {
   CollectEvalFindingsResult,

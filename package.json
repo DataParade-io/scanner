@@ -37,6 +37,7 @@
   },
   "scripts": {
     "build": "pnpm exec tsc -p tsconfig.json",
+    "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build && pnpm run test",
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\"",
     "pretest": "pnpm run build",
