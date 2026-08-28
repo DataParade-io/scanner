@@ -52,3 +52,7 @@ export { runAnalyzers } from "./analyzers/registry";
 export * from "./core/schema";
 export * from "./core/types";
 export type { ServiceSection } from "./core/sectioning/discover-service-sections";
+export {
+  discoverServiceSections,
+  tagFindingsWithServiceSections,
+} from "./core/sectioning/discover-service-sections";
