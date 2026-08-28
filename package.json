@@ -39,10 +39,14 @@
     "build": "pnpm exec tsc -p tsconfig.json",
     "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build && pnpm run test",
-    "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"features/**/*.ts\"",
     "pretest": "pnpm run build",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:features": "cucumber-js",
+    "eval:components": "jest tests/eval/layers/components/eval.test.ts",
+    "eval:pii-signals": "jest tests/eval/layers/pii-signals/eval.test.ts",
+    "eval:data-flows": "jest tests/eval/layers/data-flows/eval.test.ts"
   },
   "dependencies": {
     "typescript": "^5.7.3",
@@ -50,6 +54,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
     "@eslint/js": "^9.18.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.0.0",
@@ -64,6 +69,7 @@
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",
     "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "typescript-eslint": "^8.20.0"
   },
   "files": [

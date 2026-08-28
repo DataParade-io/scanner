@@ -23,7 +23,7 @@ pnpm run lint
 pnpm run test:coverage
 ```
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for Git Flow, Conventional Commits, Semantic Release, and Kanbus workflow.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for Git Flow, Conventional Commits, Semantic Release, Kanbus workflow, and Plexus evaluation (`PLEXUS_ROOT`).
 
 ## License
 

@@ -42,9 +42,47 @@ pnpm run build
 pnpm test
 pnpm run lint
 pnpm run test:coverage
+pnpm run test:features   # Gherkin/Cucumber (see below)
+pnpm run eval:components # Jest fixture eval layers
 ```
 
 Node.js 20+ is required.
+
+## Behavior specs and evaluation
+
+Gherkin feature specs live under `features/` and are the source of truth for Plexus-backed evaluation scenarios. Jest fixture eval layers live under `tests/eval/`.
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm test:features` | Run Cucumber `.feature` files |
+| `pnpm test` | Jest unit tests (`tests/**/*.spec.ts`) and eval layers (`tests/eval/**/*.test.ts`) |
+| `pnpm run eval:components` | Component layer ground-truth eval |
+| `pnpm run eval:data-flows` | Data-flow layer ground-truth eval |
+| `pnpm run eval:pii-signals` | PII signal layer ground-truth eval |
+
+See `features/README.md` and `tests/eval/README.md` for layout and metrics.
+
+### Local Plexus GraphQL (`PLEXUS_ROOT`)
+
+Scenarios that start a local GraphQL host require `PLEXUS_ROOT` pointing at a Plexus checkout containing `services/private-graphql-proxy`. Optionally set `PYTHON` to select the interpreter.
+
+```bash
+export PLEXUS_ROOT=/path/to/Plexus
+export PLEXUS_DATA_DIR=/tmp/plexus-data   # optional
+pnpm run test:features
+```
+
+Start GraphQL manually:
+
+```bash
+PLEXUS_ROOT=/path/to/Plexus ./scripts/start-local-graphql.sh
+```
+
+Corpus recall against materialized benchmark repos:
+
+```bash
+PLEXUS_ROOT=/path/to/Plexus ./scripts/run-corpus-eval.sh
+```
 
 ## CI and releases
 
