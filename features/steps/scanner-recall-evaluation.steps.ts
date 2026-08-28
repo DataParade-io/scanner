@@ -450,6 +450,7 @@ async function runPlexusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
       cwd: w.evalWorkDir,
       env,
       encoding: "utf8",
+      maxBuffer: 32 * 1024 * 1024,
     },
   );
 
