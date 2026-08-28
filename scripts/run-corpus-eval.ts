@@ -25,6 +25,7 @@ import {
   shouldImportAnnotation,
 } from "./import-gold-annotations";
 import {
+  buildLocalGraphqlChildEnv,
   requireGraphqlProxyDir,
   resolvePlexusCli,
 } from "../features/steps/plexus-runtime";
@@ -323,17 +324,16 @@ async function waitForReady(baseUrl: string, timeoutMs = 45_000): Promise<void> 
   throw new Error(`Timed out waiting for ${baseUrl}/readyz: ${lastError}`);
 }
 
-function startGraphql(proxyDir: string, dataDir: string, port: number): ChildProcess {
+function startGraphql(dataDir: string, port: number, proxyDir: string): ChildProcess {
   mkdirSync(dataDir, { recursive: true });
   const child = spawn("bash", [startScript], {
     cwd: repoRoot,
-    env: {
-      ...process.env,
-      PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
-      PLEXUS_DATA_DIR: dataDir,
-      PLEXUS_GRAPHQL_HOST: "127.0.0.1",
-      PLEXUS_GRAPHQL_PORT: String(port),
-    },
+    env: buildLocalGraphqlChildEnv({
+      dataDir,
+      host: "127.0.0.1",
+      port,
+      proxyDir,
+    }),
     stdio: ["ignore", "inherit", "inherit"],
     detached: true,
   });
@@ -440,7 +440,7 @@ async function main(): Promise<void> {
       );
     }
     console.log(`Starting local GraphQL on port ${port}...`);
-    startGraphql(proxyDir, dataDir, port);
+    startGraphql(dataDir, port, proxyDir);
     await waitForReady(graphqlUrl);
   }
 

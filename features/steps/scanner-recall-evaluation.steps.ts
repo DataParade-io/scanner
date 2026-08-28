@@ -20,9 +20,8 @@ import {
 } from "@cucumber/cucumber";
 
 import {
-  requireGraphqlProxyDir,
+  buildLocalGraphqlChildEnv,
   resolvePlexusCli,
-  resolvePythonForPlexus,
 } from "./plexus-runtime";
 
 setDefaultTimeout(120_000);
@@ -192,19 +191,13 @@ async function startLocalGraphqlProcess(w: ScannerRecallWorld): Promise<void> {
   assert.ok(w.dataDir, "data directory must be configured before starting");
   assert.ok(w.port, "port must be configured before starting");
 
-  const proxyDir = requireGraphqlProxyDir();
-  const python = resolvePythonForPlexus();
   const stderrCapture = { text: "" };
 
-  const env: NodeJS.ProcessEnv = {
-    ...process.env,
-    PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
-    PLEXUS_DATA_DIR: w.dataDir,
-    PLEXUS_GRAPHQL_HOST: "127.0.0.1",
-    PLEXUS_GRAPHQL_PORT: String(w.port),
-    PYTHON: python,
-  };
-  delete env.PLEXUS_PROXY_DATABASE_URL;
+  const env = buildLocalGraphqlChildEnv({
+    dataDir: w.dataDir,
+    host: "127.0.0.1",
+    port: w.port,
+  });
 
   const child = spawn("bash", [startScript], {
     cwd: repoRoot,

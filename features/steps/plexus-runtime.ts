@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 
@@ -67,6 +67,17 @@ export function isVirtuusCapableProxyDir(proxyDir: string): boolean {
   );
 }
 
+/**
+ * True when the proxy loads `.plexus/config.yaml` via Plexus ConfigLoader.
+ */
+export function isYamlConfigCapableProxyDir(proxyDir: string): boolean {
+  const configPath = join(proxyDir, "proxy", "config.py");
+  if (!existsSync(configPath)) {
+    return false;
+  }
+  return readFileSync(configPath, "utf8").includes("load_config");
+}
+
 function virtuusProxyCandidates(): string[] {
   const home = homedir();
   const candidates: string[] = [];
@@ -104,12 +115,11 @@ function virtuusProxyCandidates(): string[] {
  * Returns null when no suitable proxy is available.
  */
 export function resolveGraphqlProxyDir(): string | null {
-  for (const candidate of virtuusProxyCandidates()) {
-    if (isVirtuusCapableProxyDir(candidate)) {
-      return candidate;
-    }
+  const matches = virtuusProxyCandidates().filter(isVirtuusCapableProxyDir);
+  if (matches.length === 0) {
+    return null;
   }
-  return null;
+  return matches.find(isYamlConfigCapableProxyDir) ?? matches[0];
 }
 
 export function requireGraphqlProxyDir(): string {
@@ -131,4 +141,50 @@ export function isPlexusCliAvailable(): boolean {
 
 export function isGraphqlProxyAvailable(): boolean {
   return resolveGraphqlProxyDir() !== null;
+}
+
+export interface LocalGraphqlRuntimeOptions {
+  dataDir?: string;
+  host?: string;
+  port?: number;
+  proxyDir?: string;
+}
+
+const STATIC_PLEXUS_ENV_KEYS = [
+  "PLEXUS_STORE",
+  "PLEXUS_BACKEND_MODE",
+  "PLEXUS_PROXY_AUTH_MODE",
+  "PLEXUS_PROXY_UPSTREAM_DISABLED",
+  "PLEXUS_PROXY_DATABASE_URL",
+  "PLEXUS_VIRTUUS_DATA_DIR",
+] as const;
+
+/**
+ * Environment for spawning scripts/start-local-graphql.sh.
+ * Static Plexus settings come from .plexus/config.yaml; only proxy checkout,
+ * Python, and per-run data_dir / host / port are passed here.
+ */
+export function buildLocalGraphqlChildEnv(
+  options: LocalGraphqlRuntimeOptions = {},
+): NodeJS.ProcessEnv {
+  const proxyDir = options.proxyDir ?? requireGraphqlProxyDir();
+  const env: NodeJS.ProcessEnv = { ...process.env };
+  for (const key of STATIC_PLEXUS_ENV_KEYS) {
+    delete env[key];
+  }
+
+  env.PLEXUS_GRAPHQL_PROXY_DIR = proxyDir;
+  env.PYTHON = resolvePythonForPlexus();
+
+  if (options.dataDir) {
+    env.PLEXUS_DATA_DIR = options.dataDir;
+  }
+  if (options.host) {
+    env.PLEXUS_GRAPHQL_HOST = options.host;
+  }
+  if (options.port !== undefined) {
+    env.PLEXUS_GRAPHQL_PORT = String(options.port);
+  }
+
+  return env;
 }

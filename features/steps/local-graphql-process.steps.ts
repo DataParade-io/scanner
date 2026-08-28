@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { spawn, type ChildProcess } from "node:child_process";
-import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createServer } from "node:net";
@@ -13,8 +13,10 @@ import {
   Then,
   When,
 } from "@cucumber/cucumber";
+import YAML from "yaml";
 
 import {
+  buildLocalGraphqlChildEnv,
   isGraphqlProxyAvailable,
   requireGraphqlProxyDir,
   resolvePlexusCli,
@@ -133,19 +135,13 @@ async function startLocalGraphqlProcess(w: LocalGraphqlWorld): Promise<void> {
   assert.ok(w.dataDir, "data directory must be configured before starting");
   assert.ok(w.port, "port must be configured before starting");
 
-  const proxyDir = requireGraphqlProxyDir();
-  const python = resolvePythonForPlexus();
   const stderrCapture = { text: "" };
 
-  const env: NodeJS.ProcessEnv = {
-    ...process.env,
-    PLEXUS_GRAPHQL_PROXY_DIR: proxyDir,
-    PLEXUS_DATA_DIR: w.dataDir,
-    PLEXUS_GRAPHQL_HOST: "127.0.0.1",
-    PLEXUS_GRAPHQL_PORT: String(w.port),
-    PYTHON: python,
-  };
-  delete env.PLEXUS_PROXY_DATABASE_URL;
+  const env = buildLocalGraphqlChildEnv({
+    dataDir: w.dataDir,
+    host: "127.0.0.1",
+    port: w.port,
+  });
 
   const child = spawn("bash", [startScript], {
     cwd: repoRoot,
@@ -315,6 +311,30 @@ Then(
     assert.ok(w.childCommand, "child command must be recorded");
     assert.ok(w.childEnv, "child environment must be recorded");
 
+    const configPath = join(repoRoot, ".plexus", "config.yaml");
+    assert.ok(existsSync(configPath), ".plexus/config.yaml must exist");
+    const config = YAML.parse(readFileSync(configPath, "utf8")) as {
+      plexus?: {
+        store?: string;
+        backend_mode?: string;
+        proxy?: { auth_mode?: string; upstream_disabled?: boolean };
+      };
+    };
+    assert.strictEqual(config.plexus?.store, "virtuus");
+    assert.strictEqual(config.plexus?.backend_mode, "local");
+    assert.strictEqual(config.plexus?.proxy?.auth_mode, "trusted_open");
+    assert.strictEqual(config.plexus?.proxy?.upstream_disabled, true);
+
+    assert.strictEqual(
+      w.childEnv.PLEXUS_STORE,
+      undefined,
+      "PLEXUS_STORE must not be set on the child process",
+    );
+    assert.strictEqual(
+      w.childEnv.PLEXUS_BACKEND_MODE,
+      undefined,
+      "PLEXUS_BACKEND_MODE must not be set on the child process",
+    );
     assert.strictEqual(
       w.childEnv.PLEXUS_PROXY_DATABASE_URL,
       undefined,

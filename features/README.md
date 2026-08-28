@@ -20,13 +20,24 @@ Add new scenarios under `features/` and matching step definitions under `feature
 plexus evaluate accuracy --yaml --scorecard "Local Eval" --score "Span Overlap" --dataset-file ...
 ```
 
+## Plexus configuration
+
+Local evaluation settings live in **`.plexus/config.yaml`** (Virtuus store, local backend mode, proxy auth). Do not drive those via `PLEXUS_STORE`, `PLEXUS_BACKEND_MODE`, or `PLEXUS_PROXY_*` environment variables.
+
+Per-test **data directories** and **ports** are runtime overrides only (for example `PLEXUS_DATA_DIR` for a temp dir, or `PLEXUS_GRAPHQL_PORT` when binding an ephemeral port).
+
 ## Local GraphQL host process
 
-Start Plexus GraphQL as a single uvicorn worker with Virtuus file storage (no Docker or Postgres):
+Start Plexus GraphQL as a single uvicorn worker with Virtuus file storage (no Docker or Postgres). Static config is read from `.plexus/config.yaml`:
 
 ```bash
-PLEXUS_DATA_DIR=/tmp/plexus-data \
 ./scripts/start-local-graphql.sh
+```
+
+Use a temp data directory when you need an isolated store:
+
+```bash
+PLEXUS_DATA_DIR=/tmp/plexus-data ./scripts/start-local-graphql.sh
 ```
 
 Then check readiness and create an Item:

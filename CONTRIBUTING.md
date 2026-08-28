@@ -66,6 +66,8 @@ See `features/README.md` and `tests/eval/README.md` for layout and metrics.
 
 Feature specs and corpus eval use the installed **`plexus` CLI on PATH** (not `python -m plexus` and not `PLEXUS_ROOT`).
 
+Local Virtuus / GraphQL settings are declared in **`.plexus/config.yaml`**. Do not configure store, backend mode, or proxy behavior with `PLEXUS_STORE`, `PLEXUS_BACKEND_MODE`, or `PLEXUS_PROXY_*` env vars. Per-run **data directories** and **ports** may still be overridden at runtime (for example `PLEXUS_DATA_DIR` for a temp dir).
+
 ```bash
 command -v plexus   # must resolve
 pnpm run test:features
@@ -73,7 +75,13 @@ pnpm run test:features
 
 Scenarios that start a local GraphQL host require a **Virtuus-capable** `private-graphql-proxy` (`proxy/virtuus_store.py` + `proxy/store_factory.py`). Auto-discovery prefers `~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy`. Override with `PLEXUS_GRAPHQL_PROXY_DIR`.
 
-Start GraphQL manually:
+Start GraphQL manually (config from `.plexus/config.yaml`):
+
+```bash
+./scripts/start-local-graphql.sh
+```
+
+Optional runtime data-dir override:
 
 ```bash
 PLEXUS_DATA_DIR=/tmp/plexus-data ./scripts/start-local-graphql.sh
