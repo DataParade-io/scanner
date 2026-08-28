@@ -71,7 +71,7 @@ command -v plexus   # must resolve
 pnpm run test:features
 ```
 
-Scenarios that start a local GraphQL host auto-discover `private-graphql-proxy` under `~/projects/Plexus` or `~/Projects/Plexus`. Override with `PLEXUS_GRAPHQL_PROXY_DIR` when needed.
+Scenarios that start a local GraphQL host require a **Virtuus-capable** `private-graphql-proxy` (`proxy/virtuus_store.py` + `proxy/store_factory.py`). Auto-discovery prefers `~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy`. Override with `PLEXUS_GRAPHQL_PROXY_DIR`.
 
 Start GraphQL manually:
 

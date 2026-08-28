@@ -4,7 +4,14 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 
 const PROXY_RELATIVE = join("services", "private-graphql-proxy");
-const PROXY_APP = join("proxy", "app.py");
+const VIRTUUS_STORE = join("proxy", "virtuus_store.py");
+const STORE_FACTORY = join("proxy", "store_factory.py");
+
+const VIRTUUS_PROXY_ERROR =
+  "No Virtuus-capable private-graphql-proxy found. The proxy must include " +
+  "proxy/virtuus_store.py and proxy/store_factory.py (Plexus PR #612). " +
+  "Set PLEXUS_GRAPHQL_PROXY_DIR to a Virtuus checkout, for example " +
+  "~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy.";
 
 /**
  * Resolve the installed `plexus` CLI from PATH (or PLEXUS_CLI override).
@@ -51,44 +58,64 @@ export function resolvePythonForPlexus(): string {
 }
 
 /**
- * Locate private-graphql-proxy without requiring PLEXUS_ROOT.
- * Returns null when the proxy checkout is not available.
+ * True when the proxy checkout implements the Virtuus file-backed GraphQL store.
  */
-export function resolveGraphqlProxyDir(): string | null {
+export function isVirtuusCapableProxyDir(proxyDir: string): boolean {
+  return (
+    existsSync(join(proxyDir, VIRTUUS_STORE)) &&
+    existsSync(join(proxyDir, STORE_FACTORY))
+  );
+}
+
+function virtuusProxyCandidates(): string[] {
+  const home = homedir();
+  const candidates: string[] = [];
+
   const explicit = process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim();
-  if (explicit && existsSync(join(explicit, PROXY_APP))) {
-    return explicit;
+  if (explicit) {
+    candidates.push(explicit);
   }
+
+  candidates.push(
+    join(
+      home,
+      "Projects",
+      "Plexus_worktrees",
+      "virtuus-store",
+      PROXY_RELATIVE,
+    ),
+  );
 
   const plexusRoot = process.env.PLEXUS_ROOT?.trim();
   if (plexusRoot) {
-    const fromRoot = join(plexusRoot, PROXY_RELATIVE);
-    if (existsSync(join(fromRoot, PROXY_APP))) {
-      return fromRoot;
-    }
+    candidates.push(join(plexusRoot, PROXY_RELATIVE));
   }
 
-  const home = homedir();
-  const candidates = [
-    join(home, "projects", "Plexus", PROXY_RELATIVE),
+  candidates.push(
     join(home, "Projects", "Plexus", PROXY_RELATIVE),
-  ];
-  for (const candidate of candidates) {
-    if (existsSync(join(candidate, PROXY_APP))) {
+    join(home, "projects", "Plexus", PROXY_RELATIVE),
+  );
+
+  return candidates;
+}
+
+/**
+ * Locate a Virtuus-capable private-graphql-proxy checkout.
+ * Returns null when no suitable proxy is available.
+ */
+export function resolveGraphqlProxyDir(): string | null {
+  for (const candidate of virtuusProxyCandidates()) {
+    if (isVirtuusCapableProxyDir(candidate)) {
       return candidate;
     }
   }
-
   return null;
 }
 
 export function requireGraphqlProxyDir(): string {
   const proxyDir = resolveGraphqlProxyDir();
   if (!proxyDir) {
-    throw new Error(
-      "private-graphql-proxy not found. Set PLEXUS_GRAPHQL_PROXY_DIR to the proxy checkout " +
-        "(services/private-graphql-proxy), or clone Plexus under ~/projects/Plexus.",
-    );
+    throw new Error(VIRTUUS_PROXY_ERROR);
   }
   return proxyDir;
 }

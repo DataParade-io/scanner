@@ -12,7 +12,7 @@ Add new scenarios under `features/` and matching step definitions under `feature
 ## Prerequisites
 
 1. **`plexus` on PATH** — the installed Plexus CLI (for example via conda: `command -v plexus`)
-2. **private-graphql-proxy** — for scenarios that start a local GraphQL host. The step helpers auto-discover `~/projects/Plexus/services/private-graphql-proxy` (or `~/Projects/Plexus/...`). Override with `PLEXUS_GRAPHQL_PROXY_DIR` when needed.
+2. **Virtuus-capable private-graphql-proxy** — for scenarios that start a local GraphQL host. The proxy must include `proxy/virtuus_store.py` and `proxy/store_factory.py` (Plexus PR #612). Discovery order: `PLEXUS_GRAPHQL_PROXY_DIR`, then `~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy`, then other Plexus checkouts only when that working tree has Virtuus store files.
 
 `PLEXUS_ROOT` is not required. Eval scenarios invoke:
 
@@ -39,4 +39,4 @@ curl -sS http://127.0.0.1:8000/graphql \
   -d '{"query":"mutation CreateItem($input: CreateItemInput!) { createItem(input: $input) { id accountId text } }","variables":{"input":{"id":"demo-item","accountId":"demo-account","text":"hello"}}}'
 ```
 
-The `local-graphql-process` feature is skipped automatically when `private-graphql-proxy` is not available on disk.
+The `local-graphql-process` feature is skipped automatically when no Virtuus-capable proxy is available on disk.
