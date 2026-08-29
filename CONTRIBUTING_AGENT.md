@@ -46,10 +46,10 @@ Project key prefix: KDATAP.
 
 Hierarchy: initiative -> epic -> task -> sub-task.
 
-Non-hierarchical types: bug, story, chore.
+Non-hierarchical types: bug, story, chore, finding, annotation.
 
 Only hierarchy types may be parents.
-Initiatives are top-level milestones; they may contain epics only. Tasks, stories, bugs, and chores must roll up under an epic (or sub-task under task). Creating tasks directly under an initiative is a violation of The Way.
+Initiatives are top-level milestones; they may contain epics only. Tasks, stories, bugs, chores, findings, and annotations must roll up under an epic (or sub-task under task). Creating those types directly under an initiative is a violation of The Way.
 
 Permitted relationships are fixed and not to be altered.
 
@@ -61,7 +61,7 @@ Allowed parent-child relationships:
 
 - sub-task can have parent task.
 
-- bug, story, chore can have parent initiative, epic, task.
+- bug, story, chore, finding, annotation can have parent initiative, epic, task.
 
 
 Structure is not bureaucracy. Structure is memory.
@@ -101,6 +101,14 @@ Tasks and sub-tasks define implementation. They may not invent behavior beyond t
 Bugs restore violated behavior.
 
 Chores maintain the ground on which behavior stands.
+
+Findings name one detection we expect (or expect not) to see. They stay **proposed** until a person advances them. Decompose by eval layer in `findings/<id>/decomposition.md`; do not file five sub-tasks.
+
+Annotations name one labeling pass over a fixture or corpus repo. They stay **awaiting-review** until a person accepts them. Record the pass in `annotations/<id>/pass.md`.
+
+Stories still require Gherkin. Findings and annotations do not.
+
+Markdown under `findings/` and `annotations/` is the flywheel record. Agents may edit those files. Do not edit JSON under `project/issues/` or `project/events/`.
 
 ## The Rite of Gherkin
 
@@ -186,6 +194,42 @@ epic workflow:
 
 
 
+finding workflow:
+
+
+- open -> proposed, closed
+
+- proposed -> decomposed, closed
+
+- decomposed -> gold-authored, proposed
+
+- gold-authored -> verified, decomposed
+
+- verified -> closed, gold-authored
+
+- closed -> verified, open
+
+
+
+
+annotation workflow:
+
+
+- open -> labeling, closed
+
+- labeling -> awaiting-review, closed
+
+- awaiting-review -> accepted, labeling, rejected
+
+- accepted -> awaiting-review, closed
+
+- rejected -> labeling, closed
+
+- closed -> open
+
+
+
+
 Priorities are:
 
 
@@ -226,7 +270,9 @@ kanbus create "Release v1" --type epic --parent <initiative-id>
 
 kanbus create "Implement feature" --type task --parent <epic-id>
 
-kanbus create "Fix crash on launch" --type bug --priority 0 --parent <epic-id>
+kanbus create "Stripe sends customer email" --type finding --parent <epic-id>
+
+kanbus create "Label typescript-basic gold" --type annotation --parent <epic-id>
 
 kanbus update <id> --status in_progress --assignee "you@example.com"
 

@@ -2,7 +2,7 @@ project_directory: project
 virtual_projects: {}
 new_issue_project: null
 ignore_paths: []
-console_port: null
+console_port: 4256
 project_key: KDATAP
 project_management_template: null
 hierarchy:
@@ -14,6 +14,8 @@ types:
 - bug
 - story
 - chore
+- finding
+- annotation
 workflows:
   default:
     backlog:
@@ -41,6 +43,44 @@ workflows:
     open:
     - in_progress
     - closed
+  finding:
+    open:
+    - proposed
+    - closed
+    proposed:
+    - decomposed
+    - closed
+    decomposed:
+    - gold-authored
+    - proposed
+    gold-authored:
+    - verified
+    - decomposed
+    verified:
+    - closed
+    - gold-authored
+    closed:
+    - verified
+    - open
+  annotation:
+    open:
+    - labeling
+    - closed
+    labeling:
+    - awaiting-review
+    - closed
+    awaiting-review:
+    - accepted
+    - labeling
+    - rejected
+    accepted:
+    - awaiting-review
+    - closed
+    rejected:
+    - labeling
+    - closed
+    closed:
+    - open
 transition_labels:
   default:
     backlog:
@@ -68,6 +108,44 @@ transition_labels:
     open:
       closed: Complete
       in_progress: Start
+  finding:
+    open:
+      proposed: Start flywheel
+      closed: Drop
+    proposed:
+      decomposed: Decompose by eval layer
+      closed: Drop
+    decomposed:
+      gold-authored: Author gold
+      proposed: Revise proposal
+    gold-authored:
+      verified: Eval matches gold
+      decomposed: Revise decomposition
+    verified:
+      closed: Complete
+      gold-authored: Re-label
+    closed:
+      verified: Reopen
+      open: Reset
+  annotation:
+    open:
+      labeling: Start labeling
+      closed: Drop
+    labeling:
+      awaiting-review: Send to human review
+      closed: Drop
+    awaiting-review:
+      accepted: Accept gold
+      labeling: More labeling
+      rejected: Reject
+    accepted:
+      awaiting-review: Re-review repo
+      closed: Complete
+    rejected:
+      labeling: Relabel
+      closed: Drop
+    closed:
+      open: Reopen
 initial_status: open
 priorities:
   0:
@@ -114,6 +192,46 @@ statuses:
   category: Done
   color: null
   collapsed: true
+- key: proposed
+  name: Proposed
+  category: Flywheel
+  color: null
+  collapsed: false
+- key: decomposed
+  name: Decomposed
+  category: Flywheel
+  color: null
+  collapsed: false
+- key: gold-authored
+  name: Gold authored
+  category: Flywheel
+  color: null
+  collapsed: false
+- key: verified
+  name: Verified
+  category: Flywheel
+  color: null
+  collapsed: false
+- key: labeling
+  name: Labeling
+  category: Annotation
+  color: null
+  collapsed: false
+- key: awaiting-review
+  name: Awaiting review
+  category: Annotation
+  color: null
+  collapsed: false
+- key: accepted
+  name: Accepted
+  category: Annotation
+  color: null
+  collapsed: true
+- key: rejected
+  name: Rejected
+  category: Annotation
+  color: null
+  collapsed: true
 categories:
 - name: To do
   color: grey
@@ -121,6 +239,10 @@ categories:
   color: blue
 - name: Done
   color: green
+- name: Flywheel
+  color: yellow
+- name: Annotation
+  color: magenta
 sort_order: {}
 type_colors:
   bug: red
@@ -131,6 +253,8 @@ type_colors:
   story: yellow
   sub-task: bright_cyan
   task: blue
+  finding: yellow
+  annotation: magenta
 beads_compatibility: false
 wiki_directory: null
 ai: null
@@ -153,6 +277,18 @@ hooks:
   enabled: true
   run_in_beads_mode: true
   default_timeout_ms: 5000
-  before: {}
-  after: {}
+  before:
+    issue.update:
+    - id: flywheel-artifact-gate
+      command:
+      - python3
+      - ./hooks/flywheel-artifact-gate.py
+      timeout_ms: 5000
+  after:
+    issue.create:
+    - id: flywheel-scaffold
+      command:
+      - python3
+      - ./hooks/flywheel-scaffold.py
+      timeout_ms: 15000
 github_security: null
