@@ -1,16 +1,16 @@
-import { piiSignalEvalCases } from "./cases";
-import { scanFixturePiiSignals } from "./adapter";
+import { mentionEvalCases } from "./cases";
+import { scanFixtureMentions } from "./adapter";
 import { scoreEvalCases } from "../../score";
 
-describe("eval/layers/pii-signals", () => {
-  const fixtures = [...new Set(piiSignalEvalCases.map((caseRecord) => caseRecord.fixture))];
+describe("eval/layers/mentions", () => {
+  const fixtures = [...new Set(mentionEvalCases.map((caseRecord) => caseRecord.fixture))];
 
-  it("meets PII signal layer ground-truth expectations", async () => {
-    const scanResults = await Promise.all(fixtures.map(scanFixturePiiSignals));
-    const report = scoreEvalCases(piiSignalEvalCases, scanResults);
+  it("meets mention layer ground-truth expectations", async () => {
+    const scanResults = await Promise.all(fixtures.map(scanFixtureMentions));
+    const report = scoreEvalCases(mentionEvalCases, scanResults);
 
     const failingPositives = report.caseResults.filter((result) => {
-      const caseRecord = piiSignalEvalCases.find((entry) => entry.id === result.caseId)!;
+      const caseRecord = mentionEvalCases.find((entry) => entry.id === result.caseId)!;
       return (
         caseRecord.expected.status === "positive" &&
         !caseRecord.expected.documentedGap &&
@@ -21,7 +21,7 @@ describe("eval/layers/pii-signals", () => {
     expect(failingPositives).toEqual([]);
 
     const failingLabelPositives = report.caseResults.filter((result) => {
-      const caseRecord = piiSignalEvalCases.find((entry) => entry.id === result.caseId)!;
+      const caseRecord = mentionEvalCases.find((entry) => entry.id === result.caseId)!;
       return (
         caseRecord.expected.status === "positive" &&
         !caseRecord.expected.documentedGap &&
@@ -32,7 +32,7 @@ describe("eval/layers/pii-signals", () => {
     expect(failingLabelPositives).toEqual([]);
 
     const failingNegatives = report.caseResults.filter((result) => {
-      const caseRecord = piiSignalEvalCases.find((entry) => entry.id === result.caseId)!;
+      const caseRecord = mentionEvalCases.find((entry) => entry.id === result.caseId)!;
       return caseRecord.expected.status === "negative" && !result.unread && !result.negativeClean;
     });
     expect(failingNegatives).toEqual([]);

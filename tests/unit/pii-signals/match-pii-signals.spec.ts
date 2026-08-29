@@ -104,6 +104,6 @@ describe("matchPiiSignalsInFile", () => {
   });
 
   it("formats pii signal identity for eval subjects", () => {
-    expect(piiSignalIdentity("email")).toBe("pii_signal:email");
+    expect(piiSignalIdentity("email")).toBe("raw_hit:email");
   });
 });

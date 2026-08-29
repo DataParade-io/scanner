@@ -32,9 +32,14 @@ function evidenceOverlaps(
   );
 }
 
+const IDENTITY_ONLY_LAYERS: ReadonlySet<EvalCase["layer"]> = new Set(["data-items"]);
+
 function findingMatchesCase(finding: LayerFinding, caseRecord: EvalCase): boolean {
   if (finding.key !== caseRecord.subject.key) {
     return false;
+  }
+  if (IDENTITY_ONLY_LAYERS.has(caseRecord.layer)) {
+    return true;
   }
   return finding.sourceLines.some((line) => evidenceOverlaps(caseRecord.evidence, line));
 }

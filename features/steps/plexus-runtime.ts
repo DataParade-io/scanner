@@ -144,6 +144,46 @@ export function isPlexusCliAvailable(): boolean {
   }
 }
 
+/**
+ * True when the installed Plexus package exposes SubjectIdentityScore.
+ */
+export function isSubjectIdentityScoreAvailable(): boolean {
+  try {
+    const python = resolvePythonForPlexus();
+    const result = spawnSync(
+      python,
+      [
+        "-c",
+        "from plexus.scores.SubjectIdentityScore import SubjectIdentityScore",
+      ],
+      { encoding: "utf8" },
+    );
+    return result.status === 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * True when the installed Plexus Python package exposes a Score class by name.
+ */
+export function isPlexusScoreClassAvailable(scoreClass: string): boolean {
+  try {
+    const python = resolvePythonForPlexus();
+    const result = spawnSync(
+      python,
+      [
+        "-c",
+        `from plexus.scores import resolve_score_class; resolve_score_class(${JSON.stringify(scoreClass)})`,
+      ],
+      { encoding: "utf8" },
+    );
+    return result.status === 0;
+  } catch {
+    return false;
+  }
+}
+
 export function isGraphqlProxyAvailable(): boolean {
   return resolveGraphqlProxyDir() !== null;
 }
