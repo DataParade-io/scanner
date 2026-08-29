@@ -11,8 +11,11 @@ export type AnnotationStatus = "positive" | "negative" | "ambiguous";
 export type BenchmarkLayer =
   | "components"
   | "data_flows"
-  | "pii_signals"
-  | "data_items";
+  | "raw_hits"
+  | "mentions"
+  | "data_items"
+  /** @deprecated Use `mentions` — kept for corpus manifests and annotation files. */
+  | "pii_signals";
 
 export interface ScopeExclude {
   path: string;
@@ -90,6 +93,19 @@ export const ANNOTATION_STATUSES: readonly AnnotationStatus[] = [
 export const BENCHMARK_LAYERS: readonly BenchmarkLayer[] = [
   "components",
   "data_flows",
-  "pii_signals",
+  "raw_hits",
+  "mentions",
   "data_items",
+  "pii_signals",
 ];
+
+/** Canonical layer for deprecated `pii_signals` corpus entries. */
+export function normalizeBenchmarkLayer(layer: string): BenchmarkLayer {
+  if (layer === "pii_signals") {
+    return "mentions";
+  }
+  if (!BENCHMARK_LAYERS.includes(layer as BenchmarkLayer)) {
+    throw new Error(`Unknown benchmark layer '${layer}'`);
+  }
+  return layer as BenchmarkLayer;
+}

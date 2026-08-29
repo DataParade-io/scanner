@@ -8,6 +8,7 @@ import {
   type BenchmarkLayer,
   type BenchmarkManifest,
   BENCHMARK_LAYERS,
+  normalizeBenchmarkLayer,
   REVIEW_STATES,
   type ReviewState,
 } from "./schema";
@@ -56,9 +57,14 @@ function validateManifest(raw: Record<string, unknown>, manifestPath: string): B
   }
 
   const layers = isStringArray(coverage.layers, `${manifestPath}:coverage.layers`);
+  const normalizedLayers: BenchmarkLayer[] = [];
   for (const layer of layers) {
     if (!BENCHMARK_LAYERS.includes(layer as BenchmarkLayer)) {
       throw new Error(`Unknown coverage layer '${layer}' in ${manifestPath}`);
+    }
+    const normalized = normalizeBenchmarkLayer(layer);
+    if (!normalizedLayers.includes(normalized)) {
+      normalizedLayers.push(normalized);
     }
   }
 
@@ -81,7 +87,7 @@ function validateManifest(raw: Record<string, unknown>, manifestPath: string): B
       exclude,
     },
     coverage: {
-      layers: layers as BenchmarkLayer[],
+      layers: normalizedLayers,
       languages: isStringArray(coverage.languages, `${manifestPath}:coverage.languages`),
       domains: isStringArray(coverage.domains, `${manifestPath}:coverage.domains`),
     },
@@ -103,6 +109,7 @@ function validateAnnotation(
   if (!BENCHMARK_LAYERS.includes(layer as BenchmarkLayer)) {
     throw new Error(`Unknown annotation layer '${layer}' in ${prefix}`);
   }
+  const normalizedLayer = normalizeBenchmarkLayer(layer);
 
   const subject = isRecord(raw.subject, `${prefix}:subject`);
   const evidence = isRecord(raw.evidence, `${prefix}:evidence`);
@@ -135,7 +142,7 @@ function validateAnnotation(
 
   const record: AnnotationRecord = {
     id: isNonEmptyString(raw.id, `${prefix}:id`),
-    layer: layer as BenchmarkLayer,
+    layer: normalizedLayer,
     subject: {
       key: isNonEmptyString(subject.key, `${prefix}:subject.key`),
       name:
@@ -199,9 +206,20 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
     throw new Error(`Unknown annotation layer '${layer}'`);
   }
 
-  const filePath = path.join(repoDir, "annotations", `${layer}.yaml`);
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`Missing annotations at ${filePath}`);
+  const canonicalLayer = normalizeBenchmarkLayer(layer);
+  const candidateFiles =
+    canonicalLayer === "mentions"
+      ? ["mentions.yaml", "pii_signals.yaml"]
+      : [`${canonicalLayer}.yaml`];
+
+  const filePath = candidateFiles
+    .map((name) => path.join(repoDir, "annotations", name))
+    .find((candidate) => fs.existsSync(candidate));
+
+  if (!filePath) {
+    throw new Error(
+      `Missing annotations for layer '${canonicalLayer}' in ${path.join(repoDir, "annotations")}`,
+    );
   }
 
   const text = fs.readFileSync(filePath, "utf8");
