@@ -22,11 +22,16 @@ export function resolvePlexusCli(): string {
     return explicit;
   }
 
-  const result = spawnSync("bash", ["-lc", "command -v plexus"], {
+  // Use a non-login shell: bash -lc can print conda init noise before the path.
+  const result = spawnSync("bash", ["-c", "command -v plexus"], {
     encoding: "utf8",
   });
-  const cliPath = result.stdout.trim();
-  if (result.status === 0 && cliPath.length > 0) {
+  const cliPath = result.stdout
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .at(-1);
+  if (result.status === 0 && cliPath) {
     return cliPath;
   }
 
