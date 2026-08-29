@@ -67,11 +67,35 @@ Positives marked `documentedGap` remain in recall denominators as measured misse
 
 ```bash
 pnpm test tests/eval/
+pnpm run eval:suite
 pnpm run eval:components
 pnpm run eval:raw-hits
 pnpm run eval:mentions
 pnpm run eval:data-items
 pnpm run eval:data-flows
+```
+
+### Aggregate suite (`eval:suite`)
+
+`pnpm run eval:suite` runs every layer adapter against committed fixtures, scores with `scoreEvalCases`, and prints a metrics report. Exit code `0` when no gated positive recall failures remain (positives that are not `documentedGap` and not `unread`).
+
+Sample output:
+
+```text
+Fixture evaluation suite
+Repositories (unique fixtures): 3
+Assertions (all layers): 42
+
+layer        fixtures  positives  negatives  documentedGaps  recall  labelAccuracy  correctLabelRecall  precision  negativeCasePassRate  unread
+-----------  --------  ---------  ---------  --------------  ------  -------------  ------------------  ---------  --------------------  ------
+components   2         18         4          2               88.9%   100.0%         88.9%               n/a        100.0%                0
+...
+
+=== components ===
+caseId                                            status      matched   labelsCorrect     unread  documentedGap
+...
+
+PASS — no gated positive recall failures
 ```
 
 Scans use `createDefaultScanConfiguration({ enableAiInference: false })` for graph layers — the same deterministic path as `tests/unit/core/orchestrator.spec.ts`. Personal-data layers use `matchPiiSignalsInFiles` via `src/eval-layers/collect-personal-data-findings.ts`.
