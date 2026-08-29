@@ -13,6 +13,18 @@ const { scanResult } = await scan("/path/to/repo", config);
 
 `scan()` runs the structural pipeline only. AI enrichment, tracing, upload, and CLI wiring live in `@dataparade/cli`.
 
+## Development
+
+```bash
+pnpm install
+pnpm run build
+pnpm test
+pnpm run lint
+pnpm run test:coverage
+```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for Git Flow, Conventional Commits, Semantic Release, Kanbus workflow, and Plexus evaluation (`plexus` on PATH).
+
 ## License
 
 GPL-3.0-or-later
