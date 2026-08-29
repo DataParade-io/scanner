@@ -62,6 +62,12 @@ Gherkin feature specs live under `features/` and are the source of truth for Ple
 | `pnpm run eval:mentions` | Personal-data mention layer ground-truth eval |
 | `pnpm run eval:data-items` | Rolled-up data-item layer ground-truth eval |
 
+Layer findings for Plexus SubjectIdentityScore:
+
+```bash
+node -r ts-node/register scripts/scan-layer-findings.ts --root <fixture-dir> --layer raw-hits|mentions|data-items
+```
+
 See `features/README.md` and `tests/eval/README.md` for layout and metrics.
 
 ### Plexus evaluation

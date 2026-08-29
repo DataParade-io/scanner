@@ -1,18 +1,18 @@
 # Fixture evaluation harness
 
-Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for identity and matching rules across all six grades.
+Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for identity and matching rules across all five grades.
 
-## Four-layer personal-data pipeline
+## Five evaluation grades
 
-Personal-data evaluation uses three grades that share heuristic rules but differ in roll-up:
+Three personal-data grades share heuristic rules but differ in roll-up; two graph grades use the deterministic `scan()` pipeline:
 
-| Layer | Script | Identity prefix | Match semantics |
-| --- | --- | --- | --- |
-| Raw hits | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels |
-| Mentions | `pnpm run eval:mentions` | `mention:` | key + span + labels |
-| Data items | `pnpm run eval:data-items` | `data_item:` | identity only |
-
-Graph layers (`components`, `data-flows`) use the deterministic `scan()` pipeline.
+| Grade | Layer | Script | Identity prefix | Match semantics |
+| --- | --- | --- | --- | --- |
+| Raw hits | `raw-hits` | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels |
+| Mentions | `mentions` | `pnpm run eval:mentions` | `mention:` | key + span + labels |
+| Data items | `data-items` | `pnpm run eval:data-items` | `data_item:` | identity only |
+| Components | `components` | `pnpm run eval:components` | `${type}:${name}` | key + span + labels |
+| Data flows | `data-flows` | `pnpm run eval:data-flows` | `flow:…` | key + span + labels |
 
 ## Layout
 
@@ -20,7 +20,7 @@ Graph layers (`components`, `data-flows`) use the deterministic `scan()` pipelin
 tests/eval/
   types.ts                # Eval case and score report types
   score.ts                # Shared recall / label / precision metrics
-  ground-truth-schema.md  # Identity and matching rules for all six grades
+  ground-truth-schema.md  # Identity and matching rules for all five grades
   layers/
     raw-hits/
       adapter.ts          # Pattern-hit bridge with raw_hit: identity

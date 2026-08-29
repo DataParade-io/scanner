@@ -13,6 +13,57 @@ import {
   type ReviewState,
 } from "./schema";
 
+const LAYER_SUBJECT_PREFIX: Partial<Record<BenchmarkLayer, string>> = {
+  raw_hits: "raw_hit:",
+  mentions: "mention:",
+  data_items: "data_item:",
+};
+
+/**
+ * Normalize corpus subject keys on load.
+ *
+ * Legacy `pii_signal:` prefixes are migrated per layer:
+ * - mentions → `mention:<ruleId>`
+ * - raw_hits → `raw_hit:<ruleId>` (same rule id as today’s raw-hit identity)
+ */
+export function normalizeSubjectKey(layer: BenchmarkLayer, key: string): string {
+  const trimmed = key.trim();
+  const canonical = normalizeBenchmarkLayer(layer);
+
+  if (canonical === "mentions" && trimmed.startsWith("pii_signal:")) {
+    return `mention:${trimmed.slice("pii_signal:".length)}`;
+  }
+  if (canonical === "raw_hits" && trimmed.startsWith("pii_signal:")) {
+    return `raw_hit:${trimmed.slice("pii_signal:".length)}`;
+  }
+
+  return trimmed;
+}
+
+function assertCanonicalSubjectKey(
+  layer: BenchmarkLayer,
+  key: string,
+  field: string,
+): void {
+  const canonical = normalizeBenchmarkLayer(layer);
+  const expectedPrefix = LAYER_SUBJECT_PREFIX[canonical];
+  if (!expectedPrefix) {
+    return;
+  }
+
+  if (key.startsWith("pii_signal:")) {
+    throw new Error(
+      `${field}: stale subject.key prefix 'pii_signal:' for layer '${canonical}' — use '${expectedPrefix}'`,
+    );
+  }
+
+  if (!key.startsWith(expectedPrefix)) {
+    throw new Error(
+      `${field}: subject.key must start with '${expectedPrefix}' for layer '${canonical}', got '${key}'`,
+    );
+  }
+}
+
 function isNonEmptyString(value: unknown, field: string): string {
   if (typeof value !== "string" || value.trim().length === 0) {
     throw new Error(`Expected non-empty string for ${field}`);
@@ -144,7 +195,16 @@ function validateAnnotation(
     id: isNonEmptyString(raw.id, `${prefix}:id`),
     layer: normalizedLayer,
     subject: {
-      key: isNonEmptyString(subject.key, `${prefix}:subject.key`),
+      key: (() => {
+        const rawKey = isNonEmptyString(subject.key, `${prefix}:subject.key`);
+        const normalizedKey = normalizeSubjectKey(normalizedLayer, rawKey);
+        assertCanonicalSubjectKey(
+          normalizedLayer,
+          normalizedKey,
+          `${prefix}:subject.key`,
+        );
+        return normalizedKey;
+      })(),
       name:
         typeof subject.name === "string" && subject.name.trim().length > 0
           ? subject.name.trim()

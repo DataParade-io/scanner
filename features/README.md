@@ -59,14 +59,12 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 | Scenario file | Grade | What it proves |
 |---------------|-------|----------------|
 | `scanner-recall-evaluation.feature` | Mention / span recall | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
+| `scanner-layer-evaluation.feature` | Raw hits / mentions / data items | Gold Items evaluated with Raw Hit Span, Mention Span, and Subject Identity scores via `scan-layer-findings.ts`; unread skip and ingested miss behavior |
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Component / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
 
-### Planned Plexus scenarios
-
-- **SubjectIdentityScore** — identity-key matching for `raw_hit:*`, `mention:*`, and `data_item:*` grades (parallel to Jest `tests/eval/layers/{raw-hits,mentions,data-items}/`).
-- **Per-layer recall datasets** — scorecard datasets aligned with committed fixture ground truth, mirroring Jest `cases.ts` coverage.
+`scanner-layer-evaluation` scenarios are skipped automatically when a required Plexus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
 
 ### Jest-only layers (reference)
 

@@ -69,7 +69,7 @@ const LAYER_SCORES: Record<string, LayerScoreConfig> = {
     name: "Raw Hit Span",
     id: "local-eval-raw-hit-span",
     key: "raw-hit-span",
-    scoreClass: "SourceSpanOverlapScore",
+    scoreClass: "SubjectSpanOverlapScore",
     findingsLayer: "raw-hits",
   },
   "Mention Span": {
@@ -605,7 +605,7 @@ Given(
       "Raw Hit Span.yaml",
     );
     const yaml = readFileSync(scoreYaml, "utf8");
-    assert.match(yaml, /class:\s*SourceSpanOverlapScore/);
+    assert.match(yaml, /class:\s*SubjectSpanOverlapScore/);
   },
 );
 

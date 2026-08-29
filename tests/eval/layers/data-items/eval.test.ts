@@ -41,5 +41,12 @@ describe("eval/layers/data-items", () => {
     expect(report.scores.recall).toBe(1);
     expect(report.scores.negativeCasePassRate).toBe(1);
     expect(report.scores.precision).toBeNull();
+
+    const jvmScan = scanResults.find((result) => result.fixture === "jvm-manifests-basic");
+    expect(jvmScan).toBeDefined();
+    const usernameFindings = jvmScan!.findings.filter(
+      (finding) => finding.key === "data_item:username",
+    );
+    expect(usernameFindings).toHaveLength(1);
   });
 });

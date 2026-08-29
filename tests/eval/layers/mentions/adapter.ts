@@ -1,41 +1,23 @@
-import path from "path";
-
-import { ingestFileSystem } from "../../../../src/ingest/file-system";
-import {
-  matchPiiSignalsInFiles,
-  type PiiSignalHit,
-} from "../../../../src/pii-signals/match-pii-signals";
+import type { PiiSignalHit } from "../../../../src/pii-signals/match-pii-signals";
 import { mentionIdentity } from "../../../../src/eval-layers/identities";
-import type { FixtureScanResult, LayerFinding } from "../../types";
+import type { LayerFinding } from "../../types";
+import {
+  personalDataFindingToLayerFinding,
+  scanFixturePersonalDataLayer,
+} from "../personal-data-adapter";
 
-const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
+export { personalDataFindingToLayerFinding };
 
 export function mentionHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
-  return {
-    key: mentionIdentity(hit.id),
+  return personalDataFindingToLayerFinding({
+    subjectKey: mentionIdentity(hit.id),
     labels: [...hit.labels],
-    sourceFilePaths: [hit.evidence.filePath],
-    sourceLines: [
-      {
-        file_path: hit.evidence.filePath,
-        start_line: hit.evidence.startLine,
-        end_line: hit.evidence.endLine,
-      },
-    ],
-  };
+    filePath: hit.evidence.filePath,
+    startLine: hit.evidence.startLine,
+    endLine: hit.evidence.endLine,
+  });
 }
 
-export async function scanFixtureMentions(fixture: string): Promise<FixtureScanResult> {
-  const root = path.join(FIXTURES_ROOT, fixture);
-  const files = await ingestFileSystem(root);
-
-  const hits = matchPiiSignalsInFiles(
-    files.map((file) => ({ filePath: file.path, content: file.content })),
-  );
-
-  return {
-    fixture,
-    findings: hits.map(mentionHitToLayerFinding),
-    scannedFiles: files.map((file) => file.path),
-  };
+export async function scanFixtureMentions(fixture: string) {
+  return scanFixturePersonalDataLayer(fixture, "mentions");
 }

@@ -1,6 +1,6 @@
 # Ground-truth schema for fixture and corpus evaluation
 
-Six evaluation grades span the personal-data pipeline and the component graph. Subject keys are stable identities used in both Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
+Five evaluation grades span the personal-data pipeline (three grades) and the component graph (two grades). Subject keys are stable identities used in both Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
 
 ## Evaluation grades
 
@@ -58,3 +58,10 @@ Positives may set `documentedGap: true` for known scanner misses. They remain in
 ## Corpus compatibility
 
 Benchmark manifests and annotation YAML use snake_case layer names (`raw_hits`, `data_items`, `data_flows`). The deprecated `pii_signals` corpus layer is normalized to `mentions` on load; annotation files may live at `annotations/mentions.yaml` or the legacy `annotations/pii_signals.yaml`.
+
+Subject keys are normalized on load via `normalizeSubjectKey` in `tests/benchmark/manifest.ts`. Legacy `pii_signal:` prefixes migrate to `mention:` (mentions layer) or `raw_hit:` (raw_hits layer). Stale `pii_signal:` keys that survive migration are rejected.
+
+## Known limitations (deferred)
+
+- **Raw hits vs mentions are isomorphic today** — both grades run the same YAML heuristic matcher (`matchPiiSignalsInFiles`); they differ only in subject-key prefix until a distinct roll-up stage exists for mentions.
+- **Negative cases are vacuous on current patterns** — the heuristic rule set has no negative fixtures that exercise false-positive rejection; expanding negative coverage is a heuristic flywheel item, not a schema change.

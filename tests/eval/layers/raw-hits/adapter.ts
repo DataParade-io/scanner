@@ -1,25 +1,26 @@
 import path from "path";
 
-import { ingestFileSystem } from "../../../../src/ingest/file-system";
-import {
-  matchPiiSignalsInFiles,
-  type PiiSignalHit,
-} from "../../../../src/pii-signals/match-pii-signals";
-import { rawHitIdentity } from "../../../../src/eval-layers/identities";
+import { collectPersonalDataFindings } from "../../../../src/eval-layers/collect-personal-data-findings";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
 
-export function rawHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
+function personalFindingToLayerFinding(finding: {
+  subjectKey: string;
+  labels: string[];
+  filePath: string;
+  startLine: number;
+  endLine: number;
+}): LayerFinding {
   return {
-    key: rawHitIdentity(hit.id),
-    labels: [...hit.labels],
-    sourceFilePaths: [hit.evidence.filePath],
+    key: finding.subjectKey,
+    labels: finding.labels,
+    sourceFilePaths: [finding.filePath],
     sourceLines: [
       {
-        file_path: hit.evidence.filePath,
-        start_line: hit.evidence.startLine,
-        end_line: hit.evidence.endLine,
+        file_path: finding.filePath,
+        start_line: finding.startLine,
+        end_line: finding.endLine,
       },
     ],
   };
@@ -27,15 +28,11 @@ export function rawHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
 
 export async function scanFixtureRawHits(fixture: string): Promise<FixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
-  const files = await ingestFileSystem(root);
-
-  const hits = matchPiiSignalsInFiles(
-    files.map((file) => ({ filePath: file.path, content: file.content })),
-  );
+  const payload = await collectPersonalDataFindings(root, "raw-hits");
 
   return {
     fixture,
-    findings: hits.map(rawHitToLayerFinding),
-    scannedFiles: files.map((file) => file.path),
+    findings: payload.findings.map(personalFindingToLayerFinding),
+    scannedFiles: payload.filesScanned,
   };
 }

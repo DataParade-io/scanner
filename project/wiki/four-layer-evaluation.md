@@ -1,6 +1,6 @@
-# Four-layer scanner evaluation
+# Five-grade scanner evaluation
 
-The scanner measures detection quality at multiple **grades** of abstraction. Personal-data grades stack from raw pattern hits through rolled-up data items; graph grades cover architecture (components and data flows).
+The scanner measures detection quality at five **grades** of abstraction: three personal-data grades (raw pattern hits, mentions, rolled-up data items) and two graph grades (components and data flows).
 
 ## Evaluation grades
 
@@ -51,7 +51,7 @@ Ground-truth case shape is defined in [tests/eval/ground-truth-schema.md](../../
 | Spec source | TypeScript cases in `layers/*/cases.ts` | `.feature` files under `features/` |
 | Runner | `jest tests/eval/**/*.test.ts` | `pnpm test:features` (Cucumber) |
 | Scanner bridge | Layer `adapter.ts` files call ingest/scan or PII matchers | Steps spawn local GraphQL, load gold Items, run `plexus evaluate accuracy` |
-| Layers exercised today | All five Jest layers (components, data-flows, raw-hits, mentions, data-items) | Recall scenarios via Span Overlap score; SubjectIdentityScore planned for identity-key grades |
+| Layers exercised today | All five Jest layers (components, data-flows, raw-hits, mentions, data-items) | Span Overlap recall (`scanner-recall-evaluation.feature`); per-layer personal-data recall via Raw Hit Span, Mention Span, and Subject Identity (`scanner-layer-evaluation.feature`, skipped when a score class is not installed) |
 | Metrics | Shared `tests/eval/score.ts` (recall, label accuracy, precision, negatives) | Plexus Evaluation record + headline recall from scorecard metrics |
 
 Jest stays the fast, deterministic fixture harness. Plexus exercises end-to-end evaluation storage and scorecard integration against a local GraphQL process.
@@ -65,7 +65,13 @@ pnpm run eval:data-flows
 pnpm test tests/eval/layers/raw-hits/
 pnpm test tests/eval/layers/mentions/
 pnpm test tests/eval/layers/data-items/
-pnpm test:features                       # Gherkin / Plexus scenarios
+pnpm test:features                       # Gherkin / Plexus scenarios (layer eval skips without SubjectIdentityScore)
+```
+
+Layer findings for Plexus SubjectIdentityScore:
+
+```bash
+node -r ts-node/register scripts/scan-layer-findings.ts --root tests/fixtures/jvm-manifests-basic --layer raw-hits
 ```
 
 ## Layout

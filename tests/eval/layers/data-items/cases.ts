@@ -20,6 +20,34 @@ export const dataItemEvalCases: EvalCase[] = [
       "Fixture contains a username data item (Spring datasource username property).",
   },
   {
+    id: "data-item-jvm-username-multi-file",
+    fixture: "jvm-manifests-basic",
+    layer: "data-items",
+    subject: { key: "data_item:username", name: "username" },
+    evidence: {
+      file_path: "src/main/resources/bootstrap.yml",
+      start_line: 6,
+      end_line: 6,
+    },
+    expected: { status: "positive", labels: ["username"] },
+    rationale:
+      "Username in application.yml and bootstrap.yml rolls up to one data_item:username.",
+  },
+  {
+    id: "data-item-jvm-username-identity-only",
+    fixture: "jvm-manifests-basic",
+    layer: "data-items",
+    subject: { key: "data_item:username", name: "username" },
+    evidence: {
+      file_path: "src/main/resources/application.yml",
+      start_line: 7,
+      end_line: 7,
+    },
+    expected: { status: "positive", labels: ["username"] },
+    rationale:
+      "Data items match by identity only; evidence line need not overlap the username hit span.",
+  },
+  {
     id: "data-item-jvm-password",
     fixture: "jvm-manifests-basic",
     layer: "data-items",
