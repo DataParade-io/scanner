@@ -20,10 +20,7 @@ export interface MatchPiiSignalsFileInput {
   content: string;
 }
 
-/** Subject key for eval and benchmark layers: `pii_signal:<rule_id>` */
-export function piiSignalIdentity(ruleId: string): string {
-  return `pii_signal:${ruleId}`;
-}
+export { piiSignalIdentity, rawHitIdentity, mentionIdentity, dataItemIdentity } from "../eval-layers/identities";
 
 export function matchPiiSignalsInFile(
   input: MatchPiiSignalsFileInput,

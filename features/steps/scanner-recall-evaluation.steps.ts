@@ -21,6 +21,7 @@ import {
 
 import {
   buildLocalGraphqlChildEnv,
+  isGraphqlProxyAvailable,
   resolvePlexusCli,
 } from "./plexus-runtime";
 
@@ -473,7 +474,16 @@ async function bootstrapRecallScenario(
   await seedLocalGraphqlMetadata(w.baseUrl!);
 }
 
-Before(function (this: ScannerRecallWorld) {
+Before({ tags: "@requires-plexus" }, function (this: ScannerRecallWorld) {
+  if (!isGraphqlProxyAvailable()) {
+    return "skipped";
+  }
+  try {
+    resolvePlexusCli();
+  } catch {
+    return "skipped";
+  }
+
   const w = getWorld(this);
   w.dataDir = undefined;
   w.port = undefined;

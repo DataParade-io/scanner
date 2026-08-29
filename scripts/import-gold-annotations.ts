@@ -29,6 +29,8 @@ interface GoldItemMetadata {
   startLine: number;
   endLine: number;
   annotationId: string;
+  subjectKey?: string;
+  layer?: string;
 }
 
 interface GraphQlItemRef {
@@ -52,7 +54,7 @@ function buildMetadata(
   manifest: BenchmarkManifest,
   annotation: AnnotationRecord,
 ): GoldItemMetadata {
-  return {
+  const metadata: GoldItemMetadata = {
     groundTruth: "Yes",
     repository: manifest.repository,
     commit: manifest.commit,
@@ -61,6 +63,18 @@ function buildMetadata(
     endLine: annotation.evidence.end_line,
     annotationId: annotation.id,
   };
+
+  const subjectKey = annotation.subject.key?.trim();
+  if (subjectKey) {
+    metadata.subjectKey = subjectKey;
+  }
+
+  const layer = annotation.layer?.trim();
+  if (layer) {
+    metadata.layer = layer;
+  }
+
+  return metadata;
 }
 
 async function graphqlRequest(
