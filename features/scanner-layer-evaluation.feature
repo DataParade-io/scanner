@@ -27,3 +27,17 @@ Feature: Scanner layer evaluation
     When I run plexus evaluate accuracy for the Mention Span score
     Then an Evaluation record is stored for layer evaluation
     And the headline metric is recall of detections at 100 percent
+
+  Scenario: Unread file is omitted from layer recall
+    Given the Raw Hit Span score is on the scorecard
+    And a gold Item whose evidence file the layer scanner did not ingest
+    When I run plexus evaluate accuracy for the Raw Hit Span score
+    Then that Item is not counted as a No for layer evaluation
+    And that Item is not in the recall denominator for layer evaluation
+
+  Scenario: Ingested miss still counts for layer recall
+    Given the Raw Hit Span score is on the scorecard
+    And a gold Item whose evidence file the layer scanner ingested
+    And no matching subject identity finding
+    When I run plexus evaluate accuracy for the Raw Hit Span score
+    Then that Item counts as a miss for layer evaluation

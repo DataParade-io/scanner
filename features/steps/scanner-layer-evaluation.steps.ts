@@ -794,3 +794,85 @@ Then("that Item counts as a miss for layer evaluation", function (this: ScannerL
     "confusion matrix must show a false negative for the ingested miss",
   );
 });
+
+async function bootstrapRawHitSpanScenario(
+  w: ScannerLayerWorld,
+  datasetTemplate: string,
+): Promise<void> {
+  await bootstrapLayerScenario(w, "Raw Hit Span");
+  w.datasetFile = materializeDataset(datasetTemplate);
+}
+
+Given(
+  "a gold Item whose evidence file the layer scanner did not ingest",
+  async function (this: ScannerLayerWorld) {
+    const skip = skipUnlessScoreAvailable("Raw Hit Span");
+    if (skip) {
+      return skip;
+    }
+
+    const w = getWorld(this);
+    await bootstrapRawHitSpanScenario(w, "raw-hit-unread.csv");
+  },
+);
+
+Given(
+  "a gold Item whose evidence file the layer scanner ingested",
+  async function (this: ScannerLayerWorld) {
+    const skip = skipUnlessScoreAvailable("Raw Hit Span");
+    if (skip) {
+      return skip;
+    }
+
+    const w = getWorld(this);
+    await bootstrapRawHitSpanScenario(w, "raw-hit-miss.csv");
+  },
+);
+
+Given("no matching subject identity finding", function (this: ScannerLayerWorld) {
+  const w = getWorld(this);
+  assert.ok(w.datasetFile, "dataset file must be set");
+  const dataset = readFileSync(w.datasetFile, "utf8");
+  assert.match(dataset, /layer-raw-miss-1/);
+  assert.match(dataset, /app\.py/);
+});
+
+Then("that Item is not counted as a No for layer evaluation", function (this: ScannerLayerWorld) {
+  const w = getWorld(this);
+  assert.ok(w.evaluateOutput, "evaluate output must be captured");
+
+  assert.match(
+    w.evaluateOutput,
+    /yes\s+\|\s+0\s+0/,
+    "unread gold must not appear as a predicted-no false negative",
+  );
+});
+
+Then(
+  "that Item is not in the recall denominator for layer evaluation",
+  function (this: ScannerLayerWorld) {
+    const w = getWorld(this);
+    assert.ok(w.evaluateOutput, "evaluate output must be captured");
+    assert.ok(w.evaluation, "evaluation must be loaded after accuracy run");
+
+    w.metrics = parseMetrics(w.evaluation.metrics);
+    if (w.metrics.length === 0 && w.evaluateOutput) {
+      const parsedRecall = parseRecallFromOutput(w.evaluateOutput);
+      if (parsedRecall !== undefined) {
+        w.metrics = [{ name: "Recall", value: parsedRecall }];
+      }
+    }
+    w.recallValue = metricValue(w.metrics, "Recall");
+
+    assert.strictEqual(
+      w.recallValue,
+      0,
+      "recall denominator must be empty when the only gold item was skipped",
+    );
+    assert.match(
+      w.evaluateOutput,
+      /0\/0 correct/,
+      "no scored gold items should enter recall accounting",
+    );
+  },
+);
