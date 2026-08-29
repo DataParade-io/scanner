@@ -833,7 +833,7 @@ Given("no matching subject identity finding", function (this: ScannerLayerWorld)
   const w = getWorld(this);
   assert.ok(w.datasetFile, "dataset file must be set");
   const dataset = readFileSync(w.datasetFile, "utf8");
-  assert.match(dataset, /layer-raw-miss-1/);
+  assert.match(dataset, /layer-raw-hit-miss-1/);
   assert.match(dataset, /app\.py/);
 });
 
