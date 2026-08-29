@@ -10,3 +10,7 @@ conn = psycopg2.connect("postgres://example")
 def health():
     response = requests.get("https://api.openai.com/v1/models")
     return {"ok": True, "status": response.status_code}
+
+username = "billing_app"
+
+username = "admin"
