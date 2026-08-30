@@ -82,8 +82,10 @@ export function scoreCorpusPrecision(
   let scopedMatches = 0;
 
   for (const finding of findings) {
-    const unlocated = finding.sourceFilePaths.length === 0;
-    if (!unlocated && !findingInScope(finding, scopeFiles)) {
+    // Locationless findings are synthetic graph scaffolding (e.g. injected
+    // actor:user), not file-level detections. Exclude them from the
+    // precision denominator.
+    if (!findingInScope(finding, scopeFiles)) {
       continue;
     }
     scopedFindings += 1;
