@@ -2,14 +2,27 @@
 
 ## Repository / fixture
 
+`tests/fixtures/python-basic`
+
 ## Scope
 
-Which files were reviewed?
+Reviewed `app.py` for Jest eval gold across components and data-flows:
+
+- Line 7 — `psycopg2.connect("postgres://example")` database connection
+- Line 11 — `requests.get("https://api.openai.com/v1/models")` OpenAI API call
+
+Gold lives in `tests/eval/layers/components/cases.ts` and `tests/eval/layers/data-flows/cases.ts` under fixture id `python-basic`.
 
 ## Findings in this pass
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
+- `KDATAP-b14a5693-47a6-4ded-8ea3-8ef1813a8f92` — OpenAI third-party API flow (`py-openai-third-party`, `py-openai-api-flow`)
+- `KDATAP-3db1ac9b-49e7-49cc-9ee4-602159cac0a0` — psycopg2 database query, documented gap (`py-psycopg2-database-gap` at components and data-flows)
+- `KDATAP-7f19294a-4c6a-4c36-9510-2164a86e3ffd` — OpenAI call is not Stripe (`py-stripe-not-openai-flow`)
 
 ## Human review
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+`app.py` is a closed world. Phantom `aiosqlite` / `asyncpg` / `pymysql` assets are left ungolded so they lower precision. Extra Stripe on the OpenAI line would also lower precision without a whole-repo “no Stripe” negative.

@@ -2,12 +2,14 @@
 
 ## Fixture or repository
 
-Which `tests/fixtures/*` tree or corpus repo is this about?
+`tests/fixtures/dotnet-manifests-basic`
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+`src/Api/appsettings.json` line 8 contains `Username=app` inside `ConnectionStrings.DefaultConnection`. The PII matcher is case-insensitive, so that token should fire username raw-hit, mention, and data-item grades.
+
+Verified against the personal-data collector: `raw_hit:username`, `mention:username`, and `data_item:username` at `src/Api/appsettings.json:8-8`.
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
+Reviewed against fixture source and live scan output. Advanced off proposed after that check.

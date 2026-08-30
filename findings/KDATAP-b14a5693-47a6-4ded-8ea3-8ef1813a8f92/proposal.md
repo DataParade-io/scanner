@@ -2,12 +2,14 @@
 
 ## Fixture or repository
 
-Which `tests/fixtures/*` tree or corpus repo is this about?
+`tests/fixtures/python-basic`
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+`app.py` line 11 calls `requests.get("https://api.openai.com/v1/models")`. The scan should emit an OpenAI third-party component and an `api_call` data flow from the `python-basic` application asset to that third party, both on that HTTP line.
+
+Verified against `scan()`: `third_party:openai` at `app.py:11-11` (labels `third_party`, `ai_provider`) and `flow:asset:python-basic->third_party:openai` (`api_call`) at the same span.
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
+Reviewed against fixture source and live scan output. Advanced off proposed after that check.

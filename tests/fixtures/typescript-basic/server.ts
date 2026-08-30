@@ -26,3 +26,7 @@ app.get(
   },
 );
 
+// Local strategy name, not a travel-document identifier. A sloppy
+// \bpassport\b rule would fire; the current number-token patterns must not.
+const passport_strategy = "jwt";
+
