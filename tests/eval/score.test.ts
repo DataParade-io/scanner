@@ -230,6 +230,24 @@ const scoreScenarios: ScoreScenario[] = [
     },
   },
   {
+    name: "excludes locationless synthetic findings from the precision denominator",
+    cases: [
+      positiveCase("db", "components", "asset:pg", "db.ts", 1, 1, ["database"], {
+        exhaustiveScopeFiles: ["db.ts"],
+      }),
+    ],
+    scanResults: [
+      scanResult([
+        finding("asset:pg", "db.ts", 1, 1, ["database"]),
+        { key: "actor:user", labels: [], sourceFilePaths: [], sourceLines: [] },
+      ]),
+    ],
+    expect: {
+      recall: 1,
+      precision: 1,
+    },
+  },
+  {
     name: "does not count unread negatives toward negativeCasePassRate",
     cases: [
       negativeCase("negative-unread", "raw-hits", "raw_hit:email", "src/missing.yml", 1, 1),

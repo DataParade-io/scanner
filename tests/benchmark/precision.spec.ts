@@ -97,7 +97,7 @@ describe("scoreCorpusPrecision", () => {
     expect(report.precision).toBe(0.5);
   });
 
-  it("includes locationless findings in the denominator", () => {
+  it("excludes locationless synthetic findings from the denominator", () => {
     const report = scoreCorpusPrecision(
       [
         annotation("db", "components", "asset:pg", "db.ts", 1, 1, {
@@ -109,7 +109,7 @@ describe("scoreCorpusPrecision", () => {
         { key: "actor:user", labels: [], sourceFilePaths: [], sourceLines: [] },
       ],
     );
-    expect(report.precision).toBe(0.5);
-    expect(report.exhaustiveScopedFindings).toBe(2);
+    expect(report.precision).toBe(1);
+    expect(report.exhaustiveScopedFindings).toBe(1);
   });
 });

@@ -185,8 +185,10 @@ export function scoreEvalCases(
     }
     const fixturePositives = positivesByFixture.get(fixture) ?? [];
     for (const finding of scan.findings) {
-      const unlocated = finding.sourceFilePaths.length === 0;
-      if (!unlocated && !findingInScope(finding, scopeFiles)) {
+      // Locationless findings are synthetic graph scaffolding (e.g. injected
+      // actor:user), not file-level detections. Exclude them from the
+      // precision denominator — they have no file to be false-positive in.
+      if (!findingInScope(finding, scopeFiles)) {
         continue;
       }
       exhaustiveScopedFindings += 1;
