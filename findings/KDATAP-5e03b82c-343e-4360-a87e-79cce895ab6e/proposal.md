@@ -2,12 +2,14 @@
 
 ## Fixture or repository
 
-Which `tests/fixtures/*` tree or corpus repo is this about?
+`tests/fixtures/terraform-basic`
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+`main.tf` lines 5–10 declare `resource "aws_db_instance" "main"` with `engine = "postgres"`. That is a managed PostgreSQL database and should surface as component `asset:main (aws_db_instance)` labeled `database`.
+
+Verified against `scan()`: that key is present at `main.tf:5-10` with labels `asset`, `database`.
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
+Reviewed against fixture source and live scan output. Advanced off proposed after that check.

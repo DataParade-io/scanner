@@ -1,11 +1,11 @@
 # Decomposition
 
-Fill one row per eval grade that applies. Leave a layer blank if it does not apply.
+Eval cases: `raw-jvm-yaml-password`, `mention-jvm-yaml-password`, `data-item-jvm-password`.
 
 | Layer | Subject key | Evidence (file:lines) | Expected | Labels | documentedGap |
 | --- | --- | --- | --- | --- | --- |
-| components |  |  |  |  |  |
-| data-flows |  |  |  |  |  |
-| raw-hits |  |  |  |  |  |
-| mentions |  |  |  |  |  |
-| data-items |  |  |  |  |  |
+| raw-hits | `raw_hit:password` | `src/main/resources/application.yml:7-7` | positive | user_password | no |
+| mentions | `mention:password` | `src/main/resources/application.yml:7-7` | positive | user_password | no |
+| data-items | `data_item:password` | `src/main/resources/application.yml:7-7` | positive | user_password | no |
+
+Graph layers do not apply.

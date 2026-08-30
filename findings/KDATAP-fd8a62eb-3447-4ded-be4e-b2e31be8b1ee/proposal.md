@@ -2,12 +2,14 @@
 
 ## Fixture or repository
 
-Which `tests/fixtures/*` tree or corpus repo is this about?
+`tests/fixtures/jvm-manifests-basic`
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+`application.yml` line 7 sets `password: super-secret-value`. The PII matcher should fire the password rule (`\bpassword\b`, among others) on that line and roll up through raw-hit, mention, and data-item grades with label `user_password`.
+
+Verified against the personal-data collector: `raw_hit:password`, `mention:password`, and `data_item:password` at `application.yml:7-7`.
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
+Reviewed against fixture source and live scan output. Advanced off proposed after that check.
