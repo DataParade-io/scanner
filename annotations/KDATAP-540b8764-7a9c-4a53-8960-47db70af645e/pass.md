@@ -8,16 +8,17 @@
 
 Reviewed the Terraform fixture for component-graph and personal-data eval gold:
 
-- `main.tf` — `aws_db_instance.main` resource and `aws_db_instance.main.address` in Lambda env
-- `providers.tf`, `variables.tf` — scanned for completeness; no additional gold cases filed
+- `main.tf` — `aws_db_instance.main`, Lambda `DATABASE_URL` from `.address`, and `bind_address` output
+- `providers.tf`, `variables.tf` — scanned for completeness
 
-Gold lives in `tests/eval/layers/components/cases.ts`, `tests/eval/layers/raw-hits/cases.ts`, `tests/eval/layers/mentions/cases.ts`, and `tests/eval/layers/data-items/cases.ts` under fixture id `terraform-basic`.
+Gold lives in `tests/eval/layers/*/cases.ts` under fixture id `terraform-basic`.
 
 ## Findings in this pass
 
 - `KDATAP-5e03b82c-343e-4360-a87e-79cce895ab6e` — aws_db_instance is a database (`tf-aws-pg-database`)
-- `KDATAP-db66b175-66b2-4989-b8de-c7c94e70001b` — `.address` is not a postal address (`raw-tf-address-not-profile`, `mention-tf-address-not-profile`, `data-item-tf-no-address`)
+- `KDATAP-e63b7c9c-3886-4b84-9432-f40d5239162f` — Lambda queries aws_db_instance (`tf-lambda-db-query-flow`)
+- `KDATAP-db66b175-66b2-4989-b8de-c7c94e70001b` — `.address` / `bind_address` are not postal (`raw-tf-address-not-profile`, `raw-tf-bind-address-not-profile`, and mention/data-item counterparts)
 
 ## Human review
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.

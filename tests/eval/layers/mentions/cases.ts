@@ -78,4 +78,24 @@ export const mentionEvalCases: EvalCase[] = [
     rationale:
       "passport.authenticate is local JWT middleware, not a passport-number mention.",
   },
+  {
+    id: "mention-tf-bind-address-not-profile",
+    fixture: "terraform-basic",
+    layer: "mentions",
+    subject: { key: "mention:address", name: "address mention" },
+    evidence: { file_path: "main.tf", start_line: 36, end_line: 36 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "output bind_address is an infra hostname alias, not a postal-address mention.",
+  },
+  {
+    id: "mention-ts-passport-strategy-not-number",
+    fixture: "typescript-basic",
+    layer: "mentions",
+    subject: { key: "mention:passport", name: "passport mention" },
+    evidence: { file_path: "server.ts", start_line: 31, end_line: 31 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "passport_strategy is a local JWT strategy name, not a passport-number mention.",
+  },
 ];

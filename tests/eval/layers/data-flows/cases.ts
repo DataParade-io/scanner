@@ -1,6 +1,6 @@
 import type { EvalCase } from "../../types";
 
-/** Ground-truth data-flow cases across committed fixtures (5–6 mixed outcomes). */
+/** Ground-truth data-flow cases across committed fixtures. */
 export const dataFlowEvalCases: EvalCase[] = [
   {
     id: "ts-stripe-api-flow",
@@ -83,5 +83,35 @@ export const dataFlowEvalCases: EvalCase[] = [
     expected: { status: "negative", labels: [] },
     rationale:
       "The OpenAI HTTP call at this line must not be mislabeled as a Stripe third-party flow.",
+  },
+  {
+    id: "java-stripe-api-flow",
+    fixture: "java-basic",
+    layer: "data-flows",
+    subject: {
+      key: "flow:asset:api->third_party:stripe",
+      name: "API → Stripe",
+    },
+    evidence: {
+      file_path: "src/main/java/com/acme/billing/web/CustomersController.java",
+      start_line: 31,
+      end_line: 31,
+    },
+    expected: { status: "positive", labels: ["api_call"] },
+    rationale:
+      "RestTemplate post to api.stripe.com wires the section API asset to Stripe as an api_call.",
+  },
+  {
+    id: "tf-lambda-db-query-flow",
+    fixture: "terraform-basic",
+    layer: "data-flows",
+    subject: {
+      key: "flow:asset:api (aws_lambda_function)->asset:main (aws_db_instance)",
+      name: "Lambda API → aws_db_instance",
+    },
+    evidence: { file_path: "main.tf", start_line: 21, end_line: 32 },
+    expected: { status: "positive", labels: ["database_query"] },
+    rationale:
+      "Lambda DATABASE_URL from aws_db_instance.main.address is a database_query to the managed Postgres asset.",
   },
 ];

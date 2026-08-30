@@ -1,6 +1,6 @@
 import type { EvalCase } from "../../types";
 
-/** Ground-truth component cases across committed fixtures (5–6 mixed outcomes). */
+/** Ground-truth component cases across committed fixtures. */
 export const componentEvalCases: EvalCase[] = [
   {
     id: "ts-stripe-third-party",
@@ -63,5 +63,19 @@ export const componentEvalCases: EvalCase[] = [
     evidence: { file_path: "main.tf", start_line: 5, end_line: 10 },
     expected: { status: "positive", labels: ["database"] },
     rationale: "aws_db_instance main is a managed PostgreSQL database resource.",
+  },
+  {
+    id: "java-stripe-third-party",
+    fixture: "java-basic",
+    layer: "components",
+    subject: { key: "third_party:stripe", name: "Stripe" },
+    evidence: {
+      file_path: "src/main/java/com/acme/billing/web/CustomersController.java",
+      start_line: 31,
+      end_line: 31,
+    },
+    expected: { status: "positive", labels: ["third_party"] },
+    rationale:
+      "RestTemplate post to api.stripe.com is classified as a Stripe payment-processor third party.",
   },
 ];

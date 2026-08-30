@@ -108,4 +108,24 @@ export const dataItemEvalCases: EvalCase[] = [
     rationale:
       "passport.authenticate middleware must not surface a passport-number data item.",
   },
+  {
+    id: "data-item-tf-no-bind-address",
+    fixture: "terraform-basic",
+    layer: "data-items",
+    subject: { key: "data_item:address", name: "address" },
+    evidence: { file_path: "main.tf", start_line: 36, end_line: 36 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "Terraform bind_address output must not surface a postal-address data item.",
+  },
+  {
+    id: "data-item-ts-no-passport-strategy",
+    fixture: "typescript-basic",
+    layer: "data-items",
+    subject: { key: "data_item:passport", name: "passport" },
+    evidence: { file_path: "server.ts", start_line: 31, end_line: 31 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "passport_strategy must not surface a passport-number data item.",
+  },
 ];
