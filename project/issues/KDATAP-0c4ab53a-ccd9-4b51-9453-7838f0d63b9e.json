@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-0c4ab53a-ccd9-4b51-9453-7838f0d63b9e",
+  "title": "Component taxonomy as canonical source of truth",
+  "description": "Define the component taxonomy as the single source of truth for detector subtypes and corpus annotations. Annotators pick from a defined list; no inventing subtypes.\n\nFeature: Component taxonomy governs detector and annotation subtypes\nScenario: Detector emits a subtype not in the taxonomy\n  Given a scanner detector that would emit a component subtype\n  When the subtype is not declared in component-taxonomy.yaml\n  Then the detector must add the subtype to the taxonomy first\n  And no ad-hoc subtype is emitted\nScenario: Annotator labels a component\n  Given a corpus repo with a component detection\n  When the annotator assigns a subtype\n  Then the subtype must exist in component-taxonomy.yaml",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-d0db518a-4b58-4f9c-a105-7e3649639f48",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-30T17:55:50.230188Z",
+  "updated_at": "2026-08-30T17:55:50.230188Z",
+  "closed_at": null,
+  "custom": {}
+}
