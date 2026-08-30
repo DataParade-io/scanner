@@ -65,6 +65,10 @@ Benchmark manifests and annotation YAML use snake_case layer names (`raw_hits`, 
 
 Subject keys are normalized on load via `normalizeSubjectKey` in `tests/benchmark/manifest.ts`. Legacy `pii_signal:` prefixes migrate to `mention:` (mentions layer) or `raw_hit:` (raw_hits layer). Stale `pii_signal:` keys that survive migration are rejected.
 
+## Precision via exhaustive file scopes
+
+Corpus annotations may set `expected.exhaustive_scope_files` (a string array) on accepted positive records. When set, `tests/benchmark/precision.ts` treats those files as a closed world: every scanner finding in them is a precision denominator item, and it is a true positive only if it matches an accepted positive annotation. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings (no source paths) are included in the denominator.
+
 ## Known limitations (deferred)
 
 - **Raw hits vs mentions are isomorphic today** — both grades run the same YAML heuristic matcher (`matchPiiSignalsInFiles`); they differ only in subject-key prefix until a distinct roll-up stage exists for mentions.
