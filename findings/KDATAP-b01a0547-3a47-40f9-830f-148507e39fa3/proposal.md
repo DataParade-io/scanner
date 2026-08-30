@@ -2,12 +2,16 @@
 
 ## Fixture or repository
 
-Which `tests/fixtures/*` tree or corpus repo is this about?
+`tests/fixtures/java-basic`
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+`CustomerRepository.java` line 9 declares `Customer findByEmail(String email)`. The PII matcher (case-insensitive `\bemail\b`) should fire on that parameter and roll up through raw-hit, mention, and data-item grades with label `user_email`.
+
+Verified against the personal-data collector: `raw_hit:email`, `mention:email`, and `data_item:email` all at `CustomerRepository.java:9-9`.
+
+This fixture also contains an unfiled Stripe `fetch` in `CustomersController.java` line 31. That is a separate detection, not part of this finding.
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
+Reviewed against fixture source and live scan output. Advanced off proposed after that check.

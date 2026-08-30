@@ -1,11 +1,9 @@
 # Decomposition
 
-Fill one row per eval grade that applies. Leave a layer blank if it does not apply.
+Eval case: `py-stripe-not-openai-flow`.
 
 | Layer | Subject key | Evidence (file:lines) | Expected | Labels | documentedGap |
 | --- | --- | --- | --- | --- | --- |
-| components |  |  |  |  |  |
-| data-flows |  |  |  |  |  |
-| raw-hits |  |  |  |  |  |
-| mentions |  |  |  |  |  |
-| data-items |  |  |  |  |  |
+| data-flows | `flow:asset:python-basic->third_party:stripe` | `app.py:11-11` | negative | (none) | no |
+
+Component and personal-data layers do not apply (this finding is a flow-label negative only).

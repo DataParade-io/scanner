@@ -1,11 +1,10 @@
 # Decomposition
 
-Fill one row per eval grade that applies. Leave a layer blank if it does not apply.
+Eval cases: `py-openai-third-party`, `py-openai-api-flow`.
 
 | Layer | Subject key | Evidence (file:lines) | Expected | Labels | documentedGap |
 | --- | --- | --- | --- | --- | --- |
-| components |  |  |  |  |  |
-| data-flows |  |  |  |  |  |
-| raw-hits |  |  |  |  |  |
-| mentions |  |  |  |  |  |
-| data-items |  |  |  |  |  |
+| components | `third_party:openai` | `app.py:11-11` | positive | third_party | no |
+| data-flows | `flow:asset:python-basic->third_party:openai` | `app.py:11-11` | positive | api_call | no |
+
+Personal-data layers do not apply.
