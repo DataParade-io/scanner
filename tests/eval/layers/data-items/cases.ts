@@ -1,10 +1,11 @@
 import type { EvalCase } from "../../types";
+import { withExhaustiveScope } from "../../exhaustive-scopes";
 
 /**
  * Ground-truth data-item cases: identity (type/name/aliases) independent of a
  * single line. Evidence file anchors unread detection; matching is key-only.
  */
-export const dataItemEvalCases: EvalCase[] = [
+const dataItemEvalCaseList: EvalCase[] = [
   {
     id: "data-item-jvm-username",
     fixture: "jvm-manifests-basic",
@@ -128,4 +129,16 @@ export const dataItemEvalCases: EvalCase[] = [
     rationale:
       "passport_strategy must not surface a passport-number data item.",
   },
+  {
+    id: "data-item-py-no-email",
+    fixture: "python-basic",
+    layer: "data-items",
+    subject: { key: "data_item:email", name: "email" },
+    evidence: { file_path: "app.py", start_line: 11, end_line: 11 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "python-basic has no email data item; keeps the fixture in the PII precision world.",
+  },
 ];
+
+export const dataItemEvalCases = withExhaustiveScope(dataItemEvalCaseList);

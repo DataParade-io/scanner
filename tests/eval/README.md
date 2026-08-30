@@ -57,9 +57,9 @@ Subject keys use `${type}:${name.toLowerCase()}`, aligned with `scan()` componen
 | `recall` | Matched evaluable positives ÷ all evaluable positives |
 | `labelAccuracy` | Correctly labelled matches ÷ matched positives |
 | `correctLabelRecall` | Correctly labelled matches ÷ evaluable positives |
-| `precision` | Accepted positive matches ÷ scoped scanner findings (exhaustive scopes only) |
-| `negativeCasePassRate` | Clean explicit negatives ÷ negative cases (not precision) |
-| `unreadCount` | Cases whose evidence file was not scanned |
+| `precision` | Scanner findings in `exhaustiveScopeFiles` that match an accepted **positive** ÷ all scanner findings in those files. Extra hits (including a Stripe finding in a repo that does not use Stripe) are false positives. Explicit negatives are not the precision denominator. |
+| `negativeCasePassRate` | Clean explicit negatives ÷ negative cases (span-level must-not-fire checks, not precision) |
+| `unreadCount` | Cases whose evidence file was not scanned and is not in that case's exhaustive file list |
 
 Positives marked `documentedGap` remain in recall denominators as measured misses; CI gates may exclude them when asserting pass/fail. Metrics with empty denominators return `null`, not `1`.
 

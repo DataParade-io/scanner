@@ -22,3 +22,7 @@ Gold lives in `tests/eval/layers/*/cases.ts` under fixture id `terraform-basic`.
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+`main.tf`, `providers.tf`, and `variables.tf` are a closed world. Accepted positives include the DB instance, Lambda, S3 bucket, AWS provider, and Lambda→DB flow. Extra hits in these files lower precision.

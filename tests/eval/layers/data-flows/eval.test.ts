@@ -54,7 +54,8 @@ describe("eval/layers/data-flows", () => {
     expect(documentedGapMisses.length).toBeGreaterThan(0);
     expect(report.scores.recall).toBeLessThan(1);
 
-    expect(report.scores.precision).toBeNull();
-    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(0);
+    expect(report.scores.precision).not.toBeNull();
+    expect(report.scores.precision as number).toBeLessThan(1);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
   });
 });

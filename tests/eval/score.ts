@@ -12,7 +12,10 @@ function isNegativeCase(caseRecord: EvalCase): boolean {
 }
 
 function isUnread(caseRecord: EvalCase, scannedFiles: string[]): boolean {
-  return !scannedFiles.includes(caseRecord.evidence.file_path);
+  if (scannedFiles.includes(caseRecord.evidence.file_path)) {
+    return false;
+  }
+  return !(caseRecord.exhaustiveScopeFiles ?? []).includes(caseRecord.evidence.file_path);
 }
 
 function lineRangesOverlap(
@@ -72,7 +75,10 @@ function collectExhaustiveScopes(cases: EvalCase[]): Map<string, string[]> {
     if (!caseRecord.exhaustiveScopeFiles || caseRecord.exhaustiveScopeFiles.length === 0) {
       continue;
     }
-    scopes.set(caseRecord.fixture, caseRecord.exhaustiveScopeFiles);
+    const existing = scopes.get(caseRecord.fixture) ?? [];
+    scopes.set(caseRecord.fixture, [
+      ...new Set([...existing, ...caseRecord.exhaustiveScopeFiles]),
+    ]);
   }
   return scopes;
 }
@@ -179,7 +185,8 @@ export function scoreEvalCases(
     }
     const fixturePositives = positivesByFixture.get(fixture) ?? [];
     for (const finding of scan.findings) {
-      if (!findingInScope(finding, scopeFiles)) {
+      const unlocated = finding.sourceFilePaths.length === 0;
+      if (!unlocated && !findingInScope(finding, scopeFiles)) {
         continue;
       }
       exhaustiveScopedFindings += 1;

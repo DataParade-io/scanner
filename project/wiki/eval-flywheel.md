@@ -31,4 +31,8 @@ These Markdown files are the flywheel record. Edit them. Do not edit `project/is
 
 Ryan accepted the six fixture annotation passes. Findings on those fixtures are **verified** (including the java Stripe and Terraform Lambda→DB detections filed after review). Jest cases in `tests/eval/layers/*/cases.ts` are corpus-accepted for those fixtures.
 
+Those passes now set `exhaustiveScopeFiles` so precision is computed. Scanner findings in the reviewed files that do not match an accepted **positive** are false positives. We do not file a negative for “this repo has no Stripe”; extra Stripe hits in an exhaustive file lower precision automatically.
+
+Phantom python drivers (`aiosqlite`, `asyncpg`, `pymysql` on a `psycopg2` file) and locationless `actor:user` extras are left ungolded so they hurt precision.
+
 Passport and Terraform address negatives include both the original weak tokens (`passport.authenticate`, `.address`) and nearer-miss tokens (`passport_strategy`, `bind_address`). Those still do not match the current PII patterns (`passport_number`, `street_address`, and kin); they document the intended boundary, they do not prove the matcher rejects a token it could fire on.

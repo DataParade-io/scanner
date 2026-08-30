@@ -41,7 +41,9 @@ export interface EvalCase {
   rationale: string;
   /**
    * Files exhaustively reviewed for this fixture. When set, scanner findings
-   * with source locations in these files contribute to precision.
+   * with source locations in these files contribute to precision. Extra scanner
+   * hits in this closed world are false positives; a missing vendor is not
+   * recorded as a negative case.
    */
   exhaustiveScopeFiles?: string[];
 }

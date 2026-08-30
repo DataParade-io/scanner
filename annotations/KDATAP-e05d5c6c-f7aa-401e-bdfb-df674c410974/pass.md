@@ -21,3 +21,7 @@ Gold lives in `tests/eval/layers/raw-hits/cases.ts`, `tests/eval/layers/mentions
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+YAML, `pom.xml`, and the ledger Gradle file are a closed world. Accepted positives include datasource username/password and the declared JDBC/JPA/Jedis/Mongo/Hikari/MySQL assets. Extra hits in these files lower precision.

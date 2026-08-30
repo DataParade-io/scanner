@@ -1,7 +1,8 @@
 import type { EvalCase } from "../../types";
+import { withExhaustiveScope } from "../../exhaustive-scopes";
 
 /** Ground-truth raw YAML pattern hits before roll-up. */
-export const rawHitEvalCases: EvalCase[] = [
+const rawHitEvalCaseList: EvalCase[] = [
   {
     id: "raw-jvm-yaml-username",
     fixture: "jvm-manifests-basic",
@@ -15,6 +16,20 @@ export const rawHitEvalCases: EvalCase[] = [
     expected: { status: "positive", labels: ["username"] },
     rationale:
       "YAML datasource username property triggers the username heuristic rule on this line.",
+  },
+  {
+    id: "raw-jvm-yaml-username-bootstrap",
+    fixture: "jvm-manifests-basic",
+    layer: "raw-hits",
+    subject: { key: "raw_hit:username", name: "username pattern" },
+    evidence: {
+      file_path: "src/main/resources/bootstrap.yml",
+      start_line: 6,
+      end_line: 6,
+    },
+    expected: { status: "positive", labels: ["username"] },
+    rationale:
+      "Bootstrap datasource username is a second username hit; exhaustive precision requires this span.",
   },
   {
     id: "raw-jvm-yaml-password",
@@ -98,4 +113,16 @@ export const rawHitEvalCases: EvalCase[] = [
     rationale:
       "passport_strategy is a local JWT strategy name; the passport_number heuristic must not fire.",
   },
+  {
+    id: "raw-py-no-email",
+    fixture: "python-basic",
+    layer: "raw-hits",
+    subject: { key: "raw_hit:email", name: "email pattern" },
+    evidence: { file_path: "app.py", start_line: 11, end_line: 11 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "The OpenAI HTTP call must not fire an email heuristic; keeps python-basic in the PII precision world.",
+  },
 ];
+
+export const rawHitEvalCases = withExhaustiveScope(rawHitEvalCaseList);
