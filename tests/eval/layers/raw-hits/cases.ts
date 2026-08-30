@@ -78,4 +78,24 @@ export const rawHitEvalCases: EvalCase[] = [
     rationale:
       "passport.authenticate is local JWT middleware; the passport-number heuristic must not fire.",
   },
+  {
+    id: "raw-tf-bind-address-not-profile",
+    fixture: "terraform-basic",
+    layer: "raw-hits",
+    subject: { key: "raw_hit:address", name: "address pattern" },
+    evidence: { file_path: "main.tf", start_line: 36, end_line: 36 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "output bind_address is an infra hostname alias; street_/mailing_/postal_ address heuristics must not fire.",
+  },
+  {
+    id: "raw-ts-passport-strategy-not-number",
+    fixture: "typescript-basic",
+    layer: "raw-hits",
+    subject: { key: "raw_hit:passport", name: "passport pattern" },
+    evidence: { file_path: "server.ts", start_line: 31, end_line: 31 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "passport_strategy is a local JWT strategy name; the passport_number heuristic must not fire.",
+  },
 ];

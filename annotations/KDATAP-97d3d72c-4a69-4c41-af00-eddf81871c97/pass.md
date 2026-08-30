@@ -19,4 +19,4 @@ Gold lives in `tests/eval/layers/raw-hits/cases.ts`, `tests/eval/layers/mentions
 
 ## Human review
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
