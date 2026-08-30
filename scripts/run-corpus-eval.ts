@@ -650,35 +650,40 @@ async function main(): Promise<void> {
     throw new Error("--corpus-dir is required (tests/benchmark of the corpus checkout)");
   }
 
-  const proxyDir =
-    values["graphql-proxy-dir"]?.trim() ||
-    process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
-    requireGraphqlProxyDir();
-
   const workDir =
     values["work-dir"]?.trim() || join(repoRoot, ".plexus-corpus-eval");
   mkdirSync(workDir, { recursive: true });
 
-  const port = Number(values.port || process.env.PLEXUS_GRAPHQL_PORT || "8000");
-  let graphqlUrl =
-    values["graphql-url"]?.trim().replace(/\/$/, "") ||
-    `http://127.0.0.1:${port}`;
+  const programmaticRecall = values["programmatic-recall"] === true;
 
-  const dataDir = join(workDir, "virtuus");
-  try {
-    await waitForReady(graphqlUrl, 2_000);
-  } catch {
-    if (!values["start-graphql"]) {
-      throw new Error(
-        `GraphQL is not reachable at ${graphqlUrl}. Start it with --start-graphql or scripts/start-local-graphql.sh`,
-      );
+  let graphqlUrl = "";
+  if (!programmaticRecall) {
+    const proxyDir =
+      values["graphql-proxy-dir"]?.trim() ||
+      process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
+      requireGraphqlProxyDir();
+
+    const port = Number(values.port || process.env.PLEXUS_GRAPHQL_PORT || "8000");
+    graphqlUrl =
+      values["graphql-url"]?.trim().replace(/\/$/, "") ||
+      `http://127.0.0.1:${port}`;
+
+    const dataDir = join(workDir, "virtuus");
+    try {
+      await waitForReady(graphqlUrl, 2_000);
+    } catch {
+      if (!values["start-graphql"]) {
+        throw new Error(
+          `GraphQL is not reachable at ${graphqlUrl}. Start it with --start-graphql or scripts/start-local-graphql.sh, or use --programmatic-recall to skip GraphQL.`,
+        );
+      }
+      console.log(`Starting local GraphQL on port ${port}...`);
+      startGraphql(dataDir, port, proxyDir);
+      await waitForReady(graphqlUrl);
     }
-    console.log(`Starting local GraphQL on port ${port}...`);
-    startGraphql(dataDir, port, proxyDir);
-    await waitForReady(graphqlUrl);
+    console.log(`GraphQL ready at ${graphqlUrl}`);
   }
 
-  console.log(`GraphQL ready at ${graphqlUrl}`);
   console.log("Staging corpus scope into scan roots...");
   const stagedByKey = stageScopedSources(corpusDir, workDir);
   writeScorecardYaml(workDir);
@@ -692,7 +697,7 @@ async function main(): Promise<void> {
   );
   console.log(`Corpus precision: ${JSON.stringify(precisionReport.aggregate)}`);
 
-  if (values["programmatic-recall"]) {
+  if (programmaticRecall) {
     console.log("Computing corpus recall via plexus.scoring (no GraphQL server)...");
     const recallReport = await computeCorpusRecallProgrammatic(corpusDir, stagedByKey);
     writeFileSync(
@@ -704,8 +709,6 @@ async function main(): Promise<void> {
     console.log(JSON.stringify({
       precision: precisionReport.aggregate,
       recall: recallReport.aggregate,
-      datasetPath,
-      positiveGoldRows: rows,
     }, null, 2));
     return;
   }
