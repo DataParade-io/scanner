@@ -29,7 +29,14 @@ export function detectPythonDatabaseConnectionsFromImportsAndContent(
       hasCall = pattern.test(content);
     }
 
-    if (!hasImport && !hasCall && !db.heuristics.usesObjectsAttribute) {
+    if (db.importModules.length > 0) {
+      // Driver declares import modules — require the import to be present.
+      // Without this, a shared callName (e.g. "connect") cross-fires on
+      // every driver that lists it, even when only one driver is imported.
+      if (!hasImport) {
+        continue;
+      }
+    } else if (!hasCall && !db.heuristics.usesObjectsAttribute) {
       continue;
     }
 
