@@ -34,6 +34,15 @@ import {
   loadBenchmarkManifest,
 } from "../tests/benchmark/manifest";
 import type { AnnotationRecord } from "../tests/benchmark/schema";
+import { scoreCorpusPrecision } from "../tests/benchmark/precision";
+import type { LayerFinding } from "../tests/eval/types";
+import {
+  createDefaultScanConfiguration,
+  scan,
+} from "../src/core/pipeline/orchestrator";
+import type { DetectedComponent } from "../src/core/types/component";
+import type { DetectedDataFlow } from "../src/core/types/data-flow";
+import { collectPersonalDataFindings } from "../src/eval-layers/collect-personal-data-findings";
 
 const ACCOUNT_ID = "local-eval";
 const ACCOUNT_KEY = "local-eval";
@@ -180,6 +189,99 @@ function writeScorecardYaml(workDir: string): void {
     ].join("\n"),
     "utf8",
   );
+}
+
+function componentIdentity(component: DetectedComponent): string {
+  return `${component.type}:${component.name.toLowerCase()}`;
+}
+
+async function computeCorpusPrecision(
+  corpusDir: string,
+  stagedByKey: Map<string, string>,
+): Promise<Record<string, unknown>> {
+  const perRepo: Record<string, unknown> = {};
+  let totalScoped = 0;
+  let totalMatched = 0;
+
+  for (const repoDir of listRepoDirs(corpusDir)) {
+    const repoKey = repoDir.split("/").pop()!;
+    const sourceRoot = stagedByKey.get(repoKey);
+    if (!sourceRoot) continue;
+
+    const manifest = loadBenchmarkManifest(repoDir);
+    const allAnnotations: AnnotationRecord[] = [];
+    for (const layer of manifest.coverage.layers) {
+      allAnnotations.push(...loadAnnotations(repoDir, layer));
+    }
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { scanResult } = await scan(sourceRoot, config);
+    const findings: LayerFinding[] = [];
+
+    for (const component of scanResult.components) {
+      findings.push({
+        key: componentIdentity(component),
+        labels: [component.type, ...(component.subType ? [component.subType] : [])],
+        sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
+        sourceLines: component.sourceLocations.map((l) => ({
+          file_path: l.filePath,
+          start_line: l.startLine,
+          end_line: l.endLine,
+        })),
+      });
+    }
+
+    const componentsById = new Map(
+      scanResult.components.map((c) => [c.id, c]),
+    );
+    for (const flow of scanResult.dataFlows) {
+      const source = componentsById.get(flow.sourceComponentId);
+      const target = componentsById.get(flow.targetComponentId);
+      const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
+      const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
+      const locations = flow.sourceLocations?.length
+        ? flow.sourceLocations
+        : flow.sourceLocation
+          ? [flow.sourceLocation]
+          : [];
+      findings.push({
+        key: `flow:${sourceKey}->${targetKey}`,
+        labels: [flow.type],
+        sourceFilePaths: [...new Set(locations.map((l) => l.filePath))],
+        sourceLines: locations.map((l) => ({
+          file_path: l.filePath,
+          start_line: l.startLine,
+          end_line: l.endLine,
+        })),
+      });
+    }
+
+    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
+      const payload = await collectPersonalDataFindings(sourceRoot, layer);
+      for (const f of payload.findings) {
+        findings.push({
+          key: f.subjectKey,
+          labels: f.labels,
+          sourceFilePaths: [f.filePath],
+          sourceLines: [{ file_path: f.filePath, start_line: f.startLine, end_line: f.endLine }],
+        });
+      }
+    }
+
+    const report = scoreCorpusPrecision(allAnnotations, findings);
+    perRepo[repoKey] = report;
+    totalScoped += report.exhaustiveScopedFindings;
+    totalMatched += report.exhaustiveScopedMatches;
+  }
+
+  return {
+    perRepo,
+    aggregate: {
+      precision: totalScoped === 0 ? null : totalMatched / totalScoped,
+      exhaustiveScopedFindings: totalScoped,
+      exhaustiveScopedMatches: totalMatched,
+    },
+  };
 }
 
 async function graphqlRequest(
@@ -449,6 +551,15 @@ async function main(): Promise<void> {
   const stagedByKey = stageScopedSources(corpusDir, workDir);
   writeScorecardYaml(workDir);
 
+  console.log("Computing corpus precision from exhaustive scopes...");
+  const precisionReport = await computeCorpusPrecision(corpusDir, stagedByKey);
+  writeFileSync(
+    join(workDir, "precision.json"),
+    `${JSON.stringify(precisionReport, null, 2)}\n`,
+    "utf8",
+  );
+  console.log(`Corpus precision: ${JSON.stringify(precisionReport.aggregate)}`);
+
   const datasetPath = join(workDir, "dataset.csv");
   const { rows, skipped } = writeDatasetCsv(corpusDir, stagedByKey, datasetPath);
   console.log(`Dataset rows (positive gold): ${rows}; omitted: ${skipped}`);
@@ -518,6 +629,7 @@ async function main(): Promise<void> {
     datasetPath,
     positiveGoldRows: rows,
     importedItems: imported,
+    precision: precisionReport.aggregate,
     evaluation,
   }, null, 2));
 }
