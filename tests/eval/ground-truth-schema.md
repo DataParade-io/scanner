@@ -55,6 +55,10 @@ Each ground-truth case carries an `expected.status`:
 
 Positives may set `documentedGap: true` for known scanner misses. They remain in recall denominators for reporting; CI gates exclude them when asserting pass/fail.
 
+**Precision** is not computed from negatives. Mark files as `exhaustiveScopeFiles` on gold cases. Then every scanner finding in those files is a precision denominator item; it is a true positive only if it matches some accepted positive gold case. A repository that does not use Stripe is not recorded as a negative. If the scanner emits Stripe there anyway, that unmatched finding lowers precision.
+
+## Corpus compatibility
+
 ## Corpus compatibility
 
 Benchmark manifests and annotation YAML use snake_case layer names (`raw_hits`, `data_items`, `data_flows`). The deprecated `pii_signals` corpus layer is normalized to `mentions` on load; annotation files may live at `annotations/mentions.yaml` or the legacy `annotations/pii_signals.yaml`.

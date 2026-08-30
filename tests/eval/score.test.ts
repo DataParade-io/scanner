@@ -15,6 +15,7 @@ interface ScoreScenario {
     recall?: number | null;
     labelAccuracy?: number | null;
     negativeCasePassRate?: number | null;
+    precision?: number | null;
     caseChecks?: Array<{
       caseId: string;
       unread?: boolean;
@@ -172,6 +173,63 @@ const scoreScenarios: ScoreScenario[] = [
     },
   },
   {
+    name: "counts unmatched scanner findings in exhaustive files as precision false positives",
+    cases: [
+      positiveCase("email-hit", "raw-hits", "raw_hit:email", "src/app.yml", 1, 1, ["user_email"], {
+        exhaustiveScopeFiles: ["src/app.yml"],
+      }),
+    ],
+    scanResults: [
+      scanResult([
+        finding("raw_hit:email", "src/app.yml", 1, 1, ["user_email"]),
+        finding("raw_hit:username", "src/app.yml", 2, 2, ["username"]),
+      ]),
+    ],
+    expect: {
+      recall: 1,
+      precision: 0.5,
+    },
+  },
+  {
+    name: "does not require a negative Stripe case to penalize extra Stripe hits",
+    cases: [
+      positiveCase("openai", "data-flows", "flow:app->third_party:openai", "app.py", 11, 11, [
+        "api_call",
+      ], {
+        exhaustiveScopeFiles: ["app.py"],
+      }),
+    ],
+    scanResults: [
+      scanResult(
+        [
+          finding("flow:app->third_party:openai", "app.py", 11, 11, ["api_call"]),
+          finding("flow:app->third_party:stripe", "app.py", 11, 11, ["api_call"]),
+        ],
+        ["app.py"],
+      ),
+    ],
+    expect: {
+      recall: 1,
+      precision: 0.5,
+    },
+  },
+  {
+    name: "treats exhaustive-scope evidence as read when ingest omitted the file",
+    cases: [
+      positiveCase("jedis", "components", "asset:jedis", "pom.xml", 1, 1, ["database"], {
+        exhaustiveScopeFiles: ["pom.xml"],
+      }),
+    ],
+    scanResults: [
+      scanResult([finding("asset:jedis", "pom.xml", 1, 1, ["database"])], []),
+    ],
+    expect: {
+      unreadCount: 0,
+      recall: 1,
+      precision: 1,
+    },
+  },
+  {
     name: "does not count unread negatives toward negativeCasePassRate",
     cases: [
       negativeCase("negative-unread", "raw-hits", "raw_hit:email", "src/missing.yml", 1, 1),
@@ -221,6 +279,9 @@ describe("scoreEvalCases", () => {
       }
       if (scenario.expect.negativeCasePassRate !== undefined) {
         expect(report.scores.negativeCasePassRate).toBe(scenario.expect.negativeCasePassRate);
+      }
+      if (scenario.expect.precision !== undefined) {
+        expect(report.scores.precision).toBe(scenario.expect.precision);
       }
 
       for (const check of scenario.expect.caseChecks ?? []) {

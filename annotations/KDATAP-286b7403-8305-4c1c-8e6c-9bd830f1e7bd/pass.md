@@ -22,3 +22,7 @@ Gold lives in `tests/eval/layers/*/cases.ts` under fixture id `java-basic`.
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+The three Java sources are a closed world. Accepted positives include the email parameter, Stripe call, JDBC PostgreSQL, and Spring Data JPA. Extra scanner hits in these files lower precision.

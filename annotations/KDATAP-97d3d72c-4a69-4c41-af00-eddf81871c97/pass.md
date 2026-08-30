@@ -20,3 +20,7 @@ Gold lives in `tests/eval/layers/raw-hits/cases.ts`, `tests/eval/layers/mentions
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+`appsettings.json` and `Api.csproj` are a closed world. Accepted positives include the connection-string username plus Npgsql, cache, Stripe, Sentry, and AWS package detections. Extra hits in these files lower precision.

@@ -1,7 +1,8 @@
 import type { EvalCase } from "../../types";
+import { withExhaustiveScope } from "../../exhaustive-scopes";
 
 /** Ground-truth mention (file+line receipt) cases from committed fixtures. */
-export const mentionEvalCases: EvalCase[] = [
+const mentionEvalCaseList: EvalCase[] = [
   {
     id: "mention-jvm-yaml-username",
     fixture: "jvm-manifests-basic",
@@ -15,6 +16,20 @@ export const mentionEvalCases: EvalCase[] = [
     expected: { status: "positive", labels: ["username"] },
     rationale:
       "Spring datasource username property is a credentials-category username mention.",
+  },
+  {
+    id: "mention-jvm-yaml-username-bootstrap",
+    fixture: "jvm-manifests-basic",
+    layer: "mentions",
+    subject: { key: "mention:username", name: "username mention" },
+    evidence: {
+      file_path: "src/main/resources/bootstrap.yml",
+      start_line: 6,
+      end_line: 6,
+    },
+    expected: { status: "positive", labels: ["username"] },
+    rationale:
+      "Bootstrap datasource username is a second username mention; exhaustive precision requires this span.",
   },
   {
     id: "mention-jvm-yaml-password",
@@ -98,4 +113,16 @@ export const mentionEvalCases: EvalCase[] = [
     rationale:
       "passport_strategy is a local JWT strategy name, not a passport-number mention.",
   },
+  {
+    id: "mention-py-no-email",
+    fixture: "python-basic",
+    layer: "mentions",
+    subject: { key: "mention:email", name: "email mention" },
+    evidence: { file_path: "app.py", start_line: 11, end_line: 11 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "The OpenAI HTTP call must not be an email mention; keeps python-basic in the PII precision world.",
+  },
 ];
+
+export const mentionEvalCases = withExhaustiveScope(mentionEvalCaseList);

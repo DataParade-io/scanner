@@ -22,3 +22,7 @@ Gold lives in `tests/eval/layers/components/cases.ts` and `tests/eval/layers/dat
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+`app.py` is a closed world. Phantom `aiosqlite` / `asyncpg` / `pymysql` assets are left ungolded so they lower precision. Extra Stripe on the OpenAI line would also lower precision without a whole-repo “no Stripe” negative.

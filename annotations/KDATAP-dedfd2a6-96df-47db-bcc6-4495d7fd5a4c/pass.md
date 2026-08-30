@@ -25,3 +25,7 @@ Gold lives in `tests/eval/layers/*/cases.ts` under fixture id `typescript-basic`
 ## Human review
 
 Accepted. Ryan accepted this labeling pass after live `scan()` / PII-matcher review.
+
+## Exhaustive scope (precision)
+
+Files in `tests/eval/exhaustive-scopes.ts` for this fixture are a closed world. Scanner findings in those files that do not match an accepted positive are false positives. We do not file a negative for vendors the repo does not use.
