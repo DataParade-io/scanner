@@ -284,6 +284,137 @@ async function computeCorpusPrecision(
   };
 }
 
+function annotationToScoringRecord(annotation: AnnotationRecord): Record<string, unknown> {
+  return {
+    file_path: annotation.evidence.file_path,
+    start_line: annotation.evidence.start_line,
+    end_line: annotation.evidence.end_line,
+    expected: { status: annotation.expected.status, labels: annotation.expected.labels },
+  };
+}
+
+function findingToScoringRecord(finding: LayerFinding): Record<string, unknown> {
+  const loc = finding.sourceLines[0];
+  return {
+    filePath: loc?.file_path ?? "",
+    startLine: loc?.start_line ?? 0,
+    endLine: loc?.end_line ?? 0,
+  };
+}
+
+function scoreRecallViaPlexus(
+  annotations: AnnotationRecord[],
+  findings: LayerFinding[],
+): Record<string, unknown> {
+  const payload = JSON.stringify({
+    annotations: annotations.map(annotationToScoringRecord),
+    findings: findings.map(findingToScoringRecord),
+  });
+  const scriptPath = join(repoRoot, "scripts", "score-corpus-recall.py");
+  const plexusRoot = process.env.PLEXUS_ROOT || join(repoRoot, "..", "Plexus");
+  const result = spawnSync("python3", [scriptPath], {
+    input: payload,
+    encoding: "utf8",
+    env: { ...process.env, PYTHONPATH: plexusRoot },
+  });
+  if (result.status !== 0) {
+    throw new Error(`score-corpus-recall.py failed: ${result.stderr}`);
+  }
+  return JSON.parse(result.stdout);
+}
+
+async function computeCorpusRecallProgrammatic(
+  corpusDir: string,
+  stagedByKey: Map<string, string>,
+): Promise<Record<string, unknown>> {
+  const perRepo: Record<string, unknown> = {};
+  let totalTp = 0;
+  let totalFp = 0;
+  let totalTn = 0;
+  let totalFn = 0;
+
+  for (const repoDir of listRepoDirs(corpusDir)) {
+    const repoKey = repoDir.split("/").pop()!;
+    const sourceRoot = stagedByKey.get(repoKey);
+    if (!sourceRoot) continue;
+
+    const manifest = loadBenchmarkManifest(repoDir);
+    const allAnnotations: AnnotationRecord[] = [];
+    for (const layer of manifest.coverage.layers) {
+      allAnnotations.push(...loadAnnotations(repoDir, layer));
+    }
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { scanResult } = await scan(sourceRoot, config);
+    const findings: LayerFinding[] = [];
+
+    for (const component of scanResult.components) {
+      findings.push({
+        key: componentIdentity(component),
+        labels: [component.type, ...(component.subType ? [component.subType] : [])],
+        sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
+        sourceLines: component.sourceLocations.map((l) => ({
+          file_path: l.filePath, start_line: l.startLine, end_line: l.endLine,
+        })),
+      });
+    }
+
+    const componentsById = new Map(scanResult.components.map((c) => [c.id, c]));
+    for (const flow of scanResult.dataFlows) {
+      const source = componentsById.get(flow.sourceComponentId);
+      const target = componentsById.get(flow.targetComponentId);
+      const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
+      const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
+      const locations = flow.sourceLocations?.length
+        ? flow.sourceLocations
+        : flow.sourceLocation
+          ? [flow.sourceLocation]
+          : [];
+      findings.push({
+        key: `flow:${sourceKey}->${targetKey}`,
+        labels: [flow.type],
+        sourceFilePaths: [...new Set(locations.map((l) => l.filePath))],
+        sourceLines: locations.map((l) => ({
+          file_path: l.filePath, start_line: l.startLine, end_line: l.endLine,
+        })),
+      });
+    }
+
+    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
+      const p = await collectPersonalDataFindings(sourceRoot, layer);
+      for (const f of p.findings) {
+        findings.push({
+          key: f.subjectKey,
+          labels: f.labels,
+          sourceFilePaths: [f.filePath],
+          sourceLines: [{ file_path: f.filePath, start_line: f.startLine, end_line: f.endLine }],
+        });
+      }
+    }
+
+    const report = scoreRecallViaPlexus(allAnnotations, findings);
+    perRepo[repoKey] = report;
+    totalTp += report.true_positives as number;
+    totalFp += report.false_positives as number;
+    totalTn += report.true_negatives as number;
+    totalFn += report.false_negatives as number;
+  }
+
+  const total = totalTp + totalFp + totalTn + totalFn;
+  return {
+    perRepo,
+    aggregate: {
+      accuracy: total === 0 ? null : (totalTp + totalTn) / total,
+      recall: totalTp + totalFn === 0 ? null : totalTp / (totalTp + totalFn),
+      precision: totalTp + totalFp === 0 ? null : totalTp / (totalTp + totalFp),
+      true_positives: totalTp,
+      false_positives: totalFp,
+      true_negatives: totalTn,
+      false_negatives: totalFn,
+    },
+  };
+}
+
 async function graphqlRequest(
   graphqlUrl: string,
   query: string,
@@ -510,6 +641,7 @@ async function main(): Promise<void> {
       "graphql-proxy-dir": { type: "string" },
       port: { type: "string" },
       "start-graphql": { type: "boolean", default: false },
+      "programmatic-recall": { type: "boolean", default: false },
     },
   });
 
@@ -559,6 +691,24 @@ async function main(): Promise<void> {
     "utf8",
   );
   console.log(`Corpus precision: ${JSON.stringify(precisionReport.aggregate)}`);
+
+  if (values["programmatic-recall"]) {
+    console.log("Computing corpus recall via plexus.scoring (no GraphQL server)...");
+    const recallReport = await computeCorpusRecallProgrammatic(corpusDir, stagedByKey);
+    writeFileSync(
+      join(workDir, "recall.json"),
+      `${JSON.stringify(recallReport, null, 2)}\n`,
+      "utf8",
+    );
+    console.log(`Corpus recall: ${JSON.stringify(recallReport.aggregate)}`);
+    console.log(JSON.stringify({
+      precision: precisionReport.aggregate,
+      recall: recallReport.aggregate,
+      datasetPath,
+      positiveGoldRows: rows,
+    }, null, 2));
+    return;
+  }
 
   const datasetPath = join(workDir, "dataset.csv");
   const { rows, skipped } = writeDatasetCsv(corpusDir, stagedByKey, datasetPath);
