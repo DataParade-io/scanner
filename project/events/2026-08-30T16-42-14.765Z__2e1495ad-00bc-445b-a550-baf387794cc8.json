@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "2e1495ad-00bc-445b-a550-baf387794cc8",
+  "issue_id": "KDATAP-8959ed50-adcc-4652-bce1-a98b29f04e6c",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-30T16:42:14.765Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "Corpus annotation files declare which files were reviewed as a closed world. Scanner findings in those files that do not match an accepted positive annotation are false positives. No per-repo negative is required for a vendor the repo does not use.\n\nFeature: Corpus precision via exhaustive file scopes\nScenario: Extra scanner findings in exhaustive files lower precision\n  Given a corpus repo with an annotations file declaring exhaustive_scope_files\n  When the scanner emits a finding in one of those files that matches no accepted positive annotation\n  Then precision is less than 1\n  And the unmatched finding counts as a false positive\nScenario: Repo without exhaustive scope keeps precision null\n  Given a corpus repo whose annotations declare no exhaustive_scope_files\n  When the scanner emits findings\n  Then precision is null",
+    "issue_type": "story",
+    "labels": [],
+    "parent": "KDATAP-53db5e7c-46cd-469a-8cef-91f66da12352",
+    "priority": 2,
+    "status": "open",
+    "title": "Corpus annotations declare exhaustive file scopes"
+  }
+}
