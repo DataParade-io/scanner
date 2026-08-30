@@ -30,3 +30,9 @@ resource "aws_lambda_function" "api" {
     }
   }
 }
+
+# Infra hostname alias — not a postal address. A sloppy \baddress\b rule
+# would fire on bind_address; the current street_/mailing_/postal_ patterns must not.
+output "bind_address" {
+  value = aws_db_instance.main.address
+}

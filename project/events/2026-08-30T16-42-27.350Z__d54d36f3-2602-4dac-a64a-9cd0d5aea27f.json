@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "d54d36f3-2602-4dac-a64a-9cd0d5aea27f",
+  "issue_id": "KDATAP-0f79539b-c7cd-44db-b925-0509d43b68ff",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-30T16:42:27.350Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "Scanner emits asset:aiosqlite, asset:asyncpg, and asset:pymysql on python-basic/app.py when only psycopg2 is imported. Those drivers share 'connect' as a callName; psycopg2.connect triggers all of them. Reproduce: scanFixtureComponents('python-basic') shows three phantom database assets at app.py:1-1.",
+    "issue_type": "bug",
+    "labels": [],
+    "parent": "KDATAP-5f998a9e-f2d8-4f97-ad32-391b9194203d",
+    "priority": 1,
+    "status": "open",
+    "title": "Python phantom drivers fire on shared connect callName"
+  }
+}

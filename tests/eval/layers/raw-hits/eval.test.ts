@@ -40,6 +40,7 @@ describe("eval/layers/raw-hits", () => {
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.recall).toBe(1);
     expect(report.scores.negativeCasePassRate).toBe(1);
-    expect(report.scores.precision).toBeNull();
+    expect(report.scores.precision).toBe(1);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
   });
 });

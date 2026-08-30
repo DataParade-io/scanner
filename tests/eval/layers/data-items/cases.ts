@@ -1,10 +1,11 @@
 import type { EvalCase } from "../../types";
+import { withExhaustiveScope } from "../../exhaustive-scopes";
 
 /**
  * Ground-truth data-item cases: identity (type/name/aliases) independent of a
  * single line. Evidence file anchors unread detection; matching is key-only.
  */
-export const dataItemEvalCases: EvalCase[] = [
+const dataItemEvalCaseList: EvalCase[] = [
   {
     id: "data-item-jvm-username",
     fixture: "jvm-manifests-basic",
@@ -108,4 +109,36 @@ export const dataItemEvalCases: EvalCase[] = [
     rationale:
       "passport.authenticate middleware must not surface a passport-number data item.",
   },
+  {
+    id: "data-item-tf-no-bind-address",
+    fixture: "terraform-basic",
+    layer: "data-items",
+    subject: { key: "data_item:address", name: "address" },
+    evidence: { file_path: "main.tf", start_line: 36, end_line: 36 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "Terraform bind_address output must not surface a postal-address data item.",
+  },
+  {
+    id: "data-item-ts-no-passport-strategy",
+    fixture: "typescript-basic",
+    layer: "data-items",
+    subject: { key: "data_item:passport", name: "passport" },
+    evidence: { file_path: "server.ts", start_line: 31, end_line: 31 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "passport_strategy must not surface a passport-number data item.",
+  },
+  {
+    id: "data-item-py-no-email",
+    fixture: "python-basic",
+    layer: "data-items",
+    subject: { key: "data_item:email", name: "email" },
+    evidence: { file_path: "app.py", start_line: 11, end_line: 11 },
+    expected: { status: "negative", labels: [] },
+    rationale:
+      "python-basic has no email data item; keeps the fixture in the PII precision world.",
+  },
 ];
+
+export const dataItemEvalCases = withExhaustiveScope(dataItemEvalCaseList);

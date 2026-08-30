@@ -34,6 +34,15 @@ import {
   loadBenchmarkManifest,
 } from "../tests/benchmark/manifest";
 import type { AnnotationRecord } from "../tests/benchmark/schema";
+import { scoreCorpusPrecision } from "../tests/benchmark/precision";
+import type { LayerFinding } from "../tests/eval/types";
+import {
+  createDefaultScanConfiguration,
+  scan,
+} from "../src/core/pipeline/orchestrator";
+import type { DetectedComponent } from "../src/core/types/component";
+import type { DetectedDataFlow } from "../src/core/types/data-flow";
+import { collectPersonalDataFindings } from "../src/eval-layers/collect-personal-data-findings";
 
 const ACCOUNT_ID = "local-eval";
 const ACCOUNT_KEY = "local-eval";
@@ -180,6 +189,230 @@ function writeScorecardYaml(workDir: string): void {
     ].join("\n"),
     "utf8",
   );
+}
+
+function componentIdentity(component: DetectedComponent): string {
+  return `${component.type}:${component.name.toLowerCase()}`;
+}
+
+async function computeCorpusPrecision(
+  corpusDir: string,
+  stagedByKey: Map<string, string>,
+): Promise<Record<string, unknown>> {
+  const perRepo: Record<string, unknown> = {};
+  let totalScoped = 0;
+  let totalMatched = 0;
+
+  for (const repoDir of listRepoDirs(corpusDir)) {
+    const repoKey = repoDir.split("/").pop()!;
+    const sourceRoot = stagedByKey.get(repoKey);
+    if (!sourceRoot) continue;
+
+    const manifest = loadBenchmarkManifest(repoDir);
+    const allAnnotations: AnnotationRecord[] = [];
+    for (const layer of manifest.coverage.layers) {
+      allAnnotations.push(...loadAnnotations(repoDir, layer));
+    }
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { scanResult } = await scan(sourceRoot, config);
+    const findings: LayerFinding[] = [];
+
+    for (const component of scanResult.components) {
+      findings.push({
+        key: componentIdentity(component),
+        labels: [component.type, ...(component.subType ? [component.subType] : [])],
+        sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
+        sourceLines: component.sourceLocations.map((l) => ({
+          file_path: l.filePath,
+          start_line: l.startLine,
+          end_line: l.endLine,
+        })),
+      });
+    }
+
+    const componentsById = new Map(
+      scanResult.components.map((c) => [c.id, c]),
+    );
+    for (const flow of scanResult.dataFlows) {
+      const source = componentsById.get(flow.sourceComponentId);
+      const target = componentsById.get(flow.targetComponentId);
+      const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
+      const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
+      const locations = flow.sourceLocations?.length
+        ? flow.sourceLocations
+        : flow.sourceLocation
+          ? [flow.sourceLocation]
+          : [];
+      findings.push({
+        key: `flow:${sourceKey}->${targetKey}`,
+        labels: [flow.type],
+        sourceFilePaths: [...new Set(locations.map((l) => l.filePath))],
+        sourceLines: locations.map((l) => ({
+          file_path: l.filePath,
+          start_line: l.startLine,
+          end_line: l.endLine,
+        })),
+      });
+    }
+
+    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
+      const payload = await collectPersonalDataFindings(sourceRoot, layer);
+      for (const f of payload.findings) {
+        findings.push({
+          key: f.subjectKey,
+          labels: f.labels,
+          sourceFilePaths: [f.filePath],
+          sourceLines: [{ file_path: f.filePath, start_line: f.startLine, end_line: f.endLine }],
+        });
+      }
+    }
+
+    const report = scoreCorpusPrecision(allAnnotations, findings);
+    perRepo[repoKey] = report;
+    totalScoped += report.exhaustiveScopedFindings;
+    totalMatched += report.exhaustiveScopedMatches;
+  }
+
+  return {
+    perRepo,
+    aggregate: {
+      precision: totalScoped === 0 ? null : totalMatched / totalScoped,
+      exhaustiveScopedFindings: totalScoped,
+      exhaustiveScopedMatches: totalMatched,
+    },
+  };
+}
+
+function annotationToScoringRecord(annotation: AnnotationRecord): Record<string, unknown> {
+  return {
+    file_path: annotation.evidence.file_path,
+    start_line: annotation.evidence.start_line,
+    end_line: annotation.evidence.end_line,
+    expected: { status: annotation.expected.status, labels: annotation.expected.labels },
+  };
+}
+
+function findingToScoringRecord(finding: LayerFinding): Record<string, unknown> {
+  const loc = finding.sourceLines[0];
+  return {
+    filePath: loc?.file_path ?? "",
+    startLine: loc?.start_line ?? 0,
+    endLine: loc?.end_line ?? 0,
+  };
+}
+
+function scoreRecallViaPlexus(
+  annotations: AnnotationRecord[],
+  findings: LayerFinding[],
+): Record<string, unknown> {
+  const payload = JSON.stringify({
+    annotations: annotations.map(annotationToScoringRecord),
+    findings: findings.map(findingToScoringRecord),
+  });
+  const scriptPath = join(repoRoot, "scripts", "score-corpus-recall.py");
+  const plexusRoot = process.env.PLEXUS_ROOT || join(repoRoot, "..", "Plexus");
+  const result = spawnSync("python3", [scriptPath], {
+    input: payload,
+    encoding: "utf8",
+    env: { ...process.env, PYTHONPATH: plexusRoot },
+  });
+  if (result.status !== 0) {
+    throw new Error(`score-corpus-recall.py failed: ${result.stderr}`);
+  }
+  return JSON.parse(result.stdout);
+}
+
+async function computeCorpusRecallProgrammatic(
+  corpusDir: string,
+  stagedByKey: Map<string, string>,
+): Promise<Record<string, unknown>> {
+  const perRepo: Record<string, unknown> = {};
+  let totalTp = 0;
+  let totalFp = 0;
+  let totalTn = 0;
+  let totalFn = 0;
+
+  for (const repoDir of listRepoDirs(corpusDir)) {
+    const repoKey = repoDir.split("/").pop()!;
+    const sourceRoot = stagedByKey.get(repoKey);
+    if (!sourceRoot) continue;
+
+    const manifest = loadBenchmarkManifest(repoDir);
+    const allAnnotations: AnnotationRecord[] = [];
+    for (const layer of manifest.coverage.layers) {
+      allAnnotations.push(...loadAnnotations(repoDir, layer));
+    }
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { scanResult } = await scan(sourceRoot, config);
+    const findings: LayerFinding[] = [];
+
+    for (const component of scanResult.components) {
+      findings.push({
+        key: componentIdentity(component),
+        labels: [component.type, ...(component.subType ? [component.subType] : [])],
+        sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
+        sourceLines: component.sourceLocations.map((l) => ({
+          file_path: l.filePath, start_line: l.startLine, end_line: l.endLine,
+        })),
+      });
+    }
+
+    const componentsById = new Map(scanResult.components.map((c) => [c.id, c]));
+    for (const flow of scanResult.dataFlows) {
+      const source = componentsById.get(flow.sourceComponentId);
+      const target = componentsById.get(flow.targetComponentId);
+      const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
+      const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
+      const locations = flow.sourceLocations?.length
+        ? flow.sourceLocations
+        : flow.sourceLocation
+          ? [flow.sourceLocation]
+          : [];
+      findings.push({
+        key: `flow:${sourceKey}->${targetKey}`,
+        labels: [flow.type],
+        sourceFilePaths: [...new Set(locations.map((l) => l.filePath))],
+        sourceLines: locations.map((l) => ({
+          file_path: l.filePath, start_line: l.startLine, end_line: l.endLine,
+        })),
+      });
+    }
+
+    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
+      const p = await collectPersonalDataFindings(sourceRoot, layer);
+      for (const f of p.findings) {
+        findings.push({
+          key: f.subjectKey,
+          labels: f.labels,
+          sourceFilePaths: [f.filePath],
+          sourceLines: [{ file_path: f.filePath, start_line: f.startLine, end_line: f.endLine }],
+        });
+      }
+    }
+
+    const report = scoreRecallViaPlexus(allAnnotations, findings);
+    perRepo[repoKey] = report;
+    totalTp += report.true_positives as number;
+    totalFp += report.false_positives as number;
+    totalTn += report.true_negatives as number;
+    totalFn += report.false_negatives as number;
+  }
+
+  const total = totalTp + totalFp + totalTn + totalFn;
+  return {
+    perRepo,
+    aggregate: {
+      accuracy: total === 0 ? null : (totalTp + totalTn) / total,
+      recall: totalTp + totalFn === 0 ? null : totalTp / (totalTp + totalFn),
+      precision: totalTp + totalFp === 0 ? null : totalTp / (totalTp + totalFp),
+      true_positives: totalTp,
+      false_positives: totalFp,
+      true_negatives: totalTn,
+      false_negatives: totalFn,
+    },
+  };
 }
 
 async function graphqlRequest(
@@ -408,6 +641,7 @@ async function main(): Promise<void> {
       "graphql-proxy-dir": { type: "string" },
       port: { type: "string" },
       "start-graphql": { type: "boolean", default: false },
+      "programmatic-recall": { type: "boolean", default: false },
     },
   });
 
@@ -416,38 +650,68 @@ async function main(): Promise<void> {
     throw new Error("--corpus-dir is required (tests/benchmark of the corpus checkout)");
   }
 
-  const proxyDir =
-    values["graphql-proxy-dir"]?.trim() ||
-    process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
-    requireGraphqlProxyDir();
-
   const workDir =
     values["work-dir"]?.trim() || join(repoRoot, ".plexus-corpus-eval");
   mkdirSync(workDir, { recursive: true });
 
-  const port = Number(values.port || process.env.PLEXUS_GRAPHQL_PORT || "8000");
-  let graphqlUrl =
-    values["graphql-url"]?.trim().replace(/\/$/, "") ||
-    `http://127.0.0.1:${port}`;
+  const programmaticRecall = values["programmatic-recall"] === true;
 
-  const dataDir = join(workDir, "virtuus");
-  try {
-    await waitForReady(graphqlUrl, 2_000);
-  } catch {
-    if (!values["start-graphql"]) {
-      throw new Error(
-        `GraphQL is not reachable at ${graphqlUrl}. Start it with --start-graphql or scripts/start-local-graphql.sh`,
-      );
+  let graphqlUrl = "";
+  if (!programmaticRecall) {
+    const proxyDir =
+      values["graphql-proxy-dir"]?.trim() ||
+      process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
+      requireGraphqlProxyDir();
+
+    const port = Number(values.port || process.env.PLEXUS_GRAPHQL_PORT || "8000");
+    graphqlUrl =
+      values["graphql-url"]?.trim().replace(/\/$/, "") ||
+      `http://127.0.0.1:${port}`;
+
+    const dataDir = join(workDir, "virtuus");
+    try {
+      await waitForReady(graphqlUrl, 2_000);
+    } catch {
+      if (!values["start-graphql"]) {
+        throw new Error(
+          `GraphQL is not reachable at ${graphqlUrl}. Start it with --start-graphql or scripts/start-local-graphql.sh, or use --programmatic-recall to skip GraphQL.`,
+        );
+      }
+      console.log(`Starting local GraphQL on port ${port}...`);
+      startGraphql(dataDir, port, proxyDir);
+      await waitForReady(graphqlUrl);
     }
-    console.log(`Starting local GraphQL on port ${port}...`);
-    startGraphql(dataDir, port, proxyDir);
-    await waitForReady(graphqlUrl);
+    console.log(`GraphQL ready at ${graphqlUrl}`);
   }
 
-  console.log(`GraphQL ready at ${graphqlUrl}`);
   console.log("Staging corpus scope into scan roots...");
   const stagedByKey = stageScopedSources(corpusDir, workDir);
   writeScorecardYaml(workDir);
+
+  console.log("Computing corpus precision from exhaustive scopes...");
+  const precisionReport = await computeCorpusPrecision(corpusDir, stagedByKey);
+  writeFileSync(
+    join(workDir, "precision.json"),
+    `${JSON.stringify(precisionReport, null, 2)}\n`,
+    "utf8",
+  );
+  console.log(`Corpus precision: ${JSON.stringify(precisionReport.aggregate)}`);
+
+  if (programmaticRecall) {
+    console.log("Computing corpus recall via plexus.scoring (no GraphQL server)...");
+    const recallReport = await computeCorpusRecallProgrammatic(corpusDir, stagedByKey);
+    writeFileSync(
+      join(workDir, "recall.json"),
+      `${JSON.stringify(recallReport, null, 2)}\n`,
+      "utf8",
+    );
+    console.log(`Corpus recall: ${JSON.stringify(recallReport.aggregate)}`);
+    console.log(JSON.stringify({
+      precision: precisionReport.aggregate,
+      recall: recallReport.aggregate,
+    }, null, 2));
+    return;
+  }
 
   const datasetPath = join(workDir, "dataset.csv");
   const { rows, skipped } = writeDatasetCsv(corpusDir, stagedByKey, datasetPath);
@@ -518,6 +782,7 @@ async function main(): Promise<void> {
     datasetPath,
     positiveGoldRows: rows,
     importedItems: imported,
+    precision: precisionReport.aggregate,
     evaluation,
   }, null, 2));
 }

@@ -40,7 +40,8 @@ describe("eval/layers/data-items", () => {
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.recall).toBe(1);
     expect(report.scores.negativeCasePassRate).toBe(1);
-    expect(report.scores.precision).toBeNull();
+    expect(report.scores.precision).toBe(1);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
 
     const jvmScan = scanResults.find((result) => result.fixture === "jvm-manifests-basic");
     expect(jvmScan).toBeDefined();
