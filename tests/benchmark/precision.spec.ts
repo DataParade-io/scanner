@@ -32,10 +32,12 @@ function finding(
   filePath: string,
   startLine: number,
   endLine: number,
+  layer?: LayerFinding["layer"],
 ): LayerFinding {
   return {
     key,
     labels: [],
+    ...(layer !== undefined ? { layer } : {}),
     sourceFilePaths: [filePath],
     sourceLines: [{ file_path: filePath, start_line: startLine, end_line: endLine }],
   };
@@ -111,5 +113,73 @@ describe("scoreCorpusPrecision", () => {
     );
     expect(report.precision).toBe(1);
     expect(report.exhaustiveScopedFindings).toBe(1);
+  });
+
+  it("does not count mentions findings inside a components exhaustive scope", () => {
+    const report = scoreCorpusPrecision(
+      [
+        annotation("db", "components", "asset:pg", "app.py", 1, 1, {
+          expected: { status: "positive", labels: [], exhaustive_scope_files: ["app.py"] },
+        }),
+      ],
+      [
+        finding("asset:pg", "app.py", 1, 1, "components"),
+        finding("mention:email", "app.py", 2, 2, "mentions"),
+      ],
+    );
+    expect(report.precision).toBe(1);
+    expect(report.exhaustiveScopedFindings).toBe(1);
+    expect(report.exhaustiveScopedMatches).toBe(1);
+  });
+
+  it("scores mentions findings inside a mentions exhaustive scope", () => {
+    const report = scoreCorpusPrecision(
+      [
+        annotation("email", "mentions", "mention:email", "app.py", 2, 2, {
+          expected: { status: "positive", labels: [], exhaustive_scope_files: ["app.py"] },
+        }),
+      ],
+      [
+        finding("mention:email", "app.py", 2, 2, "mentions"),
+        finding("mention:phone", "app.py", 3, 3, "mentions"),
+      ],
+    );
+    expect(report.precision).toBe(0.5);
+    expect(report.exhaustiveScopedFindings).toBe(2);
+    expect(report.exhaustiveScopedMatches).toBe(1);
+  });
+
+  it("scores mentions findings inside a pii_signals exhaustive scope", () => {
+    const report = scoreCorpusPrecision(
+      [
+        annotation("email", "pii_signals", "mention:email", "app.py", 2, 2, {
+          expected: { status: "positive", labels: [], exhaustive_scope_files: ["app.py"] },
+        }),
+      ],
+      [
+        finding("mention:email", "app.py", 2, 2, "mentions"),
+        finding("mention:phone", "app.py", 3, 3, "mentions"),
+      ],
+    );
+    expect(report.precision).toBe(0.5);
+    expect(report.exhaustiveScopedFindings).toBe(2);
+    expect(report.exhaustiveScopedMatches).toBe(1);
+  });
+
+  it("merges pii_signals and mentions into one exhaustive scope bucket", () => {
+    const report = scoreCorpusPrecision(
+      [
+        annotation("email", "mentions", "mention:email", "app.py", 2, 2, {
+          expected: { status: "positive", labels: [], exhaustive_scope_files: ["app.py"] },
+        }),
+        annotation("phone", "pii_signals", "mention:phone", "app.py", 3, 3, {
+          expected: { status: "positive", labels: [], exhaustive_scope_files: ["app.py"] },
+        }),
+      ],
+      [finding("mention:email", "app.py", 2, 2, "mentions")],
+    );
+    expect(report.precision).toBe(1);
+    expect(report.exhaustiveScopedFindings).toBe(1);
+    expect(report.exhaustiveScopedMatches).toBe(1);
   });
 });
