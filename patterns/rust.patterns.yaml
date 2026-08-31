@@ -1,0 +1,408 @@
+# Rust pattern config. All entries share: patternId, optional confidence (default 0.8).
+#
+# `importPaths` matches a `use` path exactly or as a `::` prefix, so
+# `axum` also matches `axum::routing::get`.
+# `crateNames` matches Cargo.toml dependency keys. Manifest scanners feed
+# crate names as `crate:<name>` so they stay disjoint from `use` paths.
+
+db_clients:
+  - id: sqlx
+    patternId: database_connection
+    databaseType: sql
+    importPaths:
+      - sqlx
+    crateNames:
+      - sqlx
+    callNames:
+      - PgPool::connect
+      - MySqlPool::connect
+      - SqlitePool::connect
+      - sqlx::query
+    confidence: 0.9
+
+  - id: diesel
+    patternId: database_connection
+    databaseType: sql
+    importPaths:
+      - diesel
+    crateNames:
+      - diesel
+    callNames:
+      - diesel::connection
+      - PgConnection::establish
+    confidence: 0.9
+
+  - id: sea_orm
+    patternId: database_connection
+    databaseType: sql
+    importPaths:
+      - sea_orm
+    crateNames:
+      - sea-orm
+    callNames:
+      - Database::connect
+    confidence: 0.9
+
+  - id: redis
+    patternId: database_connection
+    databaseType: redis
+    importPaths:
+      - redis
+    crateNames:
+      - redis
+    callNames:
+      - Client::open
+      - redis::Client
+    confidence: 0.9
+
+  - id: mongodb
+    patternId: database_connection
+    databaseType: mongodb
+    importPaths:
+      - mongodb
+    crateNames:
+      - mongodb
+    callNames:
+      - Client::with_uri_str
+    confidence: 0.9
+
+  - id: tokio_postgres
+    patternId: database_connection
+    databaseType: postgres
+    importPaths:
+      - tokio_postgres
+    crateNames:
+      - tokio-postgres
+    callNames:
+      - tokio_postgres::connect
+      - Client::connect
+    confidence: 0.9
+
+  - id: deadpool_postgres
+    patternId: database_connection
+    databaseType: postgres
+    importPaths:
+      - deadpool_postgres
+    crateNames:
+      - deadpool-postgres
+    callNames:
+      - Pool::builder
+      - deadpool_postgres::
+    confidence: 0.85
+
+  - id: elasticsearch
+    patternId: database_connection
+    databaseType: elasticsearch
+    importPaths:
+      - elasticsearch
+    crateNames:
+      - elasticsearch
+    callNames:
+      - Elasticsearch::new
+      - elasticsearch::
+    confidence: 0.9
+
+  - id: opensearch
+    patternId: database_connection
+    databaseType: elasticsearch
+    importPaths:
+      - opensearch
+    crateNames:
+      - opensearch
+    callNames:
+      - OpenSearch::new
+      - opensearch::
+    confidence: 0.9
+
+  - id: aws_sdk_dynamodb
+    patternId: database_connection
+    databaseType: dynamodb
+    importPaths:
+      - aws_sdk_dynamodb
+    crateNames:
+      - aws-sdk-dynamodb
+    callNames:
+      - aws_sdk_dynamodb::
+      - Client::new
+    confidence: 0.85
+
+  - id: rusqlite
+    patternId: database_connection
+    databaseType: sqlite
+    importPaths:
+      - rusqlite
+    crateNames:
+      - rusqlite
+    callNames:
+      - Connection::open
+      - rusqlite::
+    confidence: 0.85
+
+  - id: clickhouse
+    patternId: database_connection
+    databaseType: clickhouse
+    importPaths:
+      - clickhouse
+    crateNames:
+      - clickhouse
+    callNames:
+      - clickhouse::Client
+      - Client::default
+    confidence: 0.85
+
+sqlx_url:
+  patternId: database_connection
+  regex: '["'']((?:postgres|mysql|sqlite)[^"'']+)["'']'
+  name: sqlx_url
+  confidence: 0.85
+  drivers:
+    postgres: postgres
+    postgresql: postgres
+    mysql: mysql
+    sqlite: sqlite
+  defaultDatabaseType: sql
+
+auth:
+  libraries:
+    - id: jsonwebtoken
+      patternId: auth_middleware
+      importPaths:
+        - jsonwebtoken
+      crateNames:
+        - jsonwebtoken
+      callNames:
+        - encode
+        - decode
+        - jsonwebtoken::encode
+        - jsonwebtoken::decode
+      strategy: jwt
+      confidence: 0.9
+
+    - id: axum_auth
+      patternId: auth_middleware
+      importPaths:
+        - axum::middleware
+        - tower_http::auth
+      contentRegexes:
+        - Authorization
+        - Bearer
+      strategy: bearer_token
+      confidence: 0.7
+
+    - id: actix_identity
+      patternId: auth_middleware
+      importPaths:
+        - actix_identity
+        - actix_web::middleware
+      crateNames:
+        - actix-identity
+      strategy: session
+      confidence: 0.85
+
+    - id: oauth2
+      patternId: auth_middleware
+      importPaths:
+        - oauth2
+      crateNames:
+        - oauth2
+      callNames:
+        - oauth2::
+        - AuthorizationCode
+        - Client::exchange_code
+      strategy: oauth2
+      confidence: 0.9
+
+    - id: bearer_token_header
+      patternId: auth_middleware
+      contentRegexes:
+        - 'Authorization'
+        - 'Bearer '
+      strategy: bearer_token
+      confidence: 0.7
+
+routes:
+  frameworks:
+    - id: axum
+      patternId: express_route
+      importPaths:
+        - axum
+      crateNames:
+        - axum
+      confidence: 0.9
+      routeRegexes:
+        - regex: '\.(get|post|put|patch|delete|head|options)\s*\(\s*["'']([^"'']+)["'']'
+          methodGroup: 1
+          pathGroup: 2
+        - regex: '\.route\s*\(\s*["'']([^"'']+)["'']'
+          pathGroup: 1
+
+    - id: actix_web
+      patternId: express_route
+      importPaths:
+        - actix_web
+      crateNames:
+        - actix-web
+      confidence: 0.9
+      routeRegexes:
+        - regex: '\.(?:route|service)\s*\(\s*["'']([^"'']+)["'']'
+          pathGroup: 1
+        - regex: '#\[(?:get|post|put|patch|delete|head|options)\s*\(\s*["'']([^"'']+)["'']'
+          pathGroup: 1
+
+    - id: rocket
+      patternId: express_route
+      importPaths:
+        - rocket
+      crateNames:
+        - rocket
+      confidence: 0.9
+      routeRegexes:
+        - regex: '#\[(?:get|post|put|patch|delete|head|options)\s*\(\s*["'']([^"'']+)["'']'
+          pathGroup: 1
+
+    - id: tonic
+      patternId: express_route
+      importPaths:
+        - tonic
+      crateNames:
+        - tonic
+      confidence: 0.85
+      routeRegexes:
+        - regex: '\.add_service\s*\('
+          defaultMethod: RPC
+        - regex: '\bServer::builder\s*\('
+          defaultMethod: RPC
+        - regex: '\b([A-Za-z_]\w*Server)\s*::'
+          pathGroup: 1
+          defaultMethod: RPC
+
+serverless:
+  handlers:
+    - id: aws_lambda_rust
+      patternId: lambda_handler
+      importPaths:
+        - lambda_runtime
+        - aws_lambda_events
+      crateNames:
+        - lambda_runtime
+        - aws_lambda_events
+      callNames:
+        - lambda_runtime::run
+        - run
+      confidence: 0.85
+
+env_config:
+  envVariable:
+    patternId: env_variable
+    regex: '\benv::(?:var|var_os)\s*\(\s*["'']([^"'']+)["'']'
+    confidence: 0.85
+
+  configLoaders:
+    patternId: config_file
+    confidence: 0.85
+    loaders:
+      - id: dotenvy
+        importPaths:
+          - dotenvy
+        crateNames:
+          - dotenvy
+          - dotenv
+        callNames:
+          - dotenvy::dotenv
+          - dotenv::dotenv
+          - dotenv
+      - id: config_rs
+        importPaths:
+          - config
+        crateNames:
+          - config
+        callNames:
+          - Config::builder
+          - config::Config
+
+  configFile:
+    patternId: config_file
+    fileNameRegex: '(^|/)(config|configuration|settings)\.rs$'
+    name: rust_config
+    confidence: 0.75
+
+external_apis:
+  httpClients:
+    - id: reqwest
+      patternId: external_api_call
+      clientName: reqwest
+      importPaths:
+        - reqwest
+      crateNames:
+        - reqwest
+      callNames:
+        - reqwest::get
+        - Client::new
+        - Client::builder
+        - .get
+        - .post
+        - .put
+        - .patch
+        - .delete
+        - .send
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: hyper
+      patternId: external_api_call
+      clientName: hyper
+      importPaths:
+        - hyper
+      crateNames:
+        - hyper
+      callNames:
+        - Client::new
+        - Request::builder
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.8
+
+    - id: ureq
+      patternId: external_api_call
+      clientName: ureq
+      importPaths:
+        - ureq
+      crateNames:
+        - ureq
+      callNames:
+        - ureq::get
+        - ureq::post
+        - ureq::put
+        - ureq::delete
+        - ureq::request
+        - Agent::new
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: awc
+      patternId: external_api_call
+      clientName: awc
+      importPaths:
+        - awc
+      crateNames:
+        - awc
+      callNames:
+        - awc::Client
+        - Client::default
+        - Client::new
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.85
+
+    - id: tonic_client
+      patternId: external_api_call
+      clientName: tonic
+      importPaths:
+        - tonic
+      crateNames:
+        - tonic
+      callNames:
+        - Channel::from_static
+        - Channel::from_shared
+        - Endpoint::from_static
+        - connect
+      urlRegex: '["''](https?:\/\/[^"'']+|[^"'']+:\d+)["'']'
+      confidence: 0.8

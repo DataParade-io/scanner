@@ -14,6 +14,10 @@ import type { GoPatternConfig } from "../analyzers/go/go-detection-config";
 import { loadGoPatternConfig } from "../analyzers/go/go-detection-config";
 import type { PhpPatternConfig } from "../analyzers/php/php-detection-config";
 import { loadPhpPatternConfig } from "../analyzers/php/php-detection-config";
+import type { RustPatternConfig } from "../analyzers/rust/rust-detection-config";
+import { loadRustPatternConfig } from "../analyzers/rust/rust-detection-config";
+import type { RubyPatternConfig } from "../analyzers/ruby/ruby-detection-config";
+import { loadRubyPatternConfig } from "../analyzers/ruby/ruby-detection-config";
 import type { JvmPatternConfig } from "../analyzers/jvm/jvm-detection-config";
 import { loadJvmPatternConfig } from "../analyzers/jvm/jvm-detection-config";
 import type { CppPatternConfig } from "../analyzers/cpp/cpp-detection-config";
@@ -32,6 +36,8 @@ export interface UnifiedPatternConfig {
   python: PythonPatternConfig;
   go: GoPatternConfig;
   php: PhpPatternConfig;
+  rust: RustPatternConfig;
+  ruby: RubyPatternConfig;
   jvm: JvmPatternConfig;
   cpp: CppPatternConfig;
   csharp: CSharpPatternConfig;
@@ -170,6 +176,64 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(unified.php.envConfig.configFile.patternId));
   }
   for (const c of unified.php.externalApis.httpClients) {
+    emittedPatternIds.add(String(c.patternId));
+  }
+
+  // Rust.
+  for (const db of unified.rust.dbClients) {
+    emittedPatternIds.add(String(db.patternId));
+  }
+  if (unified.rust.sqlxUrl) {
+    emittedPatternIds.add(String(unified.rust.sqlxUrl.patternId));
+  }
+  for (const lib of unified.rust.auth.libraries) {
+    emittedPatternIds.add(String(lib.patternId));
+  }
+  for (const fw of unified.rust.routes.frameworks) {
+    emittedPatternIds.add(String(fw.patternId));
+  }
+  for (const handler of unified.rust.serverless.handlers) {
+    emittedPatternIds.add(String(handler.patternId));
+  }
+  if (unified.rust.envConfig.envVariable) {
+    emittedPatternIds.add(String(unified.rust.envConfig.envVariable.patternId));
+  }
+  if (unified.rust.envConfig.configLoaders) {
+    emittedPatternIds.add(String(unified.rust.envConfig.configLoaders.patternId));
+  }
+  if (unified.rust.envConfig.configFile) {
+    emittedPatternIds.add(String(unified.rust.envConfig.configFile.patternId));
+  }
+  for (const c of unified.rust.externalApis.httpClients) {
+    emittedPatternIds.add(String(c.patternId));
+  }
+
+  // Ruby.
+  for (const db of unified.ruby.dbClients) {
+    emittedPatternIds.add(String(db.patternId));
+  }
+  if (unified.ruby.databaseUrl) {
+    emittedPatternIds.add(String(unified.ruby.databaseUrl.patternId));
+  }
+  for (const lib of unified.ruby.auth.libraries) {
+    emittedPatternIds.add(String(lib.patternId));
+  }
+  for (const fw of unified.ruby.routes.frameworks) {
+    emittedPatternIds.add(String(fw.patternId));
+  }
+  for (const handler of unified.ruby.serverless.handlers) {
+    emittedPatternIds.add(String(handler.patternId));
+  }
+  if (unified.ruby.envConfig.envVariable) {
+    emittedPatternIds.add(String(unified.ruby.envConfig.envVariable.patternId));
+  }
+  if (unified.ruby.envConfig.configLoaders) {
+    emittedPatternIds.add(String(unified.ruby.envConfig.configLoaders.patternId));
+  }
+  if (unified.ruby.envConfig.configFile) {
+    emittedPatternIds.add(String(unified.ruby.envConfig.configFile.patternId));
+  }
+  for (const c of unified.ruby.externalApis.httpClients) {
     emittedPatternIds.add(String(c.patternId));
   }
 
@@ -324,6 +388,8 @@ export function loadUnifiedPatternConfig(): UnifiedPatternConfig {
   const python = loadPythonPatternConfig();
   const go = loadGoPatternConfig();
   const php = loadPhpPatternConfig();
+  const rust = loadRustPatternConfig();
+  const ruby = loadRubyPatternConfig();
   const jvm = loadJvmPatternConfig();
   const cpp = loadCppPatternConfig();
   const csharp = loadCSharpPatternConfig();
@@ -338,6 +404,8 @@ export function loadUnifiedPatternConfig(): UnifiedPatternConfig {
     python,
     go,
     php,
+    rust,
+    ruby,
     jvm,
     cpp,
     csharp,
