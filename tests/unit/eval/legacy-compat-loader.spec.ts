@@ -171,6 +171,60 @@ describe("loadLegacyGoldRecord", () => {
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
   });
 
+  it("maps negative expected.status with rejected review to rejected disposition", () => {
+    const { record } = loadLegacyGoldRecord(
+      legacyRecord({
+        id: "negative-rejected",
+        expected: { status: "negative", labels: [] },
+        provenance: {
+          proposed_by: "test",
+          proposed_at: "2026-08-31",
+          review_state: "rejected",
+        },
+      }),
+      { warn: () => undefined },
+    );
+
+    expect(record.disposition).toBe("rejected");
+    expect(isAcceptedEvaluablePositive(record)).toBe(false);
+  });
+
+  it("maps negative expected.status with accepted review to needs_adjudication", () => {
+    const { record } = loadLegacyGoldRecord(
+      legacyRecord({
+        id: "negative-accepted-review",
+        expected: { status: "negative", labels: [] },
+        provenance: {
+          proposed_by: "test",
+          proposed_at: "2026-08-31",
+          review_state: "accepted",
+        },
+      }),
+      { warn: () => undefined },
+    );
+
+    expect(record.disposition).toBe("needs_adjudication");
+    expect(isAcceptedEvaluablePositive(record)).toBe(false);
+  });
+
+  it("maps positive expected.status with proposed review to needs_adjudication", () => {
+    const { record } = loadLegacyGoldRecord(
+      legacyRecord({
+        id: "positive-proposed",
+        expected: { status: "positive", labels: [] },
+        provenance: {
+          proposed_by: "test",
+          proposed_at: "2026-08-31",
+          review_state: "proposed",
+        },
+      }),
+      { warn: () => undefined },
+    );
+
+    expect(record.disposition).toBe("needs_adjudication");
+    expect(isAcceptedEvaluablePositive(record)).toBe(false);
+  });
+
   it("stamps source and target contract versions on every diagnostic", () => {
     const { diagnostics } = loadLegacyGoldRecord(legacyRecord({ id: "stamps" }), {
       warn: () => undefined,
