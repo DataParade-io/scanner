@@ -26,7 +26,7 @@ tests/benchmark/
         pii_signals.yaml
         data_items.yaml
   scripts/
-    materialize-repo.mjs   # optional local clone helper (not run in CI)
+    materialize-repo.ts   # optional local clone helper (not run in CI)
   .cache/               # materialized clones (gitignored)
 ```
 
@@ -78,6 +78,8 @@ pnpm run benchmark:materialize --all
 ```
 
 Clones land in `tests/benchmark/.cache/repos/<key>@<commit>/`. The script is idempotent and uses sparse checkout when scope paths are listed in the manifest.
+
+`pnpm run benchmark:materialize` compiles with `tsc` then executes `dist/tests/benchmark/scripts/materialize-repo.js`.
 
 ## Candidate inventory
 
