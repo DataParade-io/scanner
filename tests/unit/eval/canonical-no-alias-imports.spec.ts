@@ -10,10 +10,21 @@ const FORBIDDEN_ALIAS_PATTERNS = [
 function listCanonicalSourceFiles(): string[] {
   const repoRoot = path.resolve(__dirname, "..", "..", "..");
   const canonicalDir = path.join(repoRoot, "tests", "eval", "canonical");
-  return fs
-    .readdirSync(canonicalDir)
-    .filter((name) => name.endsWith(".ts"))
-    .map((name) => path.join(canonicalDir, name));
+  const files: string[] = [];
+
+  function walk(dir: string): void {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(fullPath);
+      } else if (entry.name.endsWith(".ts")) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  walk(canonicalDir);
+  return files;
 }
 
 describe("canonical module has no legacy alias tables", () => {
@@ -23,7 +34,7 @@ describe("canonical module has no legacy alias tables", () => {
       const text = fs.readFileSync(filePath, "utf8");
       for (const pattern of FORBIDDEN_ALIAS_PATTERNS) {
         if (text.includes(pattern)) {
-          offenders.push({ file: path.basename(filePath), pattern });
+          offenders.push({ file: path.relative(path.resolve(__dirname, "..", "..", ".."), filePath), pattern });
         }
       }
     }

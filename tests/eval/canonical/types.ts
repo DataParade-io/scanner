@@ -61,6 +61,23 @@ export interface DeclaredCapabilityCoverage {
   distinctLeaf: number;
 }
 
+export interface TypedComponentEndpoint {
+  componentType: string;
+  endpointKey: string;
+  componentSubtype?: string;
+  optionalAssertion?: Pick<OptionalAssertion, "vendor" | "instance">;
+}
+
+export interface AssertedFlowEndpoints {
+  source: TypedComponentEndpoint;
+  target: TypedComponentEndpoint;
+}
+
+export interface FlowAssertion {
+  dataCategories: readonly string[];
+  supportingProvenance?: readonly string[];
+}
+
 interface CanonicalRecordFields extends ContractEnvelope {
   identity: CanonicalEntityIdentity;
   classification: AssertedClassification;
@@ -71,6 +88,9 @@ interface CanonicalRecordFields extends ContractEnvelope {
   display?: DisplayFields;
   disposition: CanonicalDisposition;
   declaredCapabilitySupported?: DeclaredCapabilitySupported;
+  /** Present only on adjudicated typed flow records — never invented from prose keys. */
+  flowEndpoints?: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
 }
 
 /** Canonical gold expectation — may carry migration bookkeeping `entityId`. */
@@ -119,4 +139,16 @@ export function scannerFindingHasEntityId(
   finding: CanonicalScannerFinding,
 ): finding is CanonicalScannerFinding & { entityId: string } {
   return "entityId" in finding && (finding as { entityId?: string }).entityId !== undefined;
+}
+
+export function hasFlowEndpoints(
+  record: CanonicalGoldExpectation | CanonicalScannerFinding,
+): boolean {
+  return record.flowEndpoints !== undefined;
+}
+
+export function isFlowLayerRecord(
+  record: CanonicalGoldExpectation | CanonicalScannerFinding,
+): boolean {
+  return record.identity.layer === "data-flows";
 }
