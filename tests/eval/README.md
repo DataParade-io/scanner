@@ -1,6 +1,6 @@
 # Fixture evaluation harness
 
-Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for identity and matching rules across all five grades.
+Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for legacy identity and matching rules across all five grades, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
 
 ## Five evaluation grades
 
@@ -20,7 +20,8 @@ Three personal-data grades share heuristic rules but differ in roll-up; two grap
 tests/eval/
   types.ts                # Eval case and score report types
   score.ts                # Shared recall / label / precision metrics
-  ground-truth-schema.md  # Identity and matching rules for all five grades
+  ground-truth-schema.md  # Legacy identity and matching rules for all five grades
+  canonical-representation.md  # Canonical evaluation representation behaviour spec
   layers/
     raw-hits/
       adapter.ts          # Pattern-hit bridge with raw_hit: identity

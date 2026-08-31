@@ -63,8 +63,11 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Component / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
+| `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
 `scanner-layer-evaluation` scenarios are skipped automatically when a required Plexus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
+
+`canonical-evaluation-representation` scenarios return **pending** (not skipped) until the canonical IR types land in KDATAP-06634c. See [`tests/eval/canonical-representation.md`](../tests/eval/canonical-representation.md).
 
 ### Jest-only layers (reference)
 

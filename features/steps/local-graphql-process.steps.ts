@@ -186,7 +186,7 @@ async function graphqlRequest(
   return payload.data;
 }
 
-Before(function (this: LocalGraphqlWorld) {
+Before({ tags: "@local-graphql" }, function (this: LocalGraphqlWorld) {
   if (!isGraphqlProxyAvailable()) {
     return "skipped";
   }
@@ -208,7 +208,7 @@ Before(function (this: LocalGraphqlWorld) {
   w.itemText = undefined;
 });
 
-After(async function (this: LocalGraphqlWorld) {
+After({ tags: "@local-graphql" }, async function (this: LocalGraphqlWorld) {
   const w = getWorld(this);
   if (w.child) {
     await stopChild(w.child);
