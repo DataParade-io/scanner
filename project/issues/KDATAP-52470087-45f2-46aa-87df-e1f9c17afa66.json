@@ -3,17 +3,24 @@
   "title": "benchmark:materialize fails with ERR_MODULE_NOT_FOUND on its own .ts imports",
   "description": "`pnpm run benchmark:materialize` is the supported path for materializing a pinned corpus packet. On current `develop` (Node 22.22) it fails with `ERR_MODULE_NOT_FOUND` on its own TypeScript imports.\n\n`tests/benchmark/scripts/materialize-repo.mjs` is launched as\n\n```\nnode --experimental-strip-types tests/benchmark/scripts/materialize-repo.mjs\n```\n\nand imports `../materialize-paths.ts` and `../materialize-orchestrator.ts`. Those `.ts` specifiers do not resolve as modules under Node 22.22, so nobody can materialize a packet through the supported path.\n\nThis blocks the detection census and the baseline run. It does not authorize detector retuning, new language ingest, or skipping tests.\n\nDefinition of done: `pnpm run benchmark:materialize <repo-key>` works on the Node version CI and contributors use; existing materialize unit tests stay green; no test is skipped, disabled, or quarantined.",
   "type": "bug",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 0,
   "assignee": "rap@endymion.com",
   "creator": null,
   "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "8e351d8f-77e0-40dc-a460-216995ace828",
+      "author": "rap@endymion.com",
+      "text": "## Root cause\n`benchmark:materialize` ran `materialize-repo.mjs` with `node --experimental-strip-types`, importing `../materialize-paths.ts` and `../materialize-orchestrator.ts`. Node could load those `.ts` files, but `materialize-orchestrator.ts` imports `./materialize-paths` without an extension. Under ESM resolution (strip-types reparses the file as ESM), that inner import fails with `ERR_MODULE_NOT_FOUND`.\n\n## Fix\nMatch `benchmark:run`: compile with `tsc`, then execute the built JS.\n- Converted `tests/benchmark/scripts/materialize-repo.mjs` → `materialize-repo.ts`\n- Updated `package.json`: `pnpm run build && node dist/tests/benchmark/scripts/materialize-repo.js`\n- Entrypoint uses `resolveDefaultBenchmarkRoot(__dirname)` so paths resolve correctly from `dist/`\n- Added `tests/unit/benchmark/materialize-entrypoint.spec.ts` smoke test\n\n## Proof\n- `node dist/tests/benchmark/scripts/materialize-repo.js` → usage message, exit 1\n- `pnpm run benchmark:materialize vgs-django` → materialized successfully\n- `pnpm test tests/unit/benchmark/` → 3 suites, 8 tests, all green\n\nPR: https://github.com/DataParade-io/scanner/pull/11\n",
+      "created_at": "2026-08-31T18:35:42.934371Z"
+    }
+  ],
   "created_at": "2026-08-31T18:27:41.909509Z",
-  "updated_at": "2026-08-31T18:28:01.752088Z",
-  "closed_at": null,
+  "updated_at": "2026-08-31T18:37:49.606860Z",
+  "closed_at": "2026-08-31T18:35:42.930639Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"
