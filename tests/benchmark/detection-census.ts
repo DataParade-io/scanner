@@ -15,6 +15,7 @@ import {
   MaterializationMissingError,
 } from "./run-benchmark";
 import { scanRepoByManifestLayers } from "./scan-repo";
+import { resolveDefaultBenchmarkRoot } from "./paths";
 
 const CENSUS_LAYERS = ["components", "data_flows"] as const;
 
@@ -438,7 +439,7 @@ export function writeDetectionCensusReport(
   benchmarkRoot?: string,
 ): { jsonPath: string; markdownPath: string } {
   const reportsDir = path.join(
-    benchmarkRoot ?? path.join(__dirname, ".."),
+    benchmarkRoot ?? resolveDefaultBenchmarkRoot(),
     "reports",
   );
   fs.mkdirSync(reportsDir, { recursive: true });

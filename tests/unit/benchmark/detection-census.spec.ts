@@ -1,4 +1,5 @@
 import type { DetectedComponent } from "../../../src/core/types/component";
+import fs from "fs";
 import type { LayerFinding } from "../../eval/types";
 import {
   buildComponentIdentitySet,
@@ -16,7 +17,7 @@ import {
 } from "../../benchmark/detection-census";
 import type { AnnotationRecord } from "../../benchmark/schema";
 import type { FixtureScanResult } from "../../eval/types";
-import { MaterializationMissingError, listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
+import { MaterializationMissingError, listBenchmarkRepoKeys, resolveMaterializedRepoPath } from "../../benchmark/run-benchmark";
 
 function component(overrides: Partial<DetectedComponent> & Pick<DetectedComponent, "name" | "type">): DetectedComponent {
   return {
@@ -145,14 +146,27 @@ describe("detection census", () => {
 
   it("preflight fails closed when materialization is missing", () => {
     const repoKey = "easy-school";
-    const { missing } = preflightMaterializedRepos([repoKey]);
-    expect(missing).toHaveLength(1);
-    expect(missing[0]).toBeInstanceOf(MaterializationMissingError);
-    expect(missing[0]?.repoKey).toBe(repoKey);
+    const expectedPath = resolveMaterializedRepoPath(repoKey);
+    const originalExistsSync = fs.existsSync.bind(fs);
+    const existsSpy = jest.spyOn(fs, "existsSync").mockImplementation((target) => {
+      if (target === expectedPath) {
+        return false;
+      }
+      return originalExistsSync(target);
+    });
 
-    expect(() => assertAllMaterialized([repoKey])).toThrow(
-      /Detection census preflight failed/,
-    );
+    try {
+      const { missing } = preflightMaterializedRepos([repoKey]);
+      expect(missing).toHaveLength(1);
+      expect(missing[0]).toBeInstanceOf(MaterializationMissingError);
+      expect(missing[0]?.repoKey).toBe(repoKey);
+
+      expect(() => assertAllMaterialized([repoKey])).toThrow(
+        /Detection census preflight failed/,
+      );
+    } finally {
+      existsSpy.mockRestore();
+    }
   });
 
   it("loads only accepted component positives for gold denominators", () => {
