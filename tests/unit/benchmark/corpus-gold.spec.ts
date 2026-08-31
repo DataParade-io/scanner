@@ -4,6 +4,7 @@ import YAML from "yaml";
 
 import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
+import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical";
 import { annotationsToEvalCases } from "../../benchmark/to-eval-cases";
 
 const PATTERNS_ROOT = path.join(__dirname, "../../../patterns");
@@ -79,6 +80,20 @@ describe("imported corpus gold", () => {
     }
 
     expect(accepted).toBeGreaterThan(1000);
+  });
+
+  it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
+    const repoDir = path.join(benchmarkRoot, "repos", "wordpress");
+    const annotations = loadAnnotations(repoDir, "components");
+    const sample = annotations.find((entry) => entry.subject.key === "asset:database");
+    expect(sample).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+
+    expect(record.identity.identityKey).toBe("asset:database");
+    expect(record.classification.componentSubtype).toBe("database");
+    expect(record.optionalAssertion?.instance).toBeUndefined();
+    expect(record.contractVersion).toBeTruthy();
   });
 
   it("does not store exhaustive_scope_files on annotations (KDATAP-f9bb0f)", () => {

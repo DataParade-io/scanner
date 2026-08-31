@@ -8,6 +8,7 @@ import {
   legacySubjectName,
   piiMentionKeyExemption,
   piiSignalPrefixRewrite,
+  ruleIdToConceptLeafConversion,
   type ConversionState,
 } from "./conversions";
 import type { CompatLoadResult, LegacyGoldRecord, LoadLegacyGoldOptions } from "./types";
@@ -41,6 +42,12 @@ export function loadLegacyGoldRecord(
   state = { ...state, ...subjectKeyStep.state };
   if (subjectKeyStep.diagnostic) {
     diagnostics.push(subjectKeyStep.diagnostic);
+  }
+
+  const ruleIdStep = ruleIdToConceptLeafConversion(state, input);
+  state = { ...state, ...ruleIdStep.state };
+  if (ruleIdStep.diagnostic) {
+    diagnostics.push(ruleIdStep.diagnostic);
   }
 
   const subjectNameStep = legacySubjectName(state, input);
