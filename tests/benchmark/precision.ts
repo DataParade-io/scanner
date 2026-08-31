@@ -1,4 +1,4 @@
-import type { AnnotationRecord, BenchmarkLayer } from "./schema";
+import type { AnnotationRecord, BenchmarkLayer, LayerScopeRecord } from "./schema";
 import { normalizeBenchmarkLayer } from "./schema";
 import type { EvalLayer, LayerFinding } from "../eval/types";
 import { findingsForCaseLayer } from "../eval/identity";
@@ -71,18 +71,18 @@ function benchmarkLayerToEvalLayer(layer: BenchmarkLayer): EvalLayer {
   }
 }
 
-function collectExhaustiveScopesByLayer(
-  positives: AnnotationRecord[],
+export function collectExhaustiveScopesByLayer(
+  layerScopes: Map<BenchmarkLayer, LayerScopeRecord>,
 ): Map<BenchmarkLayer, string[]> {
   const scopes = new Map<BenchmarkLayer, string[]>();
-  for (const annotation of positives) {
-    const scopeFiles = annotation.expected.exhaustive_scope_files;
-    if (!scopeFiles || scopeFiles.length === 0) {
+  for (const [layer, record] of layerScopes) {
+    if (record.provenance.review_state !== "accepted") {
       continue;
     }
-    const layer = normalizeBenchmarkLayer(annotation.layer);
-    const existing = scopes.get(layer) ?? [];
-    scopes.set(layer, [...new Set([...existing, ...scopeFiles])]);
+    if (record.exhaustive_scope_files.length === 0) {
+      continue;
+    }
+    scopes.set(normalizeBenchmarkLayer(layer), [...record.exhaustive_scope_files]);
   }
   return scopes;
 }
@@ -101,22 +101,23 @@ function positivesByLayer(positives: AnnotationRecord[]): Map<BenchmarkLayer, An
 /**
  * Compute precision for one repo from corpus annotations and scanner findings.
  *
- * Annotations with `expected.exhaustive_scope_files` declare a closed world.
- * Scanner findings in those files that do not match an accepted positive
- * annotation are false positives. A repo that does not use a vendor needs no
- * negative case; extra hits lower precision automatically.
+ * Reviewed layer scopes in `layer-scopes.yaml` declare a closed world per layer.
+ * Scanner findings in those files that do not match a positive annotation are
+ * false positives. A repo that does not use a vendor needs no negative case;
+ * extra hits lower precision automatically.
  *
- * Returns precision null when no exhaustive scope is declared.
+ * Returns precision null when no accepted exhaustive scope is declared.
  */
 export function scoreCorpusPrecision(
   annotations: AnnotationRecord[],
   findings: LayerFinding[],
+  layerScopes: Map<BenchmarkLayer, LayerScopeRecord>,
 ): CorpusPrecisionReport {
   const positives = annotations.filter(
     (annotation) => annotation.expected.status === "positive",
   );
 
-  const scopesByLayer = collectExhaustiveScopesByLayer(positives);
+  const scopesByLayer = collectExhaustiveScopesByLayer(layerScopes);
   if (scopesByLayer.size === 0) {
     return { precision: null, exhaustiveScopedFindings: 0, exhaustiveScopedMatches: 0 };
   }

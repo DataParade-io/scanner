@@ -53,13 +53,16 @@ export interface AnnotationEvidence {
 export interface AnnotationExpected {
   status: AnnotationStatus;
   labels: string[];
-  /**
-   * Files reviewed as a closed world for precision. When set, scanner findings
-   * in these files that do not match an accepted positive are false positives.
-   * A repo that does not use a vendor needs no negative case; extra hits lower
-   * precision automatically.
-   */
-  exhaustive_scope_files?: string[];
+}
+
+/** Reviewed closed-world precision scope for one corpus layer in a packet. */
+export interface LayerScopeRecord {
+  exhaustive_scope_files: string[];
+  provenance: AnnotationProvenance;
+}
+
+export interface PacketLayerScopes {
+  layer_scopes: Partial<Record<BenchmarkLayer, LayerScopeRecord>>;
 }
 
 export interface AnnotationProvenance {
