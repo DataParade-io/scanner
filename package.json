@@ -49,7 +49,7 @@
     "eval:mentions": "jest tests/eval/layers/mentions/eval.test.ts",
     "eval:data-items": "jest tests/eval/layers/data-items/eval.test.ts",
     "eval:data-flows": "jest tests/eval/layers/data-flows/eval.test.ts",
-    "benchmark:materialize": "node --experimental-strip-types tests/benchmark/scripts/materialize-repo.mjs",
+    "benchmark:materialize": "pnpm run build && node dist/tests/benchmark/scripts/materialize-repo.js",
     "benchmark:run": "pnpm run build && node dist/tests/benchmark/run-benchmark.js"
   },
   "dependencies": {
