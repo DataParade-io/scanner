@@ -17,6 +17,15 @@ describe("benchmark/manifest normalizeSubjectKey", () => {
     expect(normalizeSubjectKey("mentions", "mention:email")).toBe("mention:email");
   });
 
+  it("leaves gold pii: taxonomy keys unchanged for mentions", () => {
+    expect(normalizeSubjectKey("mentions", "pii:email_address")).toBe(
+      "pii:email_address",
+    );
+    expect(normalizeSubjectKey("pii_signals", "pii:person_name")).toBe(
+      "pii:person_name",
+    );
+  });
+
   it("leaves data_item keys unchanged", () => {
     expect(normalizeSubjectKey("data_items", "data_item:email")).toBe(
       "data_item:email",

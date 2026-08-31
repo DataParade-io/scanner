@@ -2,20 +2,31 @@ import type {
   EvalCase,
   EvalCaseResult,
   EvalEvidence,
+  EvalLayer,
   EvalScoreReport,
   FixtureScanResult,
   LayerFinding,
 } from "./types";
+import {
+  findingsForCaseLayer,
+  identitiesMatch,
+  isIdentityOnlyLayer,
+  labelsMatch,
+  normalizeEvalPath,
+} from "./identity";
 
 function isNegativeCase(caseRecord: EvalCase): boolean {
   return caseRecord.expected.status === "negative";
 }
 
 function isUnread(caseRecord: EvalCase, scannedFiles: string[]): boolean {
-  if (scannedFiles.includes(caseRecord.evidence.file_path)) {
+  const evidencePath = normalizeEvalPath(caseRecord.evidence.file_path);
+  if (scannedFiles.some((filePath) => normalizeEvalPath(filePath) === evidencePath)) {
     return false;
   }
-  return !(caseRecord.exhaustiveScopeFiles ?? []).includes(caseRecord.evidence.file_path);
+  return !(caseRecord.exhaustiveScopeFiles ?? []).some(
+    (filePath) => normalizeEvalPath(filePath) === evidencePath,
+  );
 }
 
 function lineRangesOverlap(
@@ -30,18 +41,16 @@ function evidenceOverlaps(
   sourceLine: { file_path: string; start_line: number; end_line: number },
 ): boolean {
   return (
-    evidence.file_path === sourceLine.file_path &&
+    normalizeEvalPath(evidence.file_path) === normalizeEvalPath(sourceLine.file_path) &&
     lineRangesOverlap(evidence, sourceLine)
   );
 }
 
-const IDENTITY_ONLY_LAYERS: ReadonlySet<EvalCase["layer"]> = new Set(["data-items"]);
-
 function findingMatchesCase(finding: LayerFinding, caseRecord: EvalCase): boolean {
-  if (finding.key !== caseRecord.subject.key) {
+  if (!identitiesMatch(finding, caseRecord)) {
     return false;
   }
-  if (IDENTITY_ONLY_LAYERS.has(caseRecord.layer)) {
+  if (isIdentityOnlyLayer(caseRecord.layer)) {
     return true;
   }
   return finding.sourceLines.some((line) => evidenceOverlaps(caseRecord.evidence, line));
@@ -51,56 +60,68 @@ function findMatchingFinding(
   findings: LayerFinding[],
   caseRecord: EvalCase,
 ): LayerFinding | undefined {
-  return findings.find((finding) => findingMatchesCase(finding, caseRecord));
-}
-
-function labelsMatch(finding: LayerFinding, expectedLabels: string[]): boolean {
-  if (expectedLabels.length === 0) {
-    return true;
-  }
-  const tags = new Set(finding.labels);
-  return expectedLabels.every((label) => tags.has(label));
+  const layerFindings = findingsForCaseLayer(findings, caseRecord.layer);
+  return layerFindings.find((finding) => findingMatchesCase(finding, caseRecord));
 }
 
 function findingInScope(finding: LayerFinding, scopeFiles: string[]): boolean {
   if (scopeFiles.length === 0) {
     return false;
   }
-  return finding.sourceFilePaths.some((filePath) => scopeFiles.includes(filePath));
+  const normalizedScope = new Set(scopeFiles.map(normalizeEvalPath));
+  return finding.sourceFilePaths.some((filePath) =>
+    normalizedScope.has(normalizeEvalPath(filePath)),
+  );
 }
 
-function collectExhaustiveScopes(cases: EvalCase[]): Map<string, string[]> {
-  const scopes = new Map<string, string[]>();
+function scopeBucketKey(fixture: string, layer: EvalLayer): string {
+  return `${fixture}::${layer}`;
+}
+
+function collectExhaustiveScopes(
+  cases: EvalCase[],
+): Map<string, { fixture: string; layer: EvalLayer; files: string[] }> {
+  const scopes = new Map<string, { fixture: string; layer: EvalLayer; files: string[] }>();
   for (const caseRecord of cases) {
     if (!caseRecord.exhaustiveScopeFiles || caseRecord.exhaustiveScopeFiles.length === 0) {
       continue;
     }
-    const existing = scopes.get(caseRecord.fixture) ?? [];
-    scopes.set(caseRecord.fixture, [
-      ...new Set([...existing, ...caseRecord.exhaustiveScopeFiles]),
-    ]);
+    const key = scopeBucketKey(caseRecord.fixture, caseRecord.layer);
+    const existing = scopes.get(key);
+    const nextFiles = [
+      ...new Set([
+        ...(existing?.files ?? []),
+        ...caseRecord.exhaustiveScopeFiles.map(normalizeEvalPath),
+      ]),
+    ];
+    scopes.set(key, {
+      fixture: caseRecord.fixture,
+      layer: caseRecord.layer,
+      files: nextFiles,
+    });
   }
   return scopes;
 }
 
-function positiveCasesByFixture(cases: EvalCase[]): Map<string, EvalCase[]> {
-  const byFixture = new Map<string, EvalCase[]>();
+function positiveCasesByFixtureLayer(cases: EvalCase[]): Map<string, EvalCase[]> {
+  const byBucket = new Map<string, EvalCase[]>();
   for (const caseRecord of cases) {
     if (caseRecord.expected.status !== "positive") {
       continue;
     }
-    const fixtureCases = byFixture.get(caseRecord.fixture) ?? [];
+    const key = scopeBucketKey(caseRecord.fixture, caseRecord.layer);
+    const fixtureCases = byBucket.get(key) ?? [];
     fixtureCases.push(caseRecord);
-    byFixture.set(caseRecord.fixture, fixtureCases);
+    byBucket.set(key, fixtureCases);
   }
-  return byFixture;
+  return byBucket;
 }
 
-function findingMatchesAnyPositiveInFixture(
+function findingMatchesAnyPositive(
   finding: LayerFinding,
-  fixturePositives: EvalCase[],
+  positives: EvalCase[],
 ): boolean {
-  return fixturePositives.some((caseRecord) => findingMatchesCase(finding, caseRecord));
+  return positives.some((caseRecord) => findingMatchesCase(finding, caseRecord));
 }
 
 export function scoreEvalCases(
@@ -108,7 +129,7 @@ export function scoreEvalCases(
   scanResults: FixtureScanResult[],
 ): EvalScoreReport {
   const byFixture = new Map(scanResults.map((result) => [result.fixture, result]));
-  const positivesByFixture = positiveCasesByFixture(cases);
+  const positivesByBucket = positiveCasesByFixtureLayer(cases);
 
   const caseResults: EvalCaseResult[] = [];
   let evaluablePositives = 0;
@@ -129,7 +150,7 @@ export function scoreEvalCases(
 
     const finding = findMatchingFinding(findings, caseRecord);
     const matched = Boolean(finding);
-    const labelsCorrect = matched && labelsMatch(finding!, caseRecord.expected.labels);
+    const labelsCorrect = matched && labelsMatch(finding!, caseRecord);
     const documentedGap = Boolean(caseRecord.expected.documentedGap);
 
     let negativeClean = true;
@@ -178,21 +199,18 @@ export function scoreEvalCases(
   let exhaustiveScopedFindings = 0;
   let exhaustiveScopedMatches = 0;
 
-  for (const [fixture, scopeFiles] of collectExhaustiveScopes(cases)) {
-    const scan = byFixture.get(fixture);
+  for (const [bucketKey, scope] of collectExhaustiveScopes(cases)) {
+    const scan = byFixture.get(scope.fixture);
     if (!scan) {
       continue;
     }
-    const fixturePositives = positivesByFixture.get(fixture) ?? [];
-    for (const finding of scan.findings) {
-      // Locationless findings are synthetic graph scaffolding (e.g. injected
-      // actor:user), not file-level detections. Exclude them from the
-      // precision denominator — they have no file to be false-positive in.
-      if (!findingInScope(finding, scopeFiles)) {
+    const fixturePositives = positivesByBucket.get(bucketKey) ?? [];
+    for (const finding of findingsForCaseLayer(scan.findings, scope.layer)) {
+      if (!findingInScope(finding, scope.files)) {
         continue;
       }
       exhaustiveScopedFindings += 1;
-      if (findingMatchesAnyPositiveInFixture(finding, fixturePositives)) {
+      if (findingMatchesAnyPositive(finding, fixturePositives)) {
         exhaustiveScopedMatches += 1;
       }
     }
@@ -223,4 +241,27 @@ export function scoreEvalCases(
     },
     caseResults,
   };
+}
+
+const EVAL_LAYERS: EvalLayer[] = [
+  "components",
+  "data-flows",
+  "raw-hits",
+  "mentions",
+  "data-items",
+];
+
+export function scoreEvalCasesByLayer(
+  cases: EvalCase[],
+  scanResults: FixtureScanResult[],
+): Partial<Record<EvalLayer, EvalScoreReport>> {
+  const reports: Partial<Record<EvalLayer, EvalScoreReport>> = {};
+  for (const layer of EVAL_LAYERS) {
+    const layerCases = cases.filter((caseRecord) => caseRecord.layer === layer);
+    if (layerCases.length === 0) {
+      continue;
+    }
+    reports[layer] = scoreEvalCases(layerCases, scanResults);
+  }
+  return reports;
 }
