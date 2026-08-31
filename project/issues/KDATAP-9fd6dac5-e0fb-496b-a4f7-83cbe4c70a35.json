@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-9fd6dac5-e0fb-496b-a4f7-83cbe4c70a35",
+  "title": "Closed-world scope lives on packet-and-layer metadata",
+  "description": "As an evaluation owner, I want closed-world scope to live on reviewed packet-and-layer metadata, so that a layer reviewed exhaustively with zero positives can still catch hallucinated findings, and so that scope is not duplicated across 434 positive annotations.\n\nOut of scope: detector retuning; changing which files ingest can open; publishing a baseline.\n\n```gherkin\nFeature: Closed-world scope lives on packet-and-layer metadata\n\nScenario: A reviewed layer with no positives still measures false positives\n  Given a packet layer that was reviewed exhaustively and has no accepted positives\n  When the scanner emits a finding in a reviewed file that was successfully processed\n  Then the finding is scored as a false positive\n\nScenario: Scope is not repeated on every positive annotation\n  Given a packet layer with reviewed file scope\n  When gold is loaded\n  Then scope comes from packet-and-layer metadata\n  And positive annotations do not each carry exhaustive_scope_files\n\nScenario: Precision uses reviewed files that were successfully processed\n  Given reviewed scope that includes files ingest cannot open\n  When precision is computed\n  Then unread files are not in the precision denominator\n```",
+  "type": "story",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T18:27:42.097512Z",
+  "updated_at": "2026-08-31T18:27:42.097512Z",
+  "closed_at": null,
+  "custom": {}
+}
