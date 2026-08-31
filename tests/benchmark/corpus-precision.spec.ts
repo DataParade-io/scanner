@@ -12,6 +12,7 @@ import {
   scan,
 } from "../../src/core/pipeline/orchestrator";
 import type { DetectedComponent } from "../../src/core/types/component";
+import type { AnnotationRecord } from "./schema";
 import type { LayerFinding } from "../eval/types";
 
 const FIXTURE = "jvm-manifests-basic";
@@ -268,6 +269,49 @@ describe("corpus precision end-to-end", () => {
     expect(report.precision).not.toBeNull();
     expect(report.precision as number).toBeGreaterThan(0);
     expect(report.exhaustiveScopedFindings).toBeGreaterThan(0);
+  });
+
+  it("does not count other-layer findings in a component exhaustive scope", () => {
+    const annotation: AnnotationRecord = {
+      id: "jvm-postgresql-jdbc",
+      layer: "components",
+      subject: { key: "asset:postgresql jdbc", name: "PostgreSQL JDBC" },
+      evidence: { file_path: "pom.xml", start_line: 1, end_line: 1 },
+      rationale: "PostgreSQL JDBC driver in pom.xml",
+      expected: {
+        status: "positive",
+        labels: ["database"],
+        exhaustive_scope_files: ["pom.xml"],
+      },
+      provenance: {
+        proposed_by: "test",
+        proposed_at: "2026-01-01T00:00:00Z",
+        review_state: "accepted",
+      },
+    };
+
+    const findings: LayerFinding[] = [
+      {
+        key: "asset:postgresql jdbc",
+        labels: ["asset", "database"],
+        layer: "components",
+        sourceFilePaths: ["pom.xml"],
+        sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
+      },
+      {
+        key: "mention:postgresql",
+        labels: ["mention"],
+        layer: "mentions",
+        sourceFilePaths: ["pom.xml"],
+        sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
+      },
+    ];
+
+    const report = scoreCorpusPrecision([annotation], findings);
+
+    expect(report.precision).toBe(1);
+    expect(report.exhaustiveScopedFindings).toBe(1);
+    expect(report.exhaustiveScopedMatches).toBe(1);
   });
 
   it("returns null precision without exhaustive scope", async () => {

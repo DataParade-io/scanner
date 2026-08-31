@@ -1,5 +1,7 @@
 import type { AnnotationRecord, BenchmarkLayer } from "./schema";
-import type { LayerFinding } from "../eval/types";
+import { normalizeBenchmarkLayer } from "./schema";
+import type { EvalLayer, LayerFinding } from "../eval/types";
+import { findingsForCaseLayer } from "../eval/identity";
 
 export interface CorpusPrecisionReport {
   precision: number | null;
@@ -33,7 +35,7 @@ function findingMatchesAnnotation(
   if (finding.key !== annotation.subject.key) {
     return false;
   }
-  if (IDENTITY_ONLY_LAYERS.has(annotation.layer)) {
+  if (IDENTITY_ONLY_LAYERS.has(normalizeBenchmarkLayer(annotation.layer))) {
     return true;
   }
   return finding.sourceLines.some((line) =>
@@ -46,6 +48,54 @@ function findingInScope(finding: LayerFinding, scopeFiles: string[]): boolean {
     return false;
   }
   return finding.sourceFilePaths.some((filePath) => scopeFiles.includes(filePath));
+}
+
+function benchmarkLayerToEvalLayer(layer: BenchmarkLayer): EvalLayer {
+  const canonical = normalizeBenchmarkLayer(layer);
+  switch (canonical) {
+    case "components":
+      return "components";
+    case "data_flows":
+      return "data-flows";
+    case "raw_hits":
+      return "raw-hits";
+    case "mentions":
+    case "pii_signals":
+      return "mentions";
+    case "data_items":
+      return "data-items";
+    default: {
+      const _exhaustive: never = canonical;
+      throw new Error(`Unsupported benchmark layer '${layer}'`);
+    }
+  }
+}
+
+function collectExhaustiveScopesByLayer(
+  positives: AnnotationRecord[],
+): Map<BenchmarkLayer, string[]> {
+  const scopes = new Map<BenchmarkLayer, string[]>();
+  for (const annotation of positives) {
+    const scopeFiles = annotation.expected.exhaustive_scope_files;
+    if (!scopeFiles || scopeFiles.length === 0) {
+      continue;
+    }
+    const layer = normalizeBenchmarkLayer(annotation.layer);
+    const existing = scopes.get(layer) ?? [];
+    scopes.set(layer, [...new Set([...existing, ...scopeFiles])]);
+  }
+  return scopes;
+}
+
+function positivesByLayer(positives: AnnotationRecord[]): Map<BenchmarkLayer, AnnotationRecord[]> {
+  const byLayer = new Map<BenchmarkLayer, AnnotationRecord[]>();
+  for (const annotation of positives) {
+    const layer = normalizeBenchmarkLayer(annotation.layer);
+    const layerPositives = byLayer.get(layer) ?? [];
+    layerPositives.push(annotation);
+    byLayer.set(layer, layerPositives);
+  }
+  return byLayer;
 }
 
 /**
@@ -66,31 +116,26 @@ export function scoreCorpusPrecision(
     (annotation) => annotation.expected.status === "positive",
   );
 
-  const scopeFiles = [
-    ...new Set(
-      positives.flatMap(
-        (annotation) => annotation.expected.exhaustive_scope_files ?? [],
-      ),
-    ),
-  ];
-
-  if (scopeFiles.length === 0) {
+  const scopesByLayer = collectExhaustiveScopesByLayer(positives);
+  if (scopesByLayer.size === 0) {
     return { precision: null, exhaustiveScopedFindings: 0, exhaustiveScopedMatches: 0 };
   }
 
+  const positivesByLayerMap = positivesByLayer(positives);
   let scopedFindings = 0;
   let scopedMatches = 0;
 
-  for (const finding of findings) {
-    // Locationless findings are synthetic graph scaffolding (e.g. injected
-    // actor:user), not file-level detections. Exclude them from the
-    // precision denominator.
-    if (!findingInScope(finding, scopeFiles)) {
-      continue;
-    }
-    scopedFindings += 1;
-    if (positives.some((annotation) => findingMatchesAnnotation(finding, annotation))) {
-      scopedMatches += 1;
+  for (const [layer, scopeFiles] of scopesByLayer) {
+    const evalLayer = benchmarkLayerToEvalLayer(layer);
+    const layerPositives = positivesByLayerMap.get(layer) ?? [];
+    for (const finding of findingsForCaseLayer(findings, evalLayer)) {
+      if (!findingInScope(finding, scopeFiles)) {
+        continue;
+      }
+      scopedFindings += 1;
+      if (layerPositives.some((annotation) => findingMatchesAnnotation(finding, annotation))) {
+        scopedMatches += 1;
+      }
     }
   }
 
