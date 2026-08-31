@@ -3,7 +3,7 @@
   "title": "Unread means ingest never opened the file",
   "description": "As an evaluation owner, I want unread to mean \u201cingest never opened this evidence file\u201d, so that recall is not inflated by files the scanner could not have read.\n\n## Current behavior\n\n`tests/eval/score.ts` `isUnread`:\n\n- If the evidence path is in `scannedFiles` \u2192 read.\n- Else if the evidence path is in that case\u2019s `exhaustiveScopeFiles` \u2192 **still treated as read**.\n- Else \u2192 unread, omitted from recall denominators.\n\nFixture docs and an older wiki/Plexus reading said: omit unread from recall; exhaustive scope does not make a file read. The scanner score tests include \u201ctreats exhaustive-scope evidence as read when ingest omitted the file.\u201d\n\nCorpus gold puts whole include trees on `exhaustive_scope_files`. Many of those files are `.php` / `.rb` / `.swift` / `.rs`. `getFileLanguage` / ingest skips them, so they are absent from `scannedFiles`. Under today\u2019s rule they become **evaluable false negatives**, not unread.\n\n## Why it blocks scanner work\n\nHeadline recall then says \u201cthe scanner missed WordPress PHP gold.\u201d The honest statement is \u201cthe engine never ingested the file.\u201d Using that number to improve the scanner forces language ingest as a fake eval win. Language ingest may still be worth doing later; it must not be smuggled in as a scorer bug.\n\n## Questions to answer\n\n- Confirm: unread = evidence path not in `scannedFiles` (posix-normalized), regardless of exhaustive scope?\n- Precision: only findings whose `sourceFilePaths` intersect **scanned** exhaustive-scope files?\n- Negatives: unread negatives stay out of `negativeCasePassRate` (already true)?\n- Path identity: exact string vs posix normalize vs symlink? Gold `file_path` vs ingest `file.path` mismatches should be counted how?\n- What do we report when 50%+ of a packet is unread (Discourse `.rb`)? A required \u201cunread rate\u201d next to recall so nobody cites recall alone?\n\n## Not this task\n\nDo not add PHP/Ruby parsers here. Do not delete gold for unreadable languages; unread is the correct holding pen until ingest exists.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -40,8 +40,8 @@
     }
   ],
   "created_at": "2026-08-31T11:09:28.156126Z",
-  "updated_at": "2026-08-31T13:27:41.581100Z",
-  "closed_at": null,
+  "updated_at": "2026-08-31T19:49:15.248854Z",
+  "closed_at": "2026-08-31T19:49:15.248854Z",
   "custom": {},
   "agent": null
 }

@@ -3,7 +3,7 @@
   "title": "One scorer for all headline metrics",
   "description": "As an evaluation owner, I want every headline metric to come from one matching function, so that fixture Jest, `benchmark:run`, and any precision helper cannot disagree on the same packet.\n\n## Current mess\n\n- **`tests/eval/score.ts`**: per-layer finding bags, `identity.ts` matching, path normalize, union of exhaustive scopes per fixture+layer, data-items identity-only, optional `finding.layer` tags.\n- **`tests/benchmark/precision.ts`**: exact `finding.key === annotation.subject.key`, no taxonomy aliases, no layer tags, different overlap helper. Still used by `corpus-precision.spec.ts`.\n- **Public `dataparade-cli`**: leftover eval/score/identity copy. The next `cli-v*` rsync from the app monorepo does not update scanner, but humans will still run the wrong tree.\n- **Plexus** `evaluate accuracy` / `evaluate_recall`: third client, was not runnable in the last pass (proxy/backend mode). If it comes back with yet another identity rule, we will have four numbers.\n\n`scanRepoByManifestLayers` comments claim personal-data matching runs at most once; the body can call `collectPersonalDataFindings` three times (mentions, raw-hits, data-items). That is a runner bug adjacent to \u201cone scorer\u201d (same scan, one finding inventory).\n\n## Why it blocks scanner work\n\nA \u201cfix\u201d that greens `benchmark:run` and reds `precision.ts` (or the reverse) is not a fix. Agents will pick the number that supports the patch.\n\n## Questions to answer\n\n- Is `scoreEvalCases` the only matcher? Then `precision.ts` becomes a thin wrapper or dies.\n- Does corpus CI call `run-benchmark` (materialize is opt-in) or only YAML load tests? What is the official command for headline numbers?\n- After identity (task 1) and unread (task 2) land, which tests are the contract suite that must not be forked?\n- Do we delete or archive eval code on `dataparade-cli` so it cannot rot into a second origin?\n\n## Not this task\n\nDo not add a fourth metrics pipeline (new notebooks, ad-hoc scripts) while this is open.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -40,8 +40,8 @@
     }
   ],
   "created_at": "2026-08-31T11:09:28.196280Z",
-  "updated_at": "2026-08-31T13:27:41.926217Z",
-  "closed_at": null,
+  "updated_at": "2026-08-31T19:49:16.158699Z",
+  "closed_at": "2026-08-31T19:49:16.158699Z",
   "custom": {},
   "agent": null
 }
