@@ -35,7 +35,7 @@ function findingMatchesAnnotation(
   if (finding.key !== annotation.subject.key) {
     return false;
   }
-  if (IDENTITY_ONLY_LAYERS.has(annotation.layer)) {
+  if (IDENTITY_ONLY_LAYERS.has(normalizeBenchmarkLayer(annotation.layer))) {
     return true;
   }
   return finding.sourceLines.some((line) =>
@@ -80,8 +80,9 @@ function collectExhaustiveScopesByLayer(
     if (!scopeFiles || scopeFiles.length === 0) {
       continue;
     }
-    const existing = scopes.get(annotation.layer) ?? [];
-    scopes.set(annotation.layer, [...new Set([...existing, ...scopeFiles])]);
+    const layer = normalizeBenchmarkLayer(annotation.layer);
+    const existing = scopes.get(layer) ?? [];
+    scopes.set(layer, [...new Set([...existing, ...scopeFiles])]);
   }
   return scopes;
 }
@@ -89,9 +90,10 @@ function collectExhaustiveScopesByLayer(
 function positivesByLayer(positives: AnnotationRecord[]): Map<BenchmarkLayer, AnnotationRecord[]> {
   const byLayer = new Map<BenchmarkLayer, AnnotationRecord[]>();
   for (const annotation of positives) {
-    const layerPositives = byLayer.get(annotation.layer) ?? [];
+    const layer = normalizeBenchmarkLayer(annotation.layer);
+    const layerPositives = byLayer.get(layer) ?? [];
     layerPositives.push(annotation);
-    byLayer.set(annotation.layer, layerPositives);
+    byLayer.set(layer, layerPositives);
   }
   return byLayer;
 }
