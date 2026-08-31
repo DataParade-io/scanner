@@ -22,10 +22,16 @@
       "author": "rap@endymion.com",
       "text": "## Review: KDATAP-ea44fe + KDATAP-4b0df4 / PR #10 — sent back\n\nhttps://github.com/DataParade-io/scanner/pull/10\n\nKeep: `user` subtype; Checkr label `saas_service`; gold scan that rejects type-as-label.\n\nSend back: the injector rewrite. `getInjectedUserActorSubtype` used to emit `api_consumer` (backend) or `customer` (otherwise). Collapsing both to `user` and deleting `isLikelyBackendEntrypoint` is a scanner behavior change, not a taxonomy declaration. Out of scope for this chore; it is the kind of silent retune this programme forbids.\n\nReconcile by **declaring what the engine already emits**: add `user` (gold keys) and `api_consumer` (backend injection). Keep the split. Revert `classify.spec.ts` expectation changes.\n\nIssues were closed on the feature branch. Reopen until the revision lands.\n",
       "created_at": "2026-08-31T18:35:54.505609Z"
+    },
+    {
+      "id": "fcd52bd4-732a-43f7-b721-f150248b53cf",
+      "author": "rap@endymion.com",
+      "text": "## Review passed — awaiting merge\n\nKDATAP-ea44fe + KDATAP-4b0df4 / PR #10: `user` and `api_consumer` declared; injector split restored; Checkr label is `saas_service`; gold scan rejects type-as-label. Leave in progress until #10 is on `develop`.\n",
+      "created_at": "2026-08-31T18:37:49.632014Z"
     }
   ],
   "created_at": "2026-08-31T14:13:08.904760Z",
-  "updated_at": "2026-08-31T18:35:54.505609Z",
+  "updated_at": "2026-08-31T18:37:49.632014Z",
   "closed_at": null,
   "custom": {
     "project_label": "KDATAP",
