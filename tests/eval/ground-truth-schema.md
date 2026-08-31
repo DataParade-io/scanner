@@ -2,6 +2,8 @@
 
 Five evaluation grades span the personal-data pipeline (three grades) and the component graph (two grades). Subject keys are stable identities used in both Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
 
+**Canonical representation:** The subject-key formats below are the **legacy** scoring currency. The versioned canonical evaluation representation — separate identity, classification, evidence, observed-token candidates, and display fields — is specified in [`canonical-representation.md`](./canonical-representation.md) with executable scenarios in `features/canonical-evaluation-representation.feature`. TypeScript IR types follow in KDATAP-06634c.
+
 ## Evaluation grades
 
 | Grade | Jest layer | Corpus layer | What it measures |

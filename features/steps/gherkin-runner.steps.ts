@@ -34,6 +34,16 @@ Then("the discovered files include plexus-eval.feature", function () {
   );
 });
 
+Then(
+  "the discovered files include canonical-evaluation-representation.feature",
+  function () {
+    assert.ok(
+      featureFileNames.includes("canonical-evaluation-representation.feature"),
+      `Expected canonical-evaluation-representation.feature among: ${featureFileNames.join(", ")}`,
+    );
+  },
+);
+
 Given("the Jest configuration for this repository", function () {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const jestConfig = require(join(repoRoot, "jest.config.cjs")) as {
