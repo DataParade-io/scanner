@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-089dbaf3-1dc8-4573-b6b5-aed7b4b2c77d",
   "title": "Reconcile four-layer documentation",
-  "description": "Reconcile the documentation with the four-layer decision.\n\n- `project/wiki/four-layer-evaluation.md` is titled **\"Five-grade scanner evaluation\"**; the filename and the parent initiative say four.\n- `tests/eval/ground-truth-schema.md` line 3 sells five grades; line 27 asserts `conceptId === ruleId`, which is true of 8% of mention keys \u2014 213 of 357 reach a rule only through the alias table.\n\nOne pass closes both. Rides with the `pii_signals` rename on the gold epic.\n\nStartable now \u2014 independent of the gate rulings.",
+  "description": "Reconcile every user-facing and contributor-facing document with the canonical four-layer contract after the schema, mention migration, and runner settle.\n\nRequired corrections include:\n\n- `project/wiki/four-layer-evaluation.md` title and content;\n- `tests/eval/ground-truth-schema.md`, including removal of five-grade claims and `conceptId === ruleId`;\n- canonical names for mentions, data items, components, flows, capability diagnostics, eligibility reasons, computability states, and baseline readiness;\n- removal of `pii_signals`, `pii:`, fuzzy aliases, and legacy identity examples;\n- explicit statement that raw hits are diagnostic and no cross-layer scalar exists.\n\nDocumentation is generated or contract-tested where possible so schema and prose cannot silently diverge. It lands before legacy compatibility removal.",
   "type": "chore",
   "status": "open",
   "priority": 2,
@@ -9,11 +9,23 @@
   "creator": null,
   "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
   "labels": [],
-  "dependencies": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-b1813569-d0e5-4be6-9bf2-167d756175cb",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-fafa9f76-0206-422f-9958-7107fb46c7d8",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-c9cc2d19-1710-458f-b49b-9cc75aa9e73d",
+      "type": "blocked-by"
+    }
+  ],
   "comments": [],
   "created_at": "2026-08-31T14:15:04.467242Z",
-  "updated_at": "2026-08-31T14:15:04.467242Z",
+  "updated_at": "2026-08-31T14:42:17.525952Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {}
 }

@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
   "title": "Corpus gold migration to the canonical contract",
-  "description": "Migrate the 29-packet corpus and the Jest fixture gold onto the canonical evaluation representation agreed on KDATAP-77d2b0.\n\nThis epic is the critical path, and most of it is human judgement rather than code. Measured against the current gold:\n\n| work | scale | nature |\n| --- | ---: | --- |\n| component keys already taxonomy subtype ids | 481 | mechanical |\n| component vendor cases retaining instance | 52 | mechanical |\n| `actor:user` with no declared subtype | 30 | blocked on taxonomy |\n| mention keys plus source-name promotion | 357 | mechanical once ruled |\n| data items keyed on source field names | 308 | **adjudication** |\n| data flows with no scorer identity | 436 | **full regold** |\n\nThe two adjudication blocks gate the first baseline. They are filed as `annotation` issues so they run the flywheel ladder (labeling to awaiting-review to accepted) rather than being closed by whoever wrote them.\n\nDefinition of done: no annotation reaches the evaluator through a legacy key or a hard-coded loader exemption, and the legacy loader has been removed on its stated milestone.",
+  "description": "Migrate the 29-packet corpus and Jest fixture gold onto the canonical evaluation representation.\n\nThis epic is the human-bound critical path:\n\n| work | scale | nature |\n| --- | ---: | --- |\n| component taxonomy classification | 481 | mechanical classification, entity grouping still required |\n| component vendor assertions | 52 | mechanical candidates plus validation |\n| `actor:user` | 30 | taxonomy ruling |\n| mention identities | 357 | mechanical keys plus observed-token validation |\n| data items keyed on source fields | 308 | adjudication |\n| flows lacking typed endpoints | 436 | full regold |\n| repeated component repo/key groups | 53 groups / 456 cases | cardinality and evidence grouping |\n\nLegacy names are preserved as candidates/provenance, never blindly promoted. Source-token-only data items and unresolved flows cannot stay accepted canonical gold.\n\nThe temporary compatibility loader is introduced before migration and removed only after all migrations and readiness validation. Annotation work follows labeling -> awaiting-review -> accepted; writers cannot self-close human adjudication.\n\nDefinition of done: all accepted rows validate canonically, all legacy rows have explicit migration outcomes, packet/layer scopes carry review provenance, and the removal task deletes every compatibility path.",
   "type": "epic",
   "status": "open",
   "priority": 1,
@@ -12,8 +12,7 @@
   "dependencies": [],
   "comments": [],
   "created_at": "2026-08-31T14:13:08.904760Z",
-  "updated_at": "2026-08-31T14:13:08.904760Z",
+  "updated_at": "2026-08-31T14:40:02.473615Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {}
 }

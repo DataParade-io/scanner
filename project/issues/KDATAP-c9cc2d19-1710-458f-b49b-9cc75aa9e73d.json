@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-c9cc2d19-1710-458f-b49b-9cc75aa9e73d",
   "title": "Four-layer runner and scorecard vector",
-  "description": "Four-layer runner emitting a scorecard vector: mentions, repository-level data items, components, data flows. Raw hits are diagnostic output with no headline weight.\n\nNo cross-layer scalar is published. Occurrences, repository entities, components and edges are not commensurate units, and mentions and data items derive from the same `matchPiiSignalsInFiles` pass \u2014 data items are a `GROUP BY` over the mention stream, not a second observation \u2014 so any average would weight one regex twice. Totals are denominator-weighted within a layer only. Gates operate per layer.",
+  "description": "Four-layer runner emitting a scorecard vector: mentions, repository-level data items, components, data flows. Raw hits are diagnostic output with no headline weight.\n\nNo cross-layer scalar is published. Occurrences, repository entities, components and edges are not commensurate units, and mentions and data items derive from the same `matchPiiSignalsInFiles` pass — data items are a `GROUP BY` over the mention stream, not a second observation — so any average would weight one regex twice. Totals are denominator-weighted within a layer only. Gates operate per layer.",
   "type": "task",
   "status": "open",
   "priority": 2,
@@ -13,6 +13,10 @@
     {
       "target": "KDATAP-e1cee579-fda4-41b6-972b-f0b8462ac58a",
       "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-57a3ed80-5e1f-4390-ac42-51652936a890",
+      "type": "blocked-by"
     }
   ],
   "comments": [],
@@ -20,8 +24,7 @@
   "updated_at": "2026-08-31T14:15:02.519406Z",
   "closed_at": null,
   "custom": {
-    "source": "shared",
-    "project_label": "KDATAP"
-  },
-  "agent": null
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }

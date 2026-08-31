@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-5219531e-2d32-4004-bec6-86db31a509f6",
   "title": "Gold loaders emit canonical observations",
-  "description": "Corpus gold and Jest fixture gold both load through one adapter emitting canonical observations.\n\nToday they encode different contracts, which is why the fixture suite cannot serve as the regression guard for this work:\n\n| | component keys | flow keys |\n| --- | --- | --- |\n| Jest fixtures | `asset:pg`, `asset:hikaricp` \u2014 the engine's instance names | `flow:asset:api->third_party:stripe` |\n| Corpus gold | `asset:database` x182, `asset:api` x118 \u2014 taxonomy subtypes | `flow:password->wp_check_password` |\n\nFixture gold is itself non-canonical and is migrated by this work; it is not a fixed reference point. The loader must reject legacy keys once the migration milestone passes (see the legacy loader task on the gold epic).",
+  "description": "Corpus gold and Jest fixture gold both load through one adapter emitting canonical observations.\n\nToday they encode different contracts, which is why the fixture suite cannot serve as the regression guard for this work:\n\n| | component keys | flow keys |\n| --- | --- | --- |\n| Jest fixtures | `asset:pg`, `asset:hikaricp` — the engine's instance names | `flow:asset:api->third_party:stripe` |\n| Corpus gold | `asset:database` x182, `asset:api` x118 — taxonomy subtypes | `flow:password->wp_check_password` |\n\nFixture gold is itself non-canonical and is migrated by this work; it is not a fixed reference point. The loader must reject legacy keys once the migration milestone passes (see the legacy loader task on the gold epic).",
   "type": "task",
   "status": "open",
   "priority": 1,
@@ -13,6 +13,10 @@
     {
       "target": "KDATAP-06634c34-c0d2-4f39-b994-50ae333b4a4a",
       "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
     }
   ],
   "comments": [],
@@ -20,8 +24,7 @@
   "updated_at": "2026-08-31T14:14:58.592781Z",
   "closed_at": null,
   "custom": {
-    "source": "shared",
-    "project_label": "KDATAP"
-  },
-  "agent": null
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }
