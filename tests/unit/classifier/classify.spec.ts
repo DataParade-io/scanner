@@ -1162,7 +1162,7 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
       const actor = result.find((c) => c.type === "actor");
       expect(actor).toBeDefined();
       expect(actor?.name).toBe("User");
-      expect(actor?.subType).toBe("user");
+      expect(actor?.subType).toBe("customer");
       expect(actor?.properties?.sourceContext).toBe("injected_default");
     });
 
@@ -1204,7 +1204,7 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
       expect(actor?.properties?.section_id).toBe("frontend");
     });
 
-    it("injects User as user for backend projects", () => {
+    it("injects User as api_consumer for backend projects", () => {
       const components: DetectedComponent[] = [
         makeComponent({
           id: "cmp_1",
@@ -1223,7 +1223,7 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
       const actor = result.find((c) => c.type === "actor");
       expect(actor).toBeDefined();
       expect(actor?.name).toBe("User");
-      expect(actor?.subType).toBe("user");
+      expect(actor?.subType).toBe("api_consumer");
       expect(actor?.properties?.section_id).toBe("reedy-backend");
     });
 

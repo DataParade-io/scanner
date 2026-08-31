@@ -159,6 +159,13 @@ subtypes:
       An end-user or customer who interacts with the system via a web or
       public API.
 
+  - id: api_consumer
+    type: actor
+    description: >-
+      A caller that consumes a backend HTTP API (e.g. mobile client, partner
+      integration). Distinct from customer when the injected default actor
+      represents an API entrypoint rather than a web UI user.
+
   - id: employee
     type: actor
     description: >-
@@ -176,7 +183,7 @@ subtypes:
     description: >-
       A generic human user identity when the codebase names a User model or
       class without distinguishing customer, admin, or employee roles.
-      Used for injected default actors and actor:user gold subjects.
+      Used for actor:user gold subjects pending role-specific classification.
 
   - id: service_account
     type: actor
