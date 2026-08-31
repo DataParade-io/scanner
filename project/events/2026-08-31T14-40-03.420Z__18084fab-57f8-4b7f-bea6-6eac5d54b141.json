@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "18084fab-57f8-4b7f-bea6-6eac5d54b141",
+  "issue_id": "KDATAP-3b935c90-e680-4216-9fe9-66729f6655e2",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:40:03.420Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Run the canonical evaluator over the pinned corpus and freeze the result as baseline series 1.\n\nOfficial run: scanner `develop`, pinned materializations verified against manifests, accepted gold only, AI inference disabled, canonical evaluator.\n\n**Series 1 records `predecessor: none`.** There is no prior contract to bridge from: `benchmark:run` has never been published as a baseline on scanner `develop`, the last full run used the `dataparade-cli` copy with the pre-fix mixed runner, and `precision.ts` is wrong in a known direction (cross-layer scope). Manufacturing a bridge run from any of those would create false continuity. The artifact schema must permit a series with no predecessor.\n\nThereafter: detector changes are compared against the frozen artifact and never overwrite it; gold or contract changes start a new immutable series with a bridge run against the same scanner commit.",
+        "to": "Run the canonical evaluator over the pinned corpus and freeze baseline series 1 only after the readiness gate passes.\n\nOfficial run: scanner `develop`; verified pinned materializations; accepted canonical gold only; AI inference disabled; canonical evaluator and four-layer scorecard.\n\nThe command first produces readiness evidence and refuses to freeze on accepted legacy identities, unresolved endpoints, source-token-only gold, inadequate layer count/diversity, unreviewed scopes, path-contract errors above the limit, or unscorable rates above the limit.\n\nSeries 1 records `predecessor: none`. There is no trustworthy prior contract to bridge from. Thereafter detector changes compare against the frozen artifact; gold/contract changes create an immutable successor with a same-scanner bridge run.\n\nDefinition of done: JSON and generated Markdown are committed, fingerprints validate, readiness is green, and rerunning the same inputs reproduces byte-identical semantic content."
+      }
+    }
+  }
+}

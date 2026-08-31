@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "cf555b3a-170b-4457-8f40-5802081331a9",
+  "issue_id": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:40:02.358Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Implement the canonical evaluation harness agreed on KDATAP-77d2b0: one representation, one eligibility model, one evaluator, one four-layer scorecard.\n\nScope is the code half of the contract. Gold migration is KDATAP epic \"Corpus gold migration\"; the frozen baseline is the baseline epic. Detector retuning and new language ingest remain out of scope — with 15 PII rules, 422 of 793 mention and data-item gold cases have no concept to detect at all, so tuning against current scores optimizes the alias table.\n\nThree rulings on the design epic gate B1, B12 and the adapters: the per-layer meaning of `subject.name`, when instance/vendor is required on a component expectation, and the data-flow disposition.\n\nDefinition of done: every headline metric is produced by one evaluator consuming canonical observations from shared adapters; `tests/benchmark/precision.ts` no longer owns matching rules; the contract suite passes on synthetic golden inputs.",
+        "to": "Implement the code half of the canonical four-layer contract agreed on KDATAP-77d2b0: one versioned representation, one structured per-layer eligibility model, one deterministic one-to-one evaluator, and one scorecard vector.\n\nGold migration is KDATAP-b0d5e2; baseline publication is KDATAP-baca47. Detector retuning and new language ingest remain out of scope.\n\nThe representation and graph work are gated by four explicit design rulings:\n\n- per-layer treatment of legacy `subject.name`;\n- when component vendor/instance is asserted;\n- component entity identity and same-subtype cardinality;\n- legacy flow disposition and regold readiness.\n\nEligibility is additionally gated by the structured outcome ruling, including capacity and processing errors.\n\nDefinition of done: every headline metric comes from one evaluator consuming canonical observations from shared adapters; no alternate precision matcher remains; all per-layer eligibility reasons and one-to-one cardinality cases pass synthetic contract tests; no cross-layer scalar is produced."
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "223b4191-e6c7-4006-94ba-4aab495b267f",
+  "issue_id": "KDATAP-2e8f9fd7-8d8d-44ac-881c-0817f10eea7c",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:40:03.015Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Structured graph model for components and data flows, with a strict result plus diagnostic attribution.\n\nA component expectation separates type, taxonomy subtype, canonical instance/vendor where gold asserts one, and supporting evidence. The scorer produces one strict result plus diagnostics for observation detection, type/subtype classification, and instance/vendor resolution — so `asset:requests call` at Checkr evidence shows partial detection while remaining a strict miss for the Checkr component, and the naming failure is not hidden.\n\nA flow is a structured typed edge whose endpoints reference canonical component or typed-endpoint identities, with data categories as separate fields. Reporting distinguishes topology detection, endpoint resolution, semantic classification and the strict complete match.\n\nGraph precision uses reviewed packet-and-layer graph scope; file overlap alone is insufficient for repository graph entities. Locationless findings are counted and reported as unscorable rather than silently dropped — `collectFlowSourceLocations` returns `[]` for flows with neither `sourceLocations` nor `sourceLocation`, and `findingInScope` currently discards them, so that population becomes visible for the first time.\n\nBlocked on the component instance ruling and the data-flow disposition.",
+        "to": "Implement structured canonical graph observations after the instance, cardinality, and flow rulings.\n\nComponents carry repo-local entity identity, asserted taxonomy type/subtype, optional asserted vendor, and evidence/derivation locations. Repeated same-subtype components remain distinct unless reviewed evidence groups them.\n\nFlows carry typed source and target endpoint identities plus separate data categories and supporting provenance. Reporting distinguishes observation/topology detection, endpoint resolution, semantic classification, vendor resolution where asserted, and strict correctness over all asserted fields.\n\nGraph precision uses reviewed packet/layer graph scope. Locationless or otherwise unscorable findings remain visible with explicit computability reasons rather than disappearing from precision.\n\nDefinition of done: structured graph matching can attribute partial failures without turning them into strict success, and it preserves entity cardinality across components and edges."
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-329e7c60-70a7-4472-8040-6773202ae89f",
-  "title": "Not-computable state for precision and unscorable layers",
-  "description": "An explicit *not computable* state, distinct from a null result meaning \"scope declared, no findings in it\".\n\nUnder the eligibility decision, precision scope is reviewed packet-and-layer scope intersected with files successfully processed for that layer. Today's scope lists are dominated by `.php` (~6,500 entries) and `.rb` (~6,000), which ingest cannot open.\n\nFor discourse, wordpress, magento, redmine, spree, drupal and vapor \u2014 **7 of 29 packets, 54% of all annotations** \u2014 the intersection is close to empty. Precision there is not low and not zero-findings; it cannot be computed.\n\nThe same state serves data flows if they publish before regold, where the decision is to report the layer as unscorable pending regold rather than as a 0% strict layer.\n\nWithout this, the Markdown rendering presents both cases identically and someone writes a release gate against a packet that structurally cannot produce the number.",
+  "title": "Explicit metric computability states",
+  "description": "Represent metric availability with an explicit reason, not one overloaded null.\n\nAt minimum distinguish:\n\n- no reviewed scope;\n- reviewed scope but no successfully processed scope;\n- processed scope with zero predictions;\n- layer migration incomplete or below readiness threshold;\n- unscorable findings lacking required provenance;\n- computable numeric result.\n\nFor precision, an empty processed prediction denominator is not the same condition as absent or unread scope, even when neither produces a numeric fraction. Markdown and JSON must retain the state and all denominator counts.\n\nLegacy data flows may use migration-incomplete in readiness reports. Baseline series 1 itself is blocked until the four-layer readiness gate passes; it does not publish an unscorable flow layer as though that were a baseline result.",
   "type": "task",
   "status": "open",
   "priority": 2,
@@ -17,11 +17,10 @@
   ],
   "comments": [],
   "created_at": "2026-08-31T14:16:12.377571Z",
-  "updated_at": "2026-08-31T14:16:12.377571Z",
+  "updated_at": "2026-08-31T14:38:28.133081Z",
   "closed_at": null,
   "custom": {
-    "source": "shared",
-    "project_label": "KDATAP"
-  },
-  "agent": null
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }
