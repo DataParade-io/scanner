@@ -19,10 +19,19 @@
       "comment_type": "default",
       "data": {},
       "agent": null
+    },
+    {
+      "id": "f51c3ea2-5141-493e-b1a9-482ab17d80d1",
+      "author": "claude",
+      "text": "## Measured: the gold already says what each `actor:user` means\n\nSol's amendment on KDATAP-77d2b0 \u2014 that `actor:user` is a legacy generic key rather than a missing subtype \u2014 is correct, and the gold settles it. All 30 `actor:user` annotations carry a declared taxonomy subtype in their labels:\n\n| label carried | count | already a declared subtype |\n| --- | ---: | --- |\n| `customer` | 23 | yes |\n| `admin` | 4 | yes |\n| `employee` | 3 | yes |\n\nThirty of thirty. There is no annotation whose intent is unrecoverable, so the migration is mechanical: key on the subtype the label already asserts, and keep `user` as provenance.\n\nThe `subject.name` values point the same way \u2014 `Student`, `Employee`, `Owner`, `WP_User`, `AnonymousUser`, `merchant_customer_id`. These are different roles that a single `user` subtype would flatten.\n\n**This contradicts what is in PR #10**, which adds `user` (and `api_consumer`) to the taxonomy. Adding `user` creates a near-synonym for `customer`, leaves all 30 annotations keyed on the vaguer of the two, and gives detectors two defensible answers for one role. Recommend the taxonomy addition be dropped from that PR and this issue become the migration instead. The Checkr label fix in the same PR is unaffected and should still land.\n\nI was wrong earlier: I framed this as \"the taxonomy is missing `user`\" and listed retargeting the gold as only one of three options. The label data shows retargeting is the only one that does not degrade the vocabulary.\n",
+      "created_at": "2026-08-31T19:43:06.075498Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
     }
   ],
   "created_at": "2026-08-31T14:15:44.695729Z",
-  "updated_at": "2026-08-31T15:05:15.031831Z",
+  "updated_at": "2026-08-31T19:43:06.075498Z",
   "closed_at": null,
   "custom": {},
   "agent": null
