@@ -4,6 +4,7 @@ Feature: Executable Gherkin for Plexus-backed evaluation
     Given Gherkin files for local Plexus evaluation
     When the feature runner loads those files
     Then the discovered files include plexus-eval.feature
+    And the discovered files include canonical-evaluation-representation.feature
 
   Scenario: Jest remains separate from Gherkin specs
     Given the Jest configuration for this repository
