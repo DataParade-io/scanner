@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-955d8280-afa7-4d4b-a6ed-035f365db262",
+  "title": "Frozen evaluable-only corpus baseline",
+  "description": "As an evaluation owner, I want a frozen, citable baseline of per-layer scores on **evaluable (read) cases only**, so that later scanner changes are compared to one snapshot instead of mixed unread and alias noise.\n\n## Current gap\n\n`pnpm run benchmark:run` can print per-layer recall/precision/unread, but:\n\n- It is opt-in, not CI. CI does not materialize 29 upstream clones.\n- Nobody has published the post-harness-fix numbers on scanner `develop` as the official baseline (the last full run was against the CLI copy, with the old mixed-bag runner).\n- Packets with high unread (PHP/Ruby/Swift/Rust evidence) will dominate any “overall recall” that is not sliced.\n- Plexus accuracy/recall was not a successful baseline (proxy `trusted_open` / missing `evaluate_recall`).\n- Fixture Jest is already green and too small to steer corpus work.\n\nWithout a baseline, every agent will re-run a slightly different command (`--include-proposed`, different materialized cache, CLI vs scanner) and argue from incomparable tables.\n\n## Questions to answer\n\n- Official command, repo, branch, gold review_state (`accepted` only), and whether AI inference is off (must be off for deterministic headline).\n- Required columns: packet, layer, evaluable positives, recall, label accuracy, precision, unread count, unread rate. Overall = sum of denominators, not average of percents.\n- Do we publish a committed artifact (JSON/Markdown under `tests/benchmark/` or Kanbus wiki) and update it only on gold or scorer contract changes — never on detector tweaks?\n- Language slice: a second table restricted to extensions ingest actually reads, so unread-heavy packets do not hide Python/TS/Go signal?\n- How do `documentedGap` cases appear (in recall, excluded from CI gates, listed)?\n- Materialize in CI or only locally? If locally, how do we authenticate “this baseline was produced from these SHAs”?\n\n## Depends on\n\nTasks 1–5 should land as *decisions* first, or the baseline will be thrown out when unread/identity/layers change. This task can still specify the *shape* of the report in parallel.\n\n## Not this task\n\nDo not start a scanner improvement loop from an unpublished CLI run. Do not cite Plexus until it uses `scoreEvalCases` (or an agreed identical contract).",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T11:09:28.316887Z",
+  "updated_at": "2026-08-31T11:09:28.316887Z",
+  "closed_at": null,
+  "custom": {}
+}

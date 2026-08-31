@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-08a0ac3f-0fdc-4d3f-a036-860feafe5a3b",
+  "title": "Policy for component and flow identity",
+  "description": "As an evaluation owner, I want a policy for graph identity (components and data-flows) that does not hide naming misses and does not make every corpus run look like 0% recall.\n\n## Current contract (intentional)\n\n`identitiesMatch` requires **exact** `subject.key` for components and data-flows. We explicitly did not alias `third_party:checkr` to `asset:requests call`. That is a scanner naming/classification issue.\n\nGold was written as human taxonomy (`third_party:checkr`, `flow:pii->checkr-api`, `asset:database`). The engine emits detector names (`asset:django orm`, `asset:requests call`, `flow:asset:…->asset:…`). On vgs-django after the harness fix, component and flow recall were 0% with 0 unread. That is an honest miss **if** we believe gold keys are the product identity.\n\n## Why it blocks scanner work\n\nIf we start “improving the scanner” from those zeros, every session will retune third-party heuristics and flow wiring. That may be right — or the gold identity convention (`type:lowercase name`) may be the thing that should move, or we need a **naming grade** separate from “did we detect an HTTP client at all.”\n\nPutting vendor aliases into `identity.ts` would make Checkr look solved while the engine still does not know Checkr. Using 0% as a gate with no `documentedGap` will drown PII/data-item signal.\n\nLabels have the same split: gold `database` / `data_flow` vs finding `[asset, subtype]` / `api_call`. We already special-case some of that in `labelsMatch`. That is another policy, not a detector bug.\n\n## Questions to answer\n\n- Are gold component keys a stable public identity the engine must emit, or a reviewer’s nickname that adapters may map?\n- If the engine must emit gold keys, how do we mark today’s naming misses (`documentedGap`, a naming sub-score, per-vendor allowlists) so recall is usable?\n- If adapters may map, what is the *closed* map (not “any HTTP client matches any third_party”)?\n- Flows: gold `flow:pii->checkr-api` vs `flow:${componentIdentity}->${componentIdentity}`. Same question as components, because flow identity is defined in terms of component identity.\n- Exact span overlap on flows whose `sourceLocations` are empty or only on one endpoint: match, unread, or exclude from precision?\n\n## Not this task\n\nDo not add Checkr-specific detector rules to make vgs-django green while this policy is open.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T11:09:28.276551Z",
+  "updated_at": "2026-08-31T11:09:28.276551Z",
+  "closed_at": null,
+  "custom": {}
+}
