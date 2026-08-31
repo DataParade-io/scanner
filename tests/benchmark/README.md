@@ -112,6 +112,21 @@ The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII reg
 
 **This script is not part of `pnpm test`.** Unit tests mock scans and use temporary fixtures — no network or git clones in CI.
 
+## Detection coverage census (opt-in)
+
+Before forecasting what structured component identity buys, measure per-packet detection coverage: files ingested, components emitted, data flows emitted, and accepted component gold matched under three identity schemes (`type:name`, `type:subType`, hybrid). No spans, no scoring.
+
+```bash
+pnpm run benchmark:materialize -- --all
+pnpm run benchmark:census -- --write-report
+```
+
+Reports land in `tests/benchmark/reports/detection-coverage-census.{json,md}`. Materialized clones stay in `tests/benchmark/.cache/` (gitignored — never commit them).
+
+If materialization cannot finish (network/disk), land the runner and unit tests, list failed packets, and escalate — do not invent census numbers.
+
+**This script is not part of `pnpm test`.** CI validates the runner via mocked unit tests only.
+
 ## Adding a repository
 
 1. Create `repos/<key>/manifest.yaml` per [ground-truth-schema.md](../eval/ground-truth-schema.md).
