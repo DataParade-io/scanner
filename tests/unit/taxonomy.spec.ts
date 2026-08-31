@@ -2,6 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import YAML from "yaml";
 
+import { injectActorIfMissing } from "../../src/classifier/application-injection";
+import type { DetectedComponent } from "../../src/core/types/component";
 import { loadPropertyDetectionConfig } from "../../src/config/property-detection-config";
 
 const PATTERNS_ROOT = path.join(__dirname, "../../patterns");
@@ -83,6 +85,85 @@ describe("component taxonomy is the single source of truth", () => {
   it("every taxonomy subtype references a declared type", () => {
     for (const subtype of taxonomy.subtypes) {
       expect(taxonomyTypeIds.has(subtype.type)).toBe(true);
+    }
+  });
+
+  it("declares every subtype emitted by injectActorIfMissing", () => {
+    const fixtures: DetectedComponent[][] = [
+      [
+        {
+          id: "cmp_1",
+          name: "MyApp",
+          type: "asset",
+          subType: "application",
+          confidence: 1,
+          detectedFrom: [],
+          sourceLocations: [],
+          properties: { isMainApplication: true },
+        },
+      ],
+      [
+        {
+          id: "cmp_1",
+          name: "Backend App",
+          type: "asset",
+          subType: "application",
+          confidence: 1,
+          detectedFrom: [],
+          sourceLocations: [],
+          properties: {
+            isMainApplication: true,
+            section_id: "reedy-backend",
+            framework: "fastapi",
+          },
+        },
+      ],
+      [
+        {
+          id: "cmp_1",
+          name: "Frontend API Surface",
+          type: "asset",
+          subType: "api",
+          confidence: 1,
+          detectedFrom: [],
+          sourceLocations: [],
+          properties: {
+            isMainApplication: true,
+            section_id: "frontend",
+            framework: "next_or_react_route",
+          },
+        },
+      ],
+    ];
+
+    for (const components of fixtures) {
+      const result = injectActorIfMissing(components);
+      for (const actor of result.filter((c) => c.type === "actor")) {
+        expect(actor.subType).toBeDefined();
+        expect(taxonomySubtypeIds.has(actor.subType!)).toBe(true);
+      }
+    }
+  });
+
+  it("rejects component gold labels that are types rather than subtypes", () => {
+    const benchmarkRoot = path.join(__dirname, "../benchmark/repos");
+    const componentFiles = fs
+      .readdirSync(benchmarkRoot, { withFileTypes: true })
+      .map((entry) =>
+        path.join(benchmarkRoot, entry.name, "annotations", "components.yaml"),
+      )
+      .filter((filePath) => fs.existsSync(filePath));
+
+    for (const filePath of componentFiles) {
+      const parsed = YAML.parse(fs.readFileSync(filePath, "utf8")) as {
+        annotations?: { expected?: { labels?: string[] } }[];
+      };
+      for (const annotation of parsed.annotations ?? []) {
+        for (const label of annotation.expected?.labels ?? []) {
+          expect(taxonomyTypeIds.has(label)).toBe(false);
+          expect(taxonomySubtypeIds.has(label)).toBe(true);
+        }
+      }
     }
   });
 });

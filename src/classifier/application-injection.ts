@@ -48,47 +48,8 @@ function isLikelyUserEntrypoint(mainApp: DetectedComponent): boolean {
   });
 }
 
-function isLikelyBackendEntrypoint(mainApp: DetectedComponent): boolean {
-  const framework = mainApp.properties?.framework;
-  const frameworks: string[] = [];
-  if (typeof framework === "string") frameworks.push(framework);
-  if (Array.isArray(framework)) {
-    for (const v of framework) {
-      if (typeof v === "string") frameworks.push(v);
-    }
-  }
-
-  const backendHints = new Set([
-    "express",
-    "nest",
-    "fastapi",
-    "flask",
-    "django",
-    "drf",
-    "starlette",
-    "bottle",
-    "serverless",
-  ]);
-
-  if (
-    frameworks.some((f) => {
-      const lower = f.toLowerCase();
-      return (
-        backendHints.has(lower) ||
-        lower.includes("backend") ||
-        lower.includes("api")
-      );
-    })
-  ) {
-    return true;
-  }
-
-  const sectionId = getSectionIdFromProperties(mainApp.properties).toLowerCase();
-  return sectionId.includes("backend") || sectionId.endsWith("-api");
-}
-
-function getInjectedUserActorSubtype(mainApp: DetectedComponent): string {
-  return isLikelyBackendEntrypoint(mainApp) ? "api_consumer" : "customer";
+function getInjectedUserActorSubtype(): string {
+  return "user";
 }
 
 function getNextComponentId(components: DetectedComponent[]): string {
@@ -314,7 +275,7 @@ export function injectActorIfMissing(
       id: getNextComponentId([...components, ...synthetic]),
       name: "User",
       type: "actor",
-      subType: getInjectedUserActorSubtype(mainApp),
+      subType: getInjectedUserActorSubtype(),
       confidence: 0.5,
       detectedFrom: [],
       sourceLocations: [],
