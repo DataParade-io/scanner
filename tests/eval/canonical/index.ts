@@ -79,3 +79,14 @@ export {
   withId,
 } from "./builders";
 export type { BuildFindingInput, BuildGoldInput } from "./builders";
+
+export {
+  clearPersonalDataConceptMapCacheForTest,
+  loadPersonalDataConceptMap,
+  ruleIdToAncestry,
+  ruleIdToConceptLeaf,
+  FORBIDDEN_CATEGORY_LEAVES,
+  normalizeConceptToken,
+  validatePersonalDataConceptMapDocument,
+} from "./concept-map";
+export type { PersonalDataConceptMap, PersonalDataConceptMapEntry } from "./concept-map";
