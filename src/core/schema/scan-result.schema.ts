@@ -18,11 +18,13 @@ const fileLanguageEnum = z.enum([
   "cpp",
   "csharp",
   "go",
+  "php",
+  "rust",
+  "ruby",
   "java",
   "kotlin",
   "terraform",
   "dockerfile",
-  "rust",
 ]);
 
 export const sourceLocationSchema = z.object({

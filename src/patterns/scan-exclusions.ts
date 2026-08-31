@@ -28,6 +28,11 @@ export const DEFAULT_EXCLUDED_DIRS = new Set([
   // Maven build output. Gradle's `build` and `out` are already excluded
   // above, and its `.gradle` cache is skipped as a hidden directory.
   "target",
+  // Rails runtime / local storage. `.bundle` is already skipped as a hidden
+  // directory.
+  "tmp",
+  "log",
+  "storage",
 ]);
 
 /**

@@ -5,6 +5,8 @@ import { ingestFileSystem } from "../ingest/file-system";
 import { createCppAnalyzer } from "./cpp";
 import { createGoAnalyzer } from "./go";
 import { createPhpAnalyzer } from "./php";
+import { createRustAnalyzer } from "./rust";
+import { createRubyAnalyzer } from "./ruby";
 import { createJvmAnalyzer } from "./jvm";
 import { createCSharpAnalyzer } from "./csharp";
 import { createPythonAnalyzer } from "./python";
@@ -19,6 +21,8 @@ const pythonAnalyzer = createPythonAnalyzer();
 const cppAnalyzer = createCppAnalyzer();
 const goAnalyzer = createGoAnalyzer();
 const phpAnalyzer = createPhpAnalyzer();
+const rustAnalyzer = createRustAnalyzer();
+const rubyAnalyzer = createRubyAnalyzer();
 const jvmAnalyzer = createJvmAnalyzer();
 const cSharpAnalyzer = createCSharpAnalyzer();
 const terraformAnalyzer = createTerraformAnalyzer();
@@ -27,6 +31,8 @@ const registry = new Map<FileLanguage, Analyzer>([
   ["python", pythonAnalyzer],
   ["go", goAnalyzer],
   ["php", phpAnalyzer],
+  ["rust", rustAnalyzer],
+  ["ruby", rubyAnalyzer],
   // Java and Kotlin share one analyzer: same package namespace, same
   // Maven/Gradle coordinates, same Spring/Jakarta annotations, same JDBC.
   ["java", jvmAnalyzer],

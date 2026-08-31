@@ -41,6 +41,22 @@ import {
   detectPhpServerlessHandlersFromConfig as detectPhpServerlessHandlersFromConfigAdapter,
 } from "./detectors/php";
 import {
+  detectRustAuthFromConfig as detectRustAuthFromConfigAdapter,
+  detectRustDatabaseConnectionsFromConfig as detectRustDatabaseConnectionsFromConfigAdapter,
+  detectRustEnvAndConfigFromConfig as detectRustEnvAndConfigFromConfigAdapter,
+  detectRustExternalApisFromConfig as detectRustExternalApisFromConfigAdapter,
+  detectRustRoutesFromConfig as detectRustRoutesFromConfigAdapter,
+  detectRustServerlessHandlersFromConfig as detectRustServerlessHandlersFromConfigAdapter,
+} from "./detectors/rust";
+import {
+  detectRubyAuthFromConfig as detectRubyAuthFromConfigAdapter,
+  detectRubyDatabaseConnectionsFromConfig as detectRubyDatabaseConnectionsFromConfigAdapter,
+  detectRubyEnvAndConfigFromConfig as detectRubyEnvAndConfigFromConfigAdapter,
+  detectRubyExternalApisFromConfig as detectRubyExternalApisFromConfigAdapter,
+  detectRubyRoutesFromConfig as detectRubyRoutesFromConfigAdapter,
+  detectRubyServerlessHandlersFromConfig as detectRubyServerlessHandlersFromConfigAdapter,
+} from "./detectors/ruby";
+import {
   detectJvmAuthFromConfig as detectJvmAuthFromConfigAdapter,
   detectJvmDatabaseConnectionsFromConfig as detectJvmDatabaseConnectionsFromConfigAdapter,
   detectJvmEnvAndConfigFromConfig as detectJvmEnvAndConfigFromConfigAdapter,
@@ -275,6 +291,20 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(...detectPhpExternalApisFromConfigAdapter(ctx, config));
   findings.push(...detectPhpRoutesFromConfigAdapter(ctx, config));
   findings.push(...detectPhpServerlessHandlersFromConfigAdapter(ctx, config));
+
+  findings.push(...detectRustDatabaseConnectionsFromConfigAdapter(ctx, config));
+  findings.push(...detectRustAuthFromConfigAdapter(ctx, config));
+  findings.push(...detectRustEnvAndConfigFromConfigAdapter(ctx, config));
+  findings.push(...detectRustExternalApisFromConfigAdapter(ctx, config));
+  findings.push(...detectRustRoutesFromConfigAdapter(ctx, config));
+  findings.push(...detectRustServerlessHandlersFromConfigAdapter(ctx, config));
+
+  findings.push(...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyAuthFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyEnvAndConfigFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyExternalApisFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyRoutesFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyServerlessHandlersFromConfigAdapter(ctx, config));
 
   findings.push(...detectJvmDatabaseConnectionsFromConfigAdapter(ctx, config));
   findings.push(...detectJvmAuthFromConfigAdapter(ctx, config));

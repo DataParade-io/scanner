@@ -1,0 +1,482 @@
+# Ruby/Rails pattern config.
+#
+# `requirePaths` matches `require` / `require_relative` strings (and path
+# prefixes), e.g. `faraday` matches `faraday/adapter`.
+# `gemNames` matches Bundler gem names from Gemfile / Gemfile.lock.
+# Manifest scanners feed gems as `gem:<name>` so the spaces stay disjoint —
+# critical for Rails/Zeitwerk apps that rarely `require` gems explicitly.
+
+db_clients:
+  - id: active_record
+    patternId: database_connection
+    databaseType: sql
+    requirePaths:
+      - active_record
+    gemNames:
+      - rails
+      - activerecord
+    callNames:
+      - ActiveRecord::Base
+      - establish_connection
+      - ApplicationRecord
+    confidence: 0.9
+
+  - id: pg
+    patternId: database_connection
+    databaseType: postgres
+    requirePaths:
+      - pg
+    gemNames:
+      - pg
+    confidence: 0.85
+
+  - id: mysql2
+    patternId: database_connection
+    databaseType: mysql
+    requirePaths:
+      - mysql2
+    gemNames:
+      - mysql2
+    confidence: 0.85
+
+  - id: sqlite3
+    patternId: database_connection
+    databaseType: sqlite
+    requirePaths:
+      - sqlite3
+    gemNames:
+      - sqlite3
+    confidence: 0.85
+
+  - id: sequel
+    patternId: database_connection
+    databaseType: sql
+    requirePaths:
+      - sequel
+    gemNames:
+      - sequel
+    callNames:
+      - Sequel.connect
+      - Sequel::
+    confidence: 0.9
+
+  - id: mongoid
+    patternId: database_connection
+    databaseType: mongodb
+    requirePaths:
+      - mongoid
+    gemNames:
+      - mongoid
+    callNames:
+      - Mongoid::
+    confidence: 0.9
+
+  - id: redis
+    patternId: database_connection
+    databaseType: redis
+    requirePaths:
+      - redis
+    gemNames:
+      - redis
+    callNames:
+      - Redis.new
+      - Redis::
+    confidence: 0.9
+
+  - id: trilogy
+    patternId: database_connection
+    databaseType: mysql
+    requirePaths:
+      - trilogy
+    gemNames:
+      - trilogy
+      - activerecord-trilogy-adapter
+    callNames:
+      - Trilogy.new
+      - Trilogy::
+    confidence: 0.85
+
+  - id: elasticsearch
+    patternId: database_connection
+    databaseType: elasticsearch
+    requirePaths:
+      - elasticsearch
+    gemNames:
+      - elasticsearch
+      - elasticsearch-ruby
+    callNames:
+      - Elasticsearch::Client
+      - Elasticsearch::
+    confidence: 0.9
+
+  - id: opensearch
+    patternId: database_connection
+    databaseType: elasticsearch
+    requirePaths:
+      - opensearch
+      - opensearch-ruby
+    gemNames:
+      - opensearch-ruby
+      - opensearch
+    callNames:
+      - OpenSearch::Client
+      - OpenSearch::
+    confidence: 0.9
+
+  - id: aws_sdk_dynamodb
+    patternId: database_connection
+    databaseType: dynamodb
+    requirePaths:
+      - aws-sdk-dynamodb
+    gemNames:
+      - aws-sdk-dynamodb
+    callNames:
+      - Aws::DynamoDB::Client
+      - Aws::DynamoDB::
+    confidence: 0.85
+
+database_url:
+  patternId: database_connection
+  regex: '["'']((?:postgres(?:ql)?|mysql2?|sqlite3?|trilogy|redis|mongodb):\/\/[^"'']+)["'']'
+  name: database_url
+  confidence: 0.85
+  drivers:
+    postgres: postgres
+    postgresql: postgres
+    mysql: mysql
+    mysql2: mysql
+    trilogy: mysql
+    sqlite: sqlite
+    sqlite3: sqlite
+    redis: redis
+    mongodb: mongodb
+  defaultDatabaseType: sql
+
+auth:
+  libraries:
+    - id: devise
+      patternId: auth_middleware
+      requirePaths:
+        - devise
+      gemNames:
+        - devise
+      callNames:
+        - devise_for
+        - Devise::
+      strategy: session
+      confidence: 0.9
+
+    - id: doorkeeper
+      patternId: auth_middleware
+      requirePaths:
+        - doorkeeper
+      gemNames:
+        - doorkeeper
+      strategy: oauth2
+      confidence: 0.9
+
+    - id: omniauth
+      patternId: auth_middleware
+      requirePaths:
+        - omniauth
+      gemNames:
+        - omniauth
+      strategy: oauth2
+      confidence: 0.85
+
+    - id: jwt
+      patternId: auth_middleware
+      requirePaths:
+        - jwt
+      gemNames:
+        - jwt
+      callNames:
+        - JWT.encode
+        - JWT.decode
+      strategy: jwt
+      confidence: 0.9
+
+    - id: rodauth
+      patternId: auth_middleware
+      requirePaths:
+        - rodauth
+      gemNames:
+        - rodauth
+      callNames:
+        - Rodauth::
+        - rodauth
+      strategy: session
+      confidence: 0.9
+
+    - id: pundit
+      patternId: auth_middleware
+      requirePaths:
+        - pundit
+      gemNames:
+        - pundit
+      callNames:
+        - Pundit::
+        - authorize
+        - policy
+      strategy: authorization
+      confidence: 0.85
+
+    - id: bearer_token_header
+      patternId: auth_middleware
+      contentRegexes:
+        - '["'']Authorization["'']'
+        - 'Bearer '
+      strategy: bearer_token
+      confidence: 0.7
+
+routes:
+  frameworks:
+    # Rails routes are gated in the detector: config/routes.rb OR
+    # Rails.application.routes.draw (get "/x" alone is too generic in Ruby).
+    - id: rails
+      patternId: express_route
+      requireRailsRoutesContext: true
+      gemNames:
+        - rails
+      confidence: 0.9
+      routeRegexes:
+        - regex: '\b(get|post|put|patch|delete|match)\s+["'']([^"'']+)["'']'
+          methodGroup: 1
+          pathGroup: 2
+        - regex: '\broot\s+["'']([^"'']+)["'']'
+          pathGroup: 1
+          defaultMethod: GET
+        - regex: '\bresources?\s+:([A-Za-z_]\w*)'
+          pathGroup: 1
+        - regex: '\bmount\s+[A-Za-z_:][\w:]*\s*=>\s*["'']([^"'']+)["'']'
+          pathGroup: 1
+
+    - id: sinatra
+      patternId: express_route
+      requirePaths:
+        - sinatra
+      gemNames:
+        - sinatra
+      confidence: 0.9
+      routeRegexes:
+        - regex: '\b(get|post|put|patch|delete|options|head)\s+["'']([^"'']+)["'']'
+          methodGroup: 1
+          pathGroup: 2
+
+    - id: grape
+      patternId: express_route
+      requirePaths:
+        - grape
+      gemNames:
+        - grape
+      confidence: 0.85
+      routeRegexes:
+        - regex: '\b(get|post|put|patch|delete)\s+["'']([^"'']+)["'']'
+          methodGroup: 1
+          pathGroup: 2
+
+    - id: grpc
+      patternId: express_route
+      requirePaths:
+        - grpc
+      gemNames:
+        - grpc
+      confidence: 0.85
+      routeRegexes:
+        - regex: '\b([A-Za-z_]\w*::Service)\b'
+          pathGroup: 1
+          defaultMethod: RPC
+        - regex: '\.rpc_descs\b'
+          defaultMethod: RPC
+        - regex: '\bGRPC::RpcServer\b'
+          defaultMethod: RPC
+
+serverless:
+  handlers:
+    - id: aws_sdk_rails
+      patternId: lambda_handler
+      requirePaths:
+        - aws-sdk-rails
+        - lamby
+      gemNames:
+        - aws-sdk-rails
+        - lamby
+      confidence: 0.8
+
+    - id: functions_framework
+      patternId: lambda_handler
+      requirePaths:
+        - functions_framework
+      gemNames:
+        - functions_framework
+      callNames:
+        - FunctionsFramework::
+        - FunctionsFramework.on_startup
+        - FunctionsFramework.http
+      confidence: 0.85
+
+env_config:
+  envVariable:
+    patternId: env_variable
+    regex: '\bENV(?:\.fetch)?\s*(?:\[\s*|\()\s*["'']([^"'']+)["'']'
+    confidence: 0.85
+
+  configLoaders:
+    patternId: config_file
+    confidence: 0.85
+    loaders:
+      - id: dotenv_rails
+        requirePaths:
+          - dotenv
+          - dotenv/rails
+        gemNames:
+          - dotenv-rails
+          - dotenv
+        callNames:
+          - Dotenv.load
+          - Dotenv::
+      - id: rails_credentials
+        callNames:
+          - Rails.application.credentials
+          - Rails.application.config_for
+        gemNames:
+          - rails
+
+  configFile:
+    patternId: config_file
+    fileNameRegex: '(^|/)(application|database|credentials|secrets)\.ya?ml$'
+    name: rails_config
+    confidence: 0.75
+
+external_apis:
+  httpClients:
+    - id: faraday
+      patternId: external_api_call
+      clientName: faraday
+      requirePaths:
+        - faraday
+      gemNames:
+        - faraday
+      callNames:
+        - Faraday.get
+        - Faraday.post
+        - Faraday.put
+        - Faraday.patch
+        - Faraday.delete
+        - Faraday.new
+        - Faraday::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: httparty
+      patternId: external_api_call
+      clientName: httparty
+      requirePaths:
+        - httparty
+      gemNames:
+        - httparty
+      callNames:
+        - HTTParty.get
+        - HTTParty.post
+        - HTTParty::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: rest_client
+      patternId: external_api_call
+      clientName: rest_client
+      requirePaths:
+        - rest-client
+        - rest_client
+      gemNames:
+        - rest-client
+      callNames:
+        - RestClient.get
+        - RestClient.post
+        - RestClient::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.85
+
+    - id: net_http
+      patternId: external_api_call
+      clientName: net_http
+      requirePaths:
+        - net/http
+      callNames:
+        - Net::HTTP.get
+        - Net::HTTP.post
+        - Net::HTTP.start
+        - Net::HTTP.new
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.8
+
+    - id: typhoeus
+      patternId: external_api_call
+      clientName: typhoeus
+      requirePaths:
+        - typhoeus
+      gemNames:
+        - typhoeus
+      callNames:
+        - Typhoeus.get
+        - Typhoeus.post
+        - Typhoeus::Request
+        - Typhoeus::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: excon
+      patternId: external_api_call
+      clientName: excon
+      requirePaths:
+        - excon
+      gemNames:
+        - excon
+      callNames:
+        - Excon.get
+        - Excon.post
+        - Excon.new
+        - Excon::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: http_rb
+      patternId: external_api_call
+      clientName: http
+      requirePaths:
+        - http
+      gemNames:
+        - http
+      callNames:
+        - HTTP.get
+        - HTTP.post
+        - HTTP::
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.85
+
+    - id: stripe
+      patternId: external_api_call
+      clientName: stripe
+      requirePaths:
+        - stripe
+      gemNames:
+        - stripe
+      callNames:
+        - Stripe::
+        - Stripe::Customer
+        - Stripe::Charge
+      urlRegex: '["''](https?:\/\/[^"'']+)["'']'
+      confidence: 0.9
+
+    - id: grpc_client
+      patternId: external_api_call
+      clientName: grpc
+      requirePaths:
+        - grpc
+      gemNames:
+        - grpc
+      callNames:
+        - GRPC::ClientStub
+        - ::Stub.new
+      urlRegex: '["''](https?:\/\/[^"'']+|[^"'']+:\d+)["'']'
+      confidence: 0.8
