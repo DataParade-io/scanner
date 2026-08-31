@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "53c4bdd4-871c-4227-b80d-ba7910777d63",
+  "issue_id": "KDATAP-79109166-5505-4c9f-af30-a0e39f7263fe",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T11:09:28.156Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "As an evaluation owner, I want unread to mean “ingest never opened this evidence file”, so that recall is not inflated by files the scanner could not have read.\n\n## Current behavior\n\n`tests/eval/score.ts` `isUnread`:\n\n- If the evidence path is in `scannedFiles` → read.\n- Else if the evidence path is in that case’s `exhaustiveScopeFiles` → **still treated as read**.\n- Else → unread, omitted from recall denominators.\n\nFixture docs and an older wiki/Plexus reading said: omit unread from recall; exhaustive scope does not make a file read. The scanner score tests include “treats exhaustive-scope evidence as read when ingest omitted the file.”\n\nCorpus gold puts whole include trees on `exhaustive_scope_files`. Many of those files are `.php` / `.rb` / `.swift` / `.rs`. `getFileLanguage` / ingest skips them, so they are absent from `scannedFiles`. Under today’s rule they become **evaluable false negatives**, not unread.\n\n## Why it blocks scanner work\n\nHeadline recall then says “the scanner missed WordPress PHP gold.” The honest statement is “the engine never ingested the file.” Using that number to improve the scanner forces language ingest as a fake eval win. Language ingest may still be worth doing later; it must not be smuggled in as a scorer bug.\n\n## Questions to answer\n\n- Confirm: unread = evidence path not in `scannedFiles` (posix-normalized), regardless of exhaustive scope?\n- Precision: only findings whose `sourceFilePaths` intersect **scanned** exhaustive-scope files?\n- Negatives: unread negatives stay out of `negativeCasePassRate` (already true)?\n- Path identity: exact string vs posix normalize vs symlink? Gold `file_path` vs ingest `file.path` mismatches should be counted how?\n- What do we report when 50%+ of a packet is unread (Discourse `.rb`)? A required “unread rate” next to recall so nobody cites recall alone?\n\n## Not this task\n\nDo not add PHP/Ruby parsers here. Do not delete gold for unreadable languages; unread is the correct holding pen until ingest exists.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+    "priority": 1,
+    "status": "open",
+    "title": "Unread means ingest never opened the file"
+  }
+}

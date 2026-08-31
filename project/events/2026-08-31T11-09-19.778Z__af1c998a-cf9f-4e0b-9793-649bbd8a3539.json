@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "af1c998a-cf9f-4e0b-9793-649bbd8a3539",
+  "issue_id": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T11:09:19.778Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "As an evaluation owner, I want the corpus and fixture harness contracts settled in writing, so that later scanner work is steered by honest scores instead of alias tricks, unread files counted as misses, or two scorers that disagree.\n\nThis epic is for **design**, not for retuning detectors, adding PHP/Ruby ingest, or renaming Checkr. Those are scanner problems. We do not start using the evaluation system to improve the scanner until the questions on the child tasks have answers that code, gold YAML, and docs all implement.\n\n## Why this exists\n\nWe imported 29 packets of gold into `DataParade-io/scanner` so a public `dataparade-cli` release could not wipe them. The corpus runner can produce per-layer numbers. Those numbers are still not a safe flywheel:\n\n- Gold taxonomy keys (`pii:email_address`) and matcher rule ids (`mention:email`, `data_item:ssn`) are bridged by `tests/eval/identity.ts` aliases.\n- Unread evidence can still enter recall if it appears on an exhaustive-scope list.\n- `tests/eval/score.ts` and `tests/benchmark/precision.ts` do not implement the same match rules.\n- Jest is five grades; corpus gold is four layers (`pii_signals` loaded as `mentions`, no `raw_hits` packets).\n- Component and flow gold uses exact `type:name` keys, so vendor naming misses look like total recall failure.\n- There is no frozen baseline of **evaluable (read) only** scores.\n\nChild tasks are one issue each. Deep-thinking agents should argue the contract, propose a single decision, and list what must change in scorer, adapters, gold, and docs. They must not “fix” the scanner to make today’s messy scores look better.\n\n## Out of scope\n\n- Language ingest (PHP, Ruby, Swift, Rust) except as it affects the unread rule.\n- Component naming quality (`third_party:checkr` vs `asset:requests call`) except as a documentedGap / naming-grade policy.\n- Leftover proposed original-ten gold (incomplete corpus, not a harness contract).\n- Making Plexus GraphQL eval run (a second client; align it after the scanner harness is the source of truth).\n\n## Definition of done\n\nEach child task has a recorded decision (and rejected alternatives). Follow-on implementation work is separate tasks. This epic closes when all six design questions are answered and the answers do not contradict each other.",
+    "issue_type": "epic",
+    "labels": [],
+    "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+    "priority": 1,
+    "status": "open",
+    "title": "Settle evaluation contracts before scanner flywheel"
+  }
+}
