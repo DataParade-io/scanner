@@ -16,6 +16,7 @@ import {
   CANONICAL_CONTRACT_VERSION,
   LEGACY_SOURCE_CONTRACT_VERSION,
 } from "./contract";
+import { tryRuleIdToConceptEntry } from "../concept-map";
 import type {
   ConversionKind,
   LegacyGoldRecord,
@@ -265,6 +266,37 @@ export function canonicalSubjectKey(
   }
 }
 
+export function ruleIdToConceptLeafConversion(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+): { state: Partial<ConversionState>; diagnostic?: MigrationDiagnostic } {
+  if (state.canonicalLayer !== "mentions" && state.canonicalLayer !== "raw-hits") {
+    return { state: {} };
+  }
+
+  if (input.subject.key.trim().startsWith("pii:")) {
+    return { state: {} };
+  }
+
+  const { rest } = parseKeyPrefix(state.identityKey);
+  const entry = tryRuleIdToConceptEntry(rest);
+  if (!entry) {
+    return { state: {} };
+  }
+
+  return {
+    state: {
+      conceptLeaf: entry.conceptLeaf,
+      conceptAncestry: entry.conceptAncestry,
+    },
+    diagnostic: makeDiagnostic(
+      input.id,
+      "rule_id_to_concept_leaf",
+      `rule_id ${rest} → conceptLeaf ${entry.conceptLeaf}`,
+    ),
+  };
+}
+
 export function legacySubjectName(
   state: ConversionState,
   input: LegacyGoldRecord,
@@ -457,6 +489,7 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "pii_signal_prefix_rewrite",
   "pii_mention_key_exemption",
   "canonical_subject_key",
+  "rule_id_to_concept_leaf",
   "legacy_subject_name",
   "expected_labels_provenance",
   "expected_status_disposition",

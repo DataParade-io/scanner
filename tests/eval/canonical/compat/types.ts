@@ -12,6 +12,7 @@ export type ConversionKind =
   | "pii_signal_prefix_rewrite"
   | "pii_mention_key_exemption"
   | "canonical_subject_key"
+  | "rule_id_to_concept_leaf"
   | "legacy_subject_name"
   | "expected_labels_provenance"
   | "expected_status_disposition";
