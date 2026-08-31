@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "8d3d4c79-98af-458e-a450-e0eb92ee4a5c",
+  "issue_id": "KDATAP-5bff8f9c-0d14-411a-ad4d-4187eded664d",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T15:04:12.839Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "benchmark:materialize fails to resolve its TypeScript imports",
+    "description": "`pnpm run benchmark:materialize <packet>` fails on `develop`, so no corpus packet can be materialized through the supported path.\n\n```\nError [ERR_MODULE_NOT_FOUND]\n  url: 'file:///home/user/scanner/tests/benchmark/materialize-paths'\n```\n\n`tests/benchmark/scripts/materialize-repo.mjs` imports `../materialize-paths.ts` and `../materialize-orchestrator.ts` with explicit `.ts` extensions, and the script runs under `node --experimental-strip-types`. On Node 22.22.2 the specifier resolves without the extension and the import fails before any work happens.\n\n**Why it matters now.** KDATAP-3b935c requires pinned, validated materializations for the official baseline run, and `validateMaterializedRepo` can only check a tree that exists. Until this is fixed, corpus numbers can only be produced by cloning packets by hand, which is exactly the unauthenticated path the baseline decision rules out.\n\nVerified working around it: cloning `maxcountryman/flask-login` and `ZeroCoolHacker/easy-school` at their manifest commits and scanning directly both succeed, so the defect is in the materialize entry point, not in ingest or the orchestrator.\n\nCheap, and it unblocks anyone trying to reproduce a number.",
+    "issue_type": "bug",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "labels": []
+  }
+}

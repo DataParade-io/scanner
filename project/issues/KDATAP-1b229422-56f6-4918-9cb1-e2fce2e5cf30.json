@@ -10,9 +10,20 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "d21b45ac-7a29-41d5-9aca-624f75682e88",
+      "author": "claude",
+      "text": "## The PHP analyzer landing on `develop` moves the eligibility numbers by half\n\nPR #6 (`feature/php-analyzer`, merged as `3945aa3`) added `php` to `FileLanguage` and `.php` / `.phtml` to `getFileLanguage`. Recomputed against all 1,792 annotations:\n\n| | annotations ingest cannot open |\n| --- | ---: |\n| before the PHP analyzer | 960 (54%) |\n| **after** | **517 (29%)** |\n| moved into scope | **443** |\n\nPer packet:\n\n| packet | ineligible before | after |\n| --- | ---: | ---: |\n| wordpress | 243 / 243 | **0 / 243** |\n| drupal | 65 / 65 | **0 / 65** |\n| magento | 217 / 217 | **82 / 217** (the remainder is `.xml`) |\n\nStill ineligible by extension: `.rb` 415, `.xml` 82, `.swift` 18, `.example` 2. So the \"seven effectively unreadable packets\" figure quoted across this epic is now **four** \u2014 discourse, spree and redmine on Ruby, plus vapor on Swift.\n\n## What this changes\n\n**Correct the numbers wherever they are quoted as current.** 960/1,792 and \"7 packets\" appear in several issue descriptions and in the earlier review comments. Those were true when measured and are now stale. The earlier comments stand as a record of the pre-PHP state; the issue descriptions should be corrected, since people plan from them.\n\n**A new requirement for the baseline fingerprint.** This is the important part. Ingest language support is now a variable that moves headline recall by a large margin without any detector change \u2014 443 annotations became eligible from a language analyzer alone. Two baselines taken across a language-support change are not comparable, and nothing in the fingerprint block currently records it.\n\nRecommend the baseline artifact record **the ingest language set** (the `FileLanguage` union, or a digest of it) alongside the scanner commit, and that a change to it start a new series with a bridge run, exactly as a contract change does. Without that, the first time someone adds Ruby the numbers jump and the artifact gives no way to tell that from a detector improvement.\n\n**Worth noting explicitly, because it looks like the thing this epic forbids and is not.** The PHP analyzer was independent language work, not a move to improve a score. But its effect on the corpus is precisely the \"fake eval win\" pattern the epic warns about, arriving by an honest route. That is the argument for the fingerprint requirement rather than an argument against the analyzer.\n",
+      "created_at": "2026-08-31T19:04:23.813692Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-08-31T14:13:53.595719Z",
-  "updated_at": "2026-08-31T14:38:27.612184Z",
+  "updated_at": "2026-08-31T19:04:23.813692Z",
   "closed_at": null,
-  "custom": {}
+  "custom": {},
+  "agent": null
 }
