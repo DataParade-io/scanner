@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "78455227-558f-4a9f-99ae-4cc01f6e5704",
+      "author": "home",
+      "text": "## Decision\n\nThere is one canonical evaluator and one matching contract for every headline result. `scoreEvalCases` may remain the public entry point, but it must consume canonical observations from the shared adapters. `tests/benchmark/precision.ts` is deleted or reduced to a thin call into that evaluator; it may not own matching rules.\n\nMatching is deterministic and cardinality-aware. The evaluator performs one-to-one assignment between expected observations and findings, preferring exact canonical identity and stronger evidence matches. One finding cannot satisfy several gold cases, and duplicate findings cannot all receive true-positive credit from one gold case. Unmatched evaluable positives are false negatives; unmatched findings in closed scope are false positives. Repository-level entity layers consolidate repeated evidence into one expected entity before assignment.\n\nClosed-world scope is packet-and-layer metadata with review provenance, independent of positive annotations. This permits an exhaustively reviewed layer with zero positives to penalize hallucinated findings. Scope must not be stored only by repeating it on positive records.\n\nThe official headline path is the scanner repository command, accepted gold only, deterministic inference configuration with AI disabled, and validated pinned materializations. The contract suite includes synthetic golden inputs/outputs for identity, labels, eligibility, scope, one-to-one matching, duplicates, zero-positive scopes, and path normalization.\n\nThe public CLI and Plexus must call the shared evaluator through a library or stable JSON/process boundary. Copied scoring trees are removed or clearly archived as non-authoritative.\n\nThe adjacent runner defect is follow-on work: personal-data matching runs once per repo and the raw-hit, mention, and data-item projections derive from that one inventory.\n\nRejected alternatives:\n\n- independent any-match loops for recall and precision;\n- greedy order-dependent reuse of findings;\n- separate corpus, Jest, CLI, or Plexus scorers;\n- positive-attached scope as the only closed-world declaration;\n- ad-hoc notebooks or scripts as headline sources.\n\nScorer implementation follows the identity, eligibility, and layer-unit decisions and must not retune detectors.",
+      "created_at": "2026-08-31T13:04:32.287393Z"
+    }
+  ],
   "created_at": "2026-08-31T11:09:28.196280Z",
-  "updated_at": "2026-08-31T11:09:28.196280Z",
+  "updated_at": "2026-08-31T13:04:32.287393Z",
   "closed_at": null,
   "custom": {}
 }

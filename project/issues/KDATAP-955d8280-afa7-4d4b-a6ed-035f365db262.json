@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "9b95902d-6df1-43e3-8bc6-e8533821ca23",
+      "author": "home",
+      "text": "## Decision\n\nFreeze the first citable baseline only after tasks 1 through 5 are implemented. A baseline is an immutable, versioned corpus result, not a mutable latest file.\n\nCommit machine-readable JSON and a human-readable Markdown rendering under a baseline series identified by the evaluation-contract version. Each artifact records:\n\n- scanner commit;\n- corpus/gold digest;\n- evaluation-contract version;\n- taxonomy and adapter-map digests;\n- dependency lock digest;\n- every materialized source-repository commit;\n- accepted, proposed, ambiguous, and rejected counts plus review provenance;\n- deterministic configuration, including AI disabled.\n\nRequired packet-and-layer fields include evaluable positives, matched positives, exact-concept recall, ancestor-category recall where applicable, label/classification accuracy, strict correct-label recall, precision, unread count/rate, distinct evidence-file coverage, ineligible reasons, unscorable findings, and gate exceptions. Totals are denominator-weighted only within the same layer. No scalar overall mixes heterogeneous layers.\n\nThe official run uses scanner `develop`, pinned materializations verified against manifests, accepted gold only, and the canonical evaluator. A language/capability slice accompanies the full report so unsupported-language coverage cannot hide results on supported inputs.\n\nDetector changes are compared against a frozen baseline and do not overwrite it. Gold or contract changes start a new immutable series. For every contract change, run the old and new contracts against the same scanner commit once as a bridge so the metric discontinuity is measured.\n\nCI always validates schema, contract fixtures, digests, and deterministic rendering. Full materialized-corpus execution may be scheduled, manual, or release-gated if cloning all upstream repositories is unsuitable for each pull request; a representative pinned smoke subset can run on pull requests. Any published full baseline must include authenticated materialization validation.\n\nRejected alternatives:\n\n- averaging packet percentages;\n- a cross-layer overall score;\n- overwriting the prior baseline after detector changes;\n- unpinned or AI-assisted headline runs;\n- CLI-copy or Plexus results before they use the canonical evaluator;\n- recall published without eligibility and provenance.\n\nThe old mixed CLI run and any pre-contract scanner run remain historical diagnostics, not this baseline.",
+      "created_at": "2026-08-31T13:04:32.556752Z"
+    }
+  ],
   "created_at": "2026-08-31T11:09:28.316887Z",
-  "updated_at": "2026-08-31T11:09:28.316887Z",
+  "updated_at": "2026-08-31T13:04:32.556752Z",
   "closed_at": null,
   "custom": {}
 }

@@ -15,19 +15,23 @@
       "id": "9808cd42-118d-4063-ad73-6c6acaaaf2cb",
       "author": "ryan",
       "text": "Child design tasks (one question each, for multi-agent deep thinking — no scanner retune until decided):\n\n1. KDATAP-d6eabf — One identity vocabulary for gold, adapters, and docs\n2. KDATAP-791091 — Unread means ingest never opened the file\n3. KDATAP-89d1a6 — One scorer for all headline metrics\n4. KDATAP-f6b6e7 — One layer model for Jest and corpus\n5. KDATAP-08a0ac — Policy for component and flow identity\n6. KDATAP-955d82 — Frozen evaluable-only corpus baseline",
-      "created_at": "2026-08-31T11:09:38.709495Z",
-      "comment_type": "default"
+      "created_at": "2026-08-31T11:09:38.709495Z"
     },
     {
       "id": "68d97aa9-45d2-4430-968b-2f8e0558b475",
       "author": "ryan",
       "text": "Board hygiene: Jest layer impl tasks closed; KDATAP-0c4ab5 reparented here (taxonomy vs exact component keys). KDATAP-53db5e remains the precision epic but is not the design queue — children of this epic are.",
-      "created_at": "2026-08-31T11:11:57.049596Z",
-      "comment_type": "default"
+      "created_at": "2026-08-31T11:11:57.049596Z"
+    },
+    {
+      "id": "b61ac901-f6a8-4fa6-8d68-60240461ed54",
+      "author": "home",
+      "text": "## Agreed evaluation-contract direction\n\nStakeholder discussion resolved the six design questions with one overarching rule: semantic normalization, eligibility, matching, and reporting are separate contracts and none may silently repair another.\n\nThe agreed architecture is:\n\n1. Both gold and scanner findings map into a versioned canonical evaluation representation. Identity, classification, instance/vendor, evidence, and display names are separate. Broad aliases, labels-as-identity, and display-name matching are removed.\n2. Eligibility is per layer and per canonical evidence path, with reasoned coverage outcomes. Exhaustive scope cannot make evidence readable.\n3. One canonical evaluator performs deterministic one-to-one matching and owns recall, classification/label metrics, precision, negatives, unread, and unscorable reporting.\n4. The headline product is a four-layer scorecard: mentions, repository-level data items, components, and data flows. Raw hits are diagnostic. No heterogeneous overall scalar is published.\n5. Components and flows use structured taxonomy and graph identities, with a strict result plus diagnostic attribution. Partial detection does not become strict success, and locationless findings do not silently disappear.\n6. Baselines are immutable contract-versioned artifacts with complete scanner, corpus, taxonomy, adapter, dependency, and source-SHA fingerprints. Contract changes receive bridge runs; detector changes never overwrite the reference baseline.\n\nTwo previously implicit requirements are now explicit:\n\n- the unit and cardinality of an observation must be defined for every layer, because the current data-item collapse plus identity-only any-match scoring lets one finding satisfy multiple accepted gold cases;\n- closed-world scope belongs to packet-and-layer review metadata, not only to positive annotations, so zero-positive reviewed scopes can measure false positives.\n\nRejected system-level alternatives are matcher vocabulary as truth, current gold strings as an unversioned contract, fuzzy equivalence groups, shared global read coverage, multiple scorers, five duplicated headline layers, opaque graph string aliases, and mutable incomparable baselines.\n\nThese comments settle design. Follow-on implementation work must be filed separately and should cover the canonical schema and migration, adapter/taxonomy maps, per-layer eligibility ledger, scope migration, one-to-one evaluator, four-layer runner, structured graph model, client de-duplication, and reproducible baseline artifacts. Scanner retuning and new language ingest remain outside this epic and must not begin from current scores.",
+      "created_at": "2026-08-31T13:04:32.650522Z"
     }
   ],
   "created_at": "2026-08-31T11:09:19.778367Z",
-  "updated_at": "2026-08-31T11:11:57.049596Z",
+  "updated_at": "2026-08-31T13:04:32.650522Z",
   "closed_at": null,
   "custom": {}
 }
