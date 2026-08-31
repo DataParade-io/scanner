@@ -1,19 +1,21 @@
 {
   "id": "KDATAP-ea44fe23-55a2-4214-853c-6fee2f0aa308",
   "title": "Add user to the component taxonomy",
-  "description": "Add `user` to `patterns/component-taxonomy.yaml` and reconcile it with the injected user actor.\n\n30 component annotations use `actor:user` while `user` is not a declared subtype \u2014 `customer` and `admin` are. Under \"the taxonomy is authoritative for type and subtype\", those 30 cannot be migrated until the taxonomy declares it.\n\n`src/classifier/application-injection.ts` already injects a user actor via `getInjectedUserActorSubtype`, so the engine holds an opinion the taxonomy does not record. Reconcile both in one pass.\n\nStartable now \u2014 independent of the gate rulings.",
+  "description": "Add `user` to `patterns/component-taxonomy.yaml` and reconcile it with the injected user actor.\n\n30 component annotations use `actor:user` while `user` is not a declared subtype — `customer` and `admin` are. Under \"the taxonomy is authoritative for type and subtype\", those 30 cannot be migrated until the taxonomy declares it.\n\n`src/classifier/application-injection.ts` already injects a user actor via `getInjectedUserActorSubtype`, so the engine holds an opinion the taxonomy does not record. Reconcile both in one pass.\n\nStartable now — independent of the gate rulings.",
   "type": "chore",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "rap@endymion.com",
   "creator": null,
   "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
   "labels": [],
   "dependencies": [],
   "comments": [],
   "created_at": "2026-08-31T14:15:44.695729Z",
-  "updated_at": "2026-08-31T14:15:44.695729Z",
+  "updated_at": "2026-08-31T18:28:01.853071Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }

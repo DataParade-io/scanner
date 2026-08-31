@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "b7af3c9c-b3b6-4699-9fa8-1817230e3f9b",
+  "issue_id": "KDATAP-fbd7fe94-3b78-4bf5-9bdf-4dcba4add93b",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T18:27:42.031Z",
+  "actor_id": "rap@endymion.com",
+  "payload": {
+    "assignee": null,
+    "description": "Run a cheap detection census on materialized corpus packets so we know how much of today's 0% component recall is genuine non-detection versus vocabulary mismatch.\n\nRecorded context (do not re-derive):\n\n- `subType` is populated on 100% of emitted components in the measured packets (5/5 typescript-basic, 3/3 easy-school).\n- `type:name` emits `asset:django orm` where gold says `asset:database` (subtype already holds `database`). For third parties the fields invert.\n- `flask-login` emits **zero** components against gold claiming two positives. Some of the 0% is genuine non-detection, not vocabulary.\n- Under one-to-one matching, an identity-only fix does **not** take easy-school from 1/3 to 2/3 — the engine emitted one database and gold carries two `asset:database` annotations. What the identity fix is worth depends on the KDATAP-471fdc cardinality ruling.\n\nThis census answers: on real repositories, how many components/flows/mentions/data items does the engine actually emit, and how many gold positives have no corresponding finding of any identity?\n\nBlocked on `benchmark:materialize` working. AI inference stays disabled. No detector retuning, no new language ingest.\n\nIf the engine finds little on real repositories, **escalate**. Component recall would then be a detector problem wearing a vocabulary costume, and the sequencing of ~750 hand adjudications deserves review before that spend.\n\nDefinition of done: per-packet emission counts vs accepted gold counts, with a note on packets that emit nothing in a layer gold claims. No baseline is published from this run.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "priority": 1,
+    "status": "open",
+    "title": "Detection census: how much of 0% is genuine non-detection"
+  }
+}

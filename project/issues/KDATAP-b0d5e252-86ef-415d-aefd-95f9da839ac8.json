@@ -3,16 +3,26 @@
   "title": "Corpus gold migration to the canonical contract",
   "description": "Migrate the 29-packet corpus and Jest fixture gold onto the canonical evaluation representation.\n\nThis epic is the human-bound critical path:\n\n| work | scale | nature |\n| --- | ---: | --- |\n| component taxonomy classification | 481 | mechanical classification, entity grouping still required |\n| component vendor assertions | 52 | mechanical candidates plus validation |\n| `actor:user` | 30 | taxonomy ruling |\n| mention identities | 357 | mechanical keys plus observed-token validation |\n| data items keyed on source fields | 308 | adjudication |\n| flows lacking typed endpoints | 436 | full regold |\n| repeated component repo/key groups | 53 groups / 456 cases | cardinality and evidence grouping |\n\nLegacy names are preserved as candidates/provenance, never blindly promoted. Source-token-only data items and unresolved flows cannot stay accepted canonical gold.\n\nThe temporary compatibility loader is introduced before migration and removed only after all migrations and readiness validation. Annotation work follows labeling -> awaiting-review -> accepted; writers cannot self-close human adjudication.\n\nDefinition of done: all accepted rows validate canonically, all legacy rows have explicit migration outcomes, packet/layer scopes carry review provenance, and the removal task deletes every compatibility path.",
   "type": "epic",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "431fb8b9-ca72-4f6c-84fd-6b1c2325c660",
+      "author": "rap@endymion.com",
+      "text": "Started gate-independent gold work: KDATAP-ea44fe, KDATAP-4b0df4, and KDATAP-f45596 (sample-audit). Adjudication annotations KDATAP-a0e80b and KDATAP-8e7756 are now blocked by the audit — do not schedule them until it reports. Closed-world scope has a behaviour spec (KDATAP-9fd6da) in front of KDATAP-f9bb0f.\n",
+      "created_at": "2026-08-31T18:28:16.750022Z"
+    }
+  ],
   "created_at": "2026-08-31T14:13:08.904760Z",
-  "updated_at": "2026-08-31T14:40:02.473615Z",
+  "updated_at": "2026-08-31T18:28:16.750022Z",
   "closed_at": null,
-  "custom": {}
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }
