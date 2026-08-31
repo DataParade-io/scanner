@@ -85,4 +85,26 @@ describe("component taxonomy is the single source of truth", () => {
       expect(taxonomyTypeIds.has(subtype.type)).toBe(true);
     }
   });
+
+  it("rejects component gold labels that are types rather than subtypes", () => {
+    const benchmarkRoot = path.join(__dirname, "../benchmark/repos");
+    const componentFiles = fs
+      .readdirSync(benchmarkRoot, { withFileTypes: true })
+      .map((entry) =>
+        path.join(benchmarkRoot, entry.name, "annotations", "components.yaml"),
+      )
+      .filter((filePath) => fs.existsSync(filePath));
+
+    for (const filePath of componentFiles) {
+      const parsed = YAML.parse(fs.readFileSync(filePath, "utf8")) as {
+        annotations?: { expected?: { labels?: string[] } }[];
+      };
+      for (const annotation of parsed.annotations ?? []) {
+        for (const label of annotation.expected?.labels ?? []) {
+          expect(taxonomyTypeIds.has(label)).toBe(false);
+          expect(taxonomySubtypeIds.has(label)).toBe(true);
+        }
+      }
+    }
+  });
 });
