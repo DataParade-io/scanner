@@ -94,3 +94,14 @@ export type {
   LoadLegacyGoldOptions,
   MigrationDiagnostic,
 } from "./compat";
+
+export {
+  clearPersonalDataConceptMapCacheForTest,
+  loadPersonalDataConceptMap,
+  ruleIdToAncestry,
+  ruleIdToConceptLeaf,
+  FORBIDDEN_CATEGORY_LEAVES,
+  normalizeConceptToken,
+  validatePersonalDataConceptMapDocument,
+} from "./concept-map";
+export type { PersonalDataConceptMap, PersonalDataConceptMapEntry } from "./concept-map";
