@@ -4,6 +4,7 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   testMatch: ["**/tests/**/*.spec.ts", "**/tests/eval/**/*.test.ts"],
+  testPathIgnorePatterns: ["/node_modules/", "/tests/benchmark/\\.cache/"],
   moduleFileExtensions: ["ts", "js", "json"],
   collectCoverageFrom: ["src/**/*.ts"],
   coverageThreshold: {
