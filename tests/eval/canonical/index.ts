@@ -79,3 +79,18 @@ export {
   withId,
 } from "./builders";
 export type { BuildFindingInput, BuildGoldInput } from "./builders";
+
+export {
+  LEGACY_SOURCE_CONTRACT_VERSION,
+  CONVERSION_KINDS,
+  annotationRecordToLegacyInput,
+  loadLegacyGoldRecord,
+} from "./compat";
+export type {
+  CompatLoadResult,
+  ConversionKind,
+  LegacyGoldProvenance,
+  LegacyGoldRecord,
+  LoadLegacyGoldOptions,
+  MigrationDiagnostic,
+} from "./compat";
