@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "b9e31867-acb8-4e8b-8c5f-271eb1a26939",
+  "issue_id": "KDATAP-3b935c90-e680-4216-9fe9-66729f6655e2",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:16:13.309Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Run and freeze baseline series 1",
+    "description": "Run the canonical evaluator over the pinned corpus and freeze the result as baseline series 1.\n\nOfficial run: scanner `develop`, pinned materializations verified against manifests, accepted gold only, AI inference disabled, canonical evaluator.\n\n**Series 1 records `predecessor: none`.** There is no prior contract to bridge from: `benchmark:run` has never been published as a baseline on scanner `develop`, the last full run used the `dataparade-cli` copy with the pre-fix mixed runner, and `precision.ts` is wrong in a known direction (cross-layer scope). Manufacturing a bridge run from any of those would create false continuity. The artifact schema must permit a series with no predecessor.\n\nThereafter: detector changes are compared against the frozen artifact and never overwrite it; gold or contract changes start a new immutable series with a bridge run against the same scanner commit.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "labels": []
+  }
+}

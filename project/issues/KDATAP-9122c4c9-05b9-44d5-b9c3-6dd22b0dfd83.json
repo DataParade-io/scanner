@@ -1,0 +1,19 @@
+{
+  "id": "KDATAP-9122c4c9-05b9-44d5-b9c3-6dd22b0dfd83",
+  "title": "Per-layer coverage ledger with reasoned outcomes",
+  "description": "Replace the merged `scannedFiles` list with per-layer coverage and a reasoned outcome per evidence path.\n\n`scanRepoByManifestLayers` currently pushes orchestrator `files` and personal-data `filesScanned` into one array. A component case is therefore eligible because the PII matcher opened the file, even though the graph pass never parsed it \u2014 and it fails in the direction that inflates recall. This is a correctness fix, not a precision improvement.\n\nOutcomes: successfully evaluated, unsupported, excluded, `cap_exceeded`, missing, read/parse error. Only successfully evaluated evidence enters recall or negative denominators.\n\nRelated defect in the same function: when only personal-data layers are requested, `scannedFiles` is taken from whichever payload happened to be first (`payloadMentions ?? payloadRaw ?? payloadItems`).\n\nRepository-level entities need an explicit rule: an entity is eligible when at least one supporting evidence path is in that layer's successful ledger, and ineligible-reason counts are per entity, not per location.\n\nStartable now \u2014 independent of the gate rulings.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:15:00.103734Z",
+  "updated_at": "2026-08-31T14:15:00.103734Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "fdb44cc9-b38e-4fe2-9204-f684af8e34d7",
+  "issue_id": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:13:08.905Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Corpus gold migration to the canonical contract",
+    "description": "Migrate the 29-packet corpus and the Jest fixture gold onto the canonical evaluation representation agreed on KDATAP-77d2b0.\n\nThis epic is the critical path, and most of it is human judgement rather than code. Measured against the current gold:\n\n| work | scale | nature |\n| --- | ---: | --- |\n| component keys already taxonomy subtype ids | 481 | mechanical |\n| component vendor cases retaining instance | 52 | mechanical |\n| `actor:user` with no declared subtype | 30 | blocked on taxonomy |\n| mention keys plus source-name promotion | 357 | mechanical once ruled |\n| data items keyed on source field names | 308 | **adjudication** |\n| data flows with no scorer identity | 436 | **full regold** |\n\nThe two adjudication blocks gate the first baseline. They are filed as `annotation` issues so they run the flywheel ladder (labeling to awaiting-review to accepted) rather than being closed by whoever wrote them.\n\nDefinition of done: no annotation reaches the evaluator through a legacy key or a hard-coded loader exemption, and the legacy loader has been removed on its stated milestone.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+    "labels": []
+  }
+}

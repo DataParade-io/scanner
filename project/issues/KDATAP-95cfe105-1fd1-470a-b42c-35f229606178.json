@@ -1,0 +1,19 @@
+{
+  "id": "KDATAP-95cfe105-1fd1-470a-b42c-35f229606178",
+  "title": "Rule the meaning of subject.name per layer",
+  "description": "KDATAP-d6eabf rules that display names are never identity inputs and that `subject.name` may not rescue a key mismatch. Agreed for matching. But `subject.name` is not the same field on every layer, and the gold loader cannot be written until it is told which.\n\n| layer | populated | what it actually holds |\n| --- | ---: | --- |\n| mentions | 339 of 357 differ from the key | the **source token observed**: `pii:access_token`/`id_token`, `pii:user_identifier`/`sub`, `pii:credential_secret`/`refresh_token` |\n| components (asset) | 473 of 473 | a code instance: `directus_users`, `LocalAuthDriver`, `UsersService`, `appSession` |\n| components (third_party) | 52 of 52 | the vendor: `Auth0`, `Stripe`, `SendGrid` |\n| data flows | 436 of 436 | prose restating the key: `flow:oidc-callback->session` / \"OIDC callback to session\" |\n\n**Proposed decision.** Mentions: promote into the canonical source-name field. This is the same source-name-versus-inferred-concept separation KDATAP-d6eabf already calls for on data items; mention gold records both, the source name is simply in the wrong field. Assets and actors: evidence/display, not the canonical instance (see the component instance ruling). Flows: discard.\n\n**Why it cannot be a blanket rule.** Dropping all display names destroys the only record of what was observed on 339 annotations, and it is the field that makes the remaining adjudication possible \u2014 `pii:email_address` named `clientID` is very likely a mislabel and is only visible because the source token was kept.\n\nRejected: a single global rule; keeping `subject.name` as a matching token anywhere.",
+  "type": "task",
+  "status": "open",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:13:51.856235Z",
+  "updated_at": "2026-08-31T14:13:51.856235Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

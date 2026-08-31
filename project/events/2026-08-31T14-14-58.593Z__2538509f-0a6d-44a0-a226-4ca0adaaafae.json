@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "2538509f-0a6d-44a0-a226-4ca0adaaafae",
+  "issue_id": "KDATAP-5219531e-2d32-4004-bec6-86db31a509f6",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:14:58.593Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Gold loaders emit canonical observations",
+    "description": "Corpus gold and Jest fixture gold both load through one adapter emitting canonical observations.\n\nToday they encode different contracts, which is why the fixture suite cannot serve as the regression guard for this work:\n\n| | component keys | flow keys |\n| --- | --- | --- |\n| Jest fixtures | `asset:pg`, `asset:hikaricp` — the engine's instance names | `flow:asset:api->third_party:stripe` |\n| Corpus gold | `asset:database` x182, `asset:api` x118 — taxonomy subtypes | `flow:password->wp_check_password` |\n\nFixture gold is itself non-canonical and is migrated by this work; it is not a fixed reference point. The loader must reject legacy keys once the migration milestone passes (see the legacy loader task on the gold epic).",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}

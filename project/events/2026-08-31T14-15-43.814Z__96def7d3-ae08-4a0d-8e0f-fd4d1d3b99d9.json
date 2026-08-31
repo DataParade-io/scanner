@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "96def7d3-ae08-4a0d-8e0f-fd4d1d3b99d9",
+  "issue_id": "KDATAP-8e7756fb-e380-4140-a0cc-3e33c84a6605",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:15:43.814Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Regold data flows against canonical endpoints",
+    "description": "Regold the data-flow layer against canonical endpoint identities.\n\n436 annotations, **424 distinct keys**, and every one a bare prose endpoint: `flow:user->stripe`, `flow:api-key->key_hash`, `flow:session->cookie`, `flow:password->wp_check_password`, `flow:failed-login->lockout`. No `type:` prefix on any endpoint, and many endpoints are not components in any graph sense. All 436 `subject.name` values are prose restatements of the key, so nothing is recoverable from that field either.\n\nThere is no mechanical migration. Every endpoint is resolved by hand to a canonical component or typed-endpoint identity, with data categories recorded as separate fields.\n\nAlso to fix while regolding: 419 of 436 annotations carry the generic label `data_flow`, which `LAYER_GENERIC_LABELS` auto-passes, so semantic classification currently has nothing to score against.\n\nCritical path, human-bound. Filed as an `annotation` issue. Blocked on the data-flow disposition ruling.",
+    "issue_type": "annotation",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+    "labels": []
+  }
+}

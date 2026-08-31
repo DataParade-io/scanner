@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-8aed548b-ef7b-45d5-b97c-5763c8f5ed53",
+  "title": "Migrate component gold to structured identity",
+  "description": "Migrate component gold onto the structured canonical representation.\n\n| gold key shape | instances | migration |\n| --- | ---: | --- |\n| `type:<taxonomy subtype id>` \u2014 `asset:database` x182, `asset:api` x118, `asset:auth_service` x110, `asset:service` x41, `asset:cache` x14, `asset:config` x8, `actor:customer`, `actor:admin` | 481 | mechanical: every rest is a literal `component-taxonomy.yaml` id |\n| `third_party:<vendor>` \u2014 auth0 x17, stripe x13, supabase x5, sendgrid x5, and 8 more | 52 | mechanical; retains the instance field |\n| `actor:user` | 30 | blocked on the taxonomy gaining `user` |\n\nOf the 12 distinct vendors, six are outside `known_third_party_names`: `github_auth`, `twitter_auth`, `facebook_auth`, `oidc`, `ldap`, `checkr`.\n\nBlocked on the component instance ruling, which decides whether the 473 asset `subject.name` values (`directus_users`, `LocalAuthDriver`, `UsersService`) become the canonical instance or stay evidence/display.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-ea44fe23-55a2-4214-853c-6fee2f0aa308",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:15:44.254832Z",
+  "updated_at": "2026-08-31T14:15:44.254832Z",
+  "closed_at": null,
+  "custom": {
+    "source": "shared",
+    "project_label": "KDATAP"
+  },
+  "agent": null
+}

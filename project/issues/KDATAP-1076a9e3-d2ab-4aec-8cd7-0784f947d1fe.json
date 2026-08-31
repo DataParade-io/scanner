@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-1076a9e3-d2ab-4aec-8cd7-0784f947d1fe",
+  "title": "Scanner adapters emit canonical observations",
+  "description": "Scanner adapter emits canonical observations for components, data flows and the personal-data projections.\n\nReplaces `componentIdentity` (`${type}:${name.toLowerCase()}`) and `dataFlowIdentity` (`flow:${componentKey}->${componentKey}`) with structured fields. The taxonomy becomes an output vocabulary: nothing in `src/` currently reads `patterns/component-taxonomy.yaml` \u2014 the only consumer is `tests/unit/taxonomy.spec.ts`, a test-time containment check \u2014 so the engine has never been taught the vocabulary its gold is written in.\n\nBlocked on the component instance ruling, which decides whether `component.name` populates the instance field for assets.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-06634c34-c0d2-4f39-b994-50ae333b4a4a",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:14:59.151863Z",
+  "updated_at": "2026-08-31T14:14:59.151863Z",
+  "closed_at": null,
+  "custom": {
+    "source": "shared",
+    "project_label": "KDATAP"
+  },
+  "agent": null
+}

@@ -1,0 +1,19 @@
+{
+  "id": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "title": "Canonical evaluation harness",
+  "description": "Implement the canonical evaluation harness agreed on KDATAP-77d2b0: one representation, one eligibility model, one evaluator, one four-layer scorecard.\n\nScope is the code half of the contract. Gold migration is KDATAP epic \"Corpus gold migration\"; the frozen baseline is the baseline epic. Detector retuning and new language ingest remain out of scope \u2014 with 15 PII rules, 422 of 793 mention and data-item gold cases have no concept to detect at all, so tuning against current scores optimizes the alias table.\n\nThree rulings on the design epic gate B1, B12 and the adapters: the per-layer meaning of `subject.name`, when instance/vendor is required on a component expectation, and the data-flow disposition.\n\nDefinition of done: every headline metric is produced by one evaluator consuming canonical observations from shared adapters; `tests/benchmark/precision.ts` no longer owns matching rules; the contract suite passes on synthetic golden inputs.",
+  "type": "epic",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:13:08.423848Z",
+  "updated_at": "2026-08-31T14:13:08.423848Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

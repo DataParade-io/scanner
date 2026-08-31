@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "9871db37-8a9a-4603-896e-709f54ac8e37",
+  "issue_id": "KDATAP-4d9b3008-9fdb-4bcd-8f61-8c1f43c5ac1e",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:13:54.183Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Decide reachability reporting for gold with no detector concept",
+    "description": "There are 15 rules in `patterns/pii-signals.rules.yaml`. Against them, **422 of 793** mention and data-item gold cases match no rule under any alias:\n\n- unreachable mention concepts: `access_token` x39, `credential_secret` x29, `password_verifier` x13, `payment_card_data` x6, `employment_information` x5, `city` x5, `compensation` x4\n- unreachable data items: 308 of 436 are **source field names**, not concepts — `id` x17, `name` x8, `token` x7, `location` x5, `city` x5, `status` x3, `key` x3, `uid` x3, `uuid` x3\n\nCeilings with today's rule set, perfect matching assumed: **~68% mention recall, ~29% data-item recall.**\n\nThese cases are eligible — the file was read successfully — and permanently missed, because no detector concept exists. No eligibility reason describes that state, and a closed one-to-one leaf map cannot create leaves that do not exist.\n\n**Proposed decision.** Report a `reachable` denominator beside `evaluablePositives` as a diagnostic. This does **not** exclude anything: KDATAP-08a0ac rightly rejects removing known gaps from raw metrics, and raw recall still counts every miss. It is a second denominator so a reader can separate three different zeros — a detector missed it, no concept exists for it, or gold and engine name it differently.\n\nWithout it, the first published data-item figure reads as detector quality when it is dominated by gold keyed on raw source field names.\n\nRejected: excluding unreachable cases from recall; a `documentedGap`-style suppression flag; publishing a single recall number with no coverage context.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+    "labels": []
+  }
+}
