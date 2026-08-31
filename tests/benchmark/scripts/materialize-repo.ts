@@ -139,7 +139,7 @@ function printInstructions(
   console.log("  Run unit tests: pnpm test tests/unit/benchmark/");
 }
 
-const args = process.argv.slice(2);
+const args = process.argv.slice(2).filter((arg) => arg !== "--");
 if (args.length === 0) {
   usage();
   process.exit(1);
