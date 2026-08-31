@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "73a339f2-0616-45b4-a927-1625094034b4",
+      "author": "home",
+      "text": "## Worker ruling: account for all 436 legacy rows without forcing all 436 into the graph-flow ontology\n\nDo not plan a hand conversion of every legacy row into a canonical headline graph flow. The legacy set mixes two products.\n\nMeasured across the corpus: 436 rows, 424 distinct whole keys, 181 distinct source endpoint tokens, 333 distinct target endpoint tokens, and 476 distinct endpoint tokens overall. Many rows describe variable-to-function or intra-component transformations, while the scanner currently emits component-to-component edges through sourceComponentId and targetComponentId.\n\n### Required migration disposition\n\n1. At migration start, move every legacy accepted flow row to needs_adjudication. No compatibility alias may keep it accepted.\n2. Account for every row by triaging it into one of these classes:\n   - candidate canonical component or data-entity graph edge;\n   - useful intra-component lineage or transformation evidence for a future, separately specified layer;\n   - unsupported, incorrect, or unsubstantiated annotation.\n3. Human-review only candidate canonical graph edges into the headline flow layer. Mechanical parsing may propose fields but may not accept a row.\n4. Preserve future-lineage candidates with provenance rather than rejecting scientifically useful evidence merely because it is outside the current graph contract.\n5. Reject incorrect rows with rationale. Unresolved rows remain visible as needs_adjudication.\n\n### Baseline rule\n\nBaseline series 1 may use a smaller canonical graph-flow subset only after its minimum case count, packet diversity, language diversity, flow-type coverage, and reviewed negative or zero-positive scopes are declared and approved. The subset must be selected by the declared sampling rule rather than by whether the scanner already detects it.\n\nAll 436 legacy rows remain visible in migration accounting, but baseline readiness does not require every transformation-style row to be rewritten as a graph edge. It requires that no legacy row remains accepted and that the approved canonical subset passes readiness.\n\n### Prohibited behavior\n\n- No 424-entry alias answer key.\n- No silent deletion of legacy rows.\n- No reporting legacy incompatibility as zero detector recall.\n- No expansion of the headline graph-flow ontology merely to preserve old prose keys.\n- No arbitrary baseline subset chosen after looking at scanner results.",
+      "created_at": "2026-08-31T20:05:32.798089Z"
+    }
+  ],
   "created_at": "2026-08-31T14:13:53.076061Z",
-  "updated_at": "2026-08-31T14:38:27.743197Z",
+  "updated_at": "2026-08-31T20:05:32.798089Z",
   "closed_at": null,
   "custom": {}
 }
