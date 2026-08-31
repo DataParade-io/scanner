@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "9d244dd4-b224-4801-9606-49121778e6e6",
+  "issue_id": "KDATAP-97bf4987-e9cb-48cb-901a-87a525bc6bd2",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:40:03.282Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Define the baseline artifact: machine-readable JSON plus a deterministic Markdown rendering, committed under a series identified by the evaluation-contract version.\n\nFingerprint block on every artifact: scanner commit; corpus/gold digest; evaluation-contract version; taxonomy and adapter-map digests; dependency lock digest; every materialized source-repository commit; accepted / proposed / ambiguous / rejected counts with review provenance; and the deterministic configuration including AI disabled.\n\nCurrent corpus fingerprint for reference: 1,792 annotations — 1,717 accepted, 75 proposed; 1,565 positive, 173 negative, 54 ambiguous.\n\n`createDefaultScanConfiguration({ enableAiInference: false })` is already hard-coded in `scan-repo.ts`, so the deterministic headline is the only thing that path can produce. Assert it in the artifact rather than relying on it, since the CLI path carries no such constraint.\n\nMaterialization validation already exists in `validateMaterializedRepo` against `manifest.commit`; the artifact records the resulting SHAs rather than reimplementing the check.",
+        "to": "Define the immutable baseline artifact: canonical JSON plus deterministic Markdown, under a series identified by evaluation-contract version.\n\nFingerprint: scanner commit; corpus/gold digest; contract version; taxonomy and adapter-map digests; dependency-lock digest; all materialized source SHAs; review-state and status counts with provenance; deterministic configuration including AI disabled.\n\nThe artifact also embeds:\n\n- baseline-readiness result and invariant versions;\n- accepted canonical counts and packet diversity by layer;\n- migration-incomplete counts by reason;\n- metric computability states and denominators;\n- declared capability coverage as diagnostic metadata, never an adjusted recall denominator;\n- `predecessor`, with series 1 permitting `none`.\n\nJSON is the source artifact. Markdown is generated deterministically from it and CI verifies no drift. Materialization validation reuses existing manifest-SHA checks and records their results."
+      }
+    }
+  }
+}

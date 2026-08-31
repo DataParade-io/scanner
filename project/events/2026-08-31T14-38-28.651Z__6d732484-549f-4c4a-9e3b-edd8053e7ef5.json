@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "6d732484-549f-4c4a-9e3b-edd8053e7ef5",
+  "issue_id": "KDATAP-f009ab93-0070-49b9-9150-76d5c24d4d6c",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:28.651Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "A versioned legacy loader accepting pre-canonical keys during migration, with a warning on every load, validation that flags surviving legacy keys, and a dated removal milestone.\n\nMust cover both migration surfaces or it will be removed while one survives: the `pii_signals` layer name **and** the hard-coded `pii:` subject-key exemption in `assertCanonicalSubjectKey`.\n\nDefinition of done: the loader is deleted on its milestone and validation proves no annotation reaches the evaluator through a legacy key or a loader exemption.",
+        "to": "Delete the temporary canonical-migration compatibility loader and every hard-coded legacy exemption after migration and readiness validation.\n\nRemoval covers the `pii_signals` layer alias, the `pii:` mention-key exemption, legacy component/flow string identities, and any fixture-only compatibility shape introduced during migration.\n\nThis task is intentionally separate from introducing the loader. It begins only after canonical corpus and fixture migrations, packet/layer scope migration, and baseline readiness validation prove that no accepted record requires compatibility.\n\nDefinition of done: canonical loaders reject every legacy shape, the evaluator has no legacy identity path, documentation names only the canonical contract, and the readiness audit reports zero accepted legacy records."
+      },
+      "title": {
+        "from": "Legacy gold loader with a dated removal milestone",
+        "to": "Remove legacy gold compatibility and exemptions"
+      }
+    }
+  }
+}

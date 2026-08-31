@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "0db484f1-9dd2-47a0-8fe5-f5f981aafb76",
+  "issue_id": "KDATAP-8e7756fb-e380-4140-a0cc-3e33c84a6605",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:28.393Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Regold the data-flow layer against canonical endpoint identities.\n\n436 annotations, **424 distinct keys**, and every one a bare prose endpoint: `flow:user->stripe`, `flow:api-key->key_hash`, `flow:session->cookie`, `flow:password->wp_check_password`, `flow:failed-login->lockout`. No `type:` prefix on any endpoint, and many endpoints are not components in any graph sense. All 436 `subject.name` values are prose restatements of the key, so nothing is recoverable from that field either.\n\nThere is no mechanical migration. Every endpoint is resolved by hand to a canonical component or typed-endpoint identity, with data categories recorded as separate fields.\n\nAlso to fix while regolding: 419 of 436 annotations carry the generic label `data_flow`, which `LAYER_GENERIC_LABELS` auto-passes, so semantic classification currently has nothing to score against.\n\nCritical path, human-bound. Filed as an `annotation` issue. Blocked on the data-flow disposition ruling.",
+        "to": "Regold the data-flow layer against canonical typed endpoints and data-category fields.\n\nThe 436 legacy annotations use 424 distinct bare prose keys. At the start of this pass, legacy accepted rows transition to `needs_adjudication`; no compatibility alias keeps them accepted.\n\nEach row is reviewed against pinned evidence and ends as:\n\n- accepted with canonical source/target endpoint identities, data categories, evidence, and review provenance;\n- rejected with rationale; or\n- still `needs_adjudication`, visibly blocking readiness thresholds.\n\nMechanical parsing may propose candidates but cannot accept them. Human review resolves component/data endpoint type and identity. Generic `data_flow` labels are replaced by meaningful canonical semantic fields when evidence supports them.\n\nThe pass accounts for all 436 legacy rows. Unresolved rows appear in migration readiness; baseline series 1 waits for the approved canonical count and packet-diversity threshold."
+      }
+    }
+  }
+}

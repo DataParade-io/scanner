@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "25a3afd4-e473-4824-98ab-26d718226da5",
+  "issue_id": "KDATAP-3a3155f8-119e-4962-9467-0d2ea0437dd9",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:28.007Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Required packet-and-layer report fields.\n\nPer layer: evaluable positives, **reachable** positives, matched positives, exact-concept recall, ancestor-category recall where applicable, classification accuracy, strict correct-label recall, precision, unread count and rate, distinct evidence-file coverage, ineligible counts by reason, unscorable findings, and gate exceptions.\n\nTotals are denominator-weighted within a layer only; no scalar mixes heterogeneous layers.\n\nTwo coverage views are both required, because repeated annotations in one file distort a case-only unread rate — discourse alone carries 288 annotations across far fewer files.\n\nA language/capability slice accompanies the full report and is the load-bearing view: 960 of 1,792 annotations sit on extensions ingest cannot open, so without the slice, results on supported inputs are hidden rather than merely diluted.",
+        "to": "Required packet-and-layer report fields.\n\nPer layer: accepted canonical positives; evaluable positives; matched positives; exact-concept recall over the full accepted/evaluable denominator; ancestor-category recall where applicable; classification accuracy; strict correct-label recall; precision plus explicit computability state; unread count/rate; distinct evidence-file coverage; entity partial-coverage counts; ineligible counts by reason; unscorable findings; migration-readiness blockers; and gate exceptions.\n\nCapability support is diagnostic only: report `declaredCapabilitySupported` counts and `declaredCapabilityCoverage`, tied to the scanner and adapter-map digest. Never print recall over that subset as the headline and never remove unsupported canonical concepts from raw recall.\n\nLegacy source-token-only or unresolved endpoint rows are migration-incomplete, not accepted canonical positives. Report them in readiness accounting by review state and reason.\n\nTotals are denominator-weighted within a layer only; no scalar mixes heterogeneous layers. Both annotation/entity-weighted and distinct-file coverage are required. A language/capability slice accompanies the full scorecard without replacing it."
+      }
+    }
+  }
+}

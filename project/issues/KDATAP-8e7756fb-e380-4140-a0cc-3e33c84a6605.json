@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-8e7756fb-e380-4140-a0cc-3e33c84a6605",
   "title": "Regold data flows against canonical endpoints",
-  "description": "Regold the data-flow layer against canonical endpoint identities.\n\n436 annotations, **424 distinct keys**, and every one a bare prose endpoint: `flow:user->stripe`, `flow:api-key->key_hash`, `flow:session->cookie`, `flow:password->wp_check_password`, `flow:failed-login->lockout`. No `type:` prefix on any endpoint, and many endpoints are not components in any graph sense. All 436 `subject.name` values are prose restatements of the key, so nothing is recoverable from that field either.\n\nThere is no mechanical migration. Every endpoint is resolved by hand to a canonical component or typed-endpoint identity, with data categories recorded as separate fields.\n\nAlso to fix while regolding: 419 of 436 annotations carry the generic label `data_flow`, which `LAYER_GENERIC_LABELS` auto-passes, so semantic classification currently has nothing to score against.\n\nCritical path, human-bound. Filed as an `annotation` issue. Blocked on the data-flow disposition ruling.",
+  "description": "Regold the data-flow layer against canonical typed endpoints and data-category fields.\n\nThe 436 legacy annotations use 424 distinct bare prose keys. At the start of this pass, legacy accepted rows transition to `needs_adjudication`; no compatibility alias keeps them accepted.\n\nEach row is reviewed against pinned evidence and ends as:\n\n- accepted with canonical source/target endpoint identities, data categories, evidence, and review provenance;\n- rejected with rationale; or\n- still `needs_adjudication`, visibly blocking readiness thresholds.\n\nMechanical parsing may propose candidates but cannot accept them. Human review resolves component/data endpoint type and identity. Generic `data_flow` labels are replaced by meaningful canonical semantic fields when evidence supports them.\n\nThe pass accounts for all 436 legacy rows. Unresolved rows appear in migration readiness; baseline series 1 waits for the approved canonical count and packet-diversity threshold.",
   "type": "annotation",
   "status": "open",
   "priority": 1,
@@ -13,15 +13,22 @@
     {
       "target": "KDATAP-32c089f1-61b8-42c1-bfad-1af8da2609ba",
       "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-2e8f9fd7-8d8d-44ac-881c-0817f10eea7c",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
     }
   ],
   "comments": [],
   "created_at": "2026-08-31T14:15:43.814249Z",
-  "updated_at": "2026-08-31T14:15:43.814249Z",
+  "updated_at": "2026-08-31T14:38:28.393379Z",
   "closed_at": null,
   "custom": {
-    "source": "shared",
-    "project_label": "KDATAP"
-  },
-  "agent": null
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }

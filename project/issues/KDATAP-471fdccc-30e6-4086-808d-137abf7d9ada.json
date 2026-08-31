@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-471fdccc-30e6-4086-808d-137abf7d9ada",
+  "title": "Define component entity identity and same-subtype cardinality",
+  "description": "Type and subtype are classification fields, not sufficient repository-entity identity.\n\nMeasured accepted component gold contains 53 duplicate repository/key groups covering 456 cases, including 118 `asset:database` annotations in discourse, 50 `asset:api` annotations in magento, and 47 `asset:api` annotations in wordpress. Collapsing by `type:subtype` would turn many distinct observations or graph entities into one. Requiring every code-level `subject.name` as product identity would make the opposite error and keep strict recall structurally near zero.\n\n**Proposed decision.** A canonical component expectation carries:\n\n- a stable repo-local gold entity id that is not itself a scored product field;\n- asserted type and subtype;\n- optional asserted vendor/instance only when the annotation makes that claim;\n- all supporting evidence and derivation locations.\n\nOne-to-one assignment uses evidence and asserted canonical fields to distinguish same-subtype entities. It may not collapse all databases in one repository, and it may not require a display/code name merely to create cardinality.\n\nThe design must state whether repeated evidence denotes one graph entity with several locations or several component entities. Migration must preserve enough provenance to adjudicate that grouping rather than guessing from the repeated subtype key.\n\nRejected: subtype as entity identity; display name as mandatory identity; arbitrary first-evidence grouping.\n\nThis ruling blocks the structured graph model, component gold migration, and graph adapters.",
+  "type": "task",
+  "status": "open",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:36:03.314737Z",
+  "updated_at": "2026-08-31T14:36:03.314737Z",
+  "closed_at": null,
+  "custom": {}
+}

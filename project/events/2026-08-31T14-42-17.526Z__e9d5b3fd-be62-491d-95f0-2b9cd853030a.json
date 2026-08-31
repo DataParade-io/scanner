@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "e9d5b3fd-be62-491d-95f0-2b9cd853030a",
+  "issue_id": "KDATAP-089dbaf3-1dc8-4573-b6b5-aed7b4b2c77d",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:42:17.526Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Reconcile the documentation with the four-layer decision.\n\n- `project/wiki/four-layer-evaluation.md` is titled **\"Five-grade scanner evaluation\"**; the filename and the parent initiative say four.\n- `tests/eval/ground-truth-schema.md` line 3 sells five grades; line 27 asserts `conceptId === ruleId`, which is true of 8% of mention keys — 213 of 357 reach a rule only through the alias table.\n\nOne pass closes both. Rides with the `pii_signals` rename on the gold epic.\n\nStartable now — independent of the gate rulings.",
+        "to": "Reconcile every user-facing and contributor-facing document with the canonical four-layer contract after the schema, mention migration, and runner settle.\n\nRequired corrections include:\n\n- `project/wiki/four-layer-evaluation.md` title and content;\n- `tests/eval/ground-truth-schema.md`, including removal of five-grade claims and `conceptId === ruleId`;\n- canonical names for mentions, data items, components, flows, capability diagnostics, eligibility reasons, computability states, and baseline readiness;\n- removal of `pii_signals`, `pii:`, fuzzy aliases, and legacy identity examples;\n- explicit statement that raw hits are diagnostic and no cross-layer scalar exists.\n\nDocumentation is generated or contract-tested where possible so schema and prose cannot silently diverge. It lands before legacy compatibility removal."
+      }
+    }
+  }
+}
