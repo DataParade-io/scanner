@@ -4,10 +4,12 @@ import YAML from "yaml";
 
 import {
   ANNOTATION_STATUSES,
+  type AnnotationProvenance,
   type AnnotationRecord,
   type BenchmarkLayer,
   type BenchmarkManifest,
   BENCHMARK_LAYERS,
+  type LayerScopeRecord,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
   type ReviewState,
@@ -195,6 +197,13 @@ function validateAnnotation(
     throw new Error(`Expected string array for ${prefix}:expected.labels`);
   }
 
+  if (expected.exhaustive_scope_files !== undefined) {
+    throw new Error(
+      `${prefix}:expected.exhaustive_scope_files is no longer supported — ` +
+        "use layer-scopes.yaml at the packet root (KDATAP-f9bb0f)",
+    );
+  }
+
   const record: AnnotationRecord = {
     id: isNonEmptyString(raw.id, `${prefix}:id`),
     layer: normalizedLayer,
@@ -223,14 +232,6 @@ function validateAnnotation(
     expected: {
       status: status as AnnotationRecord["expected"]["status"],
       labels,
-      ...(Array.isArray(expected.exhaustive_scope_files)
-        ? {
-            exhaustive_scope_files: isStringArray(
-              expected.exhaustive_scope_files,
-              `${prefix}:expected.exhaustive_scope_files`,
-            ),
-          }
-        : {}),
     },
     provenance: {
       proposed_by: isNonEmptyString(
@@ -309,4 +310,88 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
   return annotationsRaw.map((entry, index) =>
     validateAnnotation(isRecord(entry, `${filePath}:annotations[${index}]`), filePath, index),
   );
+}
+
+function validateLayerScopeProvenance(
+  raw: Record<string, unknown>,
+  field: string,
+): AnnotationProvenance {
+  const reviewState = isNonEmptyString(raw.review_state, `${field}.review_state`);
+  if (!REVIEW_STATES.includes(reviewState as ReviewState)) {
+    throw new Error(`Unknown provenance.review_state '${reviewState}' in ${field}`);
+  }
+
+  return {
+    proposed_by: isNonEmptyString(raw.proposed_by, `${field}.proposed_by`),
+    proposed_at: isNonEmptyString(raw.proposed_at, `${field}.proposed_at`),
+    reviewed_by:
+      typeof raw.reviewed_by === "string" && raw.reviewed_by.trim().length > 0
+        ? raw.reviewed_by.trim()
+        : undefined,
+    reviewed_at:
+      typeof raw.reviewed_at === "string" && raw.reviewed_at.trim().length > 0
+        ? raw.reviewed_at.trim()
+        : undefined,
+    review_state: reviewState as ReviewState,
+  };
+}
+
+function validateLayerScopeRecord(
+  raw: Record<string, unknown>,
+  field: string,
+): LayerScopeRecord {
+  const provenanceRaw = isRecord(raw.provenance, `${field}.provenance`);
+  const files = isStringArray(raw.exhaustive_scope_files, `${field}.exhaustive_scope_files`);
+  const deduped = [...new Set(files.map((filePath) => filePath.trim()).filter(Boolean))].sort();
+  return {
+    exhaustive_scope_files: deduped,
+    provenance: validateLayerScopeProvenance(provenanceRaw, `${field}.provenance`),
+  };
+}
+
+export function loadLayerScopes(repoDir: string): Map<BenchmarkLayer, LayerScopeRecord> {
+  const scopesPath = path.join(repoDir, "layer-scopes.yaml");
+  if (!fs.existsSync(scopesPath)) {
+    return new Map();
+  }
+
+  const text = fs.readFileSync(scopesPath, "utf8");
+  const parsed = YAML.parse(text);
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error(`Expected YAML object in ${scopesPath}`);
+  }
+
+  const root = parsed as Record<string, unknown>;
+  const layerScopesRaw = root.layer_scopes;
+  if (layerScopesRaw === undefined) {
+    return new Map();
+  }
+  if (typeof layerScopesRaw !== "object" || layerScopesRaw === null || Array.isArray(layerScopesRaw)) {
+    throw new Error(`Expected object for ${scopesPath}:layer_scopes`);
+  }
+
+  const merged = new Map<BenchmarkLayer, LayerScopeRecord>();
+  for (const [layerKey, entry] of Object.entries(layerScopesRaw as Record<string, unknown>)) {
+    if (!BENCHMARK_LAYERS.includes(layerKey as BenchmarkLayer)) {
+      throw new Error(`Unknown layer '${layerKey}' in ${scopesPath}:layer_scopes`);
+    }
+    const canonical = normalizeBenchmarkLayer(layerKey);
+    const record = validateLayerScopeRecord(
+      isRecord(entry, `${scopesPath}:layer_scopes.${layerKey}`),
+      `${scopesPath}:layer_scopes.${layerKey}`,
+    );
+    const existing = merged.get(canonical);
+    if (!existing) {
+      merged.set(canonical, record);
+      continue;
+    }
+    merged.set(canonical, {
+      exhaustive_scope_files: [
+        ...new Set([...existing.exhaustive_scope_files, ...record.exhaustive_scope_files]),
+      ].sort(),
+      provenance: record.provenance,
+    });
+  }
+
+  return merged;
 }
