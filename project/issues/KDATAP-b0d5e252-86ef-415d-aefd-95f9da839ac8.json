@@ -16,10 +16,16 @@
       "author": "rap@endymion.com",
       "text": "Started gate-independent gold work: KDATAP-ea44fe, KDATAP-4b0df4, and KDATAP-f45596 (sample-audit). Adjudication annotations KDATAP-a0e80b and KDATAP-8e7756 are now blocked by the audit — do not schedule them until it reports. Closed-world scope has a behaviour spec (KDATAP-9fd6da) in front of KDATAP-f9bb0f.\n",
       "created_at": "2026-08-31T18:28:16.750022Z"
+    },
+    {
+      "id": "f4ac05a2-0040-45fd-a797-7bdbfc9f0ecc",
+      "author": "rap@endymion.com",
+      "text": "## Review: KDATAP-ea44fe + KDATAP-4b0df4 / PR #10 — sent back\n\nhttps://github.com/DataParade-io/scanner/pull/10\n\nKeep: `user` subtype; Checkr label `saas_service`; gold scan that rejects type-as-label.\n\nSend back: the injector rewrite. `getInjectedUserActorSubtype` used to emit `api_consumer` (backend) or `customer` (otherwise). Collapsing both to `user` and deleting `isLikelyBackendEntrypoint` is a scanner behavior change, not a taxonomy declaration. Out of scope for this chore; it is the kind of silent retune this programme forbids.\n\nReconcile by **declaring what the engine already emits**: add `user` (gold keys) and `api_consumer` (backend injection). Keep the split. Revert `classify.spec.ts` expectation changes.\n\nIssues were closed on the feature branch. Reopen until the revision lands.\n",
+      "created_at": "2026-08-31T18:35:54.505609Z"
     }
   ],
   "created_at": "2026-08-31T14:13:08.904760Z",
-  "updated_at": "2026-08-31T18:28:16.750022Z",
+  "updated_at": "2026-08-31T18:35:54.505609Z",
   "closed_at": null,
   "custom": {
     "project_label": "KDATAP",

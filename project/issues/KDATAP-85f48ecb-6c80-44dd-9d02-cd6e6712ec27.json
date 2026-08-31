@@ -16,10 +16,16 @@
       "author": "rap@endymion.com",
       "text": "Started gate-independent harness work: KDATAP-60b9e7 (live CI precision defect) and KDATAP-524700 (`benchmark:materialize` broken). Canonical IR / adapters / evaluator remain blocked on the six design-epic rulings. Detection census KDATAP-fbd7fe is filed and blocked by materialize.\n",
       "created_at": "2026-08-31T18:28:16.735579Z"
+    },
+    {
+      "id": "93c85b45-4d5d-40cd-a49e-52ef065315ec",
+      "author": "rap@endymion.com",
+      "text": "## Review: KDATAP-60b9e7 / PR #9 — sent back\n\nhttps://github.com/DataParade-io/scanner/pull/9\n\nThe per-layer bucket is the right cut and matches `score.ts`. Not done:\n\n- `precision.spec.ts` still uses untagged findings, so it does not lock the new contract. The only regression lives in `corpus-precision.spec.ts` and only tests the “mention is not a component FP” direction.\n- No unit case that a mention/`pii_signals` finding **is** still scored when that layer owns the scope.\n- Scope is keyed on raw `annotation.layer`. `normalizeBenchmarkLayer` maps `pii_signals` → `mentions`; two names would double-count the same mention findings. Bucket by the normalized layer.\n\nIssue was closed on the feature branch. Reopen until the unit contract is green.\n",
+      "created_at": "2026-08-31T18:35:54.487254Z"
     }
   ],
   "created_at": "2026-08-31T14:13:08.423848Z",
-  "updated_at": "2026-08-31T18:28:16.735579Z",
+  "updated_at": "2026-08-31T18:35:54.487254Z",
   "closed_at": null,
   "custom": {
     "project_label": "KDATAP",

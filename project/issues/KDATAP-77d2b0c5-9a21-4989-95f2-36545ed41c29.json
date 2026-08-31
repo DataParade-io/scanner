@@ -46,10 +46,16 @@
       "author": "rap@endymion.com",
       "text": "## Session start — board is the source of truth\n\nWorking from `develop` @ `3945aa3` (includes PR #6 PHP analyzer, landed independently of this programme). PHP ingest changes the unread population recorded on the original contract tasks; we will not re-derive those numbers, but eligibility and census work must treat PHP as readable now.\n\n**Closed** the original six contract tasks (`d6eabf`, `791091`, `89d1a6`, `f6b6e7`, `08a0ac`, `955d82`). Decisions and rejected alternatives are on those issues. Implementation is the three epics.\n\n**Still need a human ruling** — do not write adapters or schema enums until these are answered. Proposed decision and rejected alternatives are already on each ticket:\n\n| id | question |\n| --- | --- |\n| KDATAP-95cfe1 | what `subject.name` means per layer |\n| KDATAP-00e64a | when instance is required on a component expectation |\n| KDATAP-471fdc | component entity identity and same-subtype cardinality |\n| KDATAP-32c089 | data-flow disposition |\n| KDATAP-1b2294 | structured eligibility outcomes including capacity truncation |\n| KDATAP-4d9b30 | declared capability coverage without changing recall |\n\n**Filed** (brief IDs `5bff8f` / `256461` / `f36683` were not on the board):\n\n- KDATAP-524700 — `benchmark:materialize` `ERR_MODULE_NOT_FOUND` (blocks census and series-1 run)\n- KDATAP-f45596 — gold sample-audit (blocks both adjudication annotations)\n- KDATAP-fbd7fe — detection census (blocked by materialize)\n- KDATAP-9fd6da — Gherkin for closed-world scope (blocks KDATAP-f9bb0f)\n\n**In progress now** (gate-independent): KDATAP-60b9e7 (CI precision defect), KDATAP-524700, KDATAP-f45596, KDATAP-ea44fe, KDATAP-4b0df4.\n\nHarness and gold-migration epics are in progress. Baseline epic stays open — specify now, run last. No detector retune, no new language ingest from this programme, no tests skipped.\n",
       "created_at": "2026-08-31T18:28:16.711136Z"
+    },
+    {
+      "id": "391c6b7d-4755-47ed-853a-32b104a4c0fb",
+      "author": "rap@endymion.com",
+      "text": "## Note: language ingest landing outside this programme\n\n`develop` already includes PR #6 (PHP). PR #7 (Rust + Ruby analyzers) is open: https://github.com/DataParade-io/scanner/pull/7\n\nThis programme still does not retune detectors or add ingest to move a score. Those PRs change how many files are readable. Eligibility, unread, and the detection census must treat them as capability changes when they land — not as evaluation-contract work, and not as a reason to start adjudication early.\n\nThe six gate rulings are still unanswered. Adapters and schema enums stay blocked.\n",
+      "created_at": "2026-08-31T18:35:54.525989Z"
     }
   ],
   "created_at": "2026-08-31T11:09:19.778367Z",
-  "updated_at": "2026-08-31T18:28:16.711136Z",
+  "updated_at": "2026-08-31T18:35:54.525989Z",
   "closed_at": null,
   "custom": {
     "project_label": "KDATAP",
