@@ -75,6 +75,30 @@ describe("loadLegacyGoldRecord", () => {
     expect(record.observedTokenCandidates?.some((t) => t.value === "pii:email_address")).toBe(true);
   });
 
+  it("maps mention rule-id suffixes through rule_id_to_concept_leaf", () => {
+    const { record, diagnostics } = loadLegacyGoldRecord(
+      legacyRecord({
+        id: "mention-rule-id",
+        subject: { key: "mention:email" },
+        expected: { status: "positive", labels: [] },
+      }),
+      { warn: () => undefined },
+    );
+
+    expect(record.classification.conceptLeaf).toBe("email_address");
+    expect(record.classification.conceptAncestry).toEqual(["email_address"]);
+    expect(diagnostics.some((entry) => entry.conversion === "rule_id_to_concept_leaf")).toBe(true);
+  });
+
+  it("does not remap pii: taxonomy keys through rule_id_to_concept_leaf", () => {
+    const { record, diagnostics } = loadLegacyGoldRecord(legacyRecord({ id: "pii-no-rule-map" }), {
+      warn: () => undefined,
+    });
+
+    expect(record.classification.conceptLeaf).toBe("email_address");
+    expect(diagnostics.some((entry) => entry.conversion === "rule_id_to_concept_leaf")).toBe(false);
+  });
+
   it("does not alias pii:email_address to mention:email or leaf email", () => {
     const { record } = loadLegacyGoldRecord(
       legacyRecord({
@@ -103,7 +127,8 @@ describe("loadLegacyGoldRecord", () => {
 
     expect(diagnostics.some((d) => d.conversion === "pii_signal_prefix_rewrite")).toBe(true);
     expect(record.identity.identityKey).toBe("mention:email");
-    expect(record.classification.conceptLeaf).toBe("email");
+    expect(record.classification.conceptLeaf).toBe("email_address");
+    expect(diagnostics.some((d) => d.conversion === "rule_id_to_concept_leaf")).toBe(true);
   });
 
   it("parks expected.labels as observed-token provenance without aliasing concept leaf", () => {
