@@ -1,0 +1,55 @@
+{
+  "id": "KDATAP-b87bafd7-f3f4-43ff-bcfe-d3ed02979fa7",
+  "title": "Baseline readiness gate for canonical accepted gold",
+  "description": "Define and enforce the readiness gate that separates migration audits from the first citable four-layer baseline.\n\nA migration report may show legacy or unscorable records so work can be tracked. Baseline series 1 may not freeze until:\n\n- every accepted record validates against the canonical contract version;\n- no accepted record reaches evaluation through a legacy key, loader exemption, source-token-only identity, or unadjudicated flow endpoint;\n- legacy flow and data-item records have been accepted canonically, rejected, or moved to `needs_adjudication`;\n- each headline layer meets an explicitly approved minimum accepted-case and packet-diversity threshold;\n- packet-and-layer precision scopes carry review provenance;\n- path-contract errors and unscorable rates meet explicit limits;\n- all required materializations and source SHAs validate;\n- the readiness result is emitted as machine-readable evidence and rendered in the baseline report.\n\nData flows reported as unscorable pending regold belong to a readiness audit, not baseline series 1. A small canonical subset may be used only if its size/diversity threshold is declared and approved; silently dropping 436 legacy flow records is forbidden.\n\nDefinition of done: the baseline command refuses to freeze when any readiness invariant fails and reports the exact blockers.",
+  "type": "task",
+  "status": "open",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-97bf4987-e9cb-48cb-901a-87a525bc6bd2",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-3a3155f8-119e-4962-9467-0d2ea0437dd9",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-329e7c60-70a7-4472-8040-6773202ae89f",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-c9cc2d19-1710-458f-b49b-9cc75aa9e73d",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-a0e80b4a-7703-4425-a056-c1c9b9ef0870",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-8e7756fb-e380-4140-a0cc-3e33c84a6605",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-8aed548b-ef7b-45d5-b97c-5763c8f5ed53",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-fafa9f76-0206-422f-9958-7107fb46c7d8",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-f9bb0f7e-b1e6-4f01-824d-d0f9a1b440a3",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:36:03.441568Z",
+  "updated_at": "2026-08-31T14:36:03.441568Z",
+  "closed_at": null,
+  "custom": {}
+}

@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-06634c34-c0d2-4f39-b994-50ae333b4a4a",
   "title": "Canonical IR types and contract version stamp",
-  "description": "Implement the canonical IR types and the contract-version stamp that every observation carries.\n\nFields per the behaviour spec: observation identity; concept leaf plus taxonomy ancestry; component type, subtype, instance/vendor; evidence locations (plural \u2014 see B10); source name; display name. Version is stamped on load so a baseline can record which contract produced it.\n\nReplaces the current overloaded `type:name` string and the `EvalCase`/`LayerFinding` pair in `tests/eval/types.ts` as the scoring currency.",
+  "description": "Implement canonical IR types and the contract-version stamp carried by every expectation and finding.\n\nFields include:\n\n- stable repo-local gold/finding entity identity appropriate to the layer;\n- asserted concept leaf and taxonomy ancestry;\n- component type/subtype and optional asserted vendor/instance;\n- evidence and derivation locations as arrays;\n- observed-token candidate plus provenance;\n- display text isolated from matching;\n- contract and adapter-map versions.\n\nThe type system distinguishes asserted fields from optional descriptive data and distinguishes canonical accepted observations from migration diagnostics. It must be impossible to construct an accepted source-token-only data item or unresolved legacy flow.\n\nReplaces overloaded key strings and the current `EvalCase` / `LayerFinding` pair as scoring currency.",
   "type": "task",
   "status": "open",
   "priority": 1,
@@ -17,11 +17,10 @@
   ],
   "comments": [],
   "created_at": "2026-08-31T14:14:58.103568Z",
-  "updated_at": "2026-08-31T14:14:58.103568Z",
+  "updated_at": "2026-08-31T14:40:02.881048Z",
   "closed_at": null,
   "custom": {
-    "source": "shared",
-    "project_label": "KDATAP"
-  },
-  "agent": null
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
 }

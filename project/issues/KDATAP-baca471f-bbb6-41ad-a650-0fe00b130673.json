@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
   "title": "Reproducible corpus baseline",
-  "description": "Produce the first citable corpus baseline as an immutable, contract-versioned artifact, per the decision on KDATAP-955d82.\n\nSpecify the schema and rendering first; produce numbers only after the harness and gold migration land. A baseline published today would be a table of artifacts: 563 component cases scoring near zero on a vocabulary mismatch, 436 flow cases unable to match at all, 213 of 357 mention cases matching only through the alias table, and 960 of 1,792 annotations sitting on files ingest cannot open.\n\nSeries 1 has no predecessor to bridge from. `benchmark:run` has never been published as a baseline on scanner `develop`, the last full run used the CLI copy with the pre-fix runner, and `precision.ts` is wrong in a known direction. Manufacturing a bridge from those would be false continuity.\n\nDefinition of done: a committed JSON artifact plus deterministic Markdown rendering, carrying the full fingerprint block, validated in CI, with series 1 frozen and `predecessor: none` recorded.",
+  "description": "Produce the first citable corpus baseline as an immutable contract-versioned four-layer artifact.\n\nSpecify schema, rendering, computability states, and readiness gates first. Migration audits may report legacy, unscorable, or incomplete populations, but they are not baseline series 1.\n\nSeries 1 freezes only after the canonical harness and gold migration land and the readiness command verifies:\n\n- zero accepted legacy or source-token-only identities;\n- canonical accepted flow coverage meeting approved count and packet-diversity thresholds;\n- reviewed packet/layer scopes;\n- acceptable path-contract and unscorable rates;\n- validated materializations and fingerprint inputs.\n\nSeries 1 records `predecessor: none`; no trustworthy prior scanner baseline exists. Subsequent contract/gold series bridge against the same scanner commit, while detector changes compare to but never overwrite a frozen series.\n\nDefinition of done: committed canonical JSON plus deterministic Markdown, full fingerprint and readiness evidence, CI validation, and a clean series-1 freeze that refuses incomplete four-layer input.",
   "type": "epic",
   "status": "open",
   "priority": 1,
@@ -12,8 +12,7 @@
   "dependencies": [],
   "comments": [],
   "created_at": "2026-08-31T14:13:09.399056Z",
-  "updated_at": "2026-08-31T14:13:09.399056Z",
+  "updated_at": "2026-08-31T14:40:02.609032Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {}
 }

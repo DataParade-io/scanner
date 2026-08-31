@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-4d9b3008-9fdb-4bcd-8f61-8c1f43c5ac1e",
-  "title": "Decide reachability reporting for gold with no detector concept",
-  "description": "There are 15 rules in `patterns/pii-signals.rules.yaml`. Against them, **422 of 793** mention and data-item gold cases match no rule under any alias:\n\n- unreachable mention concepts: `access_token` x39, `credential_secret` x29, `password_verifier` x13, `payment_card_data` x6, `employment_information` x5, `city` x5, `compensation` x4\n- unreachable data items: 308 of 436 are **source field names**, not concepts \u2014 `id` x17, `name` x8, `token` x7, `location` x5, `city` x5, `status` x3, `key` x3, `uid` x3, `uuid` x3\n\nCeilings with today's rule set, perfect matching assumed: **~68% mention recall, ~29% data-item recall.**\n\nThese cases are eligible \u2014 the file was read successfully \u2014 and permanently missed, because no detector concept exists. No eligibility reason describes that state, and a closed one-to-one leaf map cannot create leaves that do not exist.\n\n**Proposed decision.** Report a `reachable` denominator beside `evaluablePositives` as a diagnostic. This does **not** exclude anything: KDATAP-08a0ac rightly rejects removing known gaps from raw metrics, and raw recall still counts every miss. It is a second denominator so a reader can separate three different zeros \u2014 a detector missed it, no concept exists for it, or gold and engine name it differently.\n\nWithout it, the first published data-item figure reads as detector quality when it is dominated by gold keyed on raw source field names.\n\nRejected: excluding unreachable cases from recall; a `documentedGap`-style suppression flag; publishing a single recall number with no coverage context.",
+  "title": "Define declared capability coverage without changing recall",
+  "description": "The corpus contains two different populations that must not be called the same kind of unreachable.\n\n1. A valid canonical concept exists, but the scanner commit and versioned adapter map declare no detector support for it. This is a real strict false negative.\n2. Legacy gold contains a source field/token but no adjudicated canonical concept. This is incomplete migration, not an accepted detector miss.\n\nMeasured legacy input includes 114 mention cases with no current rule at any alias and 308 of 436 data-item annotations keyed primarily on source field names. The latter cannot enter a canonical baseline until adjudicated.\n\n**Proposed decision.** Report `declaredCapabilitySupported` and aggregate `declaredCapabilityCoverage` beside the full canonical denominator. The declaration is derived from the closed adapter/rule map for the exact scanner commit and its digest is recorded in the artifact.\n\nRaw recall always uses every accepted canonical evaluable positive. Capability coverage never replaces a recall denominator, never suppresses a miss, never defines baseline-series identity, and never becomes an adjusted gate. It changes when detector capability changes and exists only to explain why a valid miss occurred.\n\nSource-token-only records move to `needs_adjudication` or are rejected until they carry a canonical concept. They are reported in migration readiness, not as permanent false negatives.\n\nRejected: recall over reachable only; `documentedGap` suppression; treating incomplete gold as valid unsupported concepts; one unexplained recall number.",
   "type": "task",
   "status": "open",
   "priority": 1,
@@ -12,8 +12,7 @@
   "dependencies": [],
   "comments": [],
   "created_at": "2026-08-31T14:13:54.182833Z",
-  "updated_at": "2026-08-31T14:13:54.182833Z",
+  "updated_at": "2026-08-31T14:38:27.474703Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {}
 }

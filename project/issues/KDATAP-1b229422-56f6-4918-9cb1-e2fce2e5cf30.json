@@ -1,7 +1,7 @@
 {
   "id": "KDATAP-1b229422-56f6-4918-9cb1-e2fce2e5cf30",
-  "title": "Add cap_exceeded to the eligibility outcome set",
-  "description": "KDATAP-791091 defines reasoned coverage outcomes as successfully evaluated, unsupported, excluded, missing, or read/parse error. That list is ingest-shaped and omits capacity.\n\n`ingestFileSystem` drops files against `DEFAULT_MAX_FILE_COUNT` 20,000, `DEFAULT_MAX_TOTAL_BYTES` 200MB and `DEFAULT_MAX_FILE_SIZE_BYTES` 2MB. On wordpress, magento and discourse those limits are live.\n\nTruncation currently lands in \"missing\", which conflates two different things:\n\n- **unsupported** \u2014 no parser for this language. A legitimate permanent holding pen; the gold is correct and waits for ingest.\n- **cap exceeded** \u2014 the scan silently dropped part of the repository. A scanner defect that should be visible and actionable, not absorbed into an unread rate.\n\n**Proposed decision.** Add `cap_exceeded` as its own outcome, reported separately from `unsupported`. Otherwise the first time someone raises the file cap, recall moves and nobody can explain why.\n\nCheap now, schema churn later \u2014 settle before the eligibility enum freezes in the harness epic.",
+  "title": "Define structured eligibility outcomes including capacity truncation",
+  "description": "Freeze a structured per-layer eligibility outcome model before implementing the coverage ledger.\n\nMinimum reason set:\n\n- successfully processed;\n- unsupported file type or language;\n- excluded by configured policy;\n- ignored by repository/default policy;\n- sensitive-path exclusion;\n- file too large;\n- file-count cap reached;\n- total-byte cap reached;\n- missing or path-contract mismatch;\n- read/decode error;\n- parse or layer-processing error.\n\nCapacity reasons must remain distinct from unsupported input: raising a cap is a scanner/configuration change, while adding a language changes capability. The implementation must return structured outcomes rather than parsing `onWarning` strings.\n\nThe current ingest constants are 20,000 files, 200 MB total and 2 MB per file. Their existence justifies the outcome types; whether any current packet actually hits them must be measured from the new ledger before the baseline cites truncation as observed fact.\n\nOnly successfully processed evidence enters recall or negative denominators. Repository-entity partial eligibility and multi-location reporting are specified in the ledger task.\n\nRejected: one `cap_exceeded` bucket with no cause; folding capacity into missing; warning-string inference; claiming a packet hit a cap without structured run evidence.",
   "type": "task",
   "status": "open",
   "priority": 1,
@@ -12,8 +12,7 @@
   "dependencies": [],
   "comments": [],
   "created_at": "2026-08-31T14:13:53.595719Z",
-  "updated_at": "2026-08-31T14:13:53.595719Z",
+  "updated_at": "2026-08-31T14:38:27.612184Z",
   "closed_at": null,
-  "custom": {},
-  "agent": null
+  "custom": {}
 }
