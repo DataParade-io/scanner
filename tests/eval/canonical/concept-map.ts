@@ -79,6 +79,13 @@ function requireEntry(ruleId: string): PersonalDataConceptMapEntry {
   return entry;
 }
 
+/** Lookup a concept-map entry without throwing when the rule id is unknown. */
+export function tryRuleIdToConceptEntry(ruleId: string): PersonalDataConceptMapEntry | undefined {
+  loadPersonalDataConceptMap();
+  const normalized = ruleId.trim().toLowerCase().replace(/-/g, "_");
+  return cachedByRuleId?.get(normalized);
+}
+
 /** Canonical concept leaf for a detector rule id from patterns/pii-signals.rules.yaml. */
 export function ruleIdToConceptLeaf(ruleId: string): string {
   return requireEntry(ruleId).conceptLeaf;

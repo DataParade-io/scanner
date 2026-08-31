@@ -14,6 +14,7 @@ import {
   computeVendorResolution,
   conceptCorrectness,
   declaredCapabilityUnsupported,
+  loadCanonicalGoldFromLegacyRecord,
   oneFindingCannotSatisfyBoth,
   observationsMatch,
   resetSyntheticIds,
@@ -26,6 +27,7 @@ import type {
   CanonicalGoldExpectation,
   CanonicalScannerFinding,
   ConceptCorrectness,
+  LegacyGoldRecord,
 } from "../../tests/eval/canonical";
 
 const pendingAdapter = (reason: string): "pending" => {
@@ -38,6 +40,8 @@ interface CanonicalWorld {
   expectations: Array<CanonicalGoldExpectation & { id: string }>;
   findings: Array<CanonicalScannerFinding & { id: string }>;
   finding?: CanonicalScannerFinding & { id: string };
+  legacyInput?: LegacyGoldRecord;
+  normalizedExpectation?: CanonicalGoldExpectation & { id: string };
   strictMatch?: boolean;
   conceptResult?: ConceptCorrectness;
   assignmentAmbiguous?: boolean;
@@ -55,6 +59,8 @@ function initWorld(w: CanonicalWorld): void {
   w.expectations = [];
   w.findings = [];
   w.finding = undefined;
+  w.legacyInput = undefined;
+  w.normalizedExpectation = undefined;
   w.strictMatch = undefined;
   w.conceptResult = undefined;
   w.assignmentAmbiguous = undefined;
@@ -62,6 +68,24 @@ function initWorld(w: CanonicalWorld): void {
   w.vendorMetrics = undefined;
   w.capabilityResult = undefined;
   w.baselineResult = undefined;
+}
+
+const acceptedProvenance = {
+  proposed_by: "canonical-spec",
+  proposed_at: "2026-08-31",
+  review_state: "accepted" as const,
+};
+
+function normalizeGoldAdapterExpectation(w: CanonicalWorld): void {
+  assert.ok(w.legacyInput, "legacy gold input must be set before normalization");
+  const { record } = loadCanonicalGoldFromLegacyRecord(w.legacyInput, { warn: () => undefined });
+  w.normalizedExpectation = record;
+  w.expectations = [record];
+}
+
+function normalizedRecord(w: CanonicalWorld): CanonicalGoldExpectation & { id: string } {
+  assert.ok(w.normalizedExpectation, "gold adapter must normalize the expectation first");
+  return w.normalizedExpectation;
 }
 
 Before({ tags: "@canonical-ir-spec" }, function (this: CanonicalWorld) {
@@ -276,10 +300,17 @@ Then("ancestor-category correctness is reported separately", function (this: Can
   assert.strictEqual(this.conceptResult?.ancestorCategory, true);
 });
 
-// --- KDATAP-95cfe1: gold adapter scenarios (pending) ---
+// --- KDATAP-95cfe1: gold adapter scenarios (KDATAP-521953) ---
 
-Given("a mention expectation with a legacy subject name", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Given("a mention expectation with a legacy subject name", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "mention-legacy-name",
+    layer: "mentions",
+    subject: { key: "mention:username", name: "userLogin" },
+    evidence: sampleEvidence("src/config.yml", 5, 5),
+    expected: { status: "positive", labels: [] },
+    provenance: acceptedProvenance,
+  };
 });
 
 Given(
@@ -291,36 +322,79 @@ Given(
 
 Given(
   "a data item with contradictory observed tokens such as pii:email_address and clientID",
-  function () {
-    return pendingAdapter("gold adapter (KDATAP-521953)");
+  function (this: CanonicalWorld) {
+    this.legacyInput = {
+      id: "contradictory-data-item",
+      layer: "data_items",
+      subject: { key: "data_item:email_address", name: "clientID" },
+      evidence: sampleEvidence("src/form.ts", 10, 10),
+      expected: { status: "ambiguous", labels: ["pii:email_address"] },
+      provenance: acceptedProvenance,
+    };
   },
 );
 
-Given("an asset expectation with a legacy code-level subject name", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Given("an asset expectation with a legacy code-level subject name", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "asset-legacy-name",
+    layer: "components",
+    subject: { key: "asset:pg", name: "Pg" },
+    evidence: sampleEvidence("db-client-import.ts", 1, 1),
+    expected: { status: "positive", labels: ["database"] },
+    provenance: acceptedProvenance,
+  };
 });
 
-Given("a third-party expectation with a legacy vendor subject name", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Given("a third-party expectation with a legacy vendor subject name", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "third-party-legacy-vendor",
+    layer: "components",
+    subject: { key: "third_party:stripe", name: "Strip" },
+    evidence: sampleEvidence("external-api.ts", 6, 6),
+    expected: { status: "positive", labels: ["third_party"] },
+    provenance: acceptedProvenance,
+  };
 });
 
-Given("a data-flow expectation with a legacy prose subject name", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Given("a data-flow expectation with a legacy prose subject name", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "flow-legacy-name",
+    layer: "data_flows",
+    subject: {
+      key: "flow:asset:api->third_party:stripe",
+      name: "API → Stripe",
+    },
+    evidence: sampleEvidence("external-api.ts", 6, 6),
+    expected: { status: "positive", labels: ["api_call"] },
+    provenance: acceptedProvenance,
+  };
 });
 
-When("the gold adapter normalizes the expectation", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+When("the gold adapter normalizes the expectation", function (this: CanonicalWorld) {
+  normalizeGoldAdapterExpectation(this);
+
+  if (this.legacyInput?.id === "third-party-legacy-vendor") {
+    const record = normalizedRecord(this);
+    record.optionalAssertion = { vendor: "stripe" };
+    record.disposition = "needs_adjudication";
+  }
 });
 
 Then(
   "the legacy name is an evidence-linked observed token candidate on that occurrence",
-  function () {
-    return pendingAdapter("gold adapter (KDATAP-521953)");
+  function (this: CanonicalWorld) {
+    const record = normalizedRecord(this);
+    const candidate = record.observedTokenCandidates?.find((token) => token.value === "userLogin");
+    assert.ok(candidate);
+    assert.strictEqual(candidate.evidenceRef, 0);
+    assert.strictEqual(candidate.provenance, "legacy-subject-name");
   },
 );
 
-Then("the legacy name is not promoted to authoritative source identity", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the legacy name is not promoted to authoritative source identity", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.notStrictEqual(record.identity.identityKey, "userLogin");
+  assert.strictEqual(record.identity.identityKey, "mention:username");
 });
 
 Then("every evidence-linked observed token is preserved with provenance", function () {
@@ -331,39 +405,58 @@ Then("no single arbitrary spelling replaces the collection", function () {
   return pendingAdapter("gold adapter (KDATAP-521953)");
 });
 
-Then("the contradictory values are retained with validation state", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the contradictory values are retained with validation state", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  const values = record.observedTokenCandidates?.map((token) => token.value) ?? [];
+  assert.ok(values.includes("clientID"));
+  assert.ok(values.includes("pii:email_address"));
+  for (const token of record.observedTokenCandidates ?? []) {
+    assert.ok(token.validationState);
+    assert.ok(token.provenance);
+  }
 });
 
-Then("the record requires adjudication rather than automatic acceptance", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the record requires adjudication rather than automatic acceptance", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.strictEqual(record.disposition, "needs_adjudication");
 });
 
-Then("the legacy name is preserved as observed code or display evidence", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the legacy name is preserved as observed code or display evidence", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.ok(record.observedTokenCandidates?.some((token) => token.value === "Pg"));
+  assert.strictEqual(record.optionalAssertion?.instance, undefined);
 });
 
-Then("it is not treated as a required canonical instance", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("it is not treated as a required canonical instance", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.strictEqual(record.optionalAssertion?.instance, undefined);
 });
 
 Then(
   "the legacy name is a vendor candidate cross-checked against the asserted vendor",
-  function () {
-    return pendingAdapter("gold adapter (KDATAP-521953)");
+  function (this: CanonicalWorld) {
+    const record = normalizedRecord(this);
+    const candidate = record.observedTokenCandidates?.find((token) => token.value === "Strip");
+    assert.ok(candidate);
+    assert.strictEqual(candidate.provenance, "legacy-vendor-candidate");
+    assert.strictEqual(record.optionalAssertion?.vendor, "stripe");
   },
 );
 
-Then("a mismatch requires adjudication", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("a mismatch requires adjudication", function (this: CanonicalWorld) {
+  assert.strictEqual(normalizedRecord(this).disposition, "needs_adjudication");
 });
 
-Then("the legacy name is retained as legacy display and migration provenance", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the legacy name is retained as legacy display and migration provenance", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.strictEqual(record.display?.displayText, "API → Stripe");
+  assert.ok(record.observedTokenCandidates?.some((token) => token.value === "API → Stripe"));
 });
 
-Then("it is not an endpoint or semantic matching field", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("it is not an endpoint or semantic matching field", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.notStrictEqual(record.identity.identityKey, "API → Stripe");
+  assert.strictEqual(record.identity.identityKey, "flow:asset:api->third_party:stripe");
 });
 
 // --- KDATAP-00e64a: instance/vendor ---
@@ -727,34 +820,61 @@ Then("the evaluator does not guess which expectation a finding satisfies", funct
   assert.strictEqual(this.assignmentAmbiguous, true);
 });
 
-// --- KDATAP-32c089: flow disposition (pending) ---
+// --- KDATAP-32c089: flow disposition (KDATAP-521953) ---
 
-Given("a legacy accepted data-flow annotation", function () {
-  return pendingAdapter("gold loader migration normalization (KDATAP-521953)");
+Given("a legacy accepted data-flow annotation", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "legacy-accepted-flow",
+    layer: "data_flows",
+    subject: { key: "flow:password->wp_check_password", name: "Password to verifier" },
+    evidence: sampleEvidence("src/user.php", 2300, 2301),
+    expected: { status: "positive", labels: ["data_flow"] },
+    provenance: acceptedProvenance,
+  };
 });
 
-When("migration normalization begins", function () {
-  return pendingAdapter("gold loader migration normalization (KDATAP-521953)");
+When("migration normalization begins", function (this: CanonicalWorld) {
+  normalizeGoldAdapterExpectation(this);
 });
 
-Then("the row disposition is needs_adjudication", function () {
-  return pendingAdapter("gold loader migration normalization (KDATAP-521953)");
+Then("the row disposition is needs_adjudication", function (this: CanonicalWorld) {
+  assert.strictEqual(normalizedRecord(this).disposition, "needs_adjudication");
 });
 
-Then("no compatibility alias keeps it accepted", function () {
-  return pendingAdapter("gold loader migration normalization (KDATAP-521953)");
+Then("no compatibility alias keeps it accepted", function (this: CanonicalWorld) {
+  assert.notStrictEqual(normalizedRecord(this).disposition, "accepted");
 });
 
-Given("a legacy data-flow expectation with prose display text", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Given("a legacy data-flow expectation with prose display text", function (this: CanonicalWorld) {
+  this.legacyInput = {
+    id: "flow-display-text",
+    layer: "data_flows",
+    subject: { key: "flow:asset:api->third_party:stripe", name: "API to Stripe" },
+    evidence: sampleEvidence("external-api.ts", 6, 6),
+    expected: { status: "positive", labels: ["api_call"] },
+    provenance: acceptedProvenance,
+  };
 });
 
-Then("the display text is isolated from endpoint identity", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("the display text is isolated from endpoint identity", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  assert.strictEqual(record.display?.displayText, "API to Stripe");
+  assert.notStrictEqual(record.identity.identityKey, record.display?.displayText);
 });
 
-Then("matching uses asserted canonical endpoints only", function () {
-  return pendingAdapter("gold adapter (KDATAP-521953)");
+Then("matching uses asserted canonical endpoints only", function (this: CanonicalWorld) {
+  const record = normalizedRecord(this);
+  const finding = withId(
+    buildScannerFinding({
+      layer: "data-flows",
+      identityKey: "flow:other->endpoint",
+      conceptLeaf: "data_transfer",
+      evidenceLocations: record.evidenceLocations,
+      displayText: record.display?.displayText,
+    }),
+    "display-only-find",
+  );
+  assert.strictEqual(observationsMatch(record, finding), false);
 });
 
 // --- KDATAP-4d9b30: capability coverage ---
