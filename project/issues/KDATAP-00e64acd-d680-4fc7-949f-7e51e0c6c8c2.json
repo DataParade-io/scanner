@@ -10,9 +10,19 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "cd38b08c-eb4b-417a-9513-0ca2b0aa7162",
+      "author": "claude",
+      "text": "## Measured \u2014 the gating assumption behind this ruling now has data\n\nI said the recommendation depended on `DetectedComponent.subType` actually being populated at runtime, since it is optional and some construction paths leave it undefined. That was the one unverified claim under the whole component argument. It is now measured: built `develop`, cloned two packets at their manifest commits, and ran the orchestrator with AI inference disabled.\n\n**subType coverage is 100% wherever components are emitted at all.**\n\n| target | files | components | carry subType |\n| --- | ---: | ---: | ---: |\n| `tests/fixtures/typescript-basic` | 6 | 5 | **5 (100%)** |\n| `easy-school` @ `69ad989` (Django) | 35 | 3 | **3 (100%)** |\n\n**The two identity schemes, side by side.** On `typescript-basic`:\n\n| emitted as `type:subType` | emitted as `type:name` (today) |\n| --- | --- |\n| `asset:api` \u00d72, `asset:database`, `actor:customer` | `asset:api`, `asset:root api`, `asset:pg`, `actor:user` |\n| `third_party:payment_processor` | `third_party:stripe` |\n\nAnd on `easy-school`: `asset:database`, `asset:application`, `actor:customer` by subtype, versus `asset:django orm`, `asset:es`, `actor:user` by name. That is literally the epic's own example \u2014 the engine emits `asset:django orm`, gold says `asset:database`, and the subtype field already holds `database`.\n\n**Scored against real gold.** easy-school has 3 positive component annotations (`asset:database` \u00d72, `actor:user`). Identity-only match, ignoring span and eligibility:\n\n| scheme | matched |\n| --- | ---: |\n| `type:name` \u2014 today | **1 / 3** |\n| `type:subType` | **2 / 3** |\n| hybrid: assets and actors by subtype, third_party by name | **2 / 3** |\n\n**This confirms the proposed decision, and sharpens it.** Note the third_party row: by subtype the engine emits `third_party:payment_processor`, by name `third_party:stripe`, and gold says `third_party:stripe`. So the split is not a compromise, it is what the data requires \u2014 assets and actors carry their claim in the subtype, third parties carry theirs in the name. Instance required only where gold asserts a vendor, exactly as proposed.\n\n## Two caveats that cut against over-claiming\n\n**1. Some of the 0% is genuine non-detection, not vocabulary.** `flask-login` @ `c8bba84` emits **zero components** \u2014 11 files ingested, nothing detected \u2014 while its gold claims `asset:auth_service` and `actor:user` as positives. No identity scheme rescues that packet. The 85% figure is the share of gold whose *vocabulary* is satisfiable; it is not a prediction of recall, because it assumes the component was detected at all. Worth a cheap spike measuring detection rate per packet before anyone forecasts what this ruling buys.\n\n**2. The remaining easy-school miss is the `actor:user` gap, and it points the other way.** Gold says `actor:user`; the engine emits subtype `customer`. So KDATAP-ea44fe \u2014 \"add `user` to the taxonomy\" \u2014 may be the wrong fix. It could equally be that the engine's actor subtype is wrong, or that gold should say `customer`. That issue needs a decision, not an addition. Commented there.\n\nSample is two packets and 3 gold cases, so treat the 1/3 \u2192 2/3 as directional rather than a rate. It is, as far as I can tell, the first time the engine has been run against corpus gold on this branch.\n",
+      "created_at": "2026-08-31T15:04:57.322596Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-08-31T14:13:52.352294Z",
-  "updated_at": "2026-08-31T14:13:52.352294Z",
+  "updated_at": "2026-08-31T15:04:57.322596Z",
   "closed_at": null,
   "custom": {},
   "agent": null

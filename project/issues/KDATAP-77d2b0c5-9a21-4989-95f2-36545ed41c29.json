@@ -55,10 +55,19 @@
       "comment_type": "default",
       "data": {},
       "agent": null
+    },
+    {
+      "id": "299bbc89-84ec-4cd0-a9e5-bbedf170310b",
+      "author": "claude",
+      "text": "## Ran the engine against corpus gold \u2014 three things the plan should absorb\n\nBuilt `develop`, cloned two packets at their manifest commits, and scanned with AI inference disabled. As far as I can tell this is the first time the engine has been run against corpus gold on this branch. Full numbers on KDATAP-00e64a; the parts that change the plan:\n\n**1. The component identity fix is real, and now measured rather than argued.** `subType` is populated on 100% of emitted components (5/5 on `typescript-basic`, 3/3 on `easy-school`) \u2014 that was the one unverified assumption under the whole component recommendation. Scored identity-only against easy-school's three positives, `type:name` matches 1/3 and `type:subType` matches 2/3. The third_party row settles the split cleanly: by subtype the engine says `third_party:payment_processor`, by name `third_party:stripe`, and gold says `third_party:stripe`. Assets and actors carry their claim in the subtype; third parties carry theirs in the name.\n\n**2. Some of the 0% is non-detection, not vocabulary \u2014 and nobody has measured how much.** `flask-login` emits **zero components** against gold claiming two positives. The 481-of-563 figure is the share of gold whose vocabulary becomes satisfiable; it is not a recall forecast. Filed KDATAP-f36683 as a cheap census \u2014 per-packet detection counts under all three schemes, no scoring \u2014 because if the engine emits nothing on a large share of packets, component recall is a detector problem wearing a vocabulary costume, and the sequencing here deserves a second look before 750 adjudications are spent.\n\n**3. `benchmark:materialize` is broken on `develop`.** `ERR_MODULE_NOT_FOUND` on its own `.ts` imports under Node 22.22, so no packet can be materialized through the supported path \u2014 I had to clone by hand. Filed as KDATAP-5bff8f and made a blocker on the series 1 run, since the baseline decision requires authenticated pinned materializations and `validateMaterializedRepo` can only check a tree that exists.\n\n## One more thing filed, and a recommendation the board cannot hold\n\n**KDATAP-256461 \u2014 sample-audit the gold before migrating it**, now blocking both adjudication issues. 1,643 of the 1,792 annotations were authored on one day by agent swarms, one of them named `grok-4.6-fill-to-200` \u2014 a quota, not an observation. 1,717 are marked `accepted`, but what was accepted was a labeling pass, not a correctness check. Incidental sampling while measuring other things turned up `pii:email_address` on a token called `clientID`, 308 data items keyed on source field names, and a component label that is a type rather than a subtype. Nobody has measured the error rate, and hand-resolving 436 flow endpoints is the most expensive possible way to discover the annotations were wrong. Half a day of one reviewer against ~750 adjudications downstream.\n\n**The recommendation, which belongs to people rather than to an issue:** set a date now at which measurement work stops and detector work resumes. After all 35 issues land and the adjudications are done, the reward is a trustworthy number that will probably say the scanner is mediocre. That is worth having \u2014 dishonest scores are worse than bad ones \u2014 but it is not a better scanner, and this epic has produced excellent decisions and no code. The six unblocked issues, one of which is a live defect in CI, would be worth more landed this week than any further planning.\n",
+      "created_at": "2026-08-31T15:05:40.256906Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
     }
   ],
   "created_at": "2026-08-31T11:09:19.778367Z",
-  "updated_at": "2026-08-31T13:27:40.820877Z",
+  "updated_at": "2026-08-31T15:05:40.256906Z",
   "closed_at": null,
   "custom": {},
   "agent": null
