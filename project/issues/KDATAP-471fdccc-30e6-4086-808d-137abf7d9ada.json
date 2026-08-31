@@ -10,9 +10,20 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "bc0d0e2f-4351-4d7f-99e9-183f4de8cfbd",
+      "author": "claude",
+      "text": "## Correction: my 1/3 \u2192 2/3 figure used set membership, not one-to-one\n\nKDATAP-471fdc names the thing that invalidates it. I scored the easy-school comparison as *\"is this gold key present in the set the engine emitted\"*. Sol's decision on KDATAP-89d1a6 requires **one-to-one assignment**, where a finding is consumed once. Rerunning the same data under that rule:\n\n| gold positive | | engine emitted |\n| --- | --- | --- |\n| `asset:database` | \u2714 consumes the one emitted database | `asset:database` |\n| `asset:database` | \u2718 nothing left to match | `asset:application` |\n| `actor:user` | \u2718 engine emitted subtype `customer` | `actor:customer` |\n\n**Under one-to-one, `type:subType` scores 1/3 \u2014 the same as `type:name` scores today.** My reported 2/3 was wrong for the contract we have actually agreed. The engine emitted one database component; the gold carries two `asset:database` annotations.\n\n## What survives, and what it now depends on\n\nThe vocabulary finding stands: `type:name` emits `asset:django orm`, which can never match `asset:database` under any cardinality rule, while `type:subType` emits the gold's own token. The identity fix is what makes the database *matchable at all*. What it is worth in recall is now entirely a question of the rule this issue is about.\n\nThree readings, with what easy-school scores under each:\n\n1. **Two gold annotations, two expected entities** \u2014 the engine must emit two distinct databases. Scores 1/3. Almost certainly wrong: it reads repeated evidence as duplicate infrastructure.\n2. **Consolidate repository-level entities before assignment**, per the unit defined on KDATAP-f6b6e7 \u2014 the two annotations become one expected database entity with two evidence locations. Gold becomes 2 entities, engine matches 1. **Scores 1/2.**\n3. **Cardinality-free concept coverage** \u2014 did the engine find *a* database. Scores 2/3, which is the number I originally reported, and it is the weakest of the three because it cannot see a scanner that misses the second of two real databases.\n\nReading 2 looks right and is consistent with the data-item consolidation already decided, but it needs stating explicitly, because the same gold shape appears everywhere: `asset:database` is used 182 times and `asset:api` 118 times across 29 packets, and nobody has checked how often repeated keys within one packet mean one entity versus several.\n\n**Worth measuring as part of this issue:** per packet, how many gold component annotations share a `type:subtype` key, and in how many of those cases the repeated annotations point at genuinely distinct infrastructure. That number decides whether consolidation is a safe default or a silent recall inflator.\n\nSample remains two packets and three gold cases, so all three figures are directional. The correction is the point, not the numbers.\n",
+      "created_at": "2026-08-31T18:12:42.105239Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-08-31T14:36:03.314737Z",
-  "updated_at": "2026-08-31T14:36:03.314737Z",
+  "updated_at": "2026-08-31T18:12:42.105239Z",
   "closed_at": null,
-  "custom": {}
+  "custom": {},
+  "agent": null
 }
