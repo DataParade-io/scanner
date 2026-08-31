@@ -2,36 +2,36 @@
 /**
  * Materialize a pinned benchmark repository for local development.
  *
- *   node tests/benchmark/scripts/materialize-repo.mjs vgs-django
- *   node tests/benchmark/scripts/materialize-repo.mjs easy-school
- *   node tests/benchmark/scripts/materialize-repo.mjs --all
+ *   node dist/tests/benchmark/scripts/materialize-repo.js vgs-django
+ *   node dist/tests/benchmark/scripts/materialize-repo.js easy-school
+ *   node dist/tests/benchmark/scripts/materialize-repo.js --all
  *
  * Not invoked by CI or pnpm test.
  */
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { execSync } from "child_process";
 import YAML from "yaml";
-import { sparseConeDirectories } from "../materialize-paths.ts";
+
+import { sparseConeDirectories } from "../materialize-paths";
 import {
   createNodeMaterializeDeps,
   runMaterializeOrchestration,
-} from "../materialize-orchestrator.ts";
+} from "../materialize-orchestrator";
+import { resolveDefaultBenchmarkRoot } from "../paths";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const benchmarkRoot = path.resolve(__dirname, "..");
+const benchmarkRoot = resolveDefaultBenchmarkRoot(__dirname);
 const reposRoot = path.join(benchmarkRoot, "repos");
 const cacheRoot = path.join(benchmarkRoot, ".cache", "repos");
 
-function usage() {
+function usage(): void {
   console.log(
-    "Usage: node tests/benchmark/scripts/materialize-repo.mjs <repo-key> | --all",
+    "Usage: node dist/tests/benchmark/scripts/materialize-repo.js <repo-key> | --all",
   );
   console.log("Example: pnpm run benchmark:materialize vgs-django");
 }
 
-function listRepoKeys() {
+function listRepoKeys(): string[] {
   return fs
     .readdirSync(reposRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
@@ -39,7 +39,7 @@ function listRepoKeys() {
     .sort();
 }
 
-function loadManifest(repoKey) {
+function loadManifest(repoKey: string): Record<string, unknown> {
   const manifestPath = path.join(reposRoot, repoKey, "manifest.yaml");
   if (!fs.existsSync(manifestPath)) {
     throw new Error(`Missing manifest for repo key '${repoKey}'`);
@@ -48,17 +48,22 @@ function loadManifest(repoKey) {
   if (!parsed || typeof parsed !== "object") {
     throw new Error(`Invalid manifest YAML at ${manifestPath}`);
   }
-  return parsed;
+  return parsed as Record<string, unknown>;
 }
 
-function readHeadFromDir(targetDir) {
+function readHeadFromDir(targetDir: string): string {
   return execSync("git rev-parse HEAD", {
     cwd: targetDir,
     encoding: "utf8",
   });
 }
 
-function cloneAndConfigure(targetDir, cloneUrl, commit, include) {
+function cloneAndConfigure(
+  targetDir: string,
+  cloneUrl: string,
+  commit: string,
+  include: string[],
+): void {
   execSync(`git clone --no-checkout ${cloneUrl} ${targetDir}`, {
     stdio: "inherit",
   });
@@ -74,11 +79,14 @@ function cloneAndConfigure(targetDir, cloneUrl, commit, include) {
   }
 }
 
-function materializeRepo(repoKey) {
+function materializeRepo(repoKey: string): void {
   const manifest = loadManifest(repoKey);
   const repository = String(manifest.repository ?? "");
   const commit = String(manifest.commit ?? "");
-  const include = Array.isArray(manifest.scope?.include) ? manifest.scope.include : [];
+  const scope = manifest.scope as { include?: unknown } | undefined;
+  const include = Array.isArray(scope?.include)
+    ? scope.include.map((entry) => String(entry))
+    : [];
 
   if (!repository || !/^[a-f0-9]{40}$/.test(commit)) {
     throw new Error(`Manifest for '${repoKey}' must define repository and full commit SHA`);
@@ -110,8 +118,15 @@ function materializeRepo(repoKey) {
   printInstructions(repoKey, targetDir, manifest);
 }
 
-function printInstructions(repoKey, targetDir, manifest) {
-  const include = Array.isArray(manifest.scope?.include) ? manifest.scope.include : [];
+function printInstructions(
+  repoKey: string,
+  targetDir: string,
+  manifest: Record<string, unknown>,
+): void {
+  const scope = manifest.scope as { include?: unknown } | undefined;
+  const include = Array.isArray(scope?.include)
+    ? scope.include.map((entry) => String(entry))
+    : [];
   console.log("");
   console.log("Local benchmark development:");
   console.log(`  Repo key:     ${repoKey}`);
