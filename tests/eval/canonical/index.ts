@@ -25,7 +25,9 @@ export type {
   OptionalAssertion,
 } from "./types";
 export {
+  hasFlowEndpoints,
   isAcceptedEvaluablePositive,
+  isFlowLayerRecord,
   isMigrationIncomplete,
   isNeedsAdjudication,
   scannerFindingHasEntityId,
@@ -69,6 +71,8 @@ export type {
 
 export {
   buildAcceptedGoldExpectation,
+  buildFlowFinding,
+  buildFlowGoldExpectation,
   buildMigrationIncompleteRecord,
   buildNeedsAdjudicationRecord,
   buildScannerFinding,
@@ -78,7 +82,7 @@ export {
   sampleEvidence,
   withId,
 } from "./builders";
-export type { BuildFindingInput, BuildGoldInput } from "./builders";
+export type { BuildFindingInput, BuildFlowFindingInput, BuildFlowGoldInput, BuildGoldInput } from "./builders";
 
 export {
   LEGACY_SOURCE_CONTRACT_VERSION,
@@ -114,3 +118,5 @@ export {
   loadCanonicalGoldFromLegacyRecord,
   evalCaseToLegacyInput,
 } from "./gold";
+
+export * from "./graph";

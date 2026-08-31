@@ -1,12 +1,14 @@
 import { stampEnvelope } from "./contract";
 import type {
   AcceptedCanonicalGoldExpectation,
+  AssertedFlowEndpoints,
   CanonicalDisposition,
   CanonicalEntityIdentity,
   CanonicalGoldExpectation,
   CanonicalLayer,
   CanonicalScannerFinding,
   EvidenceLocation,
+  FlowAssertion,
   MigrationIncompleteRecord,
   NeedsAdjudicationRecord,
   ObservedTokenCandidate,
@@ -41,6 +43,8 @@ export interface BuildGoldInput {
   entityId?: string;
   adapterMapVersion?: string;
   declaredCapabilitySupported?: CanonicalGoldExpectation["declaredCapabilitySupported"];
+  flowEndpoints?: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
 }
 
 export interface BuildFindingInput {
@@ -58,6 +62,8 @@ export interface BuildFindingInput {
   displayText?: string;
   disposition?: CanonicalDisposition;
   adapterMapVersion?: string;
+  flowEndpoints?: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
 }
 
 function baseGoldFields(input: BuildGoldInput): CanonicalGoldExpectation {
@@ -79,6 +85,8 @@ function baseGoldFields(input: BuildGoldInput): CanonicalGoldExpectation {
     disposition: input.disposition ?? "accepted",
     entityId: input.entityId,
     declaredCapabilitySupported: input.declaredCapabilitySupported,
+    flowEndpoints: input.flowEndpoints,
+    flowAssertion: input.flowAssertion,
   };
 }
 
@@ -99,6 +107,8 @@ function baseFindingFields(input: BuildFindingInput): CanonicalScannerFinding {
     observedTokenCandidates: input.observedTokenCandidates,
     display: input.displayText !== undefined ? { displayText: input.displayText } : undefined,
     disposition: input.disposition ?? "accepted",
+    flowEndpoints: input.flowEndpoints,
+    flowAssertion: input.flowAssertion,
   };
 }
 
@@ -143,6 +153,34 @@ export function buildScannerFinding(
   input: BuildFindingInput,
 ): CanonicalScannerFinding {
   return baseFindingFields(input);
+}
+
+export interface BuildFlowGoldInput extends BuildGoldInput {
+  layer: "data-flows";
+  flowEndpoints: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
+}
+
+export interface BuildFlowFindingInput extends BuildFindingInput {
+  layer: "data-flows";
+  flowEndpoints: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
+}
+
+export function buildFlowGoldExpectation(
+  input: BuildFlowGoldInput & { conceptLeaf: string },
+): AcceptedCanonicalGoldExpectation {
+  return buildAcceptedGoldExpectation({
+    ...input,
+    layer: "data-flows",
+  });
+}
+
+export function buildFlowFinding(input: BuildFlowFindingInput): CanonicalScannerFinding {
+  return buildScannerFinding({
+    ...input,
+    layer: "data-flows",
+  });
 }
 
 export function withId<T extends object>(record: T, id?: string): T & { id: string } {
