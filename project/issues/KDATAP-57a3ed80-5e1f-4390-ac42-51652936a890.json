@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-57a3ed80-5e1f-4390-ac42-51652936a890",
+  "title": "One personal-data inventory with full provenance",
+  "description": "Personal-data matching runs once per repository; raw-hit, mention and data-item projections derive from that one inventory.\n\nTwo defects to close together:\n\n1. `scanRepoByManifestLayers` claims in a comment that \"personal-data matching runs at most once\" while the body calls `collectPersonalDataFindings` up to three times, each running its own `ingestFileSystem` and `matchPiiSignalsInFiles`.\n2. `hitsToDataItemFindings` collapses hits by key and keeps a **single arbitrary location**, chosen by `hit.evidence.filePath < existing.filePath` \u2014 lexicographically first. Every other supporting location is discarded, which makes evidence-strength matching arbitrary under one-to-one assignment.\n\nFindings must preserve all provenance locations. Fixing only the gold-side consolidation while the finding still carries one lexicographically-chosen path leaves the defect in place.",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-1076a9e3-d2ab-4aec-8cd7-0784f947d1fe",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:15:02.058953Z",
+  "updated_at": "2026-08-31T14:15:02.058953Z",
+  "closed_at": null,
+  "custom": {
+    "source": "shared",
+    "project_label": "KDATAP"
+  },
+  "agent": null
+}

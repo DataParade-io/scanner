@@ -1,0 +1,19 @@
+{
+  "id": "KDATAP-97bf4987-e9cb-48cb-901a-87a525bc6bd2",
+  "title": "Baseline artifact schema and fingerprint block",
+  "description": "Define the baseline artifact: machine-readable JSON plus a deterministic Markdown rendering, committed under a series identified by the evaluation-contract version.\n\nFingerprint block on every artifact: scanner commit; corpus/gold digest; evaluation-contract version; taxonomy and adapter-map digests; dependency lock digest; every materialized source-repository commit; accepted / proposed / ambiguous / rejected counts with review provenance; and the deterministic configuration including AI disabled.\n\nCurrent corpus fingerprint for reference: 1,792 annotations \u2014 1,717 accepted, 75 proposed; 1,565 positive, 173 negative, 54 ambiguous.\n\n`createDefaultScanConfiguration({ enableAiInference: false })` is already hard-coded in `scan-repo.ts`, so the deterministic headline is the only thing that path can produce. Assert it in the artifact rather than relying on it, since the CLI path carries no such constraint.\n\nMaterialization validation already exists in `validateMaterializedRepo` against `manifest.commit`; the artifact records the resulting SHAs rather than reimplementing the check.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:16:11.389242Z",
+  "updated_at": "2026-08-31T14:16:11.389242Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

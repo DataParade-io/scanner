@@ -1,0 +1,19 @@
+{
+  "id": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+  "title": "Rule when instance is required on a component expectation",
+  "description": "KDATAP-08a0ac requires \"canonical instance/vendor when known\" plus \"one strict all-required-fields result\". The migration reading of \"when known\" decides whether the component number is usable or structurally zero.\n\nAll 563 component annotations carry a `subject.name`. For the 473 assets it is a code-level instance (`directus_users`, `LocalAuthDriver`, `UsersService`). If the migration reads those as the canonical instance field, 473 expectations acquire an instance requirement and the strict result stays near zero for exactly the 85% of gold that is otherwise satisfiable \u2014 the failure the decision exists to prevent, reintroduced by a plausible migration step.\n\nMeasured shape of component gold:\n\n| gold key shape | instances | share |\n| --- | ---: | ---: |\n| `type:<taxonomy subtype id>` | 481 | 85% |\n| `third_party:<vendor>` | 52 | 9% |\n| `actor:user` (no declared subtype) | 30 | 5% |\n\n**Proposed decision.** Instance is a required field only where gold asserts a vendor \u2014 the 52 `third_party:` cases. For assets and actors the strict result is (type, subtype), which is the whole claim those annotations make. Instance/vendor resolution is graded as its own diagnostic over the population that actually claims one.\n\n**Corollary to state in the contract:** strict means all fields *gold asserts*, not all fields the schema defines. Otherwise \"when known\" gets implemented as \"always required\".\n\nRejected: treating asset `subject.name` as the canonical instance; requiring every schema field on every expectation.",
+  "type": "task",
+  "status": "open",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-08-31T14:13:52.352294Z",
+  "updated_at": "2026-08-31T14:13:52.352294Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

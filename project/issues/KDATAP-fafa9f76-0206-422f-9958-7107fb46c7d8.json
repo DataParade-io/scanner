@@ -1,0 +1,24 @@
+{
+  "id": "KDATAP-fafa9f76-0206-422f-9958-7107fb46c7d8",
+  "title": "Migrate mention gold to canonical keys and source names",
+  "description": "Migrate mention gold onto canonical keys and promote the source token into the canonical source-name field.\n\nThree surfaces, all of which must move together:\n\n1. **Layer name** \u2014 all 29 packets use `annotations/pii_signals.yaml`; not one uses `mentions.yaml`. A rename, not a dual-write, since there is no split state to reconcile.\n2. **Subject key prefix** \u2014 all 357 mention annotations use `pii:` keys, which reach the scorer only through a hard-coded exemption in `assertCanonicalSubjectKey` (`tests/benchmark/manifest.ts`) permitting `pii:` on the mentions layer. Separate from the `pii_signal:` migration in `normalizeSubjectKey`. If the removal milestone covers only the layer name, the exemption quietly survives.\n3. **Source name** \u2014 339 of 357 carry a `subject.name` holding the observed token (`pii:access_token`/`id_token`, `pii:user_identifier`/`sub`). Promote into the source-name field per the `subject.name` ruling.\n\nBlocked on the `subject.name` ruling.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-95cfe105-1fd1-470a-b42c-35f229606178",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:15:42.907763Z",
+  "updated_at": "2026-08-31T14:15:42.907763Z",
+  "closed_at": null,
+  "custom": {},
+  "agent": null
+}

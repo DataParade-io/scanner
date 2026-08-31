@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-465da744-7be4-451e-8d5c-aa1014b72eaa",
+  "title": "De-duplicate evaluation clients",
+  "description": "Remove or clearly archive copied scoring trees so a second origin cannot rot back into existence, and give other clients a stable boundary onto the canonical evaluator.\n\nThe public `dataparade-cli` carries a leftover eval/score/identity copy; the next `cli-v*` rsync from the app monorepo does not update scanner, but humans will still run the wrong tree. Plexus `evaluate accuracy` / `evaluate_recall` is a third client and must call the shared evaluator through a library or stable JSON/process boundary rather than reimplementing identity rules.\n\nRecommend deletion over archival: an archived copy that still runs is exactly how a second origin returns.",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-e1cee579-fda4-41b6-972b-f0b8462ac58a",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-08-31T14:15:03.968987Z",
+  "updated_at": "2026-08-31T14:15:03.968987Z",
+  "closed_at": null,
+  "custom": {
+    "source": "shared",
+    "project_label": "KDATAP"
+  },
+  "agent": null
+}

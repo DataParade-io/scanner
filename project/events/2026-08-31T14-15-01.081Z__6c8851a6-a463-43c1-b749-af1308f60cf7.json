@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "6c8851a6-a463-43c1-b749-af1308f60cf7",
+  "issue_id": "KDATAP-5772e4ec-826d-43c3-9623-c26dc09aebfa",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:15:01.081Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Retire tests/benchmark/precision.ts",
+    "description": "Delete `tests/benchmark/precision.ts` and retarget `tests/benchmark/corpus-precision.spec.ts` at the canonical evaluator.\n\n`score.ts` already computes precision over per-layer scope buckets, so a thin wrapper would have no remaining logic. What dies with the file: exact-key-only matching, raw string path compare, no `review_state` filter (it counts the 75 `proposed` annotations as accepted gold while `to-eval-cases.ts` defaults to accepted only), no layer tags, and the cross-layer scope defect fixed separately.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "6868a6d0-3070-46a5-a280-7241ffe9d775",
+  "issue_id": "KDATAP-329e7c60-70a7-4472-8040-6773202ae89f",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:16:12.378Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Not-computable state for precision and unscorable layers",
+    "description": "An explicit *not computable* state, distinct from a null result meaning \"scope declared, no findings in it\".\n\nUnder the eligibility decision, precision scope is reviewed packet-and-layer scope intersected with files successfully processed for that layer. Today's scope lists are dominated by `.php` (~6,500 entries) and `.rb` (~6,000), which ingest cannot open.\n\nFor discourse, wordpress, magento, redmine, spree, drupal and vapor — **7 of 29 packets, 54% of all annotations** — the intersection is close to empty. Precision there is not low and not zero-findings; it cannot be computed.\n\nThe same state serves data flows if they publish before regold, where the decision is to report the layer as unscorable pending regold rather than as a 0% strict layer.\n\nWithout this, the Markdown rendering presents both cases identically and someone writes a release gate against a packet that structurally cannot produce the number.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "labels": []
+  }
+}

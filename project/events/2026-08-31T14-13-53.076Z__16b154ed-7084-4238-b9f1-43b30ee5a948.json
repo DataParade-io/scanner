@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "16b154ed-7084-4238-b9f1-43b30ee5a948",
+  "issue_id": "KDATAP-32c089f1-61b8-42c1-bfad-1af8da2609ba",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:13:53.076Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Rule the data-flow disposition: regold, and unscorable until regolded",
+    "description": "KDATAP-08a0ac rules that human strings such as `flow:pii->checkr-api` are display forms rather than scorer identity. Correct — and the consequence needs stating before anyone estimates this programme.\n\nMeasured: 436 data-flow annotations, **424 distinct keys**, and **all 436 have bare endpoints** — `flow:user->stripe`, `flow:api-key->key_hash`, `flow:session->cookie`, `flow:password->wp_check_password`, `flow:failed-login->lockout`. The engine emits `flow:${componentKey}->${componentKey}`. Endpoints carry no `type:` prefix, and many are not components in any graph sense: a password, a session, a cookie, a lockout event. All 436 also carry a `subject.name`, and unlike mentions it is genuine prose restatement, so nothing is recoverable there.\n\n**No existing flow annotation has a scorer identity under the new contract, and none can be migrated mechanically.** Every endpoint must be resolved to a canonical component or typed-endpoint identity by hand.\n\nAlso inert today: 419 of 436 flow annotations carry the generic label `data_flow`, which `LAYER_GENERIC_LABELS` auto-passes. Semantic classification has to come from the new data-category fields; current gold has nothing to score it against.\n\n**Proposed decision.** Both: regold as its own tracked workstream (436 cases, human-bound, on the critical path), and publish data flows as **unscorable pending regold** in baseline series 1 rather than as a 0% strict layer. A layer reporting 0% strict on 436 unmigrated annotations is not a measurement.\n\nRejected: aliasing 424 prose keys, which is a hand-written answer key rather than a metric; deleting flow gold; reporting the layer as a detector failure.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 0,
+    "assignee": null,
+    "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+    "labels": []
+  }
+}
