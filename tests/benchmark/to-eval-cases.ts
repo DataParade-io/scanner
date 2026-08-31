@@ -1,9 +1,11 @@
 import type { EvalCase, EvalLayer } from "../eval/types";
-import type { AnnotationRecord, ReviewState } from "./schema";
+import type { AnnotationRecord, BenchmarkLayer, LayerScopeRecord, ReviewState } from "./schema";
+import { normalizeBenchmarkLayer } from "./schema";
 
 export interface ToEvalCasesOptions {
   includeProposed?: boolean;
   reviewStates?: ReviewState[];
+  layerScopes?: Map<BenchmarkLayer, LayerScopeRecord>;
 }
 
 const DEFAULT_REVIEW_STATES: ReviewState[] = ["accepted"];
@@ -42,6 +44,23 @@ function toEvalLayer(layer: AnnotationRecord["layer"]): EvalLayer {
   return mapped;
 }
 
+function acceptedLayerScopeFiles(
+  layer: BenchmarkLayer,
+  layerScopes: Map<BenchmarkLayer, LayerScopeRecord> | undefined,
+): string[] | undefined {
+  if (!layerScopes) {
+    return undefined;
+  }
+  const record = layerScopes.get(normalizeBenchmarkLayer(layer));
+  if (!record || record.provenance.review_state !== "accepted") {
+    return undefined;
+  }
+  if (record.exhaustive_scope_files.length === 0) {
+    return undefined;
+  }
+  return [...record.exhaustive_scope_files];
+}
+
 export function annotationToEvalCase(
   annotation: AnnotationRecord,
   fixture: string,
@@ -51,6 +70,8 @@ export function annotationToEvalCase(
   if (!isIncludedReviewState(annotation.provenance.review_state, allowedStates)) {
     return null;
   }
+
+  const scopeFiles = acceptedLayerScopeFiles(annotation.layer, options.layerScopes);
 
   return {
     id: annotation.id,
@@ -70,9 +91,7 @@ export function annotationToEvalCase(
       labels: [...annotation.expected.labels],
     },
     rationale: annotation.rationale,
-    ...(annotation.expected.exhaustive_scope_files !== undefined
-      ? { exhaustiveScopeFiles: [...annotation.expected.exhaustive_scope_files] }
-      : {}),
+    ...(scopeFiles !== undefined ? { exhaustiveScopeFiles: scopeFiles } : {}),
   };
 }
 

@@ -32,6 +32,7 @@ import {
 import {
   loadAnnotations,
   loadBenchmarkManifest,
+  loadLayerScopes,
 } from "../tests/benchmark/manifest";
 import type { AnnotationRecord } from "../tests/benchmark/schema";
 import { scoreCorpusPrecision } from "../tests/benchmark/precision";
@@ -268,7 +269,11 @@ async function computeCorpusPrecision(
       }
     }
 
-    const report = scoreCorpusPrecision(allAnnotations, findings);
+    const report = scoreCorpusPrecision(
+      allAnnotations,
+      findings,
+      loadLayerScopes(repoDir),
+    );
     perRepo[repoKey] = report;
     totalScoped += report.exhaustiveScopedFindings;
     totalMatched += report.exhaustiveScopedMatches;

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import path from "path";
 import YAML from "yaml";
 
-import { loadAnnotations, loadBenchmarkManifest } from "../../benchmark/manifest";
+import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 import { annotationsToEvalCases } from "../../benchmark/to-eval-cases";
 
@@ -79,6 +79,51 @@ describe("imported corpus gold", () => {
     }
 
     expect(accepted).toBeGreaterThan(1000);
+  });
+
+  it("does not store exhaustive_scope_files on annotations (KDATAP-f9bb0f)", () => {
+    const violations: string[] = [];
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const annotationsDir = path.join(repoDir, "annotations");
+      for (const fileName of fs.readdirSync(annotationsDir)) {
+        if (!fileName.endsWith(".yaml")) {
+          continue;
+        }
+        const text = fs.readFileSync(path.join(annotationsDir, fileName), "utf8");
+        if (text.includes("exhaustive_scope_files")) {
+          violations.push(`${repoKey}/${fileName}`);
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("stores reviewed precision scope in layer-scopes.yaml (KDATAP-f9bb0f)", () => {
+    let scopedPackets = 0;
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const scopesPath = path.join(repoDir, "layer-scopes.yaml");
+      if (!fs.existsSync(scopesPath)) {
+        continue;
+      }
+      scopedPackets += 1;
+      const scopes = loadLayerScopes(repoDir);
+      expect(scopes.size).toBeGreaterThan(0);
+      for (const layer of loadBenchmarkManifest(repoDir).coverage.layers) {
+        const canonical = layer === "pii_signals" ? "mentions" : layer;
+        if (scopes.has(canonical as typeof layer)) {
+          const record = scopes.get(canonical as typeof layer)!;
+          expect(record.provenance.review_state).toBe("accepted");
+          expect(record.exhaustive_scope_files.length).toBeGreaterThan(0);
+        }
+      }
+    }
+
+    expect(scopedPackets).toBe(29);
   });
 
   it("does not use actor:user in component gold (KDATAP-ea44fe)", () => {

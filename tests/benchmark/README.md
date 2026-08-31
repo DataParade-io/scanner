@@ -20,6 +20,7 @@ tests/benchmark/
   repos/
     <repo-key>/
       manifest.yaml   # pinned commit, scope, coverage metadata
+      layer-scopes.yaml  # reviewed closed-world precision scope per layer
       annotations/
         components.yaml
         data_flows.yaml
@@ -41,7 +42,7 @@ Twenty-nine pinned packets live under `repos/`: the original ten (gitea, saleor,
 
 1. Proposed annotations start in `review_state: proposed`.
 2. A reviewer inspects pinned source at the evidence location (Grok span-check for the 2026-08-30 expansion fill; Ryan accepted that gold without a second pass) and sets `review_state` to `accepted` or `rejected`.
-3. Only `accepted` annotations count toward headline evaluation denominators. Positives should set `exhaustive_scope_files` for precision.
+3. Only `accepted` annotations count toward headline evaluation denominators. Reviewed closed-world precision scope lives in `layer-scopes.yaml` per layer (`review_state: accepted` only).
 
 Component subject keys use the evaluator identity convention: `type:name` with a lowercase name (for example `asset:database`, `third_party:checkr`).
 

@@ -5,6 +5,7 @@ import * as os from "os";
 import {
   loadAnnotations,
   loadBenchmarkManifest,
+  loadLayerScopes,
 } from "./manifest";
 import { scoreCorpusPrecision } from "./precision";
 import {
@@ -12,12 +13,19 @@ import {
   scan,
 } from "../../src/core/pipeline/orchestrator";
 import type { DetectedComponent } from "../../src/core/types/component";
-import type { AnnotationRecord } from "./schema";
+import type { AnnotationRecord, BenchmarkLayer, LayerScopeRecord } from "./schema";
 import type { LayerFinding } from "../eval/types";
 
 const FIXTURE = "jvm-manifests-basic";
 const FIXTURE_ROOT = path.join(__dirname, "..", "fixtures", FIXTURE);
 const DUMMY_COMMIT = "0".repeat(40);
+
+const JVM_SCOPE_FILES = [
+  "pom.xml",
+  "services/ledger/build.gradle.kts",
+  "src/main/resources/application.yml",
+  "src/main/resources/bootstrap.yml",
+];
 
 function componentIdentity(component: DetectedComponent): string {
   return `${component.type}:${component.name.toLowerCase()}`;
@@ -56,6 +64,28 @@ function writeCorpusRepo(destDir: string): void {
   );
 
   fs.writeFileSync(
+    path.join(destDir, "layer-scopes.yaml"),
+    [
+      "layer_scopes:",
+      "  components:",
+      "    exhaustive_scope_files:",
+      ...JVM_SCOPE_FILES.map((file) => `      - ${file}`),
+      "    provenance:",
+      "      proposed_by: test",
+      "      proposed_at: 2026-01-01T00:00:00Z",
+      "      review_state: accepted",
+      "  raw_hits:",
+      "    exhaustive_scope_files:",
+      ...JVM_SCOPE_FILES.map((file) => `      - ${file}`),
+      "    provenance:",
+      "      proposed_by: test",
+      "      proposed_at: 2026-01-01T00:00:00Z",
+      "      review_state: accepted",
+    ].join("\n"),
+    "utf8",
+  );
+
+  fs.writeFileSync(
     path.join(destDir, "annotations", "components.yaml"),
     [
       "annotations:",
@@ -72,11 +102,6 @@ function writeCorpusRepo(destDir: string): void {
       "    expected:",
       "      status: positive",
       "      labels: [database]",
-      "      exhaustive_scope_files:",
-      "        - pom.xml",
-      "        - services/ledger/build.gradle.kts",
-      "        - src/main/resources/application.yml",
-      "        - src/main/resources/bootstrap.yml",
       "    provenance:",
       "      proposed_by: test",
       "      proposed_at: 2026-01-01T00:00:00Z",
@@ -187,11 +212,6 @@ function writeCorpusRepo(destDir: string): void {
       "    expected:",
       "      status: positive",
       "      labels: [username]",
-      "      exhaustive_scope_files:",
-      "        - pom.xml",
-      "        - services/ledger/build.gradle.kts",
-      "        - src/main/resources/application.yml",
-      "        - src/main/resources/bootstrap.yml",
       "    provenance:",
       "      proposed_by: test",
       "      proposed_at: 2026-01-01T00:00:00Z",
@@ -253,18 +273,17 @@ describe("corpus precision end-to-end", () => {
     fs.rmSync(tempRoot, { recursive: true, force: true });
   });
 
-  it("computes component precision from exhaustive scope annotations", async () => {
+  it("computes component precision from reviewed layer scopes", async () => {
     const manifest = loadBenchmarkManifest(repoDir);
     expect(manifest.coverage.layers).toContain("components");
 
     const annotations = loadAnnotations(repoDir, "components");
+    const layerScopes = loadLayerScopes(repoDir);
     expect(annotations.length).toBeGreaterThan(0);
-    expect(
-      annotations.some((a) => a.expected.exhaustive_scope_files?.length),
-    ).toBe(true);
+    expect(layerScopes.get("components")?.exhaustive_scope_files.length).toBeGreaterThan(0);
 
     const findings = await scanRepoFindings(FIXTURE_ROOT);
-    const report = scoreCorpusPrecision(annotations, findings);
+    const report = scoreCorpusPrecision(annotations, findings, layerScopes);
 
     expect(report.precision).not.toBeNull();
     expect(report.precision as number).toBeGreaterThan(0);
@@ -281,7 +300,6 @@ describe("corpus precision end-to-end", () => {
       expected: {
         status: "positive",
         labels: ["database"],
-        exhaustive_scope_files: ["pom.xml"],
       },
       provenance: {
         proposed_by: "test",
@@ -289,6 +307,16 @@ describe("corpus precision end-to-end", () => {
         review_state: "accepted",
       },
     };
+
+    const layerScopes = loadLayerScopes(repoDir);
+    layerScopes.set("components", {
+      exhaustive_scope_files: ["pom.xml"],
+      provenance: {
+        proposed_by: "test",
+        proposed_at: "2026-01-01T00:00:00Z",
+        review_state: "accepted",
+      },
+    });
 
     const findings: LayerFinding[] = [
       {
@@ -307,22 +335,19 @@ describe("corpus precision end-to-end", () => {
       },
     ];
 
-    const report = scoreCorpusPrecision([annotation], findings);
+    const report = scoreCorpusPrecision([annotation], findings, layerScopes);
 
     expect(report.precision).toBe(1);
     expect(report.exhaustiveScopedFindings).toBe(1);
     expect(report.exhaustiveScopedMatches).toBe(1);
   });
 
-  it("returns null precision without exhaustive scope", async () => {
-    const manifest = loadBenchmarkManifest(repoDir);
-    const annotations = loadAnnotations(repoDir, "raw_hits").map((a) => ({
-      ...a,
-      expected: { ...a.expected, exhaustive_scope_files: undefined },
-    }));
+  it("returns null precision without accepted exhaustive scope", async () => {
+    const annotations = loadAnnotations(repoDir, "raw_hits");
+    const layerScopes = new Map<BenchmarkLayer, LayerScopeRecord>();
 
     const findings = await scanRepoFindings(FIXTURE_ROOT);
-    const report = scoreCorpusPrecision(annotations, findings);
+    const report = scoreCorpusPrecision(annotations, findings, layerScopes);
     expect(report.precision).toBeNull();
   });
 });
