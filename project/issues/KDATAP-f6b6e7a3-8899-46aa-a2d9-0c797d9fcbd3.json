@@ -3,7 +3,7 @@
   "title": "One layer model for Jest and corpus",
   "description": "As an evaluation owner, I want one list of layers that Jest fixtures and corpus packets share, so that we do not double-count the same regex or ignore a grade we claim to care about.\n\n## Current mess\n\n| Surface | Layers |\n| --- | --- |\n| Jest fixture eval | `raw-hits`, `mentions`, `data-items`, `components`, `data-flows` |\n| Corpus YAML | `components`, `data_flows`, `pii_signals`, `data_items` (no `raw_hits` packets) |\n| Load path | `pii_signals` \u2192 canonical `mentions`; files may be `pii_signals.yaml` |\n| Personal-data engine | `matchPiiSignalsInFiles` once; raw-hits vs mentions differ only by key prefix (`raw_hit:` vs `mention:`). Documented limitation: they are isomorphic until mentions gain a real roll-up. |\n\nGround-truth schema sells five grades. Corpus gold was curated as four, with `pii_signals` meaning \u201cline-level PII signal,\u201d which we now call mentions.\n\nIf corpus grew `raw_hits` annotations that duplicate `pii_signals` line-for-line, recall would count the same hit twice. If we never gold `raw_hits`, Jest\u2019s extra grade is a fixture-only toy and must not be mixed into corpus headlines.\n\n## Questions to answer\n\n- Canonical corpus layers going forward: four (mentions not pii_signals in filenames too) or five with distinct mention roll-up?\n- Rename gold files `pii_signals.yaml` \u2192 `mentions.yaml`, or keep the alias forever?\n- Are raw-hits a production grade or a debug view of the same matcher?\n- How do data-items (rolled-up identity-only) relate to mentions (span) so we do not treat them as independent proof of the same field?\n- Initiative title is still \u201cFour-layer scanner evaluation system\u201d while docs say five. Which is the product?\n\n## Not this task\n\nDo not invent a mention roll-up algorithm here unless the decision is \u201cmentions must differ.\u201d Do not duplicate 325 PII records into `raw_hits.yaml`.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -40,8 +40,8 @@
     }
   ],
   "created_at": "2026-08-31T11:09:28.236841Z",
-  "updated_at": "2026-08-31T13:27:42.279138Z",
-  "closed_at": null,
+  "updated_at": "2026-08-31T19:49:17.067525Z",
+  "closed_at": "2026-08-31T19:49:17.067525Z",
   "custom": {},
   "agent": null
 }
