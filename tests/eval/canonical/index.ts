@@ -100,8 +100,17 @@ export {
   loadPersonalDataConceptMap,
   ruleIdToAncestry,
   ruleIdToConceptLeaf,
+  tryRuleIdToConceptEntry,
   FORBIDDEN_CATEGORY_LEAVES,
   normalizeConceptToken,
   validatePersonalDataConceptMapDocument,
 } from "./concept-map";
 export type { PersonalDataConceptMap, PersonalDataConceptMapEntry } from "./concept-map";
+
+export {
+  loadCanonicalGoldFromAnnotation,
+  loadCanonicalGoldFromAnnotations,
+  loadCanonicalGoldFromEvalCase,
+  loadCanonicalGoldFromLegacyRecord,
+  evalCaseToLegacyInput,
+} from "./gold";
