@@ -1,3 +1,4 @@
+@local-graphql
 Feature: Local GraphQL is a process
 
   Scenario: Start without a database server
