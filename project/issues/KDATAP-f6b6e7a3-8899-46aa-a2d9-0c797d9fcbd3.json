@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "fc43864f-4732-468e-9810-d81e5ac0c5a5",
+      "author": "home",
+      "text": "## Decision\n\nThe product scorecard has four headline layers:\n\n1. mentions;\n2. data items;\n3. components;\n4. data flows.\n\nRaw hits are detector trace/debug output until they have semantics distinct from mentions. They remain inspectable but receive no duplicated corpus gold and no headline weight. Canonical corpus naming is `mentions`; `pii_signals` receives a one-way migration and a temporary warning loader with a defined removal milestone, not a permanent alias.\n\nThe unit of observation is explicit per layer:\n\n- mention: one canonical concept occurrence at a source span;\n- data item: one repository-level canonical concept/entity with all supporting evidence locations;\n- component: one structured repository graph entity with supporting evidence;\n- data flow: one structured typed edge with supporting evidence.\n\nThe current data-item hybrid is invalid: scanner output collapses by key while gold may repeat the same repo/key, allowing one finding to satisfy many cases and retaining an arbitrary single location. Gold must consolidate repeated evidence for repository-level entities, and findings must preserve all provenance locations.\n\nMentions and data items are related views of the same underlying evidence. They are reported separately and are never averaged or summed as independent proof. The benchmark publishes a four-layer vector, not a cross-layer overall percentage, because occurrences, repository entities, components, and edges are not commensurate units. Gates operate per layer.\n\nPersonal-data matching executes once and derives any diagnostic raw-hit trace plus canonical mention and rolled-up data-item projections from the same inventory.\n\nRejected alternatives:\n\n- five headline layers while raw hits and mentions are isomorphic;\n- duplicating mention gold into raw-hit gold;\n- retaining `pii_signals` as a forever canonical name;\n- mixing all layer denominators into one headline scalar;\n- continuing identity-only repeated data-item cases.\n\nA fifth product layer requires a future explicit semantic contract and genuinely distinct observations, not a new prefix.",
+      "created_at": "2026-08-31T13:04:32.376907Z"
+    }
+  ],
   "created_at": "2026-08-31T11:09:28.236841Z",
-  "updated_at": "2026-08-31T11:09:28.236841Z",
+  "updated_at": "2026-08-31T13:04:32.376907Z",
   "closed_at": null,
   "custom": {}
 }

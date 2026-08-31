@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "84c1dc19-5bbe-4198-a78b-c91426d0593a",
+      "author": "home",
+      "text": "## Decision\n\nEvaluation eligibility is layer-specific. A positive or negative is evaluable only when its canonical repo-relative evidence path appears in the successful processing ledger for that same layer. Exhaustive scope never makes an unopened or unsuccessfully processed file readable.\n\nThe scan result must replace the single merged `scannedFiles` assumption with per-layer coverage and a reasoned outcome such as successfully evaluated, unsupported, excluded, missing, or read/parse error. Only successfully evaluated evidence enters recall or negative-case denominators. Missing from the relevant layer ledger is unread; attempted failures are reported separately and remain ineligible rather than becoming detector false negatives.\n\nPrecision scope is the intersection of:\n\n1. the packet-and-layer closed-world review scope; and\n2. files successfully processed for that layer.\n\nUnread negatives remain outside `negativeCasePassRate`.\n\nPath identity is a canonical, case-sensitive, repo-relative POSIX path. Normalize separators and dot segments, and reject absolute paths, root traversal, and malformed paths. Do not silently equate case variants, display aliases, or symlink targets. A gold/ingest mismatch remains ineligible and produces an explicit path-contract diagnostic.\n\nEvery packet/layer report includes:\n\n- annotation-weighted unread count and rate;\n- distinct evidence-file read coverage;\n- ineligible counts by reason;\n- a prominent high-unread warning, including the 50% threshold discussed here.\n\nThe two coverage views are both required because repeated annotations in one file can distort a case-only unread rate.\n\nRejected alternatives:\n\n- exhaustive scope implying successful ingest;\n- a single repository-wide read list shared by all layers;\n- counting read or parse failures as scanner misses;\n- silent fuzzy path or symlink matching;\n- publishing recall without its eligibility coverage.\n\nAdding new language ingest remains separate implementation work.",
+      "created_at": "2026-08-31T13:04:32.174109Z"
+    }
+  ],
   "created_at": "2026-08-31T11:09:28.156126Z",
-  "updated_at": "2026-08-31T11:09:28.156126Z",
+  "updated_at": "2026-08-31T13:04:32.174109Z",
   "closed_at": null,
   "custom": {}
 }

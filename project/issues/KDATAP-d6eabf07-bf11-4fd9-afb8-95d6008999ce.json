@@ -10,9 +10,16 @@
   "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "dd4f06d5-f321-46a0-bbb3-7562e72c006e",
+      "author": "home",
+      "text": "## Decision\n\nAdopt a versioned canonical evaluation representation that is independent of both authored gold spellings and scanner rule ids. Gold loaders and scanner adapters must emit the same representation before scoring.\n\nThe representation separates:\n\n- observation identity;\n- exact semantic concept leaf and taxonomy ancestry;\n- component type, subtype, and instance/vendor;\n- evidence locations;\n- display names.\n\nDisplay names and finding labels are never identity inputs. In particular, `subject.name` and scanner labels may not rescue a key mismatch.\n\nPII relations such as SSN and driver license under national identifier are taxonomy parent/child relations, not equivalence. The scorer reports exact-leaf correctness separately from ancestor-category correctness. A curated adapter may map a detector rule id to one canonical leaf, but the map is closed, reviewed, versioned, and one-to-one at that leaf. It may not turn `ssn` into an exact match for every national identifier.\n\nData-item source names such as `uid` are separate from inferred concepts such as user identifier. Component type/subtype/instance are likewise separate fields instead of one overloaded `type:name` string.\n\nNew gold and fixtures use the canonical representation. Existing corpus data receives a mechanical migration where unambiguous and explicit adjudication where ambiguous. A temporary versioned legacy loader may support the old keys during migration, with validation and a removal milestone. Fixture Jest and corpus evaluation must pass through the same adapter and contract tests.\n\nRejected alternatives:\n\n- matcher rule ids as the public vocabulary, because that couples truth to the implementation being measured;\n- treating current gold strings as the complete contract, because they mix taxonomy, source fields, instances, and display names;\n- open-ended token equivalence groups;\n- parent/child concepts treated as exact aliases;\n- using labels or human-readable names as hidden identity aliases.\n\nFollow-on implementation must add the canonical schema/IR, taxonomy and adapter-map versions, migration validation, exact and ancestor metrics, shared fixture adapters, and synchronized docs. Detector retuning remains out of scope.",
+      "created_at": "2026-08-31T13:04:32.083478Z"
+    }
+  ],
   "created_at": "2026-08-31T11:09:28.115877Z",
-  "updated_at": "2026-08-31T11:09:28.115877Z",
+  "updated_at": "2026-08-31T13:04:32.083478Z",
   "closed_at": null,
   "custom": {}
 }
