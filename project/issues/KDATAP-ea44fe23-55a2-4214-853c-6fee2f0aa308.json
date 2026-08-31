@@ -1,6 +1,6 @@
 {
   "id": "KDATAP-ea44fe23-55a2-4214-853c-6fee2f0aa308",
-  "title": "Add user to the component taxonomy",
+  "title": "Resolve the actor:user gap",
   "description": "Add `user` to `patterns/component-taxonomy.yaml` and reconcile it with the injected user actor.\n\n30 component annotations use `actor:user` while `user` is not a declared subtype \u2014 `customer` and `admin` are. Under \"the taxonomy is authoritative for type and subtype\", those 30 cannot be migrated until the taxonomy declares it.\n\n`src/classifier/application-injection.ts` already injects a user actor via `getInjectedUserActorSubtype`, so the engine holds an opinion the taxonomy does not record. Reconcile both in one pass.\n\nStartable now \u2014 independent of the gate rulings.",
   "type": "chore",
   "status": "open",
@@ -10,9 +10,19 @@
   "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "3920eeff-09e8-4626-8a5d-e4d011f564cd",
+      "author": "claude",
+      "text": "## Measured: this may be the wrong fix\n\nRan the orchestrator against `easy-school` @ `69ad989` (AI inference disabled). Gold there claims `actor:user`. The engine emits an actor whose subtype is **`customer`** \u2014 a declared taxonomy subtype. Same on `tests/fixtures/typescript-basic`: subtype `customer`, while the engine's *name* for it is `user`.\n\nSo the two sides do not disagree about the entity, they disagree about what to call its role \u2014 and the taxonomy already declares `customer`, which is what the engine picks.\n\nThat makes three candidate resolutions, not one:\n\n1. **Add `user` to the taxonomy** \u2014 as this issue currently proposes. Cheapest, but it leaves two subtypes for one concept and the engine still emits `customer`, so the 30 gold cases keep missing.\n2. **Retarget the gold** to `actor:customer`, treating `user` as the annotators' informal name for the declared subtype. Mechanical, 30 cases, and it makes them matchable immediately.\n3. **Fix the engine's actor subtype assignment**, if `customer` is genuinely wrong for an authenticated end user in a Django app that has no customer concept \u2014 `easy-school` is a school management app, where `customer` reads as a mis-classification.\n\n`src/classifier/application-injection.ts` picks this via `getInjectedUserActorSubtype`, so option 3 is a small, contained change.\n\nMy read is that option 3 plus option 2 is right \u2014 `customer` looks like a genuine misclassification in a non-commerce app, and once the engine emits a defensible actor subtype the gold should be retargeted to it rather than the taxonomy growing a near-synonym. But this needs a decision from someone with a view on what `actor:` subtypes are *for*, which is why it should not be filed as a one-line taxonomy addition.\n\nRetitling suggested: \"Resolve the actor:user gap\" rather than \"Add user to the component taxonomy\".\n",
+      "created_at": "2026-08-31T15:04:57.760215Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-08-31T14:15:44.695729Z",
-  "updated_at": "2026-08-31T14:15:44.695729Z",
+  "updated_at": "2026-08-31T15:05:15.031831Z",
   "closed_at": null,
   "custom": {},
   "agent": null
