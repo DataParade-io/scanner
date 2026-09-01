@@ -52,6 +52,22 @@ export type { ConceptCorrectness } from "./match";
 export { evaluateCanonical } from "./evaluate";
 
 export {
+  computeMetricComputability,
+  emptyMetricComputability,
+  resolvePrecisionComputability,
+  resolveRecallComputability,
+  resolveNegativeCaseComputability,
+  rollupLayerComputabilitySummary,
+  aggregateScopeDenominators,
+} from "./computability";
+export type {
+  ComputeMetricComputabilityInput,
+  HeadlineMetricKind as CanonicalHeadlineMetricKind,
+  LayerComputabilitySummary,
+  MetricComputabilityState,
+} from "./computability";
+
+export {
   canonicalFindingFromLayerFinding,
   canonicalGoldFromEvalCase,
   findingsForEvalLayer,
