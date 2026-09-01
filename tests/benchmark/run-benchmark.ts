@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import type { EvalCase, EvalLayer, EvalScoreReport, FixtureScanResult } from "../eval/types";
-import { scoreEvalCases, scoreEvalCasesByLayer } from "../eval/score";
+import { scoreEvalCasesByLayer } from "../eval/score";
 import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "./manifest";
 import type { ReviewState } from "./schema";
 import { annotationsToEvalCases, type ToEvalCasesOptions } from "./to-eval-cases";
@@ -85,7 +85,6 @@ export interface BenchmarkRepoResult {
   materializedPath: string;
   evalCases: EvalCase[];
   scanResult: FixtureScanResult;
-  score: EvalScoreReport;
   layerScores: Partial<Record<EvalLayer, EvalScoreReport>>;
 }
 
@@ -130,7 +129,6 @@ export async function runBenchmarkRepo(
     ((key: string, root: string) =>
       scanRepoByManifestLayers(key, root, manifest.coverage.layers));
   const scanResult = await scanFn(repoKey, materializedPath);
-  const score = scoreEvalCases(evalCases, [scanResult]);
   const layerScores = scoreEvalCasesByLayer(evalCases, [scanResult]);
 
   return {
@@ -138,7 +136,6 @@ export async function runBenchmarkRepo(
     materializedPath,
     evalCases,
     scanResult,
-    score,
     layerScores,
   };
 }
@@ -172,7 +169,7 @@ function printScoreBlock(title: string, score: EvalScoreReport, evalCases: EvalC
 }
 
 function printRepoResult(result: BenchmarkRepoResult): void {
-  const { repoKey, materializedPath, evalCases, scanResult, score, layerScores } = result;
+  const { repoKey, materializedPath, evalCases, scanResult, layerScores } = result;
   console.log(`\n=== ${repoKey} ===`);
   console.log(`Materialized: ${materializedPath}`);
   const eligibleTotal = Object.values(scanResult.eligibilityLedgers ?? {}).reduce(
@@ -190,13 +187,12 @@ function printRepoResult(result: BenchmarkRepoResult): void {
   for (const [layer, count] of [...findingsByLayer.entries()].sort()) {
     console.log(`  ${layer}: ${count}`);
   }
-  printScoreBlock("Overall (per-layer findings; do not mix bags):", score, evalCases);
   const layerOrder: EvalLayer[] = [
+    "mentions",
+    "data-items",
     "components",
     "data-flows",
     "raw-hits",
-    "mentions",
-    "data-items",
   ];
   for (const layer of layerOrder) {
     const layerScore = layerScores[layer];
@@ -204,10 +200,13 @@ function printRepoResult(result: BenchmarkRepoResult): void {
       continue;
     }
     const layerCases = evalCases.filter((entry) => entry.layer === layer);
-    printScoreBlock(`Layer ${layer}:`, layerScore, layerCases);
+    const label = layer === "raw-hits" ? `Diagnostic ${layer}:` : `Layer ${layer}:`;
+    printScoreBlock(label, layerScore, layerCases);
   }
 
-  const unreadCases = score.caseResults.filter((caseResult) => caseResult.unread);
+  const unreadCases = Object.values(layerScores).flatMap((layerScore) =>
+    layerScore ? layerScore.caseResults.filter((caseResult) => caseResult.unread) : [],
+  );
   if (unreadCases.length > 0) {
     console.log("Unread evidence files:");
     for (const caseResult of unreadCases) {
