@@ -3,6 +3,7 @@ import {
   scan,
 } from "../../src/core/pipeline/orchestrator";
 import { collectPersonalDataFindings } from "../../src/eval-layers/collect-personal-data-findings";
+import { buildOrchestratorEvalLedgers } from "../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../src/core/types/component";
 import type { DetectedDataFlow } from "../../src/core/types/data-flow";
 import type { SourceLocation } from "../../src/core/types/file";
@@ -12,10 +13,31 @@ import { componentIdentity } from "../eval/layers/components/adapter";
 import { dataFlowIdentity } from "../eval/layers/data-flows/adapter";
 import { personalDataFindingToLayerFinding } from "../eval/layers/personal-data-adapter";
 import { normalizeEvalPath } from "../eval/identity";
+import {
+  layerLedgerFromOutcomes,
+  mergeFixtureLedgers,
+} from "../eval/eligibility/build-fixture-result";
+import { eligibleProcessedPaths } from "../eval/eligibility/ledger-access";
 
 export function normalizeRepoRelativePath(filePath: string): string {
   return normalizeEvalPath(filePath);
 }
+
+const BENCHMARK_TO_EVAL_LAYER: Record<string, EvalLayer> = {
+  components: "components",
+  data_flows: "data-flows",
+  raw_hits: "raw-hits",
+  mentions: "mentions",
+  data_items: "data-items",
+  pii_signals: "mentions",
+};
+
+const PERSONAL_DATA_BENCHMARK_LAYERS = new Set([
+  "mentions",
+  "raw_hits",
+  "data_items",
+  "pii_signals",
+]);
 
 function collectFlowSourceLocations(flow: DetectedDataFlow): SourceLocation[] {
   if (flow.sourceLocations && flow.sourceLocations.length > 0) {
@@ -83,37 +105,65 @@ function tagPersonalDataFinding(
   };
 }
 
-function unionSorted(values: Iterable<string>): string[] {
-  return [...new Set(values)].sort();
+function benchmarkLayerToPersonalDataLayer(
+  layer: BenchmarkLayer,
+): "mentions" | "raw-hits" | "data-items" {
+  switch (layer) {
+    case "mentions":
+    case "pii_signals":
+      return "mentions";
+    case "raw_hits":
+      return "raw-hits";
+    case "data_items":
+      return "data-items";
+    default:
+      throw new Error(`Not a personal-data benchmark layer: ${layer}`);
+  }
 }
 
 /**
  * Scan a materialized corpus packet for the requested layers.
- * Orchestrator `scan()` runs at most once; personal-data matching at most once.
+ * Orchestrator `scan()` runs at most once; each personal-data layer ingests independently.
  */
 export async function scanRepoByManifestLayers(
   repoKey: string,
   repoRoot: string,
   layers: BenchmarkLayer[],
 ): Promise<FixtureScanResult> {
-  const wanted = new Set(layers.map((layer) => (layer === "pii_signals" ? "mentions" : layer)));
+  const wanted = new Set(
+    layers.map((layer) => (layer === "pii_signals" ? "mentions" : layer)),
+  );
   const findings: LayerFinding[] = [];
-  const scannedFiles: string[] = [];
+  const eligibilityLedgers: Partial<
+    Record<EvalLayer, ReturnType<typeof layerLedgerFromOutcomes>>
+  > = {};
 
   const needsOrchestrator = wanted.has("components") || wanted.has("data_flows");
-  const needsPersonalData =
-    wanted.has("mentions") || wanted.has("raw_hits") || wanted.has("data_items");
+  const needsPersonalData = layers.some((layer) =>
+    PERSONAL_DATA_BENCHMARK_LAYERS.has(layer),
+  );
 
   if (needsOrchestrator) {
     const config = createDefaultScanConfiguration({ enableAiInference: false });
-    const { scanResult, files } = await scan(repoRoot, config);
-    scannedFiles.push(...files.map((file) => normalizeRepoRelativePath(file.path)));
+    const { scanResult, ledgerContext } = await scan(repoRoot, config);
+    if (!ledgerContext) {
+      throw new Error("Orchestrator scan missing ledger context");
+    }
+    const orchestratorLedgers = buildOrchestratorEvalLedgers(ledgerContext);
 
     if (wanted.has("components")) {
+      eligibilityLedgers.components = layerLedgerFromOutcomes(
+        "components",
+        orchestratorLedgers.components ?? [],
+      );
       findings.push(...scanResult.components.map(toComponentFinding));
     }
 
     if (wanted.has("data_flows")) {
+      eligibilityLedgers["data-flows"] = layerLedgerFromOutcomes(
+        "data-flows",
+        orchestratorLedgers["data-flows"] ?? [],
+      );
       const componentsById = new Map(
         scanResult.components.map((component) => [component.id, component]),
       );
@@ -124,47 +174,33 @@ export async function scanRepoByManifestLayers(
   }
 
   if (needsPersonalData) {
-    const payloadMentions = wanted.has("mentions")
-      ? await collectPersonalDataFindings(repoRoot, "mentions")
-      : undefined;
-    const payloadRaw = wanted.has("raw_hits")
-      ? await collectPersonalDataFindings(repoRoot, "raw-hits")
-      : undefined;
-    const payloadItems = wanted.has("data_items")
-      ? await collectPersonalDataFindings(repoRoot, "data-items")
-      : undefined;
-
-    const first = payloadMentions ?? payloadRaw ?? payloadItems;
-    if (first) {
-      scannedFiles.push(...first.filesScanned.map(normalizeRepoRelativePath));
-    }
-
-    if (payloadMentions) {
-      findings.push(
-        ...payloadMentions.findings.map((finding) =>
-          tagPersonalDataFinding(personalDataFindingToLayerFinding(finding), "mentions"),
-        ),
+    for (const benchmarkLayer of layers) {
+      if (!PERSONAL_DATA_BENCHMARK_LAYERS.has(benchmarkLayer)) {
+        continue;
+      }
+      const personalLayer = benchmarkLayerToPersonalDataLayer(benchmarkLayer);
+      const evalLayer = BENCHMARK_TO_EVAL_LAYER[benchmarkLayer]!;
+      const payload = await collectPersonalDataFindings(repoRoot, personalLayer);
+      eligibilityLedgers[evalLayer] = layerLedgerFromOutcomes(
+        evalLayer,
+        payload.layerOutcomes,
       );
-    }
-    if (payloadRaw) {
+
       findings.push(
-        ...payloadRaw.findings.map((finding) =>
-          tagPersonalDataFinding(personalDataFindingToLayerFinding(finding), "raw-hits"),
-        ),
-      );
-    }
-    if (payloadItems) {
-      findings.push(
-        ...payloadItems.findings.map((finding) =>
-          tagPersonalDataFinding(personalDataFindingToLayerFinding(finding), "data-items"),
+        ...payload.findings.map((finding) =>
+          tagPersonalDataFinding(personalDataFindingToLayerFinding(finding), evalLayer),
         ),
       );
     }
   }
 
+  const merged = mergeFixtureLedgers(repoKey, findings, eligibilityLedgers);
   return {
-    fixture: repoKey,
-    findings,
-    scannedFiles: unionSorted(scannedFiles),
+    ...merged,
+    scannedFiles: [...new Set(
+      Object.values(eligibilityLedgers).flatMap((ledger) =>
+        ledger ? eligibleProcessedPaths(ledger) : [],
+      ),
+    )].sort(),
   };
 }

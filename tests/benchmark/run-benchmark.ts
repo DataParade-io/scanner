@@ -6,6 +6,7 @@ import { scoreEvalCases, scoreEvalCasesByLayer } from "../eval/score";
 import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "./manifest";
 import type { ReviewState } from "./schema";
 import { annotationsToEvalCases, type ToEvalCasesOptions } from "./to-eval-cases";
+import { eligibleProcessedPaths } from "../eval/eligibility/ledger-access";
 import { normalizeRepoRelativePath, scanRepoByManifestLayers } from "./scan-repo";
 import { resolveDefaultBenchmarkRoot } from "./paths";
 import {
@@ -174,7 +175,12 @@ function printRepoResult(result: BenchmarkRepoResult): void {
   const { repoKey, materializedPath, evalCases, scanResult, score, layerScores } = result;
   console.log(`\n=== ${repoKey} ===`);
   console.log(`Materialized: ${materializedPath}`);
-  console.log(`Scanned files: ${scanResult.scannedFiles.length}`);
+  const eligibleTotal = Object.values(scanResult.eligibilityLedgers ?? {}).reduce(
+    (sum, ledger) => sum + (ledger ? eligibleProcessedPaths(ledger).length : 0),
+    0,
+  );
+  console.log(`Layer-eligible paths (sum across layers): ${eligibleTotal}`);
+  console.log(`Scanned files (diagnostic union): ${scanResult.scannedFiles.length}`);
   const findingsByLayer = new Map<string, number>();
   for (const finding of scanResult.findings) {
     const layer = finding.layer ?? "untagged";

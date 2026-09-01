@@ -17,6 +17,8 @@ import {
 } from "../../benchmark/detection-census";
 import type { AnnotationRecord } from "../../benchmark/schema";
 import type { FixtureScanResult } from "../../eval/types";
+import { createLayerLedger } from "../../eval/eligibility/types";
+import { layerOutcome } from "../../../src/ingest/eligibility";
 import { MaterializationMissingError, listBenchmarkRepoKeys, resolveMaterializedRepoPath } from "../../benchmark/run-benchmark";
 
 function component(overrides: Partial<DetectedComponent> & Pick<DetectedComponent, "name" | "type">): DetectedComponent {
@@ -107,6 +109,12 @@ describe("detection census", () => {
     const scanResult: FixtureScanResult = {
       fixture: "easy-school",
       scannedFiles: ["students/models.py", "students/views.py"],
+      eligibilityLedgers: {
+        components: createLayerLedger("components", [
+          layerOutcome("students/models.py", "successfully_processed"),
+          layerOutcome("students/views.py", "successfully_processed"),
+        ]),
+      },
       findings: [
         componentFinding("asset:django orm", ["asset", "database"]),
         {

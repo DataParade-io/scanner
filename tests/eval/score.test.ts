@@ -1,5 +1,7 @@
 import { scoreEvalCases } from "./score";
-import type { EvalCase, FixtureScanResult, LayerFinding } from "./types";
+import type { EvalCase, EvalLayer, FixtureScanResult, LayerFinding } from "./types";
+import { layerOutcome } from "../../src/ingest/eligibility";
+import { createLayerLedger } from "./eligibility/types";
 
 interface ScoreScenario {
   name: string;
@@ -31,9 +33,19 @@ const FIXTURE = "synthetic-fixture";
 
 function scanResult(
   findings: LayerFinding[],
-  scannedFiles: string[] = ["src/app.yml"],
+  layer: EvalLayer,
+  processedPaths: string[] = ["src/app.yml"],
 ): FixtureScanResult {
-  return { fixture: FIXTURE, findings, scannedFiles };
+  const ledger = createLayerLedger(
+    layer,
+    processedPaths.map((filePath) => layerOutcome(filePath, "successfully_processed")),
+  );
+  return {
+    fixture: FIXTURE,
+    findings,
+    scannedFiles: processedPaths,
+    eligibilityLedgers: { [layer]: ledger },
+  };
 }
 
 function positiveCase(
@@ -100,7 +112,7 @@ const scoreScenarios: ScoreScenario[] = [
         "user_email",
       ]),
     ],
-    scanResults: [scanResult([], ["src/other.yml"])],
+    scanResults: [scanResult([], "raw-hits", ["src/other.yml"])],
     expect: {
       evaluablePositives: 0,
       matchedPositives: 0,
@@ -119,7 +131,7 @@ const scoreScenarios: ScoreScenario[] = [
         rationale: "known miss still measured",
       }),
     ],
-    scanResults: [scanResult([])],
+    scanResults: [scanResult([], "raw-hits")],
     expect: {
       evaluablePositives: 1,
       matchedPositives: 0,
@@ -138,7 +150,10 @@ const scoreScenarios: ScoreScenario[] = [
       ]),
     ],
     scanResults: [
-      scanResult([finding("data_item:username", "src/app.yml", 3, 3, ["username"])]),
+      scanResult(
+        [finding("data_item:username", "src/app.yml", 3, 3, ["username"])],
+        "data-items",
+      ),
     ],
     expect: {
       evaluablePositives: 1,
@@ -159,7 +174,7 @@ const scoreScenarios: ScoreScenario[] = [
       ]),
     ],
     scanResults: [
-      scanResult([finding("mention:email", "src/app.yml", 4, 4, ["username"])]),
+      scanResult([finding("mention:email", "src/app.yml", 4, 4, ["username"])], "mentions"),
     ],
     expect: {
       evaluablePositives: 1,
@@ -180,10 +195,13 @@ const scoreScenarios: ScoreScenario[] = [
       }),
     ],
     scanResults: [
-      scanResult([
-        finding("raw_hit:email", "src/app.yml", 1, 1, ["user_email"]),
-        finding("raw_hit:username", "src/app.yml", 2, 2, ["username"]),
-      ]),
+      scanResult(
+        [
+          finding("raw_hit:email", "src/app.yml", 1, 1, ["user_email"]),
+          finding("raw_hit:username", "src/app.yml", 2, 2, ["username"]),
+        ],
+        "raw-hits",
+      ),
     ],
     expect: {
       recall: 1,
@@ -205,6 +223,7 @@ const scoreScenarios: ScoreScenario[] = [
           finding("flow:app->third_party:openai", "app.py", 11, 11, ["api_call"]),
           finding("flow:app->third_party:stripe", "app.py", 11, 11, ["api_call"]),
         ],
+        "data-flows",
         ["app.py"],
       ),
     ],
@@ -221,7 +240,11 @@ const scoreScenarios: ScoreScenario[] = [
       }),
     ],
     scanResults: [
-      scanResult([finding("asset:jedis", "pom.xml", 1, 1, ["database"])], []),
+      scanResult(
+        [finding("asset:jedis", "pom.xml", 1, 1, ["database"])],
+        "components",
+        [],
+      ),
     ],
     expect: {
       unreadCount: 0,
@@ -237,10 +260,13 @@ const scoreScenarios: ScoreScenario[] = [
       }),
     ],
     scanResults: [
-      scanResult([
-        finding("asset:pg", "db.ts", 1, 1, ["database"]),
-        { key: "actor:user", labels: [], sourceFilePaths: [], sourceLines: [] },
-      ]),
+      scanResult(
+        [
+          finding("asset:pg", "db.ts", 1, 1, ["database"]),
+          { key: "actor:user", labels: [], sourceFilePaths: [], sourceLines: [] },
+        ],
+        "components",
+      ),
     ],
     expect: {
       recall: 1,
@@ -252,13 +278,46 @@ const scoreScenarios: ScoreScenario[] = [
     cases: [
       negativeCase("negative-unread", "raw-hits", "raw_hit:email", "src/missing.yml", 1, 1),
     ],
-    scanResults: [scanResult([finding("raw_hit:email", "src/app.yml", 1, 1, ["user_email"])])],
+    scanResults: [
+      scanResult(
+        [finding("raw_hit:email", "src/app.yml", 1, 1, ["user_email"])],
+        "raw-hits",
+      ),
+    ],
     expect: {
       negativeCases: 0,
       negativeCasesPassed: 0,
       unreadCount: 1,
       negativeCasePassRate: null,
       caseChecks: [{ caseId: "negative-unread", unread: true, negativeClean: false }],
+    },
+  },
+  {
+    name: "does not confer cross-layer eligibility from another layer ledger",
+    cases: [
+      positiveCase("mentions-positive", "mentions", "mention:email", "src/pii.yml", 1, 1, [
+        "user_email",
+      ]),
+    ],
+    scanResults: [
+      {
+        fixture: FIXTURE,
+        findings: [],
+        scannedFiles: ["src/orch.ts", "src/pii.yml"],
+        eligibilityLedgers: {
+          components: createLayerLedger(
+            "components",
+            [layerOutcome("src/orch.ts", "successfully_processed")],
+          ),
+          mentions: createLayerLedger("mentions", []),
+        },
+      },
+    ],
+    expect: {
+      evaluablePositives: 0,
+      unreadCount: 1,
+      recall: null,
+      caseChecks: [{ caseId: "mentions-positive", unread: true, matched: false }],
     },
   },
 ];

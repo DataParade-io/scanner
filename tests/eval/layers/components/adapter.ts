@@ -4,8 +4,13 @@ import {
   createDefaultScanConfiguration,
   scan,
 } from "../../../../src/core/pipeline/orchestrator";
+import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../../../src/core/types/component";
 import { adaptDetectedComponent } from "../../canonical/scanner/components";
+import {
+  fixtureScanResultWithLedger,
+  layerLedgerFromOutcomes,
+} from "../../eligibility/build-fixture-result";
 import type { CanonicalFixtureScanResult } from "../personal-data-adapter";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
@@ -37,23 +42,36 @@ function toLayerFinding(component: DetectedComponent): LayerFinding {
 export async function scanFixtureComponents(fixture: string): Promise<FixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
   const config = createDefaultScanConfiguration({ enableAiInference: false });
-  const { scanResult, files } = await scan(root, config);
+  const { scanResult, ledgerContext } = await scan(root, config);
+  if (!ledgerContext) {
+    throw new Error("Orchestrator scan missing ledger context");
+  }
+  const ledgers = buildOrchestratorEvalLedgers(ledgerContext);
+  const layerLedger = layerLedgerFromOutcomes("components", ledgers.components ?? []);
 
-  return {
+  return fixtureScanResultWithLedger(
     fixture,
-    findings: scanResult.components.map(toLayerFinding),
-    scannedFiles: files.map((file) => file.path),
-  };
+    scanResult.components.map(toLayerFinding),
+    layerLedger,
+  );
 }
 
 export async function scanCanonicalComponents(fixture: string): Promise<CanonicalFixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
   const config = createDefaultScanConfiguration({ enableAiInference: false });
-  const { scanResult, files } = await scan(root, config);
+  const { scanResult, ledgerContext } = await scan(root, config);
+  if (!ledgerContext) {
+    throw new Error("Orchestrator scan missing ledger context");
+  }
+  const ledgers = buildOrchestratorEvalLedgers(ledgerContext);
+  const layerLedger = layerLedgerFromOutcomes("components", ledgers.components ?? []);
 
   return {
     fixture,
     findings: scanResult.components.map((component) => adaptDetectedComponent(component)),
-    scannedFiles: files.map((file) => file.path),
+    scannedFiles: layerLedger.outcomes
+      .filter((outcome) => outcome.reason === "successfully_processed")
+      .map((outcome) => outcome.path),
+    eligibilityLedgers: { components: layerLedger },
   };
 }
