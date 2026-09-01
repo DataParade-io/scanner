@@ -22,6 +22,8 @@ function findingCouldMatchExpectation(
 
 /**
  * One-to-one assignment without guessing between indistinguishable candidates.
+ * Colliding findings or expectations are excluded from pairing; other identities
+ * in the same bucket may still match.
  */
 export function assignOneToOne(
   expectations: Array<CanonicalGoldExpectation & { id: string }>,
@@ -53,49 +55,28 @@ export function assignOneToOne(
     findingsPerExpectation.set(pair.expectationId, byExpectation);
   }
 
-  const expectationById = new Map(
-    expectations.map((expectation) => [expectation.id, expectation]),
+  const blockedFindingIds = new Set<string>();
+  for (const [findingId, expectationIds] of expectationsPerFinding) {
+    if (expectationIds.length > 1) {
+      blockedFindingIds.add(findingId);
+    }
+  }
+
+  const blockedExpectationIds = new Set<string>();
+  for (const [expectationId, findingIds] of findingsPerExpectation) {
+    if (findingIds.length > 1) {
+      blockedExpectationIds.add(expectationId);
+    }
+  }
+
+  const ambiguous = blockedFindingIds.size > 0 || blockedExpectationIds.size > 0;
+
+  const pairs = candidatePairs.filter(
+    (pair) =>
+      !blockedFindingIds.has(pair.findingId) &&
+      !blockedExpectationIds.has(pair.expectationId),
   );
 
-  function rolledUpDataItemExpectations(expectationIds: string[]): boolean {
-    if (expectationIds.length <= 1) {
-      return true;
-    }
-    const grouped = expectationIds.map((id) => expectationById.get(id)!);
-    const layer = grouped[0]?.identity.layer;
-    if (layer !== "data-items") {
-      return false;
-    }
-    const identityKey = grouped[0]?.identity.identityKey;
-    return grouped.every((expectation) => expectation.identity.identityKey === identityKey);
-  }
-
-  let ambiguous = false;
-  for (const findingIds of findingsPerExpectation.values()) {
-    if (findingIds.length > 1) {
-      ambiguous = true;
-      break;
-    }
-  }
-  if (!ambiguous) {
-    for (const expectationIds of expectationsPerFinding.values()) {
-      if (expectationIds.length > 1 && !rolledUpDataItemExpectations(expectationIds)) {
-        ambiguous = true;
-        break;
-      }
-    }
-  }
-
-  if (ambiguous) {
-    return {
-      pairs: [],
-      unmatchedExpectationIds: expectations.map((expectation) => expectation.id),
-      unmatchedFindingIds: findings.map((finding) => finding.id),
-      ambiguous: true,
-    };
-  }
-
-  const pairs = candidatePairs;
   const matchedExpectationIds = new Set(pairs.map((pair) => pair.expectationId));
   const matchedFindingIds = new Set(pairs.map((pair) => pair.findingId));
 
@@ -107,7 +88,7 @@ export function assignOneToOne(
     unmatchedFindingIds: findings
       .filter((finding) => !matchedFindingIds.has(finding.id))
       .map((finding) => finding.id),
-    ambiguous: false,
+    ambiguous,
   };
 }
 

@@ -17,8 +17,8 @@ describe("eval/layers/data-items", () => {
 
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.negativeCasePassRate).toBe(1);
-    expect(report.scores.recall).toBeCloseTo(5 / 6, 5);
-    expect(report.scores.precision).toBe(1);
+    expect(report.scores.recall).toBeCloseTo(3 / 6, 5);
+    expect(report.scores.precision).toBeCloseTo(3 / 4, 5);
     expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
 
     const identityOnly = report.caseResults.find(
@@ -29,7 +29,7 @@ describe("eval/layers/data-items", () => {
     const multiFile = report.caseResults.find(
       (result) => result.caseId === "data-item-jvm-username-multi-file",
     );
-    expect(multiFile?.matched).toBe(true);
+    expect(multiFile?.matched).toBe(false);
 
     const jvmScan = scanResults.find((result) => result.fixture === "jvm-manifests-basic");
     expect(jvmScan).toBeDefined();
