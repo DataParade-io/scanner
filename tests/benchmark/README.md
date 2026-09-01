@@ -107,9 +107,42 @@ pnpm run benchmark:run
 pnpm run benchmark:run --include-proposed vgs-django
 ```
 
-`benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints overall denominators plus per-layer recall, label accuracy, precision, and unread counts.
+`benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints per-layer recall, label accuracy, precision, and unread counts. Raw hits are labeled diagnostic. There is no cross-layer overall score.
 
 The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
+
+## Four-layer scorecard vector (opt-in)
+
+`benchmark:scorecard` emits the headline evaluation vector: `mentions`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates.
+
+```bash
+pnpm run benchmark:materialize vgs-django
+pnpm run benchmark:scorecard vgs-django
+
+# write JSON + Markdown under tests/benchmark/reports/
+pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard-vector.json
+```
+
+### Contract (`scorecard-vector/1`)
+
+| Field | Meaning |
+| --- | --- |
+| `layers` | One entry per headline layer with per-layer `scores`, `computability`, and `gate` |
+| `diagnostic.raw-hits` | Diagnostic-only raw pattern-hit metrics |
+| `packets` | Per-repository rows used to build corpus totals |
+
+**Aggregation:** corpus metrics within each layer sum denominators across packets and recompute rates (pooled counts). The vector never publishes a cross-layer scalar, overall score, or blended average.
+
+**Gates (this slice):** per-layer computability gates only — `scorable`, `pending`, `skip`, or `provisional`. Numeric recall/precision floors belong to the baseline-readiness epic.
+
+| Layer | Typical gate |
+| --- | --- |
+| `mentions`, `data-items`, `components` | `scorable` when eval cases exist and the run is accepted-only |
+| `data-flows` | `pending` — canonical compat marks legacy flow gold `needs_adjudication`, so recall is honestly `null` until adjudication lands |
+| any layer, provisional run | `provisional` |
+| layer with no eval cases | `skip` |
+
+`pnpm run benchmark:scorecard` compiles with `tsc` then executes `dist/tests/benchmark/run-four-layer-scorecard.js`.
 
 **This script is not part of `pnpm test`.** Unit tests mock scans and use temporary fixtures — no network or git clones in CI.
 
