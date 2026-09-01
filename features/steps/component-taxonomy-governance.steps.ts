@@ -171,13 +171,6 @@ Then(
   "a component with no subtype is reported as a taxonomy gap rather than a match",
   function () {
     const w = world(this);
-    const gapFindings = w.canonicalFindings!.filter(
-      (finding) =>
-        finding.declaredCapabilitySupported?.supported === false &&
-        finding.declaredCapabilitySupported?.reason === "missing_component_subtype",
-    );
-    // typescript-basic should have valid subtypes after enforcement; verify the contract
-    // by adapting a synthetic component with no subtype.
     const synthetic = adaptDetectedComponent({
       id: "gap-test",
       name: "Unknown Vendor",
@@ -193,11 +186,15 @@ Then(
       "missing_component_subtype",
     );
     assert.strictEqual(synthetic.classification.conceptLeaf, "");
-    // After enforcement, scanned components should not carry undeclared subtypes.
+
     for (const finding of w.canonicalFindings!) {
       if (!finding.classification.componentSubtype) {
-        assert.ok(gapFindings.length >= 0 || finding === synthetic);
         assert.strictEqual(finding.declaredCapabilitySupported?.supported, false);
+        assert.strictEqual(
+          finding.declaredCapabilitySupported?.reason,
+          "missing_component_subtype",
+        );
+        assert.strictEqual(finding.classification.conceptLeaf, "");
       }
     }
   },
