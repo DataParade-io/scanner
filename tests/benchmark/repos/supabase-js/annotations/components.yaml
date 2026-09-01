@@ -12,13 +12,20 @@ annotations:
       status: positive
       labels:
         - saas_service
-    rationale: SupabaseClient wires auth, rest, storage, and realtime URLs against the hosted Supabase project API.
+    rationale: SupabaseClient wires auth, rest, storage, and realtime URLs against
+      the hosted Supabase project API.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: supabase-js::supabase-js-saas-service
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: supabase
   - id: supabase-js-auth-service
     layer: components
     subject:
@@ -32,13 +39,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: GoTrueClient is the in-SDK authentication client that manages sessions, tokens, and user state locally.
+    rationale: GoTrueClient is the in-SDK authentication client that manages
+      sessions, tokens, and user state locally.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: supabase-js::supabase-js-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: supabase-js-customer-actor
     layer: components
     subject:
@@ -59,6 +72,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: supabase-js::supabase-js-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: supabase-js-not-auth0
     layer: components
     subject:
@@ -71,10 +89,17 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: signInWithPassword posts credentials to the Supabase GoTrue /token endpoint. There is no Auth0 SDK integration in the auth client scope.
+    rationale: signInWithPassword posts credentials to the Supabase GoTrue /token
+      endpoint. There is no Auth0 SDK integration in the auth client scope.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: supabase-js::supabase-js-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0

@@ -73,6 +73,15 @@ export interface AnnotationProvenance {
   review_state: ReviewState;
 }
 
+/** Structured component identity written by KDATAP-8aed54 migration. */
+export interface AnnotationCanonical {
+  entity_id: string;
+  identity_key: string;
+  component_type: string;
+  component_subtype: string;
+  vendor?: string;
+}
+
 export interface AnnotationRecord {
   id: string;
   layer: BenchmarkLayer;
@@ -81,6 +90,7 @@ export interface AnnotationRecord {
   rationale: string;
   expected: AnnotationExpected;
   provenance: AnnotationProvenance;
+  canonical?: AnnotationCanonical;
 }
 
 export interface AnnotationFile {

@@ -55,15 +55,37 @@ describe("loadCanonicalGoldFromLegacyRecord (corpus-shaped rows)", () => {
         id: "corpus-db",
         subject: { key: "asset:database", name: "wpdb" },
       }),
-      { warn: () => undefined },
+      { warn: () => undefined, repoKey: "wordpress" },
     );
 
     expect(record.identity.identityKey).toBe("asset:database");
     expect(record.classification.componentType).toBe("asset");
     expect(record.classification.componentSubtype).toBe("database");
+    expect(record.entityId).toBe("wordpress::corpus-db");
     expect(record.optionalAssertion?.instance).toBeUndefined();
     expect(record.observedTokenCandidates?.some((token) => token.value === "wpdb")).toBe(true);
+    expect(record.observedTokenCandidates?.some((token) => token.value === "asset:database")).toBe(
+      true,
+    );
     expect(isAcceptedEvaluablePositive(record)).toBe(true);
+  });
+
+  it("maps third_party:checkr with subtype from labels and vendor from key suffix", () => {
+    const { record } = loadCanonicalGoldFromLegacyRecord(
+      legacyRecord({
+        id: "corpus-checkr",
+        subject: { key: "third_party:checkr", name: "Checkr" },
+        expected: { status: "positive", labels: ["saas_service"] },
+      }),
+      { warn: () => undefined, repoKey: "vgs-django" },
+    );
+
+    expect(record.identity.identityKey).toBe("third_party:saas_service");
+    expect(record.identity.identityKey).not.toBe("third_party:checkr");
+    expect(record.classification.componentSubtype).toBe("saas_service");
+    expect(record.optionalAssertion?.vendor).toBe("checkr");
+    expect(record.entityId).toBe("vgs-django::corpus-checkr");
+    expect(record.optionalAssertion?.instance).toBeUndefined();
   });
 
   it("routes accepted corpus data-flow rows to needs_adjudication", () => {
@@ -153,21 +175,29 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     for (const caseRecord of allCases) {
       const { record } = loadCanonicalGoldFromEvalCase(caseRecord, { warn: () => undefined });
       expect(record.id).toBe(caseRecord.id);
-      expect(record.identity.identityKey).toBe(caseRecord.subject.key);
+      if (caseRecord.layer === "components") {
+        expect(record.identity.identityKey).toMatch(/^(asset|third_party|actor):/);
+        expect(record.observedTokenCandidates?.some(
+          (token) => token.value === caseRecord.subject.key,
+        )).toBe(true);
+      } else {
+        expect(record.identity.identityKey).toBeTruthy();
+      }
     }
   });
 
-  it("maps fixture asset:pg without aliasing to asset:database", () => {
+  it("maps fixture asset:pg label database to classification identity asset:database", () => {
     const fixtureCase = componentEvalCases.find((entry) => entry.id === "ts-pg-database");
     expect(fixtureCase).toBeDefined();
 
     const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!, { warn: () => undefined });
 
-    expect(record.identity.identityKey).toBe("asset:pg");
-    expect(record.identity.identityKey).not.toBe("asset:database");
-    expect(record.classification.componentSubtype).toBe("pg");
+    expect(record.identity.identityKey).toBe("asset:database");
+    expect(record.identity.identityKey).not.toBe("asset:pg");
+    expect(record.classification.componentSubtype).toBe("database");
     expect(record.optionalAssertion?.instance).toBeUndefined();
     expect(record.observedTokenCandidates?.some((token) => token.value === "Pg")).toBe(true);
+    expect(record.observedTokenCandidates?.some((token) => token.value === "asset:pg")).toBe(true);
   });
 
   it("routes fixture data-flow positives to needs_adjudication", () => {

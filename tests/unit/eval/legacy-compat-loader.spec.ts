@@ -334,11 +334,17 @@ describe("legacy compat loader invariants", () => {
     }),
   ];
 
-  it("never writes pii: or pii_signal: into identity.identityKey", () => {
+  it("maps legacy asset key suffix through taxonomy labels to classification identity", () => {
     for (const input of legacyInputs) {
-      const { record } = loadLegacyGoldRecord(input, { warn: () => undefined });
+      const { record } = loadLegacyGoldRecord(input, { warn: () => undefined, repoKey: "test-repo" });
       expect(record.identity.identityKey).not.toMatch(/^pii:/);
       expect(record.identity.identityKey).not.toMatch(/^pii_signal:/);
+      if (input.id === "inv-4") {
+        expect(record.identity.identityKey).toBe("asset:database");
+        expect(record.observedTokenCandidates?.some((token) => token.value === "asset:main_db")).toBe(
+          true,
+        );
+      }
     }
   });
 

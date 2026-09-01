@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: connection.js instantiates knex from configured database settings used to persist members and users.
+    rationale: connection.js instantiates knex from configured database settings
+      used to persist members and users.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-members-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: ghost-members-auth-service
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: authenticateMembersToken verifies GhostMembers JWTs and attaches the member to the request.
+    rationale: authenticateMembersToken verifies GhostMembers JWTs and attaches the
+      member to the request.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-members-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: ghost-members-api
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: MembersAPI exposes HTTP routes such as sendMagicLink for member sign-in and signup flows.
+    rationale: MembersAPI exposes HTTP routes such as sendMagicLink for member
+      sign-in and signup flows.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-members-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: ghost-stripe-integration
     layer: components
     subject:
@@ -72,13 +90,20 @@ annotations:
       status: positive
       labels:
         - payment_processor
-    rationale: stripe-api.js requires the Stripe SDK to process member subscriptions and payments.
+    rationale: stripe-api.js requires the Stripe SDK to process member subscriptions
+      and payments.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-stripe-integration
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: ghost-member-customer-actor
     layer: components
     subject:
@@ -92,13 +117,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: The Member model maps to the members table and represents paying and free site subscribers.
+    rationale: The Member model maps to the members table and represents paying and
+      free site subscribers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-member-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: ghost-staff-admin-actor
     layer: components
     subject:
@@ -112,13 +143,19 @@ annotations:
       status: positive
       labels:
         - admin
-    rationale: The User model maps to the staff users table for Ghost administrators and editors.
+    rationale: The User model maps to the staff users table for Ghost administrators
+      and editors.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-staff-admin-actor
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin
   - id: ghost-not-auth0
     layer: components
     subject:
@@ -131,13 +168,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Member authentication uses locally issued GhostMembers JWTs, not an external Auth0 integration.
+    rationale: Member authentication uses locally issued GhostMembers JWTs, not an
+      external Auth0 integration.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: ghost-token-service
     layer: components
     subject:
@@ -158,6 +202,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-token-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: ghost-staff-auth-api
     layer: components
     subject:
@@ -171,13 +220,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: authentication.js exposes staff setup and login API endpoints for Ghost administrators.
+    rationale: authentication.js exposes staff setup and login API endpoints for
+      Ghost administrators.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-staff-auth-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: ghost-payments-service
     layer: components
     subject:
@@ -191,13 +246,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: PaymentsService orchestrates member checkout sessions through the Stripe API.
+    rationale: PaymentsService orchestrates member checkout sessions through the
+      Stripe API.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-payments-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: ghost-users-database
     layer: components
     subject:
@@ -218,6 +279,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-users-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: ghost-member-repository-service
     layer: components
     subject:
@@ -238,6 +304,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-member-repository-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: ghost-router-controller-api
     layer: components
     subject:
@@ -251,13 +322,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: RouterController handles member signup and signin HTTP routes including magic-link delivery.
+    rationale: RouterController handles member signup and signin HTTP routes
+      including magic-link delivery.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-router-controller-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: ghost-express-jwt-middleware
     layer: components
     subject:
@@ -271,13 +348,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: authenticateMembersToken uses express-jwt to validate GhostMembers bearer tokens on requests.
+    rationale: authenticateMembersToken uses express-jwt to validate GhostMembers
+      bearer tokens on requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-express-jwt-middleware
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: ghost-stripe-checkout-api
     layer: components
     subject:
@@ -291,13 +374,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: StripeAPI wraps Stripe SDK calls such as createCheckoutSession for member subscriptions.
+    rationale: StripeAPI wraps Stripe SDK calls such as createCheckoutSession for
+      member subscriptions.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-stripe-checkout-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: ghost-member-controller-api
     layer: components
     subject:
@@ -311,13 +400,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: MemberController exposes authenticated member profile routes including email updates.
+    rationale: MemberController exposes authenticated member profile routes
+      including email updates.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-member-controller-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: ghost-members-schema-database
     layer: components
     subject:
@@ -331,10 +426,16 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: schema.js defines the members table columns including email and transient_id used by member auth.
+    rationale: schema.js defines the members table columns including email and
+      transient_id used by member auth.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ghost::ghost-members-schema-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database

@@ -1,4 +1,5 @@
 import type {
+  AnnotationCanonical,
   AnnotationStatus,
   BenchmarkLayer,
   ReviewState,
@@ -12,6 +13,8 @@ export type ConversionKind =
   | "pii_signal_prefix_rewrite"
   | "pii_mention_key_exemption"
   | "canonical_subject_key"
+  | "component_structured_identity"
+  | "component_canonical_block"
   | "rule_id_to_concept_leaf"
   | "legacy_subject_name"
   | "expected_labels_provenance"
@@ -33,6 +36,7 @@ export interface LegacyGoldRecord {
   evidence: EvidenceLocation;
   expected: { status: AnnotationStatus; labels: string[] };
   provenance: LegacyGoldProvenance;
+  canonical?: AnnotationCanonical;
 }
 
 export interface MigrationDiagnostic {
@@ -51,4 +55,6 @@ export interface CompatLoadResult {
 export interface LoadLegacyGoldOptions {
   warn?: (message: string) => void;
   adapterMapVersion?: string;
+  /** Corpus packet key — required for component entityId assignment. */
+  repoKey?: string;
 }
