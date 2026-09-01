@@ -3,7 +3,7 @@
   "title": "Resolve the actor:user gap",
   "description": "Add `user` to `patterns/component-taxonomy.yaml` and reconcile it with the injected user actor.\n\n30 component annotations use `actor:user` while `user` is not a declared subtype — `customer` and `admin` are. Under \"the taxonomy is authoritative for type and subtype\", those 30 cannot be migrated until the taxonomy declares it.\n\n`src/classifier/application-injection.ts` already injects a user actor via `getInjectedUserActorSubtype`, so the engine holds an opinion the taxonomy does not record. Reconcile both in one pass.\n\nStartable now — independent of the gate rulings.",
   "type": "chore",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 1,
   "assignee": "rap@endymion.com",
   "creator": null,
@@ -28,10 +28,16 @@
       "author": "rap@endymion.com",
       "text": "Composer 2.5 planning: mechanical gold retarget of 30 actor:user keys to the subtype already on each label (customer/admin/employee). Do not add a user subtype. PR #10 taxonomy addition is rejected per the label census on this issue.",
       "created_at": "2026-08-31T20:24:37.987811Z"
+    },
+    {
+      "id": "6aaff4cc-f4b0-40b5-93e4-5d386b0be4ac",
+      "author": "home",
+      "text": "Landed on develop via PR #17 (retarget actor:user gold to declared actor subtypes).",
+      "created_at": "2026-09-01T17:40:05.602003Z"
     }
   ],
   "created_at": "2026-08-31T14:15:44.695729Z",
-  "updated_at": "2026-08-31T20:24:37.987811Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:05.617034Z",
+  "closed_at": "2026-09-01T17:40:05.617034Z",
   "custom": {}
 }
