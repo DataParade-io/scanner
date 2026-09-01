@@ -216,6 +216,12 @@
               "numerator": 1,
               "denominator": 2
             },
+            "ancestorCategoryRecall": {
+              "state": "computable",
+              "value": 0,
+              "numerator": 0,
+              "denominator": 2
+            },
             "precision": {
               "state": "computable",
               "value": 1,
@@ -237,6 +243,7 @@
         },
         "scores": {
           "recall": 0.5,
+          "ancestorCategoryRecall": 0,
           "labelAccuracy": 1,
           "correctLabelRecall": 0.5,
           "precision": 1,
@@ -246,6 +253,7 @@
             "evaluablePositives": 2,
             "matchedPositives": 1,
             "matchedWithCorrectLabels": 1,
+            "matchedAncestorCategory": 0,
             "negativeCases": 0,
             "negativeCasesPassed": 0,
             "exhaustiveScopedFindings": 1,
@@ -262,6 +270,12 @@
                 "state": "computable",
                 "value": 0.5,
                 "numerator": 1,
+                "denominator": 2
+              },
+              "ancestorCategoryRecall": {
+                "state": "computable",
+                "value": 0,
+                "numerator": 0,
                 "denominator": 2
               },
               "precision": {
@@ -282,6 +296,73 @@
         "gate": {
           "status": "skip",
           "reason": "no_eval_cases"
+        },
+        "accounting": {
+          "population": {
+            "acceptedCanonicalPositives": 0,
+            "evaluablePositives": 2,
+            "matchedPositives": 1,
+            "negativeCases": 0,
+            "unreadCount": 0,
+            "unreadRate": null
+          },
+          "coverage": {
+            "entityWeighted": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "distinctEvidenceFiles": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "entityPartialCoverage": {
+              "full": 0,
+              "partial": 0,
+              "none": 0
+            }
+          },
+          "eligibility": {
+            "ineligibleByReason": {
+              "successfully_processed": 0,
+              "unsupported_file_type_or_language": 0,
+              "excluded_by_configured_policy": 0,
+              "ignored_by_repository_default_policy": 0,
+              "sensitive_path_exclusion": 0,
+              "file_too_large": 0,
+              "file_count_cap_reached": 0,
+              "total_byte_cap_reached": 0,
+              "missing_or_path_contract_mismatch": 0,
+              "read_decode_error": 0,
+              "parse_or_layer_processing_error": 0
+            },
+            "unscorableFindings": {
+              "locationless": 0,
+              "total": 0
+            }
+          },
+          "migrationIncomplete": {
+            "total": 0,
+            "byReason": {},
+            "blockers": []
+          },
+          "gateExceptions": [
+            {
+              "code": "computable_metrics_with_skip_gate",
+              "reason": "metrics computable despite skip gate (no eval cases in filter)"
+            }
+          ],
+          "slices": {
+            "capability": {
+              "disclaimer": "diagnostic_only_not_recall_denominator",
+              "supportedCount": 0,
+              "totalAcceptedPositives": 0,
+              "caseWeighted": 0,
+              "distinctLeaf": 0
+            },
+            "byLanguage": []
+          }
         }
       },
       "data-items": {
@@ -295,6 +376,12 @@
               "numerator": 0,
               "denominator": 0
             },
+            "ancestorCategoryRecall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
             "precision": {
               "state": "no_reviewed_scope",
               "value": null,
@@ -316,6 +403,7 @@
         },
         "scores": {
           "recall": null,
+          "ancestorCategoryRecall": null,
           "labelAccuracy": null,
           "correctLabelRecall": null,
           "precision": null,
@@ -325,6 +413,7 @@
             "evaluablePositives": 0,
             "matchedPositives": 0,
             "matchedWithCorrectLabels": 0,
+            "matchedAncestorCategory": 0,
             "negativeCases": 0,
             "negativeCasesPassed": 0,
             "exhaustiveScopedFindings": 0,
@@ -338,6 +427,12 @@
             "locationlessFindingCount": 0,
             "metrics": {
               "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "ancestorCategoryRecall": {
                 "state": "migration_incomplete_or_not_ready",
                 "value": null,
                 "numerator": 0,
@@ -361,6 +456,68 @@
         "gate": {
           "status": "skip",
           "reason": "no_eval_cases"
+        },
+        "accounting": {
+          "population": {
+            "acceptedCanonicalPositives": 0,
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "negativeCases": 0,
+            "unreadCount": 0,
+            "unreadRate": null
+          },
+          "coverage": {
+            "entityWeighted": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "distinctEvidenceFiles": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "entityPartialCoverage": {
+              "full": 0,
+              "partial": 0,
+              "none": 0
+            }
+          },
+          "eligibility": {
+            "ineligibleByReason": {
+              "successfully_processed": 0,
+              "unsupported_file_type_or_language": 0,
+              "excluded_by_configured_policy": 0,
+              "ignored_by_repository_default_policy": 0,
+              "sensitive_path_exclusion": 0,
+              "file_too_large": 0,
+              "file_count_cap_reached": 0,
+              "total_byte_cap_reached": 0,
+              "missing_or_path_contract_mismatch": 0,
+              "read_decode_error": 0,
+              "parse_or_layer_processing_error": 0
+            },
+            "unscorableFindings": {
+              "locationless": 0,
+              "total": 0
+            }
+          },
+          "migrationIncomplete": {
+            "total": 0,
+            "byReason": {},
+            "blockers": []
+          },
+          "gateExceptions": [],
+          "slices": {
+            "capability": {
+              "disclaimer": "diagnostic_only_not_recall_denominator",
+              "supportedCount": 0,
+              "totalAcceptedPositives": 0,
+              "caseWeighted": 0,
+              "distinctLeaf": 0
+            },
+            "byLanguage": []
+          }
         }
       },
       "components": {
@@ -374,6 +531,12 @@
               "numerator": 0,
               "denominator": 0
             },
+            "ancestorCategoryRecall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
             "precision": {
               "state": "no_reviewed_scope",
               "value": null,
@@ -395,6 +558,7 @@
         },
         "scores": {
           "recall": null,
+          "ancestorCategoryRecall": null,
           "labelAccuracy": null,
           "correctLabelRecall": null,
           "precision": null,
@@ -404,6 +568,7 @@
             "evaluablePositives": 0,
             "matchedPositives": 0,
             "matchedWithCorrectLabels": 0,
+            "matchedAncestorCategory": 0,
             "negativeCases": 0,
             "negativeCasesPassed": 0,
             "exhaustiveScopedFindings": 0,
@@ -417,6 +582,12 @@
             "locationlessFindingCount": 0,
             "metrics": {
               "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "ancestorCategoryRecall": {
                 "state": "migration_incomplete_or_not_ready",
                 "value": null,
                 "numerator": 0,
@@ -440,6 +611,68 @@
         "gate": {
           "status": "skip",
           "reason": "no_eval_cases"
+        },
+        "accounting": {
+          "population": {
+            "acceptedCanonicalPositives": 0,
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "negativeCases": 0,
+            "unreadCount": 0,
+            "unreadRate": null
+          },
+          "coverage": {
+            "entityWeighted": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "distinctEvidenceFiles": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "entityPartialCoverage": {
+              "full": 0,
+              "partial": 0,
+              "none": 0
+            }
+          },
+          "eligibility": {
+            "ineligibleByReason": {
+              "successfully_processed": 0,
+              "unsupported_file_type_or_language": 0,
+              "excluded_by_configured_policy": 0,
+              "ignored_by_repository_default_policy": 0,
+              "sensitive_path_exclusion": 0,
+              "file_too_large": 0,
+              "file_count_cap_reached": 0,
+              "total_byte_cap_reached": 0,
+              "missing_or_path_contract_mismatch": 0,
+              "read_decode_error": 0,
+              "parse_or_layer_processing_error": 0
+            },
+            "unscorableFindings": {
+              "locationless": 0,
+              "total": 0
+            }
+          },
+          "migrationIncomplete": {
+            "total": 0,
+            "byReason": {},
+            "blockers": []
+          },
+          "gateExceptions": [],
+          "slices": {
+            "capability": {
+              "disclaimer": "diagnostic_only_not_recall_denominator",
+              "supportedCount": 0,
+              "totalAcceptedPositives": 0,
+              "caseWeighted": 0,
+              "distinctLeaf": 0
+            },
+            "byLanguage": []
+          }
         }
       },
       "data-flows": {
@@ -453,6 +686,12 @@
               "numerator": 0,
               "denominator": 0
             },
+            "ancestorCategoryRecall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
             "precision": {
               "state": "no_reviewed_scope",
               "value": null,
@@ -474,6 +713,7 @@
         },
         "scores": {
           "recall": null,
+          "ancestorCategoryRecall": null,
           "labelAccuracy": null,
           "correctLabelRecall": null,
           "precision": null,
@@ -483,6 +723,7 @@
             "evaluablePositives": 0,
             "matchedPositives": 0,
             "matchedWithCorrectLabels": 0,
+            "matchedAncestorCategory": 0,
             "negativeCases": 0,
             "negativeCasesPassed": 0,
             "exhaustiveScopedFindings": 0,
@@ -496,6 +737,12 @@
             "locationlessFindingCount": 0,
             "metrics": {
               "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "ancestorCategoryRecall": {
                 "state": "migration_incomplete_or_not_ready",
                 "value": null,
                 "numerator": 0,
@@ -519,6 +766,68 @@
         "gate": {
           "status": "skip",
           "reason": "no_eval_cases"
+        },
+        "accounting": {
+          "population": {
+            "acceptedCanonicalPositives": 0,
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "negativeCases": 0,
+            "unreadCount": 0,
+            "unreadRate": null
+          },
+          "coverage": {
+            "entityWeighted": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "distinctEvidenceFiles": {
+              "numerator": 0,
+              "denominator": 0,
+              "rate": null
+            },
+            "entityPartialCoverage": {
+              "full": 0,
+              "partial": 0,
+              "none": 0
+            }
+          },
+          "eligibility": {
+            "ineligibleByReason": {
+              "successfully_processed": 0,
+              "unsupported_file_type_or_language": 0,
+              "excluded_by_configured_policy": 0,
+              "ignored_by_repository_default_policy": 0,
+              "sensitive_path_exclusion": 0,
+              "file_too_large": 0,
+              "file_count_cap_reached": 0,
+              "total_byte_cap_reached": 0,
+              "missing_or_path_contract_mismatch": 0,
+              "read_decode_error": 0,
+              "parse_or_layer_processing_error": 0
+            },
+            "unscorableFindings": {
+              "locationless": 0,
+              "total": 0
+            }
+          },
+          "migrationIncomplete": {
+            "total": 0,
+            "byReason": {},
+            "blockers": []
+          },
+          "gateExceptions": [],
+          "slices": {
+            "capability": {
+              "disclaimer": "diagnostic_only_not_recall_denominator",
+              "supportedCount": 0,
+              "totalAcceptedPositives": 0,
+              "caseWeighted": 0,
+              "distinctLeaf": 0
+            },
+            "byLanguage": []
+          }
         }
       }
     },
@@ -526,6 +835,7 @@
       "raw-hits": {
         "scores": {
           "recall": null,
+          "ancestorCategoryRecall": null,
           "labelAccuracy": null,
           "correctLabelRecall": null,
           "precision": null,
@@ -535,6 +845,7 @@
             "evaluablePositives": 0,
             "matchedPositives": 0,
             "matchedWithCorrectLabels": 0,
+            "matchedAncestorCategory": 0,
             "negativeCases": 0,
             "negativeCasesPassed": 0,
             "exhaustiveScopedFindings": 0,
@@ -548,6 +859,12 @@
             "locationlessFindingCount": 0,
             "metrics": {
               "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "ancestorCategoryRecall": {
                 "state": "migration_incomplete_or_not_ready",
                 "value": null,
                 "numerator": 0,
@@ -586,6 +903,12 @@
                   "numerator": 1,
                   "denominator": 2
                 },
+                "ancestorCategoryRecall": {
+                  "state": "computable",
+                  "value": 0,
+                  "numerator": 0,
+                  "denominator": 2
+                },
                 "precision": {
                   "state": "computable",
                   "value": 1,
@@ -607,6 +930,7 @@
             },
             "scores": {
               "recall": 0.5,
+              "ancestorCategoryRecall": 0,
               "labelAccuracy": 1,
               "correctLabelRecall": 0.5,
               "precision": 1,
@@ -616,6 +940,7 @@
                 "evaluablePositives": 2,
                 "matchedPositives": 1,
                 "matchedWithCorrectLabels": 1,
+                "matchedAncestorCategory": 0,
                 "negativeCases": 0,
                 "negativeCasesPassed": 0,
                 "exhaustiveScopedFindings": 1,
@@ -632,6 +957,12 @@
                     "state": "computable",
                     "value": 0.5,
                     "numerator": 1,
+                    "denominator": 2
+                  },
+                  "ancestorCategoryRecall": {
+                    "state": "computable",
+                    "value": 0,
+                    "numerator": 0,
                     "denominator": 2
                   },
                   "precision": {
@@ -652,6 +983,73 @@
             "gate": {
               "status": "skip",
               "reason": "no_eval_cases"
+            },
+            "accounting": {
+              "population": {
+                "acceptedCanonicalPositives": 0,
+                "evaluablePositives": 2,
+                "matchedPositives": 1,
+                "negativeCases": 0,
+                "unreadCount": 0,
+                "unreadRate": null
+              },
+              "coverage": {
+                "entityWeighted": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "distinctEvidenceFiles": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "entityPartialCoverage": {
+                  "full": 0,
+                  "partial": 0,
+                  "none": 0
+                }
+              },
+              "eligibility": {
+                "ineligibleByReason": {
+                  "successfully_processed": 0,
+                  "unsupported_file_type_or_language": 0,
+                  "excluded_by_configured_policy": 0,
+                  "ignored_by_repository_default_policy": 0,
+                  "sensitive_path_exclusion": 0,
+                  "file_too_large": 0,
+                  "file_count_cap_reached": 0,
+                  "total_byte_cap_reached": 0,
+                  "missing_or_path_contract_mismatch": 0,
+                  "read_decode_error": 0,
+                  "parse_or_layer_processing_error": 0
+                },
+                "unscorableFindings": {
+                  "locationless": 0,
+                  "total": 0
+                }
+              },
+              "migrationIncomplete": {
+                "total": 0,
+                "byReason": {},
+                "blockers": []
+              },
+              "gateExceptions": [
+                {
+                  "code": "computable_metrics_with_skip_gate",
+                  "reason": "metrics computable despite skip gate (no eval cases in filter)"
+                }
+              ],
+              "slices": {
+                "capability": {
+                  "disclaimer": "diagnostic_only_not_recall_denominator",
+                  "supportedCount": 0,
+                  "totalAcceptedPositives": 0,
+                  "caseWeighted": 0,
+                  "distinctLeaf": 0
+                },
+                "byLanguage": []
+              }
             }
           },
           "data-items": {
@@ -665,6 +1063,12 @@
                   "numerator": 0,
                   "denominator": 0
                 },
+                "ancestorCategoryRecall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
                 "precision": {
                   "state": "no_reviewed_scope",
                   "value": null,
@@ -686,6 +1090,7 @@
             },
             "scores": {
               "recall": null,
+              "ancestorCategoryRecall": null,
               "labelAccuracy": null,
               "correctLabelRecall": null,
               "precision": null,
@@ -695,6 +1100,7 @@
                 "evaluablePositives": 0,
                 "matchedPositives": 0,
                 "matchedWithCorrectLabels": 0,
+                "matchedAncestorCategory": 0,
                 "negativeCases": 0,
                 "negativeCasesPassed": 0,
                 "exhaustiveScopedFindings": 0,
@@ -708,6 +1114,12 @@
                 "locationlessFindingCount": 0,
                 "metrics": {
                   "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "ancestorCategoryRecall": {
                     "state": "migration_incomplete_or_not_ready",
                     "value": null,
                     "numerator": 0,
@@ -731,6 +1143,68 @@
             "gate": {
               "status": "skip",
               "reason": "no_eval_cases"
+            },
+            "accounting": {
+              "population": {
+                "acceptedCanonicalPositives": 0,
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "negativeCases": 0,
+                "unreadCount": 0,
+                "unreadRate": null
+              },
+              "coverage": {
+                "entityWeighted": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "distinctEvidenceFiles": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "entityPartialCoverage": {
+                  "full": 0,
+                  "partial": 0,
+                  "none": 0
+                }
+              },
+              "eligibility": {
+                "ineligibleByReason": {
+                  "successfully_processed": 0,
+                  "unsupported_file_type_or_language": 0,
+                  "excluded_by_configured_policy": 0,
+                  "ignored_by_repository_default_policy": 0,
+                  "sensitive_path_exclusion": 0,
+                  "file_too_large": 0,
+                  "file_count_cap_reached": 0,
+                  "total_byte_cap_reached": 0,
+                  "missing_or_path_contract_mismatch": 0,
+                  "read_decode_error": 0,
+                  "parse_or_layer_processing_error": 0
+                },
+                "unscorableFindings": {
+                  "locationless": 0,
+                  "total": 0
+                }
+              },
+              "migrationIncomplete": {
+                "total": 0,
+                "byReason": {},
+                "blockers": []
+              },
+              "gateExceptions": [],
+              "slices": {
+                "capability": {
+                  "disclaimer": "diagnostic_only_not_recall_denominator",
+                  "supportedCount": 0,
+                  "totalAcceptedPositives": 0,
+                  "caseWeighted": 0,
+                  "distinctLeaf": 0
+                },
+                "byLanguage": []
+              }
             }
           },
           "components": {
@@ -744,6 +1218,12 @@
                   "numerator": 0,
                   "denominator": 0
                 },
+                "ancestorCategoryRecall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
                 "precision": {
                   "state": "no_reviewed_scope",
                   "value": null,
@@ -765,6 +1245,7 @@
             },
             "scores": {
               "recall": null,
+              "ancestorCategoryRecall": null,
               "labelAccuracy": null,
               "correctLabelRecall": null,
               "precision": null,
@@ -774,6 +1255,7 @@
                 "evaluablePositives": 0,
                 "matchedPositives": 0,
                 "matchedWithCorrectLabels": 0,
+                "matchedAncestorCategory": 0,
                 "negativeCases": 0,
                 "negativeCasesPassed": 0,
                 "exhaustiveScopedFindings": 0,
@@ -787,6 +1269,12 @@
                 "locationlessFindingCount": 0,
                 "metrics": {
                   "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "ancestorCategoryRecall": {
                     "state": "migration_incomplete_or_not_ready",
                     "value": null,
                     "numerator": 0,
@@ -810,6 +1298,68 @@
             "gate": {
               "status": "skip",
               "reason": "no_eval_cases"
+            },
+            "accounting": {
+              "population": {
+                "acceptedCanonicalPositives": 0,
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "negativeCases": 0,
+                "unreadCount": 0,
+                "unreadRate": null
+              },
+              "coverage": {
+                "entityWeighted": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "distinctEvidenceFiles": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "entityPartialCoverage": {
+                  "full": 0,
+                  "partial": 0,
+                  "none": 0
+                }
+              },
+              "eligibility": {
+                "ineligibleByReason": {
+                  "successfully_processed": 0,
+                  "unsupported_file_type_or_language": 0,
+                  "excluded_by_configured_policy": 0,
+                  "ignored_by_repository_default_policy": 0,
+                  "sensitive_path_exclusion": 0,
+                  "file_too_large": 0,
+                  "file_count_cap_reached": 0,
+                  "total_byte_cap_reached": 0,
+                  "missing_or_path_contract_mismatch": 0,
+                  "read_decode_error": 0,
+                  "parse_or_layer_processing_error": 0
+                },
+                "unscorableFindings": {
+                  "locationless": 0,
+                  "total": 0
+                }
+              },
+              "migrationIncomplete": {
+                "total": 0,
+                "byReason": {},
+                "blockers": []
+              },
+              "gateExceptions": [],
+              "slices": {
+                "capability": {
+                  "disclaimer": "diagnostic_only_not_recall_denominator",
+                  "supportedCount": 0,
+                  "totalAcceptedPositives": 0,
+                  "caseWeighted": 0,
+                  "distinctLeaf": 0
+                },
+                "byLanguage": []
+              }
             }
           },
           "data-flows": {
@@ -823,6 +1373,12 @@
                   "numerator": 0,
                   "denominator": 0
                 },
+                "ancestorCategoryRecall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
                 "precision": {
                   "state": "no_reviewed_scope",
                   "value": null,
@@ -844,6 +1400,7 @@
             },
             "scores": {
               "recall": null,
+              "ancestorCategoryRecall": null,
               "labelAccuracy": null,
               "correctLabelRecall": null,
               "precision": null,
@@ -853,6 +1410,7 @@
                 "evaluablePositives": 0,
                 "matchedPositives": 0,
                 "matchedWithCorrectLabels": 0,
+                "matchedAncestorCategory": 0,
                 "negativeCases": 0,
                 "negativeCasesPassed": 0,
                 "exhaustiveScopedFindings": 0,
@@ -866,6 +1424,12 @@
                 "locationlessFindingCount": 0,
                 "metrics": {
                   "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "ancestorCategoryRecall": {
                     "state": "migration_incomplete_or_not_ready",
                     "value": null,
                     "numerator": 0,
@@ -889,6 +1453,68 @@
             "gate": {
               "status": "skip",
               "reason": "no_eval_cases"
+            },
+            "accounting": {
+              "population": {
+                "acceptedCanonicalPositives": 0,
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "negativeCases": 0,
+                "unreadCount": 0,
+                "unreadRate": null
+              },
+              "coverage": {
+                "entityWeighted": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "distinctEvidenceFiles": {
+                  "numerator": 0,
+                  "denominator": 0,
+                  "rate": null
+                },
+                "entityPartialCoverage": {
+                  "full": 0,
+                  "partial": 0,
+                  "none": 0
+                }
+              },
+              "eligibility": {
+                "ineligibleByReason": {
+                  "successfully_processed": 0,
+                  "unsupported_file_type_or_language": 0,
+                  "excluded_by_configured_policy": 0,
+                  "ignored_by_repository_default_policy": 0,
+                  "sensitive_path_exclusion": 0,
+                  "file_too_large": 0,
+                  "file_count_cap_reached": 0,
+                  "total_byte_cap_reached": 0,
+                  "missing_or_path_contract_mismatch": 0,
+                  "read_decode_error": 0,
+                  "parse_or_layer_processing_error": 0
+                },
+                "unscorableFindings": {
+                  "locationless": 0,
+                  "total": 0
+                }
+              },
+              "migrationIncomplete": {
+                "total": 0,
+                "byReason": {},
+                "blockers": []
+              },
+              "gateExceptions": [],
+              "slices": {
+                "capability": {
+                  "disclaimer": "diagnostic_only_not_recall_denominator",
+                  "supportedCount": 0,
+                  "totalAcceptedPositives": 0,
+                  "caseWeighted": 0,
+                  "distinctLeaf": 0
+                },
+                "byLanguage": []
+              }
             }
           }
         },
@@ -896,6 +1522,7 @@
           "raw-hits": {
             "scores": {
               "recall": null,
+              "ancestorCategoryRecall": null,
               "labelAccuracy": null,
               "correctLabelRecall": null,
               "precision": null,
@@ -905,6 +1532,7 @@
                 "evaluablePositives": 0,
                 "matchedPositives": 0,
                 "matchedWithCorrectLabels": 0,
+                "matchedAncestorCategory": 0,
                 "negativeCases": 0,
                 "negativeCasesPassed": 0,
                 "exhaustiveScopedFindings": 0,
@@ -918,6 +1546,12 @@
                 "locationlessFindingCount": 0,
                 "metrics": {
                   "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "ancestorCategoryRecall": {
                     "state": "migration_incomplete_or_not_ready",
                     "value": null,
                     "numerator": 0,

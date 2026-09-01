@@ -161,8 +161,11 @@ export function renderBaselineMarkdown(artifact: BaselineArtifact): string {
     lines.push(
       `- gate: ${entry.gate.status}${entry.gate.reason ? ` (${entry.gate.reason})` : ""}`,
     );
-    lines.push(`- recall: ${formatMetricScore(entry.computability.metrics.recall)}`);
-    lines.push(`- precision: ${formatMetricScore(entry.computability.metrics.precision)}`);
+    lines.push(`- Recall: ${formatMetricScore(entry.computability.metrics.recall)}`);
+    lines.push(
+      `- Ancestor recall: ${formatMetricScore(entry.computability.metrics.ancestorCategoryRecall)}`,
+    );
+    lines.push(`- Precision: ${formatMetricScore(entry.computability.metrics.precision)}`);
     lines.push(
       `- negative pass rate: ${formatMetricScore(entry.computability.metrics.negativeCasePassRate)}`,
     );
@@ -172,7 +175,34 @@ export function renderBaselineMarkdown(artifact: BaselineArtifact): string {
     lines.push(
       `- denominators: evaluablePositives=${entry.scores.denominators.evaluablePositives}, exhaustiveScopedFindings=${entry.scores.denominators.exhaustiveScopedFindings}`,
     );
+    lines.push(
+      `- population: acceptedCanonical=${entry.accounting.population.acceptedCanonicalPositives}, evaluable=${entry.accounting.population.evaluablePositives}, matched=${entry.accounting.population.matchedPositives}, unreadRate=${entry.accounting.population.unreadRate === null ? "n/a" : `${(entry.accounting.population.unreadRate * 100).toFixed(1)}%`}`,
+    );
+    lines.push(
+      `- coverage: entityWeighted=${entry.accounting.coverage.entityWeighted.numerator}/${entry.accounting.coverage.entityWeighted.denominator}, distinctFiles=${entry.accounting.coverage.distinctEvidenceFiles.numerator}/${entry.accounting.coverage.distinctEvidenceFiles.denominator}`,
+    );
+    if (entry.accounting.migrationIncomplete.total > 0) {
+      lines.push(`- migration incomplete: ${entry.accounting.migrationIncomplete.total}`);
+    }
     lines.push("");
+  }
+
+  for (const packet of artifact.scorecard.packets) {
+    lines.push(`## Packet: ${packet.repoKey}`, "");
+    for (const layer of HEADLINE_LAYERS) {
+      const entry = packet.layers[layer];
+      lines.push(`### ${layer}`);
+      lines.push(
+        `- acceptedCanonical=${entry.accounting.population.acceptedCanonicalPositives}, evaluable=${entry.accounting.population.evaluablePositives}, matched=${entry.accounting.population.matchedPositives}`,
+      );
+      lines.push(
+        `- unread: ${entry.accounting.population.unreadCount} (${entry.accounting.population.unreadRate === null ? "n/a" : `${(entry.accounting.population.unreadRate * 100).toFixed(1)}%`})`,
+      );
+      lines.push(
+        `- capability (diagnostic): ${(entry.accounting.slices.capability.caseWeighted * 100).toFixed(1)}% case-weighted`,
+      );
+      lines.push("");
+    }
   }
 
   const rawHits = artifact.scorecard.diagnostic["raw-hits"].scores;

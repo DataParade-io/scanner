@@ -90,38 +90,72 @@
 ### mentions
 - summary: empty
 - gate: skip (no_eval_cases)
-- recall: 50.0% [computable; 1/2]
-- precision: 100.0% [computable; 1/1]
+- Recall: 50.0% [computable; 1/2]
+- Ancestor recall: 0.0% [computable; 0/2]
+- Precision: 100.0% [computable; 1/1]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=1, processedFiles=1, locationlessFindings=0
 - denominators: evaluablePositives=2, exhaustiveScopedFindings=1
+- population: acceptedCanonical=0, evaluable=2, matched=1, unreadRate=n/a
+- coverage: entityWeighted=0/0, distinctFiles=0/0
 
 ### data-items
 - summary: empty
 - gate: skip (no_eval_cases)
-- recall: n/a [migration_incomplete_or_not_ready; 0/0]
-- precision: n/a [no_reviewed_scope; 0/0]
+- Recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Ancestor recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Precision: n/a [no_reviewed_scope; 0/0]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=0, processedFiles=0, locationlessFindings=0
 - denominators: evaluablePositives=0, exhaustiveScopedFindings=0
+- population: acceptedCanonical=0, evaluable=0, matched=0, unreadRate=n/a
+- coverage: entityWeighted=0/0, distinctFiles=0/0
 
 ### components
 - summary: empty
 - gate: skip (no_eval_cases)
-- recall: n/a [migration_incomplete_or_not_ready; 0/0]
-- precision: n/a [no_reviewed_scope; 0/0]
+- Recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Ancestor recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Precision: n/a [no_reviewed_scope; 0/0]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=0, processedFiles=0, locationlessFindings=0
 - denominators: evaluablePositives=0, exhaustiveScopedFindings=0
+- population: acceptedCanonical=0, evaluable=0, matched=0, unreadRate=n/a
+- coverage: entityWeighted=0/0, distinctFiles=0/0
 
 ### data-flows
 - summary: empty
 - gate: skip (no_eval_cases)
-- recall: n/a [migration_incomplete_or_not_ready; 0/0]
-- precision: n/a [no_reviewed_scope; 0/0]
+- Recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Ancestor recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- Precision: n/a [no_reviewed_scope; 0/0]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=0, processedFiles=0, locationlessFindings=0
 - denominators: evaluablePositives=0, exhaustiveScopedFindings=0
+- population: acceptedCanonical=0, evaluable=0, matched=0, unreadRate=n/a
+- coverage: entityWeighted=0/0, distinctFiles=0/0
+
+## Packet: fixture-packet
+
+### mentions
+- acceptedCanonical=0, evaluable=2, matched=1
+- unread: 0 (n/a)
+- capability (diagnostic): 0.0% case-weighted
+
+### data-items
+- acceptedCanonical=0, evaluable=0, matched=0
+- unread: 0 (n/a)
+- capability (diagnostic): 0.0% case-weighted
+
+### components
+- acceptedCanonical=0, evaluable=0, matched=0
+- unread: 0 (n/a)
+- capability (diagnostic): 0.0% case-weighted
+
+### data-flows
+- acceptedCanonical=0, evaluable=0, matched=0
+- unread: 0 (n/a)
+- capability (diagnostic): 0.0% case-weighted
 
 ### Diagnostic: raw-hits
 - recall: n/a
