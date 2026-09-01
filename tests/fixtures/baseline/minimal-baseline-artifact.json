@@ -1,0 +1,958 @@
+{
+  "schemaVersion": "baseline-artifact/1",
+  "series": {
+    "evaluationContractVersion": "1.0.0",
+    "seriesLabel": "series-1"
+  },
+  "predecessor": null,
+  "generatedAt": "2026-08-31T12:00:00.000Z",
+  "fingerprint": {
+    "fingerprintDigest": "sha256:fixture-fingerprint-digest",
+    "scannerGitSha": "fixture-sha-001",
+    "corpusGoldDigest": "sha256:fixture-corpus-digest",
+    "evaluationContractVersion": "1.0.0",
+    "scorecardVectorContractVersion": "scorecard-vector/2",
+    "taxonomyDigest": "sha256:fixture-taxonomy",
+    "conceptMapDigest": "sha256:fixture-concept-map",
+    "adapterMapDigest": "sha256:fixture-adapter-map",
+    "dependencyLockDigest": "sha256:fixture-lock",
+    "materializedSources": [
+      {
+        "repoKey": "fixture-packet",
+        "manifestCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "validatedHeadSha": null,
+        "validationStatus": "missing",
+        "reason": "path does not exist"
+      }
+    ],
+    "reviewStateCounts": {
+      "provenance": "corpus-annotations",
+      "byLayer": {
+        "mentions": {
+          "accepted": 2,
+          "proposed": 0,
+          "rejected": 0,
+          "needs_adjudication": 0
+        }
+      },
+      "total": {
+        "accepted": 2,
+        "proposed": 0,
+        "rejected": 0,
+        "needs_adjudication": 0
+      }
+    },
+    "annotationStatusCounts": {
+      "provenance": "corpus-annotations",
+      "byLayer": {
+        "mentions": {
+          "positive": 2,
+          "negative": 0,
+          "ambiguous": 0
+        }
+      },
+      "total": {
+        "positive": 2,
+        "negative": 0,
+        "ambiguous": 0
+      }
+    },
+    "deterministicConfiguration": {
+      "enableAiInference": false,
+      "enableAPIDetection": true,
+      "enableDatabaseDetection": true,
+      "enableDataFlowDetection": true,
+      "minimumConfidence": 0.5,
+      "deepAnalysis": false,
+      "languages": null,
+      "excludePaths": [
+        "**/*.spec.ts"
+      ]
+    },
+    "deterministicConfigurationDigest": "sha256:fixture-config",
+    "eligibilityProfile": {
+      "fileLanguages": [
+        "go",
+        "typescript"
+      ],
+      "registeredAnalyzers": [
+        "go",
+        "typescript"
+      ],
+      "excludedDirectories": [
+        "node_modules"
+      ],
+      "excludedFileGlobs": [
+        "**/*.spec.ts"
+      ],
+      "ingestLimits": {
+        "maxFileSizeBytes": 2097152,
+        "maxFileCount": 20000,
+        "maxTotalBytes": 209715200
+      },
+      "perLayer": [
+        {
+          "layer": "mentions",
+          "orchestratorLanguages": [],
+          "personalDataLanguages": [
+            "typescript"
+          ],
+          "profileDigest": "sha256:fixture-layer-mentions"
+        },
+        {
+          "layer": "data-items",
+          "orchestratorLanguages": [],
+          "personalDataLanguages": [
+            "typescript"
+          ],
+          "profileDigest": "sha256:fixture-layer-data-items"
+        },
+        {
+          "layer": "components",
+          "orchestratorLanguages": [
+            "typescript"
+          ],
+          "personalDataLanguages": [],
+          "profileDigest": "sha256:fixture-layer-components"
+        },
+        {
+          "layer": "data-flows",
+          "orchestratorLanguages": [
+            "typescript"
+          ],
+          "personalDataLanguages": [],
+          "profileDigest": "sha256:fixture-layer-data-flows"
+        }
+      ],
+      "profileDigest": "sha256:fixture-eligibility-profile"
+    }
+  },
+  "invariants": {
+    "canonicalContractVersion": "1.0.0",
+    "scorecardVectorContractVersion": "scorecard-vector/2",
+    "baselineArtifactSchemaVersion": "baseline-artifact/1",
+    "eligibilityReasonSetVersion": "eligibility-reasons/1",
+    "groundTruthSchemaVersion": "ground-truth/1"
+  },
+  "readiness": {
+    "status": "not_evaluated",
+    "evaluatedAt": null,
+    "blockers": [],
+    "invariantVersions": {
+      "canonicalContractVersion": "1.0.0",
+      "scorecardVectorContractVersion": "scorecard-vector/2",
+      "baselineArtifactSchemaVersion": "baseline-artifact/1",
+      "eligibilityReasonSetVersion": "eligibility-reasons/1",
+      "groundTruthSchemaVersion": "ground-truth/1"
+    }
+  },
+  "goldPopulation": {
+    "byLayer": {
+      "mentions": {
+        "acceptedCanonicalCount": 2,
+        "evaluablePositiveCount": 2,
+        "packetDiversity": {
+          "distinctPackets": 1,
+          "packetKeys": [
+            "fixture-packet"
+          ]
+        },
+        "distinctConceptLeaves": 1
+      },
+      "data-items": {
+        "acceptedCanonicalCount": 0,
+        "evaluablePositiveCount": 0,
+        "packetDiversity": {
+          "distinctPackets": 0,
+          "packetKeys": []
+        },
+        "distinctConceptLeaves": 0
+      },
+      "components": {
+        "acceptedCanonicalCount": 0,
+        "evaluablePositiveCount": 0,
+        "packetDiversity": {
+          "distinctPackets": 0,
+          "packetKeys": []
+        },
+        "distinctConceptLeaves": 0
+      },
+      "data-flows": {
+        "acceptedCanonicalCount": 0,
+        "evaluablePositiveCount": 0,
+        "packetDiversity": {
+          "distinctPackets": 0,
+          "packetKeys": []
+        },
+        "distinctConceptLeaves": 0
+      }
+    }
+  },
+  "migrationIncomplete": {
+    "total": 1,
+    "byReason": {
+      "awaiting_flow_adjudication": 1
+    },
+    "byLayer": {
+      "data-flows": 1
+    }
+  },
+  "scorecard": {
+    "contractVersion": "scorecard-vector/2",
+    "scannerGitSha": "fixture-sha-001",
+    "generatedAt": "2026-08-31T12:00:00.000Z",
+    "reviewStates": [
+      "accepted"
+    ],
+    "layers": {
+      "mentions": {
+        "layer": "mentions",
+        "computability": {
+          "summary": "empty",
+          "metrics": {
+            "recall": {
+              "state": "computable",
+              "value": 0.5,
+              "numerator": 1,
+              "denominator": 2
+            },
+            "precision": {
+              "state": "computable",
+              "value": 1,
+              "numerator": 1,
+              "denominator": 1
+            },
+            "negativeCasePassRate": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            }
+          },
+          "scope": {
+            "reviewedScopeFileCount": 1,
+            "processedScopeFileCount": 1
+          },
+          "locationlessFindingCount": 0
+        },
+        "scores": {
+          "recall": 0.5,
+          "labelAccuracy": 1,
+          "correctLabelRecall": 0.5,
+          "precision": 1,
+          "negativeCasePassRate": null,
+          "unreadCount": 0,
+          "denominators": {
+            "evaluablePositives": 2,
+            "matchedPositives": 1,
+            "matchedWithCorrectLabels": 1,
+            "negativeCases": 0,
+            "negativeCasesPassed": 0,
+            "exhaustiveScopedFindings": 1,
+            "exhaustiveScopedMatches": 1
+          },
+          "metricComputability": {
+            "scope": {
+              "reviewedScopeFileCount": 1,
+              "processedScopeFileCount": 1
+            },
+            "locationlessFindingCount": 0,
+            "metrics": {
+              "recall": {
+                "state": "computable",
+                "value": 0.5,
+                "numerator": 1,
+                "denominator": 2
+              },
+              "precision": {
+                "state": "computable",
+                "value": 1,
+                "numerator": 1,
+                "denominator": 1
+              },
+              "negativeCasePassRate": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              }
+            }
+          }
+        },
+        "gate": {
+          "status": "skip",
+          "reason": "no_eval_cases"
+        }
+      },
+      "data-items": {
+        "layer": "data-items",
+        "computability": {
+          "summary": "empty",
+          "metrics": {
+            "recall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "precision": {
+              "state": "no_reviewed_scope",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "negativeCasePassRate": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            }
+          },
+          "scope": {
+            "reviewedScopeFileCount": 0,
+            "processedScopeFileCount": 0
+          },
+          "locationlessFindingCount": 0
+        },
+        "scores": {
+          "recall": null,
+          "labelAccuracy": null,
+          "correctLabelRecall": null,
+          "precision": null,
+          "negativeCasePassRate": null,
+          "unreadCount": 0,
+          "denominators": {
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "matchedWithCorrectLabels": 0,
+            "negativeCases": 0,
+            "negativeCasesPassed": 0,
+            "exhaustiveScopedFindings": 0,
+            "exhaustiveScopedMatches": 0
+          },
+          "metricComputability": {
+            "scope": {
+              "reviewedScopeFileCount": 0,
+              "processedScopeFileCount": 0
+            },
+            "locationlessFindingCount": 0,
+            "metrics": {
+              "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "precision": {
+                "state": "no_reviewed_scope",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "negativeCasePassRate": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              }
+            }
+          }
+        },
+        "gate": {
+          "status": "skip",
+          "reason": "no_eval_cases"
+        }
+      },
+      "components": {
+        "layer": "components",
+        "computability": {
+          "summary": "empty",
+          "metrics": {
+            "recall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "precision": {
+              "state": "no_reviewed_scope",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "negativeCasePassRate": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            }
+          },
+          "scope": {
+            "reviewedScopeFileCount": 0,
+            "processedScopeFileCount": 0
+          },
+          "locationlessFindingCount": 0
+        },
+        "scores": {
+          "recall": null,
+          "labelAccuracy": null,
+          "correctLabelRecall": null,
+          "precision": null,
+          "negativeCasePassRate": null,
+          "unreadCount": 0,
+          "denominators": {
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "matchedWithCorrectLabels": 0,
+            "negativeCases": 0,
+            "negativeCasesPassed": 0,
+            "exhaustiveScopedFindings": 0,
+            "exhaustiveScopedMatches": 0
+          },
+          "metricComputability": {
+            "scope": {
+              "reviewedScopeFileCount": 0,
+              "processedScopeFileCount": 0
+            },
+            "locationlessFindingCount": 0,
+            "metrics": {
+              "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "precision": {
+                "state": "no_reviewed_scope",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "negativeCasePassRate": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              }
+            }
+          }
+        },
+        "gate": {
+          "status": "skip",
+          "reason": "no_eval_cases"
+        }
+      },
+      "data-flows": {
+        "layer": "data-flows",
+        "computability": {
+          "summary": "empty",
+          "metrics": {
+            "recall": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "precision": {
+              "state": "no_reviewed_scope",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            },
+            "negativeCasePassRate": {
+              "state": "migration_incomplete_or_not_ready",
+              "value": null,
+              "numerator": 0,
+              "denominator": 0
+            }
+          },
+          "scope": {
+            "reviewedScopeFileCount": 0,
+            "processedScopeFileCount": 0
+          },
+          "locationlessFindingCount": 0
+        },
+        "scores": {
+          "recall": null,
+          "labelAccuracy": null,
+          "correctLabelRecall": null,
+          "precision": null,
+          "negativeCasePassRate": null,
+          "unreadCount": 0,
+          "denominators": {
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "matchedWithCorrectLabels": 0,
+            "negativeCases": 0,
+            "negativeCasesPassed": 0,
+            "exhaustiveScopedFindings": 0,
+            "exhaustiveScopedMatches": 0
+          },
+          "metricComputability": {
+            "scope": {
+              "reviewedScopeFileCount": 0,
+              "processedScopeFileCount": 0
+            },
+            "locationlessFindingCount": 0,
+            "metrics": {
+              "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "precision": {
+                "state": "no_reviewed_scope",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "negativeCasePassRate": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              }
+            }
+          }
+        },
+        "gate": {
+          "status": "skip",
+          "reason": "no_eval_cases"
+        }
+      }
+    },
+    "diagnostic": {
+      "raw-hits": {
+        "scores": {
+          "recall": null,
+          "labelAccuracy": null,
+          "correctLabelRecall": null,
+          "precision": null,
+          "negativeCasePassRate": null,
+          "unreadCount": 0,
+          "denominators": {
+            "evaluablePositives": 0,
+            "matchedPositives": 0,
+            "matchedWithCorrectLabels": 0,
+            "negativeCases": 0,
+            "negativeCasesPassed": 0,
+            "exhaustiveScopedFindings": 0,
+            "exhaustiveScopedMatches": 0
+          },
+          "metricComputability": {
+            "scope": {
+              "reviewedScopeFileCount": 0,
+              "processedScopeFileCount": 0
+            },
+            "locationlessFindingCount": 0,
+            "metrics": {
+              "recall": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "precision": {
+                "state": "no_reviewed_scope",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              },
+              "negativeCasePassRate": {
+                "state": "migration_incomplete_or_not_ready",
+                "value": null,
+                "numerator": 0,
+                "denominator": 0
+              }
+            }
+          }
+        },
+        "caseResults": []
+      }
+    },
+    "packets": [
+      {
+        "repoKey": "fixture-packet",
+        "layers": {
+          "mentions": {
+            "layer": "mentions",
+            "computability": {
+              "summary": "empty",
+              "metrics": {
+                "recall": {
+                  "state": "computable",
+                  "value": 0.5,
+                  "numerator": 1,
+                  "denominator": 2
+                },
+                "precision": {
+                  "state": "computable",
+                  "value": 1,
+                  "numerator": 1,
+                  "denominator": 1
+                },
+                "negativeCasePassRate": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                }
+              },
+              "scope": {
+                "reviewedScopeFileCount": 1,
+                "processedScopeFileCount": 1
+              },
+              "locationlessFindingCount": 0
+            },
+            "scores": {
+              "recall": 0.5,
+              "labelAccuracy": 1,
+              "correctLabelRecall": 0.5,
+              "precision": 1,
+              "negativeCasePassRate": null,
+              "unreadCount": 0,
+              "denominators": {
+                "evaluablePositives": 2,
+                "matchedPositives": 1,
+                "matchedWithCorrectLabels": 1,
+                "negativeCases": 0,
+                "negativeCasesPassed": 0,
+                "exhaustiveScopedFindings": 1,
+                "exhaustiveScopedMatches": 1
+              },
+              "metricComputability": {
+                "scope": {
+                  "reviewedScopeFileCount": 1,
+                  "processedScopeFileCount": 1
+                },
+                "locationlessFindingCount": 0,
+                "metrics": {
+                  "recall": {
+                    "state": "computable",
+                    "value": 0.5,
+                    "numerator": 1,
+                    "denominator": 2
+                  },
+                  "precision": {
+                    "state": "computable",
+                    "value": 1,
+                    "numerator": 1,
+                    "denominator": 1
+                  },
+                  "negativeCasePassRate": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  }
+                }
+              }
+            },
+            "gate": {
+              "status": "skip",
+              "reason": "no_eval_cases"
+            }
+          },
+          "data-items": {
+            "layer": "data-items",
+            "computability": {
+              "summary": "empty",
+              "metrics": {
+                "recall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "precision": {
+                  "state": "no_reviewed_scope",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "negativeCasePassRate": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                }
+              },
+              "scope": {
+                "reviewedScopeFileCount": 0,
+                "processedScopeFileCount": 0
+              },
+              "locationlessFindingCount": 0
+            },
+            "scores": {
+              "recall": null,
+              "labelAccuracy": null,
+              "correctLabelRecall": null,
+              "precision": null,
+              "negativeCasePassRate": null,
+              "unreadCount": 0,
+              "denominators": {
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "matchedWithCorrectLabels": 0,
+                "negativeCases": 0,
+                "negativeCasesPassed": 0,
+                "exhaustiveScopedFindings": 0,
+                "exhaustiveScopedMatches": 0
+              },
+              "metricComputability": {
+                "scope": {
+                  "reviewedScopeFileCount": 0,
+                  "processedScopeFileCount": 0
+                },
+                "locationlessFindingCount": 0,
+                "metrics": {
+                  "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "precision": {
+                    "state": "no_reviewed_scope",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "negativeCasePassRate": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  }
+                }
+              }
+            },
+            "gate": {
+              "status": "skip",
+              "reason": "no_eval_cases"
+            }
+          },
+          "components": {
+            "layer": "components",
+            "computability": {
+              "summary": "empty",
+              "metrics": {
+                "recall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "precision": {
+                  "state": "no_reviewed_scope",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "negativeCasePassRate": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                }
+              },
+              "scope": {
+                "reviewedScopeFileCount": 0,
+                "processedScopeFileCount": 0
+              },
+              "locationlessFindingCount": 0
+            },
+            "scores": {
+              "recall": null,
+              "labelAccuracy": null,
+              "correctLabelRecall": null,
+              "precision": null,
+              "negativeCasePassRate": null,
+              "unreadCount": 0,
+              "denominators": {
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "matchedWithCorrectLabels": 0,
+                "negativeCases": 0,
+                "negativeCasesPassed": 0,
+                "exhaustiveScopedFindings": 0,
+                "exhaustiveScopedMatches": 0
+              },
+              "metricComputability": {
+                "scope": {
+                  "reviewedScopeFileCount": 0,
+                  "processedScopeFileCount": 0
+                },
+                "locationlessFindingCount": 0,
+                "metrics": {
+                  "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "precision": {
+                    "state": "no_reviewed_scope",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "negativeCasePassRate": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  }
+                }
+              }
+            },
+            "gate": {
+              "status": "skip",
+              "reason": "no_eval_cases"
+            }
+          },
+          "data-flows": {
+            "layer": "data-flows",
+            "computability": {
+              "summary": "empty",
+              "metrics": {
+                "recall": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "precision": {
+                  "state": "no_reviewed_scope",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                },
+                "negativeCasePassRate": {
+                  "state": "migration_incomplete_or_not_ready",
+                  "value": null,
+                  "numerator": 0,
+                  "denominator": 0
+                }
+              },
+              "scope": {
+                "reviewedScopeFileCount": 0,
+                "processedScopeFileCount": 0
+              },
+              "locationlessFindingCount": 0
+            },
+            "scores": {
+              "recall": null,
+              "labelAccuracy": null,
+              "correctLabelRecall": null,
+              "precision": null,
+              "negativeCasePassRate": null,
+              "unreadCount": 0,
+              "denominators": {
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "matchedWithCorrectLabels": 0,
+                "negativeCases": 0,
+                "negativeCasesPassed": 0,
+                "exhaustiveScopedFindings": 0,
+                "exhaustiveScopedMatches": 0
+              },
+              "metricComputability": {
+                "scope": {
+                  "reviewedScopeFileCount": 0,
+                  "processedScopeFileCount": 0
+                },
+                "locationlessFindingCount": 0,
+                "metrics": {
+                  "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "precision": {
+                    "state": "no_reviewed_scope",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "negativeCasePassRate": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  }
+                }
+              }
+            },
+            "gate": {
+              "status": "skip",
+              "reason": "no_eval_cases"
+            }
+          }
+        },
+        "diagnostic": {
+          "raw-hits": {
+            "scores": {
+              "recall": null,
+              "labelAccuracy": null,
+              "correctLabelRecall": null,
+              "precision": null,
+              "negativeCasePassRate": null,
+              "unreadCount": 0,
+              "denominators": {
+                "evaluablePositives": 0,
+                "matchedPositives": 0,
+                "matchedWithCorrectLabels": 0,
+                "negativeCases": 0,
+                "negativeCasesPassed": 0,
+                "exhaustiveScopedFindings": 0,
+                "exhaustiveScopedMatches": 0
+              },
+              "metricComputability": {
+                "scope": {
+                  "reviewedScopeFileCount": 0,
+                  "processedScopeFileCount": 0
+                },
+                "locationlessFindingCount": 0,
+                "metrics": {
+                  "recall": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "precision": {
+                    "state": "no_reviewed_scope",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  },
+                  "negativeCasePassRate": {
+                    "state": "migration_incomplete_or_not_ready",
+                    "value": null,
+                    "numerator": 0,
+                    "denominator": 0
+                  }
+                }
+              }
+            },
+            "caseResults": []
+          }
+        }
+      }
+    ]
+  },
+  "capabilityCoverage": {
+    "disclaimer": "diagnostic_only_not_recall_denominator",
+    "byLayer": {
+      "mentions": {
+        "caseWeighted": 0,
+        "distinctLeaf": 0,
+        "supportedCount": 0,
+        "totalAcceptedPositives": 2
+      }
+    }
+  }
+}
