@@ -16,9 +16,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'plaintext-password'; unresolved target for slug 'password_hash'; no component candidates via overlap or rationale+same-file
   - id: discourse-api-key-to-key-hash
     layer: data_flows
     subject:
@@ -36,9 +41,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'api-key'; unresolved target for slug 'key_hash'; no component candidates via overlap or rationale+same-file
   - id: discourse-auth-token-generate
     layer: data_flows
     subject:
@@ -56,9 +66,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'token'; unresolved target for slug 'auth_token'; no component candidates via overlap or rationale+same-file
   - id: discourse-email-normalize
     layer: data_flows
     subject:
@@ -76,9 +91,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'normalized_email'; no component candidates via overlap or rationale+same-file
   - id: discourse-session-cookie-config
     layer: data_flows
     subject:
@@ -96,9 +116,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'session'; ambiguous target match for slug 'cookie'
   - id: discourse-login-route
     layer: data_flows
     subject:
@@ -116,9 +141,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login-request'
   - id: discourse-omniauth-csrf
     layer: data_flows
     subject:
@@ -136,9 +166,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (discourse-omniauth-middleware); prose endpoints oauth-request->csrf-check appear intra-component.
+      source_entity_id: discourse::discourse-omniauth-middleware
   - id: discourse-users-route-flow
     layer: data_flows
     subject:
@@ -156,9 +192,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-users-api); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-users-api
+      target_entity_id: discourse::discourse-users-api
   - id: discourse-session-csrf-route-flow
     layer: data_flows
     subject:
@@ -176,9 +219,14 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'http'; ambiguous target match for slug 'discourse-session-csrf-api'
   - id: discourse-login-route-flow
     layer: data_flows
     subject:
@@ -196,9 +244,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-login-api); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-login-api
+      target_entity_id: discourse::discourse-login-api
   - id: discourse-admin-users-route-flow
     layer: data_flows
     subject:
@@ -216,9 +271,14 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'http'; ambiguous target match for slug 'discourse-admin-users-api'
   - id: discourse-webhooks-mailgun-route-flow
     layer: data_flows
     subject:
@@ -236,9 +296,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-webhooks-mailgun-api); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-webhooks-mailgun-api
+      target_entity_id: discourse::discourse-webhooks-mailgun-api
   - id: discourse-password-setter-flow
     layer: data_flows
     subject:
@@ -256,9 +323,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'raw_password'; no component candidates via overlap or rationale+same-file
   - id: discourse-password-confirm-flow
     layer: data_flows
     subject:
@@ -276,9 +348,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'confirm'; no component candidates via overlap or rationale+same-file
   - id: discourse-password-hash-flow
     layer: data_flows
     subject:
@@ -296,9 +373,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'raw_password'; unresolved target for slug 'hash_password'; no component candidates via overlap or rationale+same-file
   - id: discourse-user-password-association-flow
     layer: data_flows
     subject:
@@ -316,9 +398,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-actor); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-actor
+      target_entity_id: discourse::discourse-user-actor
   - id: discourse-user-email-normalize-flow
     layer: data_flows
     subject:
@@ -336,9 +425,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'normalized'; no component candidates via overlap or rationale+same-file
   - id: discourse-primary-email-flow
     layer: data_flows
     subject:
@@ -356,9 +450,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-email-primary); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-email-primary
+      target_entity_id: discourse::discourse-user-email-primary
   - id: discourse-api-key-generate-flow
     layer: data_flows
     subject:
@@ -376,9 +477,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'key'; unresolved target for slug 'key_hash'; no component candidates via overlap or rationale+same-file
   - id: discourse-api-key-scopes-flow
     layer: data_flows
     subject:
@@ -396,9 +502,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-api-key-scopes); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-api-key-scopes
+      target_entity_id: discourse::discourse-user-api-key-scopes
   - id: discourse-auth-token-lookup-flow
     layer: data_flows
     subject:
@@ -416,9 +529,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-auth-token-lookup); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-auth-token-lookup
+      target_entity_id: discourse::discourse-user-auth-token-lookup
   - id: discourse-auth-token-rotate-flow
     layer: data_flows
     subject:
@@ -436,9 +556,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'token'; unresolved target for slug 'rotated_at'; no component candidates via overlap or rationale+same-file
   - id: discourse-oauth-email-flow
     layer: data_flows
     subject:
@@ -456,9 +581,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'provider'
   - id: discourse-associated-account-flow
     layer: data_flows
     subject:
@@ -476,9 +606,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'oauth'
   - id: discourse-totp-scope-flow
     layer: data_flows
     subject:
@@ -496,9 +631,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-totp-scope); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-totp-scope
+      target_entity_id: discourse::discourse-user-totp-scope
   - id: discourse-ip-history-flow
     layer: data_flows
     subject:
@@ -516,9 +658,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-ip-address-validation); prose endpoints request->ip_address appear intra-component.
+      source_entity_id: discourse::discourse-ip-address-validation
   - id: discourse-email-login-code-flow
     layer: data_flows
     subject:
@@ -536,9 +684,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'email'; ambiguous target match for slug 'login-code'
   - id: discourse-global-api-key-hash-flow
     layer: data_flows
     subject:
@@ -556,9 +709,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'api-key'
   - id: discourse-forgot-password-route-flow
     layer: data_flows
     subject:
@@ -576,9 +734,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'http'
   - id: discourse-users-index-route-flow
     layer: data_flows
     subject:
@@ -596,9 +759,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-not-paypal); prose endpoints http->users-index appear intra-component.
+      source_entity_id: discourse::discourse-not-paypal
   - id: discourse-sso-route-flow
     layer: data_flows
     subject:
@@ -616,9 +785,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'http'
   - id: discourse-github-settings-flow
     layer: data_flows
     subject:
@@ -636,9 +810,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-github-auth-provider); prose endpoints settings->github-oauth appear intra-component.
+      source_entity_id: discourse::discourse-github-auth-provider
   - id: discourse-twitter-settings-flow
     layer: data_flows
     subject:
@@ -656,9 +836,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-twitter-auth-provider); prose endpoints settings->twitter-oauth appear intra-component.
+      source_entity_id: discourse::discourse-twitter-auth-provider
   - id: discourse-facebook-settings-flow
     layer: data_flows
     subject:
@@ -676,9 +862,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-facebook-auth-provider); prose endpoints settings->facebook-oauth appear intra-component.
+      source_entity_id: discourse::discourse-facebook-auth-provider
   - id: discourse-omniauth-csrf-flow
     layer: data_flows
     subject:
@@ -696,9 +888,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (discourse-omniauth-middleware); prose endpoints oauth-request->csrf appear intra-component.
+      source_entity_id: discourse::discourse-omniauth-middleware
   - id: discourse-session-cookie-flow
     layer: data_flows
     subject:
@@ -716,9 +914,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'session'; ambiguous target match for slug 'cookie'
   - id: discourse-redis-version-flow
     layer: data_flows
     subject:
@@ -736,9 +939,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'boot'
   - id: discourse-database-adapter-flow
     layer: data_flows
     subject:
@@ -756,9 +964,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'config'; ambiguous target match for slug 'postgresql'
   - id: discourse-user-destroy-tokens-flow
     layer: data_flows
     subject:
@@ -776,9 +989,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (discourse-user-actor); prose endpoints user-delete->auth-tokens appear intra-component.
+      source_entity_id: discourse::discourse-user-actor
   - id: discourse-user-stat-create-flow
     layer: data_flows
     subject:
@@ -796,9 +1015,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-actor); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-actor
+      target_entity_id: discourse::discourse-user-actor
   - id: discourse-profile-bio-flow
     layer: data_flows
     subject:
@@ -816,9 +1042,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-profile-bio); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-profile-bio
+      target_entity_id: discourse::discourse-user-profile-bio
   - id: discourse-user-password-validator-flow
     layer: data_flows
     subject:
@@ -836,9 +1069,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-user-password-validator); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-user-password-validator
+      target_entity_id: discourse::discourse-user-password-validator
   - id: discourse-api-key-scope-filter-flow
     layer: data_flows
     subject:
@@ -856,9 +1096,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'scope'; unresolved target for slug 'allowed'; no component candidates via overlap or rationale+same-file
   - id: discourse-email-token-model-flow
     layer: data_flows
     subject:
@@ -876,9 +1121,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (discourse-model-email-token); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: discourse::discourse-model-email-token
+      target_entity_id: discourse::discourse-model-email-token
   - id: discourse-site-route-flow
     layer: data_flows
     subject:
@@ -896,9 +1148,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-site-api); prose endpoints get->site-metadata appear intra-component.
+      source_entity_id: discourse::discourse-site-api
   - id: discourse-sendgrid-webhook-flow
     layer: data_flows
     subject:
@@ -916,9 +1174,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous target match for slug 'webhook'
   - id: discourse-google-settings-flow
     layer: data_flows
     subject:
@@ -936,9 +1199,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (discourse-google-auth-provider); prose endpoints settings->google-oauth appear intra-component.
+      source_entity_id: discourse::discourse-google-auth-provider
   - id: discourse-user-email-skip-validate-flow
     layer: data_flows
     subject:
@@ -956,9 +1225,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'flag'; unresolved target for slug 'skip-validate'; no component candidates via overlap or rationale+same-file
   - id: discourse-not-stripe-flow
     layer: data_flows
     subject:
@@ -975,9 +1249,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: User model handles forum accounts only. No payment or card data flows to Stripe in this scope.
   - id: discourse-not-auth0-flow
     layer: data_flows
     subject:
@@ -994,6 +1273,11 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: OmniAuth is configured for Discourse providers such as Google and GitHub, not Auth0.

@@ -16,9 +16,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'user-entity'
   - id: keycloak-credential-entity-persist
     layer: data_flows
     subject:
@@ -36,6 +41,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (keycloak-credential-entity-database); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: keycloak::keycloak-credential-entity-database
+      target_entity_id: keycloak::keycloak-credential-entity-database

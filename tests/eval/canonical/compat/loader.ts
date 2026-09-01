@@ -5,6 +5,7 @@ import {
   corpusLayerToCanonical,
   expectedLabelsProvenance,
   expectedStatusDisposition,
+  flowCandidateIdentity,
   initialConversionState,
   legacySubjectName,
   piiSignalPrefixRewrite,
@@ -41,6 +42,10 @@ export function loadLegacyGoldRecord(
   const componentIdentityStep = componentStructuredIdentity(state, input, options);
   state = { ...state, ...componentIdentityStep.state };
   diagnostics.push(...componentIdentityStep.diagnostics);
+
+  const flowCandidateStep = flowCandidateIdentity(state, input);
+  state = { ...state, ...flowCandidateStep.state };
+  diagnostics.push(...flowCandidateStep.diagnostics);
 
   const ruleIdStep = ruleIdToConceptLeafConversion(state, input);
   state = { ...state, ...ruleIdStep.state };

@@ -16,9 +16,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (vgs-django-database-pii); prose endpoints pii-model->database appear intra-component.
+      source_entity_id: vgs-django::vgs-django-database-pii
   - id: vgs-django-checkr-candidate-post
     layer: data_flows
     subject:
@@ -36,6 +42,12 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (vgs-django-third-party-checkr); prose endpoints pii->checkr-api appear intra-component.
+      source_entity_id: vgs-django::vgs-django-third-party-checkr

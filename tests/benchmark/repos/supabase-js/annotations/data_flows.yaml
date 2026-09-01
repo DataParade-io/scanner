@@ -16,9 +16,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (supabase-js-not-auth0); prose endpoints credentials->gotrue-token appear intra-component.
+      source_entity_id: supabase-js::supabase-js-not-auth0
   - id: supabase-js-session-to-storage
     layer: data_flows
     subject:
@@ -36,9 +42,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'session'; unresolved target for slug 'local-storage'; no component candidates via overlap or rationale+same-file
   - id: supabase-js-access-token-to-authorization
     layer: data_flows
     subject:
@@ -56,9 +67,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'access-token'; unresolved target for slug 'authorization-header'; no component candidates via overlap or rationale+same-file
   - id: supabase-js-refresh-to-token-endpoint
     layer: data_flows
     subject:
@@ -76,9 +92,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'refresh-token'; unresolved target for slug 'gotrue'; no component candidates via overlap or rationale+same-file
   - id: supabase-js-storage-key-not-flow
     layer: data_flows
     subject:
@@ -95,6 +116,11 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: STORAGE_KEY is a local storage key name constant. It does not flow data to a database.
