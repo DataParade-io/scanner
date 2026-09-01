@@ -45,6 +45,25 @@ export function digestSortedFiles(filePaths: string[]): string {
   return sha256Digest(parts.join("\0"));
 }
 
+/** Digest file contents keyed by stable relative paths (POSIX separators). */
+export function digestSortedFilesWithKeys(
+  entries: Array<{ key: string; filePath: string }>,
+): string {
+  const parts: string[] = [];
+  for (const entry of [...entries].sort((left, right) => left.key.localeCompare(right.key))) {
+    parts.push(entry.key);
+    parts.push(fs.readFileSync(entry.filePath, "utf8"));
+  }
+  return sha256Digest(parts.join("\0"));
+}
+
+function corpusGoldRelativeKey(benchmarkRoot: string, filePath: string): string {
+  return path
+    .relative(path.resolve(benchmarkRoot), path.resolve(filePath))
+    .split(path.sep)
+    .join("/");
+}
+
 export function walkCorpusGoldFiles(benchmarkRoot: string): string[] {
   const reposRoot = path.join(benchmarkRoot, "repos");
   if (!fs.existsSync(reposRoot)) {
@@ -86,5 +105,10 @@ export function digestCorpusGold(benchmarkRoot: string): string {
   if (files.length === 0) {
     return sha256Digest("");
   }
-  return digestSortedFiles(files);
+  return digestSortedFilesWithKeys(
+    files.map((filePath) => ({
+      key: corpusGoldRelativeKey(benchmarkRoot, filePath),
+      filePath,
+    })),
+  );
 }
