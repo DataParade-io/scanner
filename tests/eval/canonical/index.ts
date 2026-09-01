@@ -43,8 +43,19 @@ export {
   conceptCorrectness,
   observationsMatch,
   strictCorrectness,
+  assignmentCandidate,
+  negativeObservationCandidate,
+  dataItemsEvidenceOverlaps,
 } from "./match";
 export type { ConceptCorrectness } from "./match";
+
+export { evaluateCanonical } from "./evaluate";
+
+export {
+  canonicalFindingFromLayerFinding,
+  canonicalGoldFromEvalCase,
+  findingsForEvalLayer,
+} from "./bridge";
 
 export {
   assignOneToOne,
@@ -58,6 +69,7 @@ export {
   computeCapabilityCoverage,
   computeEvidenceCoverage,
   computeStrictRecall,
+  computeStrictRecallFromAssignment,
   computeVendorResolution,
   declaredCapabilityUnsupported,
 } from "./metrics";

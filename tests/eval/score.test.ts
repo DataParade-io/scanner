@@ -143,9 +143,9 @@ const scoreScenarios: ScoreScenario[] = [
     },
   },
   {
-    name: "matches data-items by identity without span overlap",
+    name: "matches data-items on same file with line overlap",
     cases: [
-      positiveCase("identity-only", "data-items", "data_item:username", "src/app.yml", 9, 9, [
+      positiveCase("same-file-match", "data-items", "data_item:username", "src/app.yml", 3, 3, [
         "username",
       ]),
     ],
@@ -162,28 +162,54 @@ const scoreScenarios: ScoreScenario[] = [
       recall: 1,
       labelAccuracy: 1,
       caseChecks: [
-        { caseId: "identity-only", unread: false, matched: true, labelsCorrect: true },
+        { caseId: "same-file-match", unread: false, matched: true, labelsCorrect: true },
       ],
     },
   },
   {
-    name: "detects label mismatch on matched positives",
+    name: "does not match data-items across files with the same identity",
+    cases: [
+      positiveCase("cross-file-miss", "data-items", "data_item:email", "src/a.yml", 1, 1, [
+        "email",
+      ]),
+      positiveCase("same-file-hit", "data-items", "data_item:email", "src/b.yml", 2, 2, [
+        "email",
+      ]),
+    ],
+    scanResults: [
+      scanResult(
+        [finding("data_item:email", "src/a.yml", 1, 1, ["email"])],
+        "data-items",
+        ["src/a.yml", "src/b.yml"],
+      ),
+    ],
+    expect: {
+      evaluablePositives: 2,
+      matchedPositives: 1,
+      recall: 0.5,
+      caseChecks: [
+        { caseId: "cross-file-miss", matched: true, labelsCorrect: true },
+        { caseId: "same-file-hit", matched: false, labelsCorrect: false },
+      ],
+    },
+  },
+  {
+    name: "does not pair mentions when identity keys differ",
     cases: [
       positiveCase("label-mismatch", "mentions", "mention:email", "src/app.yml", 4, 4, [
         "user_email",
       ]),
     ],
     scanResults: [
-      scanResult([finding("mention:email", "src/app.yml", 4, 4, ["username"])], "mentions"),
+      scanResult([finding("mention:username", "src/app.yml", 4, 4, ["username"])], "mentions"),
     ],
     expect: {
       evaluablePositives: 1,
-      matchedPositives: 1,
+      matchedPositives: 0,
       matchedWithCorrectLabels: 0,
-      recall: 1,
-      labelAccuracy: 0,
+      recall: 0,
       caseChecks: [
-        { caseId: "label-mismatch", matched: true, labelsCorrect: false },
+        { caseId: "label-mismatch", matched: false, labelsCorrect: false },
       ],
     },
   },
@@ -209,7 +235,7 @@ const scoreScenarios: ScoreScenario[] = [
     },
   },
   {
-    name: "does not require a negative Stripe case to penalize extra Stripe hits",
+    name: "does not score legacy data-flow positives until adjudicated",
     cases: [
       positiveCase("openai", "data-flows", "flow:app->third_party:openai", "app.py", 11, 11, [
         "api_call",
@@ -228,8 +254,10 @@ const scoreScenarios: ScoreScenario[] = [
       ),
     ],
     expect: {
-      recall: 1,
-      precision: 0.5,
+      evaluablePositives: 0,
+      matchedPositives: 0,
+      recall: null,
+      precision: 0,
     },
   },
   {
