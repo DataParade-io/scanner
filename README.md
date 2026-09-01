@@ -15,7 +15,7 @@ const { scanResult } = await scan("/path/to/repo", config);
 
 ## Evaluation
 
-Fixture ground truth lives under `tests/eval/layers/` with shared scoring in `tests/eval/score.ts`. Five grades cover the personal-data pipeline (raw hits, mentions, data items) and the component graph (components, data flows). Run `pnpm test tests/eval/` for deterministic Jest eval, or `pnpm run test:features` for Plexus Gherkin scenarios (`scanner-recall-evaluation.feature`, `scanner-layer-evaluation.feature`). See [tests/eval/README.md](./tests/eval/README.md) and [project/wiki/four-layer-evaluation.md](./project/wiki/four-layer-evaluation.md).
+Fixture ground truth lives under `tests/eval/layers/` with shared scoring in `tests/eval/score.ts`. Four headline layers (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector; `raw-hits` is diagnostic only. Run `pnpm test tests/eval/` for deterministic Jest eval, or `pnpm run test:features` for Plexus Gherkin scenarios (`scanner-recall-evaluation.feature`, `scanner-layer-evaluation.feature`). See [tests/eval/README.md](./tests/eval/README.md) and [project/wiki/four-layer-evaluation.md](./project/wiki/four-layer-evaluation.md).
 
 ## Development
 

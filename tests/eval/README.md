@@ -1,18 +1,25 @@
 # Fixture evaluation harness
 
-Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for legacy identity and matching rules across all five grades, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
+Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
 
-## Five evaluation grades
+Four **headline layers** form the evaluation vector. `raw-hits` is **diagnostic only** — scanned and reported but excluded from headline gates. There is **no cross-layer scalar**.
 
-Three personal-data grades share heuristic rules but differ in roll-up; two graph grades use the deterministic `scan()` pipeline:
+## Headline layers
 
-| Grade | Layer | Script | Identity prefix | Match semantics |
-| --- | --- | --- | --- | --- |
-| Raw hits | `raw-hits` | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels |
-| Mentions | `mentions` | `pnpm run eval:mentions` | `mention:` | key + span + labels |
-| Data items | `data-items` | `pnpm run eval:data-items` | `data_item:` | identity only |
-| Components | `components` | `pnpm run eval:components` | `${type}:${name}` | key + span + labels |
-| Data flows | `data-flows` | `pnpm run eval:data-flows` | `flow:…` | key + span + labels |
+| Layer | Script | Identity prefix | Match semantics |
+| --- | --- | --- | --- |
+| Mentions | `pnpm run eval:mentions` | `mention:` | key + span + labels |
+| Data items | `pnpm run eval:data-items` | `data_item:` | identity only |
+| Components | `pnpm run eval:components` | `${type}:${name}` | key + span + labels |
+| Data flows | `pnpm run eval:data-flows` | `flow:…` | key + span + labels |
+
+## Diagnostic layer
+
+| Layer | Script | Identity prefix | Match semantics |
+| --- | --- | --- | --- |
+| Raw hits | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels (diagnostic; not a headline gate) |
+
+Personal-data layers share heuristic rules but differ in roll-up. Graph layers use the deterministic `scan()` pipeline.
 
 ## Layout
 
@@ -20,23 +27,24 @@ Three personal-data grades share heuristic rules but differ in roll-up; two grap
 tests/eval/
   types.ts                # Eval case and score report types
   score.ts                # Shared recall / label / precision metrics
-  ground-truth-schema.md  # Legacy identity and matching rules for all five grades
+  ground-truth-schema.md  # Layer identity, matching, computability, eligibility
   canonical-representation.md  # Canonical evaluation representation behaviour spec
+  docs-invariants.ts      # Constants checked by evaluation-docs-contract.spec.ts
   layers/
-    raw-hits/
-      adapter.ts          # Pattern-hit bridge with raw_hit: identity
+    raw-hits/             # Diagnostic layer
+      adapter.ts
       cases.ts
       eval.test.ts
     mentions/
-      adapter.ts          # Mention bridge with mention: identity
+      adapter.ts
       cases.ts
       eval.test.ts
     data-items/
-      adapter.ts          # Rolled-up data-item bridge with data_item: identity
+      adapter.ts
       cases.ts
       eval.test.ts
     components/
-      adapter.ts          # scan() bridge with component identity
+      adapter.ts
       cases.ts
       eval.test.ts
     data-flows/
@@ -62,7 +70,7 @@ Subject keys use `${type}:${name.toLowerCase()}`, aligned with `scan()` componen
 | `negativeCasePassRate` | Clean explicit negatives ÷ negative cases (span-level must-not-fire checks, not precision) |
 | `unreadCount` | Cases whose evidence file was not scanned and is not in that case's exhaustive file list |
 
-Positives marked `documentedGap` remain in recall denominators as measured misses; CI gates may exclude them when asserting pass/fail. Metrics with empty denominators return `null`, not `1`.
+Positives marked `documentedGap` remain in recall denominators as measured misses; CI gates may exclude them when asserting pass/fail. Metrics with empty denominators return `null`, not `1`. Per-metric computability states are defined in `ground-truth-schema.md`.
 
 ## Running
 
