@@ -3,26 +3,9 @@ import * as path from "path";
 import YAML from "yaml";
 
 import { loadPropertyDetectionConfig } from "../../src/config/property-detection-config";
+import { loadComponentTaxonomy } from "../../src/classifier/component-taxonomy";
 
 const PATTERNS_ROOT = path.join(__dirname, "../../patterns");
-const TAXONOMY_PATH = path.join(PATTERNS_ROOT, "component-taxonomy.yaml");
-
-interface TaxonomySubtype {
-  id: string;
-  type: string;
-}
-
-function loadTaxonomy(): { subtypes: TaxonomySubtype[]; types: string[] } {
-  const raw = fs.readFileSync(TAXONOMY_PATH, "utf8");
-  const parsed = YAML.parse(raw) as {
-    types: { id: string }[];
-    subtypes: TaxonomySubtype[];
-  };
-  return {
-    types: parsed.types.map((t) => t.id),
-    subtypes: parsed.subtypes,
-  };
-}
 
 function loadClassifierYamlSubtypes(fileName: string): string[] {
   const fullPath = path.join(PATTERNS_ROOT, "classifier", fileName);
@@ -51,9 +34,11 @@ function loadClassifierYamlSubtypes(fileName: string): string[] {
 }
 
 describe("component taxonomy is the single source of truth", () => {
-  const taxonomy = loadTaxonomy();
-  const taxonomySubtypeIds = new Set(taxonomy.subtypes.map((s) => s.id));
-  const taxonomyTypeIds = new Set(taxonomy.types);
+  const taxonomy = loadComponentTaxonomy();
+  const taxonomySubtypeIds = new Set(
+    [...taxonomy.subtypeToType.keys()],
+  );
+  const taxonomyTypeIds = taxonomy.types;
 
   it("declares all subtypes used by classifier YAMLs", () => {
     const files = [
@@ -80,9 +65,14 @@ describe("component taxonomy is the single source of truth", () => {
     }
   });
 
+  it("declares api_consumer actor subtype used by application injection", () => {
+    expect(taxonomySubtypeIds.has("api_consumer")).toBe(true);
+  });
+
   it("every taxonomy subtype references a declared type", () => {
-    for (const subtype of taxonomy.subtypes) {
-      expect(taxonomyTypeIds.has(subtype.type)).toBe(true);
+    for (const [subtype, componentType] of taxonomy.subtypeToType) {
+      expect(taxonomyTypeIds.has(componentType)).toBe(true);
+      void subtype;
     }
   });
 
