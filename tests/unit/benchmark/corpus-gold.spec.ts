@@ -83,8 +83,8 @@ describe("imported corpus gold", () => {
 
     expect(totalAnnotations).toBeGreaterThan(1500);
     // KDATAP-a0e80b: 275 source-token data-item rows demoted from accepted → needs_adjudication;
-    // they must not inflate the eval-case census until human acceptance.
-    expect(acceptedEvalCases).toBe(728);
+    // KDATAP-9b83f6: five suffix-vs-label false accepts demoted (redmine email + four password verifiers).
+    expect(acceptedEvalCases).toBe(723);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
