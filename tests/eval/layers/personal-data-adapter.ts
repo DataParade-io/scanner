@@ -7,7 +7,11 @@ import {
 } from "../../../src/eval-layers/collect-personal-data-findings";
 import { adaptPersonalDataFinding } from "../canonical/scanner/personal-data";
 import type { CanonicalScannerFinding } from "../canonical/types";
-import type { FixtureScanResult, LayerFinding } from "../types";
+import type { EvalLayer, FixtureScanResult, LayerFinding } from "../types";
+import {
+  fixtureScanResultWithLedger,
+  layerLedgerFromOutcomes,
+} from "../eligibility/build-fixture-result";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../fixtures");
 
@@ -15,6 +19,24 @@ export interface CanonicalFixtureScanResult {
   fixture: string;
   findings: CanonicalScannerFinding[];
   scannedFiles: string[];
+  eligibilityLedgers?: Partial<Record<EvalLayer, import("../eligibility/types").LayerEligibilityLedger>>;
+}
+
+const PERSONAL_DATA_EVAL_LAYER: Record<PersonalDataEvalLayer, EvalLayer> = {
+  "raw-hits": "raw-hits",
+  mentions: "mentions",
+  "data-items": "data-items",
+};
+
+function personalDataFixtureResult(
+  fixture: string,
+  layer: PersonalDataEvalLayer,
+  payload: Awaited<ReturnType<typeof collectPersonalDataFindings>>,
+  findings: LayerFinding[],
+): FixtureScanResult {
+  const evalLayer = PERSONAL_DATA_EVAL_LAYER[layer];
+  const layerLedger = layerLedgerFromOutcomes(evalLayer, payload.layerOutcomes);
+  return fixtureScanResultWithLedger(fixture, findings, layerLedger);
 }
 
 export function personalDataFindingToLayerFinding(
@@ -41,11 +63,12 @@ export async function scanFixturePersonalDataLayer(
   const root = path.join(FIXTURES_ROOT, fixture);
   const payload = await collectPersonalDataFindings(root, layer);
 
-  return {
+  return personalDataFixtureResult(
     fixture,
-    findings: payload.findings.map(personalDataFindingToLayerFinding),
-    scannedFiles: payload.filesScanned,
-  };
+    layer,
+    payload,
+    payload.findings.map(personalDataFindingToLayerFinding),
+  );
 }
 
 export async function scanCanonicalPersonalDataLayer(
@@ -54,10 +77,15 @@ export async function scanCanonicalPersonalDataLayer(
 ): Promise<CanonicalFixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
   const payload = await collectPersonalDataFindings(root, layer);
+  const evalLayer = PERSONAL_DATA_EVAL_LAYER[layer];
+  const layerLedger = layerLedgerFromOutcomes(evalLayer, payload.layerOutcomes);
 
   return {
     fixture,
     findings: payload.findings.map((finding) => adaptPersonalDataFinding(finding, layer)),
-    scannedFiles: payload.filesScanned,
+    scannedFiles: layerLedger.outcomes
+      .filter((outcome) => outcome.reason === "successfully_processed")
+      .map((outcome) => outcome.path),
+    eligibilityLedgers: { [evalLayer]: layerLedger },
   };
 }

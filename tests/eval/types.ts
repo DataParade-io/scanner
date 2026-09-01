@@ -68,7 +68,9 @@ export interface LayerFinding {
 export interface FixtureScanResult {
   fixture: string;
   findings: LayerFinding[];
+  /** @deprecated Use eligibilityLedgers; not used by score.ts */
   scannedFiles: string[];
+  eligibilityLedgers?: Partial<Record<EvalLayer, import("./eligibility/types").LayerEligibilityLedger>>;
 }
 
 export interface EvalScoreDenominators {

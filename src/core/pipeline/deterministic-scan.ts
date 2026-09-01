@@ -57,6 +57,9 @@ export interface DeterministicScanWork {
   warnings: string[];
   errors: string[];
   scanDurationMs: number;
+  ingestOutcomes: import("../../ingest/eligibility").PathEligibilityOutcome[];
+  allIngestedFiles: FileInfo[];
+  config: ScanConfiguration;
 }
 
 export interface FinalizeDeterministicScanInput {
@@ -101,6 +104,8 @@ export async function runDeterministicScanPhases(
     totalLines,
     languageStats,
     terraformScanSummary,
+    ingestOutcomes,
+    allIngestedFiles,
   } = structural;
 
   emitScanProgress(
@@ -157,6 +162,9 @@ export async function runDeterministicScanPhases(
     warnings,
     errors,
     scanDurationMs: Date.now() - start,
+    ingestOutcomes,
+    allIngestedFiles,
+    config,
   };
 }
 
@@ -215,6 +223,13 @@ export function finalizeDeterministicScanResult(
     scanResult,
     files: work.files,
     findings: work.findings,
+    ledgerContext: {
+      ingestOutcomes: work.ingestOutcomes,
+      allIngestedFiles: work.allIngestedFiles,
+      processedFiles: work.files,
+      languageStats: work.languageStats,
+      config: work.config,
+    },
   };
 }
 

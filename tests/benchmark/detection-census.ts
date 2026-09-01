@@ -4,6 +4,7 @@ import { execSync } from "child_process";
 
 import type { DetectedComponent } from "../../src/core/types/component";
 import { componentIdentity } from "../eval/layers/components/adapter";
+import { eligibleProcessedPaths } from "../eval/eligibility/ledger-access";
 import type { FixtureScanResult, LayerFinding } from "../eval/types";
 import { parseIdentityKey } from "../eval/identity";
 import { loadAnnotations, loadBenchmarkManifest } from "./manifest";
@@ -215,7 +216,7 @@ export function buildDetectionCensusRow(
     repoKey,
     commit: manifestCommit,
     scopePaths,
-    filesIngested: scanResult.scannedFiles.length,
+    filesIngested: eligibleProcessedPaths(scanResult.eligibilityLedgers?.components).length,
     componentsEmitted,
     dataFlowsEmitted: dataFlowFindings.length,
     componentGoldPositives: goldPositives.length,

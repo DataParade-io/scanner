@@ -14,19 +14,14 @@ import {
   labelsMatch,
   normalizeEvalPath,
 } from "./identity";
+import { isUnread as isCaseUnread } from "./eligibility/ledger-access";
 
 function isNegativeCase(caseRecord: EvalCase): boolean {
   return caseRecord.expected.status === "negative";
 }
 
-function isUnread(caseRecord: EvalCase, scannedFiles: string[]): boolean {
-  const evidencePath = normalizeEvalPath(caseRecord.evidence.file_path);
-  if (scannedFiles.some((filePath) => normalizeEvalPath(filePath) === evidencePath)) {
-    return false;
-  }
-  return !(caseRecord.exhaustiveScopeFiles ?? []).some(
-    (filePath) => normalizeEvalPath(filePath) === evidencePath,
-  );
+function isUnread(caseRecord: EvalCase, scan?: FixtureScanResult): boolean {
+  return isCaseUnread(caseRecord, scan);
 }
 
 function lineRangesOverlap(
@@ -141,9 +136,8 @@ export function scoreEvalCases(
 
   for (const caseRecord of cases) {
     const scan = byFixture.get(caseRecord.fixture);
-    const scannedFiles = scan?.scannedFiles ?? [];
     const findings = scan?.findings ?? [];
-    const unread = isUnread(caseRecord, scannedFiles);
+    const unread = isUnread(caseRecord, scan);
     if (unread) {
       unreadCount += 1;
     }

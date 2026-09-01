@@ -1,4 +1,5 @@
-import { ingestFileSystem } from "../ingest/file-system";
+import { ingestFileSystemWithOutcomes } from "../ingest/file-system";
+import type { PathEligibilityOutcome } from "../ingest/eligibility";
 import {
   matchPiiSignalsInFiles,
   type PiiSignalHit,
@@ -8,6 +9,8 @@ import {
   mentionIdentity,
   rawHitIdentity,
 } from "./identities";
+import { buildPersonalDataLayerLedger } from "./build-layer-ledger";
+import type { EvalLayerId } from "./layer-capability";
 
 export interface PersonalDataFinding {
   subjectKey: string;
@@ -20,6 +23,7 @@ export interface PersonalDataFinding {
 export interface PersonalDataFindingsPayload {
   findings: PersonalDataFinding[];
   filesScanned: string[];
+  layerOutcomes: PathEligibilityOutcome[];
 }
 
 function hitToRawFinding(hit: PiiSignalHit): PersonalDataFinding {
@@ -73,11 +77,23 @@ function hitsToDataItemFindings(hits: PiiSignalHit[]): PersonalDataFinding[] {
 
 export type PersonalDataEvalLayer = "raw-hits" | "mentions" | "data-items";
 
+const PERSONAL_DATA_LAYER_MAP: Record<PersonalDataEvalLayer, EvalLayerId> = {
+  "raw-hits": "raw-hits",
+  mentions: "mentions",
+  "data-items": "data-items",
+};
+
 export async function collectPersonalDataFindings(
   rootPath: string,
   layer: PersonalDataEvalLayer,
 ): Promise<PersonalDataFindingsPayload> {
-  const files = await ingestFileSystem(rootPath);
+  const ingestResult = await ingestFileSystemWithOutcomes(rootPath);
+  const files = ingestResult.files;
+  const layerOutcomes = buildPersonalDataLayerLedger(
+    PERSONAL_DATA_LAYER_MAP[layer],
+    ingestResult.outcomes,
+    files,
+  );
   const hits = matchPiiSignalsInFiles(
     files.map((file) => ({ filePath: file.path, content: file.content })),
   );
@@ -98,5 +114,6 @@ export async function collectPersonalDataFindings(
   return {
     findings,
     filesScanned: files.map((file) => file.path),
+    layerOutcomes,
   };
 }

@@ -13,10 +13,16 @@ import {
   toPosixPath,
 } from "./gitignore";
 import { isSensitiveEnvPath } from "./sensitive-paths";
+import {
+  type IngestResult,
+  type PathEligibilityOutcome,
+  recordIngestOutcome,
+  outcomesMapToSortedArray,
+} from "./eligibility";
 
-const DEFAULT_MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
-const DEFAULT_MAX_FILE_COUNT = 20_000;
-const DEFAULT_MAX_TOTAL_BYTES = 200 * 1024 * 1024; // 200MB
+export const DEFAULT_MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+export const DEFAULT_MAX_FILE_COUNT = 20_000;
+export const DEFAULT_MAX_TOTAL_BYTES = 200 * 1024 * 1024; // 200MB
 
 export interface IngestOptions {
   maxFileSizeBytes?: number;
@@ -31,6 +37,11 @@ type IngestState = {
   totalBytesIncluded: number;
   fileCountLimitReached: boolean;
 };
+
+type ResolvedIngestOptions = Required<
+  Pick<IngestOptions, "maxFileSizeBytes" | "maxFileCount" | "maxTotalBytes">
+> &
+  Pick<IngestOptions, "onWarning" | "excludePaths">;
 
 function normalizeUserPattern(pattern: string): string {
   return toPosixPath(pattern.replace(/^\.\/+/, "").trim());
@@ -157,10 +168,8 @@ export async function resolveScanFilesystemEntry(rootPath: string): Promise<{
 
 async function ingestSingleFile(
   fileAbs: string,
-  options: Required<
-    Pick<IngestOptions, "maxFileSizeBytes" | "maxFileCount" | "maxTotalBytes">
-  > &
-    Pick<IngestOptions, "onWarning" | "excludePaths">,
+  options: ResolvedIngestOptions,
+  outcomes: Map<string, PathEligibilityOutcome>,
 ): Promise<FileInfo[]> {
   const scanRootDir = path.dirname(fileAbs);
   const relativePath = toPosixPath(path.relative(scanRootDir, fileAbs));
@@ -171,6 +180,7 @@ async function ingestSingleFile(
     options.onWarning?.(
       `Skipped "${basename}" (excluded for security).`,
     );
+    recordIngestOutcome(outcomes, relativePath || basename, "sensitive_path_exclusion");
     return [];
   }
 
@@ -181,6 +191,7 @@ async function ingestSingleFile(
     options.onWarning?.(
       `Skipped "${relativePath}" (matched exclude pattern).`,
     );
+    recordIngestOutcome(outcomes, relativePath, "excluded_by_configured_policy");
     return [];
   }
 
@@ -188,6 +199,11 @@ async function ingestSingleFile(
   if (!language) {
     options.onWarning?.(
       `Skipping unsupported file type: ${basename}`,
+    );
+    recordIngestOutcome(
+      outcomes,
+      relativePath || basename,
+      "unsupported_file_type_or_language",
     );
     return [];
   }
@@ -197,6 +213,7 @@ async function ingestSingleFile(
     options.onWarning?.(
       `Skipped "${path.basename(fileAbs)}" (${stat.size} bytes) because it exceeds max file size (${options.maxFileSizeBytes} bytes).`,
     );
+    recordIngestOutcome(outcomes, relativePath || basename, "file_too_large");
     return [];
   }
 
@@ -204,10 +221,20 @@ async function ingestSingleFile(
     options.onWarning?.(
       `Skipped "${path.basename(fileAbs)}" because ingest byte budget (${options.maxTotalBytes} bytes) would be exceeded.`,
     );
+    recordIngestOutcome(outcomes, relativePath || basename, "total_byte_cap_reached");
     return [];
   }
 
-  const content = await fs.readFile(fileAbs, "utf8");
+  let content: string;
+  try {
+    content = await fs.readFile(fileAbs, "utf8");
+  } catch {
+    options.onWarning?.(`Skipped "${basename}" (read/decode error).`);
+    recordIngestOutcome(outcomes, relativePath || basename, "read_decode_error");
+    return [];
+  }
+
+  recordIngestOutcome(outcomes, relativePath, "successfully_processed");
 
   return [
     {
@@ -225,11 +252,9 @@ async function walkDirectory(
   rootDir: string,
   accumulatedRules: IgnoreRule[],
   files: FileInfo[],
-  options: Required<
-    Pick<IngestOptions, "maxFileSizeBytes" | "maxFileCount" | "maxTotalBytes">
-  > &
-    Pick<IngestOptions, "onWarning" | "excludePaths">,
+  options: ResolvedIngestOptions,
   state: IngestState,
+  outcomes: Map<string, PathEligibilityOutcome>,
 ): Promise<void> {
   if (state.fileCountLimitReached) return;
   const excludePaths = options.excludePaths ?? [];
@@ -259,20 +284,33 @@ async function walkDirectory(
         continue;
       }
 
-      await walkDirectory(entryPath, rootDir, rules, files, options, state);
+      await walkDirectory(entryPath, rootDir, rules, files, options, state, outcomes);
     } else if (entry.isFile()) {
       if (
         relativePath &&
         isExcludedByUserPatterns(relativePath, false, excludePaths)
       ) {
+        recordIngestOutcome(outcomes, relativePath, "excluded_by_configured_policy");
         continue;
       }
       if (isPathIgnored(entryPath, false, rules)) {
+        recordIngestOutcome(
+          outcomes,
+          relativePath,
+          "ignored_by_repository_default_policy",
+        );
         continue;
       }
 
       const language = getFileLanguage(entryPath);
-      if (!language) continue;
+      if (!language) {
+        recordIngestOutcome(
+          outcomes,
+          relativePath,
+          "unsupported_file_type_or_language",
+        );
+        continue;
+      }
 
       const stat = await fs.stat(entryPath);
 
@@ -280,6 +318,7 @@ async function walkDirectory(
         options.onWarning?.(
           `Skipped "${relativePath}" (${stat.size} bytes) because it exceeds max file size (${options.maxFileSizeBytes} bytes).`,
         );
+        recordIngestOutcome(outcomes, relativePath, "file_too_large");
         continue;
       }
 
@@ -290,6 +329,7 @@ async function walkDirectory(
         options.onWarning?.(
           `Skipped "${relativePath}" because ingest byte budget (${options.maxTotalBytes} bytes) would be exceeded.`,
         );
+        recordIngestOutcome(outcomes, relativePath, "total_byte_cap_reached");
         continue;
       }
 
@@ -298,10 +338,18 @@ async function walkDirectory(
         options.onWarning?.(
           `Stopped ingest after ${state.filesIncluded} files because max file count (${options.maxFileCount}) was reached.`,
         );
+        recordIngestOutcome(outcomes, relativePath, "file_count_cap_reached");
         return;
       }
 
-      const content = await fs.readFile(entryPath, "utf8");
+      let content: string;
+      try {
+        content = await fs.readFile(entryPath, "utf8");
+      } catch {
+        options.onWarning?.(`Skipped "${relativePath}" (read/decode error).`);
+        recordIngestOutcome(outcomes, relativePath, "read_decode_error");
+        continue;
+      }
 
       files.push({
         path: relativePath,
@@ -312,17 +360,13 @@ async function walkDirectory(
       });
       state.filesIncluded += 1;
       state.totalBytesIncluded += stat.size;
+      recordIngestOutcome(outcomes, relativePath, "successfully_processed");
     }
   }
 }
 
-export async function ingestFileSystem(
-  rootPath: string,
-  options: IngestOptions = {},
-): Promise<FileInfo[]> {
-  const abs = path.resolve(rootPath);
-  const st = await fs.stat(abs);
-  const resolvedOptions = {
+function resolveIngestOptions(options: IngestOptions): ResolvedIngestOptions {
+  return {
     maxFileSizeBytes: options.maxFileSizeBytes ?? DEFAULT_MAX_FILE_SIZE_BYTES,
     maxFileCount: options.maxFileCount ?? DEFAULT_MAX_FILE_COUNT,
     maxTotalBytes: options.maxTotalBytes ?? DEFAULT_MAX_TOTAL_BYTES,
@@ -332,16 +376,26 @@ export async function ingestFileSystem(
     ],
     onWarning: options.onWarning,
   };
+}
+
+export async function ingestFileSystemWithOutcomes(
+  rootPath: string,
+  options: IngestOptions = {},
+): Promise<IngestResult> {
+  const abs = path.resolve(rootPath);
+  const st = await fs.stat(abs);
+  const resolvedOptions = resolveIngestOptions(options);
+  const outcomes = new Map<string, PathEligibilityOutcome>();
 
   if (st.isFile()) {
-    return ingestSingleFile(abs, resolvedOptions);
+    const files = await ingestSingleFile(abs, resolvedOptions, outcomes);
+    return { files, outcomes: outcomesMapToSortedArray(outcomes) };
   }
 
   if (!st.isDirectory()) {
     throw new Error(`Scan path is not a file or directory: ${abs}`);
   }
 
-  const rootDir = abs;
   const files: FileInfo[] = [];
   const state: IngestState = {
     filesIncluded: 0,
@@ -349,8 +403,16 @@ export async function ingestFileSystem(
     fileCountLimitReached: false,
   };
 
-  await walkDirectory(rootDir, rootDir, [], files, resolvedOptions, state);
+  await walkDirectory(abs, abs, [], files, resolvedOptions, state, outcomes);
 
-  return files;
+  return { files, outcomes: outcomesMapToSortedArray(outcomes) };
+}
+
+export async function ingestFileSystem(
+  rootPath: string,
+  options: IngestOptions = {},
+): Promise<FileInfo[]> {
+  const result = await ingestFileSystemWithOutcomes(rootPath, options);
+  return result.files;
 }
 
