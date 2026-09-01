@@ -108,3 +108,48 @@ describe("evaluateCanonical assignment", () => {
     expect(assignment.pairs).toEqual([{ expectationId: "gold-a", findingId: "find-1" }]);
   });
 });
+
+function mentionCase(id: string, filePath: string, scope?: string[]): EvalCase {
+  return {
+    id,
+    fixture: FIXTURE,
+    layer: "mentions",
+    subject: { key: "mention:email" },
+    evidence: { file_path: filePath, start_line: 1, end_line: 1 },
+    expected: { status: "positive", labels: ["mention"] },
+    rationale: "test",
+    exhaustiveScopeFiles: scope,
+  };
+}
+
+describe("evaluateCanonical metric computability", () => {
+  it("keeps recall computable when precision has no reviewed scope", () => {
+    const cases = [mentionCase("m1", "src/app.ts")];
+    const findings: LayerFinding[] = [
+      {
+        key: "mention:email",
+        labels: ["mention"],
+        sourceFilePaths: ["src/app.ts"],
+        sourceLines: [{ file_path: "src/app.ts", start_line: 1, end_line: 1 }],
+        layer: "mentions",
+      },
+    ];
+
+    const report = evaluateCanonical(cases, [scanResult(findings, "mentions", ["src/app.ts"])]);
+
+    expect(report.scores.metricComputability.metrics.recall.state).toBe("computable");
+    expect(report.scores.metricComputability.metrics.precision.state).toBe("no_reviewed_scope");
+  });
+
+  it("marks processed scope with zero predictions separately from missing scope", () => {
+    const cases = [mentionCase("m1", "src/app.ts", ["src/scoped.ts"])];
+
+    const report = evaluateCanonical(cases, [scanResult([], "mentions", ["src/scoped.ts"])]);
+
+    expect(report.scores.metricComputability.metrics.precision.state).toBe(
+      "processed_scope_zero_predictions",
+    );
+    expect(report.scores.metricComputability.scope.processedScopeFileCount).toBe(1);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(0);
+  });
+});

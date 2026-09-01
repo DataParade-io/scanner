@@ -43,6 +43,21 @@ export function eligibleProcessedPaths(
     .sort();
 }
 
+export function isPathSuccessfullyProcessed(
+  ledger: LayerEligibilityLedger | undefined,
+  filePath: string,
+): boolean {
+  const outcome = outcomeForPath(ledger, filePath);
+  return outcome?.stage === "layer" && isSuccessfullyProcessed(outcome);
+}
+
+export function countProcessedScopeFiles(
+  scopeFiles: readonly string[],
+  ledger: LayerEligibilityLedger | undefined,
+): number {
+  return scopeFiles.filter((filePath) => isPathSuccessfullyProcessed(ledger, filePath)).length;
+}
+
 export function evidenceEligibilityReason(
   caseRecord: EvalCase,
   scan?: FixtureScanResult,

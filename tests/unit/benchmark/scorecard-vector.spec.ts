@@ -1,4 +1,5 @@
-import type { EvalCase, EvalScoreReport } from "../../eval/types";
+import type { EvalCase, EvalScoreReport, EvalScores } from "../../eval/types";
+import { computeMetricComputability } from "../../eval/canonical/computability";
 import {
   aggregateEvalScores,
   assertNoCrossLayerScalar,
@@ -9,9 +10,50 @@ import {
   SCORECARD_VECTOR_CONTRACT_VERSION,
 } from "../../benchmark/scorecard-vector";
 
-function emptyReport(): EvalScoreReport {
+function withMetricComputability(
+  scores: Omit<EvalScores, "metricComputability">,
+  layer: EvalCase["layer"],
+  options: {
+    positiveCaseCount?: number;
+    unreadPositiveCount?: number;
+    negativeCaseCount?: number;
+    unreadNegativeCount?: number;
+    reviewedScopeFileCount?: number;
+    processedScopeFileCount?: number;
+    locationlessFindingCount?: number;
+  } = {},
+): EvalScores {
+  const {
+    positiveCaseCount = scores.denominators.evaluablePositives,
+    unreadPositiveCount = 0,
+    negativeCaseCount = scores.denominators.negativeCases,
+    unreadNegativeCount = 0,
+    reviewedScopeFileCount = scores.denominators.exhaustiveScopedFindings > 0 ? 1 : 0,
+    processedScopeFileCount = scores.denominators.exhaustiveScopedFindings > 0 ? 1 : 0,
+    locationlessFindingCount = 0,
+  } = options;
+
   return {
-    scores: {
+    ...scores,
+    metricComputability: computeMetricComputability({
+      layer,
+      denominators: scores.denominators,
+      scope: { reviewedScopeFileCount, processedScopeFileCount },
+      recall: scores.recall,
+      precision: scores.precision,
+      negativeCasePassRate: scores.negativeCasePassRate,
+      positiveCaseCount,
+      unreadPositiveCount,
+      negativeCaseCount,
+      unreadNegativeCount,
+      locationlessFindingCount,
+    }),
+  };
+}
+
+function emptyReport(): EvalScoreReport {
+  const scores = withMetricComputability(
+    {
       recall: null,
       labelAccuracy: null,
       correctLabelRecall: null,
@@ -28,13 +70,16 @@ function emptyReport(): EvalScoreReport {
         exhaustiveScopedMatches: 0,
       },
     },
-    caseResults: [],
-  };
+    "components",
+  );
+  return { scores, caseResults: [] };
 }
 
 function reportWithDenominators(
+  layer: EvalCase["layer"],
   partial: Partial<EvalScoreReport["scores"]["denominators"]>,
   rates: Partial<Pick<EvalScoreReport["scores"], "recall" | "precision">> = {},
+  computabilityOptions: Parameters<typeof withMetricComputability>[2] = {},
 ): EvalScoreReport {
   const denominators = {
     evaluablePositives: 0,
@@ -46,8 +91,8 @@ function reportWithDenominators(
     exhaustiveScopedMatches: 0,
     ...partial,
   };
-  return {
-    scores: {
+  const scores = withMetricComputability(
+    {
       recall:
         rates.recall ??
         (denominators.evaluablePositives === 0
@@ -64,8 +109,10 @@ function reportWithDenominators(
       unreadCount: 0,
       denominators,
     },
-    caseResults: [],
-  };
+    layer,
+    computabilityOptions,
+  );
+  return { scores, caseResults: [] };
 }
 
 function positiveCase(layer: EvalCase["layer"], id: string): EvalCase {
@@ -83,8 +130,8 @@ function positiveCase(layer: EvalCase["layer"], id: string): EvalCase {
 describe("scorecard-vector", () => {
   it("pools denominators across packets instead of averaging recall rates", () => {
     const aggregated = aggregateEvalScores([
-      reportWithDenominators({ evaluablePositives: 10, matchedPositives: 8 }),
-      reportWithDenominators({ evaluablePositives: 10, matchedPositives: 2 }),
+      reportWithDenominators("mentions", { evaluablePositives: 10, matchedPositives: 8 }),
+      reportWithDenominators("mentions", { evaluablePositives: 10, matchedPositives: 2 }),
     ]);
 
     expect(aggregated.recall).toBe(0.5);
@@ -102,8 +149,14 @@ describe("scorecard-vector", () => {
           repoKey: "packet-a",
           evalCases: [positiveCase("mentions", "m1")],
           layerScores: {
-            mentions: reportWithDenominators({ evaluablePositives: 1, matchedPositives: 1 }),
-            "raw-hits": reportWithDenominators({ evaluablePositives: 3, matchedPositives: 2 }),
+            mentions: reportWithDenominators("mentions", {
+              evaluablePositives: 1,
+              matchedPositives: 1,
+            }),
+            "raw-hits": reportWithDenominators("raw-hits", {
+              evaluablePositives: 3,
+              matchedPositives: 2,
+            }),
           },
         },
       ],
@@ -117,26 +170,55 @@ describe("scorecard-vector", () => {
   it("marks data-flows unscorable with pending gate and null recall", () => {
     const entry = buildScorecardLayerEntry(
       "data-flows",
-      reportWithDenominators({
-        evaluablePositives: 0,
-        exhaustiveScopedFindings: 4,
-        exhaustiveScopedMatches: 0,
-      }),
+      reportWithDenominators(
+        "data-flows",
+        {
+          evaluablePositives: 0,
+          exhaustiveScopedFindings: 4,
+          exhaustiveScopedMatches: 0,
+        },
+        { precision: 0 },
+        {
+          positiveCaseCount: 2,
+          reviewedScopeFileCount: 2,
+          processedScopeFileCount: 2,
+        },
+      ),
       2,
       false,
     );
 
-    expect(entry.computability).toBe("unscorable");
-    expect(entry.unscorableReason).toBe("needs_adjudication");
+    expect(entry.computability.summary).toBe("unscorable");
+    expect(entry.computability.unscorableReason).toBe("needs_adjudication");
+    expect(entry.computability.metrics.recall.state).toBe("migration_incomplete_or_not_ready");
+    expect(entry.computability.metrics.precision.state).toBe("computable");
     expect(entry.scores.recall).toBeNull();
     expect(entry.gate.status).toBe("pending");
     expect(entry.scores.precision).toBe(0);
   });
 
+  it("keeps recall computable when precision has no reviewed scope", () => {
+    const entry = buildScorecardLayerEntry(
+      "mentions",
+      reportWithDenominators(
+        "mentions",
+        { evaluablePositives: 2, matchedPositives: 1 },
+        {},
+        { reviewedScopeFileCount: 0, processedScopeFileCount: 0 },
+      ),
+      2,
+      false,
+    );
+
+    expect(entry.computability.metrics.recall.state).toBe("computable");
+    expect(entry.computability.metrics.precision.state).toBe("no_reviewed_scope");
+    expect(entry.gate.status).toBe("scorable");
+  });
+
   it("uses provisional gate when review states are not accepted-only", () => {
     const entry = buildScorecardLayerEntry(
       "mentions",
-      reportWithDenominators({ evaluablePositives: 2, matchedPositives: 2 }),
+      reportWithDenominators("mentions", { evaluablePositives: 2, matchedPositives: 2 }),
       2,
       true,
     );
@@ -146,7 +228,7 @@ describe("scorecard-vector", () => {
 
   it("skips layers with no eval cases", () => {
     const gate = resolveLayerGate("components", emptyReport().scores, 0, false);
-    expect(gate.computability).toBe("empty");
+    expect(gate.computability.summary).toBe("empty");
     expect(gate.gate.status).toBe("skip");
   });
 
@@ -163,19 +245,34 @@ describe("scorecard-vector", () => {
             positiveCase("data-flows", "f1"),
           ],
           layerScores: {
-            mentions: reportWithDenominators({ evaluablePositives: 1, matchedPositives: 1 }),
-            "data-flows": reportWithDenominators({
-              evaluablePositives: 0,
-              exhaustiveScopedFindings: 2,
-              exhaustiveScopedMatches: 0,
+            mentions: reportWithDenominators("mentions", {
+              evaluablePositives: 1,
+              matchedPositives: 1,
             }),
+            "data-flows": reportWithDenominators(
+              "data-flows",
+              {
+                evaluablePositives: 0,
+                exhaustiveScopedFindings: 2,
+                exhaustiveScopedMatches: 0,
+              },
+              { precision: 0 },
+              {
+                positiveCaseCount: 1,
+                reviewedScopeFileCount: 1,
+                processedScopeFileCount: 1,
+              },
+            ),
           },
         },
         {
           repoKey: "packet-b",
           evalCases: [positiveCase("mentions", "m2")],
           layerScores: {
-            mentions: reportWithDenominators({ evaluablePositives: 1, matchedPositives: 0 }),
+            mentions: reportWithDenominators("mentions", {
+              evaluablePositives: 1,
+              matchedPositives: 0,
+            }),
           },
         },
       ],
@@ -185,6 +282,7 @@ describe("scorecard-vector", () => {
     expect(vector.layers.mentions.scores.recall).toBe(0.5);
     expect(vector.layers["data-flows"].gate.status).toBe("pending");
     expect(vector.layers["data-flows"].scores.recall).toBeNull();
+    expect(vector.layers["data-flows"].computability.metrics.precision.state).toBe("computable");
     expect(vector.packets).toHaveLength(2);
     assertNoCrossLayerScalar(vector);
   });

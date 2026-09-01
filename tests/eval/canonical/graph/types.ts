@@ -39,7 +39,8 @@ export interface GraphMatchAttribution {
 export type ComputabilityReason =
   | "locationless_finding"
   | "finding_outside_scope"
-  | "no_exhaustive_scope";
+  | "no_exhaustive_scope"
+  | "processed_scope_zero_predictions";
 
 export interface GraphPrecisionItem {
   findingId: string;

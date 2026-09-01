@@ -115,5 +115,11 @@ export function computeGraphPrecision(
     matches,
     precision: denominator === 0 ? null : matches / denominator,
     locationlessVisible,
+    computabilityReason:
+      denominator === 0 && locationlessVisible.length > 0
+        ? "locationless_finding"
+        : denominator === 0
+          ? "processed_scope_zero_predictions"
+          : undefined,
   };
 }

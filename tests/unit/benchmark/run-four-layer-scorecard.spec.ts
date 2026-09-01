@@ -4,11 +4,48 @@ import path from "path";
 
 import { runFourLayerScorecard } from "../../benchmark/run-four-layer-scorecard";
 import { SCORECARD_VECTOR_CONTRACT_VERSION } from "../../benchmark/scorecard-vector";
-import type { EvalCase, FixtureScanResult } from "../../eval/types";
+import type { EvalCase, EvalScoreReport, EvalScores, FixtureScanResult } from "../../eval/types";
+import { computeMetricComputability } from "../../eval/canonical/computability";
 import { createLayerLedger } from "../../eval/eligibility/types";
 import { layerOutcome } from "../../../src/ingest/eligibility";
 
 const FIXTURE = "scorecard-packet";
+
+function withMetricComputability(
+  scores: Omit<EvalScores, "metricComputability">,
+  layer: EvalCase["layer"],
+  options: {
+    positiveCaseCount?: number;
+    reviewedScopeFileCount?: number;
+    processedScopeFileCount?: number;
+  } = {},
+): EvalScoreReport {
+  const {
+    positiveCaseCount = scores.denominators.evaluablePositives,
+    reviewedScopeFileCount = scores.denominators.exhaustiveScopedFindings > 0 ? 1 : 0,
+    processedScopeFileCount = scores.denominators.exhaustiveScopedFindings > 0 ? 1 : 0,
+  } = options;
+
+  return {
+    scores: {
+      ...scores,
+      metricComputability: computeMetricComputability({
+        layer,
+        denominators: scores.denominators,
+        scope: { reviewedScopeFileCount, processedScopeFileCount },
+        recall: scores.recall,
+        precision: scores.precision,
+        negativeCasePassRate: scores.negativeCasePassRate,
+        positiveCaseCount,
+        unreadPositiveCount: 0,
+        negativeCaseCount: scores.denominators.negativeCases,
+        unreadNegativeCount: 0,
+        locationlessFindingCount: 0,
+      }),
+    },
+    caseResults: [],
+  };
+}
 
 function evalCase(layer: EvalCase["layer"], id: string): EvalCase {
   return {
@@ -70,8 +107,8 @@ describe("run-four-layer-scorecard", () => {
         evalCases: [evalCase("mentions", "m1"), evalCase("data-flows", "f1")],
         scanResult: scanResult(),
         layerScores: {
-          mentions: {
-            scores: {
+          mentions: withMetricComputability(
+            {
               recall: 1,
               labelAccuracy: 1,
               correctLabelRecall: 1,
@@ -88,10 +125,10 @@ describe("run-four-layer-scorecard", () => {
                 exhaustiveScopedMatches: 0,
               },
             },
-            caseResults: [],
-          },
-          "data-flows": {
-            scores: {
+            "mentions",
+          ),
+          "data-flows": withMetricComputability(
+            {
               recall: null,
               labelAccuracy: null,
               correctLabelRecall: null,
@@ -108,8 +145,13 @@ describe("run-four-layer-scorecard", () => {
                 exhaustiveScopedMatches: 0,
               },
             },
-            caseResults: [],
-          },
+            "data-flows",
+            {
+              positiveCaseCount: 1,
+              reviewedScopeFileCount: 1,
+              processedScopeFileCount: 1,
+            },
+          ),
         },
       },
     ]);
