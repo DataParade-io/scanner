@@ -16,9 +16,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-order-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-order-model
+      target_entity_id: spree::spree-order-model
   - id: spree-address-to-gateway
     layer: data_flows
     subject:
@@ -36,9 +43,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'address'; unresolved target for slug 'payment-gateway'; no component candidates via overlap or rationale+same-file
   - id: spree-order-to-payment-workflow
     layer: data_flows
     subject:
@@ -56,9 +68,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'order'; unresolved target for slug 'payment-process-workflow'; no component candidates via overlap or rationale+same-file
   - id: spree-oauth-to-customer
     layer: data_flows
     subject:
@@ -76,9 +93,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'oauth-info'; unresolved target for slug 'customer'; no component candidates via overlap or rationale+same-file
   - id: spree-address-to-customer-profile
     layer: data_flows
     subject:
@@ -96,9 +118,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (spree-address-model); prose endpoints address->customer-profile appear intra-component.
+      source_entity_id: spree::spree-address-model
   - id: spree-customer-to-gateway-customer
     layer: data_flows
     subject:
@@ -116,9 +144,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-gateway-customer-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-gateway-customer-model
+      target_entity_id: spree::spree-gateway-customer-model
   - id: spree-order-total-not-gateway-pii
     layer: data_flows
     subject:
@@ -135,9 +170,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: Order money totals are accounting fields; gateway_hash sends address contact data, not item_total.
   - id: spree-order-belongs-to-customer
     layer: data_flows
     subject:
@@ -155,9 +195,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-order-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-order-model
+      target_entity_id: spree::spree-order-model
   - id: spree-payment-source-to-gateway-customer
     layer: data_flows
     subject:
@@ -175,9 +222,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-payment-source-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-payment-source-model
+      target_entity_id: spree::spree-payment-source-model
   - id: spree-credit-card-to-customer
     layer: data_flows
     subject:
@@ -195,9 +249,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-credit-card-source); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-credit-card-source
+      target_entity_id: spree::spree-credit-card-source
   - id: spree-payment-to-order
     layer: data_flows
     subject:
@@ -215,9 +276,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-payment-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-payment-model
+      target_entity_id: spree::spree-payment-model
   - id: spree-create-account-from-order
     layer: data_flows
     subject:
@@ -235,9 +303,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-create-user-account-service); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-create-user-account-service
+      target_entity_id: spree::spree-create-user-account-service
   - id: spree-gateway-customer-profile-id
     layer: data_flows
     subject:
@@ -255,9 +330,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (spree-gateway-customer-model); prose endpoints customer->gateway-profile appear intra-component.
+      source_entity_id: spree::spree-gateway-customer-model
   - id: spree-admin-valid-password
     layer: data_flows
     subject:
@@ -275,9 +356,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'password'
   - id: spree-payment-method-gateway-customers
     layer: data_flows
     subject:
@@ -295,9 +381,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (spree-payment-method-model); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: spree::spree-payment-method-model
+      target_entity_id: spree::spree-payment-method-model
   - id: spree-address-clone-billing
     layer: data_flows
     subject:
@@ -315,9 +408,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'billing'; unresolved target for slug 'shipping-address'; no component candidates via overlap or rationale+same-file
   - id: spree-payment-processing-capturable
     layer: data_flows
     subject:
@@ -335,9 +433,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'source'; unresolved target for slug 'gateway-profile'; no component candidates via overlap or rationale+same-file
   - id: spree-customer-email-normalize
     layer: data_flows
     subject:
@@ -355,6 +458,11 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'input'; unresolved target for slug 'normalized-email'; no component candidates via overlap or rationale+same-file

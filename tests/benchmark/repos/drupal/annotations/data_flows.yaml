@@ -16,9 +16,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login-form'; unresolved target for slug 'user-auth'; no component candidates via overlap or rationale+same-file
   - id: drupal-login-form-to-finalizer
     layer: data_flows
     subject:
@@ -36,9 +41,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login-form'; unresolved target for slug 'login-finalizer'; no component candidates via overlap or rationale+same-file
   - id: drupal-http-login-to-finalizer
     layer: data_flows
     subject:
@@ -56,9 +66,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'http-login'; unresolved target for slug 'login-finalizer'; no component candidates via overlap or rationale+same-file
   - id: drupal-session-uid-to-database
     layer: data_flows
     subject:
@@ -76,9 +91,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (drupal-session-database); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: drupal::drupal-session-database
+      target_entity_id: drupal::drupal-session-database
   - id: drupal-finalizer-uid-to-session
     layer: data_flows
     subject:
@@ -96,9 +118,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'finalizer'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file
   - id: drupal-one-time-email-to-hmac
     layer: data_flows
     subject:
@@ -116,9 +143,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'hmac'; no component candidates via overlap or rationale+same-file
   - id: drupal-http-login-lookup-account
     layer: data_flows
     subject:
@@ -136,9 +168,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'credentials'; unresolved target for slug 'lookup-account'; no component candidates via overlap or rationale+same-file
   - id: drupal-password-to-password-checker
     layer: data_flows
     subject:
@@ -156,9 +193,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'password_checker'; no component candidates via overlap or rationale+same-file
   - id: drupal-password-rehash-to-save
     layer: data_flows
     subject:
@@ -176,9 +218,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'entity_save'; no component candidates via overlap or rationale+same-file
   - id: drupal-lookup-account-by-name
     layer: data_flows
     subject:
@@ -196,9 +243,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'name'; unresolved target for slug 'lookup_account'; no component candidates via overlap or rationale+same-file
   - id: drupal-http-login-to-csrf-token
     layer: data_flows
     subject:
@@ -216,9 +268,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'csrf_token'; no component candidates via overlap or rationale+same-file
   - id: drupal-reset-password-to-notification
     layer: data_flows
     subject:
@@ -236,9 +293,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'account'; unresolved target for slug 'send_password_reset'
   - id: drupal-one-time-login-url-flow
     layer: data_flows
     subject:
@@ -256,9 +318,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'account'; unresolved target for slug 'one_time_login_url'; no component candidates via overlap or rationale+same-file
   - id: drupal-verify-hmac-flow
     layer: data_flows
     subject:
@@ -276,9 +343,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'hmac'; unresolved target for slug 'verify'; no component candidates via overlap or rationale+same-file
   - id: drupal-finalizer-last-login-to-database
     layer: data_flows
     subject:
@@ -296,9 +368,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'last_login'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: drupal-session-migrate-on-login
     layer: data_flows
     subject:
@@ -316,9 +393,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'session_migrate'; no component candidates via overlap or rationale+same-file
   - id: drupal-cookie-roles-to-session
     layer: data_flows
     subject:
@@ -336,9 +418,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'uid'; unresolved target for slug 'roles_query'; no component candidates via overlap or rationale+same-file
   - id: drupal-flood-register-on-failed-login
     layer: data_flows
     subject:
@@ -356,9 +443,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'failed_login'; unresolved target for slug 'flood_register'; no component candidates via overlap or rationale+same-file
   - id: drupal-logout-destroy-session
     layer: data_flows
     subject:
@@ -376,6 +468,11 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'logout'; unresolved target for slug 'session_destroy'; no component candidates via overlap or rationale+same-file

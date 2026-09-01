@@ -14,6 +14,23 @@ export type {
   ComponentMigrationLedgerEntry,
 } from "./component-migration";
 export {
+  buildFlowCensus,
+  buildFlowMigrationLedger,
+  candidateEndpointsToAsserted,
+  evidenceSpansOverlap,
+  FLOW_MIGRATION_TASK,
+  listComponentCandidatesForFlow,
+  proposeFlowCandidate,
+  rationaleExplicitlyNamesComponent,
+  resolveFlowSide,
+  slugMatchesComponent,
+} from "./flow-migration";
+export type {
+  FlowCensus,
+  FlowMigrationLedger,
+  FlowMigrationLedgerEntry,
+} from "./flow-migration";
+export {
   buildRepoLocalEntityId,
   classificationIdentityKey,
   clearComponentTaxonomyCacheForTest,
