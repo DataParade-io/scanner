@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-import { computeMetricComputability } from "../../eval/canonical/computability";
-import { CANONICAL_CONTRACT_VERSION } from "../../eval/canonical/contract";
+import { computeMetricComputability } from "../../../src/eval/canonical/computability";
+import { CANONICAL_CONTRACT_VERSION } from "../../../src/eval/canonical/contract";
 import {
   assertNoCrossLayerScalar,
   buildScorecardVector,

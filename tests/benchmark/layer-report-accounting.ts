@@ -1,11 +1,11 @@
 import path from "path";
 
 import type { EligibilityReason } from "../../src/ingest/eligibility";
-import { computeCapabilityCoverage } from "../eval/canonical/metrics";
-import type { CanonicalGoldExpectation } from "../eval/canonical/types";
-import { isAcceptedEvaluablePositive } from "../eval/canonical/types";
+import { computeCapabilityCoverage } from "../../src/eval/canonical/metrics";
+import type { CanonicalGoldExpectation } from "../../src/eval/canonical/types";
+import { isAcceptedEvaluablePositive } from "../../src/eval/canonical/types";
 import type { ConversionKind } from "../eval/canonical/compat/types";
-import { isEvalPathContractValid, normalizeEvalPath } from "../eval/identity";
+import { isEvalPathContractValid, normalizeEvalPath } from "../../src/eval/path";
 import {
   getLayerLedger,
   isPathSuccessfullyProcessed,

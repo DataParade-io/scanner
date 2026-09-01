@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import { digestCorpusGold, digestFile } from "../../benchmark/baseline/digests";
-import { resolveScannerAdapterMapVersion } from "../../eval/canonical/scanner/manifest";
+import { resolveScannerAdapterMapVersion } from "../../../src/eval/canonical/scanner/manifest";
 
 const PINS_DIR = path.join(__dirname, "../../fixtures/baseline/pins");
 const PACKAGE_ROOT = path.join(__dirname, "../../..");

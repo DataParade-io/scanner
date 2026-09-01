@@ -4,7 +4,7 @@ import type {
   EvidenceLocation,
 } from "../types";
 import { evidenceLocationsOverlap } from "../identity";
-import { buildNeedsAdjudicationRecord } from "../builders";
+import { buildNeedsAdjudicationRecord } from "../record-factory";
 import type {
   ComponentAnnotationRow,
   ConsolidatedComponentEntity,

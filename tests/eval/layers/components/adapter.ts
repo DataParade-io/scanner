@@ -6,7 +6,7 @@ import {
 } from "../../../../src/core/pipeline/orchestrator";
 import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../../../src/core/types/component";
-import { adaptDetectedComponent } from "../../canonical/scanner/components";
+import { adaptDetectedComponent } from "../../../../src/eval/canonical/scanner/components";
 import {
   fixtureScanResultWithLedger,
   layerLedgerFromOutcomes,
