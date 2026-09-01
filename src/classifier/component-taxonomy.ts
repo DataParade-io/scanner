@@ -4,8 +4,11 @@ import * as path from "path";
 import YAML from "yaml";
 
 import type { DetectedComponent } from "../core/types/component";
+import { findPackageRoot } from "../package-root";
 
-const TAXONOMY_PATH = path.join(__dirname, "../../patterns/component-taxonomy.yaml");
+function resolveTaxonomyPath(): string {
+  return path.join(findPackageRoot(__dirname), "patterns", "component-taxonomy.yaml");
+}
 
 export interface ComponentTaxonomy {
   types: Set<string>;
@@ -21,7 +24,7 @@ export function loadComponentTaxonomy(): ComponentTaxonomy {
     return cachedTaxonomy;
   }
 
-  const raw = fs.readFileSync(TAXONOMY_PATH, "utf8");
+  const raw = fs.readFileSync(resolveTaxonomyPath(), "utf8");
   const parsed = YAML.parse(raw) as {
     types: { id: string }[];
     subtypes: { id: string; type: string }[];
