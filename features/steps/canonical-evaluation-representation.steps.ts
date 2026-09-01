@@ -14,6 +14,7 @@ import {
   computeVendorResolution,
   conceptCorrectness,
   declaredCapabilityUnsupported,
+  loadCanonicalGoldFromEvalCase,
   loadCanonicalGoldFromLegacyRecord,
   oneFindingCannotSatisfyBoth,
   observationsMatch,
@@ -29,6 +30,9 @@ import type {
   ConceptCorrectness,
   LegacyGoldRecord,
 } from "../../tests/eval/canonical";
+import type { EvalCase } from "../../tests/eval/types";
+import { componentEvalCases } from "../../tests/eval/layers/components/cases";
+import { scanCanonicalComponents } from "../../tests/eval/layers/components/adapter";
 
 const pendingAdapter = (reason: string): "pending" => {
   // Blocked: requires gold/scanner adapter or normalization pipeline slice.
@@ -42,6 +46,7 @@ interface CanonicalWorld {
   finding?: CanonicalScannerFinding & { id: string };
   legacyInput?: LegacyGoldRecord;
   normalizedExpectation?: CanonicalGoldExpectation & { id: string };
+  bridgeCase?: EvalCase;
   strictMatch?: boolean;
   conceptResult?: ConceptCorrectness;
   assignmentAmbiguous?: boolean;
@@ -61,6 +66,7 @@ function initWorld(w: CanonicalWorld): void {
   w.finding = undefined;
   w.legacyInput = undefined;
   w.normalizedExpectation = undefined;
+  w.bridgeCase = undefined;
   w.strictMatch = undefined;
   w.conceptResult = undefined;
   w.assignmentAmbiguous = undefined;
@@ -93,24 +99,72 @@ Before({ tags: "@canonical-ir-spec" }, function (this: CanonicalWorld) {
   initWorld(this);
 });
 
-// --- KDATAP-b18135: adapter scenarios (pending) ---
+// --- KDATAP-b18135 / KDATAP-1076a9: gold/scanner adapter bridge ---
 
-Given("canonical gold and a scanner finding for the same evidence", function () {
-  return pendingAdapter("gold/scanner adapter bridges");
+const scannerBridgeCase =
+  componentEvalCases.find((entry) => entry.id === "ts-stripe-third-party") ??
+  componentEvalCases[0];
+
+Given("canonical gold and a scanner finding for the same evidence", function (this: CanonicalWorld) {
+  this.bridgeCase = scannerBridgeCase;
+  const { record } = loadCanonicalGoldFromEvalCase(scannerBridgeCase, { warn: () => undefined });
+  this.expectations = [withId(record, scannerBridgeCase.id)];
 });
 
-When("each passes through its adapter", function () {
-  return pendingAdapter("gold/scanner adapter bridges");
+When("each passes through its adapter", async function (this: CanonicalWorld) {
+  assert.ok(this.bridgeCase, "bridge eval case must be set");
+  const scan = await scanCanonicalComponents(this.bridgeCase.fixture);
+  const match = scan.findings.find(
+    (finding) =>
+      finding.identity.identityKey === this.bridgeCase!.subject.key &&
+      finding.evidenceLocations.some(
+        (location) =>
+          location.file_path === this.bridgeCase!.evidence.file_path &&
+          location.start_line === this.bridgeCase!.evidence.start_line &&
+          location.end_line === this.bridgeCase!.evidence.end_line,
+      ),
+  );
+  assert.ok(match, "scanner adapter must emit a finding for the bridge evidence");
+  this.findings = [withId(match, "scanner-bridge-finding")];
 });
 
-Then("both carry the same contract version", function () {
-  return pendingAdapter("gold/scanner adapter bridges");
+Then("both carry the same contract version", function (this: CanonicalWorld) {
+  assert.strictEqual(this.expectations[0].contractVersion, CANONICAL_CONTRACT_VERSION);
+  assert.strictEqual(this.findings[0].contractVersion, CANONICAL_CONTRACT_VERSION);
+  assert.strictEqual(
+    this.expectations[0].contractVersion,
+    this.findings[0].contractVersion,
+  );
 });
 
 Then(
   "entity identity, asserted classification, optional vendor and evidence are separate fields",
-  function () {
-    return pendingAdapter("gold/scanner adapter bridges");
+  function (this: CanonicalWorld) {
+    const gold = this.expectations[0];
+    const scanner = this.findings[0];
+
+    assert.ok(gold.identity.identityKey);
+    assert.ok(gold.classification.conceptLeaf);
+    assert.ok(gold.evidenceLocations.length > 0);
+
+    assert.ok(scanner.identity.identityKey);
+    assert.ok(scanner.evidenceLocations.length > 0);
+    assert.strictEqual(scannerFindingHasEntityId(scanner), false);
+
+    assert.notStrictEqual(gold.identity, gold.classification);
+    assert.notStrictEqual(scanner.identity, scanner.classification);
+
+    if (scanner.display?.displayText) {
+      assert.notStrictEqual(scanner.display.displayText, scanner.identity.identityKey);
+      assert.notStrictEqual(
+        scanner.display.displayText,
+        scanner.classification.conceptLeaf,
+      );
+    }
+
+    if (scanner.optionalAssertion?.vendor) {
+      assert.notStrictEqual(scanner.optionalAssertion.vendor, scanner.identity.identityKey);
+    }
   },
 );
 

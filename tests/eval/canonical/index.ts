@@ -119,4 +119,15 @@ export {
   evalCaseToLegacyInput,
 } from "./gold";
 
+export {
+  adaptDetectedComponent,
+  adaptDetectedDataFlow,
+  adaptPersonalDataFinding,
+  clearScannerAdapterMapVersionCacheForTest,
+  componentScannerIdentityKey,
+  dataFlowScannerIdentityKey,
+  extractPersonalDataRuleId,
+  resolveScannerAdapterMapVersion,
+} from "./scanner";
+
 export * from "./graph";
