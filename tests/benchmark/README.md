@@ -150,6 +150,22 @@ pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard
 
 **This script is not part of `pnpm test`.** Unit tests mock scans and use temporary fixtures — no network or git clones in CI.
 
+## Baseline artifact (schema)
+
+The immutable corpus baseline is defined under `tests/benchmark/baseline/` as versioned JSON (`baseline-artifact/1`) with a deterministic Markdown renderer. JSON is the source artifact; Markdown is generated from it.
+
+| Piece | Location |
+| --- | --- |
+| Types + Zod schema | `tests/benchmark/baseline/types.ts` |
+| Fingerprint collector | `tests/benchmark/baseline/fingerprint.ts` |
+| Artifact builder | `tests/benchmark/baseline/build-baseline-artifact.ts` |
+| Markdown renderer | `tests/benchmark/baseline/render-markdown.ts` |
+| Fixture round-trip | `tests/fixtures/baseline/minimal-baseline-artifact.{json,md}` |
+
+The artifact embeds a `scorecard-vector/2` payload verbatim (no second scorer, no cross-layer scalar), a fingerprint block (scanner commit, corpus/gold digest, contract and taxonomy digests, materialization status per packet, deterministic config with `enableAiInference: false`), gold-population and migration-incomplete accounting, capability coverage as diagnostic-only metadata, and a readiness stub (`not_evaluated`). Series 1 uses `predecessor: null`.
+
+Freezing series 1, the `benchmark:baseline` command, and CI drift checks against committed baselines are separate issues — this module is schema + fingerprint + rendering only.
+
 ## Detection coverage census (opt-in)
 
 Before forecasting what structured component identity buys, measure per-packet detection coverage: files ingested, components emitted, data flows emitted, and accepted component gold matched under three identity schemes (`type:name`, `type:subType`, hybrid). No spans, no scoring.

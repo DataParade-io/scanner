@@ -436,11 +436,11 @@ export function scoreLayersForScorecard(
   };
 }
 
-function formatRate(value: number | null): string {
+export function formatRate(value: number | null): string {
   return value === null ? "n/a" : `${(value * 100).toFixed(1)}%`;
 }
 
-function formatMetricScore(metric: MetricScore): string {
+export function formatMetricScore(metric: MetricScore): string {
   return `${formatRate(metric.value)} [${metric.state}; ${metric.numerator}/${metric.denominator}]`;
 }
 
