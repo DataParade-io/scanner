@@ -9,11 +9,15 @@ scope:
     - path: app/migrations/
       reason: generated migrations
 coverage:
-  layers: [components, data_flows, data_items, pii_signals]
-  languages: [python]
-  domains: [identity_verification, pii]
-selection_rationale: >-
-  Baseline Django sample storing PII (SSN, driver license) via ORM models and
-  calling Checkr for identity verification through VGS outbound routes. Adds
-  plain Django field patterns without third-party type wrappers.
-annotation_version: 1
+  layers:
+    - components
+    - data_flows
+    - data_items
+    - mentions
+  languages:
+    - python
+  domains:
+    - identity_verification
+    - pii
+selection_rationale: Baseline Django sample storing PII (SSN, driver license) via ORM models and calling Checkr for identity verification through VGS outbound routes. Adds plain Django field patterns without third-party type wrappers.
+annotation_version: 2

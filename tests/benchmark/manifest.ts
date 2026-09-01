@@ -25,8 +25,6 @@ const LAYER_SUBJECT_PREFIX: Partial<Record<BenchmarkLayer, string>> = {
  * Normalize corpus subject keys on load.
  *
  * Legacy `pii_signal:` prefixes migrate to `mention:` / `raw_hit:`.
- * Gold taxonomy keys (`pii:email_address`) are kept so eval identity matching
- * can map them onto matcher rule ids.
  */
 export function normalizeSubjectKey(layer: BenchmarkLayer, key: string): string {
   const trimmed = key.trim();
@@ -59,13 +57,15 @@ function assertCanonicalSubjectKey(
     );
   }
 
-  if (canonical === "mentions" && (key.startsWith("mention:") || key.startsWith("pii:"))) {
-    return;
+  if (key.startsWith("pii:")) {
+    throw new Error(
+      `${field}: stale subject.key prefix 'pii:' for layer '${canonical}' — use '${expectedPrefix}'`,
+    );
   }
 
   if (!key.startsWith(expectedPrefix)) {
     throw new Error(
-      `${field}: subject.key must start with '${expectedPrefix}' (or 'pii:' for mentions gold) for layer '${canonical}', got '${key}'`,
+      `${field}: subject.key must start with '${expectedPrefix}' for layer '${canonical}', got '${key}'`,
     );
   }
 }
@@ -280,18 +280,11 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
   }
 
   const canonicalLayer = normalizeBenchmarkLayer(layer);
-  const candidateFiles =
-    canonicalLayer === "mentions"
-      ? ["mentions.yaml", "pii_signals.yaml"]
-      : [`${canonicalLayer}.yaml`];
+  const filePath = path.join(repoDir, "annotations", `${canonicalLayer}.yaml`);
 
-  const filePath = candidateFiles
-    .map((name) => path.join(repoDir, "annotations", name))
-    .find((candidate) => fs.existsSync(candidate));
-
-  if (!filePath) {
+  if (!fs.existsSync(filePath)) {
     throw new Error(
-      `Missing annotations for layer '${canonicalLayer}' in ${path.join(repoDir, "annotations")}`,
+      `Missing annotations for layer '${canonicalLayer}' at ${filePath}`,
     );
   }
 

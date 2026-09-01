@@ -1,8 +1,8 @@
 annotations:
   - id: vapor-username-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: username
     evidence:
       file_path: Sources/Vapor/Authentication/BasicAuthorization.swift
@@ -12,17 +12,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: BasicAuthorization.username is a live login identifier parsed from the Authorization header and may be an email address.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: vapor-password-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password
+      key: mention:password
       name: password
     evidence:
       file_path: Sources/Vapor/Authentication/BasicAuthorization.swift
@@ -40,9 +41,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: vapor-bearer-token-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: token
     evidence:
       file_path: Sources/Vapor/Authentication/BearerAuthorization.swift
@@ -52,17 +53,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: BearerAuthorization.token is the bearer secret extracted from the Authorization header.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: vapor-realm-not-pii
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: realm
     evidence:
       file_path: Sources/Vapor/Authentication/Authenticator.swift
@@ -75,6 +77,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

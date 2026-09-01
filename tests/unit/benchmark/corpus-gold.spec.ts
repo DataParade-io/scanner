@@ -221,4 +221,65 @@ describe("imported corpus gold", () => {
 
     expect(violations).toEqual([]);
   });
+
+  it("migrated mention gold uses mentions.yaml with canonical keys (KDATAP-fafa9f)", () => {
+    const legacyFiles: string[] = [];
+    const piiKeyViolations: string[] = [];
+    let acceptedMentions = 0;
+    let adjudicationMentions = 0;
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const legacyPath = path.join(repoDir, "annotations", "pii_signals.yaml");
+      if (fs.existsSync(legacyPath)) {
+        legacyFiles.push(`${repoKey}/pii_signals.yaml`);
+      }
+
+      const manifest = loadBenchmarkManifest(repoDir);
+      if (!manifest.coverage.layers.includes("mentions")) {
+        continue;
+      }
+
+      const mentionsPath = path.join(repoDir, "annotations", "mentions.yaml");
+      expect(fs.existsSync(mentionsPath)).toBe(true);
+
+      const annotations = loadAnnotations(repoDir, "mentions");
+      for (const annotation of annotations) {
+        if (annotation.subject.key.startsWith("pii:")) {
+          piiKeyViolations.push(`${repoKey}:${annotation.id}`);
+        }
+        if (annotation.provenance.review_state === "accepted") {
+          acceptedMentions += 1;
+        }
+        if (annotation.provenance.review_state === "needs_adjudication") {
+          adjudicationMentions += 1;
+        }
+      }
+    }
+
+    expect(legacyFiles).toEqual([]);
+    expect(piiKeyViolations).toEqual([]);
+    expect(acceptedMentions).toBe(79);
+    expect(adjudicationMentions).toBe(278);
+  });
+
+  it("maps accepted corpus mention:email to concept leaf email_address (KDATAP-fafa9f)", () => {
+    const repoDir = path.join(benchmarkRoot, "repos", "directus");
+    const annotations = loadAnnotations(repoDir, "mentions");
+    const sample = annotations.find(
+      (entry) =>
+        entry.subject.key === "mention:email" &&
+        entry.provenance.review_state === "accepted",
+    );
+    expect(sample).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+
+    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.classification.conceptLeaf).toBe("email_address");
+    expect(record.disposition).toBe("accepted");
+    expect(record.observedTokenCandidates?.some((token) => token.value === sample!.subject.name)).toBe(
+      true,
+    );
+  });
 });

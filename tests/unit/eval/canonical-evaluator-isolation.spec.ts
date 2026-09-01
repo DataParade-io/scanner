@@ -18,9 +18,9 @@ describe("canonical evaluator isolation", () => {
   it("never leaves legacy prefixes on identity.identityKey", () => {
     const inputs = [
       {
-        id: "iso-pii",
-        layer: "pii_signals" as const,
-        subject: { key: "pii:email_address" },
+        id: "iso-mention",
+        layer: "mentions" as const,
+        subject: { key: "mention:email" },
       },
       {
         id: "iso-pii-signal",
@@ -48,12 +48,12 @@ describe("canonical evaluator isolation", () => {
     }
   });
 
-  it("does not map pii:email_address to mention:email or concept leaf email", () => {
+  it("maps mention:email to concept leaf email_address via rule_id_to_concept_leaf", () => {
     const { record } = loadLegacyGoldRecord(
       {
-        id: "iso-no-rule-alias",
+        id: "iso-rule-map",
         layer: "mentions",
-        subject: { key: "pii:email_address" },
+        subject: { key: "mention:email" },
         evidence,
         expected: { status: "positive", labels: ["email"] },
         provenance: {
@@ -65,8 +65,7 @@ describe("canonical evaluator isolation", () => {
       { warn: () => undefined },
     );
 
-    expect(record.identity.identityKey).toBe("mention:email_address");
-    expect(record.identity.identityKey).not.toBe("mention:email");
+    expect(record.identity.identityKey).toBe("mention:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptLeaf).not.toBe("email");
   });
@@ -75,7 +74,7 @@ describe("canonical evaluator isolation", () => {
     const expectation = withId(
       buildAcceptedGoldExpectation({
         layer: "mentions",
-        identityKey: "mention:email_address",
+        identityKey: "mention:email",
         conceptLeaf: "email_address",
         evidenceLocations: [evidence],
         observedTokenCandidates: [

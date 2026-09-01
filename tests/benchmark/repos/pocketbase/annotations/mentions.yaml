@@ -1,8 +1,8 @@
 annotations:
   - id: pocketbase-email-field-type-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: core/field_email.go
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-field-name-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: FieldNameEmail
     evidence:
       file_path: core/field.go
@@ -40,9 +40,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-password-bcrypt-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: password
     evidence:
       file_path: core/field_password.go
@@ -52,17 +52,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: PasswordField documents bcrypt hashed strings for the auth collection password system field.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-jwt-auth-token-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: auth
     evidence:
       file_path: core/record_tokens.go
@@ -72,17 +73,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: TokenTypeAuth labels the JWT bearer tokens returned by NewAuthToken.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-record-id-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: id
     evidence:
       file_path: core/db_model.go
@@ -92,17 +94,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: BaseModel.Id is the primary key copied into TokenClaimId JWT claims.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-token-claim-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: TokenClaimEmail
     evidence:
       file_path: core/record_tokens.go
@@ -120,9 +123,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-token-key-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: tokenKey
     evidence:
       file_path: core/field.go
@@ -132,17 +135,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: FieldNameTokenKey identifies the per-record secret mixed into JWT signing keys.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-verified-not-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: verified
     evidence:
       file_path: core/record_model_auth.go
@@ -155,13 +159,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-email-field-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: core/record_model_auth.go
@@ -179,9 +183,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-password-hash-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: password
     evidence:
       file_path: core/field_password.go
@@ -191,17 +195,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: PasswordFieldValue.Hash stores the bcrypt verifier persisted to the database.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-token-key-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: tokenKey
     evidence:
       file_path: core/record_model_auth.go
@@ -211,17 +216,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: TokenKey is combined with collection token secrets to sign JWT auth tokens.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-jwt-auth-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: auth_token
     evidence:
       file_path: core/record_tokens.go
@@ -231,17 +237,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: NewAuthToken returns a signed JWT bearer credential for authenticated API access.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-token-claim-new-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: TokenClaimNewEmail
     evidence:
       file_path: core/record_tokens.go
@@ -259,9 +266,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-auth-token-secret-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: Secret
     evidence:
       file_path: core/collection_model_auth_options.go
@@ -271,17 +278,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: AuthToken.Secret is a random signing key combined with tokenKey to mint JWT credentials.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-external-provider-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: providerId
     evidence:
       file_path: core/external_auth_model.go
@@ -291,17 +299,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: ProviderId stores the external OAuth provider's subject identifier for the linked account.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-plain-password-transient-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: Plain
     evidence:
       file_path: core/field_password.go
@@ -311,17 +320,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: PasswordFieldValue.Plain holds the supplied password before bcrypt hashing on write.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-set-password-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: password
     evidence:
       file_path: core/record_model_auth.go
@@ -331,17 +341,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: SetPassword writes a plaintext password onto the auth record before hashing.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-smtp-username-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: Username
     evidence:
       file_path: core/settings_model.go
@@ -351,17 +362,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: SMTP Username is the mailbox/login used to send mail from the app.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-smtp-password-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: Password
     evidence:
       file_path: core/settings_model.go
@@ -371,10 +383,11 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: SMTP Password is the mail-server credential used to send mail.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

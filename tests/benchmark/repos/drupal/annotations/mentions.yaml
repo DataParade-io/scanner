@@ -1,8 +1,8 @@
 annotations:
   - id: drupal-name-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: name
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -12,17 +12,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: The name base field is the required username used for login and display.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-mail-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: mail
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -40,9 +41,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-pass-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: pass
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -52,17 +53,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: pass is the hashed password field described as the password of this user.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-init-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: init
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -80,9 +82,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-uid-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: uid
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -92,17 +94,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: uid is the numeric user ID stored in session and database queries.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-one-time-hash-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: hash
     evidence:
       file_path: core/modules/user/src/OneTimeAuthentication.php
@@ -112,17 +115,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: hash in generateOneTimeLoginUrl is the one-time login bearer code in password-reset URLs.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-timezone-not-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: timezone
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -135,13 +139,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-csrf-token-not-access-token
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: csrf_token
     evidence:
       file_path: core/modules/user/src/Controller/UserAuthenticationController.php
@@ -149,18 +153,19 @@ annotations:
       end_line: 240
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:access_token
     rationale: csrf_token is a CSRF form-protection value, not a bearer access token for API authorization.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-get-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: getEmail
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -178,9 +183,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-get-account-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: getAccountName
     evidence:
       file_path: core/modules/user/src/Entity/User.php
@@ -190,17 +195,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: getAccountName returns the stored username string.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-login-pass-credential-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: pass
     evidence:
       file_path: core/modules/user/src/Form/UserLoginForm.php
@@ -210,17 +216,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: The login form pass element accepts the plaintext password submitted by the user.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-http-login-pass-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: credentials.pass
     evidence:
       file_path: core/modules/user/src/Controller/UserAuthenticationController.php
@@ -230,10 +237,11 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: credentials['pass'] is the plaintext password from the JSON login request body.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
