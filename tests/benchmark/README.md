@@ -4,11 +4,9 @@ Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release
 
 Versioned ground-truth data for deterministic scanner evaluation. Labels are curated independently of scanner output. Headline denominators use `review_state: accepted`.
 
-On load, corpus layer `pii_signals` normalizes to `mentions` for legacy type compat only. Gold subject keys use `mention:<rule_id>` (canonical) or `mention:<taxonomy_suffix>` (adjudication bookmarks).
+Canonical corpus layers are `components`, `data_flows`, `mentions`, and `data_items`. Gold subject keys use `mention:<rule_id>` when rule-aligned, or `mention:<taxonomy_suffix>` for adjudication bookmarks.
 
-Canonical corpus layers are `components`, `data_flows`, `mentions`, and `data_items`.
-
-As of 2026-08-30 accepted positives: components 519, data_flows 419, pii_signals 325, data_items 302. Original-ten packets still have leftover proposed non-positive or unaccepted records from earlier curation.
+As of 2026-08-30 accepted positives: components 519, data_flows 419, mentions 325, data_items 302. Original-ten packets still have leftover proposed non-positive or unaccepted records from earlier curation.
 
 
 ## Layout
@@ -181,6 +179,7 @@ Two lanes keep pull requests fast while still exercising the full pinned corpus 
 - `tests/unit/benchmark/scorecard-vector.spec.ts` and `run-four-layer-scorecard.spec.ts` — `scorecard-vector/2`
 - `tests/unit/eval/canonical-computability.spec.ts` — per-metric computability states
 - `tests/unit/benchmark/ci-smoke-digests.spec.ts` — pinned corpus/taxonomy/concept-map/adapter digests under `tests/fixtures/baseline/pins/`
+- `tests/unit/docs/evaluation-docs-contract.spec.ts` — evaluation prose aligned with layer constants and contract versions
 
 Corpus YAML for all 29 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
 
