@@ -42,17 +42,17 @@ function personalDataFixtureResult(
 export function personalDataFindingToLayerFinding(
   finding: PersonalDataFinding,
 ): LayerFinding {
+  const sourceLines = finding.evidenceLocations.map((location) => ({
+    file_path: location.filePath,
+    start_line: location.startLine,
+    end_line: location.endLine,
+  }));
+
   return {
     key: finding.subjectKey,
     labels: [...finding.labels],
-    sourceFilePaths: [finding.filePath],
-    sourceLines: [
-      {
-        file_path: finding.filePath,
-        start_line: finding.startLine,
-        end_line: finding.endLine,
-      },
-    ],
+    sourceFilePaths: [...new Set(sourceLines.map((line) => line.file_path))].sort(),
+    sourceLines,
   };
 }
 

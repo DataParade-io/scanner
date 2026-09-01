@@ -97,8 +97,7 @@ function layerFindingToPersonalData(
   layer: PersonalDataEvalLayer,
   adapterMapVersion: string,
 ): CanonicalScannerFinding {
-  const line = finding.sourceLines[0];
-  if (!line) {
+  if (finding.sourceLines.length === 0) {
     throw new Error(`Personal-data finding '${finding.key}' is missing source lines`);
   }
 
@@ -106,9 +105,11 @@ function layerFindingToPersonalData(
     {
       subjectKey: finding.key,
       labels: [...finding.labels],
-      filePath: normalizeEvalPath(line.file_path),
-      startLine: line.start_line,
-      endLine: line.end_line,
+      evidenceLocations: finding.sourceLines.map((line) => ({
+        filePath: normalizeEvalPath(line.file_path),
+        startLine: line.start_line,
+        endLine: line.end_line,
+      })),
     },
     layer,
     adapterMapVersion,

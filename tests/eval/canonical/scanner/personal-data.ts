@@ -49,13 +49,11 @@ export function adaptPersonalDataFinding(
     identityKey: finding.subjectKey,
     conceptLeaf,
     conceptAncestry,
-    evidenceLocations: [
-      {
-        file_path: finding.filePath,
-        start_line: finding.startLine,
-        end_line: finding.endLine,
-      },
-    ],
+    evidenceLocations: finding.evidenceLocations.map((location) => ({
+      file_path: location.filePath,
+      start_line: location.startLine,
+      end_line: location.endLine,
+    })),
     observedTokenCandidates:
       observedTokenCandidates.length > 0 ? observedTokenCandidates : undefined,
     adapterMapVersion,
