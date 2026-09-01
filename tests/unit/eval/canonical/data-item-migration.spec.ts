@@ -62,6 +62,57 @@ describe("data-item migration", () => {
     expect(bucket).toBe("tier_a_canonical_suffix");
   });
 
+  it("classifies suffix-vs-label email conflict as tier B", () => {
+    const result = classifyDataItemRow(
+      dataItemRecord({
+        id: "redmine-email-address",
+        subject: { key: "data_item:address", name: "address" },
+        expected: { status: "positive", labels: ["email_address"] },
+      }),
+      "skipped",
+    );
+    expect(result.bucket).toBe("tier_b_label_guided");
+    expect(result.mapEntry?.ruleId).toBe("email");
+    expect(result.mapEntry?.conceptLeaf).toBe("email_address");
+  });
+
+  it("classifies password_verifier label vs password suffix as tier C", () => {
+    const result = classifyDataItemRow(
+      dataItemRecord({
+        id: "directus-user-password",
+        subject: { key: "data_item:password", name: "password" },
+        expected: { status: "positive", labels: ["password_verifier"] },
+      }),
+      "skipped",
+    );
+    expect(result.bucket).toBe("tier_c_category_unmapped");
+    expect(result.mapEntry).toBeUndefined();
+  });
+
+  it("keeps credential_secret label with password suffix as tier A", () => {
+    const bucket = classifyDataItemRow(
+      dataItemRecord({
+        id: "redmine-plain-password",
+        subject: { key: "data_item:password", name: "password" },
+        expected: { status: "positive", labels: ["credential_secret"] },
+      }),
+      "skipped",
+    ).bucket;
+    expect(bucket).toBe("tier_a_canonical_suffix");
+  });
+
+  it("keeps directus first_name with person_name label as tier A", () => {
+    const bucket = classifyDataItemRow(
+      dataItemRecord({
+        id: "directus-user-first-name",
+        subject: { key: "data_item:first_name", name: "first_name" },
+        expected: { status: "positive", labels: ["person_name"] },
+      }),
+      "skipped",
+    ).bucket;
+    expect(bucket).toBe("tier_a_canonical_suffix");
+  });
+
   it("builds candidate without rewriting subject.key", () => {
     const record = dataItemRecord({
       id: "candidate-row",
