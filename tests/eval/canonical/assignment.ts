@@ -1,4 +1,4 @@
-import { strictCorrectness } from "./match";
+import { assignmentCandidate } from "./match";
 import type { CanonicalGoldExpectation, CanonicalScannerFinding } from "./types";
 
 export interface AssignmentPair {
@@ -17,7 +17,7 @@ function findingCouldMatchExpectation(
   expectation: CanonicalGoldExpectation,
   finding: CanonicalScannerFinding,
 ): boolean {
-  return strictCorrectness(expectation, finding);
+  return assignmentCandidate(expectation, finding);
 }
 
 /**
@@ -87,7 +87,7 @@ export function oneFindingCannotSatisfyBoth(
   finding: CanonicalScannerFinding & { id: string },
 ): boolean {
   const matches = expectations.filter((expectation) =>
-    strictCorrectness(expectation, finding),
+    assignmentCandidate(expectation, finding),
   );
   return matches.length <= 1;
 }
