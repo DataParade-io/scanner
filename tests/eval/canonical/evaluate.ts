@@ -6,16 +6,18 @@ import type {
   FixtureScanResult,
 } from "../types";
 import { isEvalPathContractValid, normalizeEvalPath } from "../identity";
-import { isUnread as isCaseUnread } from "../eligibility/ledger-access";
+import { isUnread as isCaseUnread, countProcessedScopeFiles, getLayerLedger, isPathSuccessfullyProcessed } from "../eligibility/ledger-access";
 import { assignOneToOne, type AssignmentResult } from "./assignment";
 import {
   canonicalFindingFromLayerFinding,
   canonicalGoldFromEvalCase,
   findingsForEvalLayer,
 } from "./bridge";
+import { computeMetricComputability } from "./computability";
 import { assignmentCandidate, conceptCorrectness, negativeObservationCandidate } from "./match";
 import { isAcceptedEvaluablePositive } from "./types";
 import type { CanonicalGoldExpectation, CanonicalScannerFinding } from "./types";
+import type { ScopeDenominators } from "../types";
 
 const LAYER_GENERIC_LABELS: Record<EvalLayer, ReadonlySet<string>> = {
   components: new Set(["component"]),
@@ -142,6 +144,49 @@ function computePrecisionFromAssignment(
   };
 }
 
+function collectScopeMetrics(
+  exhaustiveScopes: Map<string, string[]>,
+  buckets: Map<string, BucketState>,
+  byFixture: Map<string, FixtureScanResult>,
+): { scope: ScopeDenominators; locationlessFindingCount: number } {
+  const reviewedFiles = new Set<string>();
+  const processedFiles = new Set<string>();
+  let locationlessFindingCount = 0;
+
+  for (const [bucketKey, scopeFiles] of exhaustiveScopes) {
+    const bucket = buckets.get(bucketKey);
+    if (!bucket) {
+      continue;
+    }
+    const scan = byFixture.get(bucket.fixture);
+    const ledger = getLayerLedger(scan, bucket.layer);
+    const hasProcessedScope = countProcessedScopeFiles(scopeFiles, ledger) > 0;
+
+    for (const filePath of scopeFiles) {
+      reviewedFiles.add(normalizeEvalPath(filePath));
+      if (isPathSuccessfullyProcessed(ledger, filePath)) {
+        processedFiles.add(normalizeEvalPath(filePath));
+      }
+    }
+
+    if (hasProcessedScope) {
+      for (const finding of bucket.findings) {
+        if (!findingHasLocations(finding)) {
+          locationlessFindingCount += 1;
+        }
+      }
+    }
+  }
+
+  return {
+    scope: {
+      reviewedScopeFileCount: reviewedFiles.size,
+      processedScopeFileCount: processedFiles.size,
+    },
+    locationlessFindingCount,
+  };
+}
+
 interface BucketState {
   fixture: string;
   layer: EvalLayer;
@@ -230,6 +275,11 @@ export function evaluateCanonical(
   let negativeCases = 0;
   let negativeCasesPassed = 0;
   let unreadCount = 0;
+  let positiveCaseCount = 0;
+  let unreadPositiveCount = 0;
+  let negativeCaseCount = 0;
+  let unreadNegativeCount = 0;
+  const layer = cases[0]?.layer ?? "components";
 
   for (const caseRecord of cases) {
     const scan = byFixture.get(caseRecord.fixture);
@@ -254,7 +304,9 @@ export function evaluateCanonical(
 
     let negativeClean = true;
     if (isNegativeCase(caseRecord)) {
+      negativeCaseCount += 1;
       if (unread) {
+        unreadNegativeCount += 1;
         negativeClean = false;
       } else {
         negativeCases += 1;
@@ -263,6 +315,13 @@ export function evaluateCanonical(
         if (negativeClean) {
           negativeCasesPassed += 1;
         }
+      }
+    }
+
+    if (caseRecord.expected.status === "positive") {
+      positiveCaseCount += 1;
+      if (unread) {
+        unreadPositiveCount += 1;
       }
     }
 
@@ -318,6 +377,36 @@ export function evaluateCanonical(
       ? null
       : exhaustiveScopedMatches / exhaustiveScopedFindings;
 
+  const { scope, locationlessFindingCount } = collectScopeMetrics(
+    exhaustiveScopes,
+    buckets,
+    byFixture,
+  );
+
+  const denominators = {
+    evaluablePositives,
+    matchedPositives,
+    matchedWithCorrectLabels,
+    negativeCases,
+    negativeCasesPassed,
+    exhaustiveScopedFindings,
+    exhaustiveScopedMatches,
+  };
+
+  const metricComputability = computeMetricComputability({
+    layer,
+    denominators,
+    scope,
+    recall,
+    precision,
+    negativeCasePassRate,
+    positiveCaseCount,
+    unreadPositiveCount,
+    negativeCaseCount,
+    unreadNegativeCount,
+    locationlessFindingCount,
+  });
+
   return {
     scores: {
       recall,
@@ -326,15 +415,8 @@ export function evaluateCanonical(
       precision,
       negativeCasePassRate,
       unreadCount,
-      denominators: {
-        evaluablePositives,
-        matchedPositives,
-        matchedWithCorrectLabels,
-        negativeCases,
-        negativeCasesPassed,
-        exhaustiveScopedFindings,
-        exhaustiveScopedMatches,
-      },
+      denominators,
+      metricComputability,
     },
     caseResults,
   };

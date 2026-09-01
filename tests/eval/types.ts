@@ -83,6 +83,34 @@ export interface EvalScoreDenominators {
   exhaustiveScopedMatches: number;
 }
 
+export type MetricComputabilityState =
+  | "no_reviewed_scope"
+  | "reviewed_scope_unprocessed"
+  | "processed_scope_zero_predictions"
+  | "migration_incomplete_or_not_ready"
+  | "unscorable_provenance"
+  | "computable";
+
+export interface ScopeDenominators {
+  reviewedScopeFileCount: number;
+  processedScopeFileCount: number;
+}
+
+export interface MetricScore {
+  state: MetricComputabilityState;
+  value: number | null;
+  numerator: number;
+  denominator: number;
+}
+
+export type HeadlineMetricKind = "recall" | "precision" | "negativeCasePassRate";
+
+export interface MetricComputability {
+  scope: ScopeDenominators;
+  metrics: Record<HeadlineMetricKind, MetricScore>;
+  locationlessFindingCount: number;
+}
+
 export interface EvalScores {
   /** Null when there are no evaluable (read) positive cases */
   recall: number | null;
@@ -96,6 +124,7 @@ export interface EvalScores {
   negativeCasePassRate: number | null;
   unreadCount: number;
   denominators: EvalScoreDenominators;
+  metricComputability: MetricComputability;
 }
 
 export interface EvalCaseResult {

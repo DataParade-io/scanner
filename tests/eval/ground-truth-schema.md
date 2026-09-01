@@ -73,6 +73,8 @@ Subject keys are normalized on load via `normalizeSubjectKey` in `tests/benchmar
 
 Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `evaluateCanonical` (via `scoreEvalCases`) treats those files as a closed world per fixture×layer bucket: every scanner finding with source locations in them is a precision denominator item, and it is a true positive only if it is assigned to an accepted positive gold case on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings are excluded from the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
 
+Precision null rates carry an explicit per-metric computability state: `no_reviewed_scope` (no accepted closed-world files), `reviewed_scope_unprocessed` (scope declared but not successfully processed on the layer ledger), `processed_scope_zero_predictions` (processed scope with zero in-scope predictions), or `unscorable_provenance` (only locationless or otherwise unscoreable findings). States retain reviewed/processed file counts and prediction denominators even when the numeric rate is null. Recall uses separate states and denominators.
+
 ## Known limitations (deferred)
 
 - **Raw hits vs mentions are isomorphic today** — both grades run the same YAML heuristic matcher (`matchPiiSignalsInFiles`); they differ only in subject-key prefix until a distinct roll-up stage exists for mentions.

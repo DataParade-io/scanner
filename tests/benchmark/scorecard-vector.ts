@@ -4,7 +4,17 @@ import type {
   EvalScoreDenominators,
   EvalScoreReport,
   EvalScores,
+  HeadlineMetricKind,
+  MetricComputability,
+  MetricScore,
 } from "../eval/types";
+import {
+  aggregateScopeDenominators,
+  computeMetricComputability,
+  emptyMetricComputability,
+  rollupLayerComputabilitySummary,
+  type LayerComputabilitySummary,
+} from "../eval/canonical/computability";
 import type { ReviewState } from "./schema";
 import {
   DIAGNOSTIC_LAYERS,
@@ -15,9 +25,7 @@ import {
 
 export { HEADLINE_LAYERS, DIAGNOSTIC_LAYERS, type HeadlineLayer };
 
-export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/1";
-
-export type LayerComputability = "scorable" | "unscorable" | "empty";
+export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/2";
 
 export type LayerGateStatus = "scorable" | "pending" | "skip" | "provisional";
 
@@ -28,10 +36,17 @@ export interface LayerGateResult {
   reason?: string;
 }
 
+export interface LayerComputabilityBlock {
+  summary: LayerComputabilitySummary;
+  metrics: Record<HeadlineMetricKind, MetricScore>;
+  scope: MetricComputability["scope"];
+  locationlessFindingCount: number;
+  unscorableReason?: UnscorableReason;
+}
+
 export interface ScorecardLayerEntry {
   layer: HeadlineLayer;
-  computability: LayerComputability;
-  unscorableReason?: UnscorableReason;
+  computability: LayerComputabilityBlock;
   scores: EvalScores;
   gate: LayerGateResult;
 }
@@ -75,13 +90,70 @@ function caseCountForLayer(evalCases: EvalCase[], layer: HeadlineLayer): number 
   return evalCases.filter((caseRecord) => caseRecord.layer === layer).length;
 }
 
+function layerCases(evalCases: EvalCase[], layer: HeadlineLayer): EvalCase[] {
+  return evalCases.filter((caseRecord) => caseRecord.layer === layer);
+}
+
+function unreadCountsFromCaseResults(
+  cases: EvalCase[],
+  caseResults: EvalCaseResult[],
+): { unreadPositiveCount: number; unreadNegativeCount: number } {
+  const unreadByCaseId = new Map(caseResults.map((result) => [result.caseId, result.unread]));
+  let unreadPositiveCount = 0;
+  let unreadNegativeCount = 0;
+
+  for (const caseRecord of cases) {
+    if (!unreadByCaseId.get(caseRecord.id)) {
+      continue;
+    }
+    if (caseRecord.expected.status === "positive") {
+      unreadPositiveCount += 1;
+    } else if (caseRecord.expected.status === "negative") {
+      unreadNegativeCount += 1;
+    }
+  }
+
+  return { unreadPositiveCount, unreadNegativeCount };
+}
+
+type EvalCaseResult = EvalScoreReport["caseResults"][number];
+
 function hasEvaluableWork(scores: EvalScores): boolean {
-  const { denominators } = scores;
+  const { denominators, metricComputability } = scores;
+  const recallComputable = metricComputability.metrics.recall.state === "computable";
+  const precisionComputable = metricComputability.metrics.precision.state === "computable";
+  const negativeComputable =
+    metricComputability.metrics.negativeCasePassRate.state === "computable";
   return (
+    recallComputable ||
+    precisionComputable ||
+    negativeComputable ||
     denominators.evaluablePositives > 0 ||
     denominators.negativeCases > 0 ||
     denominators.exhaustiveScopedFindings > 0
   );
+}
+
+function buildComputabilityBlock(
+  layer: HeadlineLayer,
+  metricComputability: MetricComputability,
+  caseCount: number,
+  provisional: boolean,
+): LayerComputabilityBlock {
+  const summary = rollupLayerComputabilitySummary(
+    layer,
+    caseCount,
+    metricComputability.metrics,
+    provisional,
+  );
+  return {
+    summary,
+    metrics: metricComputability.metrics,
+    scope: metricComputability.scope,
+    locationlessFindingCount: metricComputability.locationlessFindingCount,
+    unscorableReason:
+      layer === "data-flows" && caseCount > 0 ? "needs_adjudication" : undefined,
+  };
 }
 
 export function resolveLayerGate(
@@ -89,11 +161,17 @@ export function resolveLayerGate(
   scores: EvalScores,
   caseCount: number,
   provisional: boolean,
-): { computability: LayerComputability; unscorableReason?: UnscorableReason; gate: LayerGateResult } {
+): { computability: LayerComputabilityBlock; gate: LayerGateResult } {
+  const computability = buildComputabilityBlock(
+    layer,
+    scores.metricComputability,
+    caseCount,
+    provisional,
+  );
+
   if (provisional) {
     return {
-      computability: caseCount === 0 ? "empty" : layer === "data-flows" ? "unscorable" : "scorable",
-      unscorableReason: layer === "data-flows" && caseCount > 0 ? "needs_adjudication" : undefined,
+      computability,
       gate: {
         status: "provisional",
         reason: "non_accepted_review_states",
@@ -103,15 +181,14 @@ export function resolveLayerGate(
 
   if (caseCount === 0) {
     return {
-      computability: "empty",
+      computability,
       gate: { status: "skip", reason: "no_eval_cases" },
     };
   }
 
   if (layer === "data-flows") {
     return {
-      computability: "unscorable",
-      unscorableReason: "needs_adjudication",
+      computability,
       gate: {
         status: "pending",
         reason: "awaiting_canonical_flow_adjudication",
@@ -121,13 +198,13 @@ export function resolveLayerGate(
 
   if (!hasEvaluableWork(scores)) {
     return {
-      computability: "empty",
+      computability,
       gate: { status: "skip", reason: "no_evaluable_work" },
     };
   }
 
   return {
-    computability: "scorable",
+    computability,
     gate: { status: "scorable" },
   };
 }
@@ -142,7 +219,6 @@ export function buildScorecardLayerEntry(
   return {
     layer,
     computability: resolved.computability,
-    unscorableReason: resolved.unscorableReason,
     scores: report.scores,
     gate: resolved.gate,
   };
@@ -165,6 +241,7 @@ function emptyScores(): EvalScores {
       exhaustiveScopedFindings: 0,
       exhaustiveScopedMatches: 0,
     },
+    metricComputability: emptyMetricComputability(),
   };
 }
 
@@ -172,7 +249,11 @@ function rateOrNull(numerator: number, denominator: number): number | null {
   return denominator === 0 ? null : numerator / denominator;
 }
 
-export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
+function aggregateLayerScores(
+  reports: EvalScoreReport[],
+  layer: HeadlineLayer,
+  evalCases: EvalCase[],
+): EvalScores {
   const denominators: EvalScoreDenominators = {
     evaluablePositives: 0,
     matchedPositives: 0,
@@ -196,27 +277,71 @@ export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
     unreadCount += report.scores.unreadCount;
   }
 
+  const recall = rateOrNull(denominators.matchedPositives, denominators.evaluablePositives);
+  const labelAccuracy = rateOrNull(
+    denominators.matchedWithCorrectLabels,
+    denominators.matchedPositives,
+  );
+  const correctLabelRecall = rateOrNull(
+    denominators.matchedWithCorrectLabels,
+    denominators.evaluablePositives,
+  );
+  const precision = rateOrNull(
+    denominators.exhaustiveScopedMatches,
+    denominators.exhaustiveScopedFindings,
+  );
+  const negativeCasePassRate = rateOrNull(
+    denominators.negativeCasesPassed,
+    denominators.negativeCases,
+  );
+
+  const cases = layerCases(evalCases, layer);
+  const caseResults = reports.flatMap((report) => report.caseResults);
+  const { unreadPositiveCount, unreadNegativeCount } = unreadCountsFromCaseResults(
+    cases,
+    caseResults,
+  );
+  const scope = aggregateScopeDenominators(
+    reports.map((report) => report.scores.metricComputability.scope),
+  );
+  const locationlessFindingCount = reports.reduce(
+    (sum, report) => sum + report.scores.metricComputability.locationlessFindingCount,
+    0,
+  );
+
+  const metricComputability = computeMetricComputability({
+    layer,
+    denominators,
+    scope,
+    recall,
+    precision,
+    negativeCasePassRate,
+    positiveCaseCount: cases.filter((caseRecord) => caseRecord.expected.status === "positive")
+      .length,
+    unreadPositiveCount,
+    negativeCaseCount: cases.filter((caseRecord) => caseRecord.expected.status === "negative")
+      .length,
+    unreadNegativeCount,
+    locationlessFindingCount,
+  });
+
   return {
-    recall: rateOrNull(denominators.matchedPositives, denominators.evaluablePositives),
-    labelAccuracy: rateOrNull(
-      denominators.matchedWithCorrectLabels,
-      denominators.matchedPositives,
-    ),
-    correctLabelRecall: rateOrNull(
-      denominators.matchedWithCorrectLabels,
-      denominators.evaluablePositives,
-    ),
-    precision: rateOrNull(
-      denominators.exhaustiveScopedMatches,
-      denominators.exhaustiveScopedFindings,
-    ),
-    negativeCasePassRate: rateOrNull(
-      denominators.negativeCasesPassed,
-      denominators.negativeCases,
-    ),
+    recall,
+    labelAccuracy,
+    correctLabelRecall,
+    precision,
+    negativeCasePassRate,
     unreadCount,
     denominators,
+    metricComputability,
   };
+}
+
+export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
+  if (reports.length === 0) {
+    return emptyScores();
+  }
+  return aggregateLayerScores(reports, "mentions", []);
 }
 
 function buildPacketLayers(
@@ -260,11 +385,12 @@ export function buildScorecardVector(input: BuildScorecardVectorInput): Scorecar
   });
 
   const layers = {} as Record<HeadlineLayer, ScorecardLayerEntry>;
+  const allEvalCases = input.packets.flatMap((packet) => packet.evalCases);
   for (const layer of HEADLINE_LAYERS) {
-    const packetEntries = packetRows.map((packet) => packet.layers[layer]);
-    const aggregatedScores = aggregateEvalScores(
-      packetEntries.map((entry) => ({ scores: entry.scores, caseResults: [] })),
-    );
+    const packetReports = input.packets
+      .map((packet) => packet.layerScores[layer])
+      .filter((report): report is EvalScoreReport => report !== undefined);
+    const aggregatedScores = aggregateLayerScores(packetReports, layer, allEvalCases);
     const totalCaseCount = input.packets.reduce(
       (sum, packet) => sum + caseCountForLayer(packet.evalCases, layer),
       0,
@@ -314,6 +440,10 @@ function formatRate(value: number | null): string {
   return value === null ? "n/a" : `${(value * 100).toFixed(1)}%`;
 }
 
+function formatMetricScore(metric: MetricScore): string {
+  return `${formatRate(metric.value)} [${metric.state}; ${metric.numerator}/${metric.denominator}]`;
+}
+
 export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
   const lines: string[] = [
     "# Scanner scorecard vector",
@@ -331,13 +461,19 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
   for (const layer of HEADLINE_LAYERS) {
     const entry = vector.layers[layer];
     lines.push(`### ${layer}`);
-    lines.push(`- Computability: ${entry.computability}`);
-    if (entry.unscorableReason) {
-      lines.push(`- Unscorable reason: ${entry.unscorableReason}`);
+    lines.push(`- Summary: ${entry.computability.summary}`);
+    if (entry.computability.unscorableReason) {
+      lines.push(`- Unscorable reason: ${entry.computability.unscorableReason}`);
     }
     lines.push(`- Gate: ${entry.gate.status}${entry.gate.reason ? ` (${entry.gate.reason})` : ""}`);
-    lines.push(`- Recall: ${formatRate(entry.scores.recall)}`);
-    lines.push(`- Precision: ${formatRate(entry.scores.precision)}`);
+    lines.push(`- Recall: ${formatMetricScore(entry.computability.metrics.recall)}`);
+    lines.push(`- Precision: ${formatMetricScore(entry.computability.metrics.precision)}`);
+    lines.push(
+      `- Negative pass rate: ${formatMetricScore(entry.computability.metrics.negativeCasePassRate)}`,
+    );
+    lines.push(
+      `- Scope: reviewedFiles=${entry.computability.scope.reviewedScopeFileCount}, processedFiles=${entry.computability.scope.processedScopeFileCount}, locationlessFindings=${entry.computability.locationlessFindingCount}`,
+    );
     lines.push(
       `- Denominators: evaluablePositives=${entry.scores.denominators.evaluablePositives}, exhaustiveScopedFindings=${entry.scores.denominators.exhaustiveScopedFindings}`,
     );

@@ -127,4 +127,36 @@ describe("computeGraphPrecision", () => {
     expect(report.precision).toBeNull();
     expect(report.computabilityReason).toBe("no_exhaustive_scope");
   });
+
+  it("marks processed scope with zero predictions separately from missing scope", () => {
+    const positive = withId(
+      buildAcceptedGoldExpectation({
+        layer: "components",
+        identityKey: "repo::pg",
+        conceptLeaf: "database",
+        componentType: "asset",
+        componentSubtype: "database",
+        evidenceLocations: [sampleEvidence("src/app.ts", 1, 1)],
+      }),
+      "positive",
+    );
+
+    const report = computeGraphPrecision(
+      [],
+      [positive],
+      new Map([
+        [
+          "components",
+          {
+            exhaustiveScopeFiles: scopeFiles,
+            reviewState: "accepted",
+          },
+        ],
+      ]),
+    );
+
+    expect(report.precision).toBeNull();
+    expect(report.denominator).toBe(0);
+    expect(report.computabilityReason).toBe("processed_scope_zero_predictions");
+  });
 });

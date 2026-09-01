@@ -123,17 +123,21 @@ pnpm run benchmark:scorecard vgs-django
 pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard-vector.json
 ```
 
-### Contract (`scorecard-vector/1`)
+### Contract (`scorecard-vector/2`)
 
 | Field | Meaning |
 | --- | --- |
-| `layers` | One entry per headline layer with per-layer `scores`, `computability`, and `gate` |
+| `layers` | One entry per headline layer with per-layer `scores`, structured `computability` (per-metric state + scope counts), and `gate` |
+| `computability.metrics` | Per-metric `{ state, value, numerator, denominator }` for recall, precision, and negative pass rate |
+| `computability.scope` | `reviewedScopeFileCount` and `processedScopeFileCount` retained even when rates are null |
 | `diagnostic.raw-hits` | Diagnostic-only raw pattern-hit metrics |
 | `packets` | Per-repository rows used to build corpus totals |
 
-**Aggregation:** corpus metrics within each layer sum denominators across packets and recompute rates (pooled counts). The vector never publishes a cross-layer scalar, overall score, or blended average.
+**Metric states:** `no_reviewed_scope`, `reviewed_scope_unprocessed`, `processed_scope_zero_predictions`, `migration_incomplete_or_not_ready`, `unscorable_provenance`, `computable`. An empty processed prediction denominator is not the same as absent scope.
 
-**Gates (this slice):** per-layer computability gates only — `scorable`, `pending`, `skip`, or `provisional`. Numeric recall/precision floors belong to the baseline-readiness epic.
+**Aggregation:** corpus metrics within each layer sum denominators and scope counts across packets, then recompute rates and per-metric states (pooled counts). The vector never publishes a cross-layer scalar, overall score, or blended average.
+
+**Gates (rollup only):** per-layer `gate.status` — `scorable`, `pending`, `skip`, or `provisional`. Per-metric computability is authoritative; a computable recall is not hidden when precision is `no_reviewed_scope`. Numeric recall/precision floors belong to the baseline-readiness epic.
 
 | Layer | Typical gate |
 | --- | --- |
