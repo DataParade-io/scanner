@@ -7,7 +7,9 @@ import {
 import type { DetectedComponent } from "../../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../../src/core/types/data-flow";
 import type { SourceLocation } from "../../../../src/core/types/file";
+import { adaptDetectedDataFlow } from "../../canonical/scanner/data-flows";
 import { componentIdentity } from "../components/adapter";
+import type { CanonicalFixtureScanResult } from "../personal-data-adapter";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
@@ -64,6 +66,22 @@ export async function scanFixtureDataFlows(fixture: string): Promise<FixtureScan
   return {
     fixture,
     findings: scanResult.dataFlows.map((flow) => toLayerFinding(flow, componentsById)),
+    scannedFiles: files.map((file) => file.path),
+  };
+}
+
+export async function scanCanonicalDataFlows(fixture: string): Promise<CanonicalFixtureScanResult> {
+  const root = path.join(FIXTURES_ROOT, fixture);
+  const config = createDefaultScanConfiguration({ enableAiInference: false });
+  const { scanResult, files } = await scan(root, config);
+
+  const componentsById = new Map(
+    scanResult.components.map((component) => [component.id, component]),
+  );
+
+  return {
+    fixture,
+    findings: scanResult.dataFlows.map((flow) => adaptDetectedDataFlow(flow, componentsById)),
     scannedFiles: files.map((file) => file.path),
   };
 }

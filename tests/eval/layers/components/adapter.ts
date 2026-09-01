@@ -5,6 +5,8 @@ import {
   scan,
 } from "../../../../src/core/pipeline/orchestrator";
 import type { DetectedComponent } from "../../../../src/core/types/component";
+import { adaptDetectedComponent } from "../../canonical/scanner/components";
+import type { CanonicalFixtureScanResult } from "../personal-data-adapter";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
@@ -40,6 +42,18 @@ export async function scanFixtureComponents(fixture: string): Promise<FixtureSca
   return {
     fixture,
     findings: scanResult.components.map(toLayerFinding),
+    scannedFiles: files.map((file) => file.path),
+  };
+}
+
+export async function scanCanonicalComponents(fixture: string): Promise<CanonicalFixtureScanResult> {
+  const root = path.join(FIXTURES_ROOT, fixture);
+  const config = createDefaultScanConfiguration({ enableAiInference: false });
+  const { scanResult, files } = await scan(root, config);
+
+  return {
+    fixture,
+    findings: scanResult.components.map((component) => adaptDetectedComponent(component)),
     scannedFiles: files.map((file) => file.path),
   };
 }

@@ -62,6 +62,7 @@ export interface BuildFindingInput {
   displayText?: string;
   disposition?: CanonicalDisposition;
   adapterMapVersion?: string;
+  declaredCapabilitySupported?: CanonicalScannerFinding["declaredCapabilitySupported"];
   flowEndpoints?: AssertedFlowEndpoints;
   flowAssertion?: FlowAssertion;
 }
@@ -107,6 +108,7 @@ function baseFindingFields(input: BuildFindingInput): CanonicalScannerFinding {
     observedTokenCandidates: input.observedTokenCandidates,
     display: input.displayText !== undefined ? { displayText: input.displayText } : undefined,
     disposition: input.disposition ?? "accepted",
+    declaredCapabilitySupported: input.declaredCapabilitySupported,
     flowEndpoints: input.flowEndpoints,
     flowAssertion: input.flowAssertion,
   };

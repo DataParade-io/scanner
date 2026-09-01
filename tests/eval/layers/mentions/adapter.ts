@@ -3,6 +3,7 @@ import { mentionIdentity } from "../../../../src/eval-layers/identities";
 import type { LayerFinding } from "../../types";
 import {
   personalDataFindingToLayerFinding,
+  scanCanonicalPersonalDataLayer,
   scanFixturePersonalDataLayer,
 } from "../personal-data-adapter";
 
@@ -20,4 +21,8 @@ export function mentionHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
 
 export async function scanFixtureMentions(fixture: string) {
   return scanFixturePersonalDataLayer(fixture, "mentions");
+}
+
+export async function scanCanonicalMentions(fixture: string) {
+  return scanCanonicalPersonalDataLayer(fixture, "mentions");
 }

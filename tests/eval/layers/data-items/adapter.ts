@@ -1,6 +1,7 @@
 import path from "path";
 
 import { collectPersonalDataFindings } from "../../../../src/eval-layers/collect-personal-data-findings";
+import { scanCanonicalPersonalDataLayer } from "../personal-data-adapter";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
@@ -35,4 +36,8 @@ export async function scanFixtureDataItems(fixture: string): Promise<FixtureScan
     findings: payload.findings.map(personalFindingToLayerFinding),
     scannedFiles: payload.filesScanned,
   };
+}
+
+export async function scanCanonicalDataItems(fixture: string) {
+  return scanCanonicalPersonalDataLayer(fixture, "data-items");
 }
