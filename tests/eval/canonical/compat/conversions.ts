@@ -17,9 +17,15 @@ import {
   LEGACY_SOURCE_CONTRACT_VERSION,
 } from "./contract";
 import { tryRuleIdToConceptEntry } from "../concept-map";
+import {
+  buildRepoLocalEntityId,
+  classificationIdentityKey,
+  resolveComponentSubtype,
+} from "./component-taxonomy";
 import type {
   ConversionKind,
   LegacyGoldRecord,
+  LoadLegacyGoldOptions,
   MigrationDiagnostic,
 } from "./types";
 
@@ -36,6 +42,7 @@ export interface ConversionState {
   displayText?: string;
   disposition: CanonicalDisposition;
   identityAssigned: boolean;
+  entityId?: string;
 }
 
 function parseKeyPrefix(key: string): { prefix: string; rest: string } {
@@ -200,21 +207,7 @@ export function canonicalSubjectKey(
       };
     }
     case "components": {
-      return {
-        state: {
-          identityKey: key,
-          componentType: prefix,
-          componentSubtype: rest,
-          conceptLeaf: rest,
-          conceptAncestry: [rest],
-          identityAssigned: true,
-        },
-        diagnostic: makeDiagnostic(
-          annotationId,
-          "canonical_subject_key",
-          `component key → identity ${key}, type ${prefix}, subtype ${rest}`,
-        ),
-      };
+      return { state: {} };
     }
     case "data-flows": {
       return {
@@ -234,6 +227,117 @@ export function canonicalSubjectKey(
     default:
       throw new Error(`canonical_subject_key: unsupported layer '${state.canonicalLayer}'`);
   }
+}
+
+function appendLegacySubjectKeyToken(
+  state: ConversionState,
+  legacyKey: string,
+): ObservedTokenCandidate[] {
+  const trimmed = legacyKey.trim();
+  if (!trimmed) {
+    return state.observedTokenCandidates;
+  }
+  const alreadyParked = state.observedTokenCandidates.some(
+    (token) => token.provenance === "legacy-subject-key" && token.value === trimmed,
+  );
+  if (alreadyParked) {
+    return state.observedTokenCandidates;
+  }
+  return [...state.observedTokenCandidates, tokenCandidate(trimmed, 0, "legacy-subject-key")];
+}
+
+export function componentStructuredIdentity(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+  options: LoadLegacyGoldOptions = {},
+): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
+  if (state.canonicalLayer !== "components") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  if (input.canonical) {
+    const block = input.canonical;
+    const optionalAssertion: OptionalAssertion | undefined = block.vendor
+      ? { vendor: block.vendor }
+      : undefined;
+    return {
+      state: {
+        identityKey: block.identity_key,
+        componentType: block.component_type,
+        componentSubtype: block.component_subtype,
+        conceptLeaf: block.component_subtype,
+        conceptAncestry: [block.component_subtype],
+        entityId: block.entity_id,
+        optionalAssertion,
+        identityAssigned: true,
+        observedTokenCandidates: appendLegacySubjectKeyToken(state, input.subject.key),
+      },
+      diagnostics: [
+        makeDiagnostic(
+          input.id,
+          "component_canonical_block",
+          `canonical block → identity ${block.identity_key}, entityId ${block.entity_id}`,
+        ),
+      ],
+    };
+  }
+
+  const legacyKey = input.subject.key.trim();
+  const { prefix, rest } = parseKeyPrefix(legacyKey);
+  const componentType = prefix;
+  const componentSubtype = resolveComponentSubtype(
+    componentType,
+    input.expected.labels,
+    rest,
+  );
+  const identityKey = classificationIdentityKey(componentType, componentSubtype);
+
+  let optionalAssertion: OptionalAssertion | undefined;
+  const diagnostics: MigrationDiagnostic[] = [
+    makeDiagnostic(
+      input.id,
+      "component_structured_identity",
+      `legacy key ${legacyKey} → classification identity ${identityKey}, subtype ${componentSubtype}`,
+    ),
+  ];
+
+  if (componentType === "third_party") {
+    optionalAssertion = { vendor: rest };
+    diagnostics.push(
+      makeDiagnostic(
+        input.id,
+        "component_structured_identity",
+        `third_party vendor asserted from key suffix '${rest}'`,
+      ),
+    );
+  }
+
+  let entityId: string | undefined;
+  if (options.repoKey) {
+    entityId = buildRepoLocalEntityId(options.repoKey, input.id);
+    diagnostics.push(
+      makeDiagnostic(
+        input.id,
+        "component_structured_identity",
+        `entityId ${entityId} (bookkeeping only)`,
+      ),
+    );
+  }
+
+  return {
+    state: {
+      identityKey,
+      componentType,
+      componentSubtype,
+      conceptLeaf: componentSubtype,
+      conceptAncestry: [componentSubtype],
+      optionalAssertion,
+      entityId,
+      identityAssigned: true,
+      observedTokenCandidates: appendLegacySubjectKeyToken(state, legacyKey),
+    },
+    diagnostics,
+  };
 }
 
 export function ruleIdToConceptLeafConversion(
@@ -421,6 +525,7 @@ export function buildCanonicalRecord(
       state.observedTokenCandidates.length > 0 ? state.observedTokenCandidates : undefined,
     displayText: state.displayText,
     adapterMapVersion,
+    entityId: state.entityId,
   };
 
   switch (state.disposition) {
@@ -454,6 +559,8 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "corpus_layer_to_canonical",
   "pii_signal_prefix_rewrite",
   "canonical_subject_key",
+  "component_structured_identity",
+  "component_canonical_block",
   "rule_id_to_concept_leaf",
   "legacy_subject_name",
   "expected_labels_provenance",

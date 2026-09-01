@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: UserAuthentication validates username lookup and password checks against local user records.
+    rationale: UserAuthentication validates username lookup and password checks
+      against local user records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-user-authentication-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-cookie-auth-provider
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Cookie is the in-codebase session authentication provider that restores users from PHP sessions.
+    rationale: Cookie is the in-codebase session authentication provider that
+      restores users from PHP sessions.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-cookie-auth-provider
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-users-database
     layer: components
     subject:
@@ -59,6 +71,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-users-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: drupal-http-login-api
     layer: components
     subject:
@@ -72,13 +89,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: UserAuthenticationController exposes POST /user/login as a JSON HTTP authentication endpoint.
+    rationale: UserAuthenticationController exposes POST /user/login as a JSON HTTP
+      authentication endpoint.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-http-login-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: drupal-login-form-api
     layer: components
     subject:
@@ -92,13 +115,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: UserLoginForm is the HTML login route at /user/login that accepts username and password.
+    rationale: UserLoginForm is the HTML login route at /user/login that accepts
+      username and password.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-login-form-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: drupal-user-actor
     layer: components
     subject:
@@ -112,13 +141,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: The User entity represents site end-user accounts authenticated by this module.
+    rationale: The User entity represents site end-user accounts authenticated by
+      this module.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: drupal-not-auth0
     layer: components
     subject:
@@ -131,13 +166,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Authentication uses local password checking. No Auth0 or external IdP appears in this scope.
+    rationale: Authentication uses local password checking. No Auth0 or external IdP
+      appears in this scope.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: drupal-not-sendgrid
     layer: components
     subject:
@@ -150,13 +192,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Password reset delegates to NotificationHandler. No SendGrid SDK or email vendor integration is present.
+    rationale: Password reset delegates to NotificationHandler. No SendGrid SDK or
+      email vendor integration is present.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-not-sendgrid
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: sendgrid
   - id: drupal-cookie-not-cache
     layer: components
     subject:
@@ -169,13 +218,19 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Cookie authentication reads PHP session state, not a separate cache store like Redis.
+    rationale: Cookie authentication reads PHP session state, not a separate cache
+      store like Redis.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-cookie-not-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
   - id: drupal-one-time-auth-service
     layer: components
     subject:
@@ -189,13 +244,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: OneTimeAuthentication generates and verifies HMAC codes for password reset and login links.
+    rationale: OneTimeAuthentication generates and verifies HMAC codes for password
+      reset and login links.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-one-time-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-login-finalizer-service
     layer: components
     subject:
@@ -209,13 +270,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: LoginFinalizer writes uid into the PHP session after successful authentication.
+    rationale: LoginFinalizer writes uid into the PHP session after successful
+      authentication.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-login-finalizer-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-logout-finalizer-service
     layer: components
     subject:
@@ -229,13 +296,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: LogoutFinalizer destroys the session and resets the current user to anonymous.
+    rationale: LogoutFinalizer destroys the session and resets the current user to
+      anonymous.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-logout-finalizer-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-user-flood-control
     layer: components
     subject:
@@ -256,6 +329,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-user-flood-control
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: drupal-user-storage-database
     layer: components
     subject:
@@ -276,6 +354,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-user-storage-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: drupal-password-reset-api
     layer: components
     subject:
@@ -289,13 +372,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: UserAuthenticationController exposes POST /user/password for JSON password reset requests.
+    rationale: UserAuthenticationController exposes POST /user/password for JSON
+      password reset requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-password-reset-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: drupal-user-registration-api
     layer: components
     subject:
@@ -309,13 +398,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: UserRegistrationResource exposes POST /user/register as a REST registration endpoint.
+    rationale: UserRegistrationResource exposes POST /user/register as a REST
+      registration endpoint.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-user-registration-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: drupal-notification-handler
     layer: components
     subject:
@@ -329,13 +424,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: NotificationHandler dispatches account and password reset notification emails.
+    rationale: NotificationHandler dispatches account and password reset
+      notification emails.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-notification-handler
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: drupal-password-checker-service
     layer: components
     subject:
@@ -349,13 +450,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: UserAuthentication uses PasswordInterface to verify and rehash stored password hashes.
+    rationale: UserAuthentication uses PasswordInterface to verify and rehash stored
+      password hashes.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-password-checker-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: drupal-session-database
     layer: components
     subject:
@@ -369,10 +476,16 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Cookie authentication queries users_field_data to rebuild sessions from stored uid values.
+    rationale: Cookie authentication queries users_field_data to rebuild sessions
+      from stored uid values.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: drupal::drupal-session-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database

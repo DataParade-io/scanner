@@ -12,13 +12,20 @@ annotations:
       status: positive
       labels:
         - auth_provider
-    rationale: OIDC discovery and Auth0-specific logout branch on *.auth0.com issuers, integrating the external Auth0 identity provider.
+    rationale: OIDC discovery and Auth0-specific logout branch on *.auth0.com
+      issuers, integrating the external Auth0 identity provider.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: auth0-express::auth0-express-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: auth0-express-auth-service
     layer: components
     subject:
@@ -32,13 +39,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: appSession encrypts and manages the local Express session cookie that holds OIDC tokens between requests.
+    rationale: appSession encrypts and manages the local Express session cookie that
+      holds OIDC tokens between requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: auth0-express::auth0-express-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: auth0-express-customer-actor
     layer: components
     subject:
@@ -52,13 +65,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: req.oidc.user exposes filtered ID token claims representing the signed-in end user.
+    rationale: req.oidc.user exposes filtered ID token claims representing the
+      signed-in end user.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: auth0-express::auth0-express-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: auth0-express-not-supabase
     layer: components
     subject:
@@ -71,10 +90,17 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: client.discovery targets the configured OIDC issuer (Auth0). The lib scope does not call Supabase APIs.
+    rationale: client.discovery targets the configured OIDC issuer (Auth0). The lib
+      scope does not call Supabase APIs.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: auth0-express::auth0-express-not-supabase
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: supabase

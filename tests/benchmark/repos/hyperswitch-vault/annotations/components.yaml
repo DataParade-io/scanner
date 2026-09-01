@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Locker is the vault storage record whose data field holds encrypted card payloads.
+    rationale: Locker is the vault storage record whose data field holds encrypted
+      card payloads.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: hyperswitch-vault::hyperswitch-locker-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: hyperswitch-merchant-customer-actor
     layer: components
     subject:
@@ -39,3 +45,8 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: hyperswitch-vault::hyperswitch-merchant-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer

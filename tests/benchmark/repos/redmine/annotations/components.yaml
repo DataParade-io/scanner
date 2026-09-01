@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: database.yml.example declares a MySQL database named redmine that stores users, tokens, and email addresses.
+    rationale: database.yml.example declares a MySQL database named redmine that
+      stores users, tokens, and email addresses.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-mysql-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: redmine-user-auth-service
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: User.try_to_login and check_password implement in-codebase password and session authentication.
+    rationale: User.try_to_login and check_password implement in-codebase password
+      and session authentication.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-user-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: redmine-token-auth-service
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Token registers api, session, autologin, and recovery actions used to authenticate users without an external IdP.
+    rationale: Token registers api, session, autologin, and recovery actions used to
+      authenticate users without an external IdP.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-token-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: redmine-auth-source-service
     layer: components
     subject:
@@ -72,13 +90,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: AuthSource.authenticate orchestrates on-the-fly registration against configured auth backends inside Redmine.
+    rationale: AuthSource.authenticate orchestrates on-the-fly registration against
+      configured auth backends inside Redmine.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-auth-source-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: redmine-employee-actor
     layer: components
     subject:
@@ -92,13 +116,19 @@ annotations:
       status: positive
       labels:
         - employee
-    rationale: User is the internal staff account Redmine authenticates and authorizes for project work.
+    rationale: User is the internal staff account Redmine authenticates and
+      authorizes for project work.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-employee-actor
+      identity_key: actor:employee
+      component_type: actor
+      component_subtype: employee
   - id: redmine-admin-actor
     layer: components
     subject:
@@ -112,13 +142,19 @@ annotations:
       status: positive
       labels:
         - admin
-    rationale: The admin scope and admin? gate elevated operator privileges distinct from regular users.
+    rationale: The admin scope and admin? gate elevated operator privileges distinct
+      from regular users.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-admin-actor
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin
   - id: redmine-ldap-auth-provider
     layer: components
     subject:
@@ -132,13 +168,20 @@ annotations:
       status: positive
       labels:
         - auth_provider
-    rationale: AuthSourceLdap.authenticate binds to an external LDAP directory the codebase calls but does not own.
+    rationale: AuthSourceLdap.authenticate binds to an external LDAP directory the
+      codebase calls but does not own.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-ldap-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: ldap
   - id: redmine-database-config
     layer: components
     subject:
@@ -152,13 +195,19 @@ annotations:
       status: positive
       labels:
         - config
-    rationale: database.yml.example is the declared configuration source for database connection credentials and adapter settings.
+    rationale: database.yml.example is the declared configuration source for
+      database connection credentials and adapter settings.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-database-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
   - id: redmine-not-auth0
     layer: components
     subject:
@@ -171,13 +220,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Doorkeeper is configured with an empty block and the reviewed auth models do not integrate Auth0.
+    rationale: Doorkeeper is configured with an empty block and the reviewed auth
+      models do not integrate Auth0.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: redmine-not-stripe
     layer: components
     subject:
@@ -190,13 +246,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: The reviewed User and auth models handle login and tokens only; they do not call Stripe or another payment vendor.
+    rationale: The reviewed User and auth models handle login and tokens only; they
+      do not call Stripe or another payment vendor.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: redmine-email-address-model
     layer: components
     subject:
@@ -217,6 +280,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-email-address-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: redmine-principal-identity-service
     layer: components
     subject:
@@ -230,13 +298,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Principal is the shared identity base class for users and groups stored in the users table.
+    rationale: Principal is the shared identity base class for users and groups
+      stored in the users table.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-principal-identity-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: redmine-doorkeeper-oauth-api
     layer: components
     subject:
@@ -250,13 +324,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: routes.rb mounts Doorkeeper OAuth2 application endpoints for API authorization.
+    rationale: routes.rb mounts Doorkeeper OAuth2 application endpoints for API
+      authorization.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-doorkeeper-oauth-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: redmine-anonymous-user-actor
     layer: components
     subject:
@@ -270,13 +350,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: AnonymousUser represents unauthenticated visitors with a fixed anonymous principal record.
+    rationale: AnonymousUser represents unauthenticated visitors with a fixed
+      anonymous principal record.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-anonymous-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: redmine-session-config
     layer: components
     subject:
@@ -290,13 +376,19 @@ annotations:
       status: positive
       labels:
         - config
-    rationale: settings.yml declares session_lifetime and session_timeout values governing authenticated sessions.
+    rationale: settings.yml declares session_lifetime and session_timeout values
+      governing authenticated sessions.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-session-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
   - id: redmine-webhook-outbound-api
     layer: components
     subject:
@@ -317,6 +409,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-webhook-outbound-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: redmine-group-actor
     layer: components
     subject:
@@ -337,6 +434,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-group-actor
+      identity_key: actor:employee
+      component_type: actor
+      component_subtype: employee
   - id: redmine-application-record-orm
     layer: components
     subject:
@@ -350,13 +452,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: ApplicationRecord is the ActiveRecord base class backing all persisted auth models.
+    rationale: ApplicationRecord is the ActiveRecord base class backing all
+      persisted auth models.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-application-record-orm
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: redmine-twofa-auth-service
     layer: components
     subject:
@@ -370,13 +478,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: User.twofa_active? gates two-factor authentication state on stored TOTP secrets.
+    rationale: User.twofa_active? gates two-factor authentication state on stored
+      TOTP secrets.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-twofa-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: redmine-api-key-auth-service
     layer: components
     subject:
@@ -390,10 +504,16 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: User.api_key issues persistent API tokens used to authenticate REST requests.
+    rationale: User.api_key issues persistent API tokens used to authenticate REST
+      requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: redmine::redmine-api-key-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service

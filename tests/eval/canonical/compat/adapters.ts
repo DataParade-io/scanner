@@ -26,5 +26,6 @@ export function annotationRecordToLegacyInput(record: AnnotationRecord): LegacyG
       reviewed_at: record.provenance.reviewed_at,
       review_state: record.provenance.review_state,
     },
+    ...(record.canonical !== undefined ? { canonical: record.canonical } : {}),
   };
 }

@@ -12,10 +12,16 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: CredentialsPassword is Kratos in-process password-credential configuration, not an external IdP.
+    rationale: CredentialsPassword is Kratos in-process password-credential
+      configuration, not an external IdP.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: ory-kratos-password::ory-kratos-password-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service

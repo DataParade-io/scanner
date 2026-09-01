@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CustomerService persists Customer entities through IRepository<Customer>, the primary SQL store for shopper accounts.
+    rationale: CustomerService persists Customer entities through
+      IRepository<Customer>, the primary SQL store for shopper accounts.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: nopcommerce-cookie-auth-service
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: CookieAuthenticationService implements in-codebase cookie authentication via ASP.NET Core SignInAsync, not an external IdP.
+    rationale: CookieAuthenticationService implements in-codebase cookie
+      authentication via ASP.NET Core SignInAsync, not an external IdP.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-cookie-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: nopcommerce-customer-actor
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: Customer is the storefront end-user entity that registers, logs in, and owns profile and order data.
+    rationale: Customer is the storefront end-user entity that registers, logs in,
+      and owns profile and order data.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: nopcommerce-not-auth0
     layer: components
     subject:
@@ -71,13 +89,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: The reviewed customer and authentication files implement local cookie login. They do not integrate Auth0 or another external identity vendor.
+    rationale: The reviewed customer and authentication files implement local cookie
+      login. They do not integrate Auth0 or another external identity vendor.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: nopcommerce-customer-registration-service
     layer: components
     subject:
@@ -91,13 +116,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: CustomerRegistrationService orchestrates registration, login validation, and password changes for storefront customers.
+    rationale: CustomerRegistrationService orchestrates registration, login
+      validation, and password changes for storefront customers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-registration-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: nopcommerce-customer-password-entity
     layer: components
     subject:
@@ -111,13 +142,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CustomerPassword maps hashed credentials to the customer password history table.
+    rationale: CustomerPassword maps hashed credentials to the customer password
+      history table.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-password-entity
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: nopcommerce-external-auth-record-db
     layer: components
     subject:
@@ -131,13 +168,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: ExternalAuthenticationRecord persists OAuth provider identifiers and tokens linked to a customer.
+    rationale: ExternalAuthenticationRecord persists OAuth provider identifiers and
+      tokens linked to a customer.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-external-auth-record-db
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: nopcommerce-external-auth-service
     layer: components
     subject:
@@ -151,13 +194,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: ExternalAuthenticationService links social logins to local customer accounts and signs users in.
+    rationale: ExternalAuthenticationService links social logins to local customer
+      accounts and signs users in.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-external-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: nopcommerce-mfa-plugin-manager
     layer: components
     subject:
@@ -171,13 +220,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: MultiFactorAuthenticationPluginManager loads active MFA plugins during customer login.
+    rationale: MultiFactorAuthenticationPluginManager loads active MFA plugins
+      during customer login.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-mfa-plugin-manager
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: nopcommerce-customer-service-layer
     layer: components
     subject:
@@ -191,13 +246,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: CustomerService is the primary application service for querying and mutating customer records.
+    rationale: CustomerService is the primary application service for querying and
+      mutating customer records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-service-layer
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: nopcommerce-customer-password-repository
     layer: components
     subject:
@@ -211,13 +272,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CustomerService injects IRepository<CustomerPassword> to persist password hashes.
+    rationale: CustomerService injects IRepository<CustomerPassword> to persist
+      password hashes.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-password-repository
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: nopcommerce-customer-repository
     layer: components
     subject:
@@ -231,13 +298,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CustomerService uses IRepository<Customer> as the SQL persistence layer for shopper profiles.
+    rationale: CustomerService uses IRepository<Customer> as the SQL persistence
+      layer for shopper profiles.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-customer-repository
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: nopcommerce-cookie-signout-service
     layer: components
     subject:
@@ -251,13 +324,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: CookieAuthenticationService.SignOutAsync clears the ASP.NET Core authentication cookie.
+    rationale: CookieAuthenticationService.SignOutAsync clears the ASP.NET Core
+      authentication cookie.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-cookie-signout-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: nopcommerce-external-auth-repository
     layer: components
     subject:
@@ -271,10 +350,16 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: ExternalAuthenticationService stores provider associations through IRepository<ExternalAuthenticationRecord>.
+    rationale: ExternalAuthenticationService stores provider associations through
+      IRepository<ExternalAuthenticationRecord>.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: nopcommerce::nopcommerce-external-auth-repository
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database

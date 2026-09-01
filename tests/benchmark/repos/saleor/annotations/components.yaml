@@ -19,6 +19,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: saleor::saleor-account-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: saleor-customer-actor
     layer: components
     subject:
@@ -32,13 +37,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: User is the storefront customer identity with email and addresses, not a service account.
+    rationale: User is the storefront customer identity with email and addresses,
+      not a service account.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: saleor::saleor-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: saleor-not-stripe
     layer: components
     subject:
@@ -51,10 +62,17 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: This account model file does not integrate Stripe or another payment vendor.
+    rationale: This account model file does not integrate Stripe or another payment
+      vendor.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: saleor::saleor-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe

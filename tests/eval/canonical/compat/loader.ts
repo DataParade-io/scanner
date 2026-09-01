@@ -1,6 +1,7 @@
 import {
   buildCanonicalRecord,
   canonicalSubjectKey,
+  componentStructuredIdentity,
   corpusLayerToCanonical,
   expectedLabelsProvenance,
   expectedStatusDisposition,
@@ -36,6 +37,10 @@ export function loadLegacyGoldRecord(
   if (subjectKeyStep.diagnostic) {
     diagnostics.push(subjectKeyStep.diagnostic);
   }
+
+  const componentIdentityStep = componentStructuredIdentity(state, input, options);
+  state = { ...state, ...componentIdentityStep.state };
+  diagnostics.push(...componentIdentityStep.diagnostics);
 
   const ruleIdStep = ruleIdToConceptLeafConversion(state, input);
   state = { ...state, ...ruleIdStep.state };
