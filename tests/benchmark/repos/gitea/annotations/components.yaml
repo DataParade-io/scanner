@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: AccessToken is an xorm-mapped table storing personal access tokens and owner UIDs.
+    rationale: AccessToken is an xorm-mapped table storing personal access tokens
+      and owner UIDs.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: gitea::gitea-access-token-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: gitea-user-actor
     layer: components
     subject:
@@ -32,10 +38,16 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: The user struct is the account identity that owns tokens and profile fields.
+    rationale: The user struct is the account identity that owns tokens and profile
+      fields.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: gitea::gitea-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer

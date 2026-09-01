@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: AccountManagement implements in-codebase customer authentication, password reset, and account activation.
+    rationale: AccountManagement implements in-codebase customer authentication,
+      password reset, and account activation.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-account-management-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-authentication-model-auth-service
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The Authentication model validates password hashes and enforces account lockout during login.
+    rationale: The Authentication model validates password hashes and enforces
+      account lockout during login.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-authentication-model-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-customer-entity-database
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Customer resource model is the EAV entity mapped to the customer database tables.
+    rationale: Customer resource model is the EAV entity mapped to the customer
+      database tables.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-entity-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-login-post-api
     layer: components
     subject:
@@ -72,13 +90,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: LoginPost is the storefront HTTP POST handler that accepts customer login credentials.
+    rationale: LoginPost is the storefront HTTP POST handler that accepts customer
+      login credentials.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-login-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-ajax-login-api
     layer: components
     subject:
@@ -92,13 +116,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: The Ajax Login controller exposes a JSON login endpoint for XHR authentication requests.
+    rationale: The Ajax Login controller exposes a JSON login endpoint for XHR
+      authentication requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-ajax-login-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-customers-api
     layer: components
     subject:
@@ -112,13 +142,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: webapi.xml declares REST routes such as POST /V1/customers for account creation and management.
+    rationale: webapi.xml declares REST routes such as POST /V1/customers for
+      account creation and management.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-customers-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-customer-actor
     layer: components
     subject:
@@ -132,13 +168,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: CustomerInterface models the storefront end-user account, not an admin or service identity.
+    rationale: CustomerInterface models the storefront end-user account, not an
+      admin or service identity.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: magento-not-auth0
     layer: components
     subject:
@@ -151,13 +193,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Login flows delegate to local AccountManagement authentication. The reviewed scope has no Auth0 or external IdP integration.
+    rationale: Login flows delegate to local AccountManagement authentication. The
+      reviewed scope has no Auth0 or external IdP integration.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: magento-not-sendgrid
     layer: components
     subject:
@@ -170,13 +219,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Password-reset email uses Magento TransportBuilder. No SendGrid or other email vendor SDK appears in this scope.
+    rationale: Password-reset email uses Magento TransportBuilder. No SendGrid or
+      other email vendor SDK appears in this scope.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-not-sendgrid
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: sendgrid
   - id: magento-session-not-cache
     layer: components
     subject:
@@ -189,13 +245,19 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Customer Session extends SessionManager for PHP session state, not an in-memory cache layer like Redis.
+    rationale: Customer Session extends SessionManager for PHP session state, not an
+      in-memory cache layer like Redis.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-session-not-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
   - id: magento-webapi-v1-customergroups-id
     layer: components
     subject:
@@ -216,6 +278,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-id
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups-default-storeid
     layer: components
     subject:
@@ -229,13 +296,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customerGroups/default/:storeId REST route.
+    rationale: Customer webapi.xml declares the /V1/customerGroups/default/:storeId
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-default-storeid
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups-default
     layer: components
     subject:
@@ -256,6 +329,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-default
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups-default-id
     layer: components
     subject:
@@ -276,6 +354,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-default-id
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups-id-permissions
     layer: components
     subject:
@@ -289,13 +372,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customerGroups/:id/permissions REST route.
+    rationale: Customer webapi.xml declares the /V1/customerGroups/:id/permissions
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-id-permissions
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups-search
     layer: components
     subject:
@@ -316,6 +405,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups-search
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customergroups
     layer: components
     subject:
@@ -336,6 +430,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customergroups
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-attribute-attributecode
     layer: components
     subject:
@@ -349,13 +448,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customer/attribute/:attributeCode REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customer/attribute/:attributeCode REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-form-formcode
     layer: components
     subject:
@@ -369,13 +474,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customer/form/:formCode REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customer/form/:formCode REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer
     layer: components
     subject:
@@ -396,6 +507,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customer
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-custom
     layer: components
     subject:
@@ -409,13 +525,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customer/custom REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customer/custom REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
     layer: components
     subject:
@@ -429,13 +551,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customerAddress/attribute/:attributeCode REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customerAddress/attribute/:attributeCode REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-form-formcode
     layer: components
     subject:
@@ -449,13 +577,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customerAddress/form/:formCode REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customerAddress/form/:formCode REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress
     layer: components
     subject:
@@ -469,13 +603,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customerAddress REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customerAddress REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-custom
     layer: components
     subject:
@@ -489,13 +629,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/attributeMetadata/customerAddress/custom REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/attributeMetadata/customerAddress/custom REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid
     layer: components
     subject:
@@ -516,6 +662,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers
     layer: components
     subject:
@@ -536,6 +687,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-me
     layer: components
     subject:
@@ -556,6 +712,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-me
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-me-activate
     layer: components
     subject:
@@ -576,6 +737,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-me-activate
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-search
     layer: components
     subject:
@@ -596,6 +762,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-search
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-email-activate
     layer: components
     subject:
@@ -616,6 +787,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-email-activate
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-me-password
     layer: components
     subject:
@@ -636,6 +812,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-me-password
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
     layer: components
     subject:
@@ -649,13 +830,20 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-password
     layer: components
     subject:
@@ -676,6 +864,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-password
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-resetpassword
     layer: components
     subject:
@@ -696,6 +889,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-resetpassword
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid-confirm
     layer: components
     subject:
@@ -709,13 +907,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/:customerId/confirm REST route.
+    rationale: Customer webapi.xml declares the /V1/customers/:customerId/confirm
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid-confirm
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-confirm
     layer: components
     subject:
@@ -736,6 +940,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-confirm
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-validate
     layer: components
     subject:
@@ -756,6 +965,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-validate
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid-permissions-readonly
     layer: components
     subject:
@@ -769,13 +983,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/:customerId/permissions/readonly REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/customers/:customerId/permissions/readonly REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-isemailavailable
     layer: components
     subject:
@@ -796,6 +1016,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-isemailavailable
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-addresses-addressid
     layer: components
     subject:
@@ -809,13 +1034,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/addresses/:addressId REST route.
+    rationale: Customer webapi.xml declares the /V1/customers/addresses/:addressId
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-addresses-addressid
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-me-billingaddress
     layer: components
     subject:
@@ -829,13 +1060,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/me/billingAddress REST route.
+    rationale: Customer webapi.xml declares the /V1/customers/me/billingAddress REST
+      route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-me-billingaddress
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid-billingaddress
     layer: components
     subject:
@@ -849,13 +1086,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/:customerId/billingAddress REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/customers/:customerId/billingAddress REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-me-shippingaddress
     layer: components
     subject:
@@ -869,13 +1112,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/me/shippingAddress REST route.
+    rationale: Customer webapi.xml declares the /V1/customers/me/shippingAddress
+      REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-customerid-shippingaddress
     layer: components
     subject:
@@ -889,13 +1138,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: Customer webapi.xml declares the /V1/customers/:customerId/shippingAddress REST route.
+    rationale: Customer webapi.xml declares the
+      /V1/customers/:customerId/shippingAddress REST route.
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-addresses-addressid
     layer: components
     subject:
@@ -916,6 +1171,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-addresses-addressid
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-v1-customers-activate
     layer: components
     subject:
@@ -936,6 +1196,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-v1-customers-activate
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-customer-repository-api
     layer: components
     subject:
@@ -949,13 +1214,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: CustomerRepositoryInterface defines persistence operations for customer accounts.
+    rationale: CustomerRepositoryInterface defines persistence operations for
+      customer accounts.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-repository-api
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-customer-model
     layer: components
     subject:
@@ -976,6 +1247,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-address-model
     layer: components
     subject:
@@ -996,6 +1272,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-address-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-address-resource-model
     layer: components
     subject:
@@ -1016,6 +1297,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-address-resource-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-customer-registry
     layer: components
     subject:
@@ -1036,6 +1322,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-registry
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-customer-extractor
     layer: components
     subject:
@@ -1049,13 +1340,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: CustomerExtractor builds CustomerInterface objects from registration requests.
+    rationale: CustomerExtractor builds CustomerInterface objects from registration
+      requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-extractor
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-email-notification
     layer: components
     subject:
@@ -1076,6 +1373,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-email-notification
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-login-controller
     layer: components
     subject:
@@ -1096,6 +1398,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-login-controller
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-create-post-api
     layer: components
     subject:
@@ -1116,6 +1423,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-create-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-forgot-password-post-api
     layer: components
     subject:
@@ -1136,6 +1448,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-forgot-password-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-reset-password-post-api
     layer: components
     subject:
@@ -1156,6 +1473,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-reset-password-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-logout-controller
     layer: components
     subject:
@@ -1176,6 +1498,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-logout-controller
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-edit-post-api
     layer: components
     subject:
@@ -1196,6 +1523,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-edit-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-address-form-post-api
     layer: components
     subject:
@@ -1216,6 +1548,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-address-form-post-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-customers-me
     layer: components
     subject:
@@ -1229,13 +1566,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: webapi.xml exposes GET /V1/customers/me for authenticated customer profile reads.
+    rationale: webapi.xml exposes GET /V1/customers/me for authenticated customer
+      profile reads.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-customers-me
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-password-change
     layer: components
     subject:
@@ -1256,6 +1599,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-password-change
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-webapi-activate
     layer: components
     subject:
@@ -1269,13 +1617,19 @@ annotations:
       status: positive
       labels:
         - api
-    rationale: webapi.xml exposes customer self-activation via PUT /V1/customers/me/activate.
+    rationale: webapi.xml exposes customer self-activation via PUT
+      /V1/customers/me/activate.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-webapi-activate
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
   - id: magento-create-account-service
     layer: components
     subject:
@@ -1296,6 +1650,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-create-account-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-change-password-service
     layer: components
     subject:
@@ -1316,6 +1675,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-change-password-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-activate-account-service
     layer: components
     subject:
@@ -1336,6 +1700,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-activate-account-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-authenticate-method
     layer: components
     subject:
@@ -1356,6 +1725,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-authenticate-method
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-auth-failure-handler
     layer: components
     subject:
@@ -1369,13 +1743,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: processAuthenticationFailure increments failed login counters for customers.
+    rationale: processAuthenticationFailure increments failed login counters for
+      customers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-auth-failure-handler
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-session-set-logged-in
     layer: components
     subject:
@@ -1396,6 +1776,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-session-set-logged-in
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-session-logout
     layer: components
     subject:
@@ -1416,6 +1801,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-session-logout
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-address-interface
     layer: components
     subject:
@@ -1429,13 +1819,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: AddressInterface models customer postal addresses including street and region.
+    rationale: AddressInterface models customer postal addresses including street
+      and region.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-address-interface
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-customer-interface-email
     layer: components
     subject:
@@ -1456,6 +1852,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-interface-email
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-customer-interface-password
     layer: components
     subject:
@@ -1476,6 +1877,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-interface-password
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-account-management-interface
     layer: components
     subject:
@@ -1489,13 +1895,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: AccountManagementInterface declares authenticate, reset, and activation contracts.
+    rationale: AccountManagementInterface declares authenticate, reset, and
+      activation contracts.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-account-management-interface
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-validate-reset-token
     layer: components
     subject:
@@ -1509,13 +1921,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: validateResetPasswordLinkToken checks rp_token values before password resets.
+    rationale: validateResetPasswordLinkToken checks rp_token values before password
+      resets.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-validate-reset-token
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: magento-send-reset-confirmation
     layer: components
     subject:
@@ -1529,13 +1947,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: sendPasswordResetConfirmationEmail dispatches password reset messages to customers.
+    rationale: sendPasswordResetConfirmationEmail dispatches password reset messages
+      to customers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-send-reset-confirmation
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-customer-registry-retrieve
     layer: components
     subject:
@@ -1556,6 +1980,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-registry-retrieve
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-customer-registry-email
     layer: components
     subject:
@@ -1576,6 +2005,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-registry-email
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: magento-customer-get-email
     layer: components
     subject:
@@ -1596,6 +2030,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-get-email
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-resource-customer-save
     layer: components
     subject:
@@ -1616,6 +2055,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-resource-customer-save
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: magento-not-stripe
     layer: components
     subject:
@@ -1628,13 +2072,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: CreatePost registers local customer accounts. No Stripe payment SDK appears in this scope.
+    rationale: CreatePost registers local customer accounts. No Stripe payment SDK
+      appears in this scope.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: magento-customer-registry-not-cache
     layer: components
     subject:
@@ -1647,13 +2098,19 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: CustomerRegistry caches entities per request but is not a distributed cache like Redis.
+    rationale: CustomerRegistry caches entities per request but is not a distributed
+      cache like Redis.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-customer-registry-not-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
   - id: magento-not-auth0-component
     layer: components
     subject:
@@ -1666,10 +2123,17 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Customer Session uses local PHP session state. No Auth0 integration appears in the reviewed Customer module.
+    rationale: Customer Session uses local PHP session state. No Auth0 integration
+      appears in the reviewed Customer module.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: magento::magento-not-auth0-component
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0

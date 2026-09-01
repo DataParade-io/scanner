@@ -5,6 +5,7 @@ import YAML from "yaml";
 import {
   ANNOTATION_STATUSES,
   type AnnotationProvenance,
+  type AnnotationCanonical,
   type AnnotationRecord,
   type BenchmarkLayer,
   type BenchmarkManifest,
@@ -255,6 +256,29 @@ function validateAnnotation(
       review_state: reviewState as ReviewState,
     },
   };
+
+  if (raw.canonical !== undefined) {
+    const canonical = isRecord(raw.canonical, `${prefix}:canonical`);
+    const parsedCanonical: AnnotationCanonical = {
+      entity_id: isNonEmptyString(canonical.entity_id, `${prefix}:canonical.entity_id`),
+      identity_key: isNonEmptyString(
+        canonical.identity_key,
+        `${prefix}:canonical.identity_key`,
+      ),
+      component_type: isNonEmptyString(
+        canonical.component_type,
+        `${prefix}:canonical.component_type`,
+      ),
+      component_subtype: isNonEmptyString(
+        canonical.component_subtype,
+        `${prefix}:canonical.component_subtype`,
+      ),
+    };
+    if (canonical.vendor !== undefined) {
+      parsedCanonical.vendor = isNonEmptyString(canonical.vendor, `${prefix}:canonical.vendor`);
+    }
+    record.canonical = parsedCanonical;
+  }
 
   return record;
 }

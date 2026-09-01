@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: DefaultDBConnect opens a SQLite database that persists auth records, password hashes, and tokens.
+    rationale: DefaultDBConnect opens a SQLite database that persists auth records,
+      password hashes, and tokens.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-sqlite-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: pocketbase-record-auth-service
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Record.ValidatePassword and SetPassword implement in-codebase password authentication for auth collections.
+    rationale: Record.ValidatePassword and SetPassword implement in-codebase
+      password authentication for auth collections.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-record-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-jwt-auth-service
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: NewAuthToken signs JWT auth tokens from record id and collection settings inside the codebase.
+    rationale: NewAuthToken signs JWT auth tokens from record id and collection
+      settings inside the codebase.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-jwt-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-auth-collection-options
     layer: components
     subject:
@@ -72,13 +90,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: collectionAuthOptions configures PasswordAuth, MFA, OTP, and token secrets for auth collections.
+    rationale: collectionAuthOptions configures PasswordAuth, MFA, OTP, and token
+      secrets for auth collections.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-auth-collection-options
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-customer-actor
     layer: components
     subject:
@@ -92,13 +116,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: Auth collection Record holds email and password for end-user accounts authenticated by PocketBase.
+    rationale: Auth collection Record holds email and password for end-user accounts
+      authenticated by PocketBase.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: pocketbase-oauth-auth-provider
     layer: components
     subject:
@@ -112,13 +142,20 @@ annotations:
       status: positive
       labels:
         - auth_provider
-    rationale: ExternalAuth validates provider against auth.Providers, wiring OAuth2 identity vendors such as Google.
+    rationale: ExternalAuth validates provider against auth.Providers, wiring OAuth2
+      identity vendors such as Google.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-oauth-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: google_auth
   - id: pocketbase-auth-origin-service
     layer: components
     subject:
@@ -132,13 +169,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: AuthOrigin tracks device fingerprints for auth alerts, an internal service module rather than an HTTP entry point.
+    rationale: AuthOrigin tracks device fingerprints for auth alerts, an internal
+      service module rather than an HTTP entry point.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-auth-origin-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: pocketbase-token-config
     layer: components
     subject:
@@ -152,13 +195,19 @@ annotations:
       status: positive
       labels:
         - config
-    rationale: setDefaultAuthOptions seeds AuthToken.Secret and Duration configuration used when signing JWTs.
+    rationale: setDefaultAuthOptions seeds AuthToken.Secret and Duration
+      configuration used when signing JWTs.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-token-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
   - id: pocketbase-not-auth0
     layer: components
     subject:
@@ -171,13 +220,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: ExternalAuth validates against auth.Providers in core; Auth0 is not referenced in the reviewed auth files.
+    rationale: ExternalAuth validates against auth.Providers in core; Auth0 is not
+      referenced in the reviewed auth files.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: pocketbase-not-stripe
     layer: components
     subject:
@@ -190,13 +246,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: The reviewed auth and db modules implement identity only; they do not integrate Stripe or another payment vendor.
+    rationale: The reviewed auth and db modules implement identity only; they do not
+      integrate Stripe or another payment vendor.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: pocketbase-external-auth-model
     layer: components
     subject:
@@ -210,13 +273,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: ExternalAuth links auth records to OAuth2 provider identities in the _externalAuths collection.
+    rationale: ExternalAuth links auth records to OAuth2 provider identities in the
+      _externalAuths collection.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-external-auth-model
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-mfa-auth-service
     layer: components
     subject:
@@ -237,6 +306,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-mfa-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-otp-auth-service
     layer: components
     subject:
@@ -257,6 +331,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-otp-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-email-field-type
     layer: components
     subject:
@@ -270,13 +349,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: EmailField defines the email column type persisted for auth collection records.
+    rationale: EmailField defines the email column type persisted for auth
+      collection records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-email-field-type
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: pocketbase-password-field-type
     layer: components
     subject:
@@ -297,6 +382,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-password-field-type
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: pocketbase-collection-auth-type
     layer: components
     subject:
@@ -310,13 +400,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: CollectionTypeAuth marks collections that own password and token authentication.
+    rationale: CollectionTypeAuth marks collections that own password and token
+      authentication.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-collection-auth-type
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-oauth2-config
     layer: components
     subject:
@@ -330,13 +426,19 @@ annotations:
       status: positive
       labels:
         - config
-    rationale: OAuth2Config lists enabled OAuth2 providers and mapped identity fields for auth collections.
+    rationale: OAuth2Config lists enabled OAuth2 providers and mapped identity
+      fields for auth collections.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-oauth2-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
   - id: pocketbase-find-auth-record-service
     layer: components
     subject:
@@ -357,6 +459,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-find-auth-record-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: pocketbase-password-auth-config
     layer: components
     subject:
@@ -370,13 +477,19 @@ annotations:
       status: positive
       labels:
         - config
-    rationale: PasswordAuth configures identity fields and enables password authentication for collections.
+    rationale: PasswordAuth configures identity fields and enables password
+      authentication for collections.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-password-auth-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
   - id: pocketbase-external-auths-database
     layer: components
     subject:
@@ -390,10 +503,16 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CollectionNameExternalAuths names the database table storing linked OAuth provider records.
+    rationale: CollectionNameExternalAuths names the database table storing linked
+      OAuth provider records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: pocketbase::pocketbase-external-auths-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database

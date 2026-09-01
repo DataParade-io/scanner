@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Medusa user model defines searchable email and name columns persisted by the ORM layer.
+    rationale: Medusa user model defines searchable email and name columns persisted
+      by the ORM layer.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa-customer::medusa-customer-user-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: medusa-customer-customer-database
     layer: components
     subject:
@@ -39,6 +45,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa-customer::medusa-customer-customer-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: medusa-customer-invite-database
     layer: components
     subject:
@@ -59,6 +70,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa-customer::medusa-customer-invite-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: medusa-customer-user-actor
     layer: components
     subject:
@@ -79,6 +95,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa-customer::medusa-customer-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: medusa-customer-customer-actor
     layer: components
     subject:
@@ -92,10 +113,16 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: Customer is the storefront buyer identity with optional account registration.
+    rationale: Customer is the storefront buyer identity with optional account
+      registration.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa-customer::medusa-customer-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer

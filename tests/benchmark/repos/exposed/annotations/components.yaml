@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: DatabaseApi is the base class for database connections and transaction targets in this ORM access layer.
+    rationale: DatabaseApi is the base class for database connections and
+      transaction targets in this ORM access layer.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: exposed::exposed-database-api
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: exposed-statement-builder-query-api
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: StatementBuilder exposes the insert, delete, update, and select DSL used to build SQL statements.
+    rationale: StatementBuilder exposes the insert, delete, update, and select DSL
+      used to build SQL statements.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: exposed::exposed-statement-builder-query-api
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: exposed-not-stripe
     layer: components
     subject:
@@ -51,13 +63,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Exposed is a database ORM library. The reviewed core sources do not integrate Stripe or any payment processor.
+    rationale: Exposed is a database ORM library. The reviewed core sources do not
+      integrate Stripe or any payment processor.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: exposed::exposed-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: exposed-not-customer-actor
     layer: components
     subject:
@@ -70,13 +89,19 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: SQL reserved keywords like USER appear in vendor keyword lists, but there is no customer or end-user domain model.
+    rationale: SQL reserved keywords like USER appear in vendor keyword lists, but
+      there is no customer or end-user domain model.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: exposed::exposed-not-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: exposed-not-auth-service
     layer: components
     subject:
@@ -89,10 +114,16 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Transaction is a database work unit, not an authentication or session service.
+    rationale: Transaction is a database work unit, not an authentication or session
+      service.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: exposed::exposed-not-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service

@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: The admin::user content type maps to the admin_users table, the persistent store for Strapi admin accounts.
+    rationale: The admin::user content type maps to the admin_users table, the
+      persistent store for Strapi admin accounts.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-admin-users-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: strapi-sessions-database
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: The admin::session content type maps to strapi_sessions, storing refresh tokens and session metadata.
+    rationale: The admin::session content type maps to strapi_sessions, storing
+      refresh tokens and session metadata.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-sessions-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: strapi-auth-service
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The auth service hashes passwords and validates admin credentials against admin_users via strapi.db.query.
+    rationale: The auth service hashes passwords and validates admin credentials
+      against admin_users via strapi.db.query.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-admin-actor
     layer: components
     subject:
@@ -72,13 +90,19 @@ annotations:
       status: positive
       labels:
         - admin
-    rationale: The admin::user content type represents Strapi admin-panel operators with role relations, not public API consumers.
+    rationale: The admin::user content type represents Strapi admin-panel operators
+      with role relations, not public API consumers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-admin-actor
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin
   - id: strapi-not-auth0
     layer: components
     subject:
@@ -91,13 +115,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: The reviewed admin authentication flow uses passport local strategy and session cookies, not Auth0.
+    rationale: The reviewed admin authentication flow uses passport local strategy
+      and session cookies, not Auth0.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: strapi-token-service
     layer: components
     subject:
@@ -111,13 +142,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The token service generates random refresh tokens and resolves JWT signing options.
+    rationale: The token service generates random refresh tokens and resolves JWT
+      signing options.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-token-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-session-manager
     layer: components
     subject:
@@ -131,13 +168,19 @@ annotations:
       status: positive
       labels:
         - cache
-    rationale: session-manager coordinates admin refresh sessions stored for authenticated operators.
+    rationale: session-manager coordinates admin refresh sessions stored for
+      authenticated operators.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-session-manager
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
   - id: strapi-session-middleware
     layer: components
     subject:
@@ -151,13 +194,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The session middleware attaches session handling to incoming admin API requests.
+    rationale: The session middleware attaches session handling to incoming admin
+      API requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-session-middleware
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-bcrypt-hash-service
     layer: components
     subject:
@@ -178,6 +227,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-bcrypt-hash-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-validate-password-service
     layer: components
     subject:
@@ -198,6 +252,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-validate-password-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-forgot-password-service
     layer: components
     subject:
@@ -211,13 +270,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: forgotPassword issues reset tokens and emails admins a password recovery link.
+    rationale: forgotPassword issues reset tokens and emails admins a password
+      recovery link.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-forgot-password-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: strapi-reset-password-service
     layer: components
     subject:
@@ -238,6 +303,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-reset-password-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-local-passport-strategy
     layer: components
     subject:
@@ -251,13 +321,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The local passport strategy authenticates admin users with email and password.
+    rationale: The local passport strategy authenticates admin users with email and
+      password.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-local-passport-strategy
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-auth-controller
     layer: components
     subject:
@@ -271,13 +347,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: The authentication controller exposes login, logout, and password reset HTTP endpoints.
+    rationale: The authentication controller exposes login, logout, and password
+      reset HTTP endpoints.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-auth-controller
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: strapi-admin-user-content-type
     layer: components
     subject:
@@ -291,10 +373,16 @@ annotations:
       status: positive
       labels:
         - admin
-    rationale: The admin::user content type models Strapi admin operators with role relations.
+    rationale: The admin::user content type models Strapi admin operators with role
+      relations.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: strapi::strapi-admin-user-content-type
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin

@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: EmployeeSerializer is a ModelSerializer bound to the Employee model that stores identity fields.
+    rationale: EmployeeSerializer is a ModelSerializer bound to the Employee model
+      that stores identity fields.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: yjdh-employee::yjdh-employee-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: yjdh-employee-actor
     layer: components
     subject:
@@ -32,10 +38,16 @@ annotations:
       status: positive
       labels:
         - employee
-    rationale: Employee is an employment-benefit subject, not a customer or service account.
+    rationale: Employee is an employment-benefit subject, not a customer or service
+      account.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: yjdh-employee::yjdh-employee-actor
+      identity_key: actor:employee
+      component_type: actor
+      component_subtype: employee

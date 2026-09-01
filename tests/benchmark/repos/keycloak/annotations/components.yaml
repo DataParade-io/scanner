@@ -19,6 +19,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: keycloak::keycloak-user-entity-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: keycloak-user-actor
     layer: components
     subject:
@@ -39,6 +44,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: keycloak::keycloak-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: keycloak-credential-entity-database
     layer: components
     subject:
@@ -52,10 +62,16 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CredentialEntity is a JPA entity mapped to CREDENTIAL, storing secret and credential payloads.
+    rationale: CredentialEntity is a JPA entity mapped to CREDENTIAL, storing secret
+      and credential payloads.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: keycloak::keycloak-credential-entity-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database

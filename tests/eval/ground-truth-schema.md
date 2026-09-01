@@ -33,6 +33,8 @@ The three personal-data grades share the same underlying heuristic rules (`patte
 | Grade | Subject key format | Example |
 | --- | --- | --- |
 | Component | `${type}:${name}` (lowercase name) | `third_party:stripe` |
+
+Accepted component annotations may also carry an optional **`canonical`** block (KDATAP-8aed54) with structured `entity_id`, `identity_key`, `component_type`, `component_subtype`, and optional `vendor`. Legacy `subject.key` / `subject.name` remain as provenance; classification identity is `${type}:${subtype}`.
 | Data flow | `flow:${sourceKey}->${targetKey}` | `flow:asset:api->third_party:stripe` |
 
 ## Matching semantics

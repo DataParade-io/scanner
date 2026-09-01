@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Request.Authentication stores authenticated instances per request; it is in-codebase session/auth state, not an external IdP.
+    rationale: Request.Authentication stores authenticated instances per request; it
+      is in-codebase session/auth state, not an external IdP.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: vapor::vapor-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: vapor-customer-actor
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: Authenticatable is the end-user identity type that middleware authenticates and stores on the request.
+    rationale: Authenticatable is the end-user identity type that middleware
+      authenticates and stores on the request.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: vapor::vapor-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: vapor-not-auth0
     layer: components
     subject:
@@ -51,13 +63,21 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Vapor Authentication provides local request-scoped auth primitives. The scoped files do not integrate Auth0 or another external identity provider.
+    rationale: Vapor Authentication provides local request-scoped auth primitives.
+      The scoped files do not integrate Auth0 or another external identity
+      provider.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: vapor::vapor-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: vapor-not-supabase
     layer: components
     subject:
@@ -70,10 +90,17 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: SessionAuthenticator reads a local session ID and authenticates in-process. There is no Supabase or other BaaS integration in scope.
+    rationale: SessionAuthenticator reads a local session ID and authenticates
+      in-process. There is no Supabase or other BaaS integration in scope.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: vapor::vapor-not-supabase
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: supabase

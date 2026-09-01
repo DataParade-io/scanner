@@ -12,13 +12,19 @@ annotations:
       status: positive
       labels:
         - customer
-    rationale: Customer is the storefront end-user account Spree authenticates and associates with orders.
+    rationale: Customer is the storefront end-user account Spree authenticates and
+      associates with orders.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-customer-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
   - id: spree-admin-actor
     layer: components
     subject:
@@ -32,13 +38,19 @@ annotations:
       status: positive
       labels:
         - admin
-    rationale: AdminUser is the privileged staff identity that approves, cancels, and creates orders.
+    rationale: AdminUser is the privileged staff identity that approves, cancels,
+      and creates orders.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-admin-actor
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin
   - id: spree-customer-auth-service
     layer: components
     subject:
@@ -52,13 +64,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: Customer uses has_secure_password and email validation for in-codebase storefront authentication.
+    rationale: Customer uses has_secure_password and email validation for
+      in-codebase storefront authentication.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-customer-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: spree-customer-database
     layer: components
     subject:
@@ -72,13 +90,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Customer maps to the spree_customers table, the persistent store for buyer accounts.
+    rationale: Customer maps to the spree_customers table, the persistent store for
+      buyer accounts.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-customer-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-payment-processing-service
     layer: components
     subject:
@@ -92,13 +116,19 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: PaymentProcessing drives checkout payment workflows rather than exposing an HTTP API surface.
+    rationale: PaymentProcessing drives checkout payment workflows rather than
+      exposing an HTTP API surface.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-payment-processing-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: spree-oauth-identity-service
     layer: components
     subject:
@@ -112,13 +142,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: UserIdentity stores OAuth provider links and tokens for external login strategies.
+    rationale: UserIdentity stores OAuth provider links and tokens for external
+      login strategies.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-oauth-identity-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: spree-not-auth0
     layer: components
     subject:
@@ -131,13 +167,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Core customer auth is local has_secure_password. The reviewed models do not integrate Auth0.
+    rationale: Core customer auth is local has_secure_password. The reviewed models
+      do not integrate Auth0.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
   - id: spree-not-stripe-sdk
     layer: components
     subject:
@@ -150,13 +193,20 @@ annotations:
     expected:
       status: negative
       labels: []
-    rationale: Spree core references Stripe only in gateway extension comments; it does not embed the Stripe SDK in these models.
+    rationale: Spree core references Stripe only in gateway extension comments; it
+      does not embed the Stripe SDK in these models.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-not-stripe-sdk
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
   - id: spree-credit-card-source
     layer: components
     subject:
@@ -170,13 +220,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: CreditCard stores tokenized card metadata and belongs to a customer payment profile.
+    rationale: CreditCard stores tokenized card metadata and belongs to a customer
+      payment profile.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-credit-card-source
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-payment-source-model
     layer: components
     subject:
@@ -190,13 +246,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: PaymentSource is the base class for saved payment instruments linked to customers.
+    rationale: PaymentSource is the base class for saved payment instruments linked
+      to customers.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-payment-source-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-gateway-customer-model
     layer: components
     subject:
@@ -210,13 +272,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: GatewayCustomer maps a Spree customer to a payment gateway wallet profile_id.
+    rationale: GatewayCustomer maps a Spree customer to a payment gateway wallet
+      profile_id.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-gateway-customer-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-payment-model
     layer: components
     subject:
@@ -237,6 +305,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-payment-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-payment-method-model
     layer: components
     subject:
@@ -257,6 +330,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-payment-method-model
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
   - id: spree-admin-auth-service
     layer: components
     subject:
@@ -277,6 +355,11 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-admin-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: spree-customer-password-reset
     layer: components
     subject:
@@ -290,13 +373,19 @@ annotations:
       status: positive
       labels:
         - auth_service
-    rationale: CustomerMethods generates signed password_reset tokens for storefront account recovery.
+    rationale: CustomerMethods generates signed password_reset tokens for storefront
+      account recovery.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-customer-password-reset
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
   - id: spree-address-model
     layer: components
     subject:
@@ -310,13 +399,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Address stores customer shipping and billing contact fields used at checkout.
+    rationale: Address stores customer shipping and billing contact fields used at
+      checkout.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-address-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-order-model
     layer: components
     subject:
@@ -330,13 +425,19 @@ annotations:
       status: positive
       labels:
         - database
-    rationale: Order is the checkout aggregate that references the customer and payment records.
+    rationale: Order is the checkout aggregate that references the customer and
+      payment records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-order-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
   - id: spree-create-user-account-service
     layer: components
     subject:
@@ -350,10 +451,16 @@ annotations:
       status: positive
       labels:
         - service
-    rationale: CreateUserAccount delegates guest checkout account creation to the customer workflow.
+    rationale: CreateUserAccount delegates guest checkout account creation to the
+      customer workflow.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    canonical:
+      entity_id: spree::spree-create-user-account-service
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
