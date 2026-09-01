@@ -4,7 +4,7 @@ Welcome to the project wiki.
 
 ## Evaluation
 
-- [Four-layer scanner evaluation](four-layer-evaluation.md) — personal-data grades (raw hits, mentions, data items) and graph grades (components, data flows), identity keys, and Jest vs Plexus harnesses.
+- [Four-layer scanner evaluation](four-layer-evaluation.md) — headline layers (`mentions`, `data-items`, `components`, `data-flows`), diagnostic `raw-hits`, identity keys, and Jest vs Plexus harnesses.
 - [Eval gold flywheel](eval-flywheel.md) — `finding` and `annotation` issue types for proposed gold until a human accepts it.
 
 ## What's Next

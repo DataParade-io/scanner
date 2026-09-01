@@ -102,7 +102,7 @@ Bugs restore violated behavior.
 
 Chores maintain the ground on which behavior stands.
 
-Findings name one detection we expect (or expect not) to see. They stay **proposed** until a person advances them. Decompose by eval layer in `findings/<id>/decomposition.md`; do not file five sub-tasks.
+Findings name one detection we expect (or expect not) to see. They stay **proposed** until a person advances them. Decompose by eval layer in `findings/<id>/decomposition.md`; do not file per-layer sub-tasks for one finding.
 
 Annotations name one labeling pass over a fixture or corpus repo. They stay **awaiting-review** until a person accepts them. Record the pass in `annotations/<id>/pass.md`.
 

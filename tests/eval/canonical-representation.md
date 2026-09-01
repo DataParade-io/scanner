@@ -8,6 +8,8 @@ Behaviour specification for the versioned canonical representation emitted by bo
 
 The current `${type}:${name}` subject keys in `ground-truth-schema.md` are **legacy**. This document defines the canonical contract that replaces overloaded key strings and the `EvalCase` / `LayerFinding` pair as scoring currency.
 
+Headline layers: `mentions`, `data-items`, `components`, and `data-flows`. The `raw-hits` layer is diagnostic only and does not participate in headline gates.
+
 ---
 
 ## Contract envelope
@@ -94,7 +96,7 @@ Never promoted to canonical identity automatically. Never used to rescue a canon
 | Third parties | Vendor candidate cross-checked against asserted vendor | Auto-copy into canonical vendor; mismatch without adjudication |
 | Data flows | Legacy display and migration provenance only | Endpoint or semantic matching field |
 
-Contradictory observed tokens (for example `pii:email_address` paired with `clientID`) are retained and routed to adjudication.
+Contradictory observed tokens (for example `email_address` paired with `clientID`) are retained and routed to adjudication.
 
 ---
 
@@ -166,7 +168,7 @@ Baseline series 1 uses an approved canonical graph-flow subset declared upfront 
 
 ## Concept correctness
 
-| Grade | Rule |
+| Layer | Rule |
 | --- | --- |
 | Exact-leaf | Credited only when the finding's asserted concept leaf matches the expectation's asserted leaf. |
 | Ancestor-category | Reported separately. An ancestor match (for example `national_identifier` when the leaf is `driver_licence`) does not credit exact-leaf correctness. |
