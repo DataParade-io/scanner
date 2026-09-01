@@ -10,6 +10,8 @@ import {
   type BenchmarkLayer,
   type BenchmarkManifest,
   BENCHMARK_LAYERS,
+  type FlowAnnotationCandidate,
+  type FlowCandidateEndpoint,
   type LayerScopeRecord,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
@@ -280,7 +282,100 @@ function validateAnnotation(
     record.canonical = parsedCanonical;
   }
 
+  if (raw.candidate !== undefined) {
+    if (normalizedLayer !== "data_flows") {
+      throw new Error(`${prefix}:candidate is only supported on data_flows layer`);
+    }
+    record.candidate = validateFlowCandidate(raw.candidate, prefix);
+  }
+
   return record;
+}
+
+function validateFlowCandidateEndpoint(
+  raw: unknown,
+  prefix: string,
+): FlowCandidateEndpoint {
+  const endpoint = isRecord(raw, prefix);
+  const parsed: FlowCandidateEndpoint = {
+    component_type: isNonEmptyString(endpoint.component_type, `${prefix}.component_type`),
+    endpoint_key: isNonEmptyString(endpoint.endpoint_key, `${prefix}.endpoint_key`),
+  };
+  if (endpoint.component_subtype !== undefined) {
+    parsed.component_subtype = isNonEmptyString(
+      endpoint.component_subtype,
+      `${prefix}.component_subtype`,
+    );
+  }
+  if (endpoint.vendor !== undefined) {
+    parsed.vendor = isNonEmptyString(endpoint.vendor, `${prefix}.vendor`);
+  }
+  return parsed;
+}
+
+function validateFlowCandidate(raw: unknown, prefix: string): FlowAnnotationCandidate {
+  const candidate = isRecord(raw, `${prefix}:candidate`);
+  const kind = isNonEmptyString(candidate.kind, `${prefix}:candidate.kind`);
+  if (kind !== "flow") {
+    throw new Error(`${prefix}:candidate.kind must be 'flow'`);
+  }
+
+  const disposition = isNonEmptyString(
+    candidate.disposition_candidate,
+    `${prefix}:candidate.disposition_candidate`,
+  ) as FlowAnnotationCandidate["disposition_candidate"];
+  const confidence = isNonEmptyString(
+    candidate.candidate_confidence,
+    `${prefix}:candidate.candidate_confidence`,
+  ) as FlowAnnotationCandidate["candidate_confidence"];
+
+  const parsed: FlowAnnotationCandidate = {
+    kind: "flow",
+    disposition_candidate: disposition,
+    candidate_confidence: confidence,
+    candidate_notes: isNonEmptyString(candidate.candidate_notes, `${prefix}:candidate.candidate_notes`),
+  };
+
+  if (candidate.candidate_identity_key !== undefined) {
+    parsed.candidate_identity_key = isNonEmptyString(
+      candidate.candidate_identity_key,
+      `${prefix}:candidate.candidate_identity_key`,
+    );
+  }
+  if (candidate.proposed_flow_type !== undefined) {
+    parsed.proposed_flow_type = isNonEmptyString(
+      candidate.proposed_flow_type,
+      `${prefix}:candidate.proposed_flow_type`,
+    );
+  }
+  if (candidate.proposed_data_categories !== undefined) {
+    const categories = candidate.proposed_data_categories;
+    if (!Array.isArray(categories) || categories.some((item) => typeof item !== "string")) {
+      throw new Error(`${prefix}:candidate.proposed_data_categories must be a string array`);
+    }
+    parsed.proposed_data_categories = categories.map((item) => item.trim());
+  }
+  if (candidate.source_entity_id !== undefined) {
+    parsed.source_entity_id = isNonEmptyString(
+      candidate.source_entity_id,
+      `${prefix}:candidate.source_entity_id`,
+    );
+  }
+  if (candidate.target_entity_id !== undefined) {
+    parsed.target_entity_id = isNonEmptyString(
+      candidate.target_entity_id,
+      `${prefix}:candidate.target_entity_id`,
+    );
+  }
+  if (candidate.endpoints !== undefined) {
+    const endpoints = isRecord(candidate.endpoints, `${prefix}:candidate.endpoints`);
+    parsed.endpoints = {
+      source: validateFlowCandidateEndpoint(endpoints.source, `${prefix}:candidate.endpoints.source`),
+      target: validateFlowCandidateEndpoint(endpoints.target, `${prefix}:candidate.endpoints.target`),
+    };
+  }
+
+  return parsed;
 }
 
 export function loadBenchmarkManifest(repoDir: string): BenchmarkManifest {

@@ -16,9 +16,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-not-stripe); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-not-stripe
+      target_entity_id: wordpress::wordpress-not-stripe
   - id: wordpress-password-to-hash
     layer: data_flows
     subject:
@@ -36,9 +43,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-wp-insert-user); prose endpoints plaintext-password->user_pass appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-insert-user
   - id: wordpress-session-to-usermeta
     layer: data_flows
     subject:
@@ -56,9 +69,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'session-token'; unresolved target for slug 'session_tokens'; no component candidates via overlap or rationale+same-file
   - id: wordpress-token-to-auth-cookie
     layer: data_flows
     subject:
@@ -76,9 +94,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-auth-cookie-service); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-auth-cookie-service
+      target_entity_id: wordpress::wordpress-auth-cookie-service
   - id: wordpress-authenticate-check-password
     layer: data_flows
     subject:
@@ -96,9 +121,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'wp_check_password'; no component candidates via overlap or rationale+same-file
   - id: wordpress-insert-user-database
     layer: data_flows
     subject:
@@ -116,9 +146,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-wp-insert-user); prose endpoints user-data->wpdb-users appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-insert-user
   - id: wordpress-rest-email-to-user
     layer: data_flows
     subject:
@@ -136,9 +172,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'rest-email'; unresolved target for slug 'user_email'; no component candidates via overlap or rationale+same-file
   - id: wordpress-rest-abilities-v1-categories-register-routes
     layer: data_flows
     subject:
@@ -156,9 +197,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-abilities-v1-categories-api); prose endpoints http->abilities-v1-categories-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-abilities-v1-categories-api
   - id: wordpress-rest-abilities-v1-list-register-routes
     layer: data_flows
     subject:
@@ -176,9 +223,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-abilities-v1-list-api); prose endpoints http->abilities-v1-list-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-abilities-v1-list-api
   - id: wordpress-rest-abilities-v1-run-register-routes
     layer: data_flows
     subject:
@@ -196,9 +249,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-abilities-v1-run-api); prose endpoints http->abilities-v1-run-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-abilities-v1-run-api
   - id: wordpress-rest-application-passwords-register-routes
     layer: data_flows
     subject:
@@ -216,9 +275,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-application-passwords-api); prose endpoints http->application-passwords-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-application-passwords-api
   - id: wordpress-rest-attachments-register-routes
     layer: data_flows
     subject:
@@ -236,9 +301,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-attachments-api); prose endpoints http->attachments-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-attachments-api
   - id: wordpress-rest-autosaves-register-routes
     layer: data_flows
     subject:
@@ -256,9 +327,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-autosaves-api); prose endpoints http->autosaves-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-autosaves-api
   - id: wordpress-rest-block-directory-register-routes
     layer: data_flows
     subject:
@@ -276,9 +353,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-block-directory-api); prose endpoints http->block-directory-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-block-directory-api
   - id: wordpress-rest-block-pattern-categories-register-routes
     layer: data_flows
     subject:
@@ -296,9 +379,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-block-pattern-categories-api); prose endpoints http->block-pattern-categories-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-block-pattern-categories-api
   - id: wordpress-rest-block-patterns-register-routes
     layer: data_flows
     subject:
@@ -316,9 +405,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-block-patterns-api); prose endpoints http->block-patterns-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-block-patterns-api
   - id: wordpress-rest-block-renderer-register-routes
     layer: data_flows
     subject:
@@ -336,9 +431,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-block-renderer-api); prose endpoints http->block-renderer-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-block-renderer-api
   - id: wordpress-rest-block-types-register-routes
     layer: data_flows
     subject:
@@ -356,9 +457,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-block-types-api); prose endpoints http->block-types-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-block-types-api
   - id: wordpress-rest-comments-register-routes
     layer: data_flows
     subject:
@@ -376,9 +483,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-comments-api); prose endpoints http->comments-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-comments-api
   - id: wordpress-rest-edit-site-export-register-routes
     layer: data_flows
     subject:
@@ -396,9 +509,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-edit-site-export-api); prose endpoints http->edit-site-export-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-edit-site-export-api
   - id: wordpress-rest-font-collections-register-routes
     layer: data_flows
     subject:
@@ -416,9 +535,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-font-collections-api); prose endpoints http->font-collections-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-font-collections-api
   - id: wordpress-rest-font-faces-register-routes
     layer: data_flows
     subject:
@@ -436,9 +561,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-font-faces-api); prose endpoints http->font-faces-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-font-faces-api
   - id: wordpress-rest-global-styles-register-routes
     layer: data_flows
     subject:
@@ -456,9 +587,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-global-styles-api); prose endpoints http->global-styles-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-global-styles-api
   - id: wordpress-rest-global-styles-revisions-register-routes
     layer: data_flows
     subject:
@@ -476,9 +613,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-global-styles-revisions-api); prose endpoints http->global-styles-revisions-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-global-styles-revisions-api
   - id: wordpress-rest-icon-collections-register-routes
     layer: data_flows
     subject:
@@ -496,9 +639,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-icon-collections-api); prose endpoints http->icon-collections-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-icon-collections-api
   - id: wordpress-rest-icons-register-routes
     layer: data_flows
     subject:
@@ -516,9 +665,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-icons-api); prose endpoints http->icons-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-icons-api
   - id: wordpress-rest-menu-locations-register-routes
     layer: data_flows
     subject:
@@ -536,9 +691,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-menu-locations-api); prose endpoints http->menu-locations-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-menu-locations-api
   - id: wordpress-rest-navigation-fallback-register-routes
     layer: data_flows
     subject:
@@ -556,9 +717,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-navigation-fallback-api); prose endpoints http->navigation-fallback-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-navigation-fallback-api
   - id: wordpress-rest-pattern-directory-register-routes
     layer: data_flows
     subject:
@@ -576,9 +743,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-pattern-directory-api); prose endpoints http->pattern-directory-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-pattern-directory-api
   - id: wordpress-rest-plugins-register-routes
     layer: data_flows
     subject:
@@ -596,9 +769,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-plugins-api); prose endpoints http->plugins-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-plugins-api
   - id: wordpress-rest-post-statuses-register-routes
     layer: data_flows
     subject:
@@ -616,9 +795,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-post-statuses-api); prose endpoints http->post-statuses-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-post-statuses-api
   - id: wordpress-rest-post-types-register-routes
     layer: data_flows
     subject:
@@ -636,9 +821,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-post-types-api); prose endpoints http->post-types-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-post-types-api
   - id: wordpress-rest-posts-register-routes
     layer: data_flows
     subject:
@@ -656,9 +847,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-posts-api); prose endpoints http->posts-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-posts-api
   - id: wordpress-rest-revisions-register-routes
     layer: data_flows
     subject:
@@ -676,9 +873,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-revisions-api); prose endpoints http->revisions-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-revisions-api
   - id: wordpress-rest-search-register-routes
     layer: data_flows
     subject:
@@ -696,9 +899,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-search-api); prose endpoints http->search-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-search-api
   - id: wordpress-rest-settings-register-routes
     layer: data_flows
     subject:
@@ -716,9 +925,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-settings-api); prose endpoints http->settings-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-settings-api
   - id: wordpress-rest-sidebars-register-routes
     layer: data_flows
     subject:
@@ -736,9 +951,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-sidebars-api); prose endpoints http->sidebars-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-sidebars-api
   - id: wordpress-rest-site-health-register-routes
     layer: data_flows
     subject:
@@ -756,9 +977,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-site-health-api); prose endpoints http->site-health-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-site-health-api
   - id: wordpress-rest-taxonomies-register-routes
     layer: data_flows
     subject:
@@ -776,9 +1003,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-taxonomies-api); prose endpoints http->taxonomies-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-taxonomies-api
   - id: wordpress-rest-template-autosaves-register-routes
     layer: data_flows
     subject:
@@ -796,9 +1029,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-template-autosaves-api); prose endpoints http->template-autosaves-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-template-autosaves-api
   - id: wordpress-rest-template-revisions-register-routes
     layer: data_flows
     subject:
@@ -816,9 +1055,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-template-revisions-api); prose endpoints http->template-revisions-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-template-revisions-api
   - id: wordpress-rest-templates-register-routes
     layer: data_flows
     subject:
@@ -836,9 +1081,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-templates-api); prose endpoints http->templates-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-templates-api
   - id: wordpress-rest-terms-register-routes
     layer: data_flows
     subject:
@@ -856,9 +1107,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-terms-api); prose endpoints http->terms-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-terms-api
   - id: wordpress-rest-themes-register-routes
     layer: data_flows
     subject:
@@ -876,9 +1133,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-themes-api); prose endpoints http->themes-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-themes-api
   - id: wordpress-rest-url-details-register-routes
     layer: data_flows
     subject:
@@ -896,9 +1159,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-url-details-api); prose endpoints http->url-details-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-url-details-api
   - id: wordpress-rest-view-config-register-routes
     layer: data_flows
     subject:
@@ -916,9 +1185,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-view-config-api); prose endpoints http->view-config-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-view-config-api
   - id: wordpress-rest-widget-types-register-routes
     layer: data_flows
     subject:
@@ -936,9 +1211,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-widget-types-api); prose endpoints http->widget-types-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-widget-types-api
   - id: wordpress-rest-widgets-register-routes
     layer: data_flows
     subject:
@@ -956,9 +1237,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-rest-widgets-api); prose endpoints http->widgets-rest appear intra-component.
+      source_entity_id: wordpress::wordpress-rest-widgets-api
   - id: wordpress-app-password-plaintext-to-hash
     layer: data_flows
     subject:
@@ -976,9 +1263,14 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'application-password'; unresolved target for slug 'hash'; no component candidates via overlap or rationale+same-file
   - id: wordpress-new-user-notification-email
     layer: data_flows
     subject:
@@ -996,9 +1288,14 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'user-email'; unresolved target for slug 'admin-notification'; no component candidates via overlap or rationale+same-file
   - id: wordpress-hash-password-flow
     layer: data_flows
     subject:
@@ -1016,9 +1313,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-hash-password); prose endpoints plaintext-password->hash appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-hash-password
   - id: wordpress-check-password-flow
     layer: data_flows
     subject:
@@ -1036,9 +1339,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-wp-check-password); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-wp-check-password
+      target_entity_id: wordpress::wordpress-wp-check-password
   - id: wordpress-set-password-flow
     layer: data_flows
     subject:
@@ -1056,9 +1366,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-set-password); prose endpoints password->user_pass appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-set-password
   - id: wordpress-authenticate-flow
     layer: data_flows
     subject:
@@ -1076,9 +1392,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'credentials'
   - id: wordpress-app-password-auth-flow
     layer: data_flows
     subject:
@@ -1096,9 +1417,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-wp-authenticate-app-password); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-wp-authenticate-app-password
+      target_entity_id: wordpress::wordpress-wp-authenticate-app-password
   - id: wordpress-validate-app-password-flow
     layer: data_flows
     subject:
@@ -1116,9 +1444,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-wp-validate-app-password); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-wp-validate-app-password
+      target_entity_id: wordpress::wordpress-wp-validate-app-password
   - id: wordpress-clear-cookie-flow
     layer: data_flows
     subject:
@@ -1136,9 +1471,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-clear-auth-cookie); prose endpoints logout->clear-cookie appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-clear-auth-cookie
   - id: wordpress-validate-cookie-flow
     layer: data_flows
     subject:
@@ -1156,9 +1497,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-wp-validate-auth-cookie); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-wp-validate-auth-cookie
+      target_entity_id: wordpress::wordpress-wp-validate-auth-cookie
   - id: wordpress-current-user-flow
     layer: data_flows
     subject:
@@ -1176,9 +1524,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-get-current-user); prose endpoints cookie->current_user appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-get-current-user
   - id: wordpress-create-user-flow
     layer: data_flows
     subject:
@@ -1196,9 +1550,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'registration'
   - id: wordpress-insert-user-flow
     layer: data_flows
     subject:
@@ -1216,9 +1575,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-insert-user); prose endpoints user-data->wp_insert_user appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-insert-user
   - id: wordpress-get-user-by-login-flow
     layer: data_flows
     subject:
@@ -1236,9 +1601,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'get_user_by'; no component candidates via overlap or rationale+same-file
   - id: wordpress-get-user-by-email-flow
     layer: data_flows
     subject:
@@ -1256,9 +1626,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'get_user_by'; no component candidates via overlap or rationale+same-file
   - id: wordpress-username-exists-flow
     layer: data_flows
     subject:
@@ -1276,9 +1651,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-username-exists); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-username-exists
+      target_entity_id: wordpress::wordpress-username-exists
   - id: wordpress-email-exists-flow
     layer: data_flows
     subject:
@@ -1296,9 +1678,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-email-exists); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-email-exists
+      target_entity_id: wordpress::wordpress-email-exists
   - id: wordpress-reset-key-flow
     layer: data_flows
     subject:
@@ -1316,9 +1705,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-get-password-reset-key); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-get-password-reset-key
+      target_entity_id: wordpress::wordpress-get-password-reset-key
   - id: wordpress-check-reset-key-flow
     layer: data_flows
     subject:
@@ -1336,9 +1732,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-check-password-reset-key); prose endpoints reset-key->user appear intra-component.
+      source_entity_id: wordpress::wordpress-check-password-reset-key
   - id: wordpress-session-token-read-flow
     layer: data_flows
     subject:
@@ -1356,9 +1758,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-wp-get-session-token); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-wp-get-session-token
+      target_entity_id: wordpress::wordpress-wp-get-session-token
   - id: wordpress-destroy-sessions-flow
     layer: data_flows
     subject:
@@ -1376,9 +1785,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'logout'; unresolved target for slug 'destroy-sessions'; no component candidates via overlap or rationale+same-file
   - id: wordpress-session-create-flow
     layer: data_flows
     subject:
@@ -1396,9 +1810,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-session-tokens-service); prose endpoints login->session-create appear intra-component.
+      source_entity_id: wordpress::wordpress-session-tokens-service
   - id: wordpress-session-verify-flow
     layer: data_flows
     subject:
@@ -1416,9 +1836,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: low
+      candidate_notes: Single component candidate (wordpress-session-tokens-service); prose endpoints token->session-verify appear intra-component.
+      source_entity_id: wordpress::wordpress-session-tokens-service
   - id: wordpress-session-destroy-flow
     layer: data_flows
     subject:
@@ -1436,9 +1862,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'logout'; unresolved target for slug 'session-destroy'; no component candidates via overlap or rationale+same-file
   - id: wordpress-update-sessions-flow
     layer: data_flows
     subject:
@@ -1456,9 +1887,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'token'; unresolved target for slug 'usermeta'; no component candidates via overlap or rationale+same-file
   - id: wordpress-add-user-meta-flow
     layer: data_flows
     subject:
@@ -1476,9 +1912,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-add-user-meta); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-add-user-meta
+      target_entity_id: wordpress::wordpress-add-user-meta
   - id: wordpress-wpdb-prepare-flow
     layer: data_flows
     subject:
@@ -1496,9 +1939,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'query'; ambiguous target match for slug 'wpdb-prepare'
   - id: wordpress-wpdb-results-flow
     layer: data_flows
     subject:
@@ -1516,9 +1964,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'query'
   - id: wordpress-cache-set-flow
     layer: data_flows
     subject:
@@ -1536,9 +1989,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-cache-set); prose endpoints user-data->cache-set appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-cache-set
   - id: wordpress-cache-get-flow
     layer: data_flows
     subject:
@@ -1556,9 +2015,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: ambiguous source match for slug 'cache'; ambiguous target match for slug 'user-data'
   - id: wordpress-rest-create-user-flow
     layer: data_flows
     subject:
@@ -1576,9 +2040,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'rest-request'; unresolved target for slug 'create_item'; no component candidates via overlap or rationale+same-file
   - id: wordpress-rest-register-routes-flow
     layer: data_flows
     subject:
@@ -1596,9 +2065,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'rest'; unresolved target for slug 'register-routes'; no component candidates via overlap or rationale+same-file
   - id: wordpress-app-password-create-flow
     layer: data_flows
     subject:
@@ -1616,9 +2090,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'request'; unresolved target for slug 'application-password'; no component candidates via overlap or rationale+same-file
   - id: wordpress-app-password-rest-flow
     layer: data_flows
     subject:
@@ -1636,9 +2115,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'rest'; unresolved target for slug 'application-passwords'; no component candidates via overlap or rationale+same-file
   - id: wordpress-generate-password-flow
     layer: data_flows
     subject:
@@ -1656,9 +2140,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-wp-generate-password); prose endpoints entropy->password appear intra-component.
+      source_entity_id: wordpress::wordpress-wp-generate-password
   - id: wordpress-get-users-flow
     layer: data_flows
     subject:
@@ -1676,9 +2166,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Source and target resolve to the same component entity (wordpress-get-users); preserved as transformation evidence, not a headline graph edge.
+      source_entity_id: wordpress::wordpress-get-users
+      target_entity_id: wordpress::wordpress-get-users
   - id: wordpress-user-query-flow
     layer: data_flows
     subject:
@@ -1696,9 +2193,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'args'; ambiguous target match for slug 'user-query'
   - id: wordpress-author-template-flow
     layer: data_flows
     subject:
@@ -1716,9 +2218,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: unresolved
+      candidate_confidence: low
+      candidate_notes: unresolved source for slug 'query'; unresolved target for slug 'get_users'; no component candidates via overlap or rationale+same-file
   - id: wordpress-logged-in-check-flow
     layer: data_flows
     subject:
@@ -1736,9 +2243,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Single component candidate (wordpress-is-user-logged-in); prose endpoints session->is_logged_in appear intra-component.
+      source_entity_id: wordpress::wordpress-is-user-logged-in
   - id: wordpress-not-oauth-flow
     layer: data_flows
     subject:
@@ -1755,9 +2268,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: wp_authenticate validates local WordPress credentials. No OAuth redirect or token exchange appears in this scope.
   - id: wordpress-not-stripe-flow
     layer: data_flows
     subject:
@@ -1774,6 +2292,11 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: rejection
+      candidate_confidence: high
+      candidate_notes: get_users returns user records only. No payment or card data flows to Stripe in the reviewed files.

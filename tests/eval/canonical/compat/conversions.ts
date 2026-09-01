@@ -6,9 +6,11 @@ import {
   buildNeedsAdjudicationRecord,
 } from "../builders";
 import type {
+  AssertedFlowEndpoints,
   CanonicalDisposition,
   CanonicalGoldExpectation,
   CanonicalLayer,
+  FlowAssertion,
   ObservedTokenCandidate,
   OptionalAssertion,
 } from "../../../../src/eval/canonical/types";
@@ -22,6 +24,10 @@ import {
   classificationIdentityKey,
   resolveComponentSubtype,
 } from "./component-taxonomy";
+import {
+  candidateEndpointsToAsserted,
+  flowCandidateToFlowAssertion,
+} from "./flow-migration";
 import type {
   ConversionKind,
   LegacyGoldRecord,
@@ -43,6 +49,8 @@ export interface ConversionState {
   disposition: CanonicalDisposition;
   identityAssigned: boolean;
   entityId?: string;
+  flowEndpoints?: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
 }
 
 function parseKeyPrefix(key: string): { prefix: string; rest: string } {
@@ -251,7 +259,7 @@ export function componentStructuredIdentity(
   input: LegacyGoldRecord,
   options: LoadLegacyGoldOptions = {},
 ): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
-  if (state.canonicalLayer !== "components") {
+  if (state.canonicalLayer !== "components" || input.layer !== "components") {
     return { state: {}, diagnostics: [] };
   }
 
@@ -338,6 +346,59 @@ export function componentStructuredIdentity(
     },
     diagnostics,
   };
+}
+
+export function flowCandidateIdentity(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
+  if (state.canonicalLayer !== "data-flows" || input.layer !== "data_flows") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const candidate = input.candidate;
+  if (!candidate || candidate.kind !== "flow") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const diagnostics: MigrationDiagnostic[] = [];
+  const patch: Partial<ConversionState> = {};
+
+  const endpoints = candidateEndpointsToAsserted(candidate);
+  if (endpoints) {
+    patch.flowEndpoints = endpoints;
+    diagnostics.push(
+      makeDiagnostic(
+        input.id,
+        "flow_candidate_block",
+        `flow candidate endpoints → ${candidate.candidate_identity_key ?? "typed endpoints"}`,
+      ),
+    );
+  }
+
+  const flowAssertion = flowCandidateToFlowAssertion(candidate);
+  if (flowAssertion) {
+    patch.flowAssertion = flowAssertion;
+  }
+
+  if (candidate.proposed_flow_type) {
+    patch.conceptLeaf = candidate.proposed_flow_type;
+    patch.conceptAncestry = [candidate.proposed_flow_type];
+    diagnostics.push(
+      makeDiagnostic(
+        input.id,
+        "flow_candidate_block",
+        `proposed flow_type ${candidate.proposed_flow_type} parked on classification (non-scoring)`,
+      ),
+    );
+  }
+
+  if (candidate.candidate_identity_key) {
+    patch.identityKey = candidate.candidate_identity_key;
+    patch.identityAssigned = true;
+  }
+
+  return { state: patch, diagnostics };
 }
 
 export function ruleIdToConceptLeafConversion(
@@ -526,6 +587,8 @@ export function buildCanonicalRecord(
     displayText: state.displayText,
     adapterMapVersion,
     entityId: state.entityId,
+    flowEndpoints: state.flowEndpoints,
+    flowAssertion: state.flowAssertion,
   };
 
   switch (state.disposition) {
@@ -565,4 +628,5 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "legacy_subject_name",
   "expected_labels_provenance",
   "expected_status_disposition",
+  "flow_candidate_block",
 ];

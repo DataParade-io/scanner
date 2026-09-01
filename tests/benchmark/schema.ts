@@ -82,6 +82,39 @@ export interface AnnotationCanonical {
   vendor?: string;
 }
 
+export type FlowDispositionCandidate =
+  | "graph_edge"
+  | "intra_component_lineage"
+  | "rejection"
+  | "unresolved";
+
+export type FlowCandidateConfidence = "high" | "medium" | "low";
+
+/** Serialized typed endpoint in flow candidate YAML (snake_case). */
+export interface FlowCandidateEndpoint {
+  component_type: string;
+  endpoint_key: string;
+  component_subtype?: string;
+  vendor?: string;
+}
+
+/** Non-scoring flow migration proposals (KDATAP-8e7756). */
+export interface FlowAnnotationCandidate {
+  kind: "flow";
+  disposition_candidate: FlowDispositionCandidate;
+  candidate_confidence: FlowCandidateConfidence;
+  candidate_notes: string;
+  candidate_identity_key?: string;
+  proposed_flow_type?: string;
+  proposed_data_categories?: string[];
+  source_entity_id?: string;
+  target_entity_id?: string;
+  endpoints?: {
+    source: FlowCandidateEndpoint;
+    target: FlowCandidateEndpoint;
+  };
+}
+
 export interface AnnotationRecord {
   id: string;
   layer: BenchmarkLayer;
@@ -91,6 +124,7 @@ export interface AnnotationRecord {
   expected: AnnotationExpected;
   provenance: AnnotationProvenance;
   canonical?: AnnotationCanonical;
+  candidate?: FlowAnnotationCandidate;
 }
 
 export interface AnnotationFile {
