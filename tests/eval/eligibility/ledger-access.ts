@@ -1,8 +1,9 @@
 import type { EvalCase, EvalLayer, FixtureScanResult } from "../types";
-import { normalizeEvalPath } from "../identity";
+import { isEvalPathContractValid, normalizeEvalPath } from "../identity";
 import {
   isSuccessfullyProcessed,
   layerOutcome,
+  type EligibilityReason,
   type PathEligibilityOutcome,
 } from "../../../src/ingest/eligibility";
 import type { LayerEligibilityLedger } from "./types";
@@ -18,6 +19,9 @@ export function outcomeForPath(
   ledger: LayerEligibilityLedger | undefined,
   filePath: string,
 ): PathEligibilityOutcome | undefined {
+  if (!isEvalPathContractValid(filePath)) {
+    return layerOutcome(filePath, "missing_or_path_contract_mismatch");
+  }
   if (!ledger) {
     return undefined;
   }
@@ -39,16 +43,35 @@ export function eligibleProcessedPaths(
     .sort();
 }
 
-export function isEvidenceReadable(caseRecord: EvalCase, scan?: FixtureScanResult): boolean {
+export function evidenceEligibilityReason(
+  caseRecord: EvalCase,
+  scan?: FixtureScanResult,
+): EligibilityReason {
+  if (!isEvalPathContractValid(caseRecord.evidence.file_path)) {
+    return "missing_or_path_contract_mismatch";
+  }
+
   const evidencePath = normalizeEvalPath(caseRecord.evidence.file_path);
   const ledger = getLayerLedger(scan, caseRecord.layer);
-  const outcome = outcomeForPath(ledger, evidencePath);
+  const outcome = outcomeForPath(ledger, caseRecord.evidence.file_path);
   if (outcome?.stage === "layer" && isSuccessfullyProcessed(outcome)) {
-    return true;
+    return "successfully_processed";
   }
-  return (caseRecord.exhaustiveScopeFiles ?? []).some(
-    (filePath) => normalizeEvalPath(filePath) === evidencePath,
+
+  const scopeRescue = (caseRecord.exhaustiveScopeFiles ?? []).some(
+    (filePath) =>
+      isEvalPathContractValid(filePath) &&
+      normalizeEvalPath(filePath) === evidencePath,
   );
+  if (scopeRescue) {
+    return "successfully_processed";
+  }
+
+  return outcome?.reason ?? "missing_or_path_contract_mismatch";
+}
+
+export function isEvidenceReadable(caseRecord: EvalCase, scan?: FixtureScanResult): boolean {
+  return evidenceEligibilityReason(caseRecord, scan) === "successfully_processed";
 }
 
 export function isUnread(caseRecord: EvalCase, scan?: FixtureScanResult): boolean {
