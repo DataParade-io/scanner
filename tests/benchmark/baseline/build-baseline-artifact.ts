@@ -1,4 +1,4 @@
-import { CANONICAL_CONTRACT_VERSION } from "../../eval/canonical/contract";
+import { CANONICAL_CONTRACT_VERSION } from "../../../src/eval/canonical/contract";
 import { SCORECARD_VECTOR_CONTRACT_VERSION } from "../scorecard-vector";
 import type { ScorecardVector } from "../scorecard-vector";
 import {

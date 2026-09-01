@@ -15,7 +15,7 @@ import {
   emptyMetricComputability,
   rollupLayerComputabilitySummary,
   type LayerComputabilitySummary,
-} from "../eval/canonical/computability";
+} from "../../src/eval/canonical/computability";
 import type { ReviewState } from "./schema";
 import {
   DIAGNOSTIC_LAYERS,

@@ -1,4 +1,4 @@
-import { evaluateCanonical } from "../../eval/canonical/evaluate";
+import { evaluateCanonical } from "../../eval/canonical/evaluate-fixture";
 import {
   assignOneToOne,
   buildAcceptedGoldExpectation,

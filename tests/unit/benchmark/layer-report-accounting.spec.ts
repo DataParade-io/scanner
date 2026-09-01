@@ -1,8 +1,8 @@
 import type { EvalCase, EvalScoreReport, FixtureScanResult } from "../../eval/types";
-import { computeMetricComputability } from "../../eval/canonical/computability";
+import { computeMetricComputability } from "../../../src/eval/canonical/computability";
 import { createLayerLedger } from "../../eval/eligibility/types";
 import { layerOutcome } from "../../../src/ingest/eligibility";
-import type { CanonicalGoldExpectation } from "../../eval/canonical/types";
+import type { CanonicalGoldExpectation } from "../../../src/eval/canonical/types";
 import type { HeadlineLayer } from "../../eval/score";
 import {
   aggregateLayerReportAccounting,

@@ -5,8 +5,8 @@ import {
   type PersonalDataEvalLayer,
   type PersonalDataFinding,
 } from "../../../src/eval-layers/collect-personal-data-findings";
-import { adaptPersonalDataFinding } from "../canonical/scanner/personal-data";
-import type { CanonicalScannerFinding } from "../canonical/types";
+import { adaptPersonalDataFinding } from "../../../src/eval/canonical/scanner/personal-data";
+import type { CanonicalScannerFinding } from "../../../src/eval/canonical/types";
 import type { EvalLayer, FixtureScanResult, LayerFinding } from "../types";
 import {
   fixtureScanResultWithLedger,

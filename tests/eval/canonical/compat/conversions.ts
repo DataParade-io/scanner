@@ -1,5 +1,5 @@
 import type { BenchmarkLayer } from "../../../benchmark/schema";
-import { stampEnvelope } from "../contract";
+import { stampEnvelope } from "../../../../src/eval/canonical/contract";
 import {
   buildAcceptedGoldExpectation,
   buildMigrationIncompleteRecord,
@@ -11,12 +11,12 @@ import type {
   CanonicalLayer,
   ObservedTokenCandidate,
   OptionalAssertion,
-} from "../types";
+} from "../../../../src/eval/canonical/types";
 import {
   CANONICAL_CONTRACT_VERSION,
   LEGACY_SOURCE_CONTRACT_VERSION,
 } from "./contract";
-import { tryRuleIdToConceptEntry } from "../concept-map";
+import { tryRuleIdToConceptEntry } from "../../../../src/eval/canonical/concept-map";
 import {
   buildRepoLocalEntityId,
   classificationIdentityKey,

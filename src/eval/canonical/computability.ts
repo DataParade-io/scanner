@@ -5,7 +5,7 @@ import type {
   MetricComputabilityState,
   MetricScore,
   ScopeDenominators,
-} from "../types";
+} from "../report-types";
 
 export type { MetricComputabilityState };
 

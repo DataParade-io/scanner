@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
-import { createDefaultScanConfiguration } from "../../../../src/core/pipeline/orchestrator";
-import { loadPiiSignalRules } from "../../../../src/pii-signals/pii-signal-rules";
+import { createDefaultScanConfiguration } from "../../../core/pipeline/orchestrator";
+import { loadPiiSignalRules } from "../../../pii-signals/pii-signal-rules";
 
 let cachedDigest: string | undefined;
 

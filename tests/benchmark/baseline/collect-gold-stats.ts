@@ -5,10 +5,10 @@ import { loadAnnotations, loadBenchmarkManifest } from "../manifest";
 import { listBenchmarkRepoKeys } from "../run-benchmark";
 import { normalizeBenchmarkLayer, type AnnotationStatus, type ReviewState } from "../schema";
 import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical";
-import { isAcceptedEvaluablePositive } from "../../eval/canonical/types";
+import { isAcceptedEvaluablePositive } from "../../../src/eval/canonical/types";
 import type { ConversionKind } from "../../eval/canonical/compat/types";
 import { HEADLINE_LAYERS, type HeadlineLayer } from "../../eval/score";
-import { computeCapabilityCoverage } from "../../eval/canonical/metrics";
+import { computeCapabilityCoverage } from "../../../src/eval/canonical/metrics";
 import type {
   AnnotationStatusCountBlock,
   CapabilityCoverageDiagnostic,
@@ -275,7 +275,7 @@ export function collectCapabilityCoverageDiagnostic(
 
   for (const layer of HEADLINE_LAYERS) {
     const expectations: Array<
-      { id: string } & import("../../eval/canonical/types").CanonicalGoldExpectation
+      { id: string } & import("../../../src/eval/canonical/types").CanonicalGoldExpectation
     > = [];
 
     for (const repoKey of listBenchmarkRepoKeys(benchmarkRoot)) {

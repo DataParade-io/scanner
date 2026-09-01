@@ -1,5 +1,5 @@
-import type { DetectedComponent, DetectedFromRef } from "../../../../src/core/types/component";
-import { buildScannerFinding } from "../builders";
+import type { DetectedComponent, DetectedFromRef } from "../../../core/types/component";
+import { buildScannerFinding } from "../record-factory";
 import type { CanonicalScannerFinding, EvidenceLocation, ObservedTokenCandidate } from "../types";
 import { resolveScannerAdapterMapVersion } from "./manifest";
 

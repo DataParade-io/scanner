@@ -15,7 +15,7 @@ import type { EvalLayer, FixtureScanResult, LayerFinding } from "../eval/types";
 import { componentIdentity } from "../eval/layers/components/adapter";
 import { dataFlowIdentity } from "../eval/layers/data-flows/adapter";
 import { personalDataFindingToLayerFinding } from "../eval/layers/personal-data-adapter";
-import { normalizeEvalPath } from "../eval/identity";
+import { normalizeEvalPath } from "../../src/eval/path";
 import {
   layerLedgerFromOutcomes,
   mergeFixtureLedgers,

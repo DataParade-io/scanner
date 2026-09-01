@@ -8,7 +8,7 @@ import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixtur
 import type { DetectedComponent } from "../../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../../src/core/types/data-flow";
 import type { SourceLocation } from "../../../../src/core/types/file";
-import { adaptDetectedDataFlow } from "../../canonical/scanner/data-flows";
+import { adaptDetectedDataFlow } from "../../../../src/eval/canonical/scanner/data-flows";
 import { componentIdentity } from "../components/adapter";
 import {
   fixtureScanResultWithLedger,
