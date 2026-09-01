@@ -272,6 +272,7 @@ export function evaluateCanonical(
   let evaluablePositives = 0;
   let matchedPositives = 0;
   let matchedWithCorrectLabels = 0;
+  let matchedAncestorCategory = 0;
   let negativeCases = 0;
   let negativeCasesPassed = 0;
   let unreadCount = 0;
@@ -332,6 +333,9 @@ export function evaluateCanonical(
         if (labelsCorrect) {
           matchedWithCorrectLabels += 1;
         }
+        if (matchedFinding && conceptCorrectness(canonical, matchedFinding).ancestorCategory) {
+          matchedAncestorCategory += 1;
+        }
       }
     }
 
@@ -348,6 +352,8 @@ export function evaluateCanonical(
 
   const recall =
     evaluablePositives === 0 ? null : matchedPositives / evaluablePositives;
+  const ancestorCategoryRecall =
+    evaluablePositives === 0 ? null : matchedAncestorCategory / evaluablePositives;
   const labelAccuracy =
     matchedPositives === 0 ? null : matchedWithCorrectLabels / matchedPositives;
   const correctLabelRecall =
@@ -387,6 +393,7 @@ export function evaluateCanonical(
     evaluablePositives,
     matchedPositives,
     matchedWithCorrectLabels,
+    matchedAncestorCategory,
     negativeCases,
     negativeCasesPassed,
     exhaustiveScopedFindings,
@@ -410,6 +417,7 @@ export function evaluateCanonical(
   return {
     scores: {
       recall,
+      ancestorCategoryRecall,
       labelAccuracy,
       correctLabelRecall,
       precision,

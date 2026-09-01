@@ -7,6 +7,7 @@ import type {
   HeadlineMetricKind,
   MetricComputability,
   MetricScore,
+  FixtureScanResult,
 } from "../eval/types";
 import {
   aggregateScopeDenominators,
@@ -22,6 +23,14 @@ import {
   scoreEvalCasesByLayer,
   type HeadlineLayer,
 } from "../eval/score";
+import {
+  aggregateLayerReportAccounting,
+  buildLayerReportAccounting,
+  type LayerReportAccounting,
+  type PacketCanonicalRecordWithDiagnostics,
+} from "./layer-report-accounting";
+
+export type { LayerReportAccounting } from "./layer-report-accounting";
 
 export { HEADLINE_LAYERS, DIAGNOSTIC_LAYERS, type HeadlineLayer };
 
@@ -49,6 +58,7 @@ export interface ScorecardLayerEntry {
   computability: LayerComputabilityBlock;
   scores: EvalScores;
   gate: LayerGateResult;
+  accounting: LayerReportAccounting;
 }
 
 export interface ScorecardDiagnostic {
@@ -79,6 +89,8 @@ export interface BuildScorecardVectorInput {
     repoKey: string;
     evalCases: EvalCase[];
     layerScores: Partial<Record<EvalLayer, EvalScoreReport>>;
+    scanResult?: FixtureScanResult;
+    canonicalRecords?: PacketCanonicalRecordWithDiagnostics[];
   }>;
 }
 
@@ -214,19 +226,38 @@ export function buildScorecardLayerEntry(
   report: EvalScoreReport,
   caseCount: number,
   provisional: boolean,
+  accountingInput?: {
+    cases: EvalCase[];
+    scanResult?: FixtureScanResult;
+    canonicalRecords: PacketCanonicalRecordWithDiagnostics[];
+  },
 ): ScorecardLayerEntry {
   const resolved = resolveLayerGate(layer, report.scores, caseCount, provisional);
+  const accounting =
+    accountingInput === undefined
+      ? aggregateLayerReportAccounting([])
+      : buildLayerReportAccounting({
+          layer,
+          report,
+          cases: accountingInput.cases,
+          scanResult: accountingInput.scanResult,
+          canonicalRecords: accountingInput.canonicalRecords,
+          gate: resolved.gate,
+          computability: resolved.computability,
+        });
   return {
     layer,
     computability: resolved.computability,
     scores: report.scores,
     gate: resolved.gate,
+    accounting,
   };
 }
 
 function emptyScores(): EvalScores {
   return {
     recall: null,
+    ancestorCategoryRecall: null,
     labelAccuracy: null,
     correctLabelRecall: null,
     precision: null,
@@ -236,6 +267,7 @@ function emptyScores(): EvalScores {
       evaluablePositives: 0,
       matchedPositives: 0,
       matchedWithCorrectLabels: 0,
+      matchedAncestorCategory: 0,
       negativeCases: 0,
       negativeCasesPassed: 0,
       exhaustiveScopedFindings: 0,
@@ -258,6 +290,7 @@ function aggregateLayerScores(
     evaluablePositives: 0,
     matchedPositives: 0,
     matchedWithCorrectLabels: 0,
+    matchedAncestorCategory: 0,
     negativeCases: 0,
     negativeCasesPassed: 0,
     exhaustiveScopedFindings: 0,
@@ -270,6 +303,7 @@ function aggregateLayerScores(
     denominators.evaluablePositives += packetDenominators.evaluablePositives;
     denominators.matchedPositives += packetDenominators.matchedPositives;
     denominators.matchedWithCorrectLabels += packetDenominators.matchedWithCorrectLabels;
+    denominators.matchedAncestorCategory += packetDenominators.matchedAncestorCategory;
     denominators.negativeCases += packetDenominators.negativeCases;
     denominators.negativeCasesPassed += packetDenominators.negativeCasesPassed;
     denominators.exhaustiveScopedFindings += packetDenominators.exhaustiveScopedFindings;
@@ -278,6 +312,10 @@ function aggregateLayerScores(
   }
 
   const recall = rateOrNull(denominators.matchedPositives, denominators.evaluablePositives);
+  const ancestorCategoryRecall = rateOrNull(
+    denominators.matchedAncestorCategory,
+    denominators.evaluablePositives,
+  );
   const labelAccuracy = rateOrNull(
     denominators.matchedWithCorrectLabels,
     denominators.matchedPositives,
@@ -327,6 +365,7 @@ function aggregateLayerScores(
 
   return {
     recall,
+    ancestorCategoryRecall,
     labelAccuracy,
     correctLabelRecall,
     precision,
@@ -348,12 +387,18 @@ function buildPacketLayers(
   evalCases: EvalCase[],
   layerScores: Partial<Record<EvalLayer, EvalScoreReport>>,
   provisional: boolean,
+  scanResult?: FixtureScanResult,
+  canonicalRecords: PacketCanonicalRecordWithDiagnostics[] = [],
 ): Record<HeadlineLayer, ScorecardLayerEntry> {
   const layers = {} as Record<HeadlineLayer, ScorecardLayerEntry>;
   for (const layer of HEADLINE_LAYERS) {
     const caseCount = caseCountForLayer(evalCases, layer);
     const report = layerScores[layer] ?? { scores: emptyScores(), caseResults: [] };
-    layers[layer] = buildScorecardLayerEntry(layer, report, caseCount, provisional);
+    layers[layer] = buildScorecardLayerEntry(layer, report, caseCount, provisional, {
+      cases: evalCases,
+      scanResult,
+      canonicalRecords,
+    });
   }
   return layers;
 }
@@ -379,7 +424,13 @@ export function buildScorecardVector(input: BuildScorecardVectorInput): Scorecar
     };
     return {
       repoKey: packet.repoKey,
-      layers: buildPacketLayers(packet.evalCases, packet.layerScores, provisional),
+      layers: buildPacketLayers(
+        packet.evalCases,
+        packet.layerScores,
+        provisional,
+        packet.scanResult,
+        packet.canonicalRecords ?? [],
+      ),
       diagnostic: { "raw-hits": diagnosticReport },
     };
   });
@@ -395,12 +446,17 @@ export function buildScorecardVector(input: BuildScorecardVectorInput): Scorecar
       (sum, packet) => sum + caseCountForLayer(packet.evalCases, layer),
       0,
     );
-    layers[layer] = buildScorecardLayerEntry(
+    const layerEntry = buildScorecardLayerEntry(
       layer,
       { scores: aggregatedScores, caseResults: [] },
       totalCaseCount,
       provisional,
     );
+    const packetAccountings = packetRows.map((packet) => packet.layers[layer].accounting);
+    layers[layer] = {
+      ...layerEntry,
+      accounting: aggregateLayerReportAccounting(packetAccountings),
+    };
   }
 
   return {
@@ -467,6 +523,9 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
     }
     lines.push(`- Gate: ${entry.gate.status}${entry.gate.reason ? ` (${entry.gate.reason})` : ""}`);
     lines.push(`- Recall: ${formatMetricScore(entry.computability.metrics.recall)}`);
+    lines.push(
+      `- Ancestor recall: ${formatMetricScore(entry.computability.metrics.ancestorCategoryRecall)}`,
+    );
     lines.push(`- Precision: ${formatMetricScore(entry.computability.metrics.precision)}`);
     lines.push(
       `- Negative pass rate: ${formatMetricScore(entry.computability.metrics.negativeCasePassRate)}`,
@@ -477,7 +536,32 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
     lines.push(
       `- Denominators: evaluablePositives=${entry.scores.denominators.evaluablePositives}, exhaustiveScopedFindings=${entry.scores.denominators.exhaustiveScopedFindings}`,
     );
+    lines.push(
+      `- Population: acceptedCanonical=${entry.accounting.population.acceptedCanonicalPositives}, evaluable=${entry.accounting.population.evaluablePositives}, matched=${entry.accounting.population.matchedPositives}`,
+    );
+    lines.push(
+      `- Coverage: entityWeighted=${entry.accounting.coverage.entityWeighted.numerator}/${entry.accounting.coverage.entityWeighted.denominator}, distinctFiles=${entry.accounting.coverage.distinctEvidenceFiles.numerator}/${entry.accounting.coverage.distinctEvidenceFiles.denominator}`,
+    );
+    if (entry.accounting.migrationIncomplete.total > 0) {
+      lines.push(`- Migration incomplete: ${entry.accounting.migrationIncomplete.total}`);
+    }
     lines.push("");
+  }
+
+  for (const packet of vector.packets) {
+    lines.push(`## Packet: ${packet.repoKey}`, "");
+    for (const layer of HEADLINE_LAYERS) {
+      const entry = packet.layers[layer];
+      lines.push(`### ${layer}`);
+      lines.push(
+        `- acceptedCanonical=${entry.accounting.population.acceptedCanonicalPositives}, evaluable=${entry.accounting.population.evaluablePositives}, matched=${entry.accounting.population.matchedPositives}`,
+      );
+      lines.push(`- unread: ${entry.accounting.population.unreadCount} (${formatRate(entry.accounting.population.unreadRate)})`);
+      lines.push(
+        `- capability (diagnostic): ${(entry.accounting.slices.capability.caseWeighted * 100).toFixed(1)}% case-weighted`,
+      );
+      lines.push("");
+    }
   }
 
   const rawHits = vector.diagnostic["raw-hits"].scores;
