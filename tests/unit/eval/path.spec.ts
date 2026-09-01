@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 
 import { isEvalPathContractValid, normalizeEvalPath, parseIdentityKey } from "../../../src/eval/path";
@@ -22,7 +23,9 @@ describe("eval path contract", () => {
 
 describe("package eval subpath export", () => {
   it("declares @dataparade/scanner/eval in package.json exports", () => {
-    const packageJson = require(path.join(__dirname, "../../../package.json"));
+    const packageJson = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "../../../package.json"), "utf8"),
+    ) as { exports: Record<string, { types: string; default: string }> };
     expect(packageJson.exports["./eval"]).toEqual({
       types: "./dist/src/eval/index.d.ts",
       default: "./dist/src/eval/index.js",
