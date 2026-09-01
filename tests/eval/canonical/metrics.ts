@@ -1,4 +1,5 @@
-import { strictCorrectness } from "./match";
+import { assignOneToOne } from "./assignment";
+import type { AssignmentResult } from "./assignment";
 import type {
   AcceptedCanonicalGoldExpectation,
   CanonicalGoldExpectation,
@@ -46,13 +47,22 @@ export function computeStrictRecall(
   findings: Array<CanonicalScannerFinding & { id: string }>,
 ): StrictRecallResult {
   const positives = expectations.filter(isAccepted);
+  return computeStrictRecallFromAssignment(positives, assignOneToOne(positives, findings));
+}
+
+export function computeStrictRecallFromAssignment(
+  positives: Array<CanonicalGoldExpectation & { id: string }>,
+  assignment: AssignmentResult,
+): StrictRecallResult {
   const denominator = positives.length;
+  const matchedExpectationIds = new Set(
+    assignment.pairs.map((pair) => pair.expectationId),
+  );
   const falseNegativeIds: string[] = [];
   let matched = 0;
 
   for (const expectation of positives) {
-    const hasMatch = findings.some((finding) => strictCorrectness(expectation, finding));
-    if (hasMatch) {
+    if (matchedExpectationIds.has(expectation.id)) {
       matched += 1;
     } else {
       falseNegativeIds.push(expectation.id);
@@ -78,7 +88,8 @@ export function computeVendorResolution(
   let matched = 0;
 
   for (const expectation of vendorAsserting) {
-    if (findings.some((finding) => strictCorrectness(expectation, finding))) {
+    const assignment = assignOneToOne([expectation], findings);
+    if (assignment.pairs.length > 0) {
       matched += 1;
     }
   }
@@ -158,10 +169,8 @@ export function computeEvidenceCoverage(
 
   for (const expectation of consolidated) {
     evidenceLocationCount += expectation.evidenceLocations.length;
-    const matchedFinding = findings.find((finding) =>
-      strictCorrectness(expectation, finding),
-    );
-    if (matchedFinding) {
+    const assignment = assignOneToOne([expectation], findings);
+    if (assignment.pairs.length > 0) {
       entityRecallMatched += 1;
       evidenceLocationsCovered += expectation.evidenceLocations.length;
     }
