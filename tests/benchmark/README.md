@@ -165,7 +165,35 @@ The immutable corpus baseline is defined under `tests/benchmark/baseline/` as ve
 
 The artifact embeds a `scorecard-vector/2` payload verbatim (no second scorer, no cross-layer scalar), a fingerprint block (scanner commit, corpus/gold digest, contract and taxonomy digests, materialization status per packet, deterministic config with `enableAiInference: false`), gold-population and migration-incomplete accounting, capability coverage as diagnostic-only metadata, and a readiness stub (`not_evaluated`). Series 1 uses `predecessor: null`.
 
-Freezing series 1, the `benchmark:baseline` command, and CI drift checks against committed baselines are separate issues — this module is schema + fingerprint + rendering only.
+## CI validation policy
+
+Two lanes keep pull requests fast while still exercising the full pinned corpus offline.
+
+| Lane | Trigger | Clones upstream packets? | Commands |
+| --- | --- | --- | --- |
+| PR smoke | every pull request (`.github/workflows/ci.yml`) | **No** | `pnpm run ci:smoke` |
+| Full corpus | weekly schedule, manual dispatch, optional release hook (`.github/workflows/baseline-corpus.yml`) | **Yes** (all 29) | `benchmark:materialize -- --all` then `benchmark:validate-materializations` |
+
+**PR smoke** runs an allowlisted Jest subset only:
+
+- `tests/eval/contract/contract.spec.ts` — synthetic evaluator contract fixtures
+- `tests/unit/benchmark/baseline-artifact.spec.ts` — `baseline-artifact/1` schema + JSON↔MD round-trip
+- `tests/unit/benchmark/scorecard-vector.spec.ts` and `run-four-layer-scorecard.spec.ts` — `scorecard-vector/2`
+- `tests/unit/eval/canonical-computability.spec.ts` — per-metric computability states
+- `tests/unit/benchmark/ci-smoke-digests.spec.ts` — pinned corpus/taxonomy/concept-map/adapter digests under `tests/fixtures/baseline/pins/`
+
+Corpus YAML for all 29 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
+
+**Full corpus** materializes every pinned packet, then requires `validationStatus: valid` and matching `validatedHeadSha` for each packet. Partial manual dispatches may skip validation when `repo_keys` is set.
+
+Published baselines (future series 1) use:
+
+```bash
+pnpm run benchmark:validate-baseline -- <path/to/baseline.json> \
+  --require-valid-materializations --verify-digests --verify-markdown
+```
+
+Freezing series 1 and readiness numeric floors remain separate issues (`KDATAP-3b935c`, `KDATAP-b87baf`).
 
 ## Detection coverage census (opt-in)
 

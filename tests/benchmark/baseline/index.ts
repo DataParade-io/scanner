@@ -9,6 +9,12 @@ export { buildBaselineArtifact, type BuildBaselineArtifactInput } from "./build-
 export { buildBaselineFingerprint, type BuildFingerprintInput } from "./fingerprint";
 export { renderBaselineMarkdown } from "./render-markdown";
 export {
+  PublishedBaselineValidationError,
+  validatePublishedBaseline,
+  type ValidatePublishedBaselineOptions,
+  type ValidatePublishedBaselineResult,
+} from "./validate-published";
+export {
   collectAnnotationStatusCounts,
   collectCapabilityCoverageDiagnostic,
   collectGoldPopulation,

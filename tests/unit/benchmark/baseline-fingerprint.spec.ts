@@ -24,6 +24,14 @@ describe("baseline fingerprint digests", () => {
     expect(digestA.startsWith("sha256:")).toBe(true);
   });
 
+  it("produces stable corpus digests for absolute and relative benchmark roots", () => {
+    const digestFromRelative = digestCorpusGold(path.join(__dirname, "../../benchmark"));
+    const digestFromAbsolute = digestCorpusGold(
+      path.resolve(path.join(__dirname, "../../benchmark")),
+    );
+    expect(digestFromRelative).toBe(digestFromAbsolute);
+  });
+
   it("changes digest when corpus file content changes", () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "baseline-corpus-change-"));
     const repoDir = path.join(tempDir, "repos", "beta");
