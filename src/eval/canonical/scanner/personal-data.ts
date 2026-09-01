@@ -1,5 +1,5 @@
-import type { PersonalDataEvalLayer, PersonalDataFinding } from "../../../../src/eval-layers/collect-personal-data-findings";
-import { buildScannerFinding } from "../builders";
+import type { PersonalDataEvalLayer, PersonalDataFinding } from "../../../eval-layers/collect-personal-data-findings";
+import { buildScannerFinding } from "../record-factory";
 import { ruleIdToAncestry, ruleIdToConceptLeaf } from "../concept-map";
 import type { CanonicalLayer, CanonicalScannerFinding, ObservedTokenCandidate } from "../types";
 import { resolveScannerAdapterMapVersion } from "./manifest";

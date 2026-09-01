@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 import { digestCorpusGold, digestFile } from "./digests";
-import { resolveScannerAdapterMapVersion } from "../../eval/canonical/scanner/manifest";
+import { resolveScannerAdapterMapVersion } from "../../../src/eval/canonical/scanner/manifest";
 import { findPackageRoot } from "../paths";
 import { parseBaselineArtifact, renderBaselineMarkdown, type BaselineArtifact } from "./index";
 

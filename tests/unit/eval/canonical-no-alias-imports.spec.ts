@@ -9,7 +9,10 @@ const FORBIDDEN_ALIAS_PATTERNS = [
 
 function listCanonicalSourceFiles(): string[] {
   const repoRoot = path.resolve(__dirname, "..", "..", "..");
-  const canonicalDir = path.join(repoRoot, "tests", "eval", "canonical");
+  const canonicalDirs = [
+    path.join(repoRoot, "src", "eval", "canonical"),
+    path.join(repoRoot, "tests", "eval", "canonical"),
+  ];
   const files: string[] = [];
 
   function walk(dir: string): void {
@@ -23,7 +26,9 @@ function listCanonicalSourceFiles(): string[] {
     }
   }
 
-  walk(canonicalDir);
+  for (const dir of canonicalDirs) {
+    walk(dir);
+  }
   return files;
 }
 

@@ -6,7 +6,7 @@ import type { DetectedComponent } from "../../src/core/types/component";
 import { componentIdentity } from "../eval/layers/components/adapter";
 import { eligibleProcessedPaths } from "../eval/eligibility/ledger-access";
 import type { FixtureScanResult, LayerFinding } from "../eval/types";
-import { parseIdentityKey } from "../eval/identity";
+import { parseIdentityKey } from "../../src/eval/path";
 import { loadAnnotations, loadBenchmarkManifest } from "./manifest";
 import type { AnnotationRecord } from "./schema";
 import {

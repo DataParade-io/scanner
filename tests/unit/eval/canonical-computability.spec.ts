@@ -2,7 +2,7 @@ import {
   computeMetricComputability,
   resolvePrecisionComputability,
   resolveRecallComputability,
-} from "../../eval/canonical/computability";
+} from "../../../src/eval/canonical/computability";
 import type { EvalScoreDenominators } from "../../eval/types";
 
 function emptyDenominators(

@@ -4,8 +4,8 @@ import type {
   BenchmarkLayer,
   ReviewState,
 } from "../../../benchmark/schema";
-import type { CANONICAL_CONTRACT_VERSION } from "../contract";
-import type { CanonicalGoldExpectation, EvidenceLocation } from "../types";
+import type { CANONICAL_CONTRACT_VERSION } from "../../../../src/eval/canonical/contract";
+import type { CanonicalGoldExpectation, EvidenceLocation } from "../../../../src/eval/canonical/types";
 import type { LEGACY_SOURCE_CONTRACT_VERSION } from "./contract";
 
 export type ConversionKind =

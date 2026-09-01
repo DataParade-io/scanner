@@ -1,5 +1,5 @@
 import type { EvalCase, EvalLayer, FixtureScanResult } from "../types";
-import { isEvalPathContractValid, normalizeEvalPath } from "../identity";
+import { isEvalPathContractValid, normalizeEvalPath } from "../../../src/eval/path";
 import {
   isSuccessfullyProcessed,
   layerOutcome,

@@ -1,11 +1,11 @@
 import type { PersonalDataEvalLayer } from "../../../src/eval-layers/collect-personal-data-findings";
-import { normalizeEvalPath } from "../identity";
+import { normalizeEvalPath } from "../../../src/eval/path";
 import type { EvalCase, EvalLayer, LayerFinding } from "../types";
-import { buildScannerFinding } from "./builders";
+import { buildScannerFinding } from "../../../src/eval/canonical/record-factory";
 import { loadCanonicalGoldFromEvalCase } from "./gold/loader";
-import { adaptPersonalDataFinding } from "./scanner/personal-data";
-import { resolveScannerAdapterMapVersion } from "./scanner/manifest";
-import type { CanonicalGoldExpectation, CanonicalScannerFinding, EvidenceLocation } from "./types";
+import { adaptPersonalDataFinding } from "../../../src/eval/canonical/scanner/personal-data";
+import { resolveScannerAdapterMapVersion } from "../../../src/eval/canonical/scanner/manifest";
+import type { CanonicalGoldExpectation, CanonicalScannerFinding, EvidenceLocation } from "../../../src/eval/canonical/types";
 
 const PERSONAL_DATA_LAYER: Record<"raw-hits" | "mentions" | "data-items", PersonalDataEvalLayer> = {
   "raw-hits": "raw-hits",

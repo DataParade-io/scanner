@@ -3,8 +3,8 @@ export {
   SYNTHETIC_ADAPTER_MAP_VERSION,
   stampEnvelope,
   contractVersionsMatch,
-} from "./contract";
-export type { ContractEnvelope } from "./contract";
+} from "../../../src/eval/canonical/contract";
+export type { ContractEnvelope } from "../../../src/eval/canonical/contract";
 
 export type {
   AcceptedCanonicalGoldExpectation,
@@ -23,7 +23,7 @@ export type {
   ObservedTokenCandidate,
   ObservedTokenValidationState,
   OptionalAssertion,
-} from "./types";
+} from "../../../src/eval/canonical/types";
 export {
   hasFlowEndpoints,
   isAcceptedEvaluablePositive,
@@ -31,13 +31,13 @@ export {
   isMigrationIncomplete,
   isNeedsAdjudication,
   scannerFindingHasEntityId,
-} from "./types";
+} from "../../../src/eval/canonical/types";
 
 export {
   assertedIdentitiesMatch,
   evidenceLocationsOverlap,
   sameEntityIdentity,
-} from "./identity";
+} from "../../../src/eval/canonical/identity";
 
 export {
   conceptCorrectness,
@@ -46,10 +46,10 @@ export {
   assignmentCandidate,
   negativeObservationCandidate,
   dataItemsEvidenceOverlaps,
-} from "./match";
-export type { ConceptCorrectness } from "./match";
+} from "../../../src/eval/canonical/match";
+export type { ConceptCorrectness } from "../../../src/eval/canonical/match";
 
-export { evaluateCanonical } from "./evaluate";
+export { evaluateCanonical } from "./evaluate-fixture";
 
 export {
   computeMetricComputability,
@@ -59,13 +59,13 @@ export {
   resolveNegativeCaseComputability,
   rollupLayerComputabilitySummary,
   aggregateScopeDenominators,
-} from "./computability";
+} from "../../../src/eval/canonical/computability";
 export type {
   ComputeMetricComputabilityInput,
   HeadlineMetricKind as CanonicalHeadlineMetricKind,
   LayerComputabilitySummary,
   MetricComputabilityState,
-} from "./computability";
+} from "../../../src/eval/canonical/computability";
 
 export {
   canonicalFindingFromLayerFinding,
@@ -76,8 +76,8 @@ export {
 export {
   assignOneToOne,
   oneFindingCannotSatisfyBoth,
-} from "./assignment";
-export type { AssignmentPair, AssignmentResult } from "./assignment";
+} from "../../../src/eval/canonical/assignment";
+export type { AssignmentPair, AssignmentResult } from "../../../src/eval/canonical/assignment";
 
 export {
   acceptedEvaluablePositives,
@@ -88,14 +88,14 @@ export {
   computeStrictRecallFromAssignment,
   computeVendorResolution,
   declaredCapabilityUnsupported,
-} from "./metrics";
+} from "../../../src/eval/canonical/metrics";
 export type {
   BaselineMetricsResult,
   CapabilityCoverageResult,
   EvidenceCoverageResult,
   StrictRecallResult,
   VendorResolutionMetrics,
-} from "./metrics";
+} from "../../../src/eval/canonical/metrics";
 
 export {
   buildAcceptedGoldExpectation,
@@ -144,8 +144,8 @@ export {
   FORBIDDEN_CATEGORY_LEAVES,
   normalizeConceptToken,
   validatePersonalDataConceptMapDocument,
-} from "./concept-map";
-export type { PersonalDataConceptMap, PersonalDataConceptMapEntry } from "./concept-map";
+} from "../../../src/eval/canonical/concept-map";
+export type { PersonalDataConceptMap, PersonalDataConceptMapEntry } from "../../../src/eval/canonical/concept-map";
 
 export {
   loadCanonicalGoldFromAnnotation,
@@ -164,6 +164,8 @@ export {
   dataFlowScannerIdentityKey,
   extractPersonalDataRuleId,
   resolveScannerAdapterMapVersion,
-} from "./scanner";
+} from "../../../src/eval/canonical/scanner";
 
-export * from "./graph";
+export * from "../../../src/eval/canonical/graph";
+
+export { evaluateLayerBucket } from "../../../src/eval/evaluate";
