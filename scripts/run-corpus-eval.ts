@@ -34,8 +34,10 @@ import {
   loadBenchmarkManifest,
   loadLayerScopes,
 } from "../tests/benchmark/manifest";
+import { scanRepoByManifestLayers } from "../tests/benchmark/scan-repo";
 import type { AnnotationRecord } from "../tests/benchmark/schema";
-import { scoreCorpusPrecision } from "../tests/benchmark/precision";
+import { annotationsToEvalCases } from "../tests/benchmark/to-eval-cases";
+import { scoreEvalCases } from "../tests/eval/score";
 import type { LayerFinding } from "../tests/eval/types";
 import {
   createDefaultScanConfiguration,
@@ -210,73 +212,25 @@ async function computeCorpusPrecision(
     if (!sourceRoot) continue;
 
     const manifest = loadBenchmarkManifest(repoDir);
-    const allAnnotations: AnnotationRecord[] = [];
-    for (const layer of manifest.coverage.layers) {
-      allAnnotations.push(...loadAnnotations(repoDir, layer));
-    }
-
-    const config = createDefaultScanConfiguration({ enableAiInference: false });
-    const { scanResult } = await scan(sourceRoot, config);
-    const findings: LayerFinding[] = [];
-
-    for (const component of scanResult.components) {
-      findings.push({
-        key: componentIdentity(component),
-        labels: [component.type, ...(component.subType ? [component.subType] : [])],
-        sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
-        sourceLines: component.sourceLocations.map((l) => ({
-          file_path: l.filePath,
-          start_line: l.startLine,
-          end_line: l.endLine,
-        })),
-      });
-    }
-
-    const componentsById = new Map(
-      scanResult.components.map((c) => [c.id, c]),
+    const layerScopes = loadLayerScopes(repoDir);
+    const evalCases = manifest.coverage.layers.flatMap((layer) =>
+      annotationsToEvalCases(loadAnnotations(repoDir, layer), repoKey, { layerScopes }),
     );
-    for (const flow of scanResult.dataFlows) {
-      const source = componentsById.get(flow.sourceComponentId);
-      const target = componentsById.get(flow.targetComponentId);
-      const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
-      const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
-      const locations = flow.sourceLocations?.length
-        ? flow.sourceLocations
-        : flow.sourceLocation
-          ? [flow.sourceLocation]
-          : [];
-      findings.push({
-        key: `flow:${sourceKey}->${targetKey}`,
-        labels: [flow.type],
-        sourceFilePaths: [...new Set(locations.map((l) => l.filePath))],
-        sourceLines: locations.map((l) => ({
-          file_path: l.filePath,
-          start_line: l.startLine,
-          end_line: l.endLine,
-        })),
-      });
-    }
-
-    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
-      const payload = await collectPersonalDataFindings(sourceRoot, layer);
-      for (const f of payload.findings) {
-        findings.push({
-          key: f.subjectKey,
-          labels: f.labels,
-          sourceFilePaths: [f.filePath],
-          sourceLines: [{ file_path: f.filePath, start_line: f.startLine, end_line: f.endLine }],
-        });
-      }
-    }
-
-    const report = scoreCorpusPrecision(
-      allAnnotations,
-      findings,
-      loadLayerScopes(repoDir),
+    const scanResult = await scanRepoByManifestLayers(
+      repoKey,
+      sourceRoot,
+      manifest.coverage.layers,
     );
-    perRepo[repoKey] = report;
-    totalScoped += report.exhaustiveScopedFindings;
-    totalMatched += report.exhaustiveScopedMatches;
+    const report = scoreEvalCases(evalCases, [scanResult]);
+
+    const repoReport = {
+      precision: report.scores.precision,
+      exhaustiveScopedFindings: report.scores.denominators.exhaustiveScopedFindings,
+      exhaustiveScopedMatches: report.scores.denominators.exhaustiveScopedMatches,
+    };
+    perRepo[repoKey] = repoReport;
+    totalScoped += repoReport.exhaustiveScopedFindings;
+    totalMatched += repoReport.exhaustiveScopedMatches;
   }
 
   return {

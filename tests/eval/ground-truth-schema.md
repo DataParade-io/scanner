@@ -71,7 +71,7 @@ Subject keys are normalized on load via `normalizeSubjectKey` in `tests/benchmar
 
 ## Precision via exhaustive file scopes
 
-Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `tests/benchmark/precision.ts` treats those files as a closed world per layer: every scanner finding in them is a precision denominator item, and it is a true positive only if it matches a positive annotation on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings (no source paths) are included in the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
+Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `evaluateCanonical` (via `scoreEvalCases`) treats those files as a closed world per fixture×layer bucket: every scanner finding with source locations in them is a precision denominator item, and it is a true positive only if it is assigned to an accepted positive gold case on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings are excluded from the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
 
 ## Known limitations (deferred)
 

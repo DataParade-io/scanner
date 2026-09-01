@@ -7,14 +7,11 @@ import {
   loadBenchmarkManifest,
   loadLayerScopes,
 } from "./manifest";
-import { scoreCorpusPrecision } from "./precision";
-import {
-  createDefaultScanConfiguration,
-  scan,
-} from "../../src/core/pipeline/orchestrator";
-import type { DetectedComponent } from "../../src/core/types/component";
+import { annotationsToEvalCases } from "./to-eval-cases";
+import { scanRepoByManifestLayers } from "./scan-repo";
+import { scoreEvalCases } from "../eval/score";
 import type { AnnotationRecord, BenchmarkLayer, LayerScopeRecord } from "./schema";
-import type { LayerFinding } from "../eval/types";
+import type { EvalCase, FixtureScanResult } from "../eval/types";
 
 const FIXTURE = "jvm-manifests-basic";
 const FIXTURE_ROOT = path.join(__dirname, "..", "fixtures", FIXTURE);
@@ -26,10 +23,6 @@ const JVM_SCOPE_FILES = [
   "src/main/resources/application.yml",
   "src/main/resources/bootstrap.yml",
 ];
-
-function componentIdentity(component: DetectedComponent): string {
-  return `${component.type}:${component.name.toLowerCase()}`;
-}
 
 function writeCorpusRepo(destDir: string): void {
   fs.mkdirSync(destDir, { recursive: true });
@@ -238,25 +231,18 @@ function writeCorpusRepo(destDir: string): void {
   );
 }
 
-async function scanRepoFindings(root: string): Promise<LayerFinding[]> {
-  const config = createDefaultScanConfiguration({ enableAiInference: false });
-  const { scanResult } = await scan(root, config);
-  const findings: LayerFinding[] = [];
-
-  for (const component of scanResult.components) {
-    findings.push({
-      key: componentIdentity(component),
-      labels: [component.type, ...(component.subType ? [component.subType] : [])],
-      sourceFilePaths: component.sourceLocations.map((l) => l.filePath),
-      sourceLines: component.sourceLocations.map((l) => ({
-        file_path: l.filePath,
-        start_line: l.startLine,
-        end_line: l.endLine,
-      })),
-    });
+function loadEvalCases(
+  repoDir: string,
+  fixture: string,
+  layers: string[],
+  layerScopes: Map<BenchmarkLayer, LayerScopeRecord>,
+): EvalCase[] {
+  const evalCases: EvalCase[] = [];
+  for (const layer of layers) {
+    const annotations = loadAnnotations(repoDir, layer);
+    evalCases.push(...annotationsToEvalCases(annotations, fixture, { layerScopes }));
   }
-
-  return findings;
+  return evalCases;
 }
 
 describe("corpus precision end-to-end", () => {
@@ -277,17 +263,22 @@ describe("corpus precision end-to-end", () => {
     const manifest = loadBenchmarkManifest(repoDir);
     expect(manifest.coverage.layers).toContain("components");
 
-    const annotations = loadAnnotations(repoDir, "components");
     const layerScopes = loadLayerScopes(repoDir);
-    expect(annotations.length).toBeGreaterThan(0);
     expect(layerScopes.get("components")?.exhaustive_scope_files.length).toBeGreaterThan(0);
 
-    const findings = await scanRepoFindings(FIXTURE_ROOT);
-    const report = scoreCorpusPrecision(annotations, findings, layerScopes);
+    const evalCases = loadEvalCases(repoDir, FIXTURE, manifest.coverage.layers, layerScopes);
+    expect(evalCases.length).toBeGreaterThan(0);
 
-    expect(report.precision).not.toBeNull();
-    expect(report.precision as number).toBeGreaterThan(0);
-    expect(report.exhaustiveScopedFindings).toBeGreaterThan(0);
+    const scanResult = await scanRepoByManifestLayers(
+      FIXTURE,
+      FIXTURE_ROOT,
+      manifest.coverage.layers,
+    );
+    const report = scoreEvalCases(evalCases, [scanResult]);
+
+    expect(report.scores.precision).not.toBeNull();
+    expect(report.scores.precision as number).toBeGreaterThan(0);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
   });
 
   it("does not count other-layer findings in a component exhaustive scope", () => {
@@ -318,36 +309,46 @@ describe("corpus precision end-to-end", () => {
       },
     });
 
-    const findings: LayerFinding[] = [
-      {
-        key: "asset:postgresql jdbc",
-        labels: ["asset", "database"],
-        layer: "components",
-        sourceFilePaths: ["pom.xml"],
-        sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
-      },
-      {
-        key: "mention:postgresql",
-        labels: ["mention"],
-        layer: "mentions",
-        sourceFilePaths: ["pom.xml"],
-        sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
-      },
-    ];
+    const evalCases = annotationsToEvalCases([annotation], FIXTURE, { layerScopes });
+    const scanResult: FixtureScanResult = {
+      fixture: FIXTURE,
+      findings: [
+        {
+          key: "asset:postgresql jdbc",
+          labels: ["asset", "database"],
+          layer: "components",
+          sourceFilePaths: ["pom.xml"],
+          sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
+        },
+        {
+          key: "mention:postgresql",
+          labels: ["mention"],
+          layer: "mentions",
+          sourceFilePaths: ["pom.xml"],
+          sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
+        },
+      ],
+      scannedFiles: ["pom.xml"],
+    };
 
-    const report = scoreCorpusPrecision([annotation], findings, layerScopes);
+    const report = scoreEvalCases(evalCases, [scanResult]);
 
-    expect(report.precision).toBe(1);
-    expect(report.exhaustiveScopedFindings).toBe(1);
-    expect(report.exhaustiveScopedMatches).toBe(1);
+    expect(report.scores.precision).toBe(1);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(1);
+    expect(report.scores.denominators.exhaustiveScopedMatches).toBe(1);
   });
 
   it("returns null precision without accepted exhaustive scope", async () => {
-    const annotations = loadAnnotations(repoDir, "raw_hits");
+    const manifest = loadBenchmarkManifest(repoDir);
     const layerScopes = new Map<BenchmarkLayer, LayerScopeRecord>();
+    const evalCases = loadEvalCases(repoDir, FIXTURE, manifest.coverage.layers, layerScopes);
 
-    const findings = await scanRepoFindings(FIXTURE_ROOT);
-    const report = scoreCorpusPrecision(annotations, findings, layerScopes);
-    expect(report.precision).toBeNull();
+    const scanResult = await scanRepoByManifestLayers(
+      FIXTURE,
+      FIXTURE_ROOT,
+      manifest.coverage.layers,
+    );
+    const report = scoreEvalCases(evalCases, [scanResult]);
+    expect(report.scores.precision).toBeNull();
   });
 });
