@@ -5,7 +5,7 @@ import type {
   EvalScoreReport,
   FixtureScanResult,
 } from "../types";
-import { normalizeEvalPath } from "../identity";
+import { isEvalPathContractValid, normalizeEvalPath } from "../identity";
 import { isUnread as isCaseUnread } from "../eligibility/ledger-access";
 import { assignOneToOne, type AssignmentResult } from "./assignment";
 import {
@@ -80,7 +80,9 @@ function collectExhaustiveScopeFiles(cases: EvalCase[]): Map<string, string[]> {
     scopes.set(key, [
       ...new Set([
         ...existing,
-        ...caseRecord.exhaustiveScopeFiles.map(normalizeEvalPath),
+        ...caseRecord.exhaustiveScopeFiles
+          .filter(isEvalPathContractValid)
+          .map(normalizeEvalPath),
       ]),
     ]);
   }
@@ -96,8 +98,10 @@ function findingInScope(finding: CanonicalScannerFinding, scopeFiles: string[]):
     return false;
   }
   const normalizedScope = new Set(scopeFiles.map(normalizeEvalPath));
-  return finding.evidenceLocations.some((location) =>
-    normalizedScope.has(normalizeEvalPath(location.file_path)),
+  return finding.evidenceLocations.some(
+    (location) =>
+      isEvalPathContractValid(location.file_path) &&
+      normalizedScope.has(normalizeEvalPath(location.file_path)),
   );
 }
 
