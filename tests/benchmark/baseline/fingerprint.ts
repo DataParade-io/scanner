@@ -1,7 +1,7 @@
 import path from "path";
 
-import { CANONICAL_CONTRACT_VERSION } from "../../eval/canonical/contract";
-import { resolveScannerAdapterMapVersion } from "../../eval/canonical/scanner/manifest";
+import { CANONICAL_CONTRACT_VERSION } from "../../../src/eval/canonical/contract";
+import { resolveScannerAdapterMapVersion } from "../../../src/eval/canonical/scanner/manifest";
 import { SCORECARD_VECTOR_CONTRACT_VERSION } from "../scorecard-vector";
 import { findPackageRoot } from "../paths";
 import { digestCorpusGold, digestFile, digestStableJson } from "./digests";

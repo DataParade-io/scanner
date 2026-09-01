@@ -1,7 +1,7 @@
-import type { DetectedComponent } from "../../../../src/core/types/component";
-import type { DetectedDataFlow } from "../../../../src/core/types/data-flow";
-import type { SourceLocation } from "../../../../src/core/types/file";
-import { buildFlowFinding, buildScannerFinding } from "../builders";
+import type { DetectedComponent } from "../../../core/types/component";
+import type { DetectedDataFlow } from "../../../core/types/data-flow";
+import type { SourceLocation } from "../../../core/types/file";
+import { buildScannerFinding } from "../record-factory";
 import { parseTypedFlowKey } from "../graph/endpoints";
 import type { CanonicalScannerFinding, EvidenceLocation } from "../types";
 import { componentScannerIdentityKey } from "./components";
@@ -78,7 +78,7 @@ export function adaptDetectedDataFlow(
   }
 
   if (parsedEndpoints.parsed) {
-    return buildFlowFinding({
+    return buildScannerFinding({
       ...shared,
       conceptLeaf: flowType,
       conceptAncestry: [flowType],

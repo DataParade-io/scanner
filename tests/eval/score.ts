@@ -1,5 +1,5 @@
 import type { EvalCase, EvalLayer, EvalScoreReport, FixtureScanResult } from "./types";
-import { evaluateCanonical } from "./canonical/evaluate";
+import { evaluateCanonical } from "./canonical/evaluate-fixture";
 
 export function scoreEvalCases(
   cases: EvalCase[],

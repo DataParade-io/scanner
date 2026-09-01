@@ -1,5 +1,5 @@
 import type { EvalLayer } from "../types";
-import { normalizeEvalPath } from "../identity";
+import { normalizeEvalPath } from "../../../src/eval/path";
 import { isSuccessfullyProcessed } from "../../../src/ingest/eligibility";
 import type { EntityEvidenceCoverage, LayerEligibilityLedger } from "./types";
 import { outcomeForPath } from "./ledger-access";

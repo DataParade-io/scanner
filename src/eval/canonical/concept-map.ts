@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import YAML from "yaml";
 
-import { loadPiiSignalRules } from "../../../src/pii-signals/pii-signal-rules";
+import { loadPiiSignalRules } from "../../pii-signals/pii-signal-rules";
 import {
   type PersonalDataConceptMap,
   type PersonalDataConceptMapEntry,

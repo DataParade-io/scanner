@@ -11,7 +11,7 @@ import {
   resolveComponentSubtype,
 } from "./component-taxonomy";
 import { loadLegacyGoldRecord } from "./loader";
-import type { CanonicalDisposition } from "../types";
+import type { CanonicalDisposition } from "../../../../src/eval/canonical/types";
 
 export type ComponentMigrationBucket =
   | "mechanical"

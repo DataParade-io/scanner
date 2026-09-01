@@ -1,4 +1,4 @@
-import { stampEnvelope } from "./contract";
+import { stampEnvelope } from "../../../src/eval/canonical/contract";
 import type {
   AcceptedCanonicalGoldExpectation,
   AssertedFlowEndpoints,
@@ -13,7 +13,8 @@ import type {
   NeedsAdjudicationRecord,
   ObservedTokenCandidate,
   OptionalAssertion,
-} from "./types";
+} from "../../../src/eval/canonical/types";
+import { buildScannerFinding } from "../../../src/eval/canonical/record-factory";
 
 let syntheticIdCounter = 0;
 
@@ -91,29 +92,6 @@ function baseGoldFields(input: BuildGoldInput): CanonicalGoldExpectation {
   };
 }
 
-function baseFindingFields(input: BuildFindingInput): CanonicalScannerFinding {
-  const envelope = stampEnvelope(input.adapterMapVersion);
-  return {
-    ...envelope,
-    identity: { layer: input.layer, identityKey: input.identityKey },
-    classification: {
-      conceptLeaf: input.conceptLeaf,
-      conceptAncestry: input.conceptAncestry ?? [input.conceptLeaf],
-      componentType: input.componentType,
-      componentSubtype: input.componentSubtype,
-    },
-    optionalAssertion: input.optionalAssertion,
-    evidenceLocations: input.evidenceLocations,
-    derivationLocations: input.derivationLocations,
-    observedTokenCandidates: input.observedTokenCandidates,
-    display: input.displayText !== undefined ? { displayText: input.displayText } : undefined,
-    disposition: input.disposition ?? "accepted",
-    declaredCapabilitySupported: input.declaredCapabilitySupported,
-    flowEndpoints: input.flowEndpoints,
-    flowAssertion: input.flowAssertion,
-  };
-}
-
 export function buildAcceptedGoldExpectation(
   input: BuildGoldInput & { conceptLeaf: string },
 ): AcceptedCanonicalGoldExpectation {
@@ -151,11 +129,7 @@ export function buildNeedsAdjudicationRecord(
   };
 }
 
-export function buildScannerFinding(
-  input: BuildFindingInput,
-): CanonicalScannerFinding {
-  return baseFindingFields(input);
-}
+export { buildScannerFinding };
 
 export interface BuildFlowGoldInput extends BuildGoldInput {
   layer: "data-flows";

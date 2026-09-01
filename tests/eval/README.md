@@ -1,6 +1,6 @@
 # Fixture evaluation harness
 
-Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts`. See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
+Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts` and delegates to the published boundary in `src/eval/` (`@dataparade/scanner/eval`). See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
 
 Four **headline layers** form the evaluation vector. `raw-hits` is **diagnostic only** — scanned and reported but excluded from headline gates. There is **no cross-layer scalar**.
 
@@ -24,9 +24,10 @@ Personal-data layers share heuristic rules but differ in roll-up. Graph layers u
 ## Layout
 
 ```text
+src/eval/                 # Published @dataparade/scanner/eval boundary
 tests/eval/
-  types.ts                # Eval case and score report types
-  score.ts                # Shared recall / label / precision metrics
+  types.ts                # Fixture eval case and score report types
+  score.ts                # Fixture wrapper over evaluateLayerBucket
   ground-truth-schema.md  # Layer identity, matching, computability, eligibility
   canonical-representation.md  # Canonical evaluation representation behaviour spec
   docs-invariants.ts      # Constants checked by evaluation-docs-contract.spec.ts

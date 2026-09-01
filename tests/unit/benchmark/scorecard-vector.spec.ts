@@ -1,5 +1,5 @@
 import type { EvalCase, EvalScoreReport, EvalScores } from "../../eval/types";
-import { computeMetricComputability } from "../../eval/canonical/computability";
+import { computeMetricComputability } from "../../../src/eval/canonical/computability";
 import {
   aggregateEvalScores,
   assertNoCrossLayerScalar,
