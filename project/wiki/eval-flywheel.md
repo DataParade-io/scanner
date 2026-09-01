@@ -9,7 +9,7 @@ Agent-authored ground truth stays **proposed** until a person reviews it. Kanbus
 | `finding` | One detection we expect (or expect not) to see | `proposed` (create hook) | A person advances it off `proposed` |
 | `annotation` | One labeling pass over a fixture or corpus repo | `labeling` (create hook) | A person moves `awaiting-review` → `accepted` |
 
-Do not file five layer sub-tasks for a finding. Decompose in `findings/<id>/decomposition.md`.
+Do not file per-layer sub-tasks for a finding. Decompose in `findings/<id>/decomposition.md`.
 
 ## Ladders
 

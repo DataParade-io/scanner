@@ -54,14 +54,14 @@ The `local-graphql-process` feature is skipped automatically when no Virtuus-cap
 
 ## Layer evaluation scenarios
 
-Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval/layers/` covers the same grades deterministically. See [project/wiki/four-layer-evaluation.md](../project/wiki/four-layer-evaluation.md) and [tests/eval/ground-truth-schema.md](../tests/eval/ground-truth-schema.md).
+Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval/layers/` covers the same layers deterministically. See [project/wiki/four-layer-evaluation.md](../project/wiki/four-layer-evaluation.md) and [tests/eval/ground-truth-schema.md](../tests/eval/ground-truth-schema.md).
 
-| Scenario file | Grade | What it proves |
-|---------------|-------|----------------|
-| `scanner-recall-evaluation.feature` | Mention / span recall | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
-| `scanner-layer-evaluation.feature` | Raw hits / mentions / data items | Gold Items evaluated with Raw Hit Span, Mention Span, and Subject Identity scores via `scan-layer-findings.ts`; unread skip and ingested miss behavior |
+| Scenario file | Layer(s) | What it proves |
+|---------------|----------|----------------|
+| `scanner-recall-evaluation.feature` | Mentions (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
+| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Span, Mention Span, and Subject Identity scores via `scan-layer-findings.ts`; unread skip and ingested miss behavior |
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
-| `scan-findings.feature` | Component / pipeline | Scanner output shape for local fixtures |
+| `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
@@ -69,12 +69,12 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 
 `canonical-evaluation-representation` scenarios return **pending** (not skipped) until the canonical IR types land in KDATAP-06634c. See [`tests/eval/canonical-representation.md`](../tests/eval/canonical-representation.md).
 
-### Jest-only layers (reference)
+### Jest layer tests (reference)
 
-| Layer | Test path |
-|-------|-----------|
-| Raw pattern hits | `tests/eval/layers/raw-hits/eval.test.ts` |
-| Mentions | `tests/eval/layers/mentions/eval.test.ts` |
-| Data items | `tests/eval/layers/data-items/eval.test.ts` |
-| Components | `tests/eval/layers/components/eval.test.ts` |
-| Data flows | `tests/eval/layers/data-flows/eval.test.ts` |
+| Layer | Role | Test path |
+|-------|------|-----------|
+| Raw hits | Diagnostic | `tests/eval/layers/raw-hits/eval.test.ts` |
+| Mentions | Headline | `tests/eval/layers/mentions/eval.test.ts` |
+| Data items | Headline | `tests/eval/layers/data-items/eval.test.ts` |
+| Components | Headline | `tests/eval/layers/components/eval.test.ts` |
+| Data flows | Headline | `tests/eval/layers/data-flows/eval.test.ts` |

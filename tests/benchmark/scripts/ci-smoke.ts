@@ -18,6 +18,7 @@ const SMOKE_SPEC_FILES = [
   "tests/unit/benchmark/ci-smoke-digests.spec.ts",
   "tests/unit/benchmark/validate-materializations.spec.ts",
   "tests/unit/benchmark/validate-published-baseline.spec.ts",
+  "tests/unit/docs/evaluation-docs-contract.spec.ts",
 ];
 
 function main(): void {
