@@ -23,9 +23,9 @@ annotations:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (wordpress-not-stripe); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: wordpress::wordpress-not-stripe
-      target_entity_id: wordpress::wordpress-not-stripe
+      candidate_notes: wp_signon authenticates credentials then calls wp_set_auth_cookie; attributed to wordpress-auth-cookie-service (positive auth component). Negative stripe overlap at this span is a decoy, not the flow carrier.
+      source_entity_id: wordpress::wordpress-auth-cookie-service
+      target_entity_id: wordpress::wordpress-auth-cookie-service
   - id: wordpress-password-to-hash
     layer: data_flows
     subject:
