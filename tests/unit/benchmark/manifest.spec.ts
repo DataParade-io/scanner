@@ -46,4 +46,14 @@ describe("benchmark/manifest corpus mention keys", () => {
     expect(fs.existsSync(mentionsPath)).toBe(true);
     expect(fs.existsSync(legacyPath)).toBe(false);
   });
+
+  it("loads data_item candidate blocks on data_items layer", () => {
+    const repoDir = path.join(__dirname, "../../benchmark/repos/keycloak");
+    const annotations = loadAnnotations(repoDir, "data_items");
+    const username = annotations.find((row) => row.id === "keycloak-username");
+    expect(username?.candidate?.kind).toBe("data_item");
+    if (username?.candidate?.kind === "data_item") {
+      expect(username.candidate.proposed_identity_key).toBe("data_item:username");
+    }
+  });
 });

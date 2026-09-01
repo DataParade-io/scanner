@@ -595,7 +595,10 @@ export function buildFlowCensus(
       labels: [...record.expected.labels],
       reviewState: record.provenance.review_state,
       hasCandidate: record.candidate !== undefined,
-      dispositionCandidate: record.candidate?.disposition_candidate,
+      dispositionCandidate:
+        record.candidate?.kind === "flow"
+          ? record.candidate.disposition_candidate
+          : undefined,
     });
   }
 

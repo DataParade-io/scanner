@@ -16,7 +16,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-first-name
     layer: data_items
     subject:
@@ -35,6 +35,16 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:first_name
+      proposed_concept_leaf: first_name
+      proposed_ancestry:
+        - person_name
+        - first_name
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-last-name
     layer: data_items
     subject:
@@ -53,6 +63,16 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:last_name
+      proposed_concept_leaf: last_name
+      proposed_ancestry:
+        - person_name
+        - last_name
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-finnish-social-security-number
     layer: data_items
     subject:
@@ -71,6 +91,16 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-email
     layer: data_items
     subject:
@@ -89,6 +119,15 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-employee-language
     layer: data_items
     subject:
@@ -123,7 +162,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-monthly-pay
     layer: data_items
     subject:
@@ -141,7 +180,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-vacation-money
     layer: data_items
     subject:
@@ -159,7 +198,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-other-expenses
     layer: data_items
     subject:
@@ -177,7 +216,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-working-hours
     layer: data_items
     subject:
@@ -195,7 +234,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-collective-agreement
     layer: data_items
     subject:
@@ -230,7 +269,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-commission-amount
     layer: data_items
     subject:
@@ -248,7 +287,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
   - id: yjdh-commission-description
     layer: data_items
     subject:
@@ -283,7 +322,16 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: accepted
+      review_state: needs_adjudication
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:date_of_birth
+      proposed_concept_leaf: date_of_birth
+      proposed_ancestry:
+        - date_of_birth
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-ssn-validation
     layer: data_items
     subject:
@@ -302,6 +350,16 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: yjdh-search-ssn
     layer: data_items
     subject:
@@ -320,3 +378,13 @@ annotations:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
       review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped

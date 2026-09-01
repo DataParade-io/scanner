@@ -348,6 +348,46 @@ export function componentStructuredIdentity(
   };
 }
 
+export function dataItemCandidateBlock(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
+  if (state.canonicalLayer !== "data-items" || input.layer !== "data_items") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const candidate = input.candidate;
+  if (!candidate || candidate.kind !== "data_item") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const diagnostics: MigrationDiagnostic[] = [
+    makeDiagnostic(
+      input.id,
+      "data_item_candidate_block",
+      `non-scoring candidate proposes ${candidate.proposed_identity_key} → ${candidate.proposed_concept_leaf}`,
+    ),
+  ];
+
+  const parked: ObservedTokenCandidate[] = [
+    tokenCandidate(candidate.proposed_identity_key, 0, "data-item-candidate-identity"),
+    tokenCandidate(candidate.proposed_concept_leaf, 0, "data-item-candidate-leaf"),
+  ];
+  for (const ancestor of candidate.proposed_ancestry) {
+    parked.push(tokenCandidate(ancestor, 0, "data-item-candidate-ancestry"));
+  }
+  if (candidate.candidate_notes) {
+    parked.push(tokenCandidate(candidate.candidate_notes, 0, "data-item-candidate-notes"));
+  }
+
+  return {
+    state: {
+      observedTokenCandidates: [...state.observedTokenCandidates, ...parked],
+    },
+    diagnostics,
+  };
+}
+
 export function flowCandidateIdentity(
   state: ConversionState,
   input: LegacyGoldRecord,
@@ -629,4 +669,5 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "expected_labels_provenance",
   "expected_status_disposition",
   "flow_candidate_block",
+  "data_item_candidate_block",
 ];

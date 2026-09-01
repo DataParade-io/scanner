@@ -115,6 +115,25 @@ export interface FlowAnnotationCandidate {
   };
 }
 
+export type DataItemEvidenceValidation =
+  | "verified"
+  | "unverified"
+  | "contradicted"
+  | "skipped";
+
+/** Non-scoring data-item migration proposals (KDATAP-a0e80b). */
+export interface DataItemAnnotationCandidate {
+  kind: "data_item";
+  proposed_identity_key: string;
+  proposed_concept_leaf: string;
+  proposed_ancestry: string[];
+  candidate_confidence?: FlowCandidateConfidence;
+  candidate_notes?: string;
+  evidence_validation?: DataItemEvidenceValidation;
+}
+
+export type AnnotationCandidate = FlowAnnotationCandidate | DataItemAnnotationCandidate;
+
 export interface AnnotationRecord {
   id: string;
   layer: BenchmarkLayer;
@@ -124,7 +143,7 @@ export interface AnnotationRecord {
   expected: AnnotationExpected;
   provenance: AnnotationProvenance;
   canonical?: AnnotationCanonical;
-  candidate?: FlowAnnotationCandidate;
+  candidate?: AnnotationCandidate;
 }
 
 export interface AnnotationFile {
