@@ -3,7 +3,7 @@
   "title": "Packet-and-layer report fields",
   "description": "Required packet-and-layer report fields.\n\nPer layer: accepted canonical positives; evaluable positives; matched positives; exact-concept recall over the full accepted/evaluable denominator; ancestor-category recall where applicable; classification accuracy; strict correct-label recall; precision plus explicit computability state; unread count/rate; distinct evidence-file coverage; entity partial-coverage counts; ineligible counts by reason; unscorable findings; migration-readiness blockers; and gate exceptions.\n\nCapability support is diagnostic only: report `declaredCapabilitySupported` counts and `declaredCapabilityCoverage`, tied to the scanner and adapter-map digest. Never print recall over that subset as the headline and never remove unsupported canonical concepts from raw recall.\n\nLegacy source-token-only or unresolved endpoint rows are migration-incomplete, not accepted canonical positives. Report them in readiness accounting by review state and reason.\n\nTotals are denominator-weighted within a layer only; no scalar mixes heterogeneous layers. Both annotation/entity-weighted and distinct-file coverage are required. A language/capability slice accompanies the full scorecard without replacing it.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -19,10 +19,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "06e3e32a-48fe-4625-bca7-9e3f584fb5fa",
+      "author": "home",
+      "text": "Landed on develop via PR #38 (packet-and-layer report fields on scorecard-vector/2).",
+      "created_at": "2026-09-01T17:40:11.901503Z"
+    }
+  ],
   "created_at": "2026-08-31T14:16:11.893457Z",
-  "updated_at": "2026-08-31T14:38:28.007169Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:11.913558Z",
+  "closed_at": "2026-09-01T17:40:11.913558Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

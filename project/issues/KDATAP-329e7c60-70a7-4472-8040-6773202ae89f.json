@@ -3,7 +3,7 @@
   "title": "Explicit metric computability states",
   "description": "Represent metric availability with an explicit reason, not one overloaded null.\n\nAt minimum distinguish:\n\n- no reviewed scope;\n- reviewed scope but no successfully processed scope;\n- processed scope with zero predictions;\n- layer migration incomplete or below readiness threshold;\n- unscorable findings lacking required provenance;\n- computable numeric result.\n\nFor precision, an empty processed prediction denominator is not the same condition as absent or unread scope, even when neither produces a numeric fraction. Markdown and JSON must retain the state and all denominator counts.\n\nLegacy data flows may use migration-incomplete in readiness reports. Baseline series 1 itself is blocked until the four-layer readiness gate passes; it does not publish an unscorable flow layer as though that were a baseline result.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -27,11 +27,17 @@
       "author": "home",
       "text": "## Recommendation: computability belongs to each metric\n\nApprove explicit computability states, but attach them per metric rather than once to a packet and layer.\n\nA processed scope with zero predictions demonstrates the distinction:\n\n- recall can be computable as zero matched over a nonzero positive denominator;\n- precision is undefined because the prediction denominator is zero;\n- negative-case performance may still be computable.\n\nLikewise, missing reviewed closed-world scope can make precision unavailable without necessarily preventing recall over successfully processed positive gold.\n\nEach metric result should therefore carry state, numerator, denominator, and reason. Baseline readiness remains a separate gate and must not be overloaded into every metric state.\n\nThe PHP recomputation changes static capability, not these semantics. Newly recognized PHP evidence changes a metric state only after the per-layer ledger records successful processing.",
       "created_at": "2026-08-31T19:38:11.119144Z"
+    },
+    {
+      "id": "5c40b63d-5c39-4873-b364-66f8893dc9fb",
+      "author": "home",
+      "text": "Landed on develop via PR #36 (explicit per-metric computability states).",
+      "created_at": "2026-09-01T17:40:11.852029Z"
     }
   ],
   "created_at": "2026-08-31T14:16:12.377571Z",
-  "updated_at": "2026-08-31T19:38:11.119144Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:11.864460Z",
+  "closed_at": "2026-09-01T17:40:11.864460Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

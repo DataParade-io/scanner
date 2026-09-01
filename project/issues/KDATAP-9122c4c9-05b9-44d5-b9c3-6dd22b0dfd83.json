@@ -3,7 +3,7 @@
   "title": "Per-layer structured eligibility ledger",
   "description": "Replace the merged `scannedFiles` list with a structured per-layer outcome ledger for every expected evidence path.\n\n`scanRepoByManifestLayers` currently unions orchestrator and personal-data file lists. This contaminates eligibility: a file processed by one layer can improperly enlarge another layer denominator, normally creating false negatives. Data-item any-match reuse can separately turn that contamination into false credit; one-to-one assignment fixes that different defect.\n\nThe ledger implements the complete reason model ruled on KDATAP-1b2294 and is emitted directly by ingest/layer processing rather than reconstructed from warning strings. It records the exact stage, normalized path, and reason.\n\nFor repository-level entities with multiple evidence locations:\n\n- eligible when at least one supporting location was successfully processed for that layer;\n- report full, partial, or no evidence coverage;\n- entity denominators count the entity once;\n- location/file coverage remains separately visible.\n\nRelated defect: personal-data-only scans currently take `scannedFiles` from whichever payload happens to be first. The new inventory and ledger remove that order dependence.\n\nDefinition of done: eligibility cannot be conferred across layers, all reason outcomes have contract tests, and materialized runs prove which packets actually encounter capacity limits.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -15,9 +15,16 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "62337af8-e6b6-441c-9029-03755b9deef7",
+      "author": "home",
+      "text": "Landed on develop via PR #30 (per-layer structured eligibility ledger).",
+      "created_at": "2026-09-01T17:40:08.409702Z"
+    }
+  ],
   "created_at": "2026-08-31T14:15:00.103734Z",
-  "updated_at": "2026-08-31T14:38:27.872764Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:08.421233Z",
+  "closed_at": "2026-09-01T17:40:08.421233Z",
   "custom": {}
 }

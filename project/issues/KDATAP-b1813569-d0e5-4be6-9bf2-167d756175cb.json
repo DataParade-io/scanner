@@ -3,7 +3,7 @@
   "title": "Canonical evaluation representation",
   "description": "Behaviour specification for the versioned canonical representation emitted by both gold and scanner adapters.\n\nThe representation separates repo-local observation/entity identity; asserted semantic concept leaf and ancestry; component type/subtype; optional asserted instance/vendor; evidence and derivation locations; observed-token candidates; and display text. Candidates, labels, and display names never rescue identity.\n\n```gherkin\nFeature: Canonical evaluation representation\n\nScenario: Gold and scanner findings meet in one representation\n  Given canonical gold and a scanner finding for the same evidence\n  When each passes through its adapter\n  Then both carry the same contract version\n  And entity identity, asserted classification, optional vendor and evidence are separate fields\n\nScenario: Legacy observed text cannot rescue a mismatch\n  Given an expectation whose canonical identity does not match a finding\n  When a display name or observed-token candidate happens to match\n  Then the observations do not match\n\nScenario: Strict correctness uses asserted fields only\n  Given an asset expectation asserting type and subtype but no instance\n  When a finding matches the asserted fields and evidence\n  Then strict correctness does not require the legacy display name\n\nScenario: Same-subtype components retain cardinality\n  Given two database component expectations in one repository\n  When both share a taxonomy subtype but have distinct canonical entities or evidence\n  Then one finding cannot satisfy both expectations\n\nScenario: An ancestor concept is not an exact match\n  Given an expectation whose concept leaf is driver licence\n  When a finding carries only the national-identifier ancestor\n  Then exact-leaf correctness is not credited\n  And ancestor-category correctness is reported separately\n```\n\nBlocked on the legacy-name, component-instance, and component-cardinality rulings.",
   "type": "story",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -23,10 +23,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "dfa425db-8e5e-4071-a658-e340a925faba",
+      "author": "home",
+      "text": "Landed on develop via PR #21 (canonical evaluation representation behaviour spec).",
+      "created_at": "2026-09-01T17:40:08.258491Z"
+    }
+  ],
   "created_at": "2026-08-31T14:14:57.620235Z",
-  "updated_at": "2026-08-31T14:40:02.746664Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:08.271542Z",
+  "closed_at": "2026-09-01T17:40:08.271542Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

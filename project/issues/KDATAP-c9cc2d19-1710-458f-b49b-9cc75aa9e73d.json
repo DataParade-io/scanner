@@ -3,7 +3,7 @@
   "title": "Four-layer runner and scorecard vector",
   "description": "Four-layer runner emitting a scorecard vector: mentions, repository-level data items, components, data flows. Raw hits are diagnostic output with no headline weight.\n\nNo cross-layer scalar is published. Occurrences, repository entities, components and edges are not commensurate units, and mentions and data items derive from the same `matchPiiSignalsInFiles` pass — data items are a `GROUP BY` over the mention stream, not a second observation — so any average would weight one regex twice. Totals are denominator-weighted within a layer only. Gates operate per layer.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -19,10 +19,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "0685dc3b-7166-4cad-9ad1-5c3d204fdccd",
+      "author": "home",
+      "text": "Landed on develop via PR #35 (four-layer scorecard vector runner).",
+      "created_at": "2026-09-01T17:40:10.811307Z"
+    }
+  ],
   "created_at": "2026-08-31T14:15:02.519406Z",
-  "updated_at": "2026-08-31T14:15:02.519406Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:10.823018Z",
+  "closed_at": "2026-09-01T17:40:10.823018Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

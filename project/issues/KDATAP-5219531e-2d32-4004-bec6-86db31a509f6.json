@@ -3,7 +3,7 @@
   "title": "Gold loaders emit canonical observations",
   "description": "Corpus gold and Jest fixture gold both load through one adapter emitting canonical observations.\n\nToday they encode different contracts, which is why the fixture suite cannot serve as the regression guard for this work:\n\n| | component keys | flow keys |\n| --- | --- | --- |\n| Jest fixtures | `asset:pg`, `asset:hikaricp` — the engine's instance names | `flow:asset:api->third_party:stripe` |\n| Corpus gold | `asset:database` x182, `asset:api` x118 — taxonomy subtypes | `flow:password->wp_check_password` |\n\nFixture gold is itself non-canonical and is migrated by this work; it is not a fixed reference point. The loader must reject legacy keys once the migration milestone passes (see the legacy loader task on the gold epic).",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -19,10 +19,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "af605849-0f7e-4176-a06b-353d4a355a17",
+      "author": "home",
+      "text": "Landed on develop via PR #25 (gold loaders emit canonical observations).",
+      "created_at": "2026-09-01T17:40:08.336951Z"
+    }
+  ],
   "created_at": "2026-08-31T14:14:58.592781Z",
-  "updated_at": "2026-08-31T14:14:58.592781Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:08.349369Z",
+  "closed_at": "2026-09-01T17:40:08.349369Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"
