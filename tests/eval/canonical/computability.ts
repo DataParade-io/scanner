@@ -9,7 +9,11 @@ import type {
 
 export type { MetricComputabilityState };
 
-export type HeadlineMetricKind = "recall" | "precision" | "negativeCasePassRate";
+export type HeadlineMetricKind =
+  | "recall"
+  | "ancestorCategoryRecall"
+  | "precision"
+  | "negativeCasePassRate";
 
 export interface ComputeMetricComputabilityInput {
   layer: EvalLayer;
@@ -32,6 +36,29 @@ function metricScore(
   denominator: number,
 ): MetricScore {
   return { state, value, numerator, denominator };
+}
+
+export function resolveAncestorRecallComputability(
+  input: ComputeMetricComputabilityInput,
+): MetricScore {
+  const { denominators, layer, positiveCaseCount, unreadPositiveCount } = input;
+  const numerator = denominators.matchedAncestorCategory;
+  const denominator = denominators.evaluablePositives;
+  const value = denominator === 0 ? null : numerator / denominator;
+
+  if (denominator > 0) {
+    return metricScore("computable", value, numerator, denominator);
+  }
+
+  if (layer === "data-flows" && positiveCaseCount > 0) {
+    return metricScore("migration_incomplete_or_not_ready", null, numerator, denominator);
+  }
+
+  if (unreadPositiveCount > 0 && positiveCaseCount > 0) {
+    return metricScore("reviewed_scope_unprocessed", null, numerator, denominator);
+  }
+
+  return metricScore("migration_incomplete_or_not_ready", null, numerator, denominator);
 }
 
 export function resolveRecallComputability(
@@ -108,6 +135,7 @@ export function computeMetricComputability(
     locationlessFindingCount: input.locationlessFindingCount,
     metrics: {
       recall: resolveRecallComputability(input),
+      ancestorCategoryRecall: resolveAncestorRecallComputability(input),
       precision: resolvePrecisionComputability(input),
       negativeCasePassRate: resolveNegativeCaseComputability(input),
     },
@@ -160,6 +188,7 @@ export function emptyMetricComputability(): MetricComputability {
       evaluablePositives: 0,
       matchedPositives: 0,
       matchedWithCorrectLabels: 0,
+      matchedAncestorCategory: 0,
       negativeCases: 0,
       negativeCasesPassed: 0,
       exhaustiveScopedFindings: 0,

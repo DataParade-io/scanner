@@ -106,10 +106,12 @@ describe("run-four-layer-scorecard", () => {
         materializedPath: "/tmp/materialized",
         evalCases: [evalCase("mentions", "m1"), evalCase("data-flows", "f1")],
         scanResult: scanResult(),
+        canonicalRecords: [],
         layerScores: {
           mentions: withMetricComputability(
             {
               recall: 1,
+              ancestorCategoryRecall: null,
               labelAccuracy: 1,
               correctLabelRecall: 1,
               precision: null,
@@ -118,8 +120,9 @@ describe("run-four-layer-scorecard", () => {
               denominators: {
                 evaluablePositives: 1,
                 matchedPositives: 1,
-                matchedWithCorrectLabels: 1,
-                negativeCases: 0,
+              matchedWithCorrectLabels: 1,
+              matchedAncestorCategory: 0,
+              negativeCases: 0,
                 negativeCasesPassed: 0,
                 exhaustiveScopedFindings: 0,
                 exhaustiveScopedMatches: 0,
@@ -130,6 +133,7 @@ describe("run-four-layer-scorecard", () => {
           "data-flows": withMetricComputability(
             {
               recall: null,
+              ancestorCategoryRecall: null,
               labelAccuracy: null,
               correctLabelRecall: null,
               precision: 0,
@@ -139,6 +143,7 @@ describe("run-four-layer-scorecard", () => {
                 evaluablePositives: 0,
                 matchedPositives: 0,
                 matchedWithCorrectLabels: 0,
+                matchedAncestorCategory: 0,
                 negativeCases: 0,
                 negativeCasesPassed: 0,
                 exhaustiveScopedFindings: 2,

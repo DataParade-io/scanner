@@ -127,11 +127,12 @@ pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard
 
 | Field | Meaning |
 | --- | --- |
-| `layers` | One entry per headline layer with per-layer `scores`, structured `computability` (per-metric state + scope counts), and `gate` |
-| `computability.metrics` | Per-metric `{ state, value, numerator, denominator }` for recall, precision, and negative pass rate |
+| `layers` | One entry per headline layer with per-layer `scores`, structured `computability` (per-metric state + scope counts), `gate`, and `accounting` |
+| `accounting` | Per-layer population counts, coverage (entity-weighted + distinct-file), eligibility by reason, migration-incomplete blockers, gate exceptions, and diagnostic slices (capability + language) |
+| `computability.metrics` | Per-metric `{ state, value, numerator, denominator }` for recall, ancestor-category recall, precision, and negative pass rate |
 | `computability.scope` | `reviewedScopeFileCount` and `processedScopeFileCount` retained even when rates are null |
 | `diagnostic.raw-hits` | Diagnostic-only raw pattern-hit metrics |
-| `packets` | Per-repository rows used to build corpus totals |
+| `packets` | Per-repository rows with the same per-layer fields used to build corpus totals |
 
 **Metric states:** `no_reviewed_scope`, `reviewed_scope_unprocessed`, `processed_scope_zero_predictions`, `migration_incomplete_or_not_ready`, `unscorable_provenance`, `computable`. An empty processed prediction denominator is not the same as absent scope.
 

@@ -13,6 +13,10 @@ import {
   MaterializationInvalidError,
   validateMaterializedRepo,
 } from "./validate-materialization";
+import {
+  loadPacketCanonicalRecordsWithDiagnostics,
+  type PacketCanonicalRecordWithDiagnostics,
+} from "./layer-report-accounting";
 
 const DEFAULT_BENCHMARK_ROOT = resolveDefaultBenchmarkRoot();
 
@@ -86,6 +90,7 @@ export interface BenchmarkRepoResult {
   evalCases: EvalCase[];
   scanResult: FixtureScanResult;
   layerScores: Partial<Record<EvalLayer, EvalScoreReport>>;
+  canonicalRecords: PacketCanonicalRecordWithDiagnostics[];
 }
 
 export interface RunBenchmarkOptions extends RunBenchmarkRepoOptions {
@@ -130,6 +135,10 @@ export async function runBenchmarkRepo(
       scanRepoByManifestLayers(key, root, manifest.coverage.layers));
   const scanResult = await scanFn(repoKey, materializedPath);
   const layerScores = scoreEvalCasesByLayer(evalCases, [scanResult]);
+  const canonicalRecords = loadPacketCanonicalRecordsWithDiagnostics(
+    repoKey,
+    options.benchmarkRoot,
+  );
 
   return {
     repoKey,
@@ -137,6 +146,7 @@ export async function runBenchmarkRepo(
     evalCases,
     scanResult,
     layerScores,
+    canonicalRecords,
   };
 }
 

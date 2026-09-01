@@ -47,6 +47,8 @@ export async function runFourLayerScorecard(
       repoKey: result.repoKey,
       evalCases: result.evalCases,
       layerScores: result.layerScores,
+      scanResult: result.scanResult,
+      canonicalRecords: result.canonicalRecords,
     })),
   });
 }

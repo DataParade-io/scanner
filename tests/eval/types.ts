@@ -77,6 +77,7 @@ export interface EvalScoreDenominators {
   evaluablePositives: number;
   matchedPositives: number;
   matchedWithCorrectLabels: number;
+  matchedAncestorCategory: number;
   negativeCases: number;
   negativeCasesPassed: number;
   exhaustiveScopedFindings: number;
@@ -103,7 +104,11 @@ export interface MetricScore {
   denominator: number;
 }
 
-export type HeadlineMetricKind = "recall" | "precision" | "negativeCasePassRate";
+export type HeadlineMetricKind =
+  | "recall"
+  | "ancestorCategoryRecall"
+  | "precision"
+  | "negativeCasePassRate";
 
 export interface MetricComputability {
   scope: ScopeDenominators;
@@ -114,6 +119,8 @@ export interface MetricComputability {
 export interface EvalScores {
   /** Null when there are no evaluable (read) positive cases */
   recall: number | null;
+  /** Null when there are no evaluable positive cases; separate from exact-concept recall */
+  ancestorCategoryRecall: number | null;
   /** Null when no positives matched */
   labelAccuracy: number | null;
   /** Null when there are no evaluable (read) positive cases */

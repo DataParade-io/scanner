@@ -28,6 +28,7 @@ function emptyScoresForLayer(layer: EvalLayer): EvalScores {
     evaluablePositives: 0,
     matchedPositives: 0,
     matchedWithCorrectLabels: 0,
+    matchedAncestorCategory: 0,
     negativeCases: 0,
     negativeCasesPassed: 0,
     exhaustiveScopedFindings: 0,
@@ -35,6 +36,7 @@ function emptyScoresForLayer(layer: EvalLayer): EvalScores {
   };
   return {
     recall: null,
+    ancestorCategoryRecall: null,
     labelAccuracy: null,
     correctLabelRecall: null,
     precision: null,
@@ -62,6 +64,7 @@ function scorableMentionsReport(): EvalScoreReport {
     evaluablePositives: 2,
     matchedPositives: 1,
     matchedWithCorrectLabels: 1,
+    matchedAncestorCategory: 0,
     negativeCases: 0,
     negativeCasesPassed: 0,
     exhaustiveScopedFindings: 1,
@@ -70,6 +73,7 @@ function scorableMentionsReport(): EvalScoreReport {
   return {
     scores: {
       recall: 0.5,
+      ancestorCategoryRecall: null,
       labelAccuracy: 1,
       correctLabelRecall: 0.5,
       precision: 1,

@@ -55,6 +55,7 @@ function emptyReport(): EvalScoreReport {
   const scores = withMetricComputability(
     {
       recall: null,
+      ancestorCategoryRecall: null,
       labelAccuracy: null,
       correctLabelRecall: null,
       precision: null,
@@ -64,6 +65,7 @@ function emptyReport(): EvalScoreReport {
         evaluablePositives: 0,
         matchedPositives: 0,
         matchedWithCorrectLabels: 0,
+        matchedAncestorCategory: 0,
         negativeCases: 0,
         negativeCasesPassed: 0,
         exhaustiveScopedFindings: 0,
@@ -85,6 +87,7 @@ function reportWithDenominators(
     evaluablePositives: 0,
     matchedPositives: 0,
     matchedWithCorrectLabels: 0,
+    matchedAncestorCategory: 0,
     negativeCases: 0,
     negativeCasesPassed: 0,
     exhaustiveScopedFindings: 0,
@@ -98,6 +101,10 @@ function reportWithDenominators(
         (denominators.evaluablePositives === 0
           ? null
           : denominators.matchedPositives / denominators.evaluablePositives),
+      ancestorCategoryRecall:
+        denominators.evaluablePositives === 0
+          ? null
+          : denominators.matchedAncestorCategory / denominators.evaluablePositives,
       labelAccuracy: null,
       correctLabelRecall: null,
       precision:

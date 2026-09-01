@@ -12,6 +12,7 @@ function emptyDenominators(
     evaluablePositives: 0,
     matchedPositives: 0,
     matchedWithCorrectLabels: 0,
+    matchedAncestorCategory: 0,
     negativeCases: 0,
     negativeCasesPassed: 0,
     exhaustiveScopedFindings: 0,
