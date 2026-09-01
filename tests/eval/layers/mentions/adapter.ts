@@ -13,9 +13,13 @@ export function mentionHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
   return personalDataFindingToLayerFinding({
     subjectKey: mentionIdentity(hit.id),
     labels: [...hit.labels],
-    filePath: hit.evidence.filePath,
-    startLine: hit.evidence.startLine,
-    endLine: hit.evidence.endLine,
+    evidenceLocations: [
+      {
+        filePath: hit.evidence.filePath,
+        startLine: hit.evidence.startLine,
+        endLine: hit.evidence.endLine,
+      },
+    ],
   });
 }
 

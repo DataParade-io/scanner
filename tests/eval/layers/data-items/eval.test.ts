@@ -17,8 +17,8 @@ describe("eval/layers/data-items", () => {
 
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.negativeCasePassRate).toBe(1);
-    expect(report.scores.recall).toBeCloseTo(4 / 6, 5);
-    expect(report.scores.precision).toBe(1);
+    expect(report.scores.recall).toBeCloseTo(3 / 6, 5);
+    expect(report.scores.precision).toBeCloseTo(3 / 4, 5);
     expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
 
     const identityOnly = report.caseResults.find(
@@ -37,5 +37,19 @@ describe("eval/layers/data-items", () => {
       (finding) => finding.key === "data_item:username",
     );
     expect(usernameFindings).toHaveLength(1);
+    expect(usernameFindings[0]?.sourceLines).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          file_path: "src/main/resources/application.yml",
+          start_line: 6,
+          end_line: 6,
+        }),
+        expect.objectContaining({
+          file_path: "src/main/resources/bootstrap.yml",
+          start_line: 6,
+          end_line: 6,
+        }),
+      ]),
+    );
   });
 });

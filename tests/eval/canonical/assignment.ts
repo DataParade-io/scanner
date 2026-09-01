@@ -22,6 +22,8 @@ function findingCouldMatchExpectation(
 
 /**
  * One-to-one assignment without guessing between indistinguishable candidates.
+ * Colliding findings or expectations are excluded from pairing; other identities
+ * in the same bucket may still match.
  */
 export function assignOneToOne(
   expectations: Array<CanonicalGoldExpectation & { id: string }>,
@@ -53,20 +55,28 @@ export function assignOneToOne(
     findingsPerExpectation.set(pair.expectationId, byExpectation);
   }
 
-  const ambiguous = [...expectationsPerFinding.values(), ...findingsPerExpectation.values()].some(
-    (ids) => ids.length > 1,
-  );
-
-  if (ambiguous) {
-    return {
-      pairs: [],
-      unmatchedExpectationIds: expectations.map((expectation) => expectation.id),
-      unmatchedFindingIds: findings.map((finding) => finding.id),
-      ambiguous: true,
-    };
+  const blockedFindingIds = new Set<string>();
+  for (const [findingId, expectationIds] of expectationsPerFinding) {
+    if (expectationIds.length > 1) {
+      blockedFindingIds.add(findingId);
+    }
   }
 
-  const pairs = candidatePairs;
+  const blockedExpectationIds = new Set<string>();
+  for (const [expectationId, findingIds] of findingsPerExpectation) {
+    if (findingIds.length > 1) {
+      blockedExpectationIds.add(expectationId);
+    }
+  }
+
+  const ambiguous = blockedFindingIds.size > 0 || blockedExpectationIds.size > 0;
+
+  const pairs = candidatePairs.filter(
+    (pair) =>
+      !blockedFindingIds.has(pair.findingId) &&
+      !blockedExpectationIds.has(pair.expectationId),
+  );
+
   const matchedExpectationIds = new Set(pairs.map((pair) => pair.expectationId));
   const matchedFindingIds = new Set(pairs.map((pair) => pair.findingId));
 
@@ -78,7 +88,7 @@ export function assignOneToOne(
     unmatchedFindingIds: findings
       .filter((finding) => !matchedFindingIds.has(finding.id))
       .map((finding) => finding.id),
-    ambiguous: false,
+    ambiguous,
   };
 }
 

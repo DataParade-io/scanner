@@ -2,7 +2,10 @@ import {
   createDefaultScanConfiguration,
   scan,
 } from "../../src/core/pipeline/orchestrator";
-import { collectPersonalDataFindings } from "../../src/eval-layers/collect-personal-data-findings";
+import {
+  buildPersonalDataFindingsPayload,
+  buildPersonalDataInventory,
+} from "../../src/eval-layers/collect-personal-data-findings";
 import { buildOrchestratorEvalLedgers } from "../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../src/core/types/component";
 import type { DetectedDataFlow } from "../../src/core/types/data-flow";
@@ -123,7 +126,7 @@ function benchmarkLayerToPersonalDataLayer(
 
 /**
  * Scan a materialized corpus packet for the requested layers.
- * Orchestrator `scan()` runs at most once; each personal-data layer ingests independently.
+ * Orchestrator `scan()` runs at most once; personal-data matching runs at most once.
  */
 export async function scanRepoByManifestLayers(
   repoKey: string,
@@ -174,13 +177,15 @@ export async function scanRepoByManifestLayers(
   }
 
   if (needsPersonalData) {
+    const inventory = await buildPersonalDataInventory(repoRoot);
+
     for (const benchmarkLayer of layers) {
       if (!PERSONAL_DATA_BENCHMARK_LAYERS.has(benchmarkLayer)) {
         continue;
       }
       const personalLayer = benchmarkLayerToPersonalDataLayer(benchmarkLayer);
       const evalLayer = BENCHMARK_TO_EVAL_LAYER[benchmarkLayer]!;
-      const payload = await collectPersonalDataFindings(repoRoot, personalLayer);
+      const payload = buildPersonalDataFindingsPayload(inventory, personalLayer);
       eligibilityLedgers[evalLayer] = layerLedgerFromOutcomes(
         evalLayer,
         payload.layerOutcomes,

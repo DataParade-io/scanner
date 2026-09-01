@@ -62,9 +62,13 @@ describe("scanner canonical adapters", () => {
       {
         subjectKey: "mention:username",
         labels: ["username", "credentials"],
-        filePath: "src/config.yml",
-        startLine: 6,
-        endLine: 6,
+        evidenceLocations: [
+          {
+            filePath: "src/config.yml",
+            startLine: 6,
+            endLine: 6,
+          },
+        ],
       },
       "mentions",
     );
