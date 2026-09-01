@@ -1,8 +1,8 @@
 annotations:
   - id: yjdh-employee-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: id
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -12,17 +12,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: Employee serializer exposes the employee record identifier
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-first-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: first_name
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -32,17 +33,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Employee first name
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-last-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: last_name
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -52,17 +54,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Employee last name
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-finnish-social-security-number-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:national_identifier
+      key: mention:national_identifier
       name: social_security_number
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -72,17 +75,18 @@ annotations:
       status: positive
       labels:
         - national_identifier
+        - legacy-key:pii:national_identifier
     rationale: Explicit Finnish social-security-number field validated by the Finnish HETU library in this file
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -100,9 +104,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-job-title-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:employment_information
+      key: mention:employment_information
       name: job_title
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -112,17 +116,18 @@ annotations:
       status: positive
       labels:
         - employment_information
+        - legacy-key:pii:employment_information
     rationale: Employee job title describes employment information
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-monthly-pay-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:compensation
+      key: mention:compensation
       name: monthly_pay
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -132,17 +137,18 @@ annotations:
       status: positive
       labels:
         - compensation
+        - legacy-key:pii:compensation
     rationale: Employee monthly pay is compensation information
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-vacation-money-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:compensation
+      key: mention:compensation
       name: vacation_money
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -152,17 +158,18 @@ annotations:
       status: positive
       labels:
         - compensation
+        - legacy-key:pii:compensation
     rationale: Vacation-money value is compensation information
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-other-expenses-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:compensation
+      key: mention:compensation
       name: other_expenses
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -172,17 +179,18 @@ annotations:
       status: positive
       labels:
         - compensation
+        - legacy-key:pii:compensation
     rationale: Employee expense value is financial employment information
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-working-hours-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:employment_information
+      key: mention:employment_information
       name: working_hours
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -192,17 +200,18 @@ annotations:
       status: positive
       labels:
         - employment_information
+        - legacy-key:pii:employment_information
     rationale: Employee working-hours value describes employment conditions
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-residence-flag-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:residence_information
+      key: mention:residence_information
       name: is_living_in_helsinki
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -212,17 +221,18 @@ annotations:
       status: positive
       labels:
         - residence_information
+        - legacy-key:pii:residence_information
     rationale: Boolean explicitly indicates whether the employee resides in Helsinki
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-commission-amount-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:compensation
+      key: mention:compensation
       name: commission_amount
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -232,17 +242,18 @@ annotations:
       status: positive
       labels:
         - compensation
+        - legacy-key:pii:compensation
     rationale: Employee commission amount is compensation information
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-birthday-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:date_of_birth
+      key: mention:date_of_birth
       name: birthday
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -260,9 +271,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-ssn-validation-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:national_identifier
+      key: mention:national_identifier
       name: social_security_number
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -272,17 +283,18 @@ annotations:
       status: positive
       labels:
         - national_identifier
+        - legacy-key:pii:national_identifier
     rationale: Dedicated validation confirms the field has Finnish social-security-number semantics
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: yjdh-search-ssn-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:national_identifier
+      key: mention:national_identifier
       name: social_security_number
     evidence:
       file_path: backend/benefit/applications/api/v1/serializers/employee.py
@@ -292,10 +304,11 @@ annotations:
       status: positive
       labels:
         - national_identifier
+        - legacy-key:pii:national_identifier
     rationale: Search serializer exposes the same named national identifier
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

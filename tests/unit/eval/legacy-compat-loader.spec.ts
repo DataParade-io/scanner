@@ -22,7 +22,7 @@ const evidence = sampleEvidence("src/User.ts", 10, 11);
 function legacyRecord(overrides: Partial<LegacyGoldRecord> & Pick<LegacyGoldRecord, "id">): LegacyGoldRecord {
   return {
     layer: "mentions",
-    subject: { key: "pii:email_address" },
+    subject: { key: "mention:email" },
     evidence,
     expected: { status: "positive", labels: ["email"] },
     provenance: {
@@ -65,14 +65,12 @@ describe("loadLegacyGoldRecord", () => {
     expect(layerDiagnostics[0]?.detail).toBe("pii_signals → mentions");
   });
 
-  it("accepts pii: mention keys through the exemption conversion", () => {
-    const { record } = loadLegacyGoldRecord(legacyRecord({ id: "pii-exempt" }), {
-      warn: () => undefined,
-    });
-
-    expect(record.identity.identityKey).toBe("mention:email_address");
-    expect(record.classification.conceptLeaf).toBe("email_address");
-    expect(record.observedTokenCandidates?.some((t) => t.value === "pii:email_address")).toBe(true);
+  it("rejects stale pii: keys on the mentions layer", () => {
+    expect(() =>
+      loadLegacyGoldRecord(legacyRecord({ id: "pii-reject", subject: { key: "pii:email_address" } }), {
+        warn: () => undefined,
+      }),
+    ).toThrow(/mentions layer requires mention: prefix/);
   });
 
   it("maps mention rule-id suffixes through rule_id_to_concept_leaf", () => {
@@ -85,34 +83,10 @@ describe("loadLegacyGoldRecord", () => {
       { warn: () => undefined },
     );
 
+    expect(record.identity.identityKey).toBe("mention:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptAncestry).toEqual(["email_address"]);
     expect(diagnostics.some((entry) => entry.conversion === "rule_id_to_concept_leaf")).toBe(true);
-  });
-
-  it("does not remap pii: taxonomy keys through rule_id_to_concept_leaf", () => {
-    const { record, diagnostics } = loadLegacyGoldRecord(legacyRecord({ id: "pii-no-rule-map" }), {
-      warn: () => undefined,
-    });
-
-    expect(record.classification.conceptLeaf).toBe("email_address");
-    expect(diagnostics.some((entry) => entry.conversion === "rule_id_to_concept_leaf")).toBe(false);
-  });
-
-  it("does not alias pii:email_address to mention:email or leaf email", () => {
-    const { record } = loadLegacyGoldRecord(
-      legacyRecord({
-        id: "no-alias",
-        subject: { key: "pii:email_address" },
-        expected: { status: "positive", labels: ["email"] },
-      }),
-      { warn: () => undefined },
-    );
-
-    expect(record.identity.identityKey).not.toBe("mention:email");
-    expect(record.classification.conceptLeaf).not.toBe("email");
-    expect(record.identity.identityKey).toBe("mention:email_address");
-    expect(record.classification.conceptLeaf).toBe("email_address");
   });
 
   it("rewrites stale pii_signal: prefix before identity assignment", () => {
@@ -135,7 +109,7 @@ describe("loadLegacyGoldRecord", () => {
     const { record, diagnostics } = loadLegacyGoldRecord(
       legacyRecord({
         id: "labels-parked",
-        subject: { key: "pii:email_address" },
+        subject: { key: "mention:email" },
         expected: { status: "positive", labels: ["email", "user_email"] },
       }),
       { warn: () => undefined },
@@ -144,7 +118,7 @@ describe("loadLegacyGoldRecord", () => {
     expect(diagnostics.some((d) => d.conversion === "expected_labels_provenance")).toBe(true);
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.observedTokenCandidates?.map((t) => t.value)).toEqual(
-      expect.arrayContaining(["pii:email_address", "email", "user_email"]),
+      expect.arrayContaining(["email", "user_email"]),
     );
     expect(record.observedTokenCandidates?.find((t) => t.value === "email")?.provenance).toBe(
       "legacy-expected-label",
@@ -155,7 +129,7 @@ describe("loadLegacyGoldRecord", () => {
     const { record } = loadLegacyGoldRecord(
       legacyRecord({
         id: "subject-name",
-        subject: { key: "pii:user_identifier", name: "username" },
+        subject: { key: "mention:username", name: "username" },
         expected: { status: "positive", labels: [] },
       }),
       { warn: () => undefined },
@@ -166,6 +140,26 @@ describe("loadLegacyGoldRecord", () => {
     expect(
       record.observedTokenCandidates?.find((t) => t.value === "username")?.provenance,
     ).toBe("legacy-subject-name");
+    expect(record.identity.identityKey).toBe("mention:username");
+  });
+
+  it("routes bookmark mention keys to needs_adjudication", () => {
+    const { record } = loadLegacyGoldRecord(
+      legacyRecord({
+        id: "bookmark-key",
+        subject: { key: "mention:person_name", name: "first_name" },
+        provenance: {
+          proposed_by: "test",
+          proposed_at: "2026-08-31",
+          review_state: "needs_adjudication",
+        },
+      }),
+      { warn: () => undefined },
+    );
+
+    expect(record.identity.identityKey).toBe("mention:person_name");
+    expect(record.disposition).toBe("needs_adjudication");
+    expect(isAcceptedEvaluablePositive(record)).toBe(false);
   });
 
   it("never yields accepted evaluable gold for ambiguous expected.status", () => {
@@ -267,7 +261,7 @@ describe("loadLegacyGoldRecord", () => {
     const { diagnostics } = loadLegacyGoldRecord(
       legacyRecord({
         id: "diag-count",
-        subject: { key: "pii:email_address", name: "userEmail" },
+        subject: { key: "mention:email", name: "userEmail" },
         expected: { status: "positive", labels: ["email"] },
       }),
       { warn: (message) => warnings.push(message) },
@@ -291,8 +285,8 @@ describe("loadLegacyGoldRecord", () => {
   it("loads through annotationRecordToLegacyInput without semantic changes", () => {
     const annotation: AnnotationRecord = {
       id: "adapter-bridge",
-      layer: "pii_signals",
-      subject: { key: "pii:email_address", name: "emailField" },
+      layer: "mentions",
+      subject: { key: "mention:email", name: "emailField" },
       evidence: {
         file_path: evidence.file_path,
         start_line: evidence.start_line,
@@ -312,13 +306,14 @@ describe("loadLegacyGoldRecord", () => {
     });
 
     expect(record.identity.layer).toBe("mentions");
-    expect(record.identity.identityKey).toBe("mention:email_address");
+    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.classification.conceptLeaf).toBe("email_address");
   });
 });
 
 describe("legacy compat loader invariants", () => {
   const legacyInputs: LegacyGoldRecord[] = [
-    legacyRecord({ id: "inv-1", layer: "pii_signals", subject: { key: "pii:email_address" } }),
+    legacyRecord({ id: "inv-1", layer: "mentions", subject: { key: "mention:email" } }),
     legacyRecord({ id: "inv-2", subject: { key: "pii_signal:email" } }),
     legacyRecord({
       id: "inv-3",
@@ -373,7 +368,7 @@ describe("canonical evaluator isolation via loader output", () => {
     const { record: expectation } = loadLegacyGoldRecord(
       legacyRecord({
         id: "eval-isolation",
-        subject: { key: "pii:email_address", name: "sharedToken" },
+        subject: { key: "mention:email", name: "sharedToken" },
         expected: { status: "positive", labels: [] },
       }),
       { warn: () => undefined },

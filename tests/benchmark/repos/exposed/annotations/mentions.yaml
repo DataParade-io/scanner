@@ -1,8 +1,8 @@
 annotations:
   - id: exposed-current-user-keyword-not-email
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: CURRENT_USER
     evidence:
       file_path: exposed-core/src/main/kotlin/org/jetbrains/exposed/v1/core/vendors/Keywords.kt
@@ -15,13 +15,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: exposed-schema-password-not-customer-credential
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password
+      key: mention:password
       name: Schema.password
     evidence:
       file_path: exposed-core/src/main/kotlin/org/jetbrains/exposed/v1/core/Schema.kt
@@ -34,13 +34,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: exposed-transaction-id-not-user-identifier
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: transactionId
     evidence:
       file_path: exposed-core/src/main/kotlin/org/jetbrains/exposed/v1/core/Transaction.kt
@@ -48,18 +48,19 @@ annotations:
       end_line: 61
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:user_identifier
     rationale: transactionId is a random UUID for the database work unit, not an end-user identity.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: exposed-entity-id-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: EntityID
     evidence:
       file_path: exposed-core/src/main/kotlin/org/jetbrains/exposed/v1/core/dao/id/EntityID.kt
@@ -69,17 +70,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: EntityID.value wraps a table primary-key value used to identify persisted rows in the ORM layer.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: exposed-database-url-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: url
     evidence:
       file_path: exposed-core/src/main/kotlin/org/jetbrains/exposed/v1/core/DatabaseApi.kt
@@ -89,10 +91,11 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: DatabaseApi.url is the JDBC connection URL, which may embed database credentials.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

@@ -8,11 +8,14 @@ scope:
     - path: students/migrations/
       reason: generated migrations
 coverage:
-  layers: [components, data_flows, data_items, pii_signals]
-  languages: [python]
-  domains: [education]
-selection_rationale: >-
-  Django school administration app with a Guardian model storing
-  social_security_number as a plain CharField, without vendor-specific field
-  types or nearby third-party integrations.
-annotation_version: 1
+  layers:
+    - components
+    - data_flows
+    - data_items
+    - mentions
+  languages:
+    - python
+  domains:
+    - education
+selection_rationale: Django school administration app with a Guardian model storing social_security_number as a plain CharField, without vendor-specific field types or nearby third-party integrations.
+annotation_version: 2

@@ -4,9 +4,9 @@ Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release
 
 Versioned ground-truth data for deterministic scanner evaluation. Labels are curated independently of scanner output. Headline denominators use `review_state: accepted`.
 
-On load, corpus layer `pii_signals` normalizes to `mentions`. Gold subject keys may be `pii:<taxonomy>` (mapped onto matcher rule ids by `tests/eval/identity.ts`) or `data_item:<field>`.
+On load, corpus layer `pii_signals` normalizes to `mentions` for legacy type compat only. Gold subject keys use `mention:<rule_id>` (canonical) or `mention:<taxonomy_suffix>` (adjudication bookmarks).
 
-Canonical corpus layers are `components`, `data_flows`, `pii_signals`, and `data_items`.
+Canonical corpus layers are `components`, `data_flows`, `mentions`, and `data_items`.
 
 As of 2026-08-30 accepted positives: components 519, data_flows 419, pii_signals 325, data_items 302. Original-ten packets still have leftover proposed non-positive or unaccepted records from earlier curation.
 
@@ -24,7 +24,7 @@ tests/benchmark/
       annotations/
         components.yaml
         data_flows.yaml
-        pii_signals.yaml
+        mentions.yaml
         data_items.yaml
   scripts/
     materialize-repo.ts   # optional local clone helper (not run in CI)
