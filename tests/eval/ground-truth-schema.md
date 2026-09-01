@@ -63,7 +63,7 @@ Positives may set `documentedGap: true` for known scanner misses. They remain in
 
 ## Corpus compatibility
 
-Benchmark manifests and annotation YAML use snake_case layer names (`raw_hits`, `data_items`, `data_flows`). The deprecated `pii_signals` corpus layer is normalized to `mentions` on load; annotation files may live at `annotations/mentions.yaml` or the legacy `annotations/pii_signals.yaml`.
+Benchmark manifests and annotation YAML use snake_case layer names (`raw_hits`, `data_items`, `data_flows`, `mentions`). Mention annotations live at `annotations/mentions.yaml` with `mention:<rule_id>` subject keys.
 
 Subject keys are normalized on load via `normalizeSubjectKey` in `tests/benchmark/manifest.ts`. Legacy `pii_signal:` prefixes migrate to `mention:` (mentions layer) or `raw_hit:` (raw_hits layer). Stale `pii_signal:` keys that survive migration are rejected.
 

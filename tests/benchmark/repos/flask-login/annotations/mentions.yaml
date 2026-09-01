@@ -1,8 +1,8 @@
 annotations:
   - id: flask-login-user-id-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: user_identifier
     evidence:
       file_path: src/flask_login/login_manager.py
@@ -12,17 +12,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: session.get("_user_id") is a live identifier used to restore the authenticated user.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: flask-login-remember-token-name-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: remember_token
     evidence:
       file_path: src/flask_login/config.py
@@ -32,17 +33,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: COOKIE_NAME documents the remember_token cookie that carries a re-authentication secret.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: flask-login-flash-message-not-email
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: LOGIN_MESSAGE
     evidence:
       file_path: src/flask_login/config.py
@@ -55,13 +57,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: flask-login-user-id-from-mixin-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: id
     evidence:
       file_path: src/flask_login/mixins.py
@@ -71,17 +73,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: get_id serializes self.id as the stable user identifier Flask-Login stores in the session.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: flask-login-session-user-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: _user_id
     evidence:
       file_path: src/flask_login/login_manager.py
@@ -91,17 +94,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: session["_user_id"] is the stored user identifier used to reload the authenticated user.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: flask-login-remember-cookie-value-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: remember_token
     evidence:
       file_path: src/flask_login/login_manager.py
@@ -111,10 +115,11 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: encode_cookie(str(session["_user_id"])) is the remember-me cookie payload that re-authenticates the user.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

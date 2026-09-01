@@ -1,8 +1,8 @@
 annotations:
   - id: magento-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: EMAIL
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-firstname-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: FIRSTNAME
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -32,17 +32,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: FIRSTNAME is the canonical first-name field on the customer entity.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-dob-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:date_of_birth
+      key: mention:date_of_birth
       name: DOB
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -60,9 +61,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-telephone-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: TELEPHONE
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -80,9 +81,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-street-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:street_address
+      key: mention:street_address
       name: STREET
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -92,17 +93,18 @@ annotations:
       status: positive
       labels:
         - street_address
+        - legacy-key:pii:street_address
     rationale: STREET is the street address array on customer address records.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-rp-token-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: rp_token
     evidence:
       file_path: app/code/Magento/Customer/Model/ForgotPasswordToken/GetCustomerByToken.php
@@ -112,17 +114,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: rp_token is the reset-password bearer token used to look up and authorize password changes.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-password-hash-not-access-token
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: password_hash
     evidence:
       file_path: app/code/Magento/Customer/Model/Authentication.php
@@ -130,18 +133,19 @@ annotations:
       end_line: 172
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:access_token
     rationale: getPasswordHash returns a stored password verifier hash, not a reusable bearer access token.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-gender-not-dob-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:date_of_birth
+      key: mention:date_of_birth
       name: GENDER
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -154,13 +158,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: ID
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -170,17 +174,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: ID is the primary customer entity identifier.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-lastname-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: LASTNAME
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -190,17 +195,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: LASTNAME stores the customer's family name.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-customer-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: CUSTOMER_ID
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -210,17 +216,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: CUSTOMER_ID links an address record to its owning customer account.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-password-hash-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: password_hash
     evidence:
       file_path: app/code/Magento/Customer/Model/Authentication.php
@@ -230,17 +237,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: getPasswordHash retrieves the stored password verifier hash used during authentication.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-login-password-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: password
     evidence:
       file_path: app/code/Magento/Customer/Controller/Account/LoginPost.php
@@ -250,17 +258,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: login['password'] is the plaintext credential submitted on the login form.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-city-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:city
+      key: mention:city
       name: city
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -270,17 +279,18 @@ annotations:
       status: positive
       labels:
         - city
+        - legacy-key:pii:city
     rationale: AddressInterface::getCity is the locality of a customer address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-postcode-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:postal_code
+      key: mention:postal_code
       name: postcode
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -290,17 +300,18 @@ annotations:
       status: positive
       labels:
         - postal_code
+        - legacy-key:pii:postal_code
     rationale: AddressInterface::getPostcode is the postal code of a customer address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-firstname-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: firstname
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -310,17 +321,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Address firstname is the given name on a shipping or billing address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-lastname-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: lastname
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -330,17 +342,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Address lastname is the family name on a shipping or billing address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-prefix-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: prefix
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -350,17 +363,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Customer prefix is an honorific name part on the account.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-suffix-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: suffix
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/CustomerInterface.php
@@ -370,17 +384,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Customer suffix is a name suffix on the account.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-company-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:employment_information
+      key: mention:employment_information
       name: company
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -390,17 +405,18 @@ annotations:
       status: positive
       labels:
         - employment_information
+        - legacy-key:pii:employment_information
     rationale: AddressInterface::getCompany is the organization name on a customer address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-fax-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: fax
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -418,9 +434,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-prefix-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: prefix
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -430,17 +446,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Address prefix is an honorific name part on the postal address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-suffix-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: suffix
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -450,17 +467,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Address suffix is a name suffix on the postal address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-vat-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:national_identifier
+      key: mention:national_identifier
       name: vatId
     evidence:
       file_path: app/code/Magento/Customer/Api/Data/AddressInterface.php
@@ -470,10 +488,11 @@ annotations:
       status: positive
       labels:
         - national_identifier
+        - legacy-key:pii:national_identifier
     rationale: AddressInterface::getVatId is a tax/VAT identifier on the address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

@@ -127,36 +127,6 @@ export function piiSignalPrefixRewrite(
   };
 }
 
-export function piiMentionKeyExemption(
-  state: ConversionState,
-  annotationId: string,
-): { state: Partial<ConversionState>; diagnostic?: MigrationDiagnostic } {
-  if (state.canonicalLayer !== "mentions" || !state.workingKey.startsWith("pii:")) {
-    return { state: {} };
-  }
-
-  const taxonomySuffix = state.workingKey.slice("pii:".length);
-  const rawKey = state.workingKey;
-
-  return {
-    state: {
-      identityKey: `mention:${taxonomySuffix}`,
-      conceptLeaf: taxonomySuffix,
-      conceptAncestry: [taxonomySuffix],
-      identityAssigned: true,
-      observedTokenCandidates: [
-        ...state.observedTokenCandidates,
-        tokenCandidate(rawKey, 0, "legacy-subject-key"),
-      ],
-    },
-    diagnostic: makeDiagnostic(
-      annotationId,
-      "pii_mention_key_exemption",
-      `${rawKey} → gold-taxonomy identity mention:${taxonomySuffix} (not a rules.yaml rule id)`,
-    ),
-  };
-}
-
 export function canonicalSubjectKey(
   state: ConversionState,
   annotationId: string,
@@ -271,10 +241,6 @@ export function ruleIdToConceptLeafConversion(
   input: LegacyGoldRecord,
 ): { state: Partial<ConversionState>; diagnostic?: MigrationDiagnostic } {
   if (state.canonicalLayer !== "mentions" && state.canonicalLayer !== "raw-hits") {
-    return { state: {} };
-  }
-
-  if (input.subject.key.trim().startsWith("pii:")) {
     return { state: {} };
   }
 
@@ -487,7 +453,6 @@ export function initialConversionState(input: LegacyGoldRecord): ConversionState
 export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "corpus_layer_to_canonical",
   "pii_signal_prefix_rewrite",
-  "pii_mention_key_exemption",
   "canonical_subject_key",
   "rule_id_to_concept_leaf",
   "legacy_subject_name",

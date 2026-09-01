@@ -1,8 +1,8 @@
 annotations:
   - id: strapi-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-password-type-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password
+      key: mention:password
       name: password
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -40,9 +40,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-session-user-id-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: userId
     evidence:
       file_path: packages/core/admin/server/src/content-types/session.ts
@@ -52,17 +52,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: session.userId links each stored session row to its owning admin user account.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-prefered-language-not-pii
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: preferedLanguage
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -70,18 +71,19 @@ annotations:
       end_line: 104
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:person_name
     rationale: preferedLanguage is a locale preference string, not a person name or other PII field.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-user-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -99,9 +101,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-user-firstname-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: firstname
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -111,17 +113,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: firstname is a persisted given name on the admin user profile.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-user-lastname-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: lastname
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -131,17 +134,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: lastname is a persisted family name on the admin user profile.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-user-password-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: password
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -151,17 +155,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: password stores the bcrypt hash validated during admin login.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-reset-password-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: resetPasswordToken
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -171,17 +176,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: resetPasswordToken is a one-time secret emailed to the user to authorize a password reset.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-registration-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: registrationToken
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -191,17 +197,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: registrationToken is a private invite token used to complete admin account registration.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-username-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: username
     evidence:
       file_path: packages/core/admin/server/src/content-types/User.ts
@@ -211,17 +218,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: Admin User.username is an optional login identifier.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-api-token-access-key-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: accessKey
     evidence:
       file_path: packages/core/admin/server/src/content-types/api-token.ts
@@ -231,17 +239,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: Api Token accessKey is the stored API credential string.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: strapi-api-token-encrypted-key-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: encryptedKey
     evidence:
       file_path: packages/core/admin/server/src/content-types/api-token.ts
@@ -251,10 +260,11 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: Api Token encryptedKey is the encrypted form of the API key.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

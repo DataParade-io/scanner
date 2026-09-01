@@ -1,8 +1,8 @@
 annotations:
   - id: spree-customer-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: spree/core/app/models/spree/customer.rb
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-phone-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: phone
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -40,9 +40,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-firstname-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: firstname
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -52,17 +52,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: validates :firstname on Address is a person-name PII signal.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-street-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:street_address
+      key: mention:street_address
       name: address1
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -72,17 +73,18 @@ annotations:
       status: positive
       labels:
         - street_address
+        - legacy-key:pii:street_address
     rationale: validates :address1 on Address signals a street-address field.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-oauth-access-token-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: access_token
     evidence:
       file_path: spree/core/app/models/spree/user_identity.rb
@@ -92,17 +94,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: UserIdentity documents encrypted OAuth access_token storage on the identity row.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-credit-card-last-digits-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:card_number
+      key: mention:card_number
       name: last_digits
     evidence:
       file_path: spree/core/app/models/spree/credit_card.rb
@@ -112,17 +115,18 @@ annotations:
       status: positive
       labels:
         - card_number
+        - legacy-key:pii:card_number
     rationale: set_last_digits derives last_digits from the card number, a card-number PII signal.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-accepts-marketing-not-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: accepts_email_marketing
     evidence:
       file_path: spree/core/app/models/spree/customer.rb
@@ -135,13 +139,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-cc-type-not-card-number-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:card_number
+      key: mention:card_number
       name: cc_type
     evidence:
       file_path: spree/core/app/models/spree/credit_card.rb
@@ -149,18 +153,19 @@ annotations:
       end_line: 70
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:card_number
     rationale: cc_type/brand stores the card network label, not a card number or last-four value.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-customer-first-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: first_name
     evidence:
       file_path: spree/core/app/models/concerns/spree/customer_methods.rb
@@ -170,17 +175,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: first_name is normalized and searchable on the customer record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-customer-last-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: last_name
     evidence:
       file_path: spree/core/app/models/concerns/spree/customer_methods.rb
@@ -190,17 +196,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: last_name is normalized and searchable on the customer record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-customer-phone-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: phone
     evidence:
       file_path: spree/core/app/models/concerns/spree/customer_methods.rb
@@ -218,9 +225,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-street-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:street_address
+      key: mention:street_address
       name: address1
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -230,17 +237,18 @@ annotations:
       status: positive
       labels:
         - street_address
+        - legacy-key:pii:street_address
     rationale: address1 is a core address field validated and sent to payment gateways.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-zipcode-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:postal_code
+      key: mention:postal_code
       name: zipcode
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -250,17 +258,18 @@ annotations:
       status: positive
       labels:
         - postal_code
+        - legacy-key:pii:postal_code
     rationale: zipcode is validated when required and included in gateway billing payloads.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-order-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: spree/core/app/models/spree/order.rb
@@ -278,9 +287,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-oauth-access-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: access_token
     evidence:
       file_path: spree/core/app/models/spree/user_identity.rb
@@ -290,17 +299,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: UserIdentity persists encrypted OAuth access tokens when refreshing provider logins.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spree-address-city-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:city
+      key: mention:city
       name: city
     evidence:
       file_path: spree/core/app/models/spree/address.rb
@@ -310,10 +320,11 @@ annotations:
       status: positive
       labels:
         - city
+        - legacy-key:pii:city
     rationale: Address.city is the required locality on a postal address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

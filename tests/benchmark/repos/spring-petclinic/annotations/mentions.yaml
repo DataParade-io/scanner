@@ -1,8 +1,8 @@
 annotations:
   - id: spring-petclinic-telephone-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: telephone
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-first-name-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: firstName
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/model/Person.java
@@ -32,17 +32,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: The firstName field name on Person is a person-name PII signal.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-pet-birthdate-not-human-dob-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:date_of_birth
+      key: mention:date_of_birth
       name: birthDate
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/owner/Pet.java
@@ -55,13 +56,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-owner-first-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: firstName
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/model/Person.java
@@ -71,17 +72,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Person.firstName is a persisted given name on Owner (and other person subtypes).
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-owner-last-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: lastName
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/model/Person.java
@@ -91,17 +93,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: Person.lastName is a persisted family name used for owner search and display.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-owner-address-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:street_address
+      key: mention:street_address
       name: address
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
@@ -111,17 +114,18 @@ annotations:
       status: positive
       labels:
         - street_address
+        - legacy-key:pii:street_address
     rationale: Owner.address is a required street address column on the customer record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-owner-city-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:city
+      key: mention:city
       name: city
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
@@ -131,17 +135,18 @@ annotations:
       status: positive
       labels:
         - city
+        - legacy-key:pii:city
     rationale: Owner.city is a required city column on the customer address.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: spring-petclinic-owner-telephone-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: telephone
     evidence:
       file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java

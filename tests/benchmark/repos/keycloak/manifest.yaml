@@ -6,11 +6,15 @@ scope:
     - model/jpa/src/main/java/org/keycloak/models/jpa/entities/UserEntity.java
     - model/jpa/src/main/java/org/keycloak/models/jpa/entities/CredentialEntity.java
 coverage:
-  layers: [data_items, pii_signals, components, data_flows]
-  languages: [java]
-  domains: [identity, credentials]
-selection_rationale: >-
-  Compact authored Java persistence entities covering account identity and
-  credential payloads, including realistic distinction between direct secrets,
-  structured credential data, salts, account IDs, names, and email.
-annotation_version: 1
+  layers:
+    - data_items
+    - mentions
+    - components
+    - data_flows
+  languages:
+    - java
+  domains:
+    - identity
+    - credentials
+selection_rationale: Compact authored Java persistence entities covering account identity and credential payloads, including realistic distinction between direct secrets, structured credential data, salts, account IDs, names, and email.
+annotation_version: 2

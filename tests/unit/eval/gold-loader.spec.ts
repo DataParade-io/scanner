@@ -84,18 +84,18 @@ describe("loadCanonicalGoldFromLegacyRecord (corpus-shaped rows)", () => {
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
   });
 
-  it("keeps pii: gold-taxonomy exemption unchanged", () => {
+  it("maps canonical mention:email through ruleIdToConceptLeaf", () => {
     const { record } = loadCanonicalGoldFromLegacyRecord(
       legacyRecord({
-        id: "corpus-pii-taxonomy",
+        id: "corpus-mention-email",
         layer: "mentions",
-        subject: { key: "pii:email_address" },
+        subject: { key: "mention:email" },
         expected: { status: "positive", labels: ["email"] },
       }),
       { warn: () => undefined },
     );
 
-    expect(record.identity.identityKey).toBe("mention:email_address");
+    expect(record.identity.identityKey).toBe("mention:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptLeaf).not.toBe(ruleIdToConceptLeaf("username"));
   });

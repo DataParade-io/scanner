@@ -6,11 +6,16 @@ scope:
     - models/auth/access_token.go
     - modules/structs/user.go
 coverage:
-  layers: [data_items, pii_signals, components, data_flows]
-  languages: [go]
-  domains: [identity, credentials, api]
-selection_rationale: >-
-  Two compact authored Go files cover account identity, profile information, and
-  personal-access-token storage. The scope intentionally contains direct
-  credentials alongside hashes, salts, identifiers, URLs, and free text.
-annotation_version: 1
+  layers:
+    - data_items
+    - mentions
+    - components
+    - data_flows
+  languages:
+    - go
+  domains:
+    - identity
+    - credentials
+    - api
+selection_rationale: Two compact authored Go files cover account identity, profile information, and personal-access-token storage. The scope intentionally contains direct credentials alongside hashes, salts, identifiers, URLs, and free text.
+annotation_version: 2

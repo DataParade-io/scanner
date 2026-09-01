@@ -5,11 +5,15 @@ scope:
   include:
     - src/routes/data/types.rs
 coverage:
-  layers: [data_items, pii_signals, components, data_flows]
-  languages: [rust]
-  domains: [payment_card_vault, pci]
-selection_rationale: >-
-  A compact, source-authored Rust card-vault type file. It contains primary
-  account-number, cardholder-name, expiration, encrypted card-payload, and
-  deliberately ambiguous token/identifier constructs without generated code.
-annotation_version: 1
+  layers:
+    - data_items
+    - mentions
+    - components
+    - data_flows
+  languages:
+    - rust
+  domains:
+    - payment_card_vault
+    - pci
+selection_rationale: A compact, source-authored Rust card-vault type file. It contains primary account-number, cardholder-name, expiration, encrypted card-payload, and deliberately ambiguous token/identifier constructs without generated code.
+annotation_version: 2

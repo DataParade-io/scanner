@@ -6,7 +6,6 @@ import {
   expectedStatusDisposition,
   initialConversionState,
   legacySubjectName,
-  piiMentionKeyExemption,
   piiSignalPrefixRewrite,
   ruleIdToConceptLeafConversion,
   type ConversionState,
@@ -30,12 +29,6 @@ export function loadLegacyGoldRecord(
   state = { ...state, ...piiSignalStep.state };
   if (piiSignalStep.diagnostic) {
     diagnostics.push(piiSignalStep.diagnostic);
-  }
-
-  const piiMentionStep = piiMentionKeyExemption(state, input.id);
-  state = { ...state, ...piiMentionStep.state };
-  if (piiMentionStep.diagnostic) {
-    diagnostics.push(piiMentionStep.diagnostic);
   }
 
   const subjectKeyStep = canonicalSubjectKey(state, input.id);

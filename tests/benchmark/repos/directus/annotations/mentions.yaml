@@ -1,8 +1,8 @@
 annotations:
   - id: directus-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: api/src/types/auth.ts
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-password-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password
+      key: mention:password
       name: password
     evidence:
       file_path: api/src/types/auth.ts
@@ -40,9 +40,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-external-identifier-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: external_identifier
     evidence:
       file_path: api/src/types/auth.ts
@@ -52,17 +52,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: external_identifier links a Directus user to an external SSO identity provider subject.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-provider-not-pii
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: provider
     evidence:
       file_path: api/src/types/auth.ts
@@ -70,18 +71,19 @@ annotations:
       end_line: 15
     expected:
       status: negative
-      labels: []
+      labels:
+        - legacy-key:pii:user_identifier
     rationale: provider names the configured authentication driver, not a person or credential.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-user-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: id
     evidence:
       file_path: api/src/types/auth.ts
@@ -91,17 +93,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: User.id is the primary key returned from directus_users and embedded in JWT claims.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-user-first-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: first_name
     evidence:
       file_path: api/src/types/auth.ts
@@ -111,17 +114,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: first_name is a persisted given name on the Directus user record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-user-last-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: last_name
     evidence:
       file_path: api/src/types/auth.ts
@@ -131,17 +135,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: last_name is a persisted family name on the Directus user record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-session-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: token
     evidence:
       file_path: api/src/services/authentication.ts
@@ -151,17 +156,18 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: The refresh token inserted into directus_sessions is a credential used to obtain new access tokens, not the access token itself.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-access-token-jwt-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: accessToken
     evidence:
       file_path: api/src/services/authentication.ts
@@ -171,17 +177,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: jwt.sign produces the short-lived access token returned to clients after login.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-session-token-type-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: token
     evidence:
       file_path: api/src/types/auth.ts
@@ -191,17 +198,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: Session.token is the session cookie/token string.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-share-password-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:credential_secret
+      key: mention:credential_secret
       name: share_password
     evidence:
       file_path: api/src/types/auth.ts
@@ -211,10 +219,11 @@ annotations:
       status: positive
       labels:
         - credential_secret
+        - legacy-key:pii:credential_secret
     rationale: ShareData.share_password is an optional password protecting a share link.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

@@ -1,8 +1,8 @@
 annotations:
   - id: ghost-member-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
@@ -20,9 +20,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-identity-token-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: identity_token
     evidence:
       file_path: ghost/core/core/server/services/members/members-api/services/token-service.js
@@ -32,17 +32,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: encodeIdentityToken signs a JWT with the member subject used to authenticate member requests.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-email-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: staff_email
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -60,9 +61,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-no-member-phone-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:phone_number
+      key: mention:phone_number
       name: phone
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -75,13 +76,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-member-email-item-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -99,9 +100,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-member-name-item-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: name
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -111,17 +112,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: members.name stores the subscriber display name collected during signup and profile updates.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-password-item-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:password_verifier
+      key: mention:password_verifier
       name: password
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -131,17 +133,18 @@ annotations:
       status: positive
       labels:
         - password_verifier
+        - legacy-key:pii:password_verifier
     rationale: users.password is a required hashed credential column for Ghost staff login.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-member-uuid-item-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: uuid
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -151,17 +154,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: members.uuid is a unique identifier assigned to each member record.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-user-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: id
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -171,17 +175,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: users.id is the staff user primary key.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-user-name-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:person_name
+      key: mention:person_name
       name: name
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -191,17 +196,18 @@ annotations:
       status: positive
       labels:
         - person_name
+        - legacy-key:pii:person_name
     rationale: users.name is the staff member's display name.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-user-slug-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:user_identifier
+      key: mention:user_identifier
       name: slug
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -211,17 +217,18 @@ annotations:
       status: positive
       labels:
         - user_identifier
+        - legacy-key:pii:user_identifier
     rationale: users.slug is the unique staff profile slug.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-staff-location-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:residence_information
+      key: mention:residence_information
       name: location
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -231,17 +238,18 @@ annotations:
       status: positive
       labels:
         - residence_information
+        - legacy-key:pii:residence_information
     rationale: users.location is free-text staff location on the profile.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-invite-token-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: token
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -251,17 +259,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: invites.token is the unique staff-invite redemption secret.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-invite-email-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:email_address
+      key: mention:email
       name: email
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -279,9 +288,9 @@ annotations:
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-session-id-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: session_id
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -291,17 +300,18 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: sessions.session_id is the unique staff session cookie identifier.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-member-geolocation-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:residence_information
+      key: mention:residence_information
       name: geolocation
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -311,17 +321,18 @@ annotations:
       status: positive
       labels:
         - residence_information
+        - legacy-key:pii:residence_information
     rationale: members.geolocation stores member location derived from IP.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-token-value-pii-signal
-    layer: pii_signals
+    layer: mentions
     subject:
-      key: pii:access_token
+      key: mention:access_token
       name: token
     evidence:
       file_path: ghost/core/core/server/data/schema/schema.js
@@ -331,10 +342,11 @@ annotations:
       status: positive
       labels:
         - access_token
+        - legacy-key:pii:access_token
     rationale: tokens.token is a stored member/auth token value.
     provenance:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
