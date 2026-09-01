@@ -4,11 +4,16 @@ import {
   createDefaultScanConfiguration,
   scan,
 } from "../../../../src/core/pipeline/orchestrator";
+import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../../src/core/types/data-flow";
 import type { SourceLocation } from "../../../../src/core/types/file";
 import { adaptDetectedDataFlow } from "../../canonical/scanner/data-flows";
 import { componentIdentity } from "../components/adapter";
+import {
+  fixtureScanResultWithLedger,
+  layerLedgerFromOutcomes,
+} from "../../eligibility/build-fixture-result";
 import type { CanonicalFixtureScanResult } from "../personal-data-adapter";
 import type { FixtureScanResult, LayerFinding } from "../../types";
 
@@ -57,23 +62,33 @@ function toLayerFinding(
 export async function scanFixtureDataFlows(fixture: string): Promise<FixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
   const config = createDefaultScanConfiguration({ enableAiInference: false });
-  const { scanResult, files } = await scan(root, config);
+  const { scanResult, ledgerContext } = await scan(root, config);
+  if (!ledgerContext) {
+    throw new Error("Orchestrator scan missing ledger context");
+  }
+  const ledgers = buildOrchestratorEvalLedgers(ledgerContext);
+  const layerLedger = layerLedgerFromOutcomes("data-flows", ledgers["data-flows"] ?? []);
 
   const componentsById = new Map(
     scanResult.components.map((component) => [component.id, component]),
   );
 
-  return {
+  return fixtureScanResultWithLedger(
     fixture,
-    findings: scanResult.dataFlows.map((flow) => toLayerFinding(flow, componentsById)),
-    scannedFiles: files.map((file) => file.path),
-  };
+    scanResult.dataFlows.map((flow) => toLayerFinding(flow, componentsById)),
+    layerLedger,
+  );
 }
 
 export async function scanCanonicalDataFlows(fixture: string): Promise<CanonicalFixtureScanResult> {
   const root = path.join(FIXTURES_ROOT, fixture);
   const config = createDefaultScanConfiguration({ enableAiInference: false });
-  const { scanResult, files } = await scan(root, config);
+  const { scanResult, ledgerContext } = await scan(root, config);
+  if (!ledgerContext) {
+    throw new Error("Orchestrator scan missing ledger context");
+  }
+  const ledgers = buildOrchestratorEvalLedgers(ledgerContext);
+  const layerLedger = layerLedgerFromOutcomes("data-flows", ledgers["data-flows"] ?? []);
 
   const componentsById = new Map(
     scanResult.components.map((component) => [component.id, component]),
@@ -82,6 +97,9 @@ export async function scanCanonicalDataFlows(fixture: string): Promise<Canonical
   return {
     fixture,
     findings: scanResult.dataFlows.map((flow) => adaptDetectedDataFlow(flow, componentsById)),
-    scannedFiles: files.map((file) => file.path),
+    scannedFiles: layerLedger.outcomes
+      .filter((outcome) => outcome.reason === "successfully_processed")
+      .map((outcome) => outcome.path),
+    eligibilityLedgers: { "data-flows": layerLedger },
   };
 }
