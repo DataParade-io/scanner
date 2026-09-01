@@ -53,9 +53,38 @@ export function assignOneToOne(
     findingsPerExpectation.set(pair.expectationId, byExpectation);
   }
 
-  const ambiguous = [...expectationsPerFinding.values(), ...findingsPerExpectation.values()].some(
-    (ids) => ids.length > 1,
+  const expectationById = new Map(
+    expectations.map((expectation) => [expectation.id, expectation]),
   );
+
+  function rolledUpDataItemExpectations(expectationIds: string[]): boolean {
+    if (expectationIds.length <= 1) {
+      return true;
+    }
+    const grouped = expectationIds.map((id) => expectationById.get(id)!);
+    const layer = grouped[0]?.identity.layer;
+    if (layer !== "data-items") {
+      return false;
+    }
+    const identityKey = grouped[0]?.identity.identityKey;
+    return grouped.every((expectation) => expectation.identity.identityKey === identityKey);
+  }
+
+  let ambiguous = false;
+  for (const findingIds of findingsPerExpectation.values()) {
+    if (findingIds.length > 1) {
+      ambiguous = true;
+      break;
+    }
+  }
+  if (!ambiguous) {
+    for (const expectationIds of expectationsPerFinding.values()) {
+      if (expectationIds.length > 1 && !rolledUpDataItemExpectations(expectationIds)) {
+        ambiguous = true;
+        break;
+      }
+    }
+  }
 
   if (ambiguous) {
     return {
