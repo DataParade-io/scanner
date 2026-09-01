@@ -139,6 +139,10 @@ export function listComponentCandidatesForFlow(
   const seen = new Set<string>();
 
   for (const component of components) {
+    if (component.expected.status === "negative") {
+      continue;
+    }
+
     const overlaps = evidenceSpansOverlap(flow.evidence, component.evidence);
     const rationaleSameFile =
       flow.evidence.file_path === component.evidence.file_path &&

@@ -103,6 +103,32 @@ describe("flow-migration endpoint matching", () => {
     expect(resolveFlowSide("stripe", [stripe, { ...stripe, id: "stripe-dup", canonical: { ...stripe.canonical!, entity_id: "fixture::stripe-dup" } }], "Stripe charge").kind).toBe("ambiguous");
   });
 
+  it("ignores negative components for overlap matching", () => {
+    const flow = flowRecord({
+      id: "signon-flow",
+      subject: { key: "flow:credentials->auth-cookie", name: "Credentials to auth cookie" },
+      rationale: "wp_signon authenticates credentials then calls wp_set_auth_cookie on success.",
+      evidence: { file_path: "src/wp-includes/user.php", start_line: 109, end_line: 115 },
+    });
+    const stripe = componentRecord({
+      id: "not-stripe",
+      subject: { key: "third_party:stripe", name: "Stripe" },
+      expected: { status: "negative", labels: [] },
+      evidence: { file_path: "src/wp-includes/user.php", start_line: 109, end_line: 109 },
+      canonical: {
+        entity_id: "fixture::not-stripe",
+        identity_key: "third_party:payment_processor",
+        component_type: "third_party",
+        component_subtype: "payment_processor",
+        vendor: "stripe",
+      },
+    });
+
+    const candidate = proposeFlowCandidate(flow, [stripe]);
+    expect(candidate.disposition_candidate).toBe("unresolved");
+    expect(candidate.candidate_notes).toContain("no component candidates");
+  });
+
   it("proposes graph_edge when both sides resolve to distinct components", () => {
     const flow = flowRecord({
       id: "billing-flow",
