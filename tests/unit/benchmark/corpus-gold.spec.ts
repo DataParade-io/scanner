@@ -64,7 +64,8 @@ describe("imported corpus gold", () => {
   });
 
   it("loads accepted annotations for every declared layer", () => {
-    let accepted = 0;
+    let totalAnnotations = 0;
+    let acceptedEvalCases = 0;
 
     for (const repoKey of repoKeys) {
       const repoDir = path.join(benchmarkRoot, "repos", repoKey);
@@ -74,12 +75,16 @@ describe("imported corpus gold", () => {
       for (const layer of manifest.coverage.layers) {
         const annotations = loadAnnotations(repoDir, layer);
         const cases = annotationsToEvalCases(annotations, repoKey);
-        accepted += cases.length;
+        totalAnnotations += annotations.length;
+        acceptedEvalCases += cases.length;
         expect(annotations.length).toBeGreaterThan(0);
       }
     }
 
-    expect(accepted).toBeGreaterThan(1000);
+    expect(totalAnnotations).toBeGreaterThan(1500);
+    // KDATAP-a0e80b: 275 source-token data-item rows demoted from accepted → needs_adjudication;
+    // they must not inflate the eval-case census until human acceptance.
+    expect(acceptedEvalCases).toBe(728);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {

@@ -19,6 +19,16 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: vgs-django-dln
     layer: data_items
     subject:
@@ -36,6 +46,6 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
