@@ -246,6 +246,18 @@ function resolveEvidenceHint(
   return undefined;
 }
 
+function suffixLabelConflictsWithMap(
+  suffixEntry: MapLookupResult,
+  label: string,
+): boolean {
+  const normalizedLabel = normalizeToken(label);
+  if (normalizedLabel === "password_verifier" && suffixEntry.ruleId === "password") {
+    return true;
+  }
+  const labelEntry = lookupLabelInConceptMap(label);
+  return labelEntry !== undefined && labelEntry.ruleId !== suffixEntry.ruleId;
+}
+
 export function classifyDataItemRow(
   record: AnnotationRecord,
   evidenceValidation: DataItemEvidenceValidation = "skipped",
@@ -273,6 +285,16 @@ export function classifyDataItemRow(
 
   const mapEntry = lookupSuffixInConceptMap(suffix);
   if (mapEntry) {
+    if (label && suffixLabelConflictsWithMap(mapEntry, label)) {
+      if (normalizeToken(label) === "password_verifier") {
+        return { bucket: "tier_c_category_unmapped", evidenceValidation };
+      }
+      const labelEntry = lookupLabelInConceptMap(label);
+      if (labelEntry) {
+        return { bucket: "tier_b_label_guided", mapEntry: labelEntry, evidenceValidation };
+      }
+      return { bucket: "tier_c_category_unmapped", evidenceValidation };
+    }
     return { bucket: "tier_a_canonical_suffix", mapEntry, evidenceValidation };
   }
 
@@ -498,6 +520,8 @@ export function applyDataItemMigrationToRecord(
       },
       entry.evidenceValidation,
     );
+  } else {
+    delete updated.candidate;
   }
 
   return updated;
