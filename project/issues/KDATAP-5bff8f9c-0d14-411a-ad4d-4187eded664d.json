@@ -3,7 +3,7 @@
   "title": "benchmark:materialize fails to resolve its TypeScript imports",
   "description": "`pnpm run benchmark:materialize <packet>` fails on `develop`, so no corpus packet can be materialized through the supported path.\n\n```\nError [ERR_MODULE_NOT_FOUND]\n  url: 'file:///home/user/scanner/tests/benchmark/materialize-paths'\n```\n\n`tests/benchmark/scripts/materialize-repo.mjs` imports `../materialize-paths.ts` and `../materialize-orchestrator.ts` with explicit `.ts` extensions, and the script runs under `node --experimental-strip-types`. On Node 22.22.2 the specifier resolves without the extension and the import fails before any work happens.\n\n**Why it matters now.** KDATAP-3b935c requires pinned, validated materializations for the official baseline run, and `validateMaterializedRepo` can only check a tree that exists. Until this is fixed, corpus numbers can only be produced by cloning packets by hand, which is exactly the unauthenticated path the baseline decision rules out.\n\nVerified working around it: cloning `maxcountryman/flask-login` and `ZeroCoolHacker/easy-school` at their manifest commits and scanning directly both succeed, so the defect is in the materialize entry point, not in ingest or the orchestrator.\n\nCheap, and it unblocks anyone trying to reproduce a number.",
   "type": "bug",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 1,
   "assignee": "rap@endymion.com",
   "creator": null,
@@ -16,10 +16,16 @@
       "author": "rap@endymion.com",
       "text": "Rebase of reviewed compile-then-run materialize fix onto current develop. Composer 2.5 planning on a new worktree from origin/develop. Prior PR #11 conflicts because develop moved.",
       "created_at": "2026-08-31T20:24:37.863078Z"
+    },
+    {
+      "id": "0af8c92a-5fdc-4571-a49b-24dcca6a22a0",
+      "author": "home",
+      "text": "Landed on develop via PR #18 (compile-then-run materialize entrypoint).",
+      "created_at": "2026-09-01T17:40:05.553440Z"
     }
   ],
   "created_at": "2026-08-31T15:04:12.839122Z",
-  "updated_at": "2026-08-31T20:24:37.863078Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:05.565590Z",
+  "closed_at": "2026-09-01T17:40:05.565590Z",
   "custom": {}
 }

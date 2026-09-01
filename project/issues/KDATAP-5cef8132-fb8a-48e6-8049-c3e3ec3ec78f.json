@@ -3,7 +3,7 @@
   "title": "Introduce temporary canonical-migration compatibility loader",
   "description": "Introduce the temporary, versioned compatibility boundary needed while canonical gold migration is in progress.\n\nThe loader accepts known legacy shapes only through explicit conversions, stamps the source contract version, emits a warning and migration diagnostic for every converted record, and never lets a legacy field participate directly in scorer identity. It covers both the `pii_signals` layer name and the hard-coded `pii:` mention-key exemption.\n\nThis task lands before corpus migration. Removal is a separate task blocked on all gold and fixture migrations plus the readiness gate; combining introduction and deletion in one task made the dependency order impossible.\n\nDefinition of done: migration work can load legacy records through one observable compatibility boundary, while canonical contract tests prove the evaluator itself sees only canonical observations.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,9 +15,16 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "08b47744-231f-4dfe-9944-6d6932162617",
+      "author": "home",
+      "text": "Landed on develop via PR #23 (temporary canonical-migration compatibility loader). Removal remains KDATAP-f009ab.",
+      "created_at": "2026-09-01T17:40:10.966292Z"
+    }
+  ],
   "created_at": "2026-08-31T14:36:03.566516Z",
-  "updated_at": "2026-08-31T14:36:03.566516Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:10.978823Z",
+  "closed_at": "2026-09-01T17:40:10.978823Z",
   "custom": {}
 }

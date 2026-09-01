@@ -3,7 +3,7 @@
   "title": "Migrate component gold to structured identity",
   "description": "Migrate component gold onto structured canonical entities after the instance and cardinality rulings.\n\nLegacy shape:\n\n- 481 `type:<taxonomy subtype>` cases are mechanically classifiable;\n- 52 `third_party:<vendor>` cases assert vendor resolution;\n- 30 `actor:user` cases wait on the taxonomy ruling;\n- 53 duplicate repository/key groups cover 456 cases and require entity/evidence grouping rather than subtype collapse.\n\nMigration assigns a stable repo-local gold entity id, asserted type/subtype, optional asserted vendor, and all supporting evidence. It preserves code/display names as candidates without requiring them as product identity.\n\nRepeated subtype rows are grouped or kept distinct only from evidence-backed adjudication; never from arbitrary ordering. One known type-as-subtype label bug is corrected through its tracked bug.\n\nDefinition of done: every accepted component entity is canonical, same-subtype cardinality is preserved, and migration accounting covers every legacy component row.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -27,10 +27,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "a5d612a0-54cb-4890-bf07-209e78f3c23c",
+      "author": "home",
+      "text": "Landed on develop via PR #29 (migrate component gold to structured identity).",
+      "created_at": "2026-09-01T17:40:11.045931Z"
+    }
+  ],
   "created_at": "2026-08-31T14:15:44.254832Z",
-  "updated_at": "2026-08-31T14:38:28.908865Z",
-  "closed_at": null,
+  "updated_at": "2026-09-01T17:40:11.057847Z",
+  "closed_at": "2026-09-01T17:40:11.057847Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"
