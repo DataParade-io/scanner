@@ -16,7 +16,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-email
@@ -39,6 +39,15 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: magento-customer-firstname
     layer: data_items
     subject:
@@ -56,7 +65,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-lastname
@@ -76,7 +85,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-dob
@@ -96,9 +105,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:date_of_birth
+      proposed_concept_leaf: date_of_birth
+      proposed_ancestry:
+        - date_of_birth
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: magento-address-street
     layer: data_items
     subject:
@@ -116,7 +134,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-telephone
@@ -136,9 +154,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: magento-address-customer-id
     layer: data_items
     subject:
@@ -156,7 +183,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-password-hash
@@ -176,7 +203,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-rp-token
@@ -196,7 +223,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-login-password
@@ -219,6 +246,15 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: magento-confirmation-not-pii
     layer: data_items
     subject:
@@ -235,7 +271,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-group-id-not-pii
@@ -254,7 +290,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-taxvat-ambiguous
@@ -273,7 +309,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-middlename-ambiguous
@@ -292,7 +328,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-city
@@ -312,7 +348,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-postcode
@@ -332,7 +368,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-firstname
@@ -352,7 +388,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-lastname
@@ -372,7 +408,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-prefix
@@ -392,7 +428,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-customer-suffix
@@ -412,7 +448,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-company
@@ -432,7 +468,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-fax
@@ -452,9 +488,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: magento-address-prefix
     layer: data_items
     subject:
@@ -472,7 +517,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-suffix
@@ -492,7 +537,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: magento-address-vat-id
@@ -512,6 +557,6 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30

@@ -16,7 +16,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: supabase-js-refresh-token-item
@@ -36,7 +36,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: supabase-js-user-id-item
@@ -56,7 +56,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: supabase-js-email-item
@@ -79,6 +79,15 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: supabase-js-apikey-not-pii
     layer: data_items
     subject:
@@ -95,7 +104,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: supabase-js-new-email
@@ -115,9 +124,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: supabase-js-phone
     layer: data_items
     subject:
@@ -135,9 +153,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped
   - id: supabase-js-new-phone
     layer: data_items
     subject:
@@ -155,6 +182,15 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: medium
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: skipped

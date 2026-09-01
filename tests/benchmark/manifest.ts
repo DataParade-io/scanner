@@ -6,10 +6,13 @@ import {
   ANNOTATION_STATUSES,
   type AnnotationProvenance,
   type AnnotationCanonical,
+  type AnnotationCandidate,
   type AnnotationRecord,
   type BenchmarkLayer,
   type BenchmarkManifest,
   BENCHMARK_LAYERS,
+  type DataItemAnnotationCandidate,
+  type DataItemEvidenceValidation,
   type FlowAnnotationCandidate,
   type FlowCandidateEndpoint,
   type LayerScopeRecord,
@@ -283,13 +286,81 @@ function validateAnnotation(
   }
 
   if (raw.candidate !== undefined) {
-    if (normalizedLayer !== "data_flows") {
-      throw new Error(`${prefix}:candidate is only supported on data_flows layer`);
-    }
-    record.candidate = validateFlowCandidate(raw.candidate, prefix);
+    record.candidate = validateAnnotationCandidate(
+      raw.candidate,
+      normalizedLayer,
+      prefix,
+    );
   }
 
   return record;
+}
+
+function validateAnnotationCandidate(
+  raw: unknown,
+  layer: BenchmarkLayer,
+  prefix: string,
+): AnnotationCandidate {
+  const candidate = isRecord(raw, `${prefix}:candidate`);
+  const kind = isNonEmptyString(candidate.kind, `${prefix}:candidate.kind`);
+
+  if (kind === "flow") {
+    if (layer !== "data_flows") {
+      throw new Error(`${prefix}:candidate.kind 'flow' is only supported on data_flows layer`);
+    }
+    return validateFlowCandidate(candidate, prefix);
+  }
+
+  if (kind === "data_item") {
+    if (layer !== "data_items") {
+      throw new Error(`${prefix}:candidate.kind 'data_item' is only supported on data_items layer`);
+    }
+    return validateDataItemCandidate(candidate, prefix);
+  }
+
+  throw new Error(`${prefix}:candidate.kind must be 'flow' or 'data_item'`);
+}
+
+function validateDataItemCandidate(
+  candidate: Record<string, unknown>,
+  prefix: string,
+): DataItemAnnotationCandidate {
+  const parsed: DataItemAnnotationCandidate = {
+    kind: "data_item",
+    proposed_identity_key: isNonEmptyString(
+      candidate.proposed_identity_key,
+      `${prefix}:candidate.proposed_identity_key`,
+    ),
+    proposed_concept_leaf: isNonEmptyString(
+      candidate.proposed_concept_leaf,
+      `${prefix}:candidate.proposed_concept_leaf`,
+    ),
+    proposed_ancestry: isStringArray(
+      candidate.proposed_ancestry,
+      `${prefix}:candidate.proposed_ancestry`,
+    ),
+  };
+
+  if (candidate.candidate_confidence !== undefined) {
+    parsed.candidate_confidence = isNonEmptyString(
+      candidate.candidate_confidence,
+      `${prefix}:candidate.candidate_confidence`,
+    ) as DataItemAnnotationCandidate["candidate_confidence"];
+  }
+  if (candidate.candidate_notes !== undefined) {
+    parsed.candidate_notes = isNonEmptyString(
+      candidate.candidate_notes,
+      `${prefix}:candidate.candidate_notes`,
+    );
+  }
+  if (candidate.evidence_validation !== undefined) {
+    parsed.evidence_validation = isNonEmptyString(
+      candidate.evidence_validation,
+      `${prefix}:candidate.evidence_validation`,
+    ) as DataItemEvidenceValidation;
+  }
+
+  return parsed;
 }
 
 function validateFlowCandidateEndpoint(
@@ -313,8 +384,10 @@ function validateFlowCandidateEndpoint(
   return parsed;
 }
 
-function validateFlowCandidate(raw: unknown, prefix: string): FlowAnnotationCandidate {
-  const candidate = isRecord(raw, `${prefix}:candidate`);
+function validateFlowCandidate(
+  candidate: Record<string, unknown>,
+  prefix: string,
+): FlowAnnotationCandidate {
   const kind = isNonEmptyString(candidate.kind, `${prefix}:candidate.kind`);
   if (kind !== "flow") {
     throw new Error(`${prefix}:candidate.kind must be 'flow'`);
