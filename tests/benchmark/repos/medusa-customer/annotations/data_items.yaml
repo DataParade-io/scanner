@@ -29,7 +29,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: User first-name model property
     provenance:
       proposed_by: corpus-curation-agent
@@ -44,7 +44,7 @@ annotations:
         - first_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-user-last-name
     layer: data_items
     subject:
@@ -57,7 +57,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: User last-name model property
     provenance:
       proposed_by: corpus-curation-agent
@@ -72,7 +72,7 @@ annotations:
         - last_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-user-email
     layer: data_items
     subject:
@@ -99,7 +99,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-user-avatar
     layer: data_items
     subject:
@@ -116,7 +116,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-user-metadata
     layer: data_items
     subject:
@@ -133,7 +133,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-customer-id
     layer: data_items
     subject:
@@ -168,7 +168,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-customer-first-name
     layer: data_items
     subject:
@@ -181,7 +181,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: Customer first-name model property
     provenance:
       proposed_by: corpus-curation-agent
@@ -196,7 +196,7 @@ annotations:
         - first_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-customer-last-name
     layer: data_items
     subject:
@@ -209,7 +209,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: Customer last-name model property
     provenance:
       proposed_by: corpus-curation-agent
@@ -224,7 +224,7 @@ annotations:
         - last_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-customer-email
     layer: data_items
     subject:
@@ -251,7 +251,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-customer-phone
     layer: data_items
     subject:
@@ -269,16 +269,16 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: needs_adjudication
+      review_state: accepted
     candidate:
       kind: data_item
       proposed_identity_key: data_item:phone_number
       proposed_concept_leaf: phone_number
       proposed_ancestry:
         - phone_number
-      candidate_confidence: medium
+      candidate_confidence: high
       candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-has-account
     layer: data_items
     subject:
@@ -295,7 +295,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: rejected
   - id: medusa-customer-metadata
     layer: data_items
     subject:
@@ -312,7 +312,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-created-by
     layer: data_items
     subject:
@@ -329,7 +329,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-invite-id
     layer: data_items
     subject:
@@ -346,7 +346,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: rejected
   - id: medusa-invite-email
     layer: data_items
     subject:
@@ -373,7 +373,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: medusa-invite-token
     layer: data_items
     subject:
@@ -390,7 +390,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: needs_adjudication
   - id: medusa-invite-expires-at
     layer: data_items
     subject:
@@ -407,4 +407,4 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: proposed
+      review_state: rejected

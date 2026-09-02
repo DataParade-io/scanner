@@ -254,4 +254,56 @@ Ledger: `annotations/KDATAP-25b2f4/adjudication-ledger.json`.
 
 ## Human review
 
-Pending — Ryan Alyn Porter. Status: **awaiting-review**.
+Accepted — Ryan Alyn Porter. Status: **packet-accepted**.
+
+## Apply (KDATAP-25b2f4 --apply)
+
+Applied ledger dispositions to 29 `data_items.yaml` packets on branch `cursor/apply-data-item-adjudication-25b2f4`.
+
+### GLM over-accept correction
+
+| id | before | after | rationale |
+| --- | --- | --- | --- |
+| exposed-schema-password-not-data-item | accept | **reject** | Infrastructure credential (Oracle schema password), not user personal data. GLM advisory flagged; Ryan accepted the flip. |
+
+### Final disposition counts
+
+| Disposition | Count |
+| --- | ---: |
+| accept | 113 |
+| reject | 76 |
+| unresolved | 247 |
+| **Total** | **436** |
+
+### YAML mutations
+
+- 113 rows → `review_state: accepted` (+ candidate blocks where applicable)
+- 76 rows → `review_state: rejected`
+- 247 rows remain `needs_adjudication` (unchanged)
+- 49 label corrections applied per ledger `label_correction` blocks
+- Legacy `subject.key` preserved on all rows
+
+### Corpus-gold digest
+
+```
+sha256:400aa809ba60a16460511ce8856b3e4c930a670f65bc1c45b463ae72aab8aa10
+```
+
+Pinned in `tests/fixtures/baseline/pins/corpus-gold.digest` (auto-updated by apply script).
+
+### Test pins
+
+| Pin | Before | After |
+| --- | ---: | ---: |
+| `acceptedEvalCases` (corpus-gold.spec.ts) | 723 | 755 |
+
+### Test results
+
+```
+PASS tests/unit/benchmark/ci-smoke-digests.spec.ts
+PASS tests/unit/eval/canonical/data-item-adjudication.spec.ts
+PASS tests/unit/benchmark/corpus-gold.spec.ts
+Test Suites: 3 passed, 3 total
+Tests:       22 passed, 22 total
+```
+

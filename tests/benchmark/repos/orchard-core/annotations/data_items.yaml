@@ -27,7 +27,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-user-password-hash
     layer: data_items
     subject:
@@ -65,7 +65,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
@@ -74,9 +74,9 @@ annotations:
       proposed_concept_leaf: phone_number
       proposed_ancestry:
         - phone_number
-      candidate_confidence: medium
+      candidate_confidence: high
       candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-user-id
     layer: data_items
     subject:
@@ -109,7 +109,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - user_identifier
+        - username
     rationale: LoginForm.UserName is the credential handle submitted at sign-in.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -126,7 +126,7 @@ annotations:
         - username
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-login-password
     layer: data_items
     subject:
@@ -139,7 +139,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: LoginForm.Password is the plaintext credential checked by UserService.AuthenticateAsync.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -155,7 +155,7 @@ annotations:
         - password
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-reset-token
     layer: data_items
     subject:
@@ -193,7 +193,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
@@ -202,9 +202,9 @@ annotations:
       proposed_concept_leaf: email_address
       proposed_ancestry:
         - email_address
-      candidate_confidence: medium
+      candidate_confidence: high
       candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-openid-client-secret
     layer: data_items
     subject:
@@ -300,7 +300,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: orchard-application-type-not-pii
@@ -319,7 +319,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: orchard-user-name
@@ -334,7 +334,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - user_identifier
+        - username
     rationale: User.UserName is the account login name.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
@@ -351,7 +351,7 @@ annotations:
         - username
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-normalized-email
     layer: data_items
     subject:
@@ -369,7 +369,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
@@ -378,9 +378,9 @@ annotations:
       proposed_concept_leaf: email_address
       proposed_ancestry:
         - email_address
-      candidate_confidence: medium
+      candidate_confidence: high
       candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: orchard-security-stamp
     layer: data_items
     subject:

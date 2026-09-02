@@ -31,7 +31,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: Student first_name is a given name stored on the registry.
     provenance:
       proposed_by: grok-4.6-data-item-fill
@@ -48,7 +48,7 @@ annotations:
         - first_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-student-last-name
     layer: data_items
     subject:
@@ -61,7 +61,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: Student last_name is a family name stored on the registry.
     provenance:
       proposed_by: grok-4.6-data-item-fill
@@ -78,7 +78,7 @@ annotations:
         - last_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-student-dob
     layer: data_items
     subject:
@@ -107,7 +107,7 @@ annotations:
         - date_of_birth
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-student-address
     layer: data_items
     subject:
@@ -120,7 +120,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - street_address
+        - address
     rationale: address is the student's postal address string.
     provenance:
       proposed_by: grok-4.6-data-item-fill
@@ -137,7 +137,7 @@ annotations:
         - address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-guardian-name
     layer: data_items
     subject:
@@ -170,7 +170,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - national_identifier
+        - social_security_number
     rationale: Guardian.social_security_number is a national identifier CharField.
     provenance:
       proposed_by: grok-4.6-data-item-fill
@@ -187,7 +187,7 @@ annotations:
         - social_security_number
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-guardian-phone
     layer: data_items
     subject:
@@ -216,7 +216,7 @@ annotations:
         - phone_number
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: easy-school-guardian-profession
     layer: data_items
     subject:

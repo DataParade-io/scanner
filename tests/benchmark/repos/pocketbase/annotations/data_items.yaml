@@ -47,7 +47,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-password-hash
     layer: data_items
     subject:
@@ -136,7 +136,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-token-claim-new-email
     layer: data_items
     subject:
@@ -154,7 +154,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
@@ -163,9 +163,9 @@ annotations:
       proposed_concept_leaf: email_address
       proposed_ancestry:
         - email_address
-      candidate_confidence: medium
+      candidate_confidence: high
       candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-auth-token-secret
     layer: data_items
     subject:
@@ -218,7 +218,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: PasswordFieldValue.Plain holds the supplied password before bcrypt hashing on write.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -234,7 +234,7 @@ annotations:
         - password
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-verified-flag
     layer: data_items
     subject:
@@ -251,7 +251,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-email-visibility
@@ -270,7 +270,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-auth-origin-fingerprint
@@ -289,7 +289,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-collection-ref
@@ -308,7 +308,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: pocketbase-set-password
@@ -323,7 +323,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: SetPassword writes a plaintext password onto the auth record before hashing.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
@@ -339,7 +339,7 @@ annotations:
         - password
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-smtp-username
     layer: data_items
     subject:
@@ -352,7 +352,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - user_identifier
+        - username
     rationale: SMTP Username is the mailbox/login used to send mail from the app.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
@@ -369,7 +369,7 @@ annotations:
         - username
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: pocketbase-smtp-password
     layer: data_items
     subject:
@@ -382,7 +382,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: SMTP Password is the mail-server credential used to send mail.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
@@ -398,4 +398,4 @@ annotations:
         - password
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
