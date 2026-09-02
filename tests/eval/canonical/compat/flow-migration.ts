@@ -19,8 +19,7 @@ import type {
   FlowCandidateEndpoint,
   FlowDispositionCandidate,
 } from "../../../benchmark/schema";
-import { annotationRecordToLegacyInput } from "./adapters";
-import { loadLegacyGoldRecord } from "./loader";
+import { loadCanonicalGoldFromAnnotation } from "../gold/loader";
 
 export const FLOW_MIGRATION_TASK = "KDATAP-8e7756";
 
@@ -497,10 +496,7 @@ export function buildFlowMigrationLedgerEntry(
   overlapIds: string[],
   rationaleIds: string[],
 ): FlowMigrationLedgerEntry {
-  const { record } = loadLegacyGoldRecord(annotationRecordToLegacyInput(flow), {
-    warn: () => undefined,
-    repoKey,
-  });
+  const { record } = loadCanonicalGoldFromAnnotation(flow, { repoKey });
 
   return {
     annotationId: flow.id,

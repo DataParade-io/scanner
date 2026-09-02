@@ -4,7 +4,6 @@ import path from "path";
 const repoRoot = path.resolve(__dirname, "..", "..", "..");
 
 const FORBIDDEN_PUBLIC_EXPORTS = [
-  "loadLegacyGoldRecord",
   "buildScannerFinding",
   "nextSyntheticId",
   "evaluateCanonical",

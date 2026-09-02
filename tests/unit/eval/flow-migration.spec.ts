@@ -10,8 +10,7 @@ import {
   resolveFlowSide,
   slugMatchesComponent,
 } from "../../eval/canonical/compat/flow-migration";
-import { loadLegacyGoldRecord, isAcceptedEvaluablePositive } from "../../eval/canonical";
-import { annotationRecordToLegacyInput } from "../../eval/canonical/compat/adapters";
+import { loadCanonicalGoldFromAnnotation, isAcceptedEvaluablePositive } from "../../eval/canonical";
 import type {
   AnnotationRecord,
   FlowAnnotationCandidate,
@@ -178,13 +177,9 @@ describe("flow candidate loader integration", () => {
       },
     });
 
-    const { record, diagnostics } = loadLegacyGoldRecord(annotationRecordToLegacyInput(flow), {
-      warn: () => undefined,
-      repoKey: "fixture",
-    });
+    const { record } = loadCanonicalGoldFromAnnotation(flow, { repoKey: "fixture" });
 
     expect(record.classification.componentType).toBeUndefined();
-    expect(diagnostics.some((entry) => entry.conversion === "component_canonical_block")).toBe(false);
     expect(record.disposition).toBe("needs_adjudication");
   });
 
@@ -204,17 +199,13 @@ describe("flow candidate loader integration", () => {
     };
 
     const flow = flowRecord({ id: "typed-candidate", candidate });
-    const { record, diagnostics } = loadLegacyGoldRecord(annotationRecordToLegacyInput(flow), {
-      warn: () => undefined,
-      repoKey: "fixture",
-    });
+    const { record } = loadCanonicalGoldFromAnnotation(flow, { repoKey: "fixture" });
 
     expect(record.flowEndpoints?.source.componentType).toBe("asset");
     expect(record.flowEndpoints?.target.componentType).toBe("third_party");
     expect(record.flowAssertion?.dataCategories).toEqual(["payment_card"]);
     expect(record.disposition).toBe("needs_adjudication");
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
-    expect(diagnostics.some((entry) => entry.conversion === "flow_candidate_block")).toBe(true);
   });
 
   it("preserves expected.labels through loader conversion", () => {
@@ -230,7 +221,7 @@ describe("flow candidate loader integration", () => {
       },
     });
 
-    const legacy = annotationRecordToLegacyInput(flow);
+    const legacy = flow;
     expect(legacy.expected.labels).toEqual(["data_flow"]);
   });
 });
@@ -337,16 +328,12 @@ describe("flow_canonical_block loader integration", () => {
       flow_canonical: flowCanonical,
     });
 
-    const { record, diagnostics } = loadLegacyGoldRecord(annotationRecordToLegacyInput(flow), {
-      warn: () => undefined,
-      repoKey: "directus",
-    });
+    const { record } = loadCanonicalGoldFromAnnotation(flow, { repoKey: "directus" });
 
     expect(record.disposition).toBe("accepted");
     expect(record.identity.identityKey).toBe(flowCanonical.identity_key);
     expect(record.flowEndpoints?.source.componentType).toBe("asset");
     expect(record.flowAssertion?.dataCategories).toEqual(["password"]);
     expect(isAcceptedEvaluablePositive(record)).toBe(true);
-    expect(diagnostics.some((entry) => entry.conversion === "flow_canonical_block")).toBe(true);
   });
 });

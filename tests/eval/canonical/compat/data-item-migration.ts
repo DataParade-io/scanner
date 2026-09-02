@@ -15,8 +15,7 @@ import {
   normalizeConceptToken,
   tryRuleIdToConceptEntry,
 } from "../../../../src/eval/canonical/concept-map";
-import { annotationRecordToLegacyInput } from "./adapters";
-import { loadLegacyGoldRecord } from "./loader";
+import { loadCanonicalGoldFromAnnotation } from "../gold/loader";
 import type { CanonicalDisposition } from "../../../../src/eval/canonical/types";
 
 export const DATA_ITEM_MIGRATION_TASK = "KDATAP-a0e80b4a-7703-4425-a056-c1c9b9ef0870";
@@ -404,10 +403,7 @@ export function analyzeDataItemRecord(
   const writeCandidate = proposal !== undefined && shouldWriteCandidate(bucket);
   const flipReviewState = shouldFlipReviewState(record);
 
-  const { record: goldRecord } = loadLegacyGoldRecord(annotationRecordToLegacyInput(record), {
-    warn: () => undefined,
-    repoKey,
-  });
+  const { record: goldRecord } = loadCanonicalGoldFromAnnotation(record, { repoKey });
 
   return {
     annotationId: record.id,

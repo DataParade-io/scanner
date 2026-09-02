@@ -4,13 +4,12 @@ import type { AnnotationCanonical, AnnotationRecord } from "../../../benchmark/s
 import { loadAnnotations } from "../../../benchmark/manifest";
 import { resolveDefaultBenchmarkRoot } from "../../../benchmark/paths";
 import { listBenchmarkRepoKeys } from "../../../benchmark/run-benchmark";
-import { annotationRecordToLegacyInput } from "./adapters";
 import {
   buildRepoLocalEntityId,
   classificationIdentityKey,
   resolveComponentSubtype,
 } from "./component-taxonomy";
-import { loadLegacyGoldRecord } from "./loader";
+import { loadCanonicalGoldFromAnnotation } from "../gold/loader";
 import type { CanonicalDisposition } from "../../../../src/eval/canonical/types";
 
 export type ComponentMigrationBucket =
@@ -130,12 +129,9 @@ export function buildComponentMigrationLedgerEntry(
   record: AnnotationRecord,
 ): ComponentMigrationLedgerEntry {
   const canonical = buildAnnotationCanonicalBlock(repoKey, record);
-  const { record: goldRecord } = loadLegacyGoldRecord(
-    {
-      ...annotationRecordToLegacyInput(record),
-      canonical,
-    },
-    { warn: () => undefined, repoKey },
+  const { record: goldRecord } = loadCanonicalGoldFromAnnotation(
+    { ...record, canonical },
+    { repoKey },
   );
 
   return {
