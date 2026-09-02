@@ -29,6 +29,23 @@ annotations:
       proposed_flow_type: database_query
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-auth-cookie-service
+      target_entity_id: wordpress::wordpress-auth-cookie-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: database_query
+      data_categories:
+        - password
   - id: wordpress-password-to-hash
     layer: data_flows
     subject:
@@ -98,6 +115,22 @@ annotations:
       target_entity_id: wordpress::wordpress-auth-cookie-service
       proposed_data_categories:
         - session
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-auth-cookie-service
+      target_entity_id: wordpress::wordpress-auth-cookie-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - session
   - id: wordpress-authenticate-check-password
     layer: data_flows
     subject:
@@ -126,6 +159,22 @@ annotations:
       source_entity_id: wordpress::wordpress-wp-check-password
       target_entity_id: wordpress::wordpress-wp-check-password
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-check-password
+      target_entity_id: wordpress::wordpress-wp-check-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
   - id: wordpress-insert-user-database
     layer: data_flows
@@ -1016,6 +1065,22 @@ annotations:
       target_entity_id: wordpress::wordpress-wp-generate-password
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-generate-password
+      target_entity_id: wordpress::wordpress-wp-generate-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: wordpress-new-user-notification-email
     layer: data_flows
     subject:
@@ -1065,6 +1130,22 @@ annotations:
       target_entity_id: wordpress::wordpress-wp-hash-password
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-hash-password
+      target_entity_id: wordpress::wordpress-wp-hash-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: wordpress-check-password-flow
     layer: data_flows
     subject:
@@ -1093,6 +1174,22 @@ annotations:
       source_entity_id: wordpress::wordpress-wp-check-password
       target_entity_id: wordpress::wordpress-wp-check-password
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-check-password
+      target_entity_id: wordpress::wordpress-wp-check-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
   - id: wordpress-set-password-flow
     layer: data_flows
@@ -1123,6 +1220,23 @@ annotations:
       target_entity_id: wordpress::wordpress-wp-set-password
       proposed_flow_type: database_query
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-set-password
+      target_entity_id: wordpress::wordpress-wp-set-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: database_query
+      data_categories:
         - password
   - id: wordpress-authenticate-flow
     layer: data_flows
@@ -1155,6 +1269,24 @@ annotations:
         - password
         - email
         - address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-authenticate
+      target_entity_id: wordpress::wordpress-wp-authenticate
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
+        - email
+        - address
   - id: wordpress-app-password-auth-flow
     layer: data_flows
     subject:
@@ -1183,6 +1315,22 @@ annotations:
       source_entity_id: wordpress::wordpress-wp-authenticate-app-password
       target_entity_id: wordpress::wordpress-wp-authenticate-app-password
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-authenticate-app-password
+      target_entity_id: wordpress::wordpress-wp-authenticate-app-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
   - id: wordpress-validate-app-password-flow
     layer: data_flows
@@ -1294,6 +1442,23 @@ annotations:
       proposed_data_categories:
         - password
         - email
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-wp-create-user
+      target_entity_id: wordpress::wordpress-wp-create-user
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
+        - password
+        - email
   - id: wordpress-insert-user-flow
     layer: data_flows
     subject:
@@ -1341,6 +1506,20 @@ annotations:
       candidate_notes: Entity picker resolved wordpress-get-user-by from span content; negative decoys excluded.
       source_entity_id: wordpress::wordpress-get-user-by
       target_entity_id: wordpress::wordpress-get-user-by
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-get-user-by
+      target_entity_id: wordpress::wordpress-get-user-by
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: wordpress-get-user-by-email-flow
     layer: data_flows
     subject:
@@ -1369,6 +1548,23 @@ annotations:
       source_entity_id: wordpress::wordpress-get-user-by
       target_entity_id: wordpress::wordpress-get-user-by
       proposed_data_categories:
+        - email
+        - address
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-get-user-by
+      target_entity_id: wordpress::wordpress-get-user-by
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
         - email
         - address
   - id: wordpress-username-exists-flow
@@ -1459,6 +1655,22 @@ annotations:
       source_entity_id: wordpress::wordpress-check-password-reset-key
       target_entity_id: wordpress::wordpress-check-password-reset-key
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-check-password-reset-key
+      target_entity_id: wordpress::wordpress-check-password-reset-key
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
   - id: wordpress-session-token-read-flow
     layer: data_flows
@@ -1807,6 +2019,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on wordpress-get-users (intra_overlap_same_entity).
       source_entity_id: wordpress::wordpress-get-users
       target_entity_id: wordpress::wordpress-get-users
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-get-users
+      target_entity_id: wordpress::wordpress-get-users
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: wordpress-user-query-flow
     layer: data_flows
     subject:
@@ -1854,6 +2080,20 @@ annotations:
       candidate_notes: Entity picker resolved wordpress-get-users from span content; negative decoys excluded.
       source_entity_id: wordpress::wordpress-get-users
       target_entity_id: wordpress::wordpress-get-users
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: wordpress::wordpress-get-users
+      target_entity_id: wordpress::wordpress-get-users
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: wordpress-logged-in-check-flow
     layer: data_flows
     subject:

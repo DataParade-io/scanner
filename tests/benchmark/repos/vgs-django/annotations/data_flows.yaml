@@ -29,6 +29,23 @@ annotations:
       proposed_flow_type: database_query
       proposed_data_categories:
         - social_security_number
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: vgs-django::vgs-django-database-pii
+      target_entity_id: vgs-django::vgs-django-database-pii
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
+      data_categories:
+        - social_security_number
   - id: vgs-django-checkr-candidate-post
     layer: data_flows
     subject:
@@ -58,6 +75,27 @@ annotations:
       target_entity_id: vgs-django::vgs-django-third-party-checkr
       proposed_flow_type: api_call
       proposed_data_categories:
+        - email
+        - social_security_number
+        - phone_number
+    flow_canonical:
+      identity_key: flow:third_party:saas_service->third_party:saas_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: vgs-django::vgs-django-third-party-checkr
+      target_entity_id: vgs-django::vgs-django-third-party-checkr
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: saas_service
+          component_subtype: saas_service
+          vendor: checkr
+        target:
+          component_type: third_party
+          endpoint_key: saas_service
+          component_subtype: saas_service
+          vendor: checkr
+      flow_type: api_call
+      data_categories:
         - email
         - social_security_number
         - phone_number

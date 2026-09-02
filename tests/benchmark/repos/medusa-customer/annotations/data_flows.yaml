@@ -68,3 +68,19 @@ annotations:
       target_entity_id: medusa-customer::medusa-customer-invite-database
       proposed_data_categories:
         - email
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa-customer::medusa-customer-invite-database
+      target_entity_id: medusa-customer::medusa-customer-invite-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      data_categories:
+        - email

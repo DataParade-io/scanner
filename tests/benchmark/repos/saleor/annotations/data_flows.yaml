@@ -30,6 +30,24 @@ annotations:
       proposed_data_categories:
         - email
         - address
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: saleor::saleor-customer-actor
+      target_entity_id: saleor::saleor-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      flow_type: database_query
+      data_categories:
+        - email
+        - address
   - id: saleor-address-persisted
     layer: data_flows
     subject:

@@ -88,6 +88,22 @@ annotations:
       target_entity_id: directus::directus-local-verify
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-verify
+      target_entity_id: directus::directus-local-verify
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: directus-login-select-user
     layer: data_flows
     subject:
@@ -219,6 +235,24 @@ annotations:
       proposed_data_categories:
         - password
         - email
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-auth-emitter-filter
+      target_entity_id: directus::directus-auth-emitter-filter
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      flow_type: database_query
+      data_categories:
+        - password
+        - email
   - id: directus-inactive-user-reject
     layer: data_flows
     subject:
@@ -269,6 +303,23 @@ annotations:
       proposed_data_categories:
         - access_token
         - session
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-extract-token-middleware
+      target_entity_id: directus::directus-extract-token-middleware
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - access_token
+        - session
   - id: directus-clear-invalid-session-cookie
     layer: data_flows
     subject:
@@ -316,3 +367,17 @@ annotations:
       candidate_notes: Entity picker resolved directus-users-service from span content; negative decoys excluded.
       source_entity_id: directus::directus-users-service
       target_entity_id: directus::directus-users-service
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-users-service
+      target_entity_id: directus::directus-users-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
