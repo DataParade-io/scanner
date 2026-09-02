@@ -2,7 +2,7 @@
 
 Schema version: `ground-truth/1`.
 
-Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. A fifth Jest layer, `raw-hits`, is **diagnostic only** — it is scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
+Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
 
 Subject keys are stable identities used in Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
 
@@ -19,11 +19,12 @@ Subject keys are stable identities used in Jest fixture eval (`tests/eval/layers
 
 Personal-data headline layers share heuristic rules (`patterns/pii-signals.rules.yaml`) but differ in roll-up and matching semantics. Graph layers use the deterministic `scan()` pipeline.
 
-## Diagnostic layer
+## Diagnostic layers
 
 | Layer | Jest key | Corpus layer | Role |
 | --- | --- | --- | --- |
 | Raw hits | `raw-hits` | `raw_hits` | YAML heuristic pattern match before roll-up (one finding per line hit). Fixture eval and scorecard sidecar (`diagnostic.raw-hits`) only — not a headline gate. |
+| Data actions | `data-actions` | `data_actions` | Privacy verbs on component nodes (`properties.dataActions`). Fixture eval diagnostic only — **not** a `scorecard-vector/2` headline gate; not in the `diagnostic.raw-hits` sidecar. |
 
 ## Identity rules
 
@@ -43,6 +44,7 @@ Mention keys use `mention:<rule_id>` when aligned to a reviewed rule from `patte
 | --- | --- | --- |
 | Component | `${type}:${name}` (lowercase name) | `third_party:stripe` |
 | Data flow | `flow:${sourceKey}->${targetKey}` | `flow:asset:api->third_party:stripe` |
+| Data action (diagnostic) | `${type}:${name}` (same as component; labels = asserted verbs) | `asset:pg` with label `store` |
 
 Accepted component annotations may also carry an optional **`canonical`** block (KDATAP-8aed54) with structured `entity_id`, `identity_key`, `component_type`, `component_subtype`, and optional `vendor`. Legacy `subject.key` / `subject.name` remain as provenance; classification identity is `${type}:${subtype}`.
 
@@ -57,6 +59,7 @@ Scoring lives in `tests/eval/score.ts`. Headline metrics are computed per layer;
 | Components | Subject key **and** evidence span overlap **and** expected labels |
 | Data flows | Subject key **and** evidence span overlap **and** expected labels |
 | Raw hits (diagnostic) | Subject key **and** evidence span overlap **and** expected labels |
+| Data actions (diagnostic) | Subject key **and** evidence span overlap **and** expected verb label among asserted `dataActions` |
 
 ## Case status
 
