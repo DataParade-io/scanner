@@ -434,10 +434,10 @@ function resolveEntityForPicker(
     return undefined;
   }
 
-  const identifierMatches = findComponentsWithIdentifierInSpan(span, components);
   if (!hasRuntimeFlowEvidence(span, "")) {
     return undefined;
   }
+  const identifierMatches = findComponentsWithIdentifierInSpan(span, components);
   if (identifierMatches.length === 1) {
     return identifierMatches[0];
   }
@@ -590,6 +590,10 @@ export function classifyFlowSourceBucket(
     return "graph_edge";
   }
 
+  if (allCandidates.length === 1) {
+    return "intra_single_component";
+  }
+
   if (migrationCandidate.candidate_confidence === "low" && overlap.length === 0) {
     return "intra_low_rationale_only";
   }
@@ -605,10 +609,6 @@ export function classifyFlowSourceBucket(
 
   if (overlap.length >= 2) {
     return "intra_overlap_cross_entity";
-  }
-
-  if (allCandidates.length === 1) {
-    return "intra_single_component";
   }
 
   if (overlap.length === 1) {
@@ -948,6 +948,39 @@ export function analyzeFlowForAdjudication(
         contested: false,
         rationale:
           "Negative corpus label with high-confidence rejection migration proposal; source cache miss.",
+      };
+    }
+    if (
+      record.expected.status === "positive" &&
+      sourceBucket === "intra_single_component" &&
+      allCandidates.length === 1
+    ) {
+      const entity = allCandidates[0]!;
+      const candidate = buildIntraCandidate(
+        entity,
+        "",
+        "",
+        `Accepted intra-component lineage on ${entity.id} (${sourceBucket}); source cache miss.`,
+        "medium",
+      );
+      return {
+        annotationId: record.id,
+        repoKey,
+        sourceBucket,
+        migrationBucket: migrationCandidate.disposition_candidate,
+        migrationConfidence: migrationCandidate.candidate_confidence,
+        disposition: "accept",
+        confidence: "medium",
+        finalDispositionCandidate: "intra_component_lineage",
+        sourceEntityId: entity.canonical!.entity_id,
+        targetEntityId: entity.canonical!.entity_id,
+        candidate,
+        evidenceValidation: "skipped",
+        evidenceSpanHash: sha256Hex(""),
+        overlapComponentIds: overlap.map((component) => component.id),
+        rationaleComponentIds: rationale.map((component) => component.id),
+        contested: true,
+        rationale: `Single-component flow on ${entity.id}; accepted without source overlap on cache miss.`,
       };
     }
     return {
