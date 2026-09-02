@@ -49,6 +49,15 @@ describe("validatePublishedBaseline", () => {
     ).not.toThrow();
   });
 
+  it("refuses published baselines that fail readiness when required", () => {
+    expect(() =>
+      validatePublishedBaseline({
+        jsonPath: MINIMAL_FIXTURE_JSON,
+        requireReadinessPass: true,
+      }),
+    ).toThrow(/requires readiness.status=pass/i);
+  });
+
   it("accepts a baseline with all-valid materializations when publishing", () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "published-baseline-"));
     const jsonPath = path.join(tempDir, "published.json");
