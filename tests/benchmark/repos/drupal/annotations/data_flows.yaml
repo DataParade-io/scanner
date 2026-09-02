@@ -263,9 +263,36 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on drupal-password-reset-api (intra_single_component).
+      source_entity_id: drupal::drupal-password-reset-api
+      target_entity_id: drupal::drupal-password-reset-api
+      proposed_data_categories:
+        - password
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: drupal::drupal-password-reset-api
+      target_entity_id: drupal::drupal-password-reset-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - password
+        - email_address
   - id: drupal-one-time-login-url-flow
     layer: data_flows
     subject:

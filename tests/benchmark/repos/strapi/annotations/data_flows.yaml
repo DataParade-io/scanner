@@ -324,9 +324,34 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on strapi-forgot-password-service (intra_single_component).
+      source_entity_id: strapi::strapi-forgot-password-service
+      target_entity_id: strapi::strapi-forgot-password-service
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: strapi::strapi-forgot-password-service
+      target_entity_id: strapi::strapi-forgot-password-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
+        - email_address
   - id: strapi-reset-email-send
     layer: data_flows
     subject:
@@ -344,9 +369,42 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on strapi-forgot-password-service (intra_single_component).
+      source_entity_id: strapi::strapi-forgot-password-service
+      target_entity_id: strapi::strapi-forgot-password-service
+      proposed_flow_type: api_call
+      proposed_data_categories:
+        - email_address
+        - username
+        - first_name
+        - last_name
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: strapi::strapi-forgot-password-service
+      target_entity_id: strapi::strapi-forgot-password-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      flow_type: api_call
+      data_categories:
+        - email_address
+        - username
+        - first_name
+        - last_name
   - id: strapi-token-create-random
     layer: data_flows
     subject:

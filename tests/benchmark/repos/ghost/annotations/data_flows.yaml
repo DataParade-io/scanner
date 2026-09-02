@@ -341,9 +341,36 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on ghost-payments-service (intra_single_component).
+      source_entity_id: ghost::ghost-payments-service
+      target_entity_id: ghost::ghost-payments-service
+      proposed_flow_type: api_call
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-payments-service
+      target_entity_id: ghost::ghost-payments-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      flow_type: api_call
+      data_categories:
+        - email_address
   - id: ghost-jwt-member-request-property
     layer: data_flows
     subject:
