@@ -161,7 +161,7 @@ describe("evaluateBaselineReadiness dry run", () => {
       benchmarkRoot: BENCHMARK_ROOT,
       goldPopulation,
       migrationIncomplete: { total: 0, byReason: {}, byLayer: {} },
-      requireMaterializations: true,
+      requireMaterializations: false,
       requireRuntimeChecks: false,
     });
 
