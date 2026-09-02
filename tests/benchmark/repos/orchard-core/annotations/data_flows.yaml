@@ -19,11 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login-form'; unresolved target for slug 'authenticate'; no component candidates via overlap or rationale+same-file
   - id: orchard-create-user-to-store
     layer: data_flows
     subject:
@@ -41,15 +36,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (orchard-user-database); prose endpoints create-user->user-store appear intra-component.
+      candidate_notes: Accepted intra-component lineage on orchard-user-database (intra_single_component).
       source_entity_id: orchard-core::orchard-user-database
+      target_entity_id: orchard-core::orchard-user-database
   - id: orchard-reset-password-flow
     layer: data_flows
     subject:
@@ -67,14 +63,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'reset-token'; unresolved target for slug 'password-hash'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved orchard-user-actor from span content; negative decoys excluded.
+      source_entity_id: orchard-core::orchard-user-actor
+      target_entity_id: orchard-core::orchard-user-actor
   - id: orchard-ticket-to-cache
     layer: data_flows
     subject:
@@ -95,12 +93,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-session-cache); prose endpoints auth-ticket->distributed-cache appear intra-component.
-      source_entity_id: orchard-core::orchard-session-cache
   - id: orchard-openid-token-to-store
     layer: data_flows
     subject:
@@ -118,15 +110,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (orchard-openid-auth-service); prose endpoints openid-token->yesql appear intra-component.
+      candidate_notes: Accepted intra-component lineage on orchard-openid-auth-service (intra_single_component).
       source_entity_id: orchard-core::orchard-openid-auth-service
+      target_entity_id: orchard-core::orchard-openid-auth-service
   - id: orchard-set-email-on-user
     layer: data_flows
     subject:
@@ -147,11 +140,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'identity'; unresolved target for slug 'user-email'; no component candidates via overlap or rationale+same-file
   - id: orchard-display-name-not-user-email
     layer: data_flows
     subject:
@@ -168,14 +156,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: OpenIdApplication.DisplayName labels the OAuth client; it is not copied into User.Email.
   - id: orchard-change-password-flow
     layer: data_flows
     subject:
@@ -196,11 +179,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'change-password'; unresolved target for slug 'identity'; no component candidates via overlap or rationale+same-file
   - id: orchard-forgot-password-token
     layer: data_flows
     subject:
@@ -221,11 +199,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'forgot'; unresolved target for slug 'reset-token'; no component candidates via overlap or rationale+same-file
   - id: orchard-set-password-hash
     layer: data_flows
     subject:
@@ -246,11 +219,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'identity'; unresolved target for slug 'password-hash'; no component candidates via overlap or rationale+same-file
   - id: orchard-find-by-email
     layer: data_flows
     subject:
@@ -271,11 +239,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'user-query'; no component candidates via overlap or rationale+same-file
   - id: orchard-openid-app-to-yessql
     layer: data_flows
     subject:
@@ -296,12 +259,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-openid-application-store); prose endpoints openid-app->yesql appear intra-component.
-      source_entity_id: orchard-core::orchard-openid-application-store
   - id: orchard-openid-authz-to-yessql
     layer: data_flows
     subject:
@@ -322,12 +279,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-openid-authorization-store); prose endpoints openid-authz->yesql appear intra-component.
-      source_entity_id: orchard-core::orchard-openid-authorization-store
   - id: orchard-openid-scope-to-yessql
     layer: data_flows
     subject:
@@ -348,12 +299,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-openid-scope-store); prose endpoints openid-scope->yesql appear intra-component.
-      source_entity_id: orchard-core::orchard-openid-scope-store
   - id: orchard-principal-to-user
     layer: data_flows
     subject:
@@ -374,11 +319,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'principal'; unresolved target for slug 'user'; no component candidates via overlap or rationale+same-file
   - id: orchard-delete-user-from-store
     layer: data_flows
     subject:
@@ -399,12 +339,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-user-database); prose endpoints delete-user->yesql appear intra-component.
-      source_entity_id: orchard-core::orchard-user-database
   - id: orchard-update-user-to-store
     layer: data_flows
     subject:
@@ -425,12 +359,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-user-database); prose endpoints update-user->yesql appear intra-component.
-      source_entity_id: orchard-core::orchard-user-database
   - id: orchard-retrieve-ticket-from-cache
     layer: data_flows
     subject:
@@ -451,9 +379,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (orchard-session-cache); prose endpoints cache-key->auth-ticket appear intra-component.
-      source_entity_id: orchard-core::orchard-session-cache

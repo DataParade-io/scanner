@@ -16,15 +16,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (ghost-router-controller-api); prose endpoints signup-email->magic-link appear intra-component.
+      candidate_notes: Accepted intra-component lineage on ghost-router-controller-api (intra_single_component).
       source_entity_id: ghost::ghost-router-controller-api
+      target_entity_id: ghost::ghost-router-controller-api
+      proposed_data_categories:
+        - email
   - id: ghost-token-to-member-lookup
     layer: data_flows
     subject:
@@ -42,15 +45,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (ghost-member-repository-service); prose endpoints identity-token->member-repository appear intra-component.
+      candidate_notes: Accepted intra-component lineage on ghost-member-repository-service (intra_single_component).
       source_entity_id: ghost::ghost-member-repository-service
+      target_entity_id: ghost::ghost-member-repository-service
+      proposed_flow_type: api_call
+      proposed_data_categories:
+        - email
   - id: ghost-member-create-to-database
     layer: data_flows
     subject:
@@ -71,11 +78,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'member-create'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: ghost-update-email-to-magic-link
     layer: data_flows
     subject:
@@ -93,15 +95,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (ghost-member-controller-api); prose endpoints update-email->magic-link appear intra-component.
+      candidate_notes: Accepted intra-component lineage on ghost-member-controller-api (intra_single_component).
       source_entity_id: ghost::ghost-member-controller-api
+      target_entity_id: ghost::ghost-member-controller-api
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - email
   - id: ghost-not-auth0-login-flow
     layer: data_flows
     subject:
@@ -118,14 +124,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: Member auth middleware validates GhostMembers JWTs locally; no Auth0 redirect or token exchange exists.
   - id: ghost-identity-token-encode
     layer: data_flows
     subject:
@@ -146,11 +147,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'sub'; unresolved target for slug 'identity_token'; no component candidates via overlap or rationale+same-file
   - id: ghost-token-decode-to-sub
     layer: data_flows
     subject:
@@ -171,11 +167,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'token'; unresolved target for slug 'sub'; no component candidates via overlap or rationale+same-file
   - id: ghost-auth-header-to-jwt
     layer: data_flows
     subject:
@@ -196,12 +187,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (ghost-members-auth-service); prose endpoints authorization->jwt appear intra-component.
-      source_entity_id: ghost::ghost-members-auth-service
   - id: ghost-checkout-email-to-stripe
     layer: data_flows
     subject:
@@ -219,15 +204,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (ghost-payments-service); prose endpoints email->stripe_checkout appear intra-component.
+      candidate_notes: Accepted intra-component lineage on ghost-payments-service (intra_single_component).
       source_entity_id: ghost::ghost-payments-service
+      target_entity_id: ghost::ghost-payments-service
+      proposed_data_categories:
+        - email
+        - session
   - id: ghost-staff-setup-credentials
     layer: data_flows
     subject:
@@ -248,11 +237,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'setup'; unresolved target for slug 'auth_setup'; no component candidates via overlap or rationale+same-file
   - id: ghost-entitlement-token-encode
     layer: data_flows
     subject:
@@ -273,11 +257,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'member'; unresolved target for slug 'entitlement_token'; no component candidates via overlap or rationale+same-file
   - id: ghost-stripe-customer-create
     layer: data_flows
     subject:
@@ -298,12 +277,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (ghost-payments-service); prose endpoints email->stripe_customer appear intra-component.
-      source_entity_id: ghost::ghost-payments-service
   - id: ghost-jwt-member-request-property
     layer: data_flows
     subject:
@@ -321,14 +294,17 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous target match for slug 'req.member'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved ghost-members-auth-service from span content; negative decoys excluded.
+      source_entity_id: ghost::ghost-members-auth-service
+      target_entity_id: ghost::ghost-members-auth-service
+      proposed_flow_type: api_call
   - id: ghost-auth-middleware-unauthorized-wrap
     layer: data_flows
     subject:
@@ -349,11 +325,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'jwt_error'; ambiguous target match for slug 'unauthorized'
   - id: ghost-token-kid-to-jwt-sign
     layer: data_flows
     subject:
@@ -374,11 +345,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'kid'; unresolved target for slug 'jwt_sign'; no component candidates via overlap or rationale+same-file
   - id: ghost-payments-price-to-checkout
     layer: data_flows
     subject:
@@ -396,16 +362,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (ghost-payments-service); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on ghost-payments-service (intra_overlap_same_entity).
       source_entity_id: ghost::ghost-payments-service
       target_entity_id: ghost::ghost-payments-service
+      proposed_data_categories:
+        - email
+        - session
+        - payment_card
   - id: ghost-repository-transient-id-cycle
     layer: data_flows
     subject:
@@ -426,8 +396,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'member'; unresolved target for slug 'transient_id'; no component candidates via overlap or rationale+same-file

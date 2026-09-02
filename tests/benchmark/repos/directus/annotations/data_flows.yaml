@@ -19,12 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (directus-local-auth-driver); prose endpoints login-email->directus_users appear intra-component.
-      source_entity_id: directus::directus-local-auth-driver
   - id: directus-login-to-sessions-table
     layer: data_flows
     subject:
@@ -45,11 +39,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'login'; ambiguous target match for slug 'directus_sessions'
   - id: directus-local-router-to-auth-service
     layer: data_flows
     subject:
@@ -70,11 +59,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'local-router'; unresolved target for slug 'authentication-service'; no component candidates via overlap or rationale+same-file
   - id: directus-password-verify-bcrypt
     layer: data_flows
     subject:
@@ -92,14 +76,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'password'; unresolved target for slug 'bcrypt-verify'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-local-verify from span content; negative decoys excluded.
+      source_entity_id: directus::directus-local-verify
+      target_entity_id: directus::directus-local-verify
+      proposed_data_categories:
+        - password
   - id: directus-login-select-user
     layer: data_flows
     subject:
@@ -120,11 +108,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'login'; unresolved target for slug 'directus_users-select'
   - id: directus-jwt-to-accountability
     layer: data_flows
     subject:
@@ -145,11 +128,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'jwt'; unresolved target for slug 'accountability'; no component candidates via overlap or rationale+same-file
   - id: directus-suspend-on-rate-limit
     layer: data_flows
     subject:
@@ -170,11 +148,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'failed-login'; ambiguous target match for slug 'suspended'
   - id: directus-local-get-user-id
     layer: data_flows
     subject:
@@ -195,12 +168,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (directus-local-auth-driver); prose endpoints email->user-id appear intra-component.
-      source_entity_id: directus::directus-local-auth-driver
   - id: directus-auth-driver-users-service
     layer: data_flows
     subject:
@@ -221,12 +188,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (directus-auth-driver-base); prose endpoints auth-driver->users-service appear intra-component.
-      source_entity_id: directus::directus-auth-driver-base
   - id: directus-login-emitter-filter
     layer: data_flows
     subject:
@@ -244,14 +205,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'payload'; unresolved target for slug 'auth-login-filter'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-auth-emitter-filter from span content; negative decoys excluded.
+      source_entity_id: directus::directus-auth-emitter-filter
+      target_entity_id: directus::directus-auth-emitter-filter
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - password
+        - email
   - id: directus-inactive-user-reject
     layer: data_flows
     subject:
@@ -272,11 +239,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'inactive-user'; unresolved target for slug 'error'
   - id: directus-extract-token-bearer
     layer: data_flows
     subject:
@@ -294,15 +256,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (directus-extract-token-middleware); prose endpoints authorization-header->token appear intra-component.
+      candidate_notes: Accepted intra-component lineage on directus-extract-token-middleware (intra_single_component).
       source_entity_id: directus::directus-extract-token-middleware
+      target_entity_id: directus::directus-extract-token-middleware
+      proposed_data_categories:
+        - access_token
+        - session
   - id: directus-clear-invalid-session-cookie
     layer: data_flows
     subject:
@@ -323,11 +289,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'invalid-token'; unresolved target for slug 'clear-cookie'; no component candidates via overlap or rationale+same-file
   - id: directus-users-service-collection
     layer: data_flows
     subject:
@@ -345,11 +306,13 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous target match for slug 'directus_users'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-users-service from span content; negative decoys excluded.
+      source_entity_id: directus::directus-users-service
+      target_entity_id: directus::directus-users-service

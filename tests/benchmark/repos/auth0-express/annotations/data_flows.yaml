@@ -19,11 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'oidc-callback'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file
   - id: auth0-express-refresh-to-token-endpoint
     layer: data_flows
     subject:
@@ -44,11 +39,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'refresh-token'; unresolved target for slug 'token-endpoint'; no component candidates via overlap or rationale+same-file
   - id: auth0-express-cookie-to-session
     layer: data_flows
     subject:
@@ -69,11 +59,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'session-cookie'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file
   - id: auth0-express-login-to-idp
     layer: data_flows
     subject:
@@ -94,11 +79,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'auth0'; no component candidates via overlap or rationale+same-file
   - id: auth0-express-userinfo-not-in-callback
     layer: data_flows
     subject:
@@ -115,11 +95,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: authorizationCodeGrant exchanges the code for tokens directly. fetchUserInfo is a separate optional call, not part of the default callback flow shown here.

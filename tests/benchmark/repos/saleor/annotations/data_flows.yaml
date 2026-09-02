@@ -16,16 +16,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Django User model column declarations (email, name) on a single ORM class; preserved as intra-model lineage, not a headline actor→database graph edge. Aligns with unresolved twins medusa-customer-user-email-persisted / keycloak-user-entity-persist.
+      candidate_notes: "ORM demotion: single-class model field span; preserved as intra-component lineage on saleor-customer-actor."
       source_entity_id: saleor::saleor-customer-actor
       target_entity_id: saleor::saleor-customer-actor
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - email
+        - address
   - id: saleor-address-persisted
     layer: data_flows
     subject:
@@ -46,8 +50,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'address-model'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file

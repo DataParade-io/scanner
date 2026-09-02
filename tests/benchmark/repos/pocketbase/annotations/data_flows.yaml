@@ -19,12 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (pocketbase-password-field-type); prose endpoints password->bcrypt_hash appear intra-component.
-      source_entity_id: pocketbase::pocketbase-password-field-type
   - id: pocketbase-hash-to-database
     layer: data_flows
     subject:
@@ -45,12 +39,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (pocketbase-password-field-type); prose endpoints password_hash->database appear intra-component.
-      source_entity_id: pocketbase::pocketbase-password-field-type
   - id: pocketbase-email-to-verification-token
     layer: data_flows
     subject:
@@ -68,14 +56,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'verification_token'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved pocketbase-collection-auth-type from span content; negative decoys excluded.
+      source_entity_id: pocketbase::pocketbase-collection-auth-type
+      target_entity_id: pocketbase::pocketbase-collection-auth-type
+      proposed_data_categories:
+        - password
+        - email
   - id: pocketbase-token-key-to-jwt
     layer: data_flows
     subject:
@@ -93,14 +86,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (pocketbase-jwt-auth-service); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on pocketbase-jwt-auth-service (intra_overlap_same_entity).
       source_entity_id: pocketbase::pocketbase-jwt-auth-service
       target_entity_id: pocketbase::pocketbase-jwt-auth-service
   - id: pocketbase-set-email-to-record
@@ -123,11 +116,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'set_email'; ambiguous target match for slug 'record'
   - id: pocketbase-password-change-deletes-auth-origins
     layer: data_flows
     subject:
@@ -148,12 +136,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (pocketbase-auth-origin-service); prose endpoints password->delete_auth_origins appear intra-component.
-      source_entity_id: pocketbase::pocketbase-auth-origin-service
   - id: pocketbase-validate-password-flow
     layer: data_flows
     subject:
@@ -171,14 +153,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'plain_password'; ambiguous target match for slug 'validate'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on pocketbase-record-auth-service (intra_single_component).
+      source_entity_id: pocketbase::pocketbase-record-auth-service
+      target_entity_id: pocketbase::pocketbase-record-auth-service
+      proposed_data_categories:
+        - password
   - id: pocketbase-not-payment-flow
     layer: data_flows
     subject:
@@ -195,14 +181,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: NewAuthToken issues JWT credentials only; the reviewed core auth scope has no payment processing flow.
   - id: pocketbase-password-reset-token-flow
     layer: data_flows
     subject:
@@ -223,11 +204,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'password_reset_token'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-email-change-token-flow
     layer: data_flows
     subject:
@@ -248,11 +224,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'new_email'; unresolved target for slug 'email_change_token'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-file-token-flow
     layer: data_flows
     subject:
@@ -273,11 +244,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'record'; unresolved target for slug 'file_token'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-jwt-to-record-lookup
     layer: data_flows
     subject:
@@ -295,14 +261,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (pocketbase-find-auth-record-service); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on pocketbase-find-auth-record-service (intra_single_component).
       source_entity_id: pocketbase::pocketbase-find-auth-record-service
       target_entity_id: pocketbase::pocketbase-find-auth-record-service
   - id: pocketbase-jwt-signature-verify
@@ -325,12 +291,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (pocketbase-find-auth-record-service); prose endpoints token->parse_jwt appear intra-component.
-      source_entity_id: pocketbase::pocketbase-find-auth-record-service
   - id: pocketbase-find-auth-by-email
     layer: data_flows
     subject:
@@ -351,11 +311,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-set-password-flow
     layer: data_flows
     subject:
@@ -376,11 +331,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'password'; ambiguous target match for slug 'record'
   - id: pocketbase-random-password-flow
     layer: data_flows
     subject:
@@ -401,11 +351,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'random'; unresolved target for slug 'password'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-provider-validation-flow
     layer: data_flows
     subject:
@@ -423,14 +368,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'provider'; ambiguous target match for slug 'oauth_providers'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on pocketbase-oauth-auth-provider (intra_overlap_same_entity).
+      source_entity_id: pocketbase::pocketbase-oauth-auth-provider
+      target_entity_id: pocketbase::pocketbase-oauth-auth-provider
   - id: pocketbase-token-key-refresh-on-verify
     layer: data_flows
     subject:
@@ -451,11 +398,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'verified'; unresolved target for slug 'refresh_token_key'; no component candidates via overlap or rationale+same-file
   - id: pocketbase-static-auth-token-flow
     layer: data_flows
     subject:
@@ -476,12 +418,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (pocketbase-jwt-auth-service); prose endpoints record->static_auth_token appear intra-component.
-      source_entity_id: pocketbase::pocketbase-jwt-auth-service
   - id: pocketbase-refresh-token-key-flow
     layer: data_flows
     subject:
@@ -502,8 +438,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'record'; unresolved target for slug 'refresh_token_key'; no component candidates via overlap or rationale+same-file
