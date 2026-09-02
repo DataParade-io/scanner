@@ -8,7 +8,7 @@ import { scoreEvalCases } from "../../score";
 describe("eval/layers/data-actions", () => {
   const fixtures = [...new Set(dataActionEvalCases.map((caseRecord) => caseRecord.fixture))];
 
-  it("meets data-action layer ground-truth expectations (documentedGap until derivation)", async () => {
+  it("scores topology-backed verbs; documentedGap remains until 1.2–1.3", async () => {
     const scanned = await Promise.all(fixtures.map(scanFixtureDataActionAssignments));
     const scanResults = scanned.map((entry) => entry.scanResult);
     const report = scoreEvalCases(dataActionEvalCases, scanResults);
@@ -22,17 +22,21 @@ describe("eval/layers/data-actions", () => {
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.negativeCasePassRate).toBe(1);
 
-    // documentedGap positives still count in recall; derivation (1.1–1.3) has not landed.
+    // Topology (1.1) lifts some store/disclose/collect; pattern verbs stay gaps.
     const documentedGapMisses = report.caseResults.filter(
       (result) => result.documentedGap && !result.matched,
     );
+    const documentedGapHits = report.caseResults.filter(
+      (result) => result.documentedGap && result.matched,
+    );
     expect(documentedGapMisses.length).toBeGreaterThan(0);
+    expect(documentedGapHits.length).toBeGreaterThan(0);
     expect(report.scores.denominators.evaluablePositives).toBeGreaterThan(0);
-    expect(report.scores.recall).toBe(0);
+    expect(report.scores.recall).toBeGreaterThan(0);
+    expect(report.scores.recall).toBeLessThan(1);
 
-    // No asserted verbs yet → no in-scope findings (precision N/A until derivation emits).
-    expect(report.scores.precision).toBeNull();
-    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(0);
+    // Asserted verbs are in-scope findings; precision is computed when exhaustive scope applies.
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBeGreaterThan(0);
 
     const relayViolations = scanned.flatMap((entry) =>
       auditAssertedRelayCorroboration(entry.asserted),
