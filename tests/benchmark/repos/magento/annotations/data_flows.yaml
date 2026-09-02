@@ -16,16 +16,19 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-login-post-api); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on magento-login-post-api (intra_single_component).
       source_entity_id: magento::magento-login-post-api
       target_entity_id: magento::magento-login-post-api
+      proposed_data_categories:
+        - password
+        - session
   - id: magento-ajax-login-to-authenticate
     layer: data_flows
     subject:
@@ -46,11 +49,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'ajax-login'; unresolved target for slug 'authenticate'; no component candidates via overlap or rationale+same-file
   - id: magento-authenticate-to-session
     layer: data_flows
     subject:
@@ -71,12 +69,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-login-post-api); prose endpoints authenticate->session appear intra-component.
-      source_entity_id: magento::magento-login-post-api
   - id: magento-authenticate-email-to-repository
     layer: data_flows
     subject:
@@ -97,11 +89,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'customer-repository'; no component candidates via overlap or rationale+same-file
   - id: magento-reset-token-to-repository
     layer: data_flows
     subject:
@@ -122,11 +109,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'rp-token'; unresolved target for slug 'repository'; no component candidates via overlap or rationale+same-file
   - id: magento-initiate-reset-to-email
     layer: data_flows
     subject:
@@ -147,11 +129,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'initiate-reset'; unresolved target for slug 'email'; no component candidates via overlap or rationale+same-file
   - id: magento-reset-password-to-database
     layer: data_flows
     subject:
@@ -172,11 +149,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'reset-password'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: magento-webapi-v1-customergroups-id-flow
     layer: data_flows
     subject:
@@ -194,14 +166,17 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customergroups-id'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-id from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-id
+      target_entity_id: magento::magento-webapi-v1-customergroups-id
+      proposed_flow_type: api_call
   - id: magento-webapi-v1-customergroups-default-storeid-flow
     layer: data_flows
     subject:
@@ -219,14 +194,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default-storeid from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
+      target_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
   - id: magento-webapi-v1-customergroups-default-flow
     layer: data_flows
     subject:
@@ -244,14 +221,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customergroups-default'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-default
+      target_entity_id: magento::magento-webapi-v1-customergroups-default
   - id: magento-webapi-v1-customergroups-default-id-flow
     layer: data_flows
     subject:
@@ -269,14 +248,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default-id from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-default-id
+      target_entity_id: magento::magento-webapi-v1-customergroups-default-id
   - id: magento-webapi-v1-customergroups-id-permissions-flow
     layer: data_flows
     subject:
@@ -294,14 +275,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-id-permissions from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
+      target_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
   - id: magento-webapi-v1-customergroups-search-flow
     layer: data_flows
     subject:
@@ -319,14 +302,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-search from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups-search
+      target_entity_id: magento::magento-webapi-v1-customergroups-search
   - id: magento-webapi-v1-customergroups-flow
     layer: data_flows
     subject:
@@ -344,14 +329,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customergroups'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customergroups from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customergroups
+      target_entity_id: magento::magento-webapi-v1-customergroups
   - id: magento-webapi-v1-attributemetadata-customer-attribute-attributecode-flow
     layer: data_flows
     subject:
@@ -369,14 +356,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-attribute-attributecode from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
   - id: magento-webapi-v1-attributemetadata-customer-form-formcode-flow
     layer: data_flows
     subject:
@@ -394,14 +383,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-form-formcode from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
   - id: magento-webapi-v1-attributemetadata-customer-flow
     layer: data_flows
     subject:
@@ -419,14 +410,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-attributemetadata-customer'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer
   - id: magento-webapi-v1-attributemetadata-customer-custom-flow
     layer: data_flows
     subject:
@@ -444,14 +437,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-custom from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
   - id: magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode-flow
     layer: data_flows
     subject:
@@ -469,14 +464,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
+      proposed_data_categories:
+        - address
   - id: magento-webapi-v1-attributemetadata-customeraddress-form-formcode-flow
     layer: data_flows
     subject:
@@ -494,14 +493,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress-form-formcode from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
   - id: magento-webapi-v1-attributemetadata-customeraddress-flow
     layer: data_flows
     subject:
@@ -519,14 +520,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-attributemetadata-customeraddress'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
   - id: magento-webapi-v1-attributemetadata-customeraddress-custom-flow
     layer: data_flows
     subject:
@@ -544,14 +547,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress-custom from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
   - id: magento-webapi-v1-customers-customerid-flow
     layer: data_flows
     subject:
@@ -569,14 +574,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customers-customerid'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid
+      target_entity_id: magento::magento-webapi-v1-customers-customerid
   - id: magento-webapi-v1-customers-flow
     layer: data_flows
     subject:
@@ -597,11 +604,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customers'
   - id: magento-webapi-v1-customers-me-flow
     layer: data_flows
     subject:
@@ -619,14 +621,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'; ambiguous target match for slug 'v1-customers-me'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-me from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-me
+      target_entity_id: magento::magento-webapi-v1-customers-me
   - id: magento-webapi-v1-customers-me-activate-flow
     layer: data_flows
     subject:
@@ -647,11 +651,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
   - id: magento-webapi-v1-customers-search-flow
     layer: data_flows
     subject:
@@ -669,14 +668,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-search from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-search
+      target_entity_id: magento::magento-webapi-v1-customers-search
   - id: magento-webapi-v1-customers-email-activate-flow
     layer: data_flows
     subject:
@@ -694,14 +695,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-email-activate from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-email-activate
+      target_entity_id: magento::magento-webapi-v1-customers-email-activate
+      proposed_data_categories:
+        - email
   - id: magento-webapi-v1-customers-me-password-flow
     layer: data_flows
     subject:
@@ -722,11 +727,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
   - id: magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken-flow
     layer: data_flows
     subject:
@@ -744,14 +744,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
+      proposed_data_categories:
+        - password
   - id: magento-webapi-v1-customers-password-flow
     layer: data_flows
     subject:
@@ -769,14 +773,18 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-password from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-password
+      target_entity_id: magento::magento-webapi-v1-customers-password
+      proposed_data_categories:
+        - password
   - id: magento-webapi-v1-customers-resetpassword-flow
     layer: data_flows
     subject:
@@ -794,14 +802,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-resetpassword from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-resetpassword
+      target_entity_id: magento::magento-webapi-v1-customers-resetpassword
   - id: magento-webapi-v1-customers-customerid-confirm-flow
     layer: data_flows
     subject:
@@ -819,14 +829,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-confirm from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
   - id: magento-webapi-v1-customers-confirm-flow
     layer: data_flows
     subject:
@@ -844,14 +856,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-confirm from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-confirm
+      target_entity_id: magento::magento-webapi-v1-customers-confirm
   - id: magento-webapi-v1-customers-validate-flow
     layer: data_flows
     subject:
@@ -869,14 +883,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-validate from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-validate
+      target_entity_id: magento::magento-webapi-v1-customers-validate
   - id: magento-webapi-v1-customers-customerid-permissions-readonly-flow
     layer: data_flows
     subject:
@@ -894,14 +910,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-permissions-readonly from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
   - id: magento-webapi-v1-customers-isemailavailable-flow
     layer: data_flows
     subject:
@@ -919,14 +937,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-isemailavailable from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-isemailavailable
+      target_entity_id: magento::magento-webapi-v1-customers-isemailavailable
   - id: magento-webapi-v1-customers-addresses-addressid-flow
     layer: data_flows
     subject:
@@ -944,14 +964,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-addresses-addressid from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
+      target_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
   - id: magento-webapi-v1-customers-me-billingaddress-flow
     layer: data_flows
     subject:
@@ -969,14 +991,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-me-billingaddress from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
   - id: magento-webapi-v1-customers-customerid-billingaddress-flow
     layer: data_flows
     subject:
@@ -994,14 +1018,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-billingaddress from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
   - id: magento-webapi-v1-customers-me-shippingaddress-flow
     layer: data_flows
     subject:
@@ -1019,14 +1045,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-me-shippingaddress from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
   - id: magento-webapi-v1-customers-customerid-shippingaddress-flow
     layer: data_flows
     subject:
@@ -1044,14 +1072,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-shippingaddress from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
   - id: magento-webapi-v1-addresses-addressid-flow
     layer: data_flows
     subject:
@@ -1069,14 +1099,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-addresses-addressid from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-addresses-addressid
+      target_entity_id: magento::magento-webapi-v1-addresses-addressid
   - id: magento-webapi-v1-customers-activate-flow
     layer: data_flows
     subject:
@@ -1094,14 +1126,16 @@ annotations:
     provenance:
       proposed_by: grok-4.6-fill-to-200
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'http'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-activate from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-activate
+      target_entity_id: magento::magento-webapi-v1-customers-activate
   - id: magento-create-post-to-create-account
     layer: data_flows
     subject:
@@ -1119,16 +1153,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-create-post-api); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on magento-create-post-api (intra_single_component).
       source_entity_id: magento::magento-create-post-api
       target_entity_id: magento::magento-create-post-api
+      proposed_data_categories:
+        - password
   - id: magento-forgot-password-to-initiate
     layer: data_flows
     subject:
@@ -1149,12 +1185,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-forgot-password-post-api); prose endpoints forgot-post->initiate-reset appear intra-component.
-      source_entity_id: magento::magento-forgot-password-post-api
   - id: magento-reset-post-to-reset-password
     layer: data_flows
     subject:
@@ -1175,12 +1205,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-reset-password-post-api); prose endpoints reset-post->resetpassword appear intra-component.
-      source_entity_id: magento::magento-reset-password-post-api
   - id: magento-logout-to-session
     layer: data_flows
     subject:
@@ -1198,16 +1222,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-logout-controller); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on magento-logout-controller (intra_single_component).
       source_entity_id: magento::magento-logout-controller
       target_entity_id: magento::magento-logout-controller
+      proposed_data_categories:
+        - session
   - id: magento-edit-post-to-repository
     layer: data_flows
     subject:
@@ -1228,12 +1254,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-edit-post-api); prose endpoints edit-post->customer-repository appear intra-component.
-      source_entity_id: magento::magento-edit-post-api
   - id: magento-address-form-to-repository
     layer: data_flows
     subject:
@@ -1254,11 +1274,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'address-form'; unresolved target for slug 'address-repository'; no component candidates via overlap or rationale+same-file
   - id: magento-authenticate-hash-validate
     layer: data_flows
     subject:
@@ -1279,11 +1294,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'hash-validate'; no component candidates via overlap or rationale+same-file
   - id: magento-auth-failure-increment
     layer: data_flows
     subject:
@@ -1301,14 +1311,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'failed-login'; unresolved target for slug 'lockout'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-auth-failure-handler from span content; negative decoys excluded.
+      source_entity_id: magento::magento-auth-failure-handler
+      target_entity_id: magento::magento-auth-failure-handler
+      proposed_data_categories:
+        - password
   - id: magento-session-logout-flow
     layer: data_flows
     subject:
@@ -1329,12 +1343,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-session-logout); prose endpoints logout->customer_logout-event appear intra-component.
-      source_entity_id: magento::magento-session-logout
   - id: magento-change-password-flow
     layer: data_flows
     subject:
@@ -1355,13 +1363,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-change-password-service); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-change-password-service
-      target_entity_id: magento::magento-change-password-service
   - id: magento-change-password-by-id-flow
     layer: data_flows
     subject:
@@ -1382,13 +1383,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-change-password-service); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-change-password-service
-      target_entity_id: magento::magento-change-password-service
   - id: magento-activate-email-flow
     layer: data_flows
     subject:
@@ -1409,13 +1403,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-activate-account-service); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-activate-account-service
-      target_entity_id: magento::magento-activate-account-service
   - id: magento-activate-by-id-flow
     layer: data_flows
     subject:
@@ -1436,12 +1423,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-activate-account-service); prose endpoints id->activatebyid appear intra-component.
-      source_entity_id: magento::magento-activate-account-service
   - id: magento-validate-reset-token-flow
     layer: data_flows
     subject:
@@ -1462,13 +1443,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-validate-reset-token); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-validate-reset-token
-      target_entity_id: magento::magento-validate-reset-token
   - id: magento-send-reset-email-flow
     layer: data_flows
     subject:
@@ -1486,14 +1460,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-send-reset-confirmation); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on magento-send-reset-confirmation (intra_single_component).
       source_entity_id: magento::magento-send-reset-confirmation
       target_entity_id: magento::magento-send-reset-confirmation
   - id: magento-email-notification-reset-flow
@@ -1516,11 +1490,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'customer'; unresolved target for slug 'passwordreset-email'; no component candidates via overlap or rationale+same-file
   - id: magento-customer-extractor-flow
     layer: data_flows
     subject:
@@ -1541,11 +1510,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'request'; unresolved target for slug 'customer-data'; no component candidates via overlap or rationale+same-file
   - id: magento-registry-retrieve-flow
     layer: data_flows
     subject:
@@ -1566,12 +1530,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Single component candidate (magento-customer-registry-retrieve); prose endpoints id->customer-registry appear intra-component.
-      source_entity_id: magento::magento-customer-registry-retrieve
   - id: magento-registry-email-flow
     layer: data_flows
     subject:
@@ -1592,13 +1550,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-customer-registry-email); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-customer-registry-email
-      target_entity_id: magento::magento-customer-registry-email
   - id: magento-customer-save-flow
     layer: data_flows
     subject:
@@ -1616,14 +1567,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'customer'; ambiguous target match for slug 'database-save'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-resource-customer-save from span content; negative decoys excluded.
+      source_entity_id: magento::magento-resource-customer-save
+      target_entity_id: magento::magento-resource-customer-save
   - id: magento-webapi-get-self-flow
     layer: data_flows
     subject:
@@ -1641,14 +1594,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'token'; ambiguous target match for slug 'customers-me'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-customers-me from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-customers-me
+      target_entity_id: magento::magento-webapi-customers-me
   - id: magento-webapi-put-self-flow
     layer: data_flows
     subject:
@@ -1666,14 +1621,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'payload'; ambiguous target match for slug 'customers-me'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved magento-webapi-v1-customers-me from span content; negative decoys excluded.
+      source_entity_id: magento::magento-webapi-v1-customers-me
+      target_entity_id: magento::magento-webapi-v1-customers-me
   - id: magento-webapi-password-flow
     layer: data_flows
     subject:
@@ -1694,11 +1651,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'password'; ambiguous target match for slug 'changepasswordbyid'
   - id: magento-webapi-activate-flow
     layer: data_flows
     subject:
@@ -1719,11 +1671,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'confirmation'; ambiguous target match for slug 'activatebyid'
   - id: magento-create-account-hash-flow
     layer: data_flows
     subject:
@@ -1744,12 +1691,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-create-account-service); prose endpoints customer->password-hash appear intra-component.
-      source_entity_id: magento::magento-create-account-service
   - id: magento-authenticate-email-lookup-flow
     layer: data_flows
     subject:
@@ -1770,11 +1711,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'get-customer'; no component candidates via overlap or rationale+same-file
   - id: magento-login-post-session-flow
     layer: data_flows
     subject:
@@ -1795,12 +1731,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-login-post-api); prose endpoints authenticate->setcustomerdataasloggedin appear intra-component.
-      source_entity_id: magento::magento-login-post-api
   - id: magento-ajax-login-session-flow
     layer: data_flows
     subject:
@@ -1821,11 +1751,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'ajax-auth'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file
   - id: magento-reset-token-repository-flow
     layer: data_flows
     subject:
@@ -1846,11 +1771,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'rp-token'; unresolved target for slug 'repository-filter'; no component candidates via overlap or rationale+same-file
   - id: magento-initiate-reset-email-flow
     layer: data_flows
     subject:
@@ -1871,11 +1791,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email'; unresolved target for slug 'initiatepasswordreset'; no component candidates via overlap or rationale+same-file
   - id: magento-reset-password-db-flow
     layer: data_flows
     subject:
@@ -1896,11 +1811,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'new-password'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: magento-customer-email-read-flow
     layer: data_flows
     subject:
@@ -1921,11 +1831,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'entity'
   - id: magento-login-form-flow
     layer: data_flows
     subject:
@@ -1946,12 +1851,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-login-controller); prose endpoints get->login-form appear intra-component.
-      source_entity_id: magento::magento-login-controller
   - id: magento-address-interface-street-flow
     layer: data_flows
     subject:
@@ -1972,13 +1871,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (magento-address-interface); preserved as transformation evidence, not a headline graph edge.
-      source_entity_id: magento::magento-address-interface
-      target_entity_id: magento::magento-address-interface
   - id: magento-account-interface-authenticate-flow
     layer: data_flows
     subject:
@@ -1999,12 +1891,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (magento-account-management-interface); prose endpoints credentials->authenticate-interface appear intra-component.
-      source_entity_id: magento::magento-account-management-interface
   - id: magento-email-notification-new-account-flow
     layer: data_flows
     subject:
@@ -2025,11 +1911,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'customer'; unresolved target for slug 'new-account-email'; no component candidates via overlap or rationale+same-file
   - id: magento-session-set-customer-flow
     layer: data_flows
     subject:
@@ -2050,12 +1931,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Single component candidate (magento-session-set-logged-in); prose endpoints customer->session-data appear intra-component.
-      source_entity_id: magento::magento-session-set-logged-in
   - id: magento-not-oauth-flow
     layer: data_flows
     subject:
@@ -2072,14 +1947,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: LoginPost authenticates against local AccountManagement. No OAuth token exchange appears in this scope.
   - id: magento-not-stripe-flow
     layer: data_flows
     subject:
@@ -2096,11 +1966,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: Address FormPost saves postal addresses locally. No card or payment data flows to Stripe in the reviewed module.

@@ -16,16 +16,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (medusa-stripe-provider); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-stripe-provider (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-stripe-provider
       target_entity_id: medusa::medusa-stripe-provider
+      proposed_data_categories:
+        - payment_card
   - id: medusa-auth-emailpass-provider
     layer: data_flows
     subject:
@@ -43,14 +45,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (medusa-emailpass-provider); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-emailpass-provider (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-emailpass-provider
       target_entity_id: medusa::medusa-emailpass-provider
   - id: medusa-not-customer-email-to-db
@@ -69,14 +71,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: customer.ts is a module registry stub; it does not show customer email persistence or query flows.
   - id: medusa-not-order-to-customer
     layer: data_flows
     subject:
@@ -93,14 +90,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: order.ts only re-exports @medusajs/order and contains no order-to-customer data movement in scope.
   - id: medusa-auth-to-github
     layer: data_flows
     subject:
@@ -118,15 +110,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-github-auth-provider); prose endpoints auth->github-provider appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-github-auth-provider (intra_single_component).
       source_entity_id: medusa::medusa-github-auth-provider
+      target_entity_id: medusa::medusa-github-auth-provider
   - id: medusa-auth-to-oidc
     layer: data_flows
     subject:
@@ -144,14 +137,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (medusa-oidc-auth-provider); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-oidc-auth-provider (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-oidc-auth-provider
       target_entity_id: medusa::medusa-oidc-auth-provider
   - id: medusa-auth-to-google
@@ -171,15 +164,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-google-auth-provider); prose endpoints auth->google-provider appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-google-auth-provider (intra_single_component).
       source_entity_id: medusa::medusa-google-auth-provider
+      target_entity_id: medusa::medusa-google-auth-provider
   - id: medusa-customer-module-export
     layer: data_flows
     subject:
@@ -197,14 +191,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'registry'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-customer-module (intra_single_component).
+      source_entity_id: medusa::medusa-customer-module
+      target_entity_id: medusa::medusa-customer-module
   - id: medusa-user-module-export
     layer: data_flows
     subject:
@@ -222,15 +218,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-user-module); prose endpoints registry->user-module appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-user-module (intra_single_component).
       source_entity_id: medusa::medusa-user-module
+      target_entity_id: medusa::medusa-user-module
   - id: medusa-cache-to-redis
     layer: data_flows
     subject:
@@ -248,14 +245,14 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (medusa-redis-cache-module); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-redis-cache-module (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-redis-cache-module
       target_entity_id: medusa::medusa-redis-cache-module
   - id: medusa-rbac-module-export
@@ -275,15 +272,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-rbac-module); prose endpoints registry->rbac appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-rbac-module (intra_single_component).
       source_entity_id: medusa::medusa-rbac-module
+      target_entity_id: medusa::medusa-rbac-module
   - id: medusa-notification-to-sendgrid
     layer: data_flows
     subject:
@@ -301,14 +299,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'notification'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved medusa-notification-module from span content; negative decoys excluded.
+      source_entity_id: medusa::medusa-notification-module
+      target_entity_id: medusa::medusa-notification-module
   - id: medusa-payment-module-export
     layer: data_flows
     subject:
@@ -326,15 +326,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-payment-module); prose endpoints registry->payment appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-payment-module (intra_single_component).
       source_entity_id: medusa::medusa-payment-module
+      target_entity_id: medusa::medusa-payment-module
+      proposed_data_categories:
+        - payment_card
   - id: medusa-order-module-export
     layer: data_flows
     subject:
@@ -352,15 +355,16 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (medusa-order-module); prose endpoints registry->order appear intra-component.
+      candidate_notes: Accepted intra-component lineage on medusa-order-module (intra_single_component).
       source_entity_id: medusa::medusa-order-module
+      target_entity_id: medusa::medusa-order-module
   - id: medusa-auth-root-export
     layer: data_flows
     subject:
@@ -381,8 +385,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous target match for slug 'auth'

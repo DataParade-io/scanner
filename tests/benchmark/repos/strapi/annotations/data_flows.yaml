@@ -16,14 +16,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'check-credentials'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved strapi-auth-service from span content; negative decoys excluded.
+      source_entity_id: strapi::strapi-auth-service
+      target_entity_id: strapi::strapi-auth-service
+      proposed_data_categories:
+        - password
+        - email
+        - session
   - id: strapi-credentials-to-db-query
     layer: data_flows
     subject:
@@ -44,11 +50,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'credentials'; unresolved target for slug 'admin_users'; no component candidates via overlap or rationale+same-file
   - id: strapi-login-to-session-cookie
     layer: data_flows
     subject:
@@ -69,11 +70,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'refresh-cookie'; no component candidates via overlap or rationale+same-file
   - id: strapi-forgot-to-reset-token
     layer: data_flows
     subject:
@@ -94,11 +90,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'forgot-email'; unresolved target for slug 'reset-token'
   - id: strapi-reset-token-to-user-query
     layer: data_flows
     subject:
@@ -119,12 +110,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (strapi-reset-password-service); prose endpoints reset-token->admin-user appear intra-component.
-      source_entity_id: strapi::strapi-reset-password-service
   - id: strapi-password-to-bcrypt
     layer: data_flows
     subject:
@@ -142,16 +127,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (strapi-bcrypt-hash-service); preserved as transformation evidence, not a headline graph edge.
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on strapi-bcrypt-hash-service (intra_overlap_same_entity).
       source_entity_id: strapi::strapi-bcrypt-hash-service
       target_entity_id: strapi::strapi-bcrypt-hash-service
+      proposed_data_categories:
+        - password
   - id: strapi-login-password-compare
     layer: data_flows
     subject:
@@ -169,14 +156,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login'; unresolved target for slug 'bcrypt-compare'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved strapi-validate-password-service from span content; negative decoys excluded.
+      source_entity_id: strapi::strapi-validate-password-service
+      target_entity_id: strapi::strapi-validate-password-service
+      proposed_data_categories:
+        - password
   - id: strapi-assign-reset-token
     layer: data_flows
     subject:
@@ -197,12 +188,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (strapi-reset-password-service); prose endpoints user-id->reset-token appear intra-component.
-      source_entity_id: strapi::strapi-reset-password-service
   - id: strapi-passport-to-check-credentials
     layer: data_flows
     subject:
@@ -220,14 +205,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'passport'; unresolved target for slug 'checkcredentials'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved strapi-auth-service from span content; negative decoys excluded.
+      source_entity_id: strapi::strapi-auth-service
+      target_entity_id: strapi::strapi-auth-service
+      proposed_data_categories:
+        - password
+        - email
+        - session
   - id: strapi-login-passport-authenticate
     layer: data_flows
     subject:
@@ -248,12 +239,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: medium
-      candidate_notes: Single component candidate (strapi-not-auth0); prose endpoints login-body->passport appear intra-component.
-      source_entity_id: strapi::strapi-not-auth0
   - id: strapi-forgot-email-query
     layer: data_flows
     subject:
@@ -274,12 +259,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (strapi-forgot-password-service); prose endpoints forgot-email->admin_users appear intra-component.
-      source_entity_id: strapi::strapi-forgot-password-service
   - id: strapi-reset-email-send
     layer: data_flows
     subject:
@@ -300,12 +279,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (strapi-forgot-password-service); prose endpoints reset-url->email appear intra-component.
-      source_entity_id: strapi::strapi-forgot-password-service
   - id: strapi-token-create-random
     layer: data_flows
     subject:
@@ -323,15 +296,17 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (strapi-token-service); prose endpoints rng->refresh-token appear intra-component.
+      candidate_notes: Accepted intra-component lineage on strapi-token-service (intra_single_component).
       source_entity_id: strapi::strapi-token-service
+      target_entity_id: strapi::strapi-token-service
+      proposed_flow_type: api_call
   - id: strapi-check-credentials-email-query
     layer: data_flows
     subject:
@@ -352,8 +327,3 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'login-email'; unresolved target for slug 'admin_users'; no component candidates via overlap or rationale+same-file

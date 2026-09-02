@@ -85,7 +85,8 @@ describe("imported corpus gold", () => {
     // KDATAP-a0e80b: 275 source-token data-item rows demoted from accepted → needs_adjudication;
     // KDATAP-9b83f6: five suffix-vs-label false accepts demoted (redmine email + four password verifiers).
     // KDATAP-25b2f4: 113 data-item adjudication accepts applied; exposed-schema-password-not-data-item flipped reject.
-    expect(acceptedEvalCases).toBe(755);
+    // KDATAP-47e331: 146 flow adjudication accepts + 17 rejects applied from adjudication ledger.
+    expect(acceptedEvalCases).toBe(901);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {

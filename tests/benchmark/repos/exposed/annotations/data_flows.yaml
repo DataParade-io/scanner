@@ -19,11 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'database'; unresolved target for slug 'transaction'; no component candidates via overlap or rationale+same-file
   - id: exposed-insert-to-database
     layer: data_flows
     subject:
@@ -44,11 +39,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'insert-statement'; unresolved target for slug 'database'; no component candidates via overlap or rationale+same-file
   - id: exposed-select-to-result
     layer: data_flows
     subject:
@@ -69,11 +59,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'select-query'; unresolved target for slug 'result'; no component candidates via overlap or rationale+same-file
   - id: exposed-not-customer-email-flow
     layer: data_flows
     subject:
@@ -90,11 +75,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: InsertStatement accepts arbitrary table columns; the ORM core does not define or route customer email fields.
