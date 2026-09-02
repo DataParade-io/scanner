@@ -47,7 +47,7 @@ annotations:
         - email_address
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: directus-user-first-name
     layer: data_items
     subject:
@@ -60,7 +60,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: first_name is a persisted given name on the Directus user record.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -77,7 +77,7 @@ annotations:
         - first_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: directus-user-last-name
     layer: data_items
     subject:
@@ -90,7 +90,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: last_name is a persisted family name on the Directus user record.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -107,7 +107,7 @@ annotations:
         - last_name
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: directus-user-password
     layer: data_items
     subject:
@@ -184,7 +184,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-user-status-not-pii
@@ -203,7 +203,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-external-identifier
