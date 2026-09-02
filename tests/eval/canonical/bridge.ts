@@ -116,6 +116,25 @@ function layerFindingToPersonalData(
   );
 }
 
+function layerFindingToDataAction(
+  finding: LayerFinding,
+  adapterMapVersion: string,
+): CanonicalScannerFinding {
+  const { componentType } = parseComponentKey(finding.key);
+  const verb = finding.labels[0]?.trim().toLowerCase() ?? "";
+  const evidenceLocations = finding.sourceLines.map(toEvidenceLocation);
+
+  return buildScannerFinding({
+    layer: "data-actions",
+    identityKey: finding.key.trim().toLowerCase(),
+    conceptLeaf: verb,
+    conceptAncestry: verb ? [verb] : [],
+    componentType: componentType || undefined,
+    evidenceLocations,
+    adapterMapVersion,
+  });
+}
+
 export function canonicalGoldFromEvalCase(
   caseRecord: EvalCase,
 ): CanonicalGoldExpectation & { id: string } {
@@ -136,6 +155,8 @@ export function canonicalFindingFromLayerFinding(
 
   if (layer === "components") {
     canonical = layerFindingToComponent(finding, adapterMapVersion);
+  } else if (layer === "data-actions") {
+    canonical = layerFindingToDataAction(finding, adapterMapVersion);
   } else if (layer === "raw-hits" || layer === "mentions" || layer === "data-items") {
     canonical = layerFindingToPersonalData(finding, PERSONAL_DATA_LAYER[layer], adapterMapVersion);
   } else {
