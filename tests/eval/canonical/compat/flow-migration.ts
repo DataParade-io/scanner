@@ -14,6 +14,7 @@ import type {
   AnnotationEvidence,
   AnnotationRecord,
   FlowAnnotationCandidate,
+  FlowAnnotationCanonical,
   FlowCandidateConfidence,
   FlowCandidateEndpoint,
   FlowDispositionCandidate,
@@ -627,4 +628,60 @@ export function flowCandidateToFlowAssertion(
     dataCategories: candidate.proposed_data_categories,
     supportingProvenance: ["KDATAP-8e7756-candidate"],
   };
+}
+
+export const FLOW_CANONICAL_PROMOTION_TASK = "KDATAP-7e5b94";
+
+export function buildComponentEntityIndex(
+  components: AnnotationRecord[],
+): Map<string, AnnotationRecord> {
+  const index = new Map<string, AnnotationRecord>();
+  for (const component of components) {
+    const entityId = component.canonical?.entity_id;
+    if (entityId) {
+      index.set(entityId, component);
+    }
+  }
+  return index;
+}
+
+export function buildFlowAnnotationCanonicalBlock(
+  sourceEntityId: string,
+  targetEntityId: string,
+  dispositionCandidate: FlowDispositionCandidate,
+  componentIndex: Map<string, AnnotationRecord>,
+  options: { flowType?: string; dataCategories?: readonly string[] } = {},
+): FlowAnnotationCanonical {
+  const source = componentIndex.get(sourceEntityId);
+  const target = componentIndex.get(targetEntityId);
+  if (!source?.canonical) {
+    throw new Error(`Missing component canonical for source entity ${sourceEntityId}`);
+  }
+  if (!target?.canonical) {
+    throw new Error(`Missing component canonical for target entity ${targetEntityId}`);
+  }
+
+  const sourceEndpoint = componentToTypedEndpoint(source);
+  const targetEndpoint = componentToTypedEndpoint(target);
+  const identityKey = `flow:${source.canonical.identity_key}->${target.canonical.identity_key}`;
+
+  const block: FlowAnnotationCanonical = {
+    identity_key: identityKey,
+    disposition_candidate: dispositionCandidate,
+    source_entity_id: sourceEntityId,
+    target_entity_id: targetEntityId,
+    endpoints: {
+      source: serializeFlowCandidateEndpoint(sourceEndpoint),
+      target: serializeFlowCandidateEndpoint(targetEndpoint),
+    },
+  };
+
+  if (options.flowType?.trim()) {
+    block.flow_type = options.flowType.trim();
+  }
+  if (options.dataCategories && options.dataCategories.length > 0) {
+    block.data_categories = [...options.dataCategories];
+  }
+
+  return block;
 }

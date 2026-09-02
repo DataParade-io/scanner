@@ -28,6 +28,22 @@ annotations:
       target_entity_id: redmine::redmine-user-auth-service
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-user-auth-service
+      target_entity_id: redmine::redmine-user-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: redmine-mail-to-email-address
     layer: data_flows
     subject:
@@ -97,6 +113,22 @@ annotations:
       target_entity_id: redmine::redmine-auth-source-service
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-auth-source-service
+      target_entity_id: redmine::redmine-auth-source-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: redmine-session-token-create
     layer: data_flows
     subject:
@@ -126,6 +158,22 @@ annotations:
       target_entity_id: redmine::redmine-token-auth-service
       proposed_data_categories:
         - session
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - session
   - id: redmine-email-change-destroys-recovery-tokens
     layer: data_flows
     subject:
@@ -154,6 +202,24 @@ annotations:
       source_entity_id: redmine::redmine-token-auth-service
       target_entity_id: redmine::redmine-token-auth-service
       proposed_data_categories:
+        - password
+        - email
+        - address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
         - email
         - address
@@ -225,6 +291,22 @@ annotations:
       target_entity_id: redmine::redmine-user-auth-service
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-user-auth-service
+      target_entity_id: redmine::redmine-user-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: redmine-autologin-key-to-user
     layer: data_flows
     subject:
@@ -253,6 +335,21 @@ annotations:
       source_entity_id: redmine::redmine-token-auth-service
       target_entity_id: redmine::redmine-token-auth-service
       proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: database_query
   - id: redmine-api-key-token-create
     layer: data_flows
     subject:
@@ -281,6 +378,22 @@ annotations:
       source_entity_id: redmine::redmine-api-key-auth-service
       target_entity_id: redmine::redmine-api-key-auth-service
       proposed_data_categories:
+        - session
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-api-key-auth-service
+      target_entity_id: redmine::redmine-api-key-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - session
   - id: redmine-ldap-bind-password
     layer: data_flows
@@ -311,6 +424,24 @@ annotations:
       target_entity_id: redmine::redmine-ldap-auth-provider
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-ldap-auth-provider
+      target_entity_id: redmine::redmine-ldap-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: ldap
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: ldap
+      data_categories:
+        - password
   - id: redmine-ldap-login-to-dn
     layer: data_flows
     subject:
@@ -340,6 +471,24 @@ annotations:
       target_entity_id: redmine::redmine-ldap-auth-provider
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-ldap-auth-provider
+      target_entity_id: redmine::redmine-ldap-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: ldap
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: ldap
+      data_categories:
+        - password
   - id: redmine-token-find-active-user
     layer: data_flows
     subject:
@@ -368,6 +517,21 @@ annotations:
       source_entity_id: redmine::redmine-token-auth-service
       target_entity_id: redmine::redmine-token-auth-service
       proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: database_query
   - id: redmine-salt-password-hash
     layer: data_flows
     subject:
@@ -496,4 +660,20 @@ annotations:
       source_entity_id: redmine::redmine-auth-source-service
       target_entity_id: redmine::redmine-auth-source-service
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: redmine::redmine-auth-source-service
+      target_entity_id: redmine::redmine-auth-source-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password

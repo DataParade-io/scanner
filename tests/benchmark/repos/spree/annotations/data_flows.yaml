@@ -28,6 +28,22 @@ annotations:
       target_entity_id: spree::spree-order-model
       proposed_data_categories:
         - email
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-order-model
+      target_entity_id: spree::spree-order-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      data_categories:
+        - email
   - id: spree-address-to-gateway
     layer: data_flows
     subject:
@@ -135,6 +151,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on spree-gateway-customer-model (intra_single_component).
       source_entity_id: spree::spree-gateway-customer-model
       target_entity_id: spree::spree-gateway-customer-model
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-gateway-customer-model
+      target_entity_id: spree::spree-gateway-customer-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: spree-order-total-not-gateway-pii
     layer: data_flows
     subject:
@@ -181,6 +211,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on spree-order-model (intra_single_component).
       source_entity_id: spree::spree-order-model
       target_entity_id: spree::spree-order-model
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-order-model
+      target_entity_id: spree::spree-order-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: spree-payment-source-to-gateway-customer
     layer: data_flows
     subject:
@@ -208,6 +252,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on spree-payment-source-model (intra_single_component).
       source_entity_id: spree::spree-payment-source-model
       target_entity_id: spree::spree-payment-source-model
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-payment-source-model
+      target_entity_id: spree::spree-payment-source-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: spree-credit-card-to-customer
     layer: data_flows
     subject:
@@ -235,6 +293,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on spree-credit-card-source (intra_single_component).
       source_entity_id: spree::spree-credit-card-source
       target_entity_id: spree::spree-credit-card-source
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-credit-card-source
+      target_entity_id: spree::spree-credit-card-source
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: spree-payment-to-order
     layer: data_flows
     subject:
@@ -264,6 +336,22 @@ annotations:
       target_entity_id: spree::spree-payment-model
       proposed_data_categories:
         - payment_card
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-payment-model
+      target_entity_id: spree::spree-payment-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      data_categories:
+        - payment_card
   - id: spree-create-account-from-order
     layer: data_flows
     subject:
@@ -292,6 +380,22 @@ annotations:
       source_entity_id: spree::spree-create-user-account-service
       target_entity_id: spree::spree-create-user-account-service
       proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-create-user-account-service
+      target_entity_id: spree::spree-create-user-account-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
         - email
   - id: spree-gateway-customer-profile-id
     layer: data_flows
@@ -361,6 +465,22 @@ annotations:
       source_entity_id: spree::spree-payment-method-model
       target_entity_id: spree::spree-payment-method-model
       proposed_data_categories:
+        - payment_card
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: spree::spree-payment-method-model
+      target_entity_id: spree::spree-payment-method-model
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
         - payment_card
   - id: spree-address-clone-billing
     layer: data_flows

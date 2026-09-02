@@ -89,6 +89,23 @@ annotations:
       proposed_flow_type: api_call
       proposed_data_categories:
         - session
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: drupal::drupal-session-database
+      target_entity_id: drupal::drupal-session-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: api_call
+      data_categories:
+        - session
   - id: drupal-finalizer-uid-to-session
     layer: data_flows
     subject:

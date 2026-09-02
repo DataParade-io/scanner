@@ -326,18 +326,6 @@ function legacyIdentityBlockersForAnnotation(
   }
 
   if (headlineLayer === "data-flows") {
-    const candidate = annotation.candidate;
-    if (
-      candidate?.kind === "flow" &&
-      candidate.disposition_candidate !== "graph_edge"
-    ) {
-      blockers.push({
-        code: "FLOW_NO_ENDPOINTS",
-        message: `${annotation.id}: accepted flow candidate is ${candidate.disposition_candidate}, not graph_edge`,
-        layer: headlineLayer,
-        repoKey,
-      });
-    }
     if (!hasFlowEndpoints(record)) {
       blockers.push({
         code: "FLOW_NO_ENDPOINTS",

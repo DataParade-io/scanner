@@ -14,7 +14,9 @@ import {
   type DataItemAnnotationCandidate,
   type DataItemEvidenceValidation,
   type FlowAnnotationCandidate,
+  type FlowAnnotationCanonical,
   type FlowCandidateEndpoint,
+  type FlowDispositionCandidate,
   type LayerScopeRecord,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
@@ -285,6 +287,13 @@ function validateAnnotation(
     record.canonical = parsedCanonical;
   }
 
+  if (raw.flow_canonical !== undefined) {
+    if (normalizedLayer !== "data_flows") {
+      throw new Error(`${prefix}:flow_canonical is only supported on data_flows layer`);
+    }
+    record.flow_canonical = validateFlowCanonicalBlock(raw.flow_canonical, prefix);
+  }
+
   if (raw.candidate !== undefined) {
     record.candidate = validateAnnotationCandidate(
       raw.candidate,
@@ -294,6 +303,65 @@ function validateAnnotation(
   }
 
   return record;
+}
+
+const FLOW_DISPOSITION_CANDIDATES: readonly FlowDispositionCandidate[] = [
+  "graph_edge",
+  "intra_component_lineage",
+  "rejection",
+  "unresolved",
+];
+
+function validateFlowCanonicalBlock(
+  raw: unknown,
+  prefix: string,
+): FlowAnnotationCanonical {
+  const block = isRecord(raw, `${prefix}:flow_canonical`);
+  const dispositionCandidate = isNonEmptyString(
+    block.disposition_candidate,
+    `${prefix}:flow_canonical.disposition_candidate`,
+  );
+  if (!FLOW_DISPOSITION_CANDIDATES.includes(dispositionCandidate as FlowDispositionCandidate)) {
+    throw new Error(
+      `Unknown flow_canonical.disposition_candidate '${dispositionCandidate}' in ${prefix}`,
+    );
+  }
+
+  const endpoints = isRecord(block.endpoints, `${prefix}:flow_canonical.endpoints`);
+  const parsed: FlowAnnotationCanonical = {
+    identity_key: isNonEmptyString(block.identity_key, `${prefix}:flow_canonical.identity_key`),
+    disposition_candidate: dispositionCandidate as FlowDispositionCandidate,
+    source_entity_id: isNonEmptyString(
+      block.source_entity_id,
+      `${prefix}:flow_canonical.source_entity_id`,
+    ),
+    target_entity_id: isNonEmptyString(
+      block.target_entity_id,
+      `${prefix}:flow_canonical.target_entity_id`,
+    ),
+    endpoints: {
+      source: validateFlowCandidateEndpoint(
+        endpoints.source,
+        `${prefix}:flow_canonical.endpoints.source`,
+      ),
+      target: validateFlowCandidateEndpoint(
+        endpoints.target,
+        `${prefix}:flow_canonical.endpoints.target`,
+      ),
+    },
+  };
+
+  if (block.flow_type !== undefined) {
+    parsed.flow_type = isNonEmptyString(block.flow_type, `${prefix}:flow_canonical.flow_type`);
+  }
+  if (block.data_categories !== undefined) {
+    parsed.data_categories = isStringArray(
+      block.data_categories,
+      `${prefix}:flow_canonical.data_categories`,
+    );
+  }
+
+  return parsed;
 }
 
 function validateAnnotationCandidate(

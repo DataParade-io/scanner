@@ -61,6 +61,14 @@ describe("collectGoldPopulation layer mapping", () => {
     );
     expect(population.byLayer.mentions.acceptedCanonicalCount).toBeGreaterThanOrEqual(50);
   });
+
+  it("counts promoted accepted canonical data-flows", () => {
+    const population = collectGoldPopulation(BENCHMARK_ROOT);
+    expect(population.byLayer["data-flows"].acceptedCanonicalCount).toBeGreaterThanOrEqual(146);
+    expect(population.byLayer["data-flows"].packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
+      1,
+    );
+  });
 });
 
 describe("checkLayerPopulationFloors", () => {
@@ -139,16 +147,16 @@ describe("checkLegacyOutcomesResolved", () => {
 });
 
 describe("checkNoLegacyIdentityOnAccepted", () => {
-  it("reports loader exemptions for YAML-accepted flows without canonical accepts", () => {
+  it("reports loader exemptions only for component decoys after flow promotion", () => {
     const blockers = checkNoLegacyIdentityOnAccepted(BENCHMARK_ROOT);
     const loaderExemptions = blockers.filter((blocker) => blocker.code === "LOADER_EXEMPTION");
-    expect(loaderExemptions.length).toBeGreaterThan(0);
-    expect(loaderExemptions.some((blocker) => blocker.layer === "data-flows")).toBe(true);
+    expect(loaderExemptions.some((blocker) => blocker.layer === "data-flows")).toBe(false);
+    expect(loaderExemptions.some((blocker) => blocker.layer === "components")).toBe(true);
   });
 });
 
 describe("evaluateBaselineReadiness dry run", () => {
-  it("fails on develop with flow and materialization blockers", () => {
+  it("fails on develop without flow canonical blockers after promotion", () => {
     const goldPopulation = collectGoldPopulation(BENCHMARK_ROOT);
     const readiness = evaluateBaselineReadiness({
       benchmarkRoot: BENCHMARK_ROOT,
@@ -161,11 +169,20 @@ describe("evaluateBaselineReadiness dry run", () => {
     expect(readiness.status).toBe("fail");
     expect(readiness.evaluatedAt).toBeTruthy();
     expect(readiness.blockers.some((blocker) => blocker.code === "FLOW_NO_CANONICAL_ACCEPTS")).toBe(
-      true,
+      false,
     );
+    expect(
+      readiness.blockers.some(
+        (blocker) => blocker.code === "LOADER_EXEMPTION" && blocker.layer === "data-flows",
+      ),
+    ).toBe(false);
     expect(readiness.blockers.some((blocker) => blocker.code === "MATERIALIZATION_INVALID")).toBe(
       true,
     );
-    expect(readiness.blockers.some((blocker) => blocker.code === "LOADER_EXEMPTION")).toBe(true);
+    expect(
+      readiness.blockers.some(
+        (blocker) => blocker.code === "LOADER_EXEMPTION" && blocker.layer === "components",
+      ),
+    ).toBe(true);
   });
 });
