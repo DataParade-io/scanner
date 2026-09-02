@@ -98,6 +98,20 @@ export interface FlowCandidateEndpoint {
   vendor?: string;
 }
 
+/** Structured flow identity written by KDATAP-7e5b94 promotion. */
+export interface FlowAnnotationCanonical {
+  identity_key: string;
+  disposition_candidate: FlowDispositionCandidate;
+  source_entity_id: string;
+  target_entity_id: string;
+  endpoints: {
+    source: FlowCandidateEndpoint;
+    target: FlowCandidateEndpoint;
+  };
+  flow_type?: string;
+  data_categories?: string[];
+}
+
 /** Non-scoring flow migration proposals (KDATAP-8e7756). */
 export interface FlowAnnotationCandidate {
   kind: "flow";
@@ -143,6 +157,7 @@ export interface AnnotationRecord {
   expected: AnnotationExpected;
   provenance: AnnotationProvenance;
   canonical?: AnnotationCanonical;
+  flow_canonical?: FlowAnnotationCanonical;
   candidate?: AnnotationCandidate;
 }
 

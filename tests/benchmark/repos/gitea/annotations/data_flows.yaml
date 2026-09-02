@@ -27,6 +27,21 @@ annotations:
       source_entity_id: gitea::gitea-access-token-database
       target_entity_id: gitea::gitea-access-token-database
       proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: gitea::gitea-access-token-database
+      target_entity_id: gitea::gitea-access-token-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
   - id: gitea-token-to-hash
     layer: data_flows
     subject:

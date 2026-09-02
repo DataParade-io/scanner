@@ -46,6 +46,8 @@ Mention keys use `mention:<rule_id>` when aligned to a reviewed rule from `patte
 
 Accepted component annotations may also carry an optional **`canonical`** block (KDATAP-8aed54) with structured `entity_id`, `identity_key`, `component_type`, `component_subtype`, and optional `vendor`. Legacy `subject.key` / `subject.name` remain as provenance; classification identity is `${type}:${subtype}`.
 
+Accepted data-flow annotations may carry an optional **`flow_canonical`** block (KDATAP-7e5b94) with structured `identity_key`, `disposition_candidate`, `source_entity_id`, `target_entity_id`, typed `endpoints`, and optional `flow_type` / `data_categories`. Legacy `subject.key` / `subject.name` remain as display provenance; scorer identity and endpoints come from `flow_canonical` only. Non-scoring `candidate` blocks from migration/adjudication may remain for audit.
+
 ## Matching semantics
 
 Scoring lives in `tests/eval/score.ts`. Headline metrics are computed per layer; no cross-layer scalar is published.

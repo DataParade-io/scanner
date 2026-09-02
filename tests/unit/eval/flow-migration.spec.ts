@@ -1,16 +1,22 @@
 import {
+  buildComponentEntityIndex,
+  buildFlowAnnotationCanonicalBlock,
+  buildFlowMigrationLedger,
+  candidateEndpointsToAsserted,
   evidenceSpansOverlap,
+  FLOW_MIGRATION_TASK,
   proposeFlowCandidate,
   rationaleExplicitlyNamesComponent,
   resolveFlowSide,
   slugMatchesComponent,
-  candidateEndpointsToAsserted,
-  FLOW_MIGRATION_TASK,
-  buildFlowMigrationLedger,
 } from "../../eval/canonical/compat/flow-migration";
 import { loadLegacyGoldRecord, isAcceptedEvaluablePositive } from "../../eval/canonical";
 import { annotationRecordToLegacyInput } from "../../eval/canonical/compat/adapters";
-import type { AnnotationRecord, FlowAnnotationCandidate } from "../../benchmark/schema";
+import type {
+  AnnotationRecord,
+  FlowAnnotationCandidate,
+  FlowAnnotationCanonical,
+} from "../../benchmark/schema";
 
 function flowRecord(overrides: Partial<AnnotationRecord> & Pick<AnnotationRecord, "id">): AnnotationRecord {
   return {
@@ -256,5 +262,91 @@ describe("flow migration ledger accounting", () => {
     };
     const endpoints = candidateEndpointsToAsserted(candidate);
     expect(endpoints?.target.optionalAssertion?.vendor).toBe("stripe");
+  });
+});
+
+describe("buildFlowAnnotationCanonicalBlock", () => {
+  it("synthesizes self-loop typed endpoints for intra-component lineage", () => {
+    const component = componentRecord({
+      id: "auth-service",
+      subject: { key: "asset:auth_service", name: "Auth" },
+      canonical: {
+        entity_id: "directus::directus-local-verify",
+        identity_key: "asset:auth_service",
+        component_type: "asset",
+        component_subtype: "auth_service",
+      },
+    });
+    const index = buildComponentEntityIndex([component]);
+    const block = buildFlowAnnotationCanonicalBlock(
+      "directus::directus-local-verify",
+      "directus::directus-local-verify",
+      "intra_component_lineage",
+      index,
+      { dataCategories: ["password"] },
+    );
+
+    expect(block.identity_key).toBe("flow:asset:auth_service->asset:auth_service");
+    expect(block.endpoints.source).toEqual(block.endpoints.target);
+    expect(block.endpoints.source.component_type).toBe("asset");
+    expect(block.data_categories).toEqual(["password"]);
+  });
+
+  it("throws when source entity is missing from component index", () => {
+    const index = buildComponentEntityIndex([]);
+    expect(() =>
+      buildFlowAnnotationCanonicalBlock(
+        "missing::entity",
+        "missing::entity",
+        "intra_component_lineage",
+        index,
+      ),
+    ).toThrow(/Missing component canonical for source entity/);
+  });
+});
+
+describe("flow_canonical_block loader integration", () => {
+  it("promotes accepted flow with flow_canonical to accepted disposition", () => {
+    const flowCanonical: FlowAnnotationCanonical = {
+      identity_key: "flow:asset:auth_service->asset:auth_service",
+      disposition_candidate: "intra_component_lineage",
+      source_entity_id: "directus::directus-local-verify",
+      target_entity_id: "directus::directus-local-verify",
+      endpoints: {
+        source: {
+          component_type: "asset",
+          endpoint_key: "auth_service",
+          component_subtype: "auth_service",
+        },
+        target: {
+          component_type: "asset",
+          endpoint_key: "auth_service",
+          component_subtype: "auth_service",
+        },
+      },
+      data_categories: ["password"],
+    };
+
+    const flow = flowRecord({
+      id: "promoted-flow",
+      provenance: {
+        proposed_by: "test",
+        proposed_at: "2026-09-01",
+        review_state: "accepted",
+      },
+      flow_canonical: flowCanonical,
+    });
+
+    const { record, diagnostics } = loadLegacyGoldRecord(annotationRecordToLegacyInput(flow), {
+      warn: () => undefined,
+      repoKey: "directus",
+    });
+
+    expect(record.disposition).toBe("accepted");
+    expect(record.identity.identityKey).toBe(flowCanonical.identity_key);
+    expect(record.flowEndpoints?.source.componentType).toBe("asset");
+    expect(record.flowAssertion?.dataCategories).toEqual(["password"]);
+    expect(isAcceptedEvaluablePositive(record)).toBe(true);
+    expect(diagnostics.some((entry) => entry.conversion === "flow_canonical_block")).toBe(true);
   });
 });

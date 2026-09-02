@@ -68,6 +68,22 @@ annotations:
       target_entity_id: vapor::vapor-customer-actor
       proposed_data_categories:
         - session
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: vapor::vapor-customer-actor
+      target_entity_id: vapor::vapor-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
+        - session
   - id: vapor-user-to-session-store
     layer: data_flows
     subject:

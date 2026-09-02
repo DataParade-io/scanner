@@ -28,6 +28,22 @@ annotations:
       target_entity_id: nopcommerce::nopcommerce-customer-actor
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
+        - password
   - id: nopcommerce-signin-to-cookie-claims
     layer: data_flows
     subject:
@@ -60,6 +76,25 @@ annotations:
         - email
         - session
         - phone_number
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      flow_type: api_call
+      data_categories:
+        - email
+        - session
+        - phone_number
   - id: nopcommerce-cookie-claim-to-customer-lookup
     layer: data_flows
     subject:
@@ -88,6 +123,22 @@ annotations:
       source_entity_id: nopcommerce::nopcommerce-customer-actor
       target_entity_id: nopcommerce::nopcommerce-customer-actor
       proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
         - email
   - id: nopcommerce-register-to-password-hash
     layer: data_flows
@@ -138,6 +189,22 @@ annotations:
       target_entity_id: nopcommerce::nopcommerce-customer-actor
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
+        - password
   - id: nopcommerce-password-hash-to-repository
     layer: data_flows
     subject:
@@ -168,6 +235,23 @@ annotations:
       proposed_flow_type: database_query
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-password-entity
+      target_entity_id: nopcommerce::nopcommerce-customer-password-entity
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
+      data_categories:
+        - password
   - id: nopcommerce-email-to-customer-lookup
     layer: data_flows
     subject:
@@ -196,6 +280,22 @@ annotations:
       source_entity_id: nopcommerce::nopcommerce-customer-actor
       target_entity_id: nopcommerce::nopcommerce-customer-actor
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
         - password
   - id: nopcommerce-external-params-to-record
     layer: data_flows
@@ -287,6 +387,23 @@ annotations:
       proposed_flow_type: database_query
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-actor
+      target_entity_id: nopcommerce::nopcommerce-customer-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      flow_type: database_query
+      data_categories:
+        - password
   - id: nopcommerce-phone-login-to-customer
     layer: data_flows
     subject:
@@ -335,6 +452,21 @@ annotations:
       source_entity_id: nopcommerce::nopcommerce-cookie-signout-service
       target_entity_id: nopcommerce::nopcommerce-cookie-signout-service
       proposed_flow_type: api_call
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-cookie-signout-service
+      target_entity_id: nopcommerce::nopcommerce-cookie-signout-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: api_call
   - id: nopcommerce-insert-customer-to-db
     layer: data_flows
     subject:
@@ -363,3 +495,18 @@ annotations:
       source_entity_id: nopcommerce::nopcommerce-customer-database
       target_entity_id: nopcommerce::nopcommerce-customer-database
       proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: nopcommerce::nopcommerce-customer-database
+      target_entity_id: nopcommerce::nopcommerce-customer-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query

@@ -28,6 +28,24 @@ annotations:
       target_entity_id: medusa::medusa-stripe-provider
       proposed_data_categories:
         - payment_card
+    flow_canonical:
+      identity_key: flow:third_party:payment_processor->third_party:payment_processor
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-stripe-provider
+      target_entity_id: medusa::medusa-stripe-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: payment_processor
+          component_subtype: payment_processor
+          vendor: stripe
+        target:
+          component_type: third_party
+          endpoint_key: payment_processor
+          component_subtype: payment_processor
+          vendor: stripe
+      data_categories:
+        - payment_card
   - id: medusa-auth-emailpass-provider
     layer: data_flows
     subject:
@@ -55,6 +73,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-emailpass-provider (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-emailpass-provider
       target_entity_id: medusa::medusa-emailpass-provider
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-emailpass-provider
+      target_entity_id: medusa::medusa-emailpass-provider
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: medusa-not-customer-email-to-db
     layer: data_flows
     subject:
@@ -120,6 +152,22 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-github-auth-provider (intra_single_component).
       source_entity_id: medusa::medusa-github-auth-provider
       target_entity_id: medusa::medusa-github-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-github-auth-provider
+      target_entity_id: medusa::medusa-github-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: github_auth
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: github_auth
   - id: medusa-auth-to-oidc
     layer: data_flows
     subject:
@@ -147,6 +195,22 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-oidc-auth-provider (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-oidc-auth-provider
       target_entity_id: medusa::medusa-oidc-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-oidc-auth-provider
+      target_entity_id: medusa::medusa-oidc-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: oidc
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: oidc
   - id: medusa-auth-to-google
     layer: data_flows
     subject:
@@ -174,6 +238,22 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-google-auth-provider (intra_single_component).
       source_entity_id: medusa::medusa-google-auth-provider
       target_entity_id: medusa::medusa-google-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-google-auth-provider
+      target_entity_id: medusa::medusa-google-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: google_auth
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: google_auth
   - id: medusa-customer-module-export
     layer: data_flows
     subject:
@@ -201,6 +281,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-customer-module (intra_single_component).
       source_entity_id: medusa::medusa-customer-module
       target_entity_id: medusa::medusa-customer-module
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-customer-module
+      target_entity_id: medusa::medusa-customer-module
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
   - id: medusa-user-module-export
     layer: data_flows
     subject:
@@ -228,6 +322,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-user-module (intra_single_component).
       source_entity_id: medusa::medusa-user-module
       target_entity_id: medusa::medusa-user-module
+    flow_canonical:
+      identity_key: flow:actor:admin->actor:admin
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-user-module
+      target_entity_id: medusa::medusa-user-module
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: admin
+          component_subtype: admin
+        target:
+          component_type: actor
+          endpoint_key: admin
+          component_subtype: admin
   - id: medusa-cache-to-redis
     layer: data_flows
     subject:
@@ -255,6 +363,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-redis-cache-module (intra_overlap_same_entity).
       source_entity_id: medusa::medusa-redis-cache-module
       target_entity_id: medusa::medusa-redis-cache-module
+    flow_canonical:
+      identity_key: flow:asset:cache->asset:cache
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-redis-cache-module
+      target_entity_id: medusa::medusa-redis-cache-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: cache
+          component_subtype: cache
+        target:
+          component_type: asset
+          endpoint_key: cache
+          component_subtype: cache
   - id: medusa-rbac-module-export
     layer: data_flows
     subject:
@@ -282,6 +404,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-rbac-module (intra_single_component).
       source_entity_id: medusa::medusa-rbac-module
       target_entity_id: medusa::medusa-rbac-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-rbac-module
+      target_entity_id: medusa::medusa-rbac-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: medusa-notification-to-sendgrid
     layer: data_flows
     subject:
@@ -309,6 +445,20 @@ annotations:
       candidate_notes: Entity picker resolved medusa-notification-module from span content; negative decoys excluded.
       source_entity_id: medusa::medusa-notification-module
       target_entity_id: medusa::medusa-notification-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-notification-module
+      target_entity_id: medusa::medusa-notification-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: medusa-payment-module-export
     layer: data_flows
     subject:
@@ -338,6 +488,22 @@ annotations:
       target_entity_id: medusa::medusa-payment-module
       proposed_data_categories:
         - payment_card
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-payment-module
+      target_entity_id: medusa::medusa-payment-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
+        - payment_card
   - id: medusa-order-module-export
     layer: data_flows
     subject:
@@ -365,6 +531,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on medusa-order-module (intra_single_component).
       source_entity_id: medusa::medusa-order-module
       target_entity_id: medusa::medusa-order-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-order-module
+      target_entity_id: medusa::medusa-order-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: medusa-auth-root-export
     layer: data_flows
     subject:

@@ -26,6 +26,7 @@ import {
 } from "./component-taxonomy";
 import {
   candidateEndpointsToAsserted,
+  deserializeFlowCandidateEndpoint,
   flowCandidateToFlowAssertion,
 } from "./flow-migration";
 import type {
@@ -348,6 +349,56 @@ export function componentStructuredIdentity(
   };
 }
 
+function hasFlowCanonicalEndpoints(input: LegacyGoldRecord): boolean {
+  const endpoints = input.flow_canonical?.endpoints;
+  return endpoints?.source !== undefined && endpoints?.target !== undefined;
+}
+
+export function flowCanonicalBlock(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
+  if (state.canonicalLayer !== "data-flows" || input.layer !== "data_flows") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const block = input.flow_canonical;
+  if (!block || !hasFlowCanonicalEndpoints(input)) {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const conceptLeaf = block.flow_type?.trim() || "data_transfer";
+  const flowEndpoints: AssertedFlowEndpoints = {
+    source: deserializeFlowCandidateEndpoint(block.endpoints.source),
+    target: deserializeFlowCandidateEndpoint(block.endpoints.target),
+  };
+  const flowAssertion: FlowAssertion | undefined =
+    block.data_categories && block.data_categories.length > 0
+      ? {
+          dataCategories: block.data_categories,
+          supportingProvenance: ["KDATAP-7e5b94-flow-canonical"],
+        }
+      : undefined;
+
+  return {
+    state: {
+      identityKey: block.identity_key,
+      conceptLeaf,
+      conceptAncestry: [conceptLeaf],
+      flowEndpoints,
+      flowAssertion,
+      identityAssigned: true,
+    },
+    diagnostics: [
+      makeDiagnostic(
+        input.id,
+        "flow_canonical_block",
+        `flow_canonical → identity ${block.identity_key}, typed endpoints`,
+      ),
+    ],
+  };
+}
+
 export function dataItemCandidateBlock(
   state: ConversionState,
   input: LegacyGoldRecord,
@@ -433,7 +484,7 @@ export function flowCandidateIdentity(
     );
   }
 
-  if (candidate.candidate_identity_key) {
+  if (candidate.candidate_identity_key && !state.identityAssigned) {
     patch.identityKey = candidate.candidate_identity_key;
     patch.identityAssigned = true;
   }
@@ -571,6 +622,12 @@ function resolveDisposition(
   }
 
   if (canonicalLayer === "data-flows") {
+    if (provenance.review_state === "accepted" && hasFlowCanonicalEndpoints(input)) {
+      if (!conceptLeaf.trim()) {
+        return "migration_incomplete";
+      }
+      return "accepted";
+    }
     return "needs_adjudication";
   }
 
@@ -664,6 +721,7 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "canonical_subject_key",
   "component_structured_identity",
   "component_canonical_block",
+  "flow_canonical_block",
   "rule_id_to_concept_leaf",
   "legacy_subject_name",
   "expected_labels_provenance",

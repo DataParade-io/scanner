@@ -106,6 +106,20 @@ annotations:
       candidate_notes: Entity picker resolved discourse-session-auth-service from span content; negative decoys excluded.
       source_entity_id: discourse::discourse-session-auth-service
       target_entity_id: discourse::discourse-session-auth-service
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-session-auth-service
+      target_entity_id: discourse::discourse-session-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-login-route
     layer: data_flows
     subject:
@@ -233,6 +247,20 @@ annotations:
       candidate_notes: Entity picker resolved discourse-admin-users-api from span content; negative decoys excluded.
       source_entity_id: discourse::discourse-admin-users-api
       target_entity_id: discourse::discourse-admin-users-api
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-admin-users-api
+      target_entity_id: discourse::discourse-admin-users-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: discourse-webhooks-mailgun-route-flow
     layer: data_flows
     subject:
@@ -260,6 +288,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-webhooks-mailgun-api (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-webhooks-mailgun-api
       target_entity_id: discourse::discourse-webhooks-mailgun-api
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-webhooks-mailgun-api
+      target_entity_id: discourse::discourse-webhooks-mailgun-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: discourse-password-setter-flow
     layer: data_flows
     subject:
@@ -349,6 +391,22 @@ annotations:
       target_entity_id: discourse::discourse-user-actor
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-actor
+      target_entity_id: discourse::discourse-user-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      data_categories:
+        - password
   - id: discourse-user-email-normalize-flow
     layer: data_flows
     subject:
@@ -398,6 +456,22 @@ annotations:
       target_entity_id: discourse::discourse-user-email-primary
       proposed_data_categories:
         - email
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-email-primary
+      target_entity_id: discourse::discourse-user-email-primary
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      data_categories:
+        - email
   - id: discourse-api-key-generate-flow
     layer: data_flows
     subject:
@@ -445,6 +519,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-user-api-key-scopes (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-user-api-key-scopes
       target_entity_id: discourse::discourse-user-api-key-scopes
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-api-key-scopes
+      target_entity_id: discourse::discourse-user-api-key-scopes
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-auth-token-lookup-flow
     layer: data_flows
     subject:
@@ -472,6 +560,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-user-auth-token-lookup (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-user-auth-token-lookup
       target_entity_id: discourse::discourse-user-auth-token-lookup
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-auth-token-lookup
+      target_entity_id: discourse::discourse-user-auth-token-lookup
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-auth-token-rotate-flow
     layer: data_flows
     subject:
@@ -559,6 +661,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-user-totp-scope (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-user-totp-scope
       target_entity_id: discourse::discourse-user-totp-scope
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-totp-scope
+      target_entity_id: discourse::discourse-user-totp-scope
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-ip-history-flow
     layer: data_flows
     subject:
@@ -586,6 +702,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-ip-address-validation (intra_single_component).
       source_entity_id: discourse::discourse-ip-address-validation
       target_entity_id: discourse::discourse-ip-address-validation
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-ip-address-validation
+      target_entity_id: discourse::discourse-ip-address-validation
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: discourse-email-login-code-flow
     layer: data_flows
     subject:
@@ -633,6 +763,20 @@ annotations:
       candidate_notes: Entity picker resolved discourse-global-api-key-hash from span content; negative decoys excluded.
       source_entity_id: discourse::discourse-global-api-key-hash
       target_entity_id: discourse::discourse-global-api-key-hash
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-global-api-key-hash
+      target_entity_id: discourse::discourse-global-api-key-hash
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-forgot-password-route-flow
     layer: data_flows
     subject:
@@ -701,6 +845,22 @@ annotations:
       source_entity_id: discourse::discourse-sso-session-api
       target_entity_id: discourse::discourse-sso-session-api
       proposed_data_categories:
+        - session
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-sso-session-api
+      target_entity_id: discourse::discourse-sso-session-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
         - session
   - id: discourse-github-settings-flow
     layer: data_flows
@@ -809,6 +969,20 @@ annotations:
       candidate_notes: Entity picker resolved discourse-session-auth-service from span content; negative decoys excluded.
       source_entity_id: discourse::discourse-session-auth-service
       target_entity_id: discourse::discourse-session-auth-service
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-session-auth-service
+      target_entity_id: discourse::discourse-session-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-redis-version-flow
     layer: data_flows
     subject:
@@ -897,6 +1071,21 @@ annotations:
       source_entity_id: discourse::discourse-user-actor
       target_entity_id: discourse::discourse-user-actor
       proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-actor
+      target_entity_id: discourse::discourse-user-actor
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+      flow_type: database_query
   - id: discourse-profile-bio-flow
     layer: data_flows
     subject:
@@ -946,6 +1135,22 @@ annotations:
       target_entity_id: discourse::discourse-user-password-validator
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-user-password-validator
+      target_entity_id: discourse::discourse-user-password-validator
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
   - id: discourse-api-key-scope-filter-flow
     layer: data_flows
     subject:
@@ -993,6 +1198,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-model-email-token (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-model-email-token
       target_entity_id: discourse::discourse-model-email-token
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-model-email-token
+      target_entity_id: discourse::discourse-model-email-token
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
   - id: discourse-site-route-flow
     layer: data_flows
     subject:
@@ -1040,6 +1259,22 @@ annotations:
       candidate_notes: Accepted intra-component lineage on discourse-sendgrid-email-provider (intra_overlap_same_entity).
       source_entity_id: discourse::discourse-sendgrid-email-provider
       target_entity_id: discourse::discourse-sendgrid-email-provider
+    flow_canonical:
+      identity_key: flow:third_party:email_provider->third_party:email_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: discourse::discourse-sendgrid-email-provider
+      target_entity_id: discourse::discourse-sendgrid-email-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: email_provider
+          component_subtype: email_provider
+          vendor: sendgrid
+        target:
+          component_type: third_party
+          endpoint_key: email_provider
+          component_subtype: email_provider
+          vendor: sendgrid
   - id: discourse-google-settings-flow
     layer: data_flows
     subject:

@@ -3,6 +3,7 @@ import type {
   AnnotationCandidate,
   AnnotationStatus,
   BenchmarkLayer,
+  FlowAnnotationCanonical,
   ReviewState,
 } from "../../../benchmark/schema";
 import type { CANONICAL_CONTRACT_VERSION } from "../../../../src/eval/canonical/contract";
@@ -15,6 +16,7 @@ export type ConversionKind =
   | "canonical_subject_key"
   | "component_structured_identity"
   | "component_canonical_block"
+  | "flow_canonical_block"
   | "rule_id_to_concept_leaf"
   | "legacy_subject_name"
   | "expected_labels_provenance"
@@ -39,6 +41,7 @@ export interface LegacyGoldRecord {
   expected: { status: AnnotationStatus; labels: string[] };
   provenance: LegacyGoldProvenance;
   canonical?: AnnotationCanonical;
+  flow_canonical?: FlowAnnotationCanonical;
   candidate?: AnnotationCandidate;
 }
 
