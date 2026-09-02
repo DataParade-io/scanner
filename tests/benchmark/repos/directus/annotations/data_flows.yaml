@@ -16,9 +16,34 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - email_address
   - id: directus-login-to-sessions-table
     layer: data_flows
     subject:
@@ -181,9 +206,34 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - email_address
   - id: directus-auth-driver-users-service
     layer: data_flows
     subject:
