@@ -83,6 +83,41 @@ jest.mock("../../benchmark/run-benchmark", () => {
   };
 });
 
+jest.mock("../../benchmark/baseline", () => {
+  const actual = jest.requireActual("../../benchmark/baseline");
+  return {
+    ...actual,
+    collectGoldPopulation: jest.fn(() => ({
+      byLayer: {
+        mentions: {
+          acceptedCanonicalCount: 0,
+          evaluablePositiveCount: 0,
+          packetDiversity: { distinctPackets: 0, packetKeys: [] },
+          distinctConceptLeaves: 0,
+        },
+        "data-items": {
+          acceptedCanonicalCount: 0,
+          evaluablePositiveCount: 0,
+          packetDiversity: { distinctPackets: 0, packetKeys: [] },
+          distinctConceptLeaves: 0,
+        },
+        components: {
+          acceptedCanonicalCount: 0,
+          evaluablePositiveCount: 0,
+          packetDiversity: { distinctPackets: 0, packetKeys: [] },
+          distinctConceptLeaves: 0,
+        },
+        "data-flows": {
+          acceptedCanonicalCount: 0,
+          evaluablePositiveCount: 0,
+          packetDiversity: { distinctPackets: 0, packetKeys: [] },
+          distinctConceptLeaves: 0,
+        },
+      },
+    })),
+  };
+});
+
 import { runBenchmark } from "../../benchmark/run-benchmark";
 
 const mockedRunBenchmark = runBenchmark as jest.MockedFunction<typeof runBenchmark>;

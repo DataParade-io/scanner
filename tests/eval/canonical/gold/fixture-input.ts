@@ -35,5 +35,9 @@ export function evalCaseToAnnotationRecord(caseRecord: EvalCase): AnnotationReco
       labels: [...caseRecord.expected.labels],
     },
     provenance: FIXTURE_GOLD_PROVENANCE,
+    ...(caseRecord.flow_canonical !== undefined
+      ? { flow_canonical: caseRecord.flow_canonical }
+      : {}),
+    ...(caseRecord.flowCandidate !== undefined ? { candidate: caseRecord.flowCandidate } : {}),
   };
 }
