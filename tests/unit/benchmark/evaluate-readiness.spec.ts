@@ -147,11 +147,10 @@ describe("checkLegacyOutcomesResolved", () => {
 });
 
 describe("checkNoLegacyIdentityOnAccepted", () => {
-  it("reports loader exemptions only for component decoys after flow promotion", () => {
+  it("reports no loader exemptions after negative decoy review_state fix (KDATAP-b702ea)", () => {
     const blockers = checkNoLegacyIdentityOnAccepted(BENCHMARK_ROOT);
     const loaderExemptions = blockers.filter((blocker) => blocker.code === "LOADER_EXEMPTION");
-    expect(loaderExemptions.some((blocker) => blocker.layer === "data-flows")).toBe(false);
-    expect(loaderExemptions.some((blocker) => blocker.layer === "components")).toBe(true);
+    expect(loaderExemptions).toEqual([]);
   });
 });
 
@@ -183,6 +182,7 @@ describe("evaluateBaselineReadiness dry run", () => {
       readiness.blockers.some(
         (blocker) => blocker.code === "LOADER_EXEMPTION" && blocker.layer === "components",
       ),
-    ).toBe(true);
+    ).toBe(false);
+    expect(readiness.blockers).toHaveLength(29);
   });
 });
