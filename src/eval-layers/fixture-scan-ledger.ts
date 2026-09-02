@@ -21,6 +21,8 @@ export function buildOrchestratorEvalLedgers(
   return {
     components: buildOrchestratorLayerLedger("components", input),
     "data-flows": buildOrchestratorLayerLedger("data-flows", input),
+    // Diagnostic layer: same orchestrator processing as components/data-flows.
+    "data-actions": buildOrchestratorLayerLedger("data-actions", input),
   };
 }
 
