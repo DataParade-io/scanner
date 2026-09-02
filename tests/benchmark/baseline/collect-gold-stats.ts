@@ -36,10 +36,19 @@ function emptyStatusRecord(): Record<AnnotationStatus, number> {
   };
 }
 
-function toHeadlineLayer(layer: string): HeadlineLayer | null {
+export function toHeadlineLayer(layer: string): HeadlineLayer | null {
   const canonical = normalizeBenchmarkLayer(layer as Parameters<typeof normalizeBenchmarkLayer>[0]);
-  if (canonical === "raw_hits" || canonical === "pii_signals") {
-    return canonical === "pii_signals" ? "mentions" : null;
+  if (canonical === "raw_hits") {
+    return null;
+  }
+  if (canonical === "pii_signals") {
+    return "mentions";
+  }
+  if (canonical === "data_items") {
+    return "data-items";
+  }
+  if (canonical === "data_flows") {
+    return "data-flows";
   }
   if (HEADLINE_LAYERS.includes(canonical as HeadlineLayer)) {
     return canonical as HeadlineLayer;
@@ -259,11 +268,15 @@ function resolveCorpusLayerForHeadline(
   manifestLayers: string[],
   headlineLayer: HeadlineLayer,
 ): string | null {
-  if (manifestLayers.includes(headlineLayer)) {
-    return headlineLayer;
-  }
   if (headlineLayer === "mentions" && manifestLayers.includes("pii_signals")) {
     return "pii_signals";
+  }
+  const underscored = headlineLayer.replace(/-/g, "_");
+  if (manifestLayers.includes(underscored)) {
+    return underscored;
+  }
+  if (manifestLayers.includes(headlineLayer)) {
+    return headlineLayer;
   }
   return null;
 }

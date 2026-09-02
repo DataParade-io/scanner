@@ -11,12 +11,9 @@ import {
   collectGoldPopulation,
   collectMigrationIncompleteAccounting,
 } from "./collect-gold-stats";
+import { evaluateBaselineReadiness } from "./evaluate-readiness";
 import { buildBaselineFingerprint } from "./fingerprint";
-import type {
-  BaselineArtifact,
-  BaselineReadinessEmbed,
-  InvariantVersions,
-} from "./types";
+import type { BaselineArtifact, InvariantVersions } from "./types";
 
 export interface BuildBaselineArtifactInput {
   seriesLabel: string;
@@ -37,21 +34,14 @@ function buildInvariants(): InvariantVersions {
   };
 }
 
-function buildReadinessStub(invariants: InvariantVersions): BaselineReadinessEmbed {
-  return {
-    status: "not_evaluated",
-    evaluatedAt: null,
-    blockers: [],
-    invariantVersions: invariants,
-  };
-}
-
 export function buildBaselineArtifact(input: BuildBaselineArtifactInput): BaselineArtifact {
   const invariants = buildInvariants();
   const fingerprint = buildBaselineFingerprint({
     benchmarkRoot: input.benchmarkRoot,
     scannerGitSha: input.scannerGitSha ?? input.scorecard.scannerGitSha,
   });
+  const goldPopulation = collectGoldPopulation(input.benchmarkRoot);
+  const migrationIncomplete = collectMigrationIncompleteAccounting(input.benchmarkRoot);
 
   return {
     schemaVersion: BASELINE_ARTIFACT_SCHEMA_VERSION,
@@ -63,9 +53,18 @@ export function buildBaselineArtifact(input: BuildBaselineArtifactInput): Baseli
     generatedAt: input.generatedAt,
     fingerprint,
     invariants,
-    readiness: buildReadinessStub(invariants),
-    goldPopulation: collectGoldPopulation(input.benchmarkRoot),
-    migrationIncomplete: collectMigrationIncompleteAccounting(input.benchmarkRoot),
+    readiness: evaluateBaselineReadiness({
+      benchmarkRoot: input.benchmarkRoot,
+      goldPopulation,
+      migrationIncomplete,
+      fingerprint,
+      scorecard: input.scorecard,
+      requireMaterializations: true,
+      requireRuntimeChecks: true,
+      evaluatedAt: input.generatedAt,
+    }),
+    goldPopulation,
+    migrationIncomplete,
     scorecard: input.scorecard,
     capabilityCoverage: collectCapabilityCoverageDiagnostic(input.benchmarkRoot),
   };

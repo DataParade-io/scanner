@@ -15,6 +15,7 @@ function usage(): void {
   console.log("");
   console.log("Options:");
   console.log("  --require-valid-materializations  Fail unless every packet is materialized");
+  console.log("  --require-readiness-pass            Fail unless readiness.status=pass");
   console.log("  --verify-digests                  Recompute corpus/taxonomy/concept-map/adapter digests");
   console.log("  --verify-markdown                 Require sibling .md and verify deterministic render");
 }
@@ -30,6 +31,7 @@ function main(): void {
   const options = {
     jsonPath,
     requireValidMaterializations: args.includes("--require-valid-materializations"),
+    requireReadinessPass: args.includes("--require-readiness-pass"),
     verifyDigests: args.includes("--verify-digests"),
     verifyMarkdown: args.includes("--verify-markdown"),
   };
