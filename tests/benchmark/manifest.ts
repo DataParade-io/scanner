@@ -29,23 +29,10 @@ const LAYER_SUBJECT_PREFIX: Partial<Record<BenchmarkLayer, string>> = {
   data_items: "data_item:",
 };
 
-/**
- * Normalize corpus subject keys on load.
- *
- * Legacy `pii_signal:` prefixes migrate to `mention:` / `raw_hit:`.
- */
+/** Normalize corpus subject keys on load (trim only; stale prefixes are rejected). */
 export function normalizeSubjectKey(layer: BenchmarkLayer, key: string): string {
-  const trimmed = key.trim();
-  const canonical = normalizeBenchmarkLayer(layer);
-
-  if (canonical === "mentions" && trimmed.startsWith("pii_signal:")) {
-    return `mention:${trimmed.slice("pii_signal:".length)}`;
-  }
-  if (canonical === "raw_hits" && trimmed.startsWith("pii_signal:")) {
-    return `raw_hit:${trimmed.slice("pii_signal:".length)}`;
-  }
-
-  return trimmed;
+  void layer;
+  return key.trim();
 }
 
 function assertCanonicalSubjectKey(

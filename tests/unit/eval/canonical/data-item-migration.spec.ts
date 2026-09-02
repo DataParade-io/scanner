@@ -8,9 +8,8 @@ import {
   shouldFlipReviewState,
 } from "../../../eval/canonical/compat/data-item-migration";
 import {
-  annotationRecordToLegacyInput,
   isAcceptedEvaluablePositive,
-  loadLegacyGoldRecord,
+  loadCanonicalGoldFromAnnotation,
 } from "../../../eval/canonical";
 
 function dataItemRecord(
@@ -142,28 +141,25 @@ describe("data-item migration", () => {
   });
 
   it("does not promote data-item candidate to evaluable positive", () => {
-    const { record } = loadLegacyGoldRecord(
-      annotationRecordToLegacyInput(
-        dataItemRecord({
-          id: "non-scoring",
-          subject: { key: "data_item:mail", name: "mail" },
-          provenance: {
-            proposed_by: "test",
-            proposed_at: "2026-08-31",
-            review_state: "needs_adjudication",
-          },
-          candidate: buildDataItemCandidate(
-            "tier_b_label_guided",
-            lookupSuffixInConceptMap("email")!,
-            "verified",
-          ),
-        }),
-      ),
-      { warn: () => undefined },
+    const { record } = loadCanonicalGoldFromAnnotation(
+      dataItemRecord({
+        id: "non-scoring",
+        subject: { key: "data_item:mail", name: "mail" },
+        provenance: {
+          proposed_by: "test",
+          proposed_at: "2026-08-31",
+          review_state: "needs_adjudication",
+        },
+        candidate: buildDataItemCandidate(
+          "tier_b_label_guided",
+          lookupSuffixInConceptMap("email")!,
+          "verified",
+        ),
+      }),
     );
 
-    expect(record.identity.identityKey).toBe("data_item:mail");
-    expect(record.classification.conceptLeaf).toBe("mail");
+    expect(record.identity.identityKey).toBe("data_item:email");
+    expect(record.classification.conceptLeaf).toBe("email_address");
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
     expect(
       record.observedTokenCandidates?.some(

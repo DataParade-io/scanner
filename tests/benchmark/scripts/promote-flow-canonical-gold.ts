@@ -22,8 +22,7 @@ import {
   listAcceptedComponentsWithCanonical,
 } from "../../eval/canonical/compat/flow-migration";
 import type { FlowAdjudicationLedgerEntry } from "../../eval/canonical/compat/flow-adjudication";
-import { loadLegacyGoldRecord } from "../../eval/canonical/compat/loader";
-import { annotationRecordToLegacyInput } from "../../eval/canonical/compat/adapters";
+import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical/gold/loader";
 
 const REPO_ROOT = path.join(__dirname, "..", "..", "..");
 const ADJUDICATION_LEDGER_PATH = path.join(
@@ -85,10 +84,7 @@ function promoteFlowRecord(
     entry.candidate?.disposition_candidate ??
     "intra_component_lineage";
 
-  const before = loadLegacyGoldRecord(annotationRecordToLegacyInput(record), {
-    repoKey,
-    warn: () => undefined,
-  });
+  const before = loadCanonicalGoldFromAnnotation(record, { repoKey });
 
   const flowCanonical = buildFlowAnnotationCanonicalBlock(
     entry.sourceEntityId,
@@ -106,10 +102,7 @@ function promoteFlowRecord(
     flow_canonical: flowCanonical,
   };
 
-  const after = loadLegacyGoldRecord(annotationRecordToLegacyInput(promoted), {
-    repoKey,
-    warn: () => undefined,
-  });
+  const after = loadCanonicalGoldFromAnnotation(promoted, { repoKey });
 
   return {
     record: promoted,
