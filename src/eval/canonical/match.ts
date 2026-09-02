@@ -151,6 +151,19 @@ function componentAssignmentCandidate(
   return conceptCorrectness(expectation, finding).exactLeaf;
 }
 
+function dataActionsAssignmentCandidate(
+  expectation: CanonicalGoldExpectation,
+  finding: CanonicalScannerFinding,
+): boolean {
+  if (!sameEntityIdentity(expectation.identity, finding.identity)) {
+    return false;
+  }
+  if (!evidenceLocationsOverlap(expectation.evidenceLocations, finding.evidenceLocations)) {
+    return false;
+  }
+  return conceptCorrectness(expectation, finding).exactLeaf;
+}
+
 function dataItemsAssignmentCandidate(
   expectation: CanonicalGoldExpectation,
   finding: CanonicalScannerFinding,
@@ -216,6 +229,8 @@ function pairingCandidate(
   switch (expectation.identity.layer) {
     case "components":
       return componentAssignmentCandidate(expectation, finding);
+    case "data-actions":
+      return dataActionsAssignmentCandidate(expectation, finding);
     case "data-items":
       return dataItemsAssignmentCandidate(expectation, finding);
     case "mentions":
@@ -239,6 +254,8 @@ function negativePairingCandidate(
   switch (expectation.identity.layer) {
     case "components":
       return componentAssignmentCandidate(expectation, finding);
+    case "data-actions":
+      return dataActionsAssignmentCandidate(expectation, finding);
     case "data-items":
       return dataItemsAssignmentCandidate(expectation, finding);
     case "mentions":
