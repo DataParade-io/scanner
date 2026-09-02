@@ -3,6 +3,7 @@ import {
   canonicalSubjectKey,
   componentStructuredIdentity,
   corpusLayerToCanonical,
+  dataActionStructuredIdentity,
   dataItemCandidateBlock,
   expectedLabelsProvenance,
   expectedStatusDisposition,
@@ -43,6 +44,10 @@ export function loadLegacyGoldRecord(
   const componentIdentityStep = componentStructuredIdentity(state, input, options);
   state = { ...state, ...componentIdentityStep.state };
   diagnostics.push(...componentIdentityStep.diagnostics);
+
+  const dataActionIdentityStep = dataActionStructuredIdentity(state, input);
+  state = { ...state, ...dataActionIdentityStep.state };
+  diagnostics.push(...dataActionIdentityStep.diagnostics);
 
   const flowCandidateStep = flowCandidateIdentity(state, input);
   state = { ...state, ...flowCandidateStep.state };

@@ -8,6 +8,7 @@ const EVAL_LAYER_TO_BENCHMARK: Record<EvalLayer, BenchmarkLayer> = {
   "raw-hits": "raw_hits",
   "data-items": "data_items",
   mentions: "mentions",
+  "data-actions": "data_actions",
 };
 
 const FIXTURE_GOLD_PROVENANCE: LegacyGoldRecord["provenance"] = {
