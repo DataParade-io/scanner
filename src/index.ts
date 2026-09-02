@@ -65,5 +65,12 @@ export {
   isDataAction,
   normalizeDataAction,
   normalizeDataActionToken,
-} from "./data-actions/taxonomy";
-export type { DataAction, DataActionFrameworkAnchor } from "./data-actions/taxonomy";
+  deriveFromTopology,
+  STORAGE_SUBTYPES,
+  mergeAssignmentsOntoComponents,
+  mergeOneAssignment,
+  readDataActions,
+  hasVerb,
+  runDataActionPhase,
+} from "./data-actions";
+export type { DataAction, DataActionFrameworkAnchor } from "./data-actions";
