@@ -6,11 +6,11 @@ Row-level observability for the corpus gold migration (KDATAP-b0d5e2). Finding c
 
 | Layer | Total rows | Accepted | Rejected | Unresolved | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
-| **Data items** | 436 | 113 | 76 | 247 | Adjudicated and applied (PR #50) |
+| **Data items** | 436 | 140 | 119 | 177 | Adjudicated and applied (PR #50, slice KDATAP-6b1c67) |
 | **Data flows** | 436 | 146 | 17 | 273 | Adjudicated and applied (PR #52); canonical blocks (PR #54) |
 | Components | 481 | 481 | 0 | 0 | Accepted (prior passes; not tracked as per-label findings) |
 | Mentions | 357 | 357 | 0 | 0 | Accepted (prior passes; not tracked as per-label findings) |
-| **Corpus total** | **1710** | **1097** | **93** | **520** | |
+| **Corpus total** | **1710** | **1124** | **136** | **450** | |
 
 Each data-item and data-flow row has one finding issue under KDATAP-b0d5e2. Mapping onto the custom board: YAML `accepted` -> finding `accepted`, `rejected` -> finding `rejected`, `needs_adjudication` -> finding `proposed`. Sample-app Jest findings are in Done.
 
@@ -20,16 +20,16 @@ These counts are what the custom board columns show.
 
 | Board column | Live count | Expected | Meaning |
 | --- | ---: | --- | --- |
-| Proposed | {{ count(type="finding", status="proposed") }} | 520 | Unresolved corpus labels |
-| Accepted | {{ count(status="accepted") }} | 259 | Human-accepted gold labels |
-| Rejected | {{ count(type="finding", status="rejected") }} | 93 | Human-rejected labels |
+| Proposed | {{ count(type="finding", status="proposed") }} | 450 | Unresolved corpus labels |
+| Accepted | {{ count(status="accepted") }} | 286 | Human-accepted gold labels |
+| Rejected | {{ count(type="finding", status="rejected") }} | 136 | Human-rejected labels |
 | **Total findings** | **{{ count(type="finding") }}** | **888** | Drift if this is not 888 |
 
 Layer split for the 872 corpus findings:
 
 | Layer | Accepted | Rejected | Proposed | Total |
 | --- | ---: | ---: | ---: | ---: |
-| Data items (`Data item:`) | 113 | 76 | 247 | 436 |
+| Data items (`Data item:`) | 140 | 119 | 177 | 436 |
 | Data flows (`Data flow:`) | 146 | 17 | 273 | 436 |
 
 Use `kbs list --type finding --parent b0d5e2`. Issue title is `Data item: <yaml id>` or `Data flow: <yaml id>`.
@@ -68,7 +68,8 @@ GLM missed positives promoted: 77 (real runtime flows left unresolved).
 | Labeling | a0e80b | closed | 81 | 0 | 355 | Mechanical: candidates on 117, demote 275 source-token |
 | Correction | 9b83f6 | closed | 76 | 0 | 360 | Fix 5 suffix-vs-label conflicts (email/password hashes) |
 | Adjudication | 25b2f4 | closed | 113 | 76 | 247 | AI adjudicated all 436 rows from source + taxonomy |
-| **Current** | | | **113** | **76** | **247** | Real gold on develop |
+| Adjudication slice 2 | 6b1c67 | closed | 27 | 43 | 177 | Remaining 247 rows; Ryan accepted packet |
+| **Current** | | | **140** | **119** | **177** | Real gold on develop |
 
 ### Data-item adjudication breakdown (25b2f4)
 
@@ -110,4 +111,4 @@ flowchart LR
 
 1. **KDATAP-b7c3ae** - enable data-flows metric for within-component flows (PR #59). Re-freeze baseline so all four layers report.
 2. **Scanner alignment** - future work against the frozen baseline. Do not rewrite gold to match the scanner.
-3. The 520 unresolved labels can be adjudicated later without blocking the baseline.
+3. The 450 unresolved labels can be adjudicated later without blocking the baseline.

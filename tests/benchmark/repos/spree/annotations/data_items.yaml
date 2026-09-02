@@ -336,14 +336,23 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: Address.firstname is the given name required on a postal address.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:first_name
+      proposed_concept_leaf: first_name
+      proposed_ancestry:
+        - person_name
+        - first_name
+      candidate_confidence: low
+      evidence_validation: verified
   - id: spree-address-lastname
     layer: data_items
     subject:
@@ -356,14 +365,23 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: Address.lastname is the family name required on a postal address.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:last_name
+      proposed_concept_leaf: last_name
+      proposed_ancestry:
+        - person_name
+        - last_name
+      candidate_confidence: low
+      evidence_validation: verified
   - id: spree-address-city
     layer: data_items
     subject:
