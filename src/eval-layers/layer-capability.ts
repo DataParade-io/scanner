@@ -4,7 +4,8 @@ export type EvalLayerId =
   | "data-flows"
   | "raw-hits"
   | "data-items"
-  | "mentions";
+  | "mentions"
+  | "data-actions";
 
 import type { FileLanguage } from "../core/types/file";
 
@@ -55,6 +56,7 @@ export function isLanguageSupportedForEvalLayer(
   switch (layer) {
     case "components":
     case "data-flows":
+    case "data-actions":
       return isOrchestratorLayerLanguage(language);
     case "mentions":
     case "raw-hits":

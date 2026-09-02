@@ -97,6 +97,7 @@ const CORPUS_TO_CANONICAL_LAYER: Record<BenchmarkLayer, CanonicalLayer> = {
   data_items: "data-items",
   raw_hits: "raw-hits",
   mentions: "mentions",
+  data_actions: "data-actions",
   pii_signals: "mentions",
 };
 
@@ -215,6 +216,9 @@ export function canonicalSubjectKey(
       };
     }
     case "components": {
+      return { state: {} };
+    }
+    case "data-actions": {
       return { state: {} };
     }
     case "data-flows": {
@@ -345,6 +349,39 @@ export function componentStructuredIdentity(
       observedTokenCandidates: appendLegacySubjectKeyToken(state, legacyKey),
     },
     diagnostics,
+  };
+}
+
+/**
+ * Data-actions gold: identity stays `${type}:${name}`; concept leaf is the expected verb.
+ */
+export function dataActionStructuredIdentity(
+  state: ConversionState,
+  input: LegacyGoldRecord,
+): { state: Partial<ConversionState>; diagnostics: MigrationDiagnostic[] } {
+  if (state.canonicalLayer !== "data-actions" || input.layer !== "data_actions") {
+    return { state: {}, diagnostics: [] };
+  }
+
+  const legacyKey = input.subject.key.trim().toLowerCase();
+  const { prefix } = parseKeyPrefix(legacyKey);
+  const verb = input.expected.labels[0]?.trim().toLowerCase() ?? "";
+
+  return {
+    state: {
+      identityKey: legacyKey,
+      componentType: prefix || undefined,
+      conceptLeaf: verb,
+      conceptAncestry: verb ? [verb] : [],
+      identityAssigned: true,
+    },
+    diagnostics: [
+      makeDiagnostic(
+        input.id,
+        "data_action_structured_identity",
+        `subject ${legacyKey} → identity ${legacyKey}, verb ${verb || "(missing)"}`,
+      ),
+    ],
   };
 }
 
@@ -664,6 +701,7 @@ export const CONVERSION_KINDS: readonly ConversionKind[] = [
   "canonical_subject_key",
   "component_structured_identity",
   "component_canonical_block",
+  "data_action_structured_identity",
   "rule_id_to_concept_leaf",
   "legacy_subject_name",
   "expected_labels_provenance",

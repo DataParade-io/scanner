@@ -7,7 +7,8 @@ export type EvalLayer =
   | "data-flows"
   | "raw-hits"
   | "data-items"
-  | "mentions";
+  | "mentions"
+  | "data-actions";
 
 export interface EvalSubject {
   /** Layer identity, e.g. `asset:database` or `third_party:stripe` */

@@ -5,7 +5,8 @@ export type CanonicalLayer =
   | "data-flows"
   | "mentions"
   | "data-items"
-  | "raw-hits";
+  | "raw-hits"
+  | "data-actions";
 
 export type ObservedTokenValidationState = "verified" | "unverified" | "contradicted";
 

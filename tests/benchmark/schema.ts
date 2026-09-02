@@ -14,6 +14,7 @@ export type BenchmarkLayer =
   | "raw_hits"
   | "mentions"
   | "data_items"
+  | "data_actions"
   /** @deprecated Use `mentions` — kept for corpus manifests and annotation files. */
   | "pii_signals";
 
@@ -169,6 +170,7 @@ export const BENCHMARK_LAYERS: readonly BenchmarkLayer[] = [
   "raw_hits",
   "mentions",
   "data_items",
+  "data_actions",
   "pii_signals",
 ];
 
