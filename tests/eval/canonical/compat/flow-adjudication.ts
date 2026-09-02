@@ -11,7 +11,6 @@ import type {
   FlowDispositionCandidate,
 } from "../../../benchmark/schema";
 import {
-  readEvidenceSpanWithContext,
   sha256Hex,
   type AdjudicationConfidence,
   type AdjudicationDisposition,
@@ -129,6 +128,55 @@ const AUTH_FLOW_PATTERNS = [
   /session_tokens/i,
 ];
 
+const RUNTIME_FLOW_PATTERNS = [
+  /\.\w+\s*\(/,
+  /->\w+\(/,
+  /\$\w+\s*=\s*/,
+  /\bawait\s+/,
+  /\breturn\s+/,
+  ...PERSISTENCE_PATTERNS,
+  ...AUTH_FLOW_PATTERNS,
+  ...CROSS_BOUNDARY_PATTERNS,
+];
+
+const DECLARATION_ONLY_LINE_PATTERNS = [
+  /^\s*\w[\w.-]*:\s*[\w.-]+\s*$/,
+  /^\s*\w[\w.-]*:\s*$/,
+  /^\s*interface\s+\w+/,
+  /^\s*(public|private|protected|val|var)\s+\w+/,
+  /^\s*function\s+\w+\s*\([^)]*\)\s*\{?\s*$/,
+  /^\s*\w+\s+\w+\s*`/,
+  /^\s*\w+\s+\w+(\s+\/\/.*)?\s*$/,
+  /^\s*\/\//,
+  /^\s*\/\*/,
+  /^\s*\*\s/,
+];
+
+function isCommentOrBlankLine(line: string): boolean {
+  const trimmed = line.trim();
+  return trimmed.length === 0 || trimmed.startsWith("//") || trimmed.startsWith("#");
+}
+
+export function isDeclarationOnlySpan(span: string): boolean {
+  const lines = span.split("\n").filter((line) => !isCommentOrBlankLine(line));
+  if (lines.length === 0) {
+    return true;
+  }
+
+  return lines.every((line) =>
+    DECLARATION_ONLY_LINE_PATTERNS.some((pattern) => pattern.test(line)),
+  );
+}
+
+export function hasRuntimeFlowEvidence(span: string, contextSpan: string): boolean {
+  const text = `${span}\n${contextSpan}`;
+  return (
+    !isDeclarationOnlySpan(span) &&
+    (RUNTIME_FLOW_PATTERNS.some((pattern) => pattern.test(text)) ||
+      ORM_PATTERNS.some((pattern) => pattern.test(text)))
+  );
+}
+
 const NEGATIVE_EVIDENCE_PATTERNS = [
   /not implemented/i,
   /does not call/i,
@@ -219,11 +267,16 @@ export function validateFlowEvidence(
     return "unverified";
   }
 
+  if (isDeclarationOnlySpan(span)) {
+    return "unverified";
+  }
+
   if (
     ORM_PATTERNS.some((pattern) => pattern.test(text)) ||
     PERSISTENCE_PATTERNS.some((pattern) => pattern.test(text)) ||
     AUTH_FLOW_PATTERNS.some((pattern) => pattern.test(text)) ||
-    CROSS_BOUNDARY_PATTERNS.some((pattern) => pattern.test(text))
+    CROSS_BOUNDARY_PATTERNS.some((pattern) => pattern.test(text)) ||
+    hasRuntimeFlowEvidence(span, contextSpan)
   ) {
     return "verified";
   }
@@ -300,30 +353,101 @@ export function findComponentsReferencedInSpan(
   });
 }
 
-function resolveEntityFromSpan(
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function componentIdentifierInSpan(span: string, component: AnnotationRecord): boolean {
+  const tokens = [
+    component.subject.name,
+    component.id,
+    component.subject.key.includes(":")
+      ? component.subject.key.slice(component.subject.key.indexOf(":") + 1)
+      : component.subject.key,
+  ].filter((token): token is string => Boolean(token && token.length >= 3));
+
+  for (const token of tokens) {
+    const pattern = new RegExp(`\\b${escapeRegExp(token)}\\b`);
+    if (pattern.test(span)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function findComponentsWithIdentifierInSpan(
+  span: string,
+  components: AnnotationRecord[],
+): AnnotationRecord[] {
+  return components.filter(
+    (component) =>
+      component.expected.status !== "negative" && componentIdentifierInSpan(span, component),
+  );
+}
+
+function isApiOrServiceComponent(component: AnnotationRecord): boolean {
+  const subtype = component.canonical?.component_subtype;
+  if (subtype === "api" || subtype === "service") {
+    return true;
+  }
+  const identity = component.canonical?.identity_key ?? "";
+  const id = component.id.toLowerCase();
+  return identity.includes(":api") || id.includes("-api") || id.includes("-service");
+}
+
+function preferServiceComponent(candidates: AnnotationRecord[]): AnnotationRecord | undefined {
+  const positive = candidates.filter((component) => component.expected.status !== "negative");
+  if (positive.length < 2) {
+    return undefined;
+  }
+  const preferred = positive.filter(isApiOrServiceComponent);
+  return preferred.length === 1 ? preferred[0] : undefined;
+}
+
+function resolveEntityForPicker(
+  overlap: AnnotationRecord[],
   span: string,
   rationale: string,
   components: AnnotationRecord[],
   entityIdHint?: string,
 ): AnnotationRecord | undefined {
-  const matches = findComponentsReferencedInSpan(span, components);
-  if (matches.length === 1) {
-    return matches[0];
+  if (overlap.length === 1) {
+    return overlap[0];
   }
-  if (matches.length > 1) {
+  if (overlap.length > 1) {
     if (entityIdHint) {
-      const hintMatches = matches.filter(
+      const hintMatches = overlap.filter(
         (component) => component.canonical?.entity_id === entityIdHint,
       );
       if (hintMatches.length === 1) {
         return hintMatches[0];
       }
     }
-    const idMatches = matches.filter((component) => rationale.includes(component.id));
+    const preferred = preferServiceComponent(overlap);
+    if (preferred) {
+      return preferred;
+    }
+    const idMatches = overlap.filter((component) => rationale.includes(component.id));
     if (idMatches.length === 1) {
       return idMatches[0];
     }
     return undefined;
+  }
+
+  const identifierMatches = findComponentsWithIdentifierInSpan(span, components);
+  if (!hasRuntimeFlowEvidence(span, "")) {
+    return undefined;
+  }
+  if (identifierMatches.length === 1) {
+    return identifierMatches[0];
+  }
+  if (identifierMatches.length > 1 && entityIdHint) {
+    const hintMatches = identifierMatches.filter(
+      (component) => component.canonical?.entity_id === entityIdHint,
+    );
+    if (hintMatches.length === 1) {
+      return hintMatches[0];
+    }
   }
   return undefined;
 }
@@ -374,6 +498,10 @@ export function pickIntraEntity(
     const positiveOverlap = overlap.filter((component) => component.expected.status !== "negative");
     if (positiveOverlap.length === 1) {
       return positiveOverlap[0];
+    }
+    const preferred = preferServiceComponent(positiveOverlap);
+    if (preferred) {
+      return preferred;
     }
   }
 
@@ -588,7 +716,13 @@ export function adjudicateFlowRow(input: AdjudicateFlowRowInput): FlowAdjudicati
       record.candidate?.kind === "flow"
         ? record.candidate.source_entity_id ?? migrationCandidate.source_entity_id
         : migrationCandidate.source_entity_id;
-    const entity = resolveEntityFromSpan(span, record.rationale, components, entityIdHint);
+    const entity = resolveEntityForPicker(
+      overlap,
+      span,
+      record.rationale,
+      components,
+      entityIdHint,
+    );
     if (entity && evidenceValidation === "verified") {
       const candidate = buildIntraCandidate(
         entity,
@@ -696,7 +830,10 @@ export function adjudicateFlowRow(input: AdjudicateFlowRowInput): FlowAdjudicati
     };
   }
 
-  const entity = pickIntraEntity(overlap, span, record.rationale, components);
+  const entity =
+    sourceBucket === "intra_single_component" && allCandidates.length === 1
+      ? allCandidates[0]
+      : pickIntraEntity(overlap, span, record.rationale, components);
   if (!entity) {
     return {
       ...base,
@@ -750,13 +887,24 @@ function readFlowEvidenceOrSkip(
   commit: string,
   evidence: AnnotationRecord["evidence"],
   benchmarkRoot: string,
+  contextLines = 5,
 ): { span: string; contextSpan: string } | undefined {
   const cacheDir = path.join(benchmarkRoot, ".cache", "repos", `${repoKey}@${commit}`);
   const filePath = path.join(cacheDir, evidence.file_path);
   if (!fs.existsSync(filePath)) {
     return undefined;
   }
-  return readEvidenceSpanWithContext(repoKey, commit, evidence);
+
+  const lines = fs.readFileSync(filePath, "utf8").split(/\r?\n/);
+  const start = Math.max(1, evidence.start_line);
+  const end = Math.min(lines.length, evidence.end_line);
+  const contextStart = Math.max(1, start - contextLines);
+  const contextEnd = Math.min(lines.length, end + contextLines);
+
+  return {
+    span: lines.slice(start - 1, end).join("\n"),
+    contextSpan: lines.slice(contextStart - 1, contextEnd).join("\n"),
+  };
 }
 
 export function analyzeFlowForAdjudication(
@@ -781,6 +929,27 @@ export function analyzeFlowForAdjudication(
       rationale,
       allCandidates,
     );
+    if (
+      record.expected.status === "negative" &&
+      migrationCandidate.disposition_candidate === "rejection"
+    ) {
+      return {
+        annotationId: record.id,
+        repoKey,
+        sourceBucket: "rejection",
+        migrationBucket: migrationCandidate.disposition_candidate,
+        migrationConfidence: migrationCandidate.candidate_confidence,
+        disposition: "reject",
+        confidence: "medium",
+        evidenceValidation: "skipped",
+        evidenceSpanHash: sha256Hex(""),
+        overlapComponentIds: overlap.map((component) => component.id),
+        rationaleComponentIds: rationale.map((component) => component.id),
+        contested: false,
+        rationale:
+          "Negative corpus label with high-confidence rejection migration proposal; source cache miss.",
+      };
+    }
     return {
       annotationId: record.id,
       repoKey,
