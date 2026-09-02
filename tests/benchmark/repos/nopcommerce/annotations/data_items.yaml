@@ -177,8 +177,9 @@ annotations:
       start_line: 21
       end_line: 21
     expected:
-      status: ambiguous
-      labels: []
+      status: positive
+      labels:
+        - password
     rationale: CustomerPassword.Password has no source-fixed type; PasswordFormat defaults to Clear and may store plaintext or a hash.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -193,6 +194,7 @@ annotations:
       proposed_ancestry:
         - password
       candidate_confidence: low
+      candidate_notes: "Tier D: evidence alias hint maps to rule_id; requires human acceptance."
       evidence_validation: verified
   - id: nopcommerce-oauth-access-token
     layer: data_items
@@ -280,6 +282,7 @@ annotations:
         - person_name
         - first_name
       candidate_confidence: low
+      candidate_notes: "Tier D: evidence alias hint maps to rule_id; requires human acceptance."
       evidence_validation: verified
   - id: nopcommerce-customer-last-name
     layer: data_items
@@ -309,6 +312,7 @@ annotations:
         - person_name
         - last_name
       candidate_confidence: low
+      candidate_notes: "Tier D: evidence alias hint maps to rule_id; requires human acceptance."
       evidence_validation: verified
   - id: nopcommerce-customer-dob
     layer: data_items

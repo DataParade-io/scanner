@@ -95,6 +95,7 @@ annotations:
       proposed_ancestry:
         - password
       candidate_confidence: low
+      candidate_notes: "Tier D: evidence alias hint maps to rule_id; requires human acceptance."
       evidence_validation: verified
   - id: wordpress-display-name
     layer: data_items
@@ -272,8 +273,9 @@ annotations:
       start_line: 2179
       end_line: 2180
     expected:
-      status: ambiguous
-      labels: []
+      status: positive
+      labels:
+        - password
     rationale: wp_insert_user documents user_pass as plaintext for new users before hashing; role as credential_secret vs verifier depends on call path.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -288,6 +290,7 @@ annotations:
       proposed_ancestry:
         - password
       candidate_confidence: low
+      candidate_notes: "Tier D: evidence alias hint maps to rule_id; requires human acceptance."
       evidence_validation: verified
   - id: wordpress-session-token-hash
     layer: data_items

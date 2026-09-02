@@ -50,6 +50,17 @@ function loadLedger(): Slice2AdjudicationLedger {
   return JSON.parse(fs.readFileSync(LEDGER_SHORT_PATH, "utf8")) as Slice2AdjudicationLedger;
 }
 
+function resolveApplyCandidateBucket(entry: AdjudicationLedgerEntry): DataItemMigrationBucket {
+  if (
+    entry.sourceBucket === "tier_a_canonical_suffix" ||
+    entry.sourceBucket === "tier_b_label_guided" ||
+    entry.sourceBucket === "tier_d_evidence_hint"
+  ) {
+    return entry.sourceBucket;
+  }
+  return "tier_d_evidence_hint";
+}
+
 function applyLedgerEntryToRecord(
   record: AnnotationRecord,
   entry: AdjudicationLedgerEntry,
@@ -66,9 +77,15 @@ function applyLedgerEntryToRecord(
 
   if (entry.disposition === "accept" && entry.conceptLeaf && entry.identityKey) {
     updated.provenance.review_state = "accepted";
+    if (updated.expected.status === "ambiguous") {
+      updated.expected.status = "positive";
+    }
+    if (updated.expected.labels.length === 0) {
+      updated.expected.labels = [entry.conceptLeaf];
+    }
     const ruleId = entry.identityKey.replace(/^data_item:/, "");
     updated.candidate = buildDataItemCandidate(
-      entry.sourceBucket as DataItemMigrationBucket,
+      resolveApplyCandidateBucket(entry),
       {
         ruleId,
         conceptLeaf: entry.conceptLeaf,
