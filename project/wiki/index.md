@@ -5,7 +5,8 @@ Welcome to the project wiki.
 ## Evaluation
 
 - [Four-layer scanner evaluation](four-layer-evaluation.md) — headline layers (`mentions`, `data-items`, `components`, `data-flows`), diagnostic `raw-hits`, identity keys, and Jest vs Plexus harnesses.
-- [Eval gold flywheel](eval-flywheel.md) — `finding` and `annotation` issue types for proposed gold until a human accepts it.
+- [Gold review](eval-flywheel.md) — finding issues on Proposed / Accepted / Rejected.
+- [Corpus gold status](corpus-gold-status.md) — row-level adjudication counts per layer; updated after each pass.
 
 ## What's Next
 

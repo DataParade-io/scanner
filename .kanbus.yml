@@ -48,36 +48,22 @@ workflows:
     - proposed
     - closed
     proposed:
-    - decomposed
+    - accepted
+    - rejected
     - closed
-    decomposed:
-    - gold-authored
+    accepted:
+    - rejected
     - proposed
-    gold-authored:
-    - verified
-    - decomposed
-    verified:
     - closed
-    - gold-authored
+    rejected:
+    - proposed
+    - accepted
+    - closed
     closed:
-    - verified
+    - proposed
     - open
   annotation:
     open:
-    - labeling
-    - closed
-    labeling:
-    - awaiting-review
-    - closed
-    awaiting-review:
-    - accepted
-    - labeling
-    - rejected
-    accepted:
-    - awaiting-review
-    - closed
-    rejected:
-    - labeling
     - closed
     closed:
     - open
@@ -110,40 +96,26 @@ transition_labels:
       in_progress: Start
   finding:
     open:
-      proposed: Start flywheel
+      proposed: Start review
       closed: Drop
     proposed:
-      decomposed: Decompose by eval layer
+      accepted: Accept as gold
+      rejected: Reject label
       closed: Drop
-    decomposed:
-      gold-authored: Author gold
-      proposed: Revise proposal
-    gold-authored:
-      verified: Eval matches gold
-      decomposed: Revise decomposition
-    verified:
-      closed: Complete
-      gold-authored: Re-label
+    accepted:
+      rejected: Reject label
+      proposed: Reopen review
+      closed: Drop
+    rejected:
+      proposed: Reopen review
+      accepted: Accept as gold
+      closed: Drop
     closed:
-      verified: Reopen
+      proposed: Reopen review
       open: Reset
   annotation:
     open:
-      labeling: Start labeling
-      closed: Drop
-    labeling:
-      awaiting-review: Send to human review
-      closed: Drop
-    awaiting-review:
-      accepted: Accept gold
-      labeling: More labeling
-      rejected: Reject
-    accepted:
-      awaiting-review: Re-review repo
       closed: Complete
-    rejected:
-      labeling: Relabel
-      closed: Drop
     closed:
       open: Reopen
 initial_status: open
@@ -194,44 +166,19 @@ statuses:
   collapsed: true
 - key: proposed
   name: Proposed
-  category: Flywheel
-  color: null
-  collapsed: false
-- key: decomposed
-  name: Decomposed
-  category: Flywheel
-  color: null
-  collapsed: false
-- key: gold-authored
-  name: Gold authored
-  category: Flywheel
-  color: null
-  collapsed: false
-- key: verified
-  name: Verified
-  category: Flywheel
-  color: null
-  collapsed: false
-- key: labeling
-  name: Labeling
-  category: Annotation
-  color: null
-  collapsed: false
-- key: awaiting-review
-  name: Awaiting review
-  category: Annotation
+  category: Gold
   color: null
   collapsed: false
 - key: accepted
   name: Accepted
-  category: Annotation
+  category: Gold
   color: null
-  collapsed: true
+  collapsed: false
 - key: rejected
   name: Rejected
-  category: Annotation
+  category: Gold
   color: null
-  collapsed: true
+  collapsed: false
 categories:
 - name: To do
   color: grey
@@ -239,10 +186,8 @@ categories:
   color: blue
 - name: Done
   color: green
-- name: Flywheel
+- name: Gold
   color: yellow
-- name: Annotation
-  color: magenta
 sort_order: {}
 type_colors:
   bug: red
