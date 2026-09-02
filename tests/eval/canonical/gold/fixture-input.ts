@@ -1,6 +1,5 @@
-import type { BenchmarkLayer } from "../../../benchmark/schema";
+import type { AnnotationRecord, BenchmarkLayer } from "../../../benchmark/schema";
 import type { EvalCase, EvalLayer } from "../../types";
-import type { LegacyGoldRecord } from "../compat/types";
 
 const EVAL_LAYER_TO_BENCHMARK: Record<EvalLayer, BenchmarkLayer> = {
   components: "components",
@@ -10,14 +9,14 @@ const EVAL_LAYER_TO_BENCHMARK: Record<EvalLayer, BenchmarkLayer> = {
   mentions: "mentions",
 };
 
-const FIXTURE_GOLD_PROVENANCE: LegacyGoldRecord["provenance"] = {
+const FIXTURE_GOLD_PROVENANCE: AnnotationRecord["provenance"] = {
   proposed_by: "fixture-gold",
   proposed_at: "2026-08-31T00:00:00.000Z",
   review_state: "accepted",
 };
 
-/** Map a committed Jest fixture EvalCase into the legacy gold shape for compat loading. */
-export function evalCaseToLegacyInput(caseRecord: EvalCase): LegacyGoldRecord {
+/** Map a committed Jest fixture EvalCase into a corpus annotation row for gold loading. */
+export function evalCaseToAnnotationRecord(caseRecord: EvalCase): AnnotationRecord {
   return {
     id: caseRecord.id,
     layer: EVAL_LAYER_TO_BENCHMARK[caseRecord.layer],
@@ -30,6 +29,7 @@ export function evalCaseToLegacyInput(caseRecord: EvalCase): LegacyGoldRecord {
       start_line: caseRecord.evidence.start_line,
       end_line: caseRecord.evidence.end_line,
     },
+    rationale: caseRecord.rationale,
     expected: {
       status: caseRecord.expected.status,
       labels: [...caseRecord.expected.labels],

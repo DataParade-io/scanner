@@ -4,8 +4,7 @@ import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 import { loadAnnotations } from "../../benchmark/manifest";
 import {
   buildComponentMigrationLedger,
-  loadLegacyGoldRecord,
-  annotationRecordToLegacyInput,
+  loadCanonicalGoldFromAnnotation,
   type ComponentMigrationLedgerEntry,
 } from "../../eval/canonical";
 
@@ -77,10 +76,7 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
         if (annotation.provenance.review_state !== "accepted") {
           continue;
         }
-        const { record } = loadLegacyGoldRecord(annotationRecordToLegacyInput(annotation), {
-          warn: () => undefined,
-          repoKey,
-        });
+        const { record } = loadCanonicalGoldFromAnnotation(annotation, { repoKey });
         expect(record.optionalAssertion?.instance).toBeUndefined();
       }
     }

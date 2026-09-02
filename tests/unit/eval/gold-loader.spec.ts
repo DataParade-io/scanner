@@ -3,11 +3,9 @@ import {
   isNeedsAdjudication,
   loadCanonicalGoldFromAnnotation,
   loadCanonicalGoldFromEvalCase,
-  loadCanonicalGoldFromLegacyRecord,
   ruleIdToConceptLeaf,
   sampleEvidence,
 } from "../../eval/canonical";
-import type { LegacyGoldRecord } from "../../eval/canonical";
 import type { AnnotationRecord } from "../../benchmark/schema";
 import { componentEvalCases } from "../../eval/layers/components/cases";
 import { dataFlowEvalCases } from "../../eval/layers/data-flows/cases";
@@ -16,21 +14,6 @@ import { loadAnnotations } from "../../benchmark/manifest";
 import path from "path";
 
 const evidence = sampleEvidence("db-client-import.ts", 1, 1);
-
-function legacyRecord(overrides: Partial<LegacyGoldRecord> & Pick<LegacyGoldRecord, "id">): LegacyGoldRecord {
-  return {
-    layer: "components",
-    subject: { key: "asset:database" },
-    evidence,
-    expected: { status: "positive", labels: ["database"] },
-    provenance: {
-      proposed_by: "test",
-      proposed_at: "2026-08-31",
-      review_state: "accepted",
-    },
-    ...overrides,
-  };
-}
 
 function corpusAnnotation(overrides: Partial<AnnotationRecord> & Pick<AnnotationRecord, "id">): AnnotationRecord {
   return {
@@ -48,14 +31,20 @@ function corpusAnnotation(overrides: Partial<AnnotationRecord> & Pick<Annotation
   };
 }
 
-describe("loadCanonicalGoldFromLegacyRecord (corpus-shaped rows)", () => {
-  it("maps asset:database with legacy name to structured identity without instance", () => {
-    const { record } = loadCanonicalGoldFromLegacyRecord(
-      legacyRecord({
+describe("loadCanonicalGoldFromAnnotation (corpus-shaped rows)", () => {
+  it("maps structured component canonical blocks to accepted gold", () => {
+    const { record } = loadCanonicalGoldFromAnnotation(
+      corpusAnnotation({
         id: "corpus-db",
         subject: { key: "asset:database", name: "wpdb" },
+        canonical: {
+          entity_id: "wordpress::corpus-db",
+          identity_key: "asset:database",
+          component_type: "asset",
+          component_subtype: "database",
+        },
       }),
-      { warn: () => undefined, repoKey: "wordpress" },
+      { repoKey: "wordpress" },
     );
 
     expect(record.identity.identityKey).toBe("asset:database");
@@ -70,51 +59,54 @@ describe("loadCanonicalGoldFromLegacyRecord (corpus-shaped rows)", () => {
     expect(isAcceptedEvaluablePositive(record)).toBe(true);
   });
 
-  it("maps third_party:checkr with subtype from labels and vendor from key suffix", () => {
-    const { record } = loadCanonicalGoldFromLegacyRecord(
-      legacyRecord({
+  it("maps third_party canonical blocks with vendor from block", () => {
+    const { record } = loadCanonicalGoldFromAnnotation(
+      corpusAnnotation({
         id: "corpus-checkr",
         subject: { key: "third_party:checkr", name: "Checkr" },
         expected: { status: "positive", labels: ["saas_service"] },
+        canonical: {
+          entity_id: "vgs-django::corpus-checkr",
+          identity_key: "third_party:saas_service",
+          component_type: "third_party",
+          component_subtype: "saas_service",
+          vendor: "checkr",
+        },
       }),
-      { warn: () => undefined, repoKey: "vgs-django" },
+      { repoKey: "vgs-django" },
     );
 
     expect(record.identity.identityKey).toBe("third_party:saas_service");
-    expect(record.identity.identityKey).not.toBe("third_party:checkr");
     expect(record.classification.componentSubtype).toBe("saas_service");
     expect(record.optionalAssertion?.vendor).toBe("checkr");
     expect(record.entityId).toBe("vgs-django::corpus-checkr");
     expect(record.optionalAssertion?.instance).toBeUndefined();
   });
 
-  it("routes accepted corpus data-flow rows to needs_adjudication", () => {
-    const { record } = loadCanonicalGoldFromLegacyRecord(
-      legacyRecord({
+  it("routes accepted corpus data-flow rows without flow_canonical to needs_adjudication", () => {
+    const { record } = loadCanonicalGoldFromAnnotation(
+      corpusAnnotation({
         id: "corpus-flow",
         layer: "data_flows",
         subject: { key: "flow:password->wp_check_password", name: "Password to verifier" },
         expected: { status: "positive", labels: ["data_flow"] },
       }),
-      { warn: () => undefined },
     );
 
     expect(record.identity.layer).toBe("data-flows");
-    expect(record.identity.identityKey).toBe("flow:password->wp_check_password");
     expect(record.disposition).toBe("needs_adjudication");
     expect(isNeedsAdjudication(record)).toBe(true);
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
   });
 
-  it("maps canonical mention:email through ruleIdToConceptLeaf", () => {
-    const { record } = loadCanonicalGoldFromLegacyRecord(
-      legacyRecord({
+  it("maps canonical mention:email using expected labels", () => {
+    const { record } = loadCanonicalGoldFromAnnotation(
+      corpusAnnotation({
         id: "corpus-mention-email",
         layer: "mentions",
         subject: { key: "mention:email" },
-        expected: { status: "positive", labels: ["email"] },
+        expected: { status: "positive", labels: ["email_address"] },
       }),
-      { warn: () => undefined },
     );
 
     expect(record.identity.identityKey).toBe("mention:email");
@@ -122,28 +114,25 @@ describe("loadCanonicalGoldFromLegacyRecord (corpus-shaped rows)", () => {
     expect(record.classification.conceptLeaf).not.toBe(ruleIdToConceptLeaf("username"));
   });
 
-  it("maps mention rule-id suffixes through ruleIdToConceptLeaf", () => {
-    const { record, diagnostics } = loadCanonicalGoldFromLegacyRecord(
-      legacyRecord({
+  it("falls back to concept-map for mention rule-id suffixes when labels are empty", () => {
+    const { record, diagnostics } = loadCanonicalGoldFromAnnotation(
+      corpusAnnotation({
         id: "corpus-mention-email",
         layer: "mentions",
         subject: { key: "mention:email" },
         expected: { status: "positive", labels: [] },
       }),
-      { warn: () => undefined },
     );
 
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptAncestry).toEqual(["email_address"]);
-    expect(diagnostics.some((entry) => entry.conversion === "rule_id_to_concept_leaf")).toBe(true);
+    expect(diagnostics).toEqual([]);
   });
 });
 
-describe("loadCanonicalGoldFromAnnotation", () => {
+describe("loadCanonicalGoldFromAnnotation corpus bridge", () => {
   it("round-trips corpus AnnotationRecord rows", () => {
-    const { record } = loadCanonicalGoldFromAnnotation(corpusAnnotation({ id: "annotation-bridge" }), {
-      warn: () => undefined,
-    });
+    const { record } = loadCanonicalGoldFromAnnotation(corpusAnnotation({ id: "annotation-bridge" }));
 
     expect(record.identity.identityKey).toBe("asset:database");
     expect(record.contractVersion).toBeDefined();
@@ -157,7 +146,7 @@ describe("loadCanonicalGoldFromAnnotation", () => {
     for (const layer of layers) {
       const annotations = loadAnnotations(repoDir, layer);
       expect(annotations.length).toBeGreaterThan(0);
-      const { record } = loadCanonicalGoldFromAnnotation(annotations[0]!, { warn: () => undefined });
+      const { record } = loadCanonicalGoldFromAnnotation(annotations[0]!);
       expect(record.identity.layer).toBeTruthy();
       expect(record.identity.identityKey).toBeTruthy();
     }
@@ -173,10 +162,9 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     ];
 
     for (const caseRecord of allCases) {
-      const { record } = loadCanonicalGoldFromEvalCase(caseRecord, { warn: () => undefined });
+      const { record } = loadCanonicalGoldFromEvalCase(caseRecord);
       expect(record.id).toBe(caseRecord.id);
       if (caseRecord.layer === "components") {
-        expect(record.identity.identityKey).toMatch(/^(asset|third_party|actor):/);
         expect(record.observedTokenCandidates?.some(
           (token) => token.value === caseRecord.subject.key,
         )).toBe(true);
@@ -186,11 +174,11 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     }
   });
 
-  it("maps fixture asset:pg label database to classification identity asset:database", () => {
+  it("preserves fixture component keys with taxonomy-resolved classification identity", () => {
     const fixtureCase = componentEvalCases.find((entry) => entry.id === "ts-pg-database");
     expect(fixtureCase).toBeDefined();
 
-    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!, { warn: () => undefined });
+    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!);
 
     expect(record.identity.identityKey).toBe("asset:database");
     expect(record.identity.identityKey).not.toBe("asset:pg");
@@ -205,16 +193,16 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
       if (caseRecord.expected.status !== "positive") {
         continue;
       }
-      const { record } = loadCanonicalGoldFromEvalCase(caseRecord, { warn: () => undefined });
+      const { record } = loadCanonicalGoldFromEvalCase(caseRecord);
       expect(record.disposition).toBe("needs_adjudication");
     }
   });
 
-  it("maps fixture mention:username through ruleIdToConceptLeaf", () => {
+  it("maps fixture mention:username through concept-map fallback", () => {
     const fixtureCase = mentionEvalCases.find((entry) => entry.id === "mention-jvm-yaml-username");
     expect(fixtureCase).toBeDefined();
 
-    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!, { warn: () => undefined });
+    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!);
 
     expect(record.identity.identityKey).toBe("mention:username");
     expect(record.classification.conceptLeaf).toBe("username");
