@@ -19,11 +19,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'authorization-header'; unresolved target for slug 'basic-authorization'; no component candidates via overlap or rationale+same-file
   - id: vapor-bearer-header-to-token
     layer: data_flows
     subject:
@@ -44,11 +39,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'authorization-header'; unresolved target for slug 'bearer-authorization'; no component candidates via overlap or rationale+same-file
   - id: vapor-session-id-to-authenticator
     layer: data_flows
     subject:
@@ -66,15 +56,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (vapor-not-supabase); prose endpoints session->session-authenticator appear intra-component.
-      source_entity_id: vapor::vapor-not-supabase
+      candidate_notes: Entity picker resolved vapor-customer-actor from span content; negative decoys excluded.
+      source_entity_id: vapor::vapor-customer-actor
+      target_entity_id: vapor::vapor-customer-actor
+      proposed_data_categories:
+        - session
   - id: vapor-user-to-session-store
     layer: data_flows
     subject:
@@ -95,11 +88,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'authenticatable'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file
   - id: vapor-bearer-authenticator-not-database
     layer: data_flows
     subject:
@@ -116,11 +104,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: BearerAuthenticator only parses the header and delegates to authenticate(bearer:for:). No database read or write occurs in the scoped files.

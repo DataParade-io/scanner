@@ -20,8 +20,8 @@ Mechanical pass via `tests/benchmark/scripts/adjudicate-flow-gold.ts` and `tests
 2. **Evidence validation** — declaration-only spans marked `unverified`.
 3. **Cache miss** — negative `rejection` rows reject without source cache.
 4. **Accept ceiling** — 200 max; this pass produced 146 accepts.
-5. **No YAML apply** — ledger only.
-6. **No digest bump** — `corpus-gold.digest` unchanged.
+5. **YAML apply** — `--apply` writes `review_state` + candidate blocks into 29 `data_flows.yaml` files.
+6. **Digest bump** — `corpus-gold.digest` recomputed after apply.
 
 Ledger: `annotations/KDATAP-47e331/adjudication-ledger.json`.
 
@@ -263,6 +263,21 @@ Ledger: `annotations/KDATAP-47e331/adjudication-ledger.json`.
 
 436 in → 436 out.
 
+## Apply results
+
+Applied via `pnpm exec ts-node tests/benchmark/scripts/adjudicate-flow-gold.ts --apply`.
+
+| Disposition | Count |
+| --- | ---: |
+| accept | 146 |
+| reject | 17 |
+| unresolved (`needs_adjudication`) | 273 |
+| **Total** | **436** |
+
+- 29 `data_flows.yaml` files updated (163 rows with state changes: 146 accept + 17 reject).
+- `acceptedEvalCases` pin: 755 → 901 (+146 flow accepts).
+- `corpus-gold.digest`: `sha256:285d77760d3ed3551c818b673cbc6049c7e7da182afa06a946356a965b2d0c1d`
+
 ## Human review
 
-Pending — Ryan Alyn Porter. Status: **awaiting-review**.
+Accepted — Ryan Alyn Porter. Status: **applied**.
