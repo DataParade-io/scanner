@@ -59,13 +59,43 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 | Scenario file | Layer(s) | What it proves |
 |---------------|----------|----------------|
 | `scanner-recall-evaluation.feature` | Mentions (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
-| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Span, Mention Span, and Subject Identity scores via `scan-layer-findings.ts`; unread skip and ingested miss behavior |
+| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Identity, Mention Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Mention Span (`SubjectSpanOverlapScore`) via layer findings commands; unread skip and ingested miss behavior |
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
 `scanner-layer-evaluation` scenarios are skipped automatically when a required Plexus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
+
+### Layer evaluation scores and findings bridge
+
+Layer evaluation invokes Plexus scores **directly as Python modules** (no GraphQL server, no `plexus evaluate accuracy` CLI). Step definitions call `features/scripts/run-layer-score-eval.py` via the Plexus venv Python (`PYTHON` env).
+
+| Score | Plexus class | Identity prefix | Findings command |
+|-------|--------------|-----------------|------------------|
+| Subject Identity | SubjectIdentityScore | `data_item:` | `scripts/scan-layer-findings.ts` |
+| Raw Hit Identity | SubjectIdentityScore | `raw_hit:` | `scripts/scan-layer-findings.ts` |
+| Mention Identity | SubjectIdentityScore | `mention:` | `scripts/scan-layer-findings.ts` |
+| Raw Hit Span | SubjectSpanOverlapScore | `raw_hit:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
+| Mention Span | SubjectSpanOverlapScore | `mention:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
+
+Identity scores match on `subjectKey` only. Span scores require flattened `filePath` / `startLine` / `endLine` on each finding; `flatten-span-findings.ts` expands `evidenceLocations` from the layer scanner payload.
+
+### Gherkin datasets vs Jest `cases.ts` patterns
+
+Representative parity (not one scenario per Jest case):
+
+| Pattern | Jest reference | Gherkin dataset |
+|---------|----------------|-----------------|
+| Positive identity hit | `*-jvm-yaml-username`, `*-java-email-parameter` | `*-identity-hit.csv`, `data-item-hit.csv` on `scan-findings/app.py` |
+| Ingested identity miss | `*-ts-passport-*`, `*-py-no-email` | `*-identity-miss.csv` with `*:passport` |
+| Identity-only evidence | `data-item-jvm-username-identity-only` | `data-item-identity-only.csv` (evidence line ≠ hit span) |
+| Multi-file rollup | `data-item-jvm-username-multi-file` | `data-item-multi-file.csv` on `repos/jvm-manifests-basic` |
+| Unread skip | unread detection in eval harness | `raw-hit-identity-unread.csv`, `raw-hit-unread.csv` |
+| Span overlap hit | mention/raw span positives | `raw-hit-hit.csv`, `mention-hit.csv` |
+| Span ingested miss | non-overlapping gold span | `raw-hit-miss.csv` |
+
+Fixtures live under `features/fixtures/scanner-recall-eval/` (datasets, scorecards, and `repos/` for Jest-parity source trees).
 
 `canonical-evaluation-representation` scenarios return **pending** (not skipped) until the canonical IR types land in KDATAP-06634c. See [`tests/eval/canonical-representation.md`](../tests/eval/canonical-representation.md).
 
