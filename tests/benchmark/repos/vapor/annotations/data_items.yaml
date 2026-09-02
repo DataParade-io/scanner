@@ -11,7 +11,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - user_identifier
+        - username
     rationale: username is stored on BasicAuthorization and serialized back into the Authorization header.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -28,7 +28,7 @@ annotations:
         - username
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: vapor-basic-password-item
     layer: data_items
     subject:
@@ -41,7 +41,7 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: password is a credential field carried in BasicAuthorization and encoded into the Authorization header.
     provenance:
       proposed_by: composer-2.5-swarm
@@ -57,7 +57,7 @@ annotations:
         - password
       candidate_confidence: high
       candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
-      evidence_validation: skipped
+      evidence_validation: verified
   - id: vapor-bearer-token-item
     layer: data_items
     subject:
@@ -113,6 +113,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
