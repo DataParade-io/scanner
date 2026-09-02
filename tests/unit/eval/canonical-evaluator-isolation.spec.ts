@@ -4,65 +4,54 @@ import path from "node:path";
 import {
   buildAcceptedGoldExpectation,
   buildScannerFinding,
-  loadLegacyGoldRecord,
+  loadCanonicalGoldFromAnnotation,
   observationsMatch,
   sampleEvidence,
   strictCorrectness,
   withId,
 } from "../../eval/canonical";
+import type { AnnotationRecord } from "../../benchmark/schema";
 
 const compatDir = path.join(__dirname, "../../eval/canonical/compat");
 const evidence = sampleEvidence("src/app.ts", 5, 5);
 
-describe("canonical evaluator isolation", () => {
-  it("never leaves legacy prefixes on identity.identityKey", () => {
-    const inputs = [
-      {
-        id: "iso-mention",
-        layer: "mentions" as const,
-        subject: { key: "mention:email" },
-      },
-      {
-        id: "iso-pii-signal",
-        layer: "mentions" as const,
-        subject: { key: "pii_signal:email" },
-      },
-    ];
+function annotationRow(
+  overrides: Partial<AnnotationRecord> & Pick<AnnotationRecord, "id" | "layer" | "subject">,
+): AnnotationRecord {
+  return {
+    evidence,
+    rationale: "canonical evaluator isolation",
+    expected: { status: "positive", labels: [] },
+    provenance: {
+      proposed_by: "test",
+      proposed_at: "2026-08-31",
+      review_state: "accepted",
+    },
+    ...overrides,
+  };
+}
 
-    for (const input of inputs) {
-      const { record } = loadLegacyGoldRecord(
-        {
-          ...input,
-          evidence,
-          expected: { status: "positive", labels: [] },
-          provenance: {
-            proposed_by: "test",
-            proposed_at: "2026-08-31",
-            review_state: "accepted",
-          },
-        },
-        { warn: () => undefined },
-      );
-      expect(record.identity.identityKey).not.toMatch(/^pii:/);
-      expect(record.identity.identityKey).not.toMatch(/^pii_signal:/);
-    }
+describe("canonical evaluator isolation", () => {
+  it("rejects stale pii_signal: mention keys at load time", () => {
+    expect(() =>
+      loadCanonicalGoldFromAnnotation(
+        annotationRow({
+          id: "iso-pii-signal",
+          layer: "mentions",
+          subject: { key: "pii_signal:email" },
+        }),
+      ),
+    ).toThrow(/requires mention: prefix/);
   });
 
-  it("maps mention:email to concept leaf email_address via rule_id_to_concept_leaf", () => {
-    const { record } = loadLegacyGoldRecord(
-      {
+  it("maps mention:email to concept leaf email_address via concept-map fallback", () => {
+    const { record } = loadCanonicalGoldFromAnnotation(
+      annotationRow({
         id: "iso-rule-map",
         layer: "mentions",
         subject: { key: "mention:email" },
-        evidence,
         expected: { status: "positive", labels: ["email"] },
-        provenance: {
-          proposed_by: "test",
-          proposed_at: "2026-08-31",
-          review_state: "accepted",
-        },
-      },
-      { warn: () => undefined },
+      }),
     );
 
     expect(record.identity.identityKey).toBe("mention:email");
@@ -86,6 +75,7 @@ describe("canonical evaluator isolation", () => {
           },
         ],
       }),
+      "token-only",
     );
 
     const finding = withId(
@@ -103,6 +93,7 @@ describe("canonical evaluator isolation", () => {
           },
         ],
       }),
+      "token-find",
     );
 
     expect(strictCorrectness(expectation, finding)).toBe(false);
@@ -119,6 +110,7 @@ describe("canonical evaluator isolation", () => {
         evidenceLocations: [evidence],
         displayText: "Shared Label",
       }),
+      "display-expectation",
     );
 
     const finding = withId(
@@ -131,6 +123,7 @@ describe("canonical evaluator isolation", () => {
         evidenceLocations: [evidence],
         displayText: "Shared Label",
       }),
+      "display-finding",
     );
 
     expect(observationsMatch(expectation, finding)).toBe(false);

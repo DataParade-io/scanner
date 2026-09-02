@@ -114,24 +114,17 @@ export type { BuildFindingInput, BuildFlowFindingInput, BuildFlowGoldInput, Buil
 
 export {
   LEGACY_SOURCE_CONTRACT_VERSION,
-  CONVERSION_KINDS,
-  annotationRecordToLegacyInput,
   buildAnnotationCanonicalBlock,
   buildComponentMigrationLedger,
   buildComponentMigrationLedgerEntry,
   classifyComponentMigrationBucket,
   listAcceptedComponentAnnotations,
-  loadLegacyGoldRecord,
 } from "./compat";
 export type {
-  CompatLoadResult,
   ConversionKind,
   ComponentMigrationBucket,
   ComponentMigrationLedger,
   ComponentMigrationLedgerEntry,
-  LegacyGoldProvenance,
-  LegacyGoldRecord,
-  LoadLegacyGoldOptions,
   MigrationDiagnostic,
 } from "./compat";
 
@@ -151,9 +144,9 @@ export {
   loadCanonicalGoldFromAnnotation,
   loadCanonicalGoldFromAnnotations,
   loadCanonicalGoldFromEvalCase,
-  loadCanonicalGoldFromLegacyRecord,
-  evalCaseToLegacyInput,
+  evalCaseToAnnotationRecord,
 } from "./gold";
+export type { CanonicalGoldLoadResult, LoadCanonicalGoldOptions } from "./gold";
 
 export {
   adaptDetectedComponent,

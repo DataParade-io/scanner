@@ -38,7 +38,7 @@ describe("baseline gold stats collectors", () => {
     expect(["accepted", "migration_incomplete", "needs_adjudication"]).toContain(
       canonical.disposition,
     );
-    expect(diagnostics.length).toBeGreaterThan(0);
+    expect(diagnostics).toEqual([]);
   });
 
   it("classifies data-flow accepted rows as awaiting adjudication", () => {

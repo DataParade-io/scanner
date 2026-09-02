@@ -15,7 +15,7 @@ import {
   conceptCorrectness,
   declaredCapabilityUnsupported,
   loadCanonicalGoldFromEvalCase,
-  loadCanonicalGoldFromLegacyRecord,
+  loadCanonicalGoldFromAnnotation,
   oneFindingCannotSatisfyBoth,
   observationsMatch,
   resetSyntheticIds,
@@ -28,8 +28,8 @@ import type {
   CanonicalGoldExpectation,
   CanonicalScannerFinding,
   ConceptCorrectness,
-  LegacyGoldRecord,
 } from "../../tests/eval/canonical";
+import type { AnnotationRecord } from "../../tests/benchmark/schema";
 import type { EvalCase } from "../../tests/eval/types";
 import { componentEvalCases } from "../../tests/eval/layers/components/cases";
 import { scanCanonicalComponents } from "../../tests/eval/layers/components/adapter";
@@ -44,7 +44,7 @@ interface CanonicalWorld {
   expectations: Array<CanonicalGoldExpectation & { id: string }>;
   findings: Array<CanonicalScannerFinding & { id: string }>;
   finding?: CanonicalScannerFinding & { id: string };
-  legacyInput?: LegacyGoldRecord;
+  legacyInput?: AnnotationRecord;
   normalizedExpectation?: CanonicalGoldExpectation & { id: string };
   bridgeCase?: EvalCase;
   strictMatch?: boolean;
@@ -83,8 +83,8 @@ const acceptedProvenance = {
 };
 
 function normalizeGoldAdapterExpectation(w: CanonicalWorld): void {
-  assert.ok(w.legacyInput, "legacy gold input must be set before normalization");
-  const { record } = loadCanonicalGoldFromLegacyRecord(w.legacyInput, { warn: () => undefined });
+  assert.ok(w.legacyInput, "annotation input must be set before normalization");
+  const { record } = loadCanonicalGoldFromAnnotation(w.legacyInput, {});
   w.normalizedExpectation = record;
   w.expectations = [record];
 }
@@ -362,6 +362,7 @@ Given("a mention expectation with a legacy subject name", function (this: Canoni
     layer: "mentions",
     subject: { key: "mention:username", name: "userLogin" },
     evidence: sampleEvidence("src/config.yml", 5, 5),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: [] },
     provenance: acceptedProvenance,
   };
@@ -382,6 +383,7 @@ Given(
       layer: "data_items",
       subject: { key: "data_item:email_address", name: "clientID" },
       evidence: sampleEvidence("src/form.ts", 10, 10),
+      rationale: "cucumber gold adapter scenario",
       expected: { status: "ambiguous", labels: ["pii:email_address"] },
       provenance: acceptedProvenance,
     };
@@ -394,6 +396,7 @@ Given("an asset expectation with a legacy code-level subject name", function (th
     layer: "components",
     subject: { key: "asset:pg", name: "Pg" },
     evidence: sampleEvidence("db-client-import.ts", 1, 1),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: ["database"] },
     provenance: acceptedProvenance,
   };
@@ -405,6 +408,7 @@ Given("a third-party expectation with a legacy vendor subject name", function (t
     layer: "components",
     subject: { key: "third_party:stripe", name: "Strip" },
     evidence: sampleEvidence("external-api.ts", 6, 6),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: ["third_party"] },
     provenance: acceptedProvenance,
   };
@@ -419,6 +423,7 @@ Given("a data-flow expectation with a legacy prose subject name", function (this
       name: "API → Stripe",
     },
     evidence: sampleEvidence("external-api.ts", 6, 6),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: ["api_call"] },
     provenance: acceptedProvenance,
   };
@@ -882,6 +887,7 @@ Given("a legacy accepted data-flow annotation", function (this: CanonicalWorld) 
     layer: "data_flows",
     subject: { key: "flow:password->wp_check_password", name: "Password to verifier" },
     evidence: sampleEvidence("src/user.php", 2300, 2301),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: ["data_flow"] },
     provenance: acceptedProvenance,
   };
@@ -905,6 +911,7 @@ Given("a legacy data-flow expectation with prose display text", function (this: 
     layer: "data_flows",
     subject: { key: "flow:asset:api->third_party:stripe", name: "API to Stripe" },
     evidence: sampleEvidence("external-api.ts", 6, 6),
+    rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: ["api_call"] },
     provenance: acceptedProvenance,
   };
