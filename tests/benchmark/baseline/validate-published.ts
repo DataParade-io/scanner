@@ -11,6 +11,7 @@ export interface ValidatePublishedBaselineOptions {
   benchmarkRoot?: string;
   packageRoot?: string;
   requireValidMaterializations?: boolean;
+  requireReadinessPass?: boolean;
   verifyDigests?: boolean;
   verifyMarkdown?: boolean;
 }
@@ -33,6 +34,19 @@ function resolveMarkdownPath(jsonPath: string): string | null {
     return fs.existsSync(sibling) ? sibling : null;
   }
   return null;
+}
+
+function assertReadinessPass(artifact: BaselineArtifact): void {
+  if (artifact.readiness.status === "pass") {
+    return;
+  }
+
+  const details = artifact.readiness.blockers
+    .map((blocker) => `${blocker.code}: ${blocker.message}`)
+    .join("; ");
+  throw new PublishedBaselineValidationError(
+    `Published baseline requires readiness.status=pass; got ${artifact.readiness.status}. Blockers: ${details || "(none listed)"}`,
+  );
 }
 
 function assertValidMaterializations(artifact: BaselineArtifact): void {
@@ -107,6 +121,10 @@ export function validatePublishedBaseline(
 
   if (options.requireValidMaterializations) {
     assertValidMaterializations(artifact);
+  }
+
+  if (options.requireReadinessPass) {
+    assertReadinessPass(artifact);
   }
 
   if (options.verifyDigests) {
