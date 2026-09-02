@@ -31,6 +31,21 @@ export const EXHAUSTIVE_SCOPE_FILES: Record<string, string[]> = {
     "src/main/resources/bootstrap.yml",
   ],
   "dotnet-manifests-basic": ["src/Api/Api.csproj", "src/Api/appsettings.json"],
+  "php-dependency-manifests-basic": ["composer.json"],
+  "data-actions-basic": [
+    "collect.ts",
+    "generate.ts",
+    "transform.ts",
+    "use.ts",
+    "combine.ts",
+    "relay.ts",
+    "display.ts",
+    "log.ts",
+    "delete.ts",
+    "combos.ts",
+  ],
+  "data-actions-python": ["app.py"],
+  "data-actions-php": ["src/CheckoutController.php", "composer.json"],
 };
 
 export function withExhaustiveScope(cases: EvalCase[]): EvalCase[] {
