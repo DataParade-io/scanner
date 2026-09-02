@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 
 import {
@@ -9,6 +10,7 @@ import {
   classifyFlowSourceBucket,
   findComponentsReferencedInSpan,
   FLOW_ADJUDICATION_TASK,
+  isDeclarationOnlySpan,
   pickIntraEntity,
   shouldDemoteOrmGraphEdge,
   validateFlowEvidence,
@@ -131,6 +133,31 @@ describe("flow-adjudication", () => {
     expect(entry.sourceEntityId).not.toContain("not-stripe");
   });
 
+  it("rejects negative migration rows when source cache is missing", () => {
+    const root = resolveDefaultBenchmarkRoot();
+    const repoDir = path.join(root, "repos", "exposed");
+    const flows = loadAnnotations(repoDir, "data_flows");
+    const flow = flows.find((row) => row.id === "exposed-not-customer-email-flow");
+    expect(flow?.expected.status).toBe("negative");
+
+    const originalExistsSync = fs.existsSync;
+    const existsSyncSpy = jest.spyOn(fs, "existsSync").mockImplementation((target) => {
+      if (String(target).includes(`${path.sep}.cache${path.sep}repos${path.sep}`)) {
+        return false;
+      }
+      return originalExistsSync(target);
+    });
+
+    try {
+      const entry = analyzeFlowForAdjudication("exposed", flow!, root);
+      expect(entry.disposition).toBe("reject");
+      expect(entry.evidenceValidation).toBe("skipped");
+      expect(entry.sourceBucket).toBe("rejection");
+    } finally {
+      existsSyncSpy.mockRestore();
+    }
+  });
+
   it("rejects all 17 negative flow rows", () => {
     const ledger = buildFlowMigrationLedger();
     const adjudication = buildFlowAdjudicationLedger();
@@ -249,6 +276,36 @@ describe("flow-adjudication", () => {
     expect(validateFlowEvidence("email = models.EmailField()", "", "User email persisted")).toBe(
       "verified",
     );
+  });
+
+  it("marks declaration-only spans as unverified", () => {
+    expect(isDeclarationOnlySpan("adapter: postgresql")).toBe(true);
+    expect(isDeclarationOnlySpan("enable_github_logins:")).toBe(true);
+    expect(isDeclarationOnlySpan("function wp_cache_set( $key, $data, $group, $expire ) {")).toBe(
+      true,
+    );
+    expect(
+      validateFlowEvidence("adapter: postgresql", "", "database.yml configures adapter"),
+    ).toBe("unverified");
+  });
+
+  it("accepts single-component runtime flows without evidence overlap", () => {
+    const root = resolveDefaultBenchmarkRoot();
+    const repoDir = path.join(root, "repos", "magento");
+    const flows = loadAnnotations(repoDir, "data_flows");
+    const flow = flows.find((row) => row.id === "magento-login-post-to-authenticate");
+    expect(flow).toBeDefined();
+
+    try {
+      const entry = analyzeFlowForAdjudication("magento", flow!, root);
+      expect(entry.disposition).toBe("accept");
+      expect(entry.sourceBucket).toBe("intra_single_component");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (!message.includes("Cache miss")) {
+        throw error;
+      }
+    }
   });
 
   it("picks actor entity for ORM demotion", () => {
