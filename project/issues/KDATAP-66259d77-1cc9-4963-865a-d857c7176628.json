@@ -3,7 +3,7 @@
   "title": "python-basic: phantom drivers must not fire",
   "description": "Scanner emits asset:aiosqlite, asset:asyncpg, and asset:pymysql on python-basic/app.py when only psycopg2 is imported. These are false positives; the drivers share 'connect' as a callName and psycopg2.connect triggers them. Tracked by bug KDATAP-0f7953.",
   "type": "finding",
-  "status": "verified",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -17,11 +17,18 @@
       "text": "Verified against live scan output. Negative expectation confirmed. Linked bug tracks the fix.",
       "created_at": "2026-08-30T16:43:09.853382Z",
       "comment_type": "default"
+    },
+    {
+      "id": "3b7d331f-6995-4743-a0ef-c438f04f7b13",
+      "author": "home",
+      "text": "Closing: sample-app Jest gold is finished; not part of corpus review.",
+      "created_at": "2026-09-02T19:23:32.294413Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-08-30T16:42:54.844745Z",
-  "updated_at": "2026-08-30T16:43:09.853382Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T19:23:32.315429Z",
+  "closed_at": "2026-09-02T19:23:32.315429Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

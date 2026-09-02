@@ -33,7 +33,7 @@ This repository uses [Kanbus](https://kanb.us) for issue tracking. Initialize yo
 - New issues use the **KDATAP** key prefix.
 - Do not use `kbs create --local` or `project-local/`.
 - Do not edit JSON under `project/issues/` or `project/events/` by hand; use `kbs` commands only.
-- Eval gold review uses issue types **finding** (one expected detection) and **annotation** (one fixture labeling pass). Artifacts live in `findings/<id>/` and `annotations/<id>/` and may be edited as Markdown. Findings stay **proposed** until a person advances them; annotations stay **awaiting-review** until a person accepts them.
+- Eval gold review uses issue type **finding** (one gold label). Findings stay **proposed** until a person moves them to **accepted** or **rejected**. Optional pass notes live in `annotations/<id>/`.
 
 ## Development
 

@@ -1,0 +1,97 @@
+{
+  "id": "KDATAP-25b2f474-1d4a-4279-bfcc-b6a73343714a",
+  "title": "Adjudicate data-item gold dispositions (accept/reject/unresolved)",
+  "description": "AI adjudication pass over the 431 data-item rows currently `needs_adjudication` after a0e80b + 9b83f6.\n\nFor each row, read pinned source at the evidence span, apply `patterns/personal-data-concept-map.yaml`, and propose a final disposition:\n\n- **accept** with canonical `concept_leaf` (from map only; no invented leaves) — source clearly is that concept\n- **reject** with rationale — source is not personal data, not on this layer, or negative\n- **unresolved** with reason — genuinely ambiguous; flag for later\n\nOutput: an adjudication ledger with a proposed disposition for every row. Human gate is at the packet level (sample + bucket counts), not row-by-row, because humans will not review hundreds of rows.\n\nLocks:\n- Ontology only from `personal-data-concept-map.yaml`. No invented leaves. No `no-concept` escape.\n- Do not run `scan()` or use detector output.\n- Legacy `subject.key` preserved.\n- `expected.labels` may be corrected only if the source clearly contradicts the label (annotation defect, not scanner alignment).\n- Follow `.agents/skills/curate-scanner-evaluation-corpus/SKILL.md` Correct ground truth.\n\nOpen question for the plan: does AI write `review_state: accepted/rejected` directly in YAML, or propose in a ledger and a mechanical flip runs after human packet-accept? Planner recommends; manager decides.",
+  "type": "annotation",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [
+    "data-items",
+    "113-accepted",
+    "76-rejected",
+    "247-unresolved"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "39a28c7c-0be6-4bb2-a840-5f1cf9b54003",
+      "author": "home",
+      "text": "Plan approved: Option B (ledger-then-flip), deterministic-only, accept ceiling 140. Create worktree only at /tmp/scanner-25b2f4-adjudicate on cursor/adjudicate-data-items-25b2f4.",
+      "created_at": "2026-09-02T00:20:49.920727Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "07e4ec86-298f-4037-9472-137c1c95f2c7",
+      "author": "home",
+      "text": "Implementation authorized. Worktree verified at /tmp/scanner-25b2f4-adjudicate @ 0d56feb.",
+      "created_at": "2026-09-02T00:21:04.440878Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "c28b7f96-261b-4221-813e-a239646e7c26",
+      "author": "home",
+      "text": "Implementation authorized. Worktree verified at /tmp/scanner-25b2f4-adjudicate @ 0d56feb.",
+      "created_at": "2026-09-02T00:40:56.999690Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "99cd9733-c48a-4898-bc3e-6ae8de0c69ae",
+      "author": "home",
+      "text": "## Adjudication ledger written (KDATAP-25b2f4)\n\nDeterministic pass complete — ledger only, no YAML `--apply` this slice.\n\n| Disposition | Count |\n| --- | ---: |\n| accept | 114 |\n| reject | 75 |\n| unresolved | 247 |\n| **Total** | **436** |\n\n- Accept ceiling: 140 (not exceeded)\n- Label corrections documented: 49\n- Contested calls: 38\n- Spot-check queue: 92 rows in pass.md\n\nArtifacts:\n- `annotations/KDATAP-25b2f4/adjudication-ledger.json`\n- `annotations/KDATAP-25b2f474-1d4a-4279-bfcc-b6a73343714a/pass.md`\n- Script: `tests/benchmark/scripts/adjudicate-data-item-gold.ts`\n\nStatus remains **labeling** pending Ryan packet review.",
+      "created_at": "2026-09-02T00:50:18.642386Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "c2953faf-0b2e-42e2-9741-778e12c803f6",
+      "author": "home",
+      "text": "Staging acceptance APPROVED (PR #49). Mechanics verified in worktree: 436/436 ledger↔YAML parity, 114 accepts ≤140 ceiling, all accept concept_leaf values valid (no forbidden category leaves), no data_items.yaml or corpus-gold.digest changes, --apply path present (not run), hard-fail on cache miss/ceiling confirmed, pass.md complete with 92-row spot-check queue. Tests: data-item-adjudication.spec.ts + ci-smoke-digests.spec.ts PASS. Disposition review deferred to GLM/Ryan.",
+      "created_at": "2026-09-02T00:52:34.200393Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "018c4a10-13ee-47d2-9954-2d824ec8e400",
+      "author": "home",
+      "text": "PR #49 merged (6f59813). Adjudication ledger: 114 accept / 75 reject / 247 unresolved. Acceptance + GLM approved. GLM flagged one over-accept (exposed-schema-password-not-data-item) already in contested/spot-check queue. Awaiting Ryan packet accept; then --apply flips YAML.",
+      "created_at": "2026-09-02T01:16:58.026063Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "27c7d652-42bb-4dea-b994-989b782fd32e",
+      "author": "home",
+      "text": "Ryan accepted the adjudication packet. Running --apply to flip YAML. GLM over-accept (exposed-schema-password-not-data-item) will be flipped to reject before apply.",
+      "created_at": "2026-09-02T01:18:30.468578Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d00e0788-8569-4ef3-8666-a0eac499a9b3",
+      "author": "home",
+      "text": "Apply authorized: flipping exposed-schema-password-not-data-item accept→reject; running --apply in worktree /tmp/scanner-25b2f4-apply.",
+      "created_at": "2026-09-02T01:19:43.997501Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "1a870823-7068-42a5-9d10-c8fbcf97efe4",
+      "author": "home",
+      "text": "Apply complete: 113 accept / 76 reject / 247 unresolved. Over-accept exposed-schema-password-not-data-item flipped to reject. Digest sha256:400aa809ba60a16460511ce8856b3e4c930a670f65bc1c45b463ae72aab8aa10. Tests 22/22 pass.",
+      "created_at": "2026-09-02T01:21:50.242305Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d3f8fd9f-16b3-47d8-a9fc-b51b08234c53",
+      "author": "home",
+      "text": "PR #50 merged (e5c4cd5). --apply complete: 113 accept / 76 reject / 247 unresolved in YAML. Real data-item gold on develop. Closed.",
+      "created_at": "2026-09-02T01:26:46.060964Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T00:17:57.305122Z",
+  "updated_at": "2026-09-02T01:27:14.824119Z",
+  "closed_at": "2026-09-02T01:26:46.046157Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

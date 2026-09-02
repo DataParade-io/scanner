@@ -3,7 +3,7 @@
   "title": "Remove legacy gold compatibility and exemptions",
   "description": "Delete the temporary canonical-migration compatibility loader and every hard-coded legacy exemption after migration and readiness validation.\n\nRemoval covers the `pii_signals` layer alias, the `pii:` mention-key exemption, legacy component/flow string identities, and any fixture-only compatibility shape introduced during migration.\n\nThis task is intentionally separate from introducing the loader. It begins only after canonical corpus and fixture migrations, packet/layer scope migration, and baseline readiness validation prove that no accepted record requires compatibility.\n\nDefinition of done: canonical loaders reject every legacy shape, the evaluator has no legacy identity path, documentation names only the canonical contract, and the readiness audit reports zero accepted legacy records.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -47,9 +47,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f156b5b5-aa3b-487d-8cc8-0dca80eb1c3f",
+      "author": "home",
+      "text": "Closing: compatibility loader removed (PR #56). Canonical loader is the only path.",
+      "created_at": "2026-09-02T17:06:34.259910Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-08-31T14:15:45.575485Z",
-  "updated_at": "2026-08-31T14:38:28.649321Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T17:06:34.287411Z",
+  "closed_at": "2026-09-02T17:06:34.287411Z",
   "custom": {}
 }

@@ -3,7 +3,7 @@
   "title": "Baseline readiness gate for canonical accepted gold",
   "description": "Define and enforce the readiness gate that separates migration audits from the first citable four-layer baseline.\n\nA migration report may show legacy or unscorable records so work can be tracked. Baseline series 1 may not freeze until:\n\n- every accepted record validates against the canonical contract version;\n- no accepted record reaches evaluation through a legacy key, loader exemption, source-token-only identity, or unadjudicated flow endpoint;\n- legacy flow and data-item records have been accepted canonically, rejected, or moved to `needs_adjudication`;\n- each headline layer meets an explicitly approved minimum accepted-case and packet-diversity threshold;\n- packet-and-layer precision scopes carry review provenance;\n- path-contract errors and unscorable rates meet explicit limits;\n- all required materializations and source SHAs validate;\n- the readiness result is emitted as machine-readable evidence and rendered in the baseline report.\n\nData flows reported as unscorable pending regold belong to a readiness audit, not baseline series 1. A small canonical subset may be used only if its size/diversity threshold is declared and approved; silently dropping 436 legacy flow records is forbidden.\n\nDefinition of done: the baseline command refuses to freeze when any readiness invariant fails and reports the exact blockers.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 0,
   "assignee": null,
   "creator": null,
@@ -47,9 +47,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "5dd8d7cf-eac4-410d-8180-33818c7095ce",
+      "author": "home",
+      "text": "Closing: readiness gate landed (PRs #53-#55). Gate passes with 0 blockers when clones are materialized; CI correctly does not require clones.",
+      "created_at": "2026-09-02T17:06:34.137322Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-08-31T14:36:03.441568Z",
-  "updated_at": "2026-08-31T14:36:03.441568Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T17:06:34.165311Z",
+  "closed_at": "2026-09-02T17:06:34.165311Z",
   "custom": {}
 }

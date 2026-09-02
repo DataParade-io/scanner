@@ -1,0 +1,57 @@
+{
+  "id": "KDATAP-7e5b94dd-ed08-4edf-8765-433f83fc84a4",
+  "title": "Promote accepted flows to canonical blocks with typed endpoints",
+  "description": "Prerequisite for KDATAP-b87baf readiness gate. Write canonical blocks with typed endpoints for accepted flows from the adjudication ledger. Extend compat loader to promote data-flows with canonical blocks. Regold pass script + digest bump.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "6fc390ce-8bc7-4210-b32f-d8ec2050cffb",
+      "author": "home",
+      "text": "Starting flow canonical promotion. Prerequisite for b87baf readiness gate to pass on data-flows.",
+      "created_at": "2026-09-02T10:54:09.265192Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "a425c251-4fb2-4933-baf3-5aee7a441216",
+      "author": "home",
+      "text": "Plan approved: FlowAnnotationCanonical + flow_canonical_block compat conversion + resolveDisposition extension + regold script + readiness gate adjustment. 44 component decoy LOADER_EXEMPTION rows out of scope (separate follow-up). Create worktree at /tmp/scanner-KDATAP-7e5b94-flow-canonical.",
+      "created_at": "2026-09-02T11:08:30.451619Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d7d8e73d-55da-4b71-8a06-434d60bdab2f",
+      "author": "home",
+      "text": "Implementation authorized. Worktree verified at /tmp/scanner-KDATAP-7e5b94-flow-canonical @ 551cb6a.",
+      "created_at": "2026-09-02T11:08:48.160572Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "61ab0d92-3084-4f17-9ec6-8f163db9cee5",
+      "author": "home",
+      "text": "## Readiness dry-run (post-promotion)\n\n`pnpm run benchmark:readiness` on branch `cursor/promote-flow-canonical-7e5b94`:\n\n| Metric | Before | After |\n| --- | ---: | ---: |\n| Total blockers | 224 | **75** |\n| `LOADER_EXEMPTION` (data-flows) | 146 | **0** |\n| `FLOW_NO_CANONICAL_ACCEPTS` | 3 | **0** |\n| `LOADER_EXEMPTION` (components, decoys) | 44 | 44 |\n| `MATERIALIZATION_INVALID` | 29 | 29 |\n| `SCOPE_MISSING_OR_UNREVIEWED` | 2 | 2 |\n\n146 accepts now load as canonical `accepted` with typed `flowEndpoints`. Tests: 924 passed + ci:smoke 100 passed. PR #54.",
+      "created_at": "2026-09-02T11:13:14.403135Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "c234f0df-4afd-4943-bbbf-b06891d6a792",
+      "author": "home",
+      "text": "PR #54 merged (786bc8f). 146 flow_canonical blocks written; compat promotes accepted flows. Readiness blockers 224 → 75. Closed.",
+      "created_at": "2026-09-02T11:18:32.752925Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T10:50:35.671075Z",
+  "updated_at": "2026-09-02T11:18:32.752925Z",
+  "closed_at": "2026-09-02T11:18:32.734194Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

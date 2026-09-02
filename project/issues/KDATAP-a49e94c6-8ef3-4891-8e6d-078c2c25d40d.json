@@ -1,0 +1,57 @@
+{
+  "id": "KDATAP-a49e94c6-8ef3-4891-8e6d-078c2c25d40d",
+  "title": "Correct two flow candidate mis-buckets from GLM review",
+  "description": "Correct ground truth on flow candidate buckets (corpus skill). Ryan accepted GLM advisory on KDATAP-8e7756; parent pass returns to labeling until these are fixed.\n\n| id | packet | defect | fix |\n| --- | --- | --- | --- |\n| saleor-user-email-persisted | saleor | sole `graph_edge` is Django Model declaring own columns; inconsistent with unresolved twins sharing `flow:user-model->database` | `disposition_candidate: intra_component_lineage` (or `unresolved` with notes); align with medusa-customer-user-email-persisted / keycloak-user-entity-persist |\n| wordpress-signon-to-auth-cookie | wordpress | lineage attributes credentials→auth-cookie flow to negative `wordpress-not-stripe` | re-route to positive auth-cookie component or mark `unresolved`; do not attribute flow to negative component |\n\nLocks:\n- Edit only these two `data_flows.yaml` rows (+ ledger/pass if needed).\n- Do not run `scan()` or use detector output.\n- Do not write `review_state: accepted`.\n- Do not rewrite `subject.key` / `expected.labels`.\n- Bump `corpus-gold.digest` if YAML changes.\n- Parent KDATAP-8e7756 stays labeling until this lands and Ryan re-accepts the flow worksheet.",
+  "type": "annotation",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "e2a020e5-b2d8-4860-ad5b-b386859a0fcd",
+      "author": "home",
+      "text": "Composer 2.5 planning two-row flow correction. Worktree /tmp/scanner-a49e94-flow-truth branch cursor/correct-flow-buckets-a49e94. Parent 8e7756 labeling.",
+      "created_at": "2026-09-01T22:11:12.520276Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "47f89507-b299-4be6-8f00-c435d6cc4b60",
+      "author": "home",
+      "text": "Plan approved. Create worktree only at /tmp/scanner-a49e94-flow-truth on cursor/correct-flow-buckets-a49e94.",
+      "created_at": "2026-09-01T22:13:23.214564Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "6efd504f-ca29-4064-a166-0c0bb9cb5118",
+      "author": "home",
+      "text": "Implementation authorized. Worktree verified at /tmp/scanner-a49e94-flow-truth @ 08fba4e.",
+      "created_at": "2026-09-01T22:13:37.935864Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "03a5f387-bb3e-4520-97bb-99abf5d85f2c",
+      "author": "home",
+      "text": "Staging acceptance passed @ PR #48. Scope: two flow rows only; saleor intra_component_lineage; wordpress auth-cookie-service; negative overlap guard; digest sha256:8c9fdeca…; pass.md filled; no accepted review_state; no ledger/census edits. Tests: flow-migration 13/13, ci-smoke-digests 1/1. Approved, not merged.",
+      "created_at": "2026-09-01T22:15:48.368706Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "9409c550-62e2-4cd7-97fe-e51c683609f1",
+      "author": "home",
+      "text": "PR #48 merged (0d56feb). Two flow buckets corrected. Awaiting Ryan accept.",
+      "created_at": "2026-09-01T22:19:11.380623Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-01T22:11:09.338675Z",
+  "updated_at": "2026-09-01T22:19:27.769628Z",
+  "closed_at": "2026-09-01T22:19:27.769628Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}
