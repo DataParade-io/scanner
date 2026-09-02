@@ -60,14 +60,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - password_verifier
+        - password
     rationale: users.password is a required hashed credential column for Ghost staff login.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: ghost-member-uuid-item
     layer: data_items
     subject:
@@ -207,14 +215,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - password_verifier
+        - password
     rationale: users.password is the stored staff password hash column.
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: ghost-staff-user-slug
     layer: data_items
     subject:

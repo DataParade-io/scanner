@@ -16,7 +16,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: needs_adjudication
+      review_state: rejected
   - id: gitea-token-name
     layer: data_items
     subject:
@@ -33,7 +33,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: needs_adjudication
+      review_state: rejected
   - id: gitea-access-token
     layer: data_items
     subject:
@@ -184,12 +184,21 @@ annotations:
     expected:
       status: positive
       labels:
-        - user_identifier
+        - username
     rationale: The source comments identify this as the user's login/username.
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: needs_adjudication
+      review_state: accepted
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:username
+      proposed_concept_leaf: username
+      proposed_ancestry:
+        - user_identifier
+        - username
+      candidate_confidence: low
+      evidence_validation: verified
   - id: gitea-external-login-name
     layer: data_items
     subject:
@@ -296,7 +305,7 @@ annotations:
     provenance:
       proposed_by: corpus-curation-agent
       proposed_at: 2026-08-26
-      review_state: needs_adjudication
+      review_state: rejected
   - id: gitea-profile-url
     layer: data_items
     subject:

@@ -80,14 +80,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - password_verifier
+        - password
     rationale: user_pass holds the bcrypt (or legacy) password hash stored in the users table.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: wordpress-display-name
     layer: data_items
     subject:
@@ -270,9 +278,17 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: wordpress-session-token-hash
     layer: data_items
     subject:
@@ -418,7 +434,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: wordpress-comment-author-ip

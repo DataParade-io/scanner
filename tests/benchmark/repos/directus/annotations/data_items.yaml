@@ -120,14 +120,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - password_verifier
+        - password
     rationale: password stores the argon2 hash checked during local login.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: directus-session-token
     layer: data_items
     subject:
@@ -223,7 +231,7 @@ annotations:
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: directus-session-token-type
@@ -258,11 +266,19 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: ShareData.share_password is an optional password protecting a share link.
     provenance:
       proposed_by: grok-4.6-data-item-fill2
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
