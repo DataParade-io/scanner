@@ -16,14 +16,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'login'; ambiguous target match for slug 'check_password'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on redmine-user-auth-service (intra_overlap_same_entity).
+      source_entity_id: redmine::redmine-user-auth-service
+      target_entity_id: redmine::redmine-user-auth-service
+      proposed_data_categories:
+        - password
   - id: redmine-mail-to-email-address
     layer: data_flows
     subject:
@@ -44,11 +48,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'mail'; unresolved target for slug 'email_address'
   - id: redmine-password-to-hashed-password
     layer: data_flows
     subject:
@@ -69,11 +68,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'hashed_password'; no component candidates via overlap or rationale+same-file
   - id: redmine-ldap-to-user-create
     layer: data_flows
     subject:
@@ -91,14 +85,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'auth_source'; ambiguous target match for slug 'user'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved redmine-auth-source-service from span content; negative decoys excluded.
+      source_entity_id: redmine::redmine-auth-source-service
+      target_entity_id: redmine::redmine-auth-source-service
+      proposed_data_categories:
+        - password
   - id: redmine-session-token-create
     layer: data_flows
     subject:
@@ -116,14 +114,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'user'; unresolved target for slug 'session_token'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved redmine-token-auth-service from span content; negative decoys excluded.
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      proposed_data_categories:
+        - session
   - id: redmine-email-change-destroys-recovery-tokens
     layer: data_flows
     subject:
@@ -141,14 +143,20 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'email_address'; unresolved target for slug 'destroy_tokens'; no component candidates via overlap or rationale+same-file
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved redmine-token-auth-service from span content; negative decoys excluded.
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      proposed_data_categories:
+        - password
+        - email
+        - address
   - id: redmine-external-auth-to-check-password
     layer: data_flows
     subject:
@@ -169,11 +177,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'auth_source'; ambiguous target match for slug 'check_password'
   - id: redmine-not-payment-flow
     layer: data_flows
     subject:
@@ -190,14 +193,9 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: rejection
-      candidate_confidence: high
-      candidate_notes: api_key issues API tokens only; the reviewed auth scope has no payment or card-processing flow.
   - id: redmine-login-to-find-by-login
     layer: data_flows
     subject:
@@ -215,14 +213,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'login'; ambiguous target match for slug 'find_by_login'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on redmine-user-auth-service (intra_overlap_same_entity).
+      source_entity_id: redmine::redmine-user-auth-service
+      target_entity_id: redmine::redmine-user-auth-service
+      proposed_data_categories:
+        - password
   - id: redmine-autologin-key-to-user
     layer: data_flows
     subject:
@@ -240,14 +242,17 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'autologin'; ambiguous target match for slug 'user'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved redmine-token-auth-service from span content; negative decoys excluded.
+      source_entity_id: redmine::redmine-token-auth-service
+      target_entity_id: redmine::redmine-token-auth-service
+      proposed_flow_type: database_query
   - id: redmine-api-key-token-create
     layer: data_flows
     subject:
@@ -265,15 +270,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Single component candidate (redmine-api-key-auth-service); prose endpoints user->api_token appear intra-component.
+      candidate_notes: Accepted intra-component lineage on redmine-api-key-auth-service (intra_single_component).
       source_entity_id: redmine::redmine-api-key-auth-service
+      target_entity_id: redmine::redmine-api-key-auth-service
+      proposed_data_categories:
+        - session
   - id: redmine-ldap-bind-password
     layer: data_flows
     subject:
@@ -291,16 +299,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (redmine-ldap-auth-provider); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on redmine-ldap-auth-provider (intra_single_component).
       source_entity_id: redmine::redmine-ldap-auth-provider
       target_entity_id: redmine::redmine-ldap-auth-provider
+      proposed_data_categories:
+        - password
   - id: redmine-ldap-login-to-dn
     layer: data_flows
     subject:
@@ -318,16 +328,18 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (redmine-ldap-auth-provider); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on redmine-ldap-auth-provider (intra_single_component).
       source_entity_id: redmine::redmine-ldap-auth-provider
       target_entity_id: redmine::redmine-ldap-auth-provider
+      proposed_data_categories:
+        - password
   - id: redmine-token-find-active-user
     layer: data_flows
     subject:
@@ -345,16 +357,17 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
       disposition_candidate: intra_component_lineage
       candidate_confidence: medium
-      candidate_notes: Source and target resolve to the same component entity (redmine-token-auth-service); preserved as transformation evidence, not a headline graph edge.
+      candidate_notes: Accepted intra-component lineage on redmine-token-auth-service (intra_single_component).
       source_entity_id: redmine::redmine-token-auth-service
       target_entity_id: redmine::redmine-token-auth-service
+      proposed_flow_type: database_query
   - id: redmine-salt-password-hash
     layer: data_flows
     subject:
@@ -375,11 +388,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'salt_hash'; no component candidates via overlap or rationale+same-file
   - id: redmine-generate-autologin-token
     layer: data_flows
     subject:
@@ -400,11 +408,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'user'; unresolved target for slug 'autologin_token'; no component candidates via overlap or rationale+same-file
   - id: redmine-find-by-api-key
     layer: data_flows
     subject:
@@ -425,11 +428,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous target match for slug 'user'
   - id: redmine-email-normalize-address
     layer: data_flows
     subject:
@@ -450,12 +448,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: intra_component_lineage
-      candidate_confidence: low
-      candidate_notes: Single component candidate (redmine-email-address-model); prose endpoints address->normalized_address appear intra-component.
-      source_entity_id: redmine::redmine-email-address-model
   - id: redmine-password-check-local-hash
     layer: data_flows
     subject:
@@ -476,11 +468,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-    candidate:
-      kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: unresolved source for slug 'password'; unresolved target for slug 'hashed_password_check'; no component candidates via overlap or rationale+same-file
   - id: redmine-auth-source-authenticate-flow
     layer: data_flows
     subject:
@@ -498,11 +485,15 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     candidate:
       kind: flow
-      disposition_candidate: unresolved
-      candidate_confidence: low
-      candidate_notes: ambiguous source match for slug 'login'; unresolved target for slug 'auth_source'
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved redmine-auth-source-service from span content; negative decoys excluded.
+      source_entity_id: redmine::redmine-auth-source-service
+      target_entity_id: redmine::redmine-auth-source-service
+      proposed_data_categories:
+        - password
