@@ -6,6 +6,7 @@ import {
   dataItemCandidateBlock,
   expectedLabelsProvenance,
   expectedStatusDisposition,
+  flowCanonicalBlock,
   flowCandidateIdentity,
   initialConversionState,
   legacySubjectName,
@@ -43,6 +44,10 @@ export function loadLegacyGoldRecord(
   const componentIdentityStep = componentStructuredIdentity(state, input, options);
   state = { ...state, ...componentIdentityStep.state };
   diagnostics.push(...componentIdentityStep.diagnostics);
+
+  const flowCanonicalStep = flowCanonicalBlock(state, input);
+  state = { ...state, ...flowCanonicalStep.state };
+  diagnostics.push(...flowCanonicalStep.diagnostics);
 
   const flowCandidateStep = flowCandidateIdentity(state, input);
   state = { ...state, ...flowCandidateStep.state };

@@ -29,6 +29,23 @@ annotations:
       proposed_data_categories:
         - password
         - session
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-login-post-api
+      target_entity_id: magento::magento-login-post-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - password
+        - session
   - id: magento-ajax-login-to-authenticate
     layer: data_flows
     subject:
@@ -177,6 +194,21 @@ annotations:
       source_entity_id: magento::magento-webapi-v1-customergroups-id
       target_entity_id: magento::magento-webapi-v1-customergroups-id
       proposed_flow_type: api_call
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-id
+      target_entity_id: magento::magento-webapi-v1-customergroups-id
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      flow_type: api_call
   - id: magento-webapi-v1-customergroups-default-storeid-flow
     layer: data_flows
     subject:
@@ -204,6 +236,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default-storeid from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
       target_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
+      target_entity_id: magento::magento-webapi-v1-customergroups-default-storeid
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customergroups-default-flow
     layer: data_flows
     subject:
@@ -231,6 +277,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups-default
       target_entity_id: magento::magento-webapi-v1-customergroups-default
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-default
+      target_entity_id: magento::magento-webapi-v1-customergroups-default
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customergroups-default-id-flow
     layer: data_flows
     subject:
@@ -258,6 +318,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-default-id from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups-default-id
       target_entity_id: magento::magento-webapi-v1-customergroups-default-id
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-default-id
+      target_entity_id: magento::magento-webapi-v1-customergroups-default-id
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customergroups-id-permissions-flow
     layer: data_flows
     subject:
@@ -285,6 +359,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-id-permissions from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
       target_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
+      target_entity_id: magento::magento-webapi-v1-customergroups-id-permissions
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customergroups-search-flow
     layer: data_flows
     subject:
@@ -312,6 +400,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups-search from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups-search
       target_entity_id: magento::magento-webapi-v1-customergroups-search
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups-search
+      target_entity_id: magento::magento-webapi-v1-customergroups-search
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customergroups-flow
     layer: data_flows
     subject:
@@ -339,6 +441,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customergroups from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customergroups
       target_entity_id: magento::magento-webapi-v1-customergroups
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customergroups
+      target_entity_id: magento::magento-webapi-v1-customergroups
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-attribute-attributecode-flow
     layer: data_flows
     subject:
@@ -366,6 +482,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-attribute-attributecode from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-attribute-attributecode
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-form-formcode-flow
     layer: data_flows
     subject:
@@ -393,6 +523,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-form-formcode from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-form-formcode
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-flow
     layer: data_flows
     subject:
@@ -420,6 +564,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customer
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customer
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customer-custom-flow
     layer: data_flows
     subject:
@@ -447,6 +605,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customer-custom from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customer-custom
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode-flow
     layer: data_flows
     subject:
@@ -476,6 +648,22 @@ annotations:
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
       proposed_data_categories:
         - address
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - address
   - id: magento-webapi-v1-attributemetadata-customeraddress-form-formcode-flow
     layer: data_flows
     subject:
@@ -503,6 +691,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress-form-formcode from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-form-formcode
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-flow
     layer: data_flows
     subject:
@@ -530,6 +732,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-attributemetadata-customeraddress-custom-flow
     layer: data_flows
     subject:
@@ -557,6 +773,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-attributemetadata-customeraddress-custom from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
       target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
+      target_entity_id: magento::magento-webapi-v1-attributemetadata-customeraddress-custom
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-customerid-flow
     layer: data_flows
     subject:
@@ -584,6 +814,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-customerid
       target_entity_id: magento::magento-webapi-v1-customers-customerid
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid
+      target_entity_id: magento::magento-webapi-v1-customers-customerid
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-flow
     layer: data_flows
     subject:
@@ -631,6 +875,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-me from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-me
       target_entity_id: magento::magento-webapi-v1-customers-me
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-me
+      target_entity_id: magento::magento-webapi-v1-customers-me
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-me-activate-flow
     layer: data_flows
     subject:
@@ -678,6 +936,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-search from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-search
       target_entity_id: magento::magento-webapi-v1-customers-search
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-search
+      target_entity_id: magento::magento-webapi-v1-customers-search
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-email-activate-flow
     layer: data_flows
     subject:
@@ -706,6 +978,22 @@ annotations:
       source_entity_id: magento::magento-webapi-v1-customers-email-activate
       target_entity_id: magento::magento-webapi-v1-customers-email-activate
       proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-email-activate
+      target_entity_id: magento::magento-webapi-v1-customers-email-activate
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
         - email
   - id: magento-webapi-v1-customers-me-password-flow
     layer: data_flows
@@ -756,6 +1044,22 @@ annotations:
       target_entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - password
   - id: magento-webapi-v1-customers-password-flow
     layer: data_flows
     subject:
@@ -785,6 +1089,22 @@ annotations:
       target_entity_id: magento::magento-webapi-v1-customers-password
       proposed_data_categories:
         - password
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-password
+      target_entity_id: magento::magento-webapi-v1-customers-password
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - password
   - id: magento-webapi-v1-customers-resetpassword-flow
     layer: data_flows
     subject:
@@ -812,6 +1132,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-resetpassword from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-resetpassword
       target_entity_id: magento::magento-webapi-v1-customers-resetpassword
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-resetpassword
+      target_entity_id: magento::magento-webapi-v1-customers-resetpassword
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-customerid-confirm-flow
     layer: data_flows
     subject:
@@ -839,6 +1173,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-confirm from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
       target_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-confirm
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-confirm-flow
     layer: data_flows
     subject:
@@ -866,6 +1214,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-confirm from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-confirm
       target_entity_id: magento::magento-webapi-v1-customers-confirm
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-confirm
+      target_entity_id: magento::magento-webapi-v1-customers-confirm
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-validate-flow
     layer: data_flows
     subject:
@@ -893,6 +1255,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-validate from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-validate
       target_entity_id: magento::magento-webapi-v1-customers-validate
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-validate
+      target_entity_id: magento::magento-webapi-v1-customers-validate
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-customerid-permissions-readonly-flow
     layer: data_flows
     subject:
@@ -920,6 +1296,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-permissions-readonly from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
       target_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-permissions-readonly
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-isemailavailable-flow
     layer: data_flows
     subject:
@@ -947,6 +1337,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-isemailavailable from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-isemailavailable
       target_entity_id: magento::magento-webapi-v1-customers-isemailavailable
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-isemailavailable
+      target_entity_id: magento::magento-webapi-v1-customers-isemailavailable
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-addresses-addressid-flow
     layer: data_flows
     subject:
@@ -974,6 +1378,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-addresses-addressid from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
       target_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
+      target_entity_id: magento::magento-webapi-v1-customers-addresses-addressid
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-me-billingaddress-flow
     layer: data_flows
     subject:
@@ -1001,6 +1419,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-me-billingaddress from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
       target_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-me-billingaddress
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-customerid-billingaddress-flow
     layer: data_flows
     subject:
@@ -1028,6 +1460,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-billingaddress from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
       target_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-billingaddress
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-me-shippingaddress-flow
     layer: data_flows
     subject:
@@ -1055,6 +1501,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-me-shippingaddress from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
       target_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-me-shippingaddress
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-customerid-shippingaddress-flow
     layer: data_flows
     subject:
@@ -1082,6 +1542,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-customerid-shippingaddress from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
       target_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
+      target_entity_id: magento::magento-webapi-v1-customers-customerid-shippingaddress
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-addresses-addressid-flow
     layer: data_flows
     subject:
@@ -1109,6 +1583,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-addresses-addressid from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-addresses-addressid
       target_entity_id: magento::magento-webapi-v1-addresses-addressid
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-addresses-addressid
+      target_entity_id: magento::magento-webapi-v1-addresses-addressid
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-v1-customers-activate-flow
     layer: data_flows
     subject:
@@ -1136,6 +1624,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-activate from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-activate
       target_entity_id: magento::magento-webapi-v1-customers-activate
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-activate
+      target_entity_id: magento::magento-webapi-v1-customers-activate
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-create-post-to-create-account
     layer: data_flows
     subject:
@@ -1164,6 +1666,22 @@ annotations:
       source_entity_id: magento::magento-create-post-api
       target_entity_id: magento::magento-create-post-api
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-create-post-api
+      target_entity_id: magento::magento-create-post-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
         - password
   - id: magento-forgot-password-to-initiate
     layer: data_flows
@@ -1233,6 +1751,22 @@ annotations:
       source_entity_id: magento::magento-logout-controller
       target_entity_id: magento::magento-logout-controller
       proposed_data_categories:
+        - session
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-logout-controller
+      target_entity_id: magento::magento-logout-controller
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
         - session
   - id: magento-edit-post-to-repository
     layer: data_flows
@@ -1322,6 +1856,22 @@ annotations:
       source_entity_id: magento::magento-auth-failure-handler
       target_entity_id: magento::magento-auth-failure-handler
       proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-auth-failure-handler
+      target_entity_id: magento::magento-auth-failure-handler
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
         - password
   - id: magento-session-logout-flow
     layer: data_flows
@@ -1470,6 +2020,20 @@ annotations:
       candidate_notes: Accepted intra-component lineage on magento-send-reset-confirmation (intra_single_component).
       source_entity_id: magento::magento-send-reset-confirmation
       target_entity_id: magento::magento-send-reset-confirmation
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-send-reset-confirmation
+      target_entity_id: magento::magento-send-reset-confirmation
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
   - id: magento-email-notification-reset-flow
     layer: data_flows
     subject:
@@ -1577,6 +2141,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-resource-customer-save from span content; negative decoys excluded.
       source_entity_id: magento::magento-resource-customer-save
       target_entity_id: magento::magento-resource-customer-save
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-resource-customer-save
+      target_entity_id: magento::magento-resource-customer-save
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
   - id: magento-webapi-get-self-flow
     layer: data_flows
     subject:
@@ -1604,6 +2182,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-customers-me from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-customers-me
       target_entity_id: magento::magento-webapi-customers-me
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-customers-me
+      target_entity_id: magento::magento-webapi-customers-me
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-put-self-flow
     layer: data_flows
     subject:
@@ -1631,6 +2223,20 @@ annotations:
       candidate_notes: Entity picker resolved magento-webapi-v1-customers-me from span content; negative decoys excluded.
       source_entity_id: magento::magento-webapi-v1-customers-me
       target_entity_id: magento::magento-webapi-v1-customers-me
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: magento::magento-webapi-v1-customers-me
+      target_entity_id: magento::magento-webapi-v1-customers-me
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
   - id: magento-webapi-password-flow
     layer: data_flows
     subject:

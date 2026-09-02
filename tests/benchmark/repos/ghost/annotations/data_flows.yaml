@@ -28,6 +28,22 @@ annotations:
       target_entity_id: ghost::ghost-router-controller-api
       proposed_data_categories:
         - email
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-router-controller-api
+      target_entity_id: ghost::ghost-router-controller-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      data_categories:
+        - email
   - id: ghost-token-to-member-lookup
     layer: data_flows
     subject:
@@ -57,6 +73,23 @@ annotations:
       target_entity_id: ghost::ghost-member-repository-service
       proposed_flow_type: api_call
       proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-member-repository-service
+      target_entity_id: ghost::ghost-member-repository-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      flow_type: api_call
+      data_categories:
         - email
   - id: ghost-member-create-to-database
     layer: data_flows
@@ -107,6 +140,23 @@ annotations:
       target_entity_id: ghost::ghost-member-controller-api
       proposed_flow_type: database_query
       proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:asset:api->asset:api
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-member-controller-api
+      target_entity_id: ghost::ghost-member-controller-api
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+        target:
+          component_type: asset
+          endpoint_key: api
+          component_subtype: api
+      flow_type: database_query
+      data_categories:
         - email
   - id: ghost-not-auth0-login-flow
     layer: data_flows
@@ -217,6 +267,23 @@ annotations:
       proposed_data_categories:
         - email
         - session
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-payments-service
+      target_entity_id: ghost::ghost-payments-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
+        - email
+        - session
   - id: ghost-staff-setup-credentials
     layer: data_flows
     subject:
@@ -305,6 +372,21 @@ annotations:
       source_entity_id: ghost::ghost-members-auth-service
       target_entity_id: ghost::ghost-members-auth-service
       proposed_flow_type: api_call
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-members-auth-service
+      target_entity_id: ghost::ghost-members-auth-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      flow_type: api_call
   - id: ghost-auth-middleware-unauthorized-wrap
     layer: data_flows
     subject:
@@ -373,6 +455,24 @@ annotations:
       source_entity_id: ghost::ghost-payments-service
       target_entity_id: ghost::ghost-payments-service
       proposed_data_categories:
+        - email
+        - session
+        - payment_card
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: ghost::ghost-payments-service
+      target_entity_id: ghost::ghost-payments-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
         - email
         - session
         - payment_card

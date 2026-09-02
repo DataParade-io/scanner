@@ -47,3 +47,18 @@ annotations:
       source_entity_id: keycloak::keycloak-credential-entity-database
       target_entity_id: keycloak::keycloak-credential-entity-database
       proposed_flow_type: api_call
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: keycloak::keycloak-credential-entity-database
+      target_entity_id: keycloak::keycloak-credential-entity-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: api_call

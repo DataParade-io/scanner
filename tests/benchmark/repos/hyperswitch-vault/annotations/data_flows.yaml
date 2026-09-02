@@ -46,3 +46,17 @@ annotations:
       candidate_notes: Accepted intra-component lineage on hyperswitch-locker-database (intra_overlap_same_entity).
       source_entity_id: hyperswitch-vault::hyperswitch-locker-database
       target_entity_id: hyperswitch-vault::hyperswitch-locker-database
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: hyperswitch-vault::hyperswitch-locker-database
+      target_entity_id: hyperswitch-vault::hyperswitch-locker-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
