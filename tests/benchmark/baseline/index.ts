@@ -21,7 +21,30 @@ export {
   collectMigrationIncompleteAccounting,
   collectReviewStateCounts,
 } from "./collect-gold-stats";
-export { collectMaterializedSources } from "./collect-materializations";
+export {
+  evaluateBaselineReadiness,
+  formatReadinessReport,
+  checkAcceptedCanonicalContract,
+  checkFingerprintDigests,
+  checkLayerPopulationFloors,
+  checkLayerScopeProvenance,
+  checkLegacyOutcomesResolved,
+  checkMaterializations,
+  checkNoLegacyIdentityOnAccepted,
+  checkPathContractLimits,
+  checkUnscorableRates,
+  type EvaluateBaselineReadinessInput,
+  type ReadinessBlocker,
+} from "./evaluate-readiness";
+export {
+  BASELINE_READINESS_POLICY,
+  BASELINE_READINESS_POLICY_VERSION,
+  type BaselineReadinessPolicy,
+  type FlowSubsetPolicy,
+  type LayerPopulationFloor,
+  type RuntimeRateLimits,
+} from "./readiness-policy";
+export { toHeadlineLayer } from "./collect-gold-stats";
 export {
   buildDeterministicScanConfig,
   digestDeterministicScanConfig,
