@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scaffold finding/annotation workspaces and start flywheel statuses."""
+"""Scaffold finding/annotation workspaces and start review status."""
 
 from __future__ import annotations
 
@@ -17,24 +17,11 @@ Which `tests/fixtures/*` tree or corpus repo is this about?
 
 ## What we expect to find
 
-Describe the data-flow detail in plain English (example: the API sends customer email to Stripe).
+Describe the detection in plain English (example: the API sends customer email to Stripe).
 
 ## Human review
 
-Findings stay **proposed** until a person advances them. Do not treat agent-authored gold as accepted.
-"""
-
-DECOMPOSITION_TEMPLATE = """# Decomposition
-
-Fill one row per eval grade that applies. Leave a layer blank if it does not apply.
-
-| Layer | Subject key | Evidence (file:lines) | Expected | Labels | documentedGap |
-| --- | --- | --- | --- | --- | --- |
-| components |  |  |  |  |  |
-| data-flows |  |  |  |  |  |
-| raw-hits |  |  |  |  |  |
-| mentions |  |  |  |  |  |
-| data-items |  |  |  |  |  |
+Findings stay **proposed** until a person moves them to **accepted** or **rejected**.
 """
 
 PASS_TEMPLATE = """# Annotation pass
@@ -47,11 +34,7 @@ Which files were reviewed?
 
 ## Findings in this pass
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
-
-## Human review
-
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+List finding issue IDs (KDATAP-…) that belong to this pass.
 """
 
 
@@ -83,9 +66,6 @@ def main() -> int:
         proposal = workspace / "proposal.md"
         if not proposal.exists():
             proposal.write_text(PROPOSAL_TEMPLATE, encoding="utf-8")
-        decomposition = workspace / "decomposition.md"
-        if not decomposition.exists():
-            decomposition.write_text(DECOMPOSITION_TEMPLATE, encoding="utf-8")
         if issue.get("status") == "open":
             _run_kbs_status(issue_id, "proposed")
         return 0
@@ -96,8 +76,6 @@ def main() -> int:
         pass_path = workspace / "pass.md"
         if not pass_path.exists():
             pass_path.write_text(PASS_TEMPLATE, encoding="utf-8")
-        if issue.get("status") == "open":
-            _run_kbs_status(issue_id, "labeling")
         return 0
 
     return 0

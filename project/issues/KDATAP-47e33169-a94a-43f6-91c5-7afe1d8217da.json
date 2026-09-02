@@ -1,0 +1,90 @@
+{
+  "id": "KDATAP-47e33169-a94a-43f6-91c5-7afe1d8217da",
+  "title": "Adjudicate flow gold dispositions (accept/reject/unresolved)",
+  "description": "AI adjudication pass over the 436 data-flow rows currently `needs_adjudication` after 8e7756 + a49e94.\n\nFor each row, read pinned source at the evidence span, apply the flow taxonomy and component gold, and propose a final disposition:\n\n- **accept** with canonical typed endpoints and data categories — source clearly shows a cross-component or intra-component flow\n- **reject** with rationale — not a data flow, or negative\n- **unresolved** with reason — genuinely ambiguous endpoint matching\n\nOutput: an adjudication ledger with a proposed disposition for every row. Human gate is at the packet level (sample + bucket counts), not row-by-row.\n\nLocks:\n- Do not run `scan()` or use detector output.\n- Component gold is already accepted; use it as input for endpoint typing.\n- Legacy `subject.key` preserved.\n- Follow `.agents/skills/curate-scanner-evaluation-corpus/SKILL.md` Correct ground truth.\n- Negative components (e.g. `wordpress-not-stripe`) must not be attributed as flow carriers.\n- Same ledger-then-flip pattern as 25b2f4 (data items): AI writes ledger, Ryan accepts packet, --apply flips YAML later.",
+  "type": "annotation",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [
+    "data-flows",
+    "146-accepted",
+    "17-rejected",
+    "273-unresolved"
+  ],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "2df0d3ac-fcba-4ad2-bfcc-3d4cbed6ba27",
+      "author": "home",
+      "text": "Plan approved: Option B, deterministic-only, accept ceiling 200. Create worktree only at /tmp/scanner-47e331-adjudicate on cursor/adjudicate-flows-47e331.",
+      "created_at": "2026-09-02T01:27:43.463005Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "f4c4945a-1492-4a52-914b-5120fadf56bb",
+      "author": "home",
+      "text": "Implementation authorized. Worktree verified at /tmp/scanner-47e331-adjudicate @ e5c4cd5.",
+      "created_at": "2026-09-02T01:27:56.467398Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "816f7d8f-248c-4b03-82e4-707f67abd070",
+      "author": "home",
+      "text": "Flow adjudication pass complete. PR: https://github.com/DataParade-io/scanner/pull/51\n\n**Dispositions:** accept 121, reject 17, unresolved 298 (436 total, ceiling 200)\n\n**By bucket:**\n- entity_picker_resolved: 46 accept\n- graph_edge: 1 accept\n- intra_overlap_same_entity: 31 accept / 8 unresolved\n- intra_single_component: 43 accept / 21 unresolved\n- rejection: 17 reject\n- intra_low_rationale_only: 85 unresolved\n- unresolved: 184 unresolved\n\n**Skipped evidence:** 2 rows in posthog-user (partial cache miss → unresolved)\n**Contested accepts:** 90 (spot-check queue in pass.md)\n**Tests:** 15/15 pass",
+      "created_at": "2026-09-02T02:23:37.624786Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "1e9300a7-8877-457f-8b41-127ed00b4218",
+      "author": "home",
+      "text": "PR #51 send-back (acceptance + GLM). Two fixes needed: (1) CI: negative/rejection rows must return reject even on cache miss — flow-adjudication.spec.ts fails in CI. (2) Adjudication logic: entity_picker_resolved over-accepts ~10 static config/declaration spans as flows (discourse YAML keys, exposed interface decls, wordpress function signatures); pickIntraEntity bails on ambiguity leaving ~8 real runtime flows unresolved. Fix: require evidence overlap not substring match for entity_picker; add declaration-vs-flow discriminator; tie-break ambiguous components toward API/service over generic actor.",
+      "created_at": "2026-09-02T02:30:16.755834Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "84256471-c095-42b6-a50a-2ab0709baf9e",
+      "author": "home",
+      "text": "CI + GLM fixes pushed to PR #51.\n\n**New dispositions:** accept 146, reject 17, unresolved 273 (ceiling 200)\n\n**By bucket:**\n- entity_picker_resolved: 72 accept\n- graph_edge: 1 accept\n- intra_overlap_same_entity: 25 accept / 14 unresolved\n- intra_single_component: 48 accept / 16 unresolved\n- rejection: 17 reject\n- intra_low_rationale_only: 85 unresolved\n- unresolved: 158 unresolved\n\n**Changes vs prior ledger:** 52 demoted (declaration-only / loose picker), 77 promoted (runtime flows)\n**Tests:** 18/18 pass",
+      "created_at": "2026-09-02T02:35:09.126278Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "cd451a4b-48b6-4ccb-838f-78bdde7e73da",
+      "author": "home",
+      "text": "CI fix: scoped evidence-overlap to entity_picker_resolved only. intra_single_component accepts on cache miss with single candidate. Tests 18/18 pass.",
+      "created_at": "2026-09-02T02:41:11.717866Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d2db262b-4aeb-46e9-9fbb-d9638c8bde2f",
+      "author": "home",
+      "text": "PR #51 merged (6d572e8). Flow adjudication ledger: 146 accept / 17 reject / 273 unresolved. Acceptance + GLM approved after fixes (52 over-accepts demoted, 77 missed positives promoted). Awaiting Ryan packet accept.",
+      "created_at": "2026-09-02T02:46:42.058490Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "3a673edf-4051-4d6b-8066-5b9ad5a37b2e",
+      "author": "home",
+      "text": "Ryan accepted the flow adjudication packet. Running --apply to flip YAML.",
+      "created_at": "2026-09-02T10:37:22.422466Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "fc1be458-e756-4a85-b32e-ef6dc6c7e01b",
+      "author": "home",
+      "text": "PR #52 merged (29c08bc). --apply complete: 146 accept / 17 reject / 273 unresolved in YAML. Real flow gold on develop. Closed.",
+      "created_at": "2026-09-02T10:43:32.336745Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T01:18:36.465893Z",
+  "updated_at": "2026-09-02T10:43:32.336745Z",
+  "closed_at": "2026-09-02T10:43:32.314848Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

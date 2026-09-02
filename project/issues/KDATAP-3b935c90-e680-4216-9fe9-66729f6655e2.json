@@ -3,7 +3,7 @@
   "title": "Run and freeze baseline series 1",
   "description": "Run the canonical evaluator over the pinned corpus and freeze baseline series 1 only after the readiness gate passes.\n\nOfficial run: scanner `develop`; verified pinned materializations; accepted canonical gold only; AI inference disabled; canonical evaluator and four-layer scorecard.\n\nThe command first produces readiness evidence and refuses to freeze on accepted legacy identities, unresolved endpoints, source-token-only gold, inadequate layer count/diversity, unreviewed scopes, path-contract errors above the limit, or unscorable rates above the limit.\n\nSeries 1 records `predecessor: none`. There is no trustworthy prior contract to bridge from. Thereafter detector changes compare against the frozen artifact; gold/contract changes create an immutable successor with a same-scanner bridge run.\n\nDefinition of done: JSON and generated Markdown are committed, fingerprints validate, readiness is green, and rerunning the same inputs reproduces byte-identical semantic content.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -55,13 +55,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "28c347e0-766b-4daf-be51-4fbde24ec42e",
+      "author": "home",
+      "text": "Closing: series-1 freeze landed (PR #57). Successor freeze is KDATAP-b7c3ae (PR #59) so data-flows become scorable.",
+      "created_at": "2026-09-02T17:06:34.196187Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-08-31T14:16:13.308835Z",
-  "updated_at": "2026-08-31T14:40:03.420154Z",
-  "closed_at": null,
+  "updated_at": "2026-09-02T17:06:34.230193Z",
+  "closed_at": "2026-09-02T17:06:34.230193Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"
-  },
-  "agent": null
+  }
 }
