@@ -46,6 +46,10 @@ export interface EvalCase {
    * recorded as a negative case.
    */
   exhaustiveScopeFiles?: string[];
+  /** Promoted flow canonical block from corpus annotations (benchmark eval only). */
+  flow_canonical?: import("../benchmark/schema").FlowAnnotationCanonical;
+  /** Non-scoring flow candidate metadata preserved for canonical gold loading. */
+  flowCandidate?: import("../benchmark/schema").FlowAnnotationCandidate;
 }
 
 export interface LayerFinding {

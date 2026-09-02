@@ -5,12 +5,12 @@
 - Evaluation contract: 1.0.0
 - Schema: baseline-artifact/1
 - Predecessor: none
-- Generated: 2026-09-02T13:03:16.652Z
+- Generated: 2026-09-02T15:16:04.743Z
 
 ## Fingerprint
 
-- fingerprintDigest: sha256:e0d0baecd3cf307f10b0ed169761187078e656dce1fb198da0de55f22e13d85c
-- scannerGitSha: c5cf114dfad52185829dc9950056f1e97293d122
+- fingerprintDigest: sha256:b7f31758c3ddaf31e0f7cec2a2567def0dffbb70a61ed53f6590d5dae1024f45
+- scannerGitSha: 384d7f3da2db282abc8c523c42c9d88a9f6b5e3c
 - corpusGoldDigest: sha256:3e7c61f3b675e57ffd290d9c3bd45785cccd52ba18077446eb3fc17189f65acb
 - evaluationContractVersion: 1.0.0
 - scorecardVectorContractVersion: scorecard-vector/2
@@ -72,7 +72,7 @@
 ## Readiness
 
 - status: pass
-- evaluatedAt: 2026-09-02T13:03:16.652Z
+- evaluatedAt: 2026-09-02T15:16:04.743Z
 - blockers: (none)
 
 ## Gold population
@@ -114,7 +114,7 @@
 ## Scorecard (scorecard-vector/2)
 
 - contract: scorecard-vector/2
-- scanner: c5cf114dfad52185829dc9950056f1e97293d122
+- scanner: 384d7f3da2db282abc8c523c42c9d88a9f6b5e3c
 - review states: accepted
 - packets: 29
 
@@ -156,16 +156,15 @@
 - coverage: entityWeighted=284/519, distinctFiles=203/355
 
 ### data-flows
-- summary: unscorable
-- unscorable reason: needs_adjudication
-- gate: pending (awaiting_canonical_flow_adjudication)
-- Recall: n/a [migration_incomplete_or_not_ready; 0/0]
-- Ancestor recall: n/a [migration_incomplete_or_not_ready; 0/0]
+- summary: scorable
+- gate: scorable
+- Recall: 0.0% [computable; 0/146]
+- Ancestor recall: 0.0% [computable; 0/146]
 - Precision: 0.0% [computable; 0/12]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=246, processedFiles=187, locationlessFindings=58
-- denominators: evaluablePositives=0, exhaustiveScopedFindings=12
-- population: acceptedCanonical=0, evaluable=0, matched=0, unreadRate=n/a
+- denominators: evaluablePositives=146, exhaustiveScopedFindings=12
+- population: acceptedCanonical=0, evaluable=146, matched=0, unreadRate=n/a
 - coverage: entityWeighted=0/0, distinctFiles=52/77
 
 ## Packet: auth0-express
@@ -208,7 +207,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=4, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -230,7 +229,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=16, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -252,7 +251,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -274,7 +273,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -340,7 +339,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=6, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -362,7 +361,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -384,7 +383,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -406,7 +405,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -428,7 +427,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=42, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -450,7 +449,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=12, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -472,7 +471,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -494,7 +493,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=9, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -516,7 +515,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=3, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -560,7 +559,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=5, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -604,7 +603,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=11, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -626,7 +625,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -648,7 +647,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=8, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -692,7 +691,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=5, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -736,7 +735,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=1, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -758,7 +757,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=2, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -780,7 +779,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-flows
-- acceptedCanonical=0, evaluable=0, matched=0
+- acceptedCanonical=0, evaluable=15, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 

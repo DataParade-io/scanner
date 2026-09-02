@@ -18,6 +18,11 @@ import type {
   ReviewStateCountBlock,
 } from "./types";
 import { CAPABILITY_COVERAGE_DISCLAIMER } from "./contract";
+import {
+  BASELINE_READINESS_POLICY,
+  type BaselineReadinessPolicy,
+} from "./readiness-policy";
+import { isEligibleFlowAnnotation } from "./flow-readiness";
 
 function emptyReviewStateRecord(): Record<ReviewState, number> {
   return {
@@ -150,7 +155,10 @@ export function collectAnnotationStatusCounts(benchmarkRoot: string): Annotation
   };
 }
 
-export function collectGoldPopulation(benchmarkRoot: string): GoldPopulationStats {
+export function collectGoldPopulation(
+  benchmarkRoot: string,
+  policy: BaselineReadinessPolicy = BASELINE_READINESS_POLICY,
+): GoldPopulationStats {
   const byLayer = {} as Record<HeadlineLayer, LayerGoldPopulation>;
 
   for (const layer of HEADLINE_LAYERS) {
@@ -183,21 +191,27 @@ export function collectGoldPopulation(benchmarkRoot: string): GoldPopulationStat
         });
 
         if (record.disposition === "accepted") {
-          byLayer[headlineLayer].acceptedCanonicalCount += 1;
-          if (!packetKeysByLayer.has(headlineLayer)) {
-            packetKeysByLayer.set(headlineLayer, new Set());
-          }
-          packetKeysByLayer.get(headlineLayer)!.add(repoKey);
+          const countsTowardFlowFloor =
+            headlineLayer !== "data-flows" || isEligibleFlowAnnotation(annotation, policy);
+          if (countsTowardFlowFloor) {
+            byLayer[headlineLayer].acceptedCanonicalCount += 1;
+            if (!packetKeysByLayer.has(headlineLayer)) {
+              packetKeysByLayer.set(headlineLayer, new Set());
+            }
+            packetKeysByLayer.get(headlineLayer)!.add(repoKey);
 
-          if (!conceptLeavesByLayer.has(headlineLayer)) {
-            conceptLeavesByLayer.set(headlineLayer, new Set());
-          }
-          if (record.classification.conceptLeaf.trim()) {
-            conceptLeavesByLayer.get(headlineLayer)!.add(record.classification.conceptLeaf);
+            if (!conceptLeavesByLayer.has(headlineLayer)) {
+              conceptLeavesByLayer.set(headlineLayer, new Set());
+            }
+            if (record.classification.conceptLeaf.trim()) {
+              conceptLeavesByLayer.get(headlineLayer)!.add(record.classification.conceptLeaf);
+            }
           }
         }
 
-        if (isAcceptedEvaluablePositive(record)) {
+        const countsAsEvaluablePositive =
+          headlineLayer !== "data-flows" || isEligibleFlowAnnotation(annotation, policy);
+        if (countsAsEvaluablePositive && isAcceptedEvaluablePositive(record)) {
           byLayer[headlineLayer].evaluablePositiveCount += 1;
         }
       }

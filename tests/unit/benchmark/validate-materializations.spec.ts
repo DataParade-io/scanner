@@ -1,3 +1,7 @@
+import fs from "fs";
+import os from "os";
+import path from "path";
+
 import {
   buildMaterializationValidationReport,
   evaluateMaterializationEntry,
@@ -5,15 +9,20 @@ import {
 } from "../../benchmark/materialization-validation";
 
 describe("materialization validation report", () => {
-  it("reports missing materializations for all corpus packets without local cache", () => {
+  it("reports materialization status for the corpus benchmark root", () => {
     const report = buildMaterializationValidationReport();
     expect(report.totalPackets).toBe(29);
-    expect(report.validCount).toBe(0);
-    expect(report.failures).toHaveLength(29);
-    expect(report.failures.every((failure) => failure.validationStatus === "missing")).toBe(
-      true,
-    );
-    expect(isMaterializationValidationPassing(report)).toBe(false);
+    if (report.validCount === 0) {
+      expect(report.failures).toHaveLength(29);
+      expect(report.failures.every((failure) => failure.validationStatus === "missing")).toBe(
+        true,
+      );
+      expect(isMaterializationValidationPassing(report)).toBe(false);
+      return;
+    }
+
+    expect(report.failures).toHaveLength(0);
+    expect(isMaterializationValidationPassing(report)).toBe(true);
   });
 
   it("treats head mismatch as invalid even when status is valid", () => {

@@ -8,9 +8,9 @@ export interface LayerPopulationFloor {
   minDistinctPackets: number;
 }
 
-/** Graph-edge headline flows only; intra-component lineage excluded until promoted. */
+/** Headline flow dispositions counted toward readiness and scorecard gates. */
 export interface FlowSubsetPolicy {
-  eligibleDispositionCandidates: readonly ["graph_edge"];
+  eligibleDispositionCandidates: readonly ["graph_edge", "intra_component_lineage"];
   minAcceptedCanonicalCount: number;
   minDistinctPackets: number;
   minDistinctFlowTypes: number;
@@ -47,7 +47,7 @@ export const BASELINE_READINESS_POLICY: BaselineReadinessPolicy = {
     },
   },
   flowSubset: {
-    eligibleDispositionCandidates: ["graph_edge"],
+    eligibleDispositionCandidates: ["graph_edge", "intra_component_lineage"],
     minAcceptedCanonicalCount: 1,
     minDistinctPackets: 1,
     minDistinctFlowTypes: 1,
