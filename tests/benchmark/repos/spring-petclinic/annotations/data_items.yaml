@@ -11,14 +11,23 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - first_name
     rationale: Person.firstName is a persisted given name on Owner (and other person subtypes).
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:first_name
+      proposed_concept_leaf: first_name
+      proposed_ancestry:
+        - person_name
+        - first_name
+      candidate_confidence: low
+      evidence_validation: verified
   - id: spring-petclinic-owner-last-name
     layer: data_items
     subject:
@@ -31,14 +40,23 @@ annotations:
     expected:
       status: positive
       labels:
-        - person_name
+        - last_name
     rationale: Person.lastName is a persisted family name used for owner search and display.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:last_name
+      proposed_concept_leaf: last_name
+      proposed_ancestry:
+        - person_name
+        - last_name
+      candidate_confidence: low
+      evidence_validation: verified
   - id: spring-petclinic-owner-address
     layer: data_items
     subject:

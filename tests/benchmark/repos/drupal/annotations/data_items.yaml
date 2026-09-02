@@ -80,14 +80,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - password_verifier
+        - password
     rationale: pass stores the hashed password verifier checked during authentication.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: drupal-init-email
     layer: data_items
     subject:
@@ -178,14 +186,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: The login form pass element accepts the plaintext password submitted by the user.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: drupal-http-login-pass
     layer: data_items
     subject:
@@ -198,14 +214,22 @@ annotations:
     expected:
       status: positive
       labels:
-        - credential_secret
+        - password
     rationale: credentials['pass'] is the plaintext password from the JSON login request body.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:password
+      proposed_concept_leaf: password
+      proposed_ancestry:
+        - password
+      candidate_confidence: low
+      evidence_validation: verified
   - id: drupal-one-time-hash
     layer: data_items
     subject:
@@ -299,7 +323,7 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: drupal-logout-token-ambiguous
@@ -318,6 +342,6 @@ annotations:
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: needs_adjudication
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
