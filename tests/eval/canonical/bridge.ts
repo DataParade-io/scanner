@@ -138,16 +138,21 @@ export function canonicalFindingFromLayerFinding(
     canonical = layerFindingToComponent(finding, adapterMapVersion);
   } else if (layer === "raw-hits" || layer === "mentions" || layer === "data-items") {
     canonical = layerFindingToPersonalData(finding, PERSONAL_DATA_LAYER[layer], adapterMapVersion);
-  } else {
+  } else if (layer === "data-flows") {
     const evidenceLocations = finding.sourceLines.map(toEvidenceLocation);
+    const flowType = finding.labels[0]?.trim().toLowerCase() ?? "";
     canonical = buildScannerFinding({
       layer: "data-flows",
       identityKey: finding.key.trim().toLowerCase(),
-      conceptLeaf: finding.labels[0]?.trim().toLowerCase() ?? "",
-      conceptAncestry: finding.labels.length > 0 ? [finding.labels[0]] : [],
+      conceptLeaf: flowType,
+      conceptAncestry: flowType ? [flowType] : [],
       evidenceLocations,
+      flowEndpoints: finding.flowEndpoints,
+      flowAssertion: finding.flowAssertion,
       adapterMapVersion,
     });
+  } else {
+    throw new Error(`Unsupported eval layer for canonical finding conversion: ${layer}`);
   }
 
   return { ...canonical, id: findingId };

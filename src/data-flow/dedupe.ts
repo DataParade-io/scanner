@@ -2,6 +2,18 @@ import type { DetectedDataFlow } from "../core/types/data-flow";
 import type { SourceLocation } from "../core/types/file";
 
 function makeKey(flow: DetectedDataFlow): string {
+  if (
+    flow.sourceComponentId === flow.targetComponentId &&
+    flow.sourceLocation
+  ) {
+    return [
+      flow.sourceComponentId,
+      flow.targetComponentId,
+      flow.type,
+      flow.sourceLocation.filePath,
+      flow.sourceLocation.startLine,
+    ].join("\t");
+  }
   return `${flow.sourceComponentId}\t${flow.targetComponentId}\t${flow.type}`;
 }
 

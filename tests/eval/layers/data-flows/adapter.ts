@@ -8,8 +8,7 @@ import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixtur
 import type { DetectedComponent } from "../../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../../src/core/types/data-flow";
 import type { SourceLocation } from "../../../../src/core/types/file";
-import { adaptDetectedDataFlow } from "../../../../src/eval/canonical/scanner/data-flows";
-import { componentIdentity } from "../components/adapter";
+import { adaptDetectedDataFlow, dataFlowScannerIdentityKey } from "../../../../src/eval/canonical/scanner/data-flows";
 import {
   fixtureScanResultWithLedger,
   layerLedgerFromOutcomes,
@@ -29,34 +28,42 @@ function collectSourceLocations(flow: DetectedDataFlow): SourceLocation[] {
   return [];
 }
 
-/** Edge identity aligned with benchmark subject keys: `flow:sourceKey->targetKey` */
+/** Edge identity aligned with canonical flow keys: `flow:type:endpoint->type:endpoint` */
 export function dataFlowIdentity(
   flow: DetectedDataFlow,
   componentsById: Map<string, DetectedComponent>,
 ): string {
-  const source = componentsById.get(flow.sourceComponentId);
-  const target = componentsById.get(flow.targetComponentId);
-  const sourceKey = source ? componentIdentity(source) : flow.sourceComponentId;
-  const targetKey = target ? componentIdentity(target) : flow.targetComponentId;
-  return `flow:${sourceKey}->${targetKey}`;
+  return dataFlowScannerIdentityKey(flow, componentsById);
 }
 
-function toLayerFinding(
+export function toDataFlowLayerFinding(
   flow: DetectedDataFlow,
   componentsById: Map<string, DetectedComponent>,
 ): LayerFinding {
+  const adapted = adaptDetectedDataFlow(flow, componentsById);
   const locations = collectSourceLocations(flow);
 
   return {
-    key: dataFlowIdentity(flow, componentsById),
-    labels: [flow.type],
+    key: adapted.identity.identityKey,
+    labels: adapted.classification.conceptLeaf
+      ? [adapted.classification.conceptLeaf]
+      : [],
     sourceFilePaths: [...new Set(locations.map((location) => location.filePath))],
     sourceLines: locations.map((location) => ({
       file_path: location.filePath,
       start_line: location.startLine,
       end_line: location.endLine,
     })),
+    flowEndpoints: adapted.flowEndpoints,
+    flowAssertion: adapted.flowAssertion,
   };
+}
+
+function toLayerFinding(
+  flow: DetectedDataFlow,
+  componentsById: Map<string, DetectedComponent>,
+): LayerFinding {
+  return toDataFlowLayerFinding(flow, componentsById);
 }
 
 export async function scanFixtureDataFlows(fixture: string): Promise<FixtureScanResult> {

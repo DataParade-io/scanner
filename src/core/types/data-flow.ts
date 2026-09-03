@@ -6,7 +6,8 @@ export type DataFlowType =
   | "message_queue"
   | "file_transfer"
   | "webhook"
-  | "rpc";
+  | "rpc"
+  | "data_transfer";
 
 export interface DetectedDataFlow {
   id: string;

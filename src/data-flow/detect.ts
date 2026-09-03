@@ -35,6 +35,7 @@ import {
   findTargetThirdPartyComponent,
 } from "./target-matching";
 import { detectInternalFetchCalls } from "./internal-fetch";
+import { detectIntraComponentLineage } from "./intra-component-lineage";
 import {
   appendTerraformDataFlows,
 } from "./terraform-flows";
@@ -286,6 +287,10 @@ export function detectDataFlows(
   const terraformAppend = appendTerraformDataFlows(components, flowIndex);
   flows.push(...terraformAppend.flows);
   flowIndex = terraformAppend.nextIndex;
+
+  const intra = detectIntraComponentLineage(files, components, flowIndex);
+  flows.push(...intra.flows);
+  flowIndex = intra.nextIndex;
 
   // Provider → Terraform resource edges (and managed-service topology) are
   // applied in applyDeterministicInferenceFallbacks (same pass as TS SDK).
