@@ -56,6 +56,36 @@ describe("data-flow/intra-component-lineage", () => {
       const context = "func newAuthToken(tokenKey string) {\n" + span;
       expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
     });
+
+    it("accepts route declaration spans with personal-data paths", () => {
+      const span = "<route url=\"/V1/customers/me/password\" method=\"PUT\">";
+      const context = "<routes>\n" + span;
+      expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
+
+    it("accepts model association spans", () => {
+      const span = "  has_many :sessions";
+      const context = "class User < ActiveRecord::Base\n" + span;
+      expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
+
+    it("accepts lookup query spans", () => {
+      const span = "  user = User.find_by_email(email)";
+      const context = "def lookup_user(email)\n" + span;
+      expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
+
+    it("accepts module re-export spans", () => {
+      const span = "export * from './services/auth'";
+      const context = span;
+      expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
+
+    it("accepts argon2 password hashing spans", () => {
+      const span = "  hash = await argon2.hash(password)";
+      const context = "async function setPassword(password) {\n" + span;
+      expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
   });
 
   describe("component evidence resolution", () => {
@@ -234,6 +264,113 @@ describe("data-flow/intra-component-lineage", () => {
 
       const { flows } = detectIntraComponentLineage([file], components, 0);
       expect(flows).toHaveLength(0);
+    });
+
+    it("emits one self-loop per enclosing scope (best evidence line)", () => {
+      const file = makeFile(
+        "core/auth.go",
+        [
+          "func hashPassword(password string) {",
+          "  hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)",
+          "}",
+          "func verifyPassword(password string) {",
+          "  ok := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))",
+          "}",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "auth_service",
+          name: "Auth Service",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "core/auth.go", startLine: 1, endLine: 6 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBe(2);
+      const lines = flows.map((flow) => flow.sourceLocation?.startLine).sort();
+      expect(new Set(lines).size).toBe(2);
+    });
+
+    it("emits a self-loop flow for route declaration in webapi.xml", () => {
+      const file = makeFile(
+        "app/code/Magento/Customer/etc/webapi.xml",
+        [
+          "<routes>",
+          "  <route url=\"/V1/customers/me/password\" method=\"PUT\">",
+          "    <service class=\"CustomerAccountManagement\" method=\"changePasswordById\"/>",
+          "  </route>",
+          "</routes>",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "customers_api",
+          name: "CustomerWebapi",
+          type: "asset",
+          subType: "api",
+          sourceLocations: [
+            {
+              filePath: "app/code/Magento/Customer/etc/webapi.xml",
+              startLine: 2,
+              endLine: 4,
+            },
+          ],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows[0]?.type).toBe("data_transfer");
+    });
+
+    it("emits a self-loop flow for session logout", () => {
+      const file = makeFile(
+        "core/session.php",
+        [
+          "function logout_user($session) {",
+          "  $session->logout();",
+          "}",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "session_service",
+          name: "Session",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "core/session.php", startLine: 1, endLine: 3 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows.some((flow) => flow.dataCategories?.includes("session"))).toBe(true);
+    });
+
+    it("emits a self-loop flow for SaveAsync session handling", () => {
+      const file = makeFile(
+        "services/session.ts",
+        [
+          "async function persistSession(userId: string, sessionToken: string) {",
+          "  await sessionStore.SaveAsync(userId, sessionToken);",
+          "}",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "session_store",
+          name: "Session Store",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "services/session.ts", startLine: 1, endLine: 3 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

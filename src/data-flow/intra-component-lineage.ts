@@ -11,8 +11,12 @@ import {
   inferDataCategoriesFromSpan,
   inferFlowTypeFromSpan,
   isOrmModelSpan,
+  isRouteDeclarationSpan,
+  isRouteDeclarationWithPersonalData,
+  MODEL_ASSOCIATION_PATTERNS,
   PERSISTENCE_PATTERNS,
   piiRuleIdToDataCategory,
+  ROUTE_DECLARATION_PATTERNS,
 } from "./transformation-patterns";
 
 const CONTEXT_LINE_RADIUS = 15;
@@ -36,6 +40,31 @@ const PERSONAL_DATA_FIELD_PATTERNS = [
   /tokenKey/i,
   /PlainPassword/i,
   /user_pass/i,
+];
+
+const FUNCTION_DEF_PATTERNS = [
+  /^\s*(export\s+)?(async\s+)?function\s+\w+/,
+  /^\s*func\s+\w+/,
+  /^\s*(public|private|protected|internal|static)\s+.*\([^)]*\)\s*[{;]/,
+  /^\s*def\s+\w+/,
+  /^\s*async\s+def\s+\w+/,
+  /^\s*async\s+[_\w]+\s*\(/,
+  /^\s*[_\w]+\s*=\s*(async\s+)?\([^)]*\)\s*=>/,
+  /^\s*[_\w]+\s*=\s*function\s*\(/,
+  /^\s*\w+\s*=\s*(async\s+)?\([^)]*\)\s*=>/,
+  /^\s*\w+\s*=\s*function\s*\(/,
+  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*\{/,
+  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*$/,
+  /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s*<[^>]+>\s+\w+\s*\(/,
+  /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s+\w+\s*\(/,
+];
+
+const CLASS_DEF_PATTERNS = [
+  /^\s*(export\s+)?class\s+\w+/,
+  /^\s*class\s+\w+/,
+  /^\s*module\s+\w+/,
+  /^\s*interface\s+\w+/,
+  /^\s*struct\s+\w+/,
 ];
 
 function isTestFile(filePath: string): boolean {
@@ -63,6 +92,13 @@ function buildContextSpan(content: string, centerLine: number): string {
 function hasPersonalDataReference(span: string, contextSpan: string): boolean {
   const text = `${span}\n${contextSpan}`;
 
+  if (
+    isRouteDeclarationSpan(span, contextSpan) &&
+    isRouteDeclarationWithPersonalData(span, contextSpan)
+  ) {
+    return true;
+  }
+
   for (const rule of loadPiiSignalRules()) {
     if (rule.patterns.some((pattern) => pattern.test(text))) {
       return true;
@@ -73,7 +109,11 @@ function hasPersonalDataReference(span: string, contextSpan: string): boolean {
     return true;
   }
 
-  return inferDataCategoriesFromSpan(span, contextSpan).length > 0;
+  if (inferDataCategoriesFromSpan(span, contextSpan).length > 0) {
+    return true;
+  }
+
+  return false;
 }
 
 function collectDataCategories(span: string, contextSpan: string): string[] {
@@ -85,7 +125,7 @@ function collectDataCategories(span: string, contextSpan: string): string[] {
     }
   }
 
-  for (const category of inferDataCategoriesFromSpan(span, "")) {
+  for (const category of inferDataCategoriesFromSpan(span, contextSpan)) {
     categories.add(category);
   }
 
@@ -112,18 +152,54 @@ function collectDataCategories(span: string, contextSpan: string): string[] {
 }
 
 function intraComponentFlowType(span: string, contextSpan: string): DetectedDataFlow["type"] {
+  const text = `${span}\n${contextSpan}`;
   if (isOrmModelSpan(span) || isOrmModelSpan(contextSpan)) {
     return inferFlowTypeFromSpan(span, contextSpan);
   }
   const inferred = inferFlowTypeFromSpan(span, contextSpan);
-  if (inferred === "database_query" || inferred === "api_call") {
+  if (inferred === "database_query") {
+    return inferred;
+  }
+  if (
+    inferred === "api_call" &&
+    /sendEmailWithMagicLink|decodeToken|createCustomer|createCheckoutSession|this\.\w+Service|notificationHandler|SignInAsync|SignOutAsync/i.test(
+      text,
+    )
+  ) {
     return inferred;
   }
   return "data_transfer";
 }
 
+function spanAnchorsEvidence(span: string, contextSpan: string): boolean {
+  if (isFileLevelDeclaration(span, contextSpan)) {
+    return true;
+  }
+  return hasStrongTransformationOnSpan(span);
+}
+
+function hasCustomerEntityInScope(scopeText: string, span: string): boolean {
+  if (!/\bCustomer(?:Password)?\s+\w+/i.test(scopeText)) {
+    return false;
+  }
+  return /repository\.\w*Insert/i.test(span) || /InsertCustomer/i.test(span);
+}
+
+function coOccursInFunctionScope(span: string, scopeText: string): boolean {
+  if (!hasStrongTransformationOnSpan(span)) {
+    return false;
+  }
+  return (
+    hasPersonalDataReference(span, scopeText) ||
+    hasCustomerEntityInScope(scopeText, span)
+  );
+}
+
 function isImportOrLiteralLine(span: string): boolean {
   const trimmed = span.trim();
+  if (/^export\s+\*\s+from/i.test(trimmed)) {
+    return false;
+  }
   if (/^import\s/.test(trimmed)) {
     return true;
   }
@@ -133,30 +209,110 @@ function isImportOrLiteralLine(span: string): boolean {
   return false;
 }
 
-function transformationPriority(span: string): number {
+function isFileLevelDeclaration(span: string, contextSpan: string): boolean {
+  const text = `${span}\n${contextSpan}`;
+  if (ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(text))) {
+    return true;
+  }
   if (
-    CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(span)) &&
-    /[\.(]|:=/.test(span)
+    isOrmModelSpan(span) &&
+    /EmailField|PasswordField|PlainPassword|user_pass/i.test(span)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function countIndent(line: string): number {
+  const match = line.match(/^(\s*)/);
+  return match ? match[1].replace(/\t/g, "  ").length : 0;
+}
+
+function findEnclosingScope(
+  lines: string[],
+  lineIndex: number,
+): { startLine: number; endLine: number; text: string } {
+  const contextStart = Math.max(0, lineIndex - CONTEXT_LINE_RADIUS);
+  const contextEnd = Math.min(lines.length - 1, lineIndex + CONTEXT_LINE_RADIUS);
+
+  let scopeStart = lineIndex;
+  let scopeEnd = lineIndex;
+
+  for (let index = lineIndex; index >= 0; index -= 1) {
+    const line = lines[index] ?? "";
+    if (FUNCTION_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
+      scopeStart = index;
+      break;
+    }
+    if (CLASS_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
+      scopeStart = index;
+      break;
+    }
+  }
+
+  const baseIndent = countIndent(lines[scopeStart] ?? "");
+  let braceDepth = 0;
+  let foundOpenBrace = false;
+
+  for (let index = scopeStart; index < lines.length; index += 1) {
+    const line = lines[index] ?? "";
+    for (const char of line) {
+      if (char === "{") {
+        braceDepth += 1;
+        foundOpenBrace = true;
+      } else if (char === "}") {
+        braceDepth -= 1;
+      }
+    }
+
+    scopeEnd = index;
+
+    if (foundOpenBrace && braceDepth <= 0 && index > scopeStart) {
+      break;
+    }
+
+    if (!foundOpenBrace && index > scopeStart) {
+      const indent = countIndent(line);
+      if (line.trim().length > 0 && indent <= baseIndent && index > lineIndex) {
+        scopeEnd = index - 1;
+        break;
+      }
+    }
+  }
+
+  return {
+    startLine: scopeStart + 1,
+    endLine: scopeEnd + 1,
+    text: lines.slice(scopeStart, scopeEnd + 1).join("\n"),
+  };
+}
+
+function transformationPriority(span: string, contextSpan: string): number {
+  const text = `${span}\n${contextSpan}`;
+  if (
+    CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(text)) &&
+    /[\.(]|:=/.test(text)
   ) {
     return 4;
   }
-  if (CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(span))) {
+  if (CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(text))) {
     return 3;
   }
-  if (PERSISTENCE_PATTERNS.some((pattern) => pattern.test(span))) {
+  if (PERSISTENCE_PATTERNS.some((pattern) => pattern.test(text))) {
     return 2;
   }
-  if (isOrmModelSpan(span)) {
+  if (isOrmModelSpan(span) || isOrmModelSpan(contextSpan)) {
     return 1;
   }
   return 0;
 }
 
-function transformationScore(span: string): number {
-  let score = transformationPriority(span) * 1000;
-  if (/GenerateFromPassword|DriverValue|\.Email\s*\(/i.test(span)) {
+function transformationScore(span: string, contextSpan: string): number {
+  let score = transformationPriority(span, contextSpan) * 1000;
+  const text = `${span}\n${contextSpan}`;
+  if (/GenerateFromPassword|DriverValue|\.Email\s*\(/i.test(text)) {
     score += 200;
-  } else if (/bcrypt\.|\.save\s*\(/i.test(span)) {
+  } else if (/bcrypt\.|\.save\s*\(/i.test(text)) {
     score += 100;
   }
   return score;
@@ -166,8 +322,9 @@ function dedupeKey(
   componentId: string,
   type: DetectedDataFlow["type"],
   filePath: string,
+  scopeStartLine: number,
 ): string {
-  return `${componentId}\t${type}\t${normalizeProjectPath(filePath)}`;
+  return `${componentId}\t${type}\t${normalizeProjectPath(filePath)}\t${scopeStartLine}`;
 }
 
 export function detectIntraComponentLineage(
@@ -200,11 +357,25 @@ export function detectIntraComponentLineage(
       if (!hasIntraComponentTransformationEvidence(span, contextSpan)) {
         continue;
       }
-      if (!hasStrongTransformationOnSpan(span)) {
+      if (!spanAnchorsEvidence(span, contextSpan)) {
         continue;
       }
-      if (!hasPersonalDataReference(span, contextSpan)) {
-        continue;
+      const scope = findEnclosingScope(lines, lineIndex);
+
+      if (isFileLevelDeclaration(span, contextSpan)) {
+        if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
+          continue;
+        }
+        if (!hasPersonalDataReference(span, span)) {
+          continue;
+        }
+        if (!hasStrongTransformationOnSpan(span)) {
+          continue;
+        }
+      } else {
+        if (!coOccursInFunctionScope(span, scope.text)) {
+          continue;
+        }
       }
 
       const flowType = intraComponentFlowType(span, contextSpan);
@@ -223,9 +394,9 @@ export function detectIntraComponentLineage(
         continue;
       }
 
-      const key = dedupeKey(component.id, flowType, file.path);
+      const key = dedupeKey(component.id, flowType, file.path, scope.startLine);
       const categories = collectDataCategories(span, contextSpan);
-      const score = transformationScore(span);
+      const score = transformationScore(span, contextSpan);
       const candidate = {
         id: "",
         sourceComponentId: component.id,
