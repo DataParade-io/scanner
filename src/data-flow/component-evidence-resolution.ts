@@ -460,26 +460,14 @@ function pickDeterministicComponent(
 function resolveIntraComponentFallback(
   components: DetectedComponent[],
   evidence: EvidenceSpan,
+  span: string,
 ): DetectedComponent | undefined {
-  const path = normalizeEvidencePath(evidence.filePath);
+  const filePath = normalizeEvidencePath(evidence.filePath);
 
-  if (/field_password|field_email|record_tokens/i.test(path)) {
+  if (/field_password|field_email|record_tokens/i.test(filePath)) {
     return pickDeterministicComponent(components, "database");
   }
-  if (/controllers?\/|router-controller|member-controller/i.test(path)) {
-    return pickDeterministicComponent(components, "api");
-  }
-  if (/repository|repositories\//i.test(path)) {
-    return pickDeterministicComponent(components, "service");
-  }
-  if (/\/models\/|_model\.rb$/i.test(path)) {
-    const customer = pickDeterministicComponent(components, "customer");
-    if (customer) {
-      return customer;
-    }
-    return pickDeterministicComponent(components, "database");
-  }
-  if (/src\/modules\/.*\.ts$/i.test(path) || /\/modules\/[^/]+\.ts$/i.test(path)) {
+  if (/router-controller|member-controller/i.test(filePath) && /sendEmailWithMagicLink|decodeToken|createCustomer|createCheckoutSession/i.test(span)) {
     return pickDeterministicComponent(components, "api");
   }
 
@@ -559,7 +547,7 @@ export function resolveComponentForEvidence(
     return sameFile;
   }
 
-  const fallback = resolveIntraComponentFallback(components, evidence);
+  const fallback = resolveIntraComponentFallback(components, evidence, span);
   if (fallback) {
     return fallback;
   }

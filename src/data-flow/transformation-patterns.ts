@@ -35,15 +35,11 @@ export const CRYPTO_AUTH_PATTERNS = [
   /JWT/i,
   /\bsign\s*\(/i,
   /\.sign\s*\(/i,
-  /encrypt/i,
-  /decrypt/i,
   /tokenKey/i,
   /TokenKey/i,
   /wp_signon/i,
   /wp_set_auth_cookie/i,
   /set_auth_cookie/i,
-  /authenticate/i,
-  /signon/i,
   /session_token/i,
   /session_tokens/i,
   /setCustomerDataAsLoggedIn/i,
@@ -87,11 +83,7 @@ export const LOOKUP_PATTERNS = [
   /GetCustomerByUsername/i,
   /getbytoken/i,
   /\.whereRaw\s*\(/i,
-  /\.first\s*\(/i,
   /->where\s*\(/i,
-  /->query\s*\(/i,
-  /\.query\s*\(\s*['"]/i,
-  /SELECT\s+\*/i,
   /strapi\.db\.query/i,
 ];
 
@@ -120,10 +112,8 @@ export const PASSWORD_HASH_PATTERNS_ADDENDUM = [
 ];
 
 export const ORM_PERSISTENCE_PATTERNS_ADDENDUM = [
-  /\.create\w*\s*\(/i,
-  /\.save\w*\s*\(/i,
-  /\.insert\w*\s*\(/i,
-  /\.update\w*\s*\(/i,
+  /Repository\.InsertAsync/i,
+  /repository\.InsertAsync/i,
   /->save\w*\s*\(/i,
   /->create\w*\s*\(/i,
   /model\.text\s*\(/i,
@@ -132,6 +122,7 @@ export const ORM_PERSISTENCE_PATTERNS_ADDENDUM = [
   /repository\.insert/i,
   /repository\.save/i,
   /entityService\.(create|update)/i,
+  /DriverValue/i,
 ];
 
 export const SESSION_COOKIE_PATTERNS_ADDENDUM = [
@@ -156,7 +147,6 @@ export const AUTH_FUNCTION_PATTERNS_ADDENDUM = [
   /function\s+check_password_reset_key/i,
   /get_user_by\s*\(/i,
   /\bget_users\s*\(/i,
-  /this\.\w*Service\.\w+/i,
   /this\._sendEmail/i,
   /sendEmailWithMagicLink/i,
   /decodeToken/i,
@@ -204,8 +194,14 @@ const PERSONAL_DATA_ROUTE_PATH_PATTERNS = [
 ];
 
 export function hasPersonalDataRouteReference(span: string, contextSpan: string): boolean {
-  const text = `${span}\n${contextSpan}`;
-  return PERSONAL_DATA_ROUTE_PATH_PATTERNS.some((pattern) => pattern.test(text));
+  const routeLine = span.trim().length > 0 ? span : contextSpan.split('\n').find((line) =>
+    ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(line)),
+  ) ?? '';
+  const urlMatch =
+    routeLine.match(/url\s*=\s*["']([^"']+)["']/i) ??
+    routeLine.match(/^\s*(?:get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s*=>/i);
+  const url = urlMatch?.[1] ?? routeLine;
+  return PERSONAL_DATA_ROUTE_PATH_PATTERNS.some((pattern) => pattern.test(url));
 }
 
 export const CROSS_BOUNDARY_PATTERNS = [
@@ -350,9 +346,6 @@ export function hasStrongTransformationOnSpan(span: string, contextSpan?: string
   if (matchesAnyPattern(span, STRONG_TRANSFORMATION_PATTERN_GROUPS.flat())) {
     return true;
   }
-  if (contextSpan) {
-    return matchesAnyPattern(contextSpan, STRONG_TRANSFORMATION_PATTERN_GROUPS.flat());
-  }
   return false;
 }
 
@@ -371,12 +364,12 @@ const DATA_CATEGORY_PATTERNS: Array<{ category: string; patterns: RegExp[] }> = 
     category: "password",
     patterns: [
       /\bpassword\b/i,
-      /password/i,
       /\bpasswd\b/i,
       /user_pass/i,
       /PlainPassword/i,
       /hash_password/i,
       /hashPassword/i,
+      /GenerateFromPassword/i,
     ],
   },
   { category: "email", patterns: [/\bemail\b/i] },

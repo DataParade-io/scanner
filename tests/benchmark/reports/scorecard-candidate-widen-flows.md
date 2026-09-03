@@ -1,8 +1,8 @@
 # Scanner scorecard vector
 
 Contract: scorecard-vector/2
-Generated: 2026-09-03T18:10:02.734Z
-Scanner: 08a5206c317bb512e5536ce0d1274d3ee3f73138
+Generated: 2026-09-03T19:55:26.406Z
+Scanner: 786936a0cdcbdac0cc151f30b8726f40f71a6d7c
 Review states: accepted
 Packets: 29
 
@@ -50,10 +50,10 @@ Packets: 29
 - Gate: scorable
 - Recall: 2.5% [computable; 4/158]
 - Ancestor recall: 0.0% [computable; 0/158]
-- Precision: 1.6% [computable; 4/246]
+- Precision: 3.7% [computable; 4/107]
 - Negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - Scope: reviewedFiles=247, processedFiles=188, locationlessFindings=52
-- Denominators: evaluablePositives=158, exhaustiveScopedFindings=246
+- Denominators: evaluablePositives=158, exhaustiveScopedFindings=107
 - Population: acceptedCanonical=0, evaluable=158, matched=4
 - Coverage: entityWeighted=0/0, distinctFiles=55/81
 

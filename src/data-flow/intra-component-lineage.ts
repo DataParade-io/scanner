@@ -8,14 +8,12 @@ import {
   CRYPTO_AUTH_PATTERNS,
   hasIntraComponentTransformationEvidence,
   hasStrongTransformationOnSpan,
-  hasPersonalDataRouteReference,
   inferDataCategoriesFromSpan,
   inferFlowTypeFromSpan,
   isOrmModelSpan,
   isRouteDeclarationSpan,
   isRouteDeclarationWithPersonalData,
   MODEL_ASSOCIATION_PATTERNS,
-  MODULE_REEXPORT_PATTERNS,
   PERSISTENCE_PATTERNS,
   piiRuleIdToDataCategory,
   ROUTE_DECLARATION_PATTERNS,
@@ -55,6 +53,10 @@ const FUNCTION_DEF_PATTERNS = [
   /^\s*[_\w]+\s*=\s*function\s*\(/,
   /^\s*\w+\s*=\s*(async\s+)?\([^)]*\)\s*=>/,
   /^\s*\w+\s*=\s*function\s*\(/,
+  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*\{/,
+  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*$/,
+  /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s*<[^>]+>\s+\w+\s*\(/,
+  /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s+\w+\s*\(/,
 ];
 
 const CLASS_DEF_PATTERNS = [
@@ -108,10 +110,6 @@ function hasPersonalDataReference(span: string, contextSpan: string): boolean {
   }
 
   if (inferDataCategoriesFromSpan(span, contextSpan).length > 0) {
-    return true;
-  }
-
-  if (hasPersonalDataRouteReference(span, contextSpan)) {
     return true;
   }
 
@@ -180,6 +178,23 @@ function spanAnchorsEvidence(span: string, contextSpan: string): boolean {
   return hasStrongTransformationOnSpan(span);
 }
 
+function hasCustomerEntityInScope(scopeText: string, span: string): boolean {
+  if (!/\bCustomer(?:Password)?\s+\w+/i.test(scopeText)) {
+    return false;
+  }
+  return /repository\.\w*Insert/i.test(span) || /InsertCustomer/i.test(span);
+}
+
+function coOccursInFunctionScope(span: string, scopeText: string): boolean {
+  if (!hasStrongTransformationOnSpan(span)) {
+    return false;
+  }
+  return (
+    hasPersonalDataReference(span, scopeText) ||
+    hasCustomerEntityInScope(scopeText, span)
+  );
+}
+
 function isImportOrLiteralLine(span: string): boolean {
   const trimmed = span.trim();
   if (/^export\s+\*\s+from/i.test(trimmed)) {
@@ -196,12 +211,16 @@ function isImportOrLiteralLine(span: string): boolean {
 
 function isFileLevelDeclaration(span: string, contextSpan: string): boolean {
   const text = `${span}\n${contextSpan}`;
-  return (
-    ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(text)) ||
-    MODULE_REEXPORT_PATTERNS.some((pattern) => pattern.test(text)) ||
-    MODEL_ASSOCIATION_PATTERNS.some((pattern) => pattern.test(text)) ||
-    isOrmModelSpan(span)
-  );
+  if (ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(text))) {
+    return true;
+  }
+  if (
+    isOrmModelSpan(span) &&
+    /EmailField|PasswordField|PlainPassword|user_pass/i.test(span)
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function countIndent(line: string): number {
@@ -341,21 +360,20 @@ export function detectIntraComponentLineage(
       if (!spanAnchorsEvidence(span, contextSpan)) {
         continue;
       }
-      if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
-        continue;
-      }
-
       const scope = findEnclosingScope(lines, lineIndex);
-      if (!hasStrongTransformationOnSpan(span, scope.text)) {
-        continue;
-      }
 
-      if (!isFileLevelDeclaration(span, contextSpan)) {
-        if (!hasPersonalDataReference(span, scope.text)) {
+      if (isFileLevelDeclaration(span, contextSpan)) {
+        if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
+          continue;
+        }
+        if (!hasPersonalDataReference(span, span)) {
+          continue;
+        }
+        if (!hasStrongTransformationOnSpan(span)) {
           continue;
         }
       } else {
-        if (!hasPersonalDataReference(span, contextSpan)) {
+        if (!coOccursInFunctionScope(span, scope.text)) {
           continue;
         }
       }
