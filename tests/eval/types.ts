@@ -4,6 +4,8 @@ import type {
   FlowAnnotationCanonical,
   FlowAnnotationCandidate,
 } from "../benchmark/schema";
+import type { AssertedFlowEndpoints } from "../../src/eval/canonical/graph/types";
+import type { FlowAssertion } from "../../src/eval/canonical/types";
 
 export type EvalCaseStatus = "positive" | "negative" | "ambiguous";
 
@@ -72,6 +74,8 @@ export interface LayerFinding {
    * score call — fixture tests score one layer at a time.
    */
   layer?: EvalLayer;
+  flowEndpoints?: AssertedFlowEndpoints;
+  flowAssertion?: FlowAssertion;
 }
 
 export interface FixtureScanResult {

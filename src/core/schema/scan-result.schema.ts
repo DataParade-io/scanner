@@ -69,6 +69,7 @@ export const detectedDataFlowSchema = z.object({
     "file_transfer",
     "webhook",
     "rpc",
+    "data_transfer",
   ]),
   description: z.string().optional(),
   confidence: z.number().min(0).max(1),
