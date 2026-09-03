@@ -185,6 +185,13 @@ async function walkForManifests(
       lower === "vcpkg.json" ||
       lower === "conanfile.txt" ||
       lower === "conanfile.py";
+    // composer.json is the Composer package root for PHP services.
+    const isComposerManifest = lower === "composer.json";
+    // Cargo.toml is the crate/package root for Rust services.
+    const isCargoManifest = lower === "cargo.toml";
+    // Gemfile is the Bundler app/engine root for Ruby/Rails services.
+    // Gemfile.lock is not a section marker on its own (always next to Gemfile).
+    const isGemfileManifest = name === "Gemfile";
 
     if (
       !isTsManifest &&
@@ -194,7 +201,10 @@ async function walkForManifests(
       !isDotnetProject &&
       !isGoModule &&
       !isJvmManifest &&
-      !isCppManifest
+      !isCppManifest &&
+      !isComposerManifest &&
+      !isCargoManifest &&
+      !isGemfileManifest
     ) {
       continue;
     }

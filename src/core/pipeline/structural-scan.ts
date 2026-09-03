@@ -26,6 +26,9 @@ import {
 import { runTerraformShowJsonSync } from "../../analyzers/terraform/terraform-exec";
 import { parsePythonModule } from "../../analyzers/python/parser";
 import { parseGoSourceFile } from "../../analyzers/go/parser";
+import { parsePhpSourceFile } from "../../analyzers/php/parser";
+import { parseRustSourceFile } from "../../analyzers/rust/parser";
+import { parseRubySourceFile } from "../../analyzers/ruby/parser";
 import { parseJvmSourceFile } from "../../analyzers/jvm/parser";
 import { parseCppTranslationUnit } from "../../analyzers/cpp/parser";
 import { parseCSharpCompilationUnit } from "../../analyzers/csharp/parser";
@@ -35,6 +38,15 @@ import {
 import {
   detectGoPatternsFromDependencyManifests,
 } from "../../analyzers/go/dependency-manifests";
+import {
+  detectPhpPatternsFromDependencyManifests,
+} from "../../analyzers/php/dependency-manifests";
+import {
+  detectRustPatternsFromDependencyManifests,
+} from "../../analyzers/rust/dependency-manifests";
+import {
+  detectRubyPatternsFromDependencyManifests,
+} from "../../analyzers/ruby/dependency-manifests";
 import {
   detectJvmPatternsFromDependencyManifests,
 } from "../../analyzers/jvm/dependency-manifests";
@@ -216,6 +228,51 @@ export async function runStructuralScanPhase(
   );
   if (goStats) languageStats.push(goStats);
 
+  const phpStats = collectLanguageParserStats(
+    files,
+    "php",
+    (file) => {
+      const unit = parsePhpSourceFile(file);
+      return {
+        functionsIndexed: unit.functions.length,
+        callsIndexed: unit.calls.length,
+        warnings: unit.warnings,
+      };
+    },
+    warn,
+  );
+  if (phpStats) languageStats.push(phpStats);
+
+  const rustStats = collectLanguageParserStats(
+    files,
+    "rust",
+    (file) => {
+      const unit = parseRustSourceFile(file);
+      return {
+        functionsIndexed: unit.functions.length,
+        callsIndexed: unit.calls.length,
+        warnings: unit.warnings,
+      };
+    },
+    warn,
+  );
+  if (rustStats) languageStats.push(rustStats);
+
+  const rubyStats = collectLanguageParserStats(
+    files,
+    "ruby",
+    (file) => {
+      const unit = parseRubySourceFile(file);
+      return {
+        functionsIndexed: unit.functions.length,
+        callsIndexed: unit.calls.length,
+        warnings: unit.warnings,
+      };
+    },
+    warn,
+  );
+  if (rubyStats) languageStats.push(rubyStats);
+
   // One parser, reported per language so the stats stay attributable.
   for (const jvmLanguage of ["java", "kotlin"] as const) {
     const jvmStats = collectLanguageParserStats(
@@ -365,6 +422,54 @@ export async function runStructuralScanPhase(
       const message =
         err instanceof Error ? err.message : "Unknown error parsing manifests.";
       warn(`go-manifests: ${message}`);
+    }
+  }
+
+  // Third-party service and dependency detection from Composer manifests.
+  if (!config.languages || config.languages.includes("php")) {
+    try {
+      findings.push(
+        ...(await detectPhpPatternsFromDependencyManifests(scanRootDir, {
+          onWarning: warn,
+          excludePaths: config.excludePaths,
+        })),
+      );
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unknown error parsing manifests.";
+      warn(`php-manifests: ${message}`);
+    }
+  }
+
+  // Third-party service and dependency detection from Cargo manifests.
+  if (!config.languages || config.languages.includes("rust")) {
+    try {
+      findings.push(
+        ...(await detectRustPatternsFromDependencyManifests(scanRootDir, {
+          onWarning: warn,
+          excludePaths: config.excludePaths,
+        })),
+      );
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unknown error parsing manifests.";
+      warn(`rust-manifests: ${message}`);
+    }
+  }
+
+  // Third-party service and dependency detection from Bundler manifests.
+  if (!config.languages || config.languages.includes("ruby")) {
+    try {
+      findings.push(
+        ...(await detectRubyPatternsFromDependencyManifests(scanRootDir, {
+          onWarning: warn,
+          excludePaths: config.excludePaths,
+        })),
+      );
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unknown error parsing manifests.";
+      warn(`ruby-manifests: ${message}`);
     }
   }
 
