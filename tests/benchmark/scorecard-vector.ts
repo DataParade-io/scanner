@@ -29,6 +29,8 @@ import {
   type LayerReportAccounting,
   type PacketCanonicalRecordWithDiagnostics,
 } from "./layer-report-accounting";
+import { isDataFlowsLayerScoreable } from "./baseline/evaluate-readiness";
+import type { GoldPopulationStats } from "./baseline/types";
 
 export type { LayerReportAccounting } from "./layer-report-accounting";
 
@@ -85,6 +87,7 @@ export interface BuildScorecardVectorInput {
   scannerGitSha: string;
   generatedAt: string;
   reviewStates: ReviewState[];
+  flowLayerScoreable?: boolean;
   packets: Array<{
     repoKey: string;
     evalCases: EvalCase[];
@@ -151,20 +154,31 @@ function buildComputabilityBlock(
   metricComputability: MetricComputability,
   caseCount: number,
   provisional: boolean,
+  flowLayerScoreable = false,
 ): LayerComputabilityBlock {
-  const summary = rollupLayerComputabilitySummary(
+  let summary = rollupLayerComputabilitySummary(
     layer,
     caseCount,
     metricComputability.metrics,
     provisional,
   );
+  if (layer === "data-flows" && flowLayerScoreable && caseCount > 0 && !provisional) {
+    const anyComputable = Object.values(metricComputability.metrics).some(
+      (metric) => metric.state === "computable",
+    );
+    if (anyComputable) {
+      summary = "scorable";
+    }
+  }
   return {
     summary,
     metrics: metricComputability.metrics,
     scope: metricComputability.scope,
     locationlessFindingCount: metricComputability.locationlessFindingCount,
     unscorableReason:
-      layer === "data-flows" && caseCount > 0 ? "needs_adjudication" : undefined,
+      layer === "data-flows" && caseCount > 0 && !flowLayerScoreable
+        ? "needs_adjudication"
+        : undefined,
   };
 }
 
@@ -173,12 +187,14 @@ export function resolveLayerGate(
   scores: EvalScores,
   caseCount: number,
   provisional: boolean,
+  flowLayerScoreable = false,
 ): { computability: LayerComputabilityBlock; gate: LayerGateResult } {
   const computability = buildComputabilityBlock(
     layer,
     scores.metricComputability,
     caseCount,
     provisional,
+    flowLayerScoreable,
   );
 
   if (provisional) {
@@ -198,7 +214,7 @@ export function resolveLayerGate(
     };
   }
 
-  if (layer === "data-flows") {
+  if (layer === "data-flows" && !flowLayerScoreable) {
     return {
       computability,
       gate: {
@@ -231,8 +247,15 @@ export function buildScorecardLayerEntry(
     scanResult?: FixtureScanResult;
     canonicalRecords: PacketCanonicalRecordWithDiagnostics[];
   },
+  flowLayerScoreable = false,
 ): ScorecardLayerEntry {
-  const resolved = resolveLayerGate(layer, report.scores, caseCount, provisional);
+  const resolved = resolveLayerGate(
+    layer,
+    report.scores,
+    caseCount,
+    provisional,
+    flowLayerScoreable,
+  );
   const accounting =
     accountingInput === undefined
       ? aggregateLayerReportAccounting([])
@@ -387,6 +410,7 @@ function buildPacketLayers(
   evalCases: EvalCase[],
   layerScores: Partial<Record<EvalLayer, EvalScoreReport>>,
   provisional: boolean,
+  flowLayerScoreable: boolean,
   scanResult?: FixtureScanResult,
   canonicalRecords: PacketCanonicalRecordWithDiagnostics[] = [],
 ): Record<HeadlineLayer, ScorecardLayerEntry> {
@@ -394,11 +418,18 @@ function buildPacketLayers(
   for (const layer of HEADLINE_LAYERS) {
     const caseCount = caseCountForLayer(evalCases, layer);
     const report = layerScores[layer] ?? { scores: emptyScores(), caseResults: [] };
-    layers[layer] = buildScorecardLayerEntry(layer, report, caseCount, provisional, {
-      cases: evalCases,
-      scanResult,
-      canonicalRecords,
-    });
+    layers[layer] = buildScorecardLayerEntry(
+      layer,
+      report,
+      caseCount,
+      provisional,
+      {
+        cases: evalCases,
+        scanResult,
+        canonicalRecords,
+      },
+      flowLayerScoreable,
+    );
   }
   return layers;
 }
@@ -417,6 +448,7 @@ function aggregateDiagnostic(
 
 export function buildScorecardVector(input: BuildScorecardVectorInput): ScorecardVector {
   const provisional = isProvisionalReviewStates(input.reviewStates);
+  const flowLayerScoreable = input.flowLayerScoreable ?? false;
   const packetRows: ScorecardPacketRow[] = input.packets.map((packet) => {
     const diagnosticReport = packet.layerScores["raw-hits"] ?? {
       scores: emptyScores(),
@@ -428,6 +460,7 @@ export function buildScorecardVector(input: BuildScorecardVectorInput): Scorecar
         packet.evalCases,
         packet.layerScores,
         provisional,
+        flowLayerScoreable,
         packet.scanResult,
         packet.canonicalRecords ?? [],
       ),
@@ -451,6 +484,8 @@ export function buildScorecardVector(input: BuildScorecardVectorInput): Scorecar
       { scores: aggregatedScores, caseResults: [] },
       totalCaseCount,
       provisional,
+      undefined,
+      flowLayerScoreable,
     );
     const packetAccountings = packetRows.map((packet) => packet.layers[layer].accounting);
     layers[layer] = {
@@ -573,6 +608,10 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
   );
 
   return `${lines.join("\n")}\n`;
+}
+
+export function resolveFlowLayerScoreable(goldPopulation: GoldPopulationStats): boolean {
+  return isDataFlowsLayerScoreable(goldPopulation);
 }
 
 export function assertNoCrossLayerScalar(value: unknown): void {

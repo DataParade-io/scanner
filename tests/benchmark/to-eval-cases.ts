@@ -92,6 +92,12 @@ export function annotationToEvalCase(
     },
     rationale: annotation.rationale,
     ...(scopeFiles !== undefined ? { exhaustiveScopeFiles: scopeFiles } : {}),
+    ...(annotation.flow_canonical !== undefined
+      ? { flow_canonical: annotation.flow_canonical }
+      : {}),
+    ...(annotation.candidate?.kind === "flow"
+      ? { flowCandidate: annotation.candidate }
+      : {}),
   };
 }
 
