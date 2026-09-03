@@ -5,6 +5,7 @@ Welcome to the project wiki.
 ## Evaluation
 
 - [Four-layer scanner evaluation](four-layer-evaluation.md) — headline layers (`mentions`, `data-items`, `components`, `data-flows`), diagnostic `raw-hits`, identity keys, and Jest vs Plexus harnesses.
+- [Performance baseline history](baseline-performance.md) — pinned reference scorecard at `6d241f8` and append-only improvement-slice deltas.
 - [Gold review](eval-flywheel.md) — finding issues on Proposed / Accepted / Rejected.
 - [Corpus gold status](corpus-gold-status.md) — row-level adjudication counts per layer; updated after each pass.
 
