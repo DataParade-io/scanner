@@ -33,9 +33,15 @@ export {
   checkNoLegacyIdentityOnAccepted,
   checkPathContractLimits,
   checkUnscorableRates,
+  isDataFlowsLayerScoreable,
   type EvaluateBaselineReadinessInput,
   type ReadinessBlocker,
 } from "./evaluate-readiness";
+export {
+  isEligibleFlowAnnotation,
+  isFlowLayerScoreable,
+  resolveFlowDispositionCandidate,
+} from "./flow-readiness";
 export {
   BASELINE_READINESS_POLICY,
   BASELINE_READINESS_POLICY_VERSION,

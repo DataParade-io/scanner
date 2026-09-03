@@ -38,6 +38,7 @@ import {
   BASELINE_READINESS_POLICY,
   type BaselineReadinessPolicy,
 } from "./readiness-policy";
+import { isFlowLayerScoreable } from "./flow-readiness";
 import type {
   BaselineFingerprint,
   BaselineReadinessEmbed,
@@ -388,7 +389,7 @@ export function checkLayerPopulationFloors(
   if (flowStats.acceptedCanonicalCount < flowPolicy.minAcceptedCanonicalCount) {
     blockers.push({
       code: "FLOW_NO_CANONICAL_ACCEPTS",
-      message: `data-flows: acceptedCanonicalCount ${flowStats.acceptedCanonicalCount} < graph-edge floor ${flowPolicy.minAcceptedCanonicalCount}`,
+      message: `data-flows: acceptedCanonicalCount ${flowStats.acceptedCanonicalCount} < flow subset floor ${flowPolicy.minAcceptedCanonicalCount}`,
       layer: "data-flows",
     });
   }
@@ -396,7 +397,7 @@ export function checkLayerPopulationFloors(
   if (flowStats.packetDiversity.distinctPackets < flowPolicy.minDistinctPackets) {
     blockers.push({
       code: "FLOW_NO_CANONICAL_ACCEPTS",
-      message: `data-flows: distinctPackets ${flowStats.packetDiversity.distinctPackets} < graph-edge floor ${flowPolicy.minDistinctPackets}`,
+      message: `data-flows: distinctPackets ${flowStats.packetDiversity.distinctPackets} < flow subset floor ${flowPolicy.minDistinctPackets}`,
       layer: "data-flows",
     });
   }
@@ -404,12 +405,19 @@ export function checkLayerPopulationFloors(
   if (flowStats.distinctConceptLeaves < flowPolicy.minDistinctFlowTypes) {
     blockers.push({
       code: "FLOW_NO_CANONICAL_ACCEPTS",
-      message: `data-flows: distinctConceptLeaves ${flowStats.distinctConceptLeaves} < graph-edge floor ${flowPolicy.minDistinctFlowTypes}`,
+      message: `data-flows: distinctConceptLeaves ${flowStats.distinctConceptLeaves} < flow subset floor ${flowPolicy.minDistinctFlowTypes}`,
       layer: "data-flows",
     });
   }
 
   return blockers;
+}
+
+export function isDataFlowsLayerScoreable(
+  goldPopulation: GoldPopulationStats,
+  policy: BaselineReadinessPolicy = BASELINE_READINESS_POLICY,
+): boolean {
+  return isFlowLayerScoreable(goldPopulation.byLayer["data-flows"], policy);
 }
 
 export function checkLayerScopeProvenance(benchmarkRoot: string): ReadinessBlocker[] {
@@ -465,16 +473,11 @@ export function checkMaterializations(
   benchmarkRoot: string,
   requireMaterializations = true,
 ): ReadinessBlocker[] {
-  const report = buildMaterializationValidationReport(benchmarkRoot);
-  if (!requireMaterializations && report.validCount === 0) {
-    return [
-      {
-        code: "MATERIALIZATION_INVALID",
-        message: "Materializations not present (0 valid packets); run benchmark:materialize -- --all",
-      },
-    ];
+  if (!requireMaterializations) {
+    return [];
   }
 
+  const report = buildMaterializationValidationReport(benchmarkRoot);
   if (isMaterializationValidationPassing(report)) {
     return [];
   }

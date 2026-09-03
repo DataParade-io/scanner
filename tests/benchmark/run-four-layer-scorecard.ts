@@ -6,12 +6,15 @@ import type { ReviewState } from "./schema";
 import {
   buildScorecardVector,
   formatScorecardVectorMarkdown,
+  resolveFlowLayerScoreable,
   type ScorecardVector,
 } from "./scorecard-vector";
 import {
   runBenchmark,
   type RunBenchmarkOptions,
 } from "./run-benchmark";
+import { resolveDefaultBenchmarkRoot } from "./paths";
+import { collectGoldPopulation } from "./baseline";
 
 export interface RunFourLayerScorecardOptions extends RunBenchmarkOptions {
   writeReportPath?: string;
@@ -39,10 +42,14 @@ export async function runFourLayerScorecard(
   options: RunFourLayerScorecardOptions = {},
 ): Promise<ScorecardVector> {
   const results = await runBenchmark(options);
+  const benchmarkRoot = options.benchmarkRoot ?? resolveDefaultBenchmarkRoot(__dirname);
+  const goldPopulation = collectGoldPopulation(benchmarkRoot);
+  const flowLayerScoreable = resolveFlowLayerScoreable(goldPopulation);
   return buildScorecardVector({
     scannerGitSha: scannerGitSha(),
     generatedAt: new Date().toISOString(),
     reviewStates: resolveReviewStates(options),
+    flowLayerScoreable,
     packets: results.map((result) => ({
       repoKey: result.repoKey,
       evalCases: result.evalCases,

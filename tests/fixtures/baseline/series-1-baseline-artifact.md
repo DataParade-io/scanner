@@ -5,13 +5,13 @@
 - Evaluation contract: 1.0.0
 - Schema: baseline-artifact/1
 - Predecessor: none
-- Generated: 2026-09-02T13:03:16.652Z
+- Generated: 2026-09-03T00:25:41.592Z
 
 ## Fingerprint
 
-- fingerprintDigest: sha256:e0d0baecd3cf307f10b0ed169761187078e656dce1fb198da0de55f22e13d85c
-- scannerGitSha: c5cf114dfad52185829dc9950056f1e97293d122
-- corpusGoldDigest: sha256:3e7c61f3b675e57ffd290d9c3bd45785cccd52ba18077446eb3fc17189f65acb
+- fingerprintDigest: sha256:08408077b5a9fd1becef325cccc2f7c15ccb677d6e2bf08ccca4188fc46c696a
+- scannerGitSha: c2d9d0bb8780540cdf193cab70e2c395c659ee9f
+- corpusGoldDigest: sha256:5f51893edc6210c9af8156393cd5f8055acb55f8335b7ed8dae45a991426e93b
 - evaluationContractVersion: 1.0.0
 - scorecardVectorContractVersion: scorecard-vector/2
 - taxonomyDigest: sha256:83e357f218044c959a5f1d892707ccb25238ad9dc36cc5503b98e9f44aed22ef
@@ -56,10 +56,10 @@
 
 ### Review state counts (total)
 
-- accepted: 857
-- needs_adjudication: 798
+- accepted: 896
+- needs_adjudication: 716
 - proposed: 0
-- rejected: 137
+- rejected: 180
 
 ## Invariants
 
@@ -72,7 +72,7 @@
 ## Readiness
 
 - status: pass
-- evaluatedAt: 2026-09-02T13:03:16.652Z
+- evaluatedAt: 2026-09-03T00:25:41.592Z
 - blockers: (none)
 
 ## Gold population
@@ -84,8 +84,8 @@
 - packetDiversity: 22 (directus, discourse, drupal, easy-school, ghost, gitea, keycloak, magento, medusa-customer, nopcommerce, orchard-core, pocketbase, posthog-user, redmine, saleor, spree, spring-petclinic, strapi, supabase-js, vapor, wordpress, yjdh-employee)
 
 ### data-items
-- acceptedCanonicalCount: 113
-- evaluablePositiveCount: 113
+- acceptedCanonicalCount: 140
+- evaluablePositiveCount: 140
 - distinctConceptLeaves: 10
 - packetDiversity: 23 (directus, discourse, drupal, easy-school, ghost, gitea, keycloak, magento, medusa-customer, nopcommerce, orchard-core, pocketbase, posthog-user, redmine, saleor, spree, spring-petclinic, strapi, supabase-js, vapor, vgs-django, wordpress, yjdh-employee)
 
@@ -96,25 +96,25 @@
 - packetDiversity: 29 (auth0-express, directus, discourse, drupal, easy-school, exposed, flask-login, ghost, gitea, hyperswitch-vault, keycloak, magento, medusa, medusa-customer, nopcommerce, orchard-core, ory-kratos-password, pocketbase, posthog-user, redmine, saleor, spree, spring-petclinic, strapi, supabase-js, vapor, vgs-django, wordpress, yjdh-employee)
 
 ### data-flows
-- acceptedCanonicalCount: 146
-- evaluablePositiveCount: 146
+- acceptedCanonicalCount: 158
+- evaluablePositiveCount: 158
 - distinctConceptLeaves: 3
-- packetDiversity: 21 (directus, discourse, drupal, easy-school, ghost, gitea, hyperswitch-vault, keycloak, magento, medusa, medusa-customer, nopcommerce, orchard-core, pocketbase, redmine, saleor, spree, strapi, vapor, vgs-django, wordpress)
+- packetDiversity: 22 (directus, discourse, drupal, easy-school, ghost, gitea, hyperswitch-vault, keycloak, magento, medusa, medusa-customer, nopcommerce, orchard-core, pocketbase, posthog-user, redmine, saleor, spree, strapi, vapor, vgs-django, wordpress)
 
 ## Migration incomplete
 
-- total: 798
-- awaiting_flow_adjudication: 273
-- needs_adjudication: 525
+- total: 728
+- awaiting_flow_adjudication: 261
+- needs_adjudication: 467
 
-- data-flows: 273
-- data-items: 247
+- data-flows: 261
+- data-items: 189
 - mentions: 278
 
 ## Scorecard (scorecard-vector/2)
 
 - contract: scorecard-vector/2
-- scanner: c5cf114dfad52185829dc9950056f1e97293d122
+- scanner: c2d9d0bb8780540cdf193cab70e2c395c659ee9f
 - review states: accepted
 - packets: 29
 
@@ -134,14 +134,14 @@
 ### data-items
 - summary: scorable
 - gate: scorable
-- Recall: 30.1% [computable; 34/113]
-- Ancestor recall: 0.0% [computable; 0/113]
-- Precision: 32.7% [computable; 34/104]
+- Recall: 27.1% [computable; 38/140]
+- Ancestor recall: 0.0% [computable; 0/140]
+- Precision: 36.5% [computable; 38/104]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
 - scope: reviewedFiles=190, processedFiles=138, locationlessFindings=0
-- denominators: evaluablePositives=113, exhaustiveScopedFindings=104
-- population: acceptedCanonical=0, evaluable=113, matched=34, unreadRate=n/a
-- coverage: entityWeighted=0/0, distinctFiles=31/47
+- denominators: evaluablePositives=140, exhaustiveScopedFindings=104
+- population: acceptedCanonical=0, evaluable=140, matched=38, unreadRate=n/a
+- coverage: entityWeighted=0/0, distinctFiles=36/52
 
 ### components
 - summary: scorable
@@ -156,17 +156,16 @@
 - coverage: entityWeighted=284/519, distinctFiles=203/355
 
 ### data-flows
-- summary: unscorable
-- unscorable reason: needs_adjudication
-- gate: pending (awaiting_canonical_flow_adjudication)
+- summary: scorable
+- gate: scorable
 - Recall: n/a [migration_incomplete_or_not_ready; 0/0]
 - Ancestor recall: n/a [migration_incomplete_or_not_ready; 0/0]
-- Precision: 0.0% [computable; 0/12]
+- Precision: 0.0% [computable; 0/13]
 - negative pass rate: n/a [migration_incomplete_or_not_ready; 0/0]
-- scope: reviewedFiles=246, processedFiles=187, locationlessFindings=58
-- denominators: evaluablePositives=0, exhaustiveScopedFindings=12
+- scope: reviewedFiles=247, processedFiles=188, locationlessFindings=58
+- denominators: evaluablePositives=0, exhaustiveScopedFindings=13
 - population: acceptedCanonical=0, evaluable=0, matched=0, unreadRate=n/a
-- coverage: entityWeighted=0/0, distinctFiles=52/77
+- coverage: entityWeighted=0/0, distinctFiles=55/81
 
 ## Packet: auth0-express
 
@@ -198,7 +197,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=3, matched=3
+- acceptedCanonical=0, evaluable=5, matched=4
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -220,7 +219,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=10, matched=0
+- acceptedCanonical=0, evaluable=11, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -242,7 +241,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=3, matched=0
+- acceptedCanonical=0, evaluable=6, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -330,7 +329,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=3, matched=1
+- acceptedCanonical=0, evaluable=5, matched=2
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -352,7 +351,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=4, matched=1
+- acceptedCanonical=0, evaluable=5, matched=1
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -418,7 +417,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=5, matched=2
+- acceptedCanonical=0, evaluable=9, matched=2
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -484,7 +483,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=8, matched=4
+- acceptedCanonical=0, evaluable=11, matched=5
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -594,7 +593,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=3, matched=0
+- acceptedCanonical=0, evaluable=5, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -638,7 +637,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=6, matched=0
+- acceptedCanonical=0, evaluable=8, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -660,7 +659,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=2, matched=0
+- acceptedCanonical=0, evaluable=4, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -682,7 +681,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=2, matched=2
+- acceptedCanonical=0, evaluable=5, matched=3
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -770,7 +769,7 @@
 - capability (diagnostic): 0.0% case-weighted
 
 ### data-items
-- acceptedCanonical=0, evaluable=9, matched=5
+- acceptedCanonical=0, evaluable=11, matched=5
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
 
@@ -824,7 +823,7 @@
 - caseWeighted: 0.0%
 - distinctLeaf: 0.0%
 - supportedCount: 0
-- totalAcceptedPositives: 113
+- totalAcceptedPositives: 140
 
 ### components
 - caseWeighted: 0.0%
@@ -836,5 +835,5 @@
 - caseWeighted: 0.0%
 - distinctLeaf: 0.0%
 - supportedCount: 0
-- totalAcceptedPositives: 146
+- totalAcceptedPositives: 158
 
