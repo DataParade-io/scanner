@@ -13,7 +13,7 @@ import type { SourceLocation } from "../../src/core/types/file";
 import type { BenchmarkLayer } from "./schema";
 import type { EvalLayer, FixtureScanResult, LayerFinding } from "../eval/types";
 import { componentIdentity } from "../eval/layers/components/adapter";
-import { dataFlowIdentity } from "../eval/layers/data-flows/adapter";
+import { toDataFlowLayerFinding } from "../eval/layers/data-flows/adapter";
 import { personalDataFindingToLayerFinding } from "../eval/layers/personal-data-adapter";
 import { normalizeEvalPath } from "../../src/eval/path";
 import {
@@ -77,19 +77,17 @@ function toDataFlowFinding(
   flow: DetectedDataFlow,
   componentsById: Map<string, DetectedComponent>,
 ): LayerFinding {
-  const locations = collectFlowSourceLocations(flow);
-  const sourceLines = locations.map((location) => ({
-    file_path: normalizeRepoRelativePath(location.filePath),
-    start_line: location.startLine,
-    end_line: location.endLine,
-  }));
-
   return {
-    key: dataFlowIdentity(flow, componentsById),
-    labels: [flow.type],
+    ...toDataFlowLayerFinding(flow, componentsById),
     layer: "data-flows",
-    sourceFilePaths: [...new Set(sourceLines.map((line) => line.file_path))],
-    sourceLines,
+    sourceFilePaths: collectFlowSourceLocations(flow).map((location) =>
+      normalizeRepoRelativePath(location.filePath),
+    ),
+    sourceLines: collectFlowSourceLocations(flow).map((location) => ({
+      file_path: normalizeRepoRelativePath(location.filePath),
+      start_line: location.startLine,
+      end_line: location.endLine,
+    })),
   };
 }
 
