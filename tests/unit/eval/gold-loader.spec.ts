@@ -6,11 +6,13 @@ import {
   ruleIdToConceptLeaf,
   sampleEvidence,
 } from "../../eval/canonical";
+import { evalCaseToAnnotationRecord } from "../../eval/canonical/gold/fixture-input";
 import type { AnnotationRecord } from "../../benchmark/schema";
 import { componentEvalCases } from "../../eval/layers/components/cases";
 import { dataFlowEvalCases } from "../../eval/layers/data-flows/cases";
 import { mentionEvalCases } from "../../eval/layers/mentions/cases";
 import { loadAnnotations } from "../../benchmark/manifest";
+import { annotationToEvalCase } from "../../benchmark/to-eval-cases";
 import path from "path";
 
 const evidence = sampleEvidence("db-client-import.ts", 1, 1);
@@ -207,5 +209,37 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     expect(record.identity.identityKey).toBe("mention:username");
     expect(record.classification.conceptLeaf).toBe("username");
     expect(record.classification.conceptAncestry).toEqual(["user_identifier", "username"]);
+  });
+
+  it("preserves accepted flow_canonical through eval-case round-trip", () => {
+    const benchmarkRoot = path.join(__dirname, "../../benchmark");
+    const repoDir = path.join(benchmarkRoot, "repos", "wordpress");
+    const annotations = loadAnnotations(repoDir, "data_flows");
+    const acceptedWithCanonical = annotations.filter(
+      (annotation) =>
+        annotation.provenance.review_state === "accepted" &&
+        annotation.expected.status === "positive" &&
+        annotation.flow_canonical !== undefined,
+    );
+
+    expect(acceptedWithCanonical.length).toBeGreaterThan(0);
+
+    let needsAdjudicationAfterRoundTrip = 0;
+    for (const annotation of acceptedWithCanonical) {
+      const evalCase = annotationToEvalCase(annotation, "wordpress");
+      expect(evalCase).not.toBeNull();
+      expect(evalCase!.flow_canonical).toBeDefined();
+
+      const roundTripped = evalCaseToAnnotationRecord(evalCase!);
+      const { record } = loadCanonicalGoldFromAnnotation(roundTripped, { repoKey: "wordpress" });
+
+      if (record.disposition === "needs_adjudication") {
+        needsAdjudicationAfterRoundTrip += 1;
+      }
+      expect(record.disposition).toBe("accepted");
+      expect(isAcceptedEvaluablePositive(record)).toBe(true);
+    }
+
+    expect(needsAdjudicationAfterRoundTrip).toBe(0);
   });
 });

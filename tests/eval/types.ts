@@ -1,5 +1,10 @@
 /** Fixture evaluation types — aligns with tests/benchmark/schema.ts and ground-truth-schema.md */
 
+import type {
+  FlowAnnotationCanonical,
+  FlowAnnotationCandidate,
+} from "../benchmark/schema";
+
 export type EvalCaseStatus = "positive" | "negative" | "ambiguous";
 
 export type EvalLayer =
@@ -46,6 +51,10 @@ export interface EvalCase {
    * recorded as a negative case.
    */
   exhaustiveScopeFiles?: string[];
+  /** Promoted flow identity for data-flows scoring (KDATAP-7e5b94). */
+  flow_canonical?: FlowAnnotationCanonical;
+  /** Non-scoring flow migration audit block when carried through eval cases. */
+  flowCandidate?: FlowAnnotationCandidate;
 }
 
 export interface LayerFinding {
