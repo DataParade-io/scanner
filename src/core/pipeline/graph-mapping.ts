@@ -4,6 +4,11 @@ import type {
   ScanResult,
 } from "../types";
 import type { SourceLocation } from "../types/file";
+import type {
+  DataActionAssignment,
+} from "../types/data-action";
+import { componentMayCarryDataActions } from "../types/data-action";
+import type { DataAction } from "../../data-actions/taxonomy";
 import {
   diagramGraphJsonSchema,
   type DiagramGraphJsonSchema,
@@ -33,6 +38,51 @@ import {
   shouldUseTerraformMinimalServiceDiagramLayout,
 } from "./terraform-minimal-services";
 import { inferDataFlowProtocol } from "./infer-data-flow-protocol";
+
+function isAssertedDataAction(assignment: DataActionAssignment): boolean {
+  return (assignment.status ?? "asserted") === "asserted";
+}
+
+function readComponentDataActions(
+  component: DetectedComponent,
+): DataActionAssignment[] {
+  const raw = component.properties?.dataActions;
+  if (!Array.isArray(raw)) return [];
+  return raw as DataActionAssignment[];
+}
+
+/** Highest-confidence asserted verb; tie-break by ascending action name. */
+export function selectPrimaryDataAction(
+  assignments: DataActionAssignment[],
+): DataAction | undefined {
+  const asserted = assignments.filter(isAssertedDataAction);
+  if (asserted.length === 0) return undefined;
+  const sorted = [...asserted].sort((a, b) => {
+    if (b.confidence !== a.confidence) return b.confidence - a.confidence;
+    return a.action.localeCompare(b.action);
+  });
+  return sorted[0]?.action;
+}
+
+function applyPrivacyDataActions(
+  privacy: Record<string, unknown>,
+  component: DetectedComponent,
+): void {
+  if (!componentMayCarryDataActions(component.type)) {
+    return;
+  }
+  const asserted = readComponentDataActions(component).filter(isAssertedDataAction);
+  if (asserted.length === 0) {
+    return;
+  }
+  // Stable order for board export determinism.
+  const ordered = [...asserted].sort((a, b) => a.action.localeCompare(b.action));
+  privacy.dataActions = ordered;
+  const primary = selectPrimaryDataAction(ordered);
+  if (primary) {
+    privacy.primaryDataAction = primary;
+  }
+}
 
 function stripCodeFromSourceLocation(
   loc: SourceLocation | undefined,
@@ -111,10 +161,13 @@ function mapComponentToNode(
   sectionIndex: number,
   indexWithinSection: number,
 ): DiagramNodeSchema {
+  const privacy: Record<string, unknown> = {};
+  applyPrivacyDataActions(privacy, component);
+
   const baseData: NodeDataSchema = {
     label: component.name,
     description: component.description,
-    privacy: {},
+    privacy,
     security: {},
     engineering: {},
   };
@@ -140,6 +193,10 @@ function mapComponentToNode(
     if (value === undefined) continue;
     if (key === "label" || key === "description") continue;
     if (key === "privacy" || key === "security" || key === "engineering") {
+      continue;
+    }
+    // Board contract: verbs live under privacy.*, never top-level node data.
+    if (key === "dataActions" || key === "primaryDataAction") {
       continue;
     }
     const dataRecord = baseData as Record<string, unknown>;
