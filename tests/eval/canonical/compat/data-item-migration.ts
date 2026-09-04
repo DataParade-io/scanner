@@ -81,21 +81,10 @@ const NEVER_AUTO_MAP_SUFFIXES = new Set([
   "password_salt",
 ]);
 
-const EVIDENCE_ALIAS_TO_RULE: Record<string, string> = {
-  mail: "email",
-  user_email: "email",
-  invite_email: "email",
-  e_mail: "email",
-  phone: "phone_number",
-  mobile: "phone_number",
-  tel: "phone_number",
-  firstname: "first_name",
-  lastname: "last_name",
-  pass: "password",
-  passwd: "password",
-  ssn: "ssn",
-  social_security: "ssn",
-};
+import {
+  PII_SIGNAL_ALIASES,
+  normalizeIdentifierToken,
+} from "../../../../src/pii-signals/pii-signal-aliases";
 
 const FORBIDDEN_CATEGORY_SET = new Set(
   FORBIDDEN_CATEGORY_LEAVES.map((leaf) => normalizeConceptToken(leaf)),
@@ -226,7 +215,7 @@ function resolveEvidenceHint(
   ].filter((value): value is string => Boolean(value));
 
   for (const token of candidates) {
-    const ruleId = EVIDENCE_ALIAS_TO_RULE[token];
+    const ruleId = PII_SIGNAL_ALIASES[normalizeIdentifierToken(token)];
     if (!ruleId) {
       continue;
     }

@@ -106,4 +106,129 @@ describe("matchPiiSignalsInFile", () => {
   it("formats pii signal identity for eval subjects", () => {
     expect(piiSignalIdentity("email")).toBe("raw_hit:email");
   });
+
+  it("matches user_email via identifier alias", () => {
+    const content = "* @property string $user_email";
+    const hits = matchPiiSignalsInFile(
+      { filePath: "class-wp-user.php", content },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "email",
+        evidence: expect.objectContaining({
+          startLine: 1,
+          reason: "matched pii:email alias:user_email",
+        }),
+      }),
+    ]);
+  });
+
+  it("matches user_pass via identifier alias", () => {
+    const content = "* @property string $user_pass";
+    const hits = matchPiiSignalsInFile(
+      { filePath: "class-wp-user.php", content },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "password",
+        evidence: expect.objectContaining({
+          reason: "matched pii:password alias:user_pass",
+        }),
+      }),
+    ]);
+  });
+
+  it("matches external_email via identifier alias", () => {
+    const content = "#  external_email                  :string";
+    const hits = matchPiiSignalsInFile(
+      { filePath: "single_sign_on_record.rb", content },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "email",
+        evidence: expect.objectContaining({
+          reason: "matched pii:email alias:external_email",
+        }),
+      }),
+    ]);
+  });
+
+  it("matches birthday via identifier alias", () => {
+    const content = '            "birthday",';
+    const hits = matchPiiSignalsInFile(
+      { filePath: "employee.py", content },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "date_of_birth",
+        evidence: expect.objectContaining({
+          reason: "matched pii:date_of_birth alias:birthday",
+        }),
+      }),
+    ]);
+  });
+
+  it("matches bare address field declarations via gated alias", () => {
+    const pythonField =
+      '    address = models.CharField(max_length=150, default="Not Set")';
+    const javaField = "\tprivate String address;";
+
+    expect(
+      matchPiiSignalsInFile({ filePath: "models.py", content: pythonField }, rules),
+    ).toEqual([
+      expect.objectContaining({
+        id: "address",
+        evidence: expect.objectContaining({
+          reason: "matched pii:address alias:address",
+        }),
+      }),
+    ]);
+
+    expect(
+      matchPiiSignalsInFile({ filePath: "Owner.java", content: javaField }, rules),
+    ).toEqual([
+      expect.objectContaining({
+        id: "address",
+      }),
+    ]);
+  });
+
+  it("matches getter forms via camelCase token splitting", () => {
+    const content = [
+      "public function getFirstname();",
+      "public function getFax();",
+    ].join("\n");
+
+    const hits = matchPiiSignalsInFile(
+      { filePath: "Address.php", content },
+      rules,
+    );
+
+    expect(hits).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "first_name",
+          evidence: expect.objectContaining({
+            startLine: 1,
+            reason: "matched pii:first_name alias:getFirstname",
+          }),
+        }),
+        expect.objectContaining({
+          id: "phone_number",
+          evidence: expect.objectContaining({
+            startLine: 2,
+            reason: "matched pii:phone_number alias:getFax",
+          }),
+        }),
+      ]),
+    );
+  });
 });
