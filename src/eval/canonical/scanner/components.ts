@@ -4,7 +4,21 @@ import type { CanonicalScannerFinding, EvidenceLocation, ObservedTokenCandidate 
 import { resolveScannerAdapterMapVersion } from "./manifest";
 
 export function componentScannerIdentityKey(component: DetectedComponent): string {
-  return `${component.type}:${component.name.toLowerCase()}`;
+  const nameKey = component.name.toLowerCase();
+  const subtype = component.subType?.trim().toLowerCase();
+
+  if (component.type === "third_party") {
+    return `${component.type}:${nameKey}`;
+  }
+
+  if (component.type === "asset" || component.type === "actor") {
+    if (subtype) {
+      return `${component.type}:${subtype}`;
+    }
+    return `${component.type}:${nameKey}`;
+  }
+
+  return `${component.type}:${nameKey}`;
 }
 
 function toEvidenceLocation(location: {

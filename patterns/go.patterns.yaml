@@ -185,6 +185,15 @@ db_clients:
       - sql.Open
     confidence: 0.75
 
+  - id: dbx_sqlite
+    patternId: database_connection
+    databaseType: sqlite
+    importPaths:
+      - github.com/pocketbase/dbx
+    callNames:
+      - dbx.Open
+    confidence: 0.9
+
 # Go-specific: `database/sql` is driver-agnostic, and the concrete engine is
 # named as the first argument of sql.Open. Reading it turns a generic "SQL"
 # node into the actual engine.
@@ -250,6 +259,30 @@ auth:
         - 'Header\.Get\(\s*"Authorization"'
       strategy: bearer_token
       confidence: 0.7
+
+    - id: pocketbase_record_auth
+      patternId: auth_middleware
+      importPaths:
+        - github.com/pocketbase/pocketbase/tools/security
+        - github.com/golang-jwt/jwt
+      callNames:
+        - security.NewJWT
+      contentRegexes:
+        - 'func\s+\([^)]*\)\s+ValidatePassword\s*\('
+        - 'func\s+\([^)]*\)\s+NewAuthToken\s*\('
+        - 'func\s+\([^)]*\)\s+NewStaticAuthToken\s*\('
+      strategy: jwt
+      confidence: 0.85
+
+    - id: golang_bcrypt
+      patternId: auth_middleware
+      importPaths:
+        - golang.org/x/crypto/bcrypt
+      callNames:
+        - bcrypt.GenerateFromPassword
+        - bcrypt.CompareHashAndPassword
+      strategy: bcrypt
+      confidence: 0.85
 
 routes:
   frameworks:

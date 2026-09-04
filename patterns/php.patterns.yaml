@@ -75,6 +75,23 @@ db_clients:
       - mongodb/mongodb
     confidence: 0.85
 
+  - id: magento_eav_resource
+    patternId: database_connection
+    databaseType: sql
+    importNamespaces:
+      - Magento\Eav\Model\Entity
+      - Magento\Framework\Model\ResourceModel
+    contentRegexes:
+      - 'class\s+\w+\s+extends\s+AbstractEntity\b'
+    confidence: 0.85
+
+  - id: magento_framework_db
+    patternId: database_connection
+    databaseType: sql
+    importNamespaces:
+      - Magento\Framework\DB
+    confidence: 0.85
+
 pdo_dsn:
   patternId: database_connection
   regex: 'new\s+\\?PDO\s*\(\s*["'']([^"'']+)["'']'
@@ -166,6 +183,20 @@ auth:
       strategy: bearer_token
       confidence: 0.7
 
+    - id: magento_customer_auth
+      patternId: auth_middleware
+      importNamespaces:
+        - Magento\Customer\Api\AccountManagementInterface
+        - Magento\Customer\Model\AccountManagement
+        - Magento\Customer\Model\Authentication
+      contentRegexes:
+        - 'class\s+AccountManagement\b'
+        - 'class\s+Authentication\b'
+        - 'function\s+\w*ValidatePassword\s*\('
+        - 'function\s+\w*Authenticate\s*\('
+      strategy: session
+      confidence: 0.85
+
 routes:
   frameworks:
     # Laravel route files usually call the Route facade with no `use` import
@@ -201,6 +232,13 @@ routes:
         - regex: '(?:^|[^A-Za-z0-9_])\$[A-Za-z_]\w*->(get|post|put|patch|delete|options|any|map)\s*\(\s*["'']([^"'']+)["'']'
           methodGroup: 1
           pathGroup: 2
+
+    - id: magento
+      patternId: express_route
+      confidence: 0.85
+      routeRegexes:
+        - regex: 'class\s+(\w+)\s+extends\s+[^{]+implements\s+[^{]*Http(?:Get|Post|Put|Delete|Patch)ActionInterface'
+          pathGroup: 1
 
 serverless:
   handlers:

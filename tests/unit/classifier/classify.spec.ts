@@ -1277,7 +1277,7 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
   });
 
   describe("compactAuthServiceComponents", () => {
-    it("merges auth_service properties into same-section Auth0 node and removes standalone auth_service", () => {
+    it("preserves standalone auth_service components for subtype-based scoring", () => {
       const components: DetectedComponent[] = [
         makeComponent({
           id: "tp_1",
@@ -1307,13 +1307,9 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
       ];
 
       const compacted = compactAuthServiceComponents(components);
-      expect(compacted.find((c) => c.id === "a_1")).toBeUndefined();
-
-      const auth0 = compacted.find((c) => c.id === "tp_1");
-      expect(auth0).toBeDefined();
-      expect(auth0?.properties.strategy).toBe("jwt");
-      expect(auth0?.properties.authentication_method).toBe("jwt");
-      expect(auth0?.type).toBe("third_party");
+      expect(compacted).toHaveLength(2);
+      expect(compacted.find((c) => c.id === "a_1")).toBeDefined();
+      expect(compacted.find((c) => c.id === "tp_1")).toBeDefined();
     });
   });
 
