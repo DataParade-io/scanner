@@ -121,12 +121,19 @@ function buildComponentDedupeKey(
     }
   }
 
-  if (component.type === "asset" && component.subType === "auth_service") {
-    return `asset:auth_service:${sectionId}`;
-  }
-
   if (component.type === "asset" && component.subType === "database") {
     return `asset:database:${sectionId}:${getDatabaseCanonicalKey(component)}`;
+  }
+
+  if (
+    component.type === "asset" &&
+    component.subType === "auth_service" &&
+    component.sourceLocations[0]?.filePath
+  ) {
+    const primaryFile = component.sourceLocations[0].filePath
+      .replace(/\\/g, "/")
+      .toLowerCase();
+    return `asset:auth_service:${sectionId}:${primaryFile}`;
   }
 
   if (component.type === "third_party") {
@@ -515,108 +522,10 @@ export function mergeDatabaseAssetsByType(
   });
 }
 
-function isAuthProviderThirdParty(component: DetectedComponent): boolean {
-  if (component.type !== "third_party") return false;
-  const serviceName = component.properties?.serviceName;
-  const normalizedService =
-    typeof serviceName === "string" ? serviceName.trim().toLowerCase() : "";
-  const normalizedName = (component.name || "").trim().toLowerCase();
-  return normalizedService.includes("auth0") || normalizedName.includes("auth0");
-}
-
-function mergeAuthServiceIntoTarget(
-  authService: DetectedComponent,
-  target: DetectedComponent,
-): DetectedComponent {
-  const mergedProperties: Record<string, unknown> = {};
-  mergeProperties(mergedProperties, target.properties);
-  mergeProperties(mergedProperties, authService.properties);
-
-  const confidence = Math.max(target.confidence, authService.confidence);
-  const sourceLocations = dedupeSourceLocations([
-    ...target.sourceLocations,
-    ...authService.sourceLocations,
-  ]).sort(compareSourceLocations);
-
-  const detectedFromMap = new Map<string, DetectedFromRef>();
-  for (const ref of [...target.detectedFrom, ...authService.detectedFrom]) {
-    const loc = ref.sourceLocation;
-    const locKey =
-      loc != null
-        ? `${ref.pattern}:${loc.filePath}:${loc.startLine}:${loc.endLine}`
-        : `${ref.pattern}:<no-location>`;
-    if (!detectedFromMap.has(locKey)) detectedFromMap.set(locKey, ref);
-  }
-
-  return {
-    ...target,
-    confidence,
-    sourceLocations,
-    detectedFrom: Array.from(detectedFromMap.values()).sort(
-      compareDetectedFromRefs,
-    ),
-    properties: mergedProperties,
-  };
-}
-
-function isTerraformScannedResourceAsset(component: DetectedComponent): boolean {
-  const addr = component.properties?.terraform_address;
-  return (
-    typeof addr === "string" &&
-    Boolean(addr.trim()) &&
-    !addr.trim().startsWith("provider.")
-  );
-}
-
 export function compactAuthServiceComponents(
   components: DetectedComponent[],
 ): DetectedComponent[] {
   if (!components?.length) return [];
-
-  const bySection = new Map<string, DetectedComponent[]>();
-  for (const c of components) {
-    const sid = getSectionIdFromProperties(c.properties);
-    const list = bySection.get(sid);
-    if (list) list.push(c);
-    else bySection.set(sid, [c]);
-  }
-
-  const replacementById = new Map<string, DetectedComponent>();
-  const removeIds = new Set<string>();
-
-  for (const [, sectionComponents] of bySection) {
-    const authServices = sectionComponents.filter(
-      (c) =>
-        c.type === "asset" &&
-        c.subType === "auth_service" &&
-        !isTerraformScannedResourceAsset(c),
-    );
-    if (authServices.length === 0) continue;
-
-    const authThirdParty = sectionComponents.find(isAuthProviderThirdParty);
-    const mainApp = sectionComponents.find(
-      (c) =>
-        c.type === "asset" &&
-        (c.properties?.isMainApplication === true ||
-          c.properties?.isMainApplication === "true"),
-    );
-    const fallbackAsset = sectionComponents.find((c) => c.type === "asset");
-    const mergeTarget = authThirdParty ?? mainApp ?? fallbackAsset;
-    if (!mergeTarget) continue;
-
-    let nextTarget = replacementById.get(mergeTarget.id) ?? mergeTarget;
-    for (const authService of authServices) {
-      nextTarget = mergeAuthServiceIntoTarget(authService, nextTarget);
-      removeIds.add(authService.id);
-    }
-    replacementById.set(mergeTarget.id, nextTarget);
-  }
-
-  const out: DetectedComponent[] = [];
-  for (const c of components) {
-    if (removeIds.has(c.id)) continue;
-    out.push(replacementById.get(c.id) ?? c);
-  }
-  return out;
+  return components;
 }
 

@@ -18,6 +18,7 @@ interface RawDbClientConfig {
   importNamespaces?: string[];
   packageNames?: string[];
   callNames?: unknown[];
+  contentRegexes?: string[];
   confidence?: number;
 }
 
@@ -126,6 +127,7 @@ export interface PhpDbClientConfig {
   importNamespaces: string[];
   packageNames: string[];
   callNames: string[];
+  contentRegexes: RegExp[];
   confidence: number;
 }
 
@@ -299,6 +301,9 @@ function normalizeRawConfig(raw: RawPhpPatternConfig): PhpPatternConfig {
       importNamespaces: normalizeList(c.importNamespaces),
       packageNames: normalizeList(c.packageNames),
       callNames: normalizeCallNames(c.callNames),
+      contentRegexes: (c.contentRegexes ?? []).map((pattern) =>
+        compileRegex(pattern, `php.db_clients['${c.id}'].contentRegexes`),
+      ),
       confidence: c.confidence ?? DEFAULT_CONFIDENCE,
     })) ?? [];
 

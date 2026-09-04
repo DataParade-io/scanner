@@ -65,7 +65,10 @@ function layerFindingToComponent(
 
   const base = {
     layer: "components" as const,
-    identityKey: finding.key.trim().toLowerCase(),
+    identityKey:
+      componentType !== "third_party" && subtype
+        ? `${componentType}:${subtype}`
+        : finding.key.trim().toLowerCase(),
     componentType,
     evidenceLocations,
     optionalAssertion,

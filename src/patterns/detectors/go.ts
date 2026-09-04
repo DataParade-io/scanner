@@ -4,7 +4,10 @@ import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/externa
 import type { RawFinding } from "../../core/types/detection";
 import {
   buildThirdPartyUrlHostPatterns,
+  createLocationFromLine,
+  findLineMatches,
   inferServiceNameFromUrl,
+  sourceOf,
 } from "./helpers";
 
 /**
@@ -26,16 +29,14 @@ function hasAnyImport(ctx: PatternContext, paths: string[]): boolean {
   );
 }
 
-function sourceOf(ctx: PatternContext): string {
-  return ctx.strippedContent ?? ctx.file.content ?? "";
-}
-
-function callNameRegex(callNames: string[]): RegExp {
+function callNameLineRegex(callNames: string[]): RegExp {
   const escaped = callNames.map((name) =>
     name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
   );
   return new RegExp(`(?:^|[^A-Za-z0-9_.])(?:${escaped.join("|")})\\s*[({]`);
 }
+
+const callNameRegex = callNameLineRegex;
 
 export function detectGoDatabaseConnectionsFromConfig(
   ctx: PatternContext,
@@ -49,24 +50,41 @@ export function detectGoDatabaseConnectionsFromConfig(
   for (const db of config.go.dbClients) {
     const hasImport = hasAnyImport(ctx, db.importPaths);
     const hasCall =
-      db.callNames.length > 0 && callNameRegex(db.callNames).test(content);
+      db.callNames.length > 0 && callNameLineRegex(db.callNames).test(content);
 
     if (!hasImport && !hasCall) continue;
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    let emitted = false;
+
+    if (db.callNames.length > 0) {
+      const regex = callNameLineRegex(db.callNames);
+      for (const { line, match } of findLineMatches(content, regex)) {
+        emitted = true;
+        findings.push({
+          pattern: db.patternId,
+          name: db.id,
+          confidence: db.confidence,
+          location: createLocationFromLine(ctx.file, line, match[0]),
+          properties: {
+            client: db.id,
+            databaseType: db.databaseType,
+          },
+        });
+      }
+    }
+
+    if (!emitted) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location: createLocationFromLine(ctx.file, 1),
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   // `database/sql` names its engine in the first argument of sql.Open.
@@ -120,26 +138,57 @@ export function detectGoAuthFromConfig(
   for (const lib of config.go.auth.libraries) {
     const hasImport = hasAnyImport(ctx, lib.importPaths);
     const hasCall =
-      lib.callNames.length > 0 && callNameRegex(lib.callNames).test(content);
+      lib.callNames.length > 0 && callNameLineRegex(lib.callNames).test(content);
     const matchesContent =
       lib.contentRegexes.length > 0 &&
       lib.contentRegexes.some((re) => re.test(content));
 
     if (!hasImport && !hasCall && !matchesContent) continue;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    let emitted = false;
+
+    for (const regex of lib.contentRegexes) {
+      for (const { line, match } of findLineMatches(content, regex)) {
+        emitted = true;
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location: createLocationFromLine(ctx.file, line, match[0]),
+          properties: {
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
+    }
+
+    if (lib.callNames.length > 0) {
+      const regex = callNameLineRegex(lib.callNames);
+      for (const { line, match } of findLineMatches(content, regex)) {
+        emitted = true;
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location: createLocationFromLine(ctx.file, line, match[0]),
+          properties: {
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
+    }
+
+    if (!emitted) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location: createLocationFromLine(ctx.file, 1),
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
   return findings;

@@ -4,7 +4,10 @@ import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/externa
 import type { RawFinding } from "../../core/types/detection";
 import {
   buildThirdPartyUrlHostPatterns,
+  createLocationFromLine,
+  findLineMatches,
   inferServiceNameFromUrl,
+  sourceOf,
 } from "./helpers";
 
 /**
@@ -40,10 +43,6 @@ function hasAnyPackageName(ctx: PatternContext, packageNames: string[]): boolean
       (want) => imp.module === want || imp.module.startsWith(`${want}/`),
     );
   });
-}
-
-function sourceOf(ctx: PatternContext): string {
-  return ctx.strippedContent ?? ctx.file.content ?? "";
 }
 
 function escapeRegexLiteral(value: string): string {
@@ -145,26 +144,60 @@ export function detectPhpDatabaseConnectionsFromConfig(
     const gated =
       db.importNamespaces.length > 0 || db.packageNames.length > 0;
     if (gated) {
-      // Import/package required — avoids `new Client()` matching Predis/Guzzle/etc.
       if (!hasImport && !hasPackage) continue;
-    } else if (!hasCall) {
+    } else if (!hasCall && db.contentRegexes.length === 0) {
       continue;
     }
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    let emitted = false;
+
+    for (const regex of db.contentRegexes) {
+      for (const { line, match } of findLineMatches(content, regex)) {
+        emitted = true;
+        findings.push({
+          pattern: db.patternId,
+          name: db.id,
+          confidence: db.confidence,
+          location: createLocationFromLine(ctx.file, line, match[0]),
+          properties: {
+            client: db.id,
+            databaseType: db.databaseType,
+          },
+        });
+      }
+    }
+
+    if (db.callNames.length > 0) {
+      for (const callName of db.callNames) {
+        const regex = callNameRegex([callName]);
+        for (const { line, match } of findLineMatches(content, regex)) {
+          emitted = true;
+          findings.push({
+            pattern: db.patternId,
+            name: db.id,
+            confidence: db.confidence,
+            location: createLocationFromLine(ctx.file, line, match[0]),
+            properties: {
+              client: db.id,
+              databaseType: db.databaseType,
+            },
+          });
+        }
+      }
+    }
+
+    if (!emitted) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location: createLocationFromLine(ctx.file, 1),
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   const pdoDsn = config.php.pdoDsn;
@@ -225,21 +258,58 @@ export function detectPhpAuthFromConfig(
       lib.contentRegexes.length > 0 &&
       lib.contentRegexes.some((re) => re.test(content));
 
-    if (!hasImport && !hasPackage && !hasCall && !matchesContent) continue;
+    const importGated =
+      lib.importNamespaces.length > 0 || lib.packageNames.length > 0;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    if (!hasImport && !hasPackage && !hasCall && !matchesContent) continue;
+    if (importGated && !hasImport && !hasPackage && matchesContent) continue;
+
+    let emitted = false;
+
+    for (const regex of lib.contentRegexes) {
+      for (const { line, match } of findLineMatches(content, regex)) {
+        emitted = true;
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location: createLocationFromLine(ctx.file, line, match[0]),
+          properties: {
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
+    }
+
+    if (lib.callNames.length > 0) {
+      for (const callName of lib.callNames) {
+        const regex = callNameRegex([callName]);
+        for (const { line, match } of findLineMatches(content, regex)) {
+          emitted = true;
+          findings.push({
+            pattern: lib.patternId,
+            name: lib.id,
+            confidence: lib.confidence,
+            location: createLocationFromLine(ctx.file, line, match[0]),
+            properties: {
+              ...(lib.strategy ? { strategy: lib.strategy } : {}),
+            },
+          });
+        }
+      }
+    }
+
+    if (!emitted) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location: createLocationFromLine(ctx.file, 1),
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
   return findings;

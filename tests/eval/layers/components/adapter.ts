@@ -6,7 +6,10 @@ import {
 } from "../../../../src/core/pipeline/orchestrator";
 import { buildOrchestratorEvalLedgers } from "../../../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../../../src/core/types/component";
-import { adaptDetectedComponent } from "../../../../src/eval/canonical/scanner/components";
+import {
+  adaptDetectedComponent,
+  componentScannerIdentityKey,
+} from "../../../../src/eval/canonical/scanner/components";
 import {
   fixtureScanResultWithLedger,
   layerLedgerFromOutcomes,
@@ -16,9 +19,9 @@ import type { FixtureScanResult, LayerFinding } from "../../types";
 
 const FIXTURES_ROOT = path.join(__dirname, "../../../fixtures");
 
-/** Component identity aligned with tests/benchmark subject keys: `type:name` lowercase */
+/** Hybrid identity: asset/actor by subtype, third_party by name. */
 export function componentIdentity(component: DetectedComponent): string {
-  return `${component.type}:${component.name.toLowerCase()}`;
+  return componentScannerIdentityKey(component);
 }
 
 function toLayerFinding(component: DetectedComponent): LayerFinding {
