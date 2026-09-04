@@ -1,0 +1,5208 @@
+{
+  "task": "KDATAP-8e7756",
+  "censusAt": "2026-09-01T18:52:35.247Z",
+  "totalRows": 436,
+  "distinctKeys": 424,
+  "acceptedReviewState": 0,
+  "needsAdjudicationReviewState": 436,
+  "rows": [
+    {
+      "annotationId": "auth0-express-callback-to-session",
+      "repoKey": "auth0-express",
+      "legacySubjectKey": "flow:oidc-callback->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "auth0-express-refresh-to-token-endpoint",
+      "repoKey": "auth0-express",
+      "legacySubjectKey": "flow:refresh-token->token-endpoint",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "auth0-express-cookie-to-session",
+      "repoKey": "auth0-express",
+      "legacySubjectKey": "flow:session-cookie->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "auth0-express-login-to-idp",
+      "repoKey": "auth0-express",
+      "legacySubjectKey": "flow:login->auth0",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "auth0-express-userinfo-not-in-callback",
+      "repoKey": "auth0-express",
+      "legacySubjectKey": "flow:callback->userinfo",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "directus-login-email-to-users-table",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:login-email->directus_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "directus-login-to-sessions-table",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:login->directus_sessions",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-local-router-to-auth-service",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:local-router->authentication-service",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-password-verify-bcrypt",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:password->bcrypt-verify",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-login-select-user",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:login->directus_users-select",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-jwt-to-accountability",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:jwt->accountability",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-suspend-on-rate-limit",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:failed-login->suspended",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-local-get-user-id",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:email->user-id",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "directus-auth-driver-users-service",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:auth-driver->users-service",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "directus-login-emitter-filter",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:payload->auth-login-filter",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-inactive-user-reject",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:inactive-user->error",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-extract-token-bearer",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:authorization-header->token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "directus-clear-invalid-session-cookie",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:invalid-token->clear-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "directus-users-service-collection",
+      "repoKey": "directus",
+      "legacySubjectKey": "flow:users-service->directus_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-password-to-hash",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:plaintext-password->password_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-api-key-to-key-hash",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:api-key->key_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-auth-token-generate",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:token->auth_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-email-normalize",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:email->normalized_email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-session-cookie-config",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:session->cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-login-route",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:login-request->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-omniauth-csrf",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:oauth-request->csrf-check",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-users-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->discourse-users-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-session-csrf-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->discourse-session-csrf-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-login-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->discourse-login-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-admin-users-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->discourse-admin-users-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-webhooks-mailgun-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->discourse-webhooks-mailgun-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-password-setter-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:password->raw_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-password-confirm-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:password->confirm",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-password-hash-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:raw_password->hash_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-user-password-association-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:user->user_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-user-email-normalize-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:email->normalized",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-primary-email-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:email->primary",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-api-key-generate-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:key->key_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-api-key-scopes-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:scopes->user_api_key",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-auth-token-lookup-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:token->user_auth_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-auth-token-rotate-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:token->rotated_at",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-oauth-email-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:provider->oauth-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-associated-account-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:oauth->provider_uid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-totp-scope-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:user->totp",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-ip-history-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:request->ip_address",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-email-login-code-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:email->login-code",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-global-api-key-hash-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:api-key->key_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-forgot-password-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->forgot_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-users-index-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->users-index",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-sso-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:http->sso",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-github-settings-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:settings->github-oauth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-twitter-settings-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:settings->twitter-oauth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-facebook-settings-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:settings->facebook-oauth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-omniauth-csrf-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:oauth-request->csrf",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-session-cookie-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:session->cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-redis-version-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:boot->redis-check",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-database-adapter-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:config->postgresql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-user-destroy-tokens-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:user-delete->auth-tokens",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-user-stat-create-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:user-create->user-stat",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-profile-bio-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:bio->profile",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-user-password-validator-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:password->validator",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-api-key-scope-filter-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:scope->allowed",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-email-token-model-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:email->email-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-site-route-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:get->site-metadata",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-sendgrid-webhook-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:sendgrid->webhook",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-google-settings-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:settings->google-oauth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "discourse-user-email-skip-validate-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:flag->skip-validate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "discourse-not-stripe-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:user->stripe",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "discourse-not-auth0-flow",
+      "repoKey": "discourse",
+      "legacySubjectKey": "flow:oauth->auth0",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "drupal-login-form-to-user-auth",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:login-form->user-auth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-login-form-to-finalizer",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:login-form->login-finalizer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-http-login-to-finalizer",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:http-login->login-finalizer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-session-uid-to-database",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:session-uid->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "drupal-finalizer-uid-to-session",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:finalizer->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-one-time-email-to-hmac",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:email->hmac",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-http-login-lookup-account",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:credentials->lookup-account",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-password-to-password-checker",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:password->password_checker",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-password-rehash-to-save",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:password->entity_save",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-lookup-account-by-name",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:name->lookup_account",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-http-login-to-csrf-token",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:login->csrf_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-reset-password-to-notification",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:account->send_password_reset",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-one-time-login-url-flow",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:account->one_time_login_url",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-verify-hmac-flow",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:hmac->verify",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-finalizer-last-login-to-database",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:last_login->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-session-migrate-on-login",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:login->session_migrate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-cookie-roles-to-session",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:uid->roles_query",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-flood-register-on-failed-login",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:failed_login->flood_register",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "drupal-logout-destroy-session",
+      "repoKey": "drupal",
+      "legacySubjectKey": "flow:logout->session_destroy",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "easy-school-guardian-ssn-persisted",
+      "repoKey": "easy-school",
+      "legacySubjectKey": "flow:guardian-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "easy-school-student-profile-persisted",
+      "repoKey": "easy-school",
+      "legacySubjectKey": "flow:student-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "exposed-database-to-transaction",
+      "repoKey": "exposed",
+      "legacySubjectKey": "flow:database->transaction",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "exposed-insert-to-database",
+      "repoKey": "exposed",
+      "legacySubjectKey": "flow:insert-statement->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "exposed-select-to-result",
+      "repoKey": "exposed",
+      "legacySubjectKey": "flow:select-query->result",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "exposed-not-customer-email-flow",
+      "repoKey": "exposed",
+      "legacySubjectKey": "flow:customer-email->database",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "flask-login-session-to-user-loader",
+      "repoKey": "flask-login",
+      "legacySubjectKey": "flow:session->user_loader",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "flask-login-cookie-to-user-loader",
+      "repoKey": "flask-login",
+      "legacySubjectKey": "flow:remember-cookie->user_loader",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "flask-login-session-to-remember-cookie",
+      "repoKey": "flask-login",
+      "legacySubjectKey": "flow:session->remember-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-signup-email-to-magic-link",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:signup-email->magic-link",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-token-to-member-lookup",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:identity-token->member-repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-member-create-to-database",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:member-create->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-update-email-to-magic-link",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:update-email->magic-link",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-not-auth0-login-flow",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:member->auth0",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "ghost-identity-token-encode",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:sub->identity_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-token-decode-to-sub",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:token->sub",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-auth-header-to-jwt",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:authorization->jwt",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-checkout-email-to-stripe",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:email->stripe_checkout",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-staff-setup-credentials",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:setup->auth_setup",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-entitlement-token-encode",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:member->entitlement_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-stripe-customer-create",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:email->stripe_customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-jwt-member-request-property",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:jwt->req.member",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-auth-middleware-unauthorized-wrap",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:jwt_error->unauthorized",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-token-kid-to-jwt-sign",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:kid->jwt_sign",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "ghost-payments-price-to-checkout",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:price->checkout_session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ghost-repository-transient-id-cycle",
+      "repoKey": "ghost",
+      "legacySubjectKey": "flow:member->transient_id",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "gitea-token-hash-persisted",
+      "repoKey": "gitea",
+      "legacySubjectKey": "flow:access-token->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "gitea-token-to-hash",
+      "repoKey": "gitea",
+      "legacySubjectKey": "flow:token->token-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "hyperswitch-card-to-locker",
+      "repoKey": "hyperswitch-vault",
+      "legacySubjectKey": "flow:card->locker",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "hyperswitch-decrypted-to-encrypted",
+      "repoKey": "hyperswitch-vault",
+      "legacySubjectKey": "flow:decrypted-card->encrypted-locker",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "keycloak-user-entity-persist",
+      "repoKey": "keycloak",
+      "legacySubjectKey": "flow:user-entity->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "keycloak-credential-entity-persist",
+      "repoKey": "keycloak",
+      "legacySubjectKey": "flow:credential-entity->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-login-post-to-authenticate",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:login-post->authenticate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-ajax-login-to-authenticate",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:ajax-login->authenticate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-authenticate-to-session",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:authenticate->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-authenticate-email-to-repository",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:email->customer-repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-reset-token-to-repository",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:rp-token->repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-initiate-reset-to-email",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:initiate-reset->email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-reset-password-to-database",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:reset-password->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-id-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-id",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-default-storeid-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-default-storeid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-default-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-default",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-default-id-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-default-id",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-id-permissions-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-id-permissions",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-search-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups-search",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customergroups-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customergroups",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customer-attribute-attributecode-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customer-attribute-attributecode",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customer-form-formcode-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customer-form-formcode",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customer-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customer-custom-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customer-custom",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customeraddress-attribute-attributecode-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customeraddress-attribute-attributecode",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customeraddress-form-formcode-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customeraddress-form-formcode",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customeraddress-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customeraddress",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-attributemetadata-customeraddress-custom-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-attributemetadata-customeraddress-custom",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-me-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-me",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-me-activate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-me-activate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-search-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-search",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-email-activate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-email-activate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-me-password-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-me-password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid-password-resetlinktoken-resetpasswordlinktoken",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-password-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-resetpassword-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-resetpassword",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-confirm-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid-confirm",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-confirm-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-confirm",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-validate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-validate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-permissions-readonly-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid-permissions-readonly",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-isemailavailable-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-isemailavailable",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-addresses-addressid-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-addresses-addressid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-me-billingaddress-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-me-billingaddress",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-billingaddress-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid-billingaddress",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-me-shippingaddress-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-me-shippingaddress",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-customerid-shippingaddress-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-customerid-shippingaddress",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-addresses-addressid-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-addresses-addressid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-v1-customers-activate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:http->v1-customers-activate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-create-post-to-create-account",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:create-post->createAccount",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-forgot-password-to-initiate",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:forgot-post->initiate-reset",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-reset-post-to-reset-password",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:reset-post->resetPassword",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-logout-to-session",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:logout->session-logout",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-edit-post-to-repository",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:edit-post->customer-repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-address-form-to-repository",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:address-form->address-repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-authenticate-hash-validate",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:password->hash-validate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-auth-failure-increment",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:failed-login->lockout",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-session-logout-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:logout->customer_logout-event",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-change-password-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:passwords->changePassword",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-change-password-by-id-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:passwords->changePasswordById",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-activate-email-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:email->activate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-activate-by-id-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:id->activateById",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-validate-reset-token-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:token->validateResetPasswordLinkToken",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-send-reset-email-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:reset->email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-email-notification-reset-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->passwordReset-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-customer-extractor-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:request->customer-data",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-registry-retrieve-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:id->customer-registry",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-registry-email-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:email->customer-registry",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-customer-save-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->database-save",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-get-self-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:token->customers-me",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-put-self-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:payload->customers-me",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-password-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:password->changePasswordById",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-webapi-activate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:confirmation->activateById",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-create-account-hash-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->password-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-authenticate-email-lookup-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:email->get-customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-login-post-session-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:authenticate->setCustomerDataAsLoggedIn",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-ajax-login-session-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:ajax-auth->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-reset-token-repository-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:rp-token->repository-filter",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-initiate-reset-email-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:email->initiatePasswordReset",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-reset-password-db-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:new-password->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-customer-email-read-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:entity->getEmail",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-login-form-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:get->login-form",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-address-interface-street-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:address->street",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-account-interface-authenticate-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:credentials->authenticate-interface",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-email-notification-new-account-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->new-account-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "magento-session-set-customer-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->session-data",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "magento-not-oauth-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:oauth->external-idp",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "magento-not-stripe-flow",
+      "repoKey": "magento",
+      "legacySubjectKey": "flow:customer->stripe",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "medusa-payment-to-stripe",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:payment->stripe",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-auth-emailpass-provider",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:auth->emailpass-provider",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-not-customer-email-to-db",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:customer-email->database",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "medusa-not-order-to-customer",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:order->customer",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "medusa-auth-to-github",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:auth->github-provider",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-auth-to-oidc",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:auth->oidc-provider",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-auth-to-google",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:auth->google-provider",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-customer-module-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->customer-module",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "medusa-user-module-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->user-module",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-cache-to-redis",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:cache->redis",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-rbac-module-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->rbac",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-notification-to-sendgrid",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:notification->sendgrid",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "medusa-payment-module-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->payment",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-order-module-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->order",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "medusa-auth-root-export",
+      "repoKey": "medusa",
+      "legacySubjectKey": "flow:registry->auth",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "medusa-customer-user-email-persisted",
+      "repoKey": "medusa-customer",
+      "legacySubjectKey": "flow:user-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "medusa-customer-customer-email-persisted",
+      "repoKey": "medusa-customer",
+      "legacySubjectKey": "flow:customer-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "medusa-customer-invite-token-persisted",
+      "repoKey": "medusa-customer",
+      "legacySubjectKey": "flow:invite-token->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "nopcommerce-login-to-customer-service",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:login->customer-service",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-signin-to-cookie-claims",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:customer->cookie-claims",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "nopcommerce-cookie-claim-to-customer-lookup",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:cookie-claim->customer-service",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-register-to-password-hash",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:register->password-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-validate-to-current-password",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:login->current-password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-password-hash-to-repository",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:password-hash->repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-email-to-customer-lookup",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:email->customer-lookup",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-external-params-to-record",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:oauth-params->external-record",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-external-id-to-customer",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:external-id->customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-external-login-to-signin",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:external-login->signin",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-failed-login-to-lockout",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:failed-login->lockout",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-phone-login-to-customer",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:phone->customer-lookup",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "nopcommerce-signout-to-cookie",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:signout->cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "nopcommerce-insert-customer-to-db",
+      "repoKey": "nopcommerce",
+      "legacySubjectKey": "flow:customer->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-login-to-authenticate",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:login-form->authenticate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-create-user-to-store",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:create-user->user-store",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-reset-password-flow",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:reset-token->password-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-ticket-to-cache",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:auth-ticket->distributed-cache",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-openid-token-to-store",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:openid-token->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-set-email-on-user",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:identity->user-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-display-name-not-user-email",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:display-name->user-email",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "orchard-change-password-flow",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:change-password->identity",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-forgot-password-token",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:forgot->reset-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-set-password-hash",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:identity->password-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-find-by-email",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:email->user-query",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-openid-app-to-yessql",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:openid-app->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-openid-authz-to-yessql",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:openid-authz->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-openid-scope-to-yessql",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:openid-scope->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-principal-to-user",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:principal->user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "orchard-delete-user-from-store",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:delete-user->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-update-user-to-store",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:update-user->yesql",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "orchard-retrieve-ticket-from-cache",
+      "repoKey": "orchard-core",
+      "legacySubjectKey": "flow:cache-key->auth-ticket",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "ory-kratos-hashed-password-stored",
+      "repoKey": "ory-kratos-password",
+      "legacySubjectKey": "flow:password->hashed-password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-password-to-bcrypt-hash",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:password->bcrypt_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-hash-to-database",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:password_hash->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-email-to-verification-token",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:email->verification_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-token-key-to-jwt",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:tokenKey->jwt",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-set-email-to-record",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:set_email->record",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-password-change-deletes-auth-origins",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:password->delete_auth_origins",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-validate-password-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:plain_password->validate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-not-payment-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:record->stripe",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "pocketbase-password-reset-token-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:email->password_reset_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-email-change-token-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:new_email->email_change_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-file-token-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:record->file_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-jwt-to-record-lookup",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:jwt->record",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-jwt-signature-verify",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:token->parse_jwt",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-find-auth-by-email",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:email->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-set-password-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:password->record",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-random-password-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:random->password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-provider-validation-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:provider->oauth_providers",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-token-key-refresh-on-verify",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:verified->refresh_token_key",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "pocketbase-static-auth-token-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:record->static_auth_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "pocketbase-refresh-token-key-flow",
+      "repoKey": "pocketbase",
+      "legacySubjectKey": "flow:record->refresh_token_key",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "posthog-user-email-persisted",
+      "repoKey": "posthog-user",
+      "legacySubjectKey": "flow:user-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "posthog-password-to-hash",
+      "repoKey": "posthog-user",
+      "legacySubjectKey": "flow:password->password-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-login-to-check-password",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:login->check_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-mail-to-email-address",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:mail->email_address",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-password-to-hashed-password",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:password->hashed_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-ldap-to-user-create",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:auth_source->user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-session-token-create",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:user->session_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-email-change-destroys-recovery-tokens",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:email_address->destroy_tokens",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-external-auth-to-check-password",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:auth_source->check_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-not-payment-flow",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:user->stripe",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "redmine-login-to-find-by-login",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:login->find_by_login",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-autologin-key-to-user",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:autologin->user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-api-key-token-create",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:user->api_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "redmine-ldap-bind-password",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:password->ldap_bind",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "redmine-ldap-login-to-dn",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:login->ldap_search",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "redmine-token-find-active-user",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:token->active_user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "redmine-salt-password-hash",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:password->salt_hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-generate-autologin-token",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:user->autologin_token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-find-by-api-key",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:api_key->user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-email-normalize-address",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:address->normalized_address",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "redmine-password-check-local-hash",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:password->hashed_password_check",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "redmine-auth-source-authenticate-flow",
+      "repoKey": "redmine",
+      "legacySubjectKey": "flow:login->auth_source",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "saleor-user-email-persisted",
+      "repoKey": "saleor",
+      "legacySubjectKey": "flow:user-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "graph_edge"
+    },
+    {
+      "annotationId": "saleor-address-persisted",
+      "repoKey": "saleor",
+      "legacySubjectKey": "flow:address-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-customer-email-to-order",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:customer->order-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-address-to-gateway",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:address->payment-gateway",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-order-to-payment-workflow",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:order->payment-process-workflow",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-oauth-to-customer",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:oauth-info->customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-address-to-customer-profile",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:address->customer-profile",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-customer-to-gateway-customer",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:customer->gateway-customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-order-total-not-gateway-pii",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:order-total->gateway-pii",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "spree-order-belongs-to-customer",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:order->customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-payment-source-to-gateway-customer",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:payment-source->gateway-customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-credit-card-to-customer",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:credit-card->customer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-payment-to-order",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:payment->order",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-create-account-from-order",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:order->customer-create",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-gateway-customer-profile-id",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:customer->gateway-profile",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-admin-valid-password",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:password->admin-digest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-payment-method-gateway-customers",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:payment-method->gateway-customers",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "spree-address-clone-billing",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:billing->shipping-address",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-payment-processing-capturable",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:source->gateway-profile",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spree-customer-email-normalize",
+      "repoKey": "spree",
+      "legacySubjectKey": "flow:input->normalized-email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spring-petclinic-owner-create-to-db",
+      "repoKey": "spring-petclinic",
+      "legacySubjectKey": "flow:owner-controller->owner-repository",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spring-petclinic-owner-find-to-db",
+      "repoKey": "spring-petclinic",
+      "legacySubjectKey": "flow:owner-controller->find-by-last-name",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "spring-petclinic-vets-to-cache",
+      "repoKey": "spring-petclinic",
+      "legacySubjectKey": "flow:vet-repository->vets-cache",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-login-to-check-credentials",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:login->check-credentials",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-credentials-to-db-query",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:credentials->admin_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-login-to-session-cookie",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:login->refresh-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-forgot-to-reset-token",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:forgot-email->reset-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-reset-token-to-user-query",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:reset-token->admin-user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-password-to-bcrypt",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:password->bcrypt-hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-login-password-compare",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:login->bcrypt-compare",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-assign-reset-token",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:user-id->reset-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-passport-to-check-credentials",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:passport->checkCredentials",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "strapi-login-passport-authenticate",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:login-body->passport",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-forgot-email-query",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:forgot-email->admin_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-reset-email-send",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:reset-url->email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-token-create-random",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:rng->refresh-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "strapi-check-credentials-email-query",
+      "repoKey": "strapi",
+      "legacySubjectKey": "flow:login-email->admin_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "supabase-js-credentials-to-gotrue",
+      "repoKey": "supabase-js",
+      "legacySubjectKey": "flow:credentials->gotrue-token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "supabase-js-session-to-storage",
+      "repoKey": "supabase-js",
+      "legacySubjectKey": "flow:session->local-storage",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "supabase-js-access-token-to-authorization",
+      "repoKey": "supabase-js",
+      "legacySubjectKey": "flow:access-token->authorization-header",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "supabase-js-refresh-to-token-endpoint",
+      "repoKey": "supabase-js",
+      "legacySubjectKey": "flow:refresh-token->gotrue",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "supabase-js-storage-key-not-flow",
+      "repoKey": "supabase-js",
+      "legacySubjectKey": "flow:storage-key->database",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "vapor-basic-header-to-credentials",
+      "repoKey": "vapor",
+      "legacySubjectKey": "flow:authorization-header->basic-authorization",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "vapor-bearer-header-to-token",
+      "repoKey": "vapor",
+      "legacySubjectKey": "flow:authorization-header->bearer-authorization",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "vapor-session-id-to-authenticator",
+      "repoKey": "vapor",
+      "legacySubjectKey": "flow:session->session-authenticator",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "vapor-user-to-session-store",
+      "repoKey": "vapor",
+      "legacySubjectKey": "flow:authenticatable->session",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "vapor-bearer-authenticator-not-database",
+      "repoKey": "vapor",
+      "legacySubjectKey": "flow:bearer->database",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "vgs-django-pii-model-persisted",
+      "repoKey": "vgs-django",
+      "legacySubjectKey": "flow:pii-model->database",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "vgs-django-checkr-candidate-post",
+      "repoKey": "vgs-django",
+      "legacySubjectKey": "flow:pii->checkr-api",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-signon-to-auth-cookie",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:credentials->auth-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-password-to-hash",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:plaintext-password->user_pass",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-session-to-usermeta",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:session-token->session_tokens",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-token-to-auth-cookie",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:session-token->auth-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-authenticate-check-password",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:password->wp_check_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-insert-user-database",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user-data->wpdb-users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-email-to-user",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:rest-email->user_email",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-rest-abilities-v1-categories-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->abilities-v1-categories-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-abilities-v1-list-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->abilities-v1-list-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-abilities-v1-run-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->abilities-v1-run-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-application-passwords-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->application-passwords-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-attachments-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->attachments-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-autosaves-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->autosaves-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-block-directory-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->block-directory-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-block-pattern-categories-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->block-pattern-categories-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-block-patterns-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->block-patterns-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-block-renderer-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->block-renderer-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-block-types-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->block-types-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-comments-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->comments-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-edit-site-export-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->edit-site-export-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-font-collections-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->font-collections-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-font-faces-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->font-faces-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-global-styles-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->global-styles-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-global-styles-revisions-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->global-styles-revisions-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-icon-collections-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->icon-collections-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-icons-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->icons-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-menu-locations-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->menu-locations-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-navigation-fallback-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->navigation-fallback-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-pattern-directory-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->pattern-directory-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-plugins-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->plugins-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-post-statuses-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->post-statuses-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-post-types-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->post-types-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-posts-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->posts-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-revisions-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->revisions-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-search-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->search-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-settings-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->settings-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-sidebars-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->sidebars-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-site-health-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->site-health-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-taxonomies-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->taxonomies-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-template-autosaves-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->template-autosaves-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-template-revisions-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->template-revisions-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-templates-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->templates-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-terms-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->terms-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-themes-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->themes-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-url-details-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->url-details-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-view-config-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->view-config-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-widget-types-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->widget-types-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-rest-widgets-register-routes",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:http->widgets-rest",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-app-password-plaintext-to-hash",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:application-password->hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-new-user-notification-email",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user-email->admin-notification",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-hash-password-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:plaintext-password->hash",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-check-password-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:password->wp_check_password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-set-password-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:password->user_pass",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-authenticate-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:credentials->wp_authenticate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-app-password-auth-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:app-password->authenticate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-validate-app-password-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:app-password->validate",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-clear-cookie-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:logout->clear-cookie",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-validate-cookie-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:cookie->user_id",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-current-user-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:cookie->current_user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-create-user-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:registration->wp_create_user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-insert-user-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user-data->wp_insert_user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-get-user-by-login-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:login->get_user_by",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-get-user-by-email-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:email->get_user_by",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-username-exists-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:username->users-table",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-email-exists-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:email->users-table",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-reset-key-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user->reset-key",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-check-reset-key-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:reset-key->user",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-session-token-read-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:session->token",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-destroy-sessions-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:logout->destroy-sessions",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-session-create-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:login->session-create",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-session-verify-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:token->session-verify",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-session-destroy-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:logout->session-destroy",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-update-sessions-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:token->usermeta",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-add-user-meta-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:meta->usermeta",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-wpdb-prepare-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:query->wpdb-prepare",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-wpdb-results-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:query->wpdb-results",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-cache-set-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user-data->cache-set",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-cache-get-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:cache->user-data",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-rest-create-user-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:rest-request->create_item",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-rest-register-routes-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:rest->register-routes",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-app-password-create-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:request->application-password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-app-password-rest-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:rest->application-passwords",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-generate-password-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:entropy->password",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-get-users-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:query->get_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-user-query-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:args->user-query",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-author-template-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:query->get_users",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "wordpress-logged-in-check-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:session->is_logged_in",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "intra_component_lineage"
+    },
+    {
+      "annotationId": "wordpress-not-oauth-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:oauth->external-idp",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "wordpress-not-stripe-flow",
+      "repoKey": "wordpress",
+      "legacySubjectKey": "flow:user->stripe",
+      "expectedStatus": "negative",
+      "labels": [],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "rejection"
+    },
+    {
+      "annotationId": "yjdh-employee-serializer-to-model",
+      "repoKey": "yjdh-employee",
+      "legacySubjectKey": "flow:employee-serializer->employee-model",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    },
+    {
+      "annotationId": "yjdh-ssn-serializer-validation",
+      "repoKey": "yjdh-employee",
+      "legacySubjectKey": "flow:ssn->employee-serializer",
+      "expectedStatus": "positive",
+      "labels": [
+        "data_flow"
+      ],
+      "reviewState": "needs_adjudication",
+      "hasCandidate": true,
+      "dispositionCandidate": "unresolved"
+    }
+  ]
+}

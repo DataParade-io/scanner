@@ -1,0 +1,463 @@
+annotations:
+  - id: orchard-user-actor
+    layer: components
+    subject:
+      key: actor:customer
+      name: User
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Models/User.cs
+      start_line: 6
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - customer
+    rationale: User is the site member identity Orchard authenticates and persists
+      through ASP.NET Core Identity.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
+  - id: orchard-identity-auth-service
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserService
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Services/UserService.cs
+      start_line: 14
+      end_line: 17
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserService implements local login, registration, and password reset
+      via ASP.NET Core Identity.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-identity-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: orchard-user-database
+    layer: components
+    subject:
+      key: asset:database
+      name: UserStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Services/UserStore.cs
+      start_line: 112
+      end_line: 113
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserStore persists IUser documents through YesSql ISession.SaveAsync.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-user-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: orchard-openid-auth-service
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: OpenIdTokenStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Stores/OpenIdTokenStore.cs
+      start_line: 41
+      end_line: 48
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: OpenIdTokenStore is the in-codebase OpenIddict token persistence layer.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: orchard-session-cache
+    layer: components
+    subject:
+      key: asset:cache
+      name: CacheTicketStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Authentication/CacheTicketStore.cs
+      start_line: 12
+      end_line: 18
+    expected:
+      status: positive
+      labels:
+        - cache
+    rationale: CacheTicketStore stores encrypted authentication tickets in
+      IDistributedCache.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-session-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
+  - id: orchard-password-reset-provider
+    layer: components
+    subject:
+      key: asset:service
+      name: PasswordResetTokenProvider
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Services/PasswordResetTokenProvider.cs
+      start_line: 9
+      end_line: 17
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: PasswordResetTokenProvider issues protected reset tokens as an
+      internal Identity service.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-password-reset-provider
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: orchard-not-auth0
+    layer: components
+    subject:
+      key: third_party:auth0
+      name: Auth0
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Services/UserService.cs
+      start_line: 58
+      end_line: 66
+    expected:
+      status: negative
+      labels: []
+    rationale: UserService authenticates against the local UserManager store, not an
+      Auth0 tenant.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
+  - id: orchard-not-stripe
+    layer: components
+    subject:
+      key: third_party:stripe
+      name: Stripe
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Services/UserService.cs
+      start_line: 58
+      end_line: 66
+    expected:
+      status: negative
+      labels: []
+    rationale: The reviewed Users and OpenId files handle identity only; they do not
+      call Stripe.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
+  - id: orchard-login-form-model
+    layer: components
+    subject:
+      key: asset:service
+      name: LoginForm
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Models/LoginForm.cs
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: LoginForm carries the username and password submitted to Orchard's
+      local login workflow.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-login-form-model
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: orchard-forgot-password-form
+    layer: components
+    subject:
+      key: asset:service
+      name: ForgotPasswordForm
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Models/ForgotPasswordForm.cs
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: ForgotPasswordForm models the email address used to request a
+      password reset.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-forgot-password-form
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: orchard-reset-password-form
+    layer: components
+    subject:
+      key: asset:service
+      name: ResetPasswordForm
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Models/ResetPasswordForm.cs
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: ResetPasswordForm captures the reset token and new password for
+      account recovery.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-reset-password-form
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: orchard-user-token-model
+    layer: components
+    subject:
+      key: asset:database
+      name: UserToken
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Core/Models/UserToken.cs
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserToken stores ASP.NET Identity provider tokens for external logins.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-user-token-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: orchard-openid-application-db
+    layer: components
+    subject:
+      key: asset:database
+      name: OpenIdApplication
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Models/OpenIdApplication.cs
+      start_line: 7
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: OpenIdApplication is the YesSql document for registered OAuth/OIDC
+      client applications.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-application-db
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: orchard-openid-authorization-db
+    layer: components
+    subject:
+      key: asset:database
+      name: OpenIdAuthorization
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Models/OpenIdAuthorization.cs
+      start_line: 6
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: OpenIdAuthorization persists granted authorizations for OpenIddict clients.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-authorization-db
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: orchard-openid-authorization-store
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: OpenIdAuthorizationStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Stores/OpenIdAuthorizationStore.cs
+      start_line: 18
+      end_line: 18
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: OpenIdAuthorizationStore saves authorization grants into the OpenId
+      YesSql collection.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-authorization-store
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: orchard-openid-application-store
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: OpenIdApplicationStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Stores/OpenIdApplicationStore.cs
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: OpenIdApplicationStore manages OAuth client registration documents in
+      YesSql.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-application-store
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: orchard-openid-scope-store
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: OpenIdScopeStore
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.OpenId.Core/YesSql/Stores/OpenIdScopeStore.cs
+      start_line: 15
+      end_line: 15
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: OpenIdScopeStore persists OpenIddict scope definitions for token issuance.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-openid-scope-store
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: orchard-iuser-abstraction
+    layer: components
+    subject:
+      key: actor:customer
+      name: IUser
+    evidence:
+      file_path: src/OrchardCore/OrchardCore.Users.Abstractions/IUser.cs
+      start_line: 6
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - customer
+    rationale: IUser is the shared identity contract implemented by Orchard site members.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: orchard-core::orchard-iuser-abstraction
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer

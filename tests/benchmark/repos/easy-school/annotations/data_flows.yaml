@@ -1,0 +1,68 @@
+annotations:
+  - id: easy-school-guardian-ssn-persisted
+    layer: data_flows
+    subject:
+      key: flow:guardian-model->database
+      name: Guardian SSN to database
+    evidence:
+      file_path: students/models.py
+      start_line: 57
+      end_line: 61
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: Guardian.social_security_number is a CharField column persisted via Django ORM.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on easy-school-database-guardian-ssn (intra_single_component).
+      source_entity_id: easy-school::easy-school-database-guardian-ssn
+      target_entity_id: easy-school::easy-school-database-guardian-ssn
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - social_security_number
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: easy-school::easy-school-database-guardian-ssn
+      target_entity_id: easy-school::easy-school-database-guardian-ssn
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
+      data_categories:
+        - social_security_number
+  - id: easy-school-student-profile-persisted
+    layer: data_flows
+    subject:
+      key: flow:student-model->database
+      name: Student profile to database
+    evidence:
+      file_path: students/models.py
+      start_line: 17
+      end_line: 23
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: Student stores admission number, name, gender, and date of birth as ORM columns.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

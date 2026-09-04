@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "972cf59b-566a-4303-9b03-b7ec19912051",
+  "issue_id": "KDATAP-e1cee579-fda4-41b6-972b-f0b8462ac58a",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:15:00.600Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "One-to-one deterministic assignment evaluator",
+    "description": "One deterministic evaluator performing one-to-one assignment between expected observations and findings, owning recall, classification, precision, negatives, unread and unscorable reporting.\n\nReplaces the current any-match behaviour. `IDENTITY_ONLY_LAYERS` makes `findingMatchesCase` return true for data items with no span check, and `findMatchingFinding` uses `.find()` — first match wins, nothing is consumed. So one `data_item:email` finding satisfies every `data_item:email` gold case in the repository, in any file. With 436 data-item annotations and gold repeating keys within a packet, that is a direct recall inflator.\n\nAssignment prefers exact canonical identity and stronger evidence matches. One finding cannot satisfy several gold cases; duplicate findings cannot all take credit from one case. Unmatched evaluable positives are false negatives; unmatched findings in closed scope are false positives.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}

@@ -1,0 +1,101 @@
+annotations:
+  - id: vgs-django-pii-model-persisted
+    layer: data_flows
+    subject:
+      key: flow:pii-model->database
+      name: PiiData to database
+    evidence:
+      file_path: app/models.py
+      start_line: 4
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: PiiData CharFields for SSN and driver license are Django ORM columns written to the database.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on vgs-django-database-pii (intra_single_component).
+      source_entity_id: vgs-django::vgs-django-database-pii
+      target_entity_id: vgs-django::vgs-django-database-pii
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - social_security_number
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: vgs-django::vgs-django-database-pii
+      target_entity_id: vgs-django::vgs-django-database-pii
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
+      data_categories:
+        - social_security_number
+  - id: vgs-django-checkr-candidate-post
+    layer: data_flows
+    subject:
+      key: flow:pii->checkr-api
+      name: PII to Checkr candidates API
+    evidence:
+      file_path: app/checker_client.py
+      start_line: 38
+      end_line: 48
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: create_candidate posts ssn and driver_license_number in candidate_data to Checkr /v1/candidates.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on vgs-django-third-party-checkr (intra_single_component).
+      source_entity_id: vgs-django::vgs-django-third-party-checkr
+      target_entity_id: vgs-django::vgs-django-third-party-checkr
+      proposed_flow_type: api_call
+      proposed_data_categories:
+        - email
+        - social_security_number
+        - phone_number
+    flow_canonical:
+      identity_key: flow:third_party:saas_service->third_party:saas_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: vgs-django::vgs-django-third-party-checkr
+      target_entity_id: vgs-django::vgs-django-third-party-checkr
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: saas_service
+          component_subtype: saas_service
+          vendor: checkr
+        target:
+          component_type: third_party
+          endpoint_key: saas_service
+          component_subtype: saas_service
+          vendor: checkr
+      flow_type: api_call
+      data_categories:
+        - email
+        - social_security_number
+        - phone_number

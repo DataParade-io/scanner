@@ -1,0 +1,42 @@
+{
+  "id": "KDATAP-a0e80b4a-7703-4425-a056-c1c9b9ef0870",
+  "title": "Adjudicate data items keyed on source field names",
+  "description": "Adjudicate legacy data-item gold keyed on source field names rather than canonical concepts.\n\nMeasured: 308 of 436 annotations match no current rule under any alias because they record source fields such as `id`, `name`, `token`, `location`, `status`, `key`, `uid`, and `uuid`.\n\nFor each row:\n\n- preserve the observed source token and evidence;\n- assign a canonical concept leaf when the evidence supports one;\n- otherwise move it to `needs_adjudication` or reject it with rationale;\n- do not keep a source-token-only row accepted merely by calling it no-concept.\n\nAn explicitly unclassified concept may be accepted only if the canonical ontology deliberately defines that scored leaf; it may not be invented as a migration escape hatch.\n\nRepository-level canonical entities consolidate repeated evidence only after concept and entity grouping are adjudicated. The pass records every legacy row outcome so none disappear from readiness accounting.\n\nThis human-reviewed annotation work gates baseline readiness.",
+  "type": "annotation",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-326fdd87-dbfb-4f98-8d8a-3ddd7e36dba4",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-25646119-f4d7-4a88-913d-1cf6000c5643",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "23b3d334-68fb-495f-83b0-cd8acd96fe76",
+      "author": "home",
+      "text": "Closing: labeling pass completed; dispositions applied via KDATAP-25b2f4 (PR #50). 113 accepted / 76 rejected / 247 unresolved, each tracked as a finding.",
+      "created_at": "2026-09-02T17:06:34.023240Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:43.359920Z",
+  "updated_at": "2026-09-02T17:06:34.051745Z",
+  "closed_at": "2026-09-02T17:06:34.051745Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

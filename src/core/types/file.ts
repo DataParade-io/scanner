@@ -8,11 +8,13 @@ export type FileLanguage =
   | "cpp"
   | "csharp"
   | "go"
+  | "php"
   | "java"
   | "kotlin"
   | "terraform"
   | "dockerfile"
-  | "rust";
+  | "rust"
+  | "ruby";
 
 export interface FileInfo {
   path: string;

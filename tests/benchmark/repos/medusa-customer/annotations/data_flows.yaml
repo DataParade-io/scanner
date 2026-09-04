@@ -1,0 +1,86 @@
+annotations:
+  - id: medusa-customer-user-email-persisted
+    layer: data_flows
+    subject:
+      key: flow:user-model->database
+      name: User email to database
+    evidence:
+      file_path: packages/modules/user/src/models/user.ts
+      start_line: 8
+      end_line: 8
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: email is a required searchable column on the user model.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-customer-customer-email-persisted
+    layer: data_flows
+    subject:
+      key: flow:customer-model->database
+      name: Customer email to database
+    evidence:
+      file_path: packages/modules/customer/src/models/customer.ts
+      start_line: 12
+      end_line: 12
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: Customer email is stored as a searchable nullable column.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-customer-invite-token-persisted
+    layer: data_flows
+    subject:
+      key: flow:invite-token->database
+      name: Invite token to database
+    evidence:
+      file_path: packages/modules/user/src/models/invite.ts
+      start_line: 8
+      end_line: 8
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: Invite.token is persisted for staff invitation acceptance.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-customer-invite-database (intra_overlap_same_entity).
+      source_entity_id: medusa-customer::medusa-customer-invite-database
+      target_entity_id: medusa-customer::medusa-customer-invite-database
+      proposed_data_categories:
+        - email
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa-customer::medusa-customer-invite-database
+      target_entity_id: medusa-customer::medusa-customer-invite-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      data_categories:
+        - email

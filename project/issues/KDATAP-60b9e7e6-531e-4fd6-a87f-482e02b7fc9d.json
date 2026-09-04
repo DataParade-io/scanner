@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-60b9e7e6-531e-4fd6-a87f-482e02b7fc9d",
+  "title": "Corpus precision unions exhaustive scope across layers",
+  "description": "`scoreCorpusPrecision` builds one `scopeFiles` set from every positive annotation regardless of layer, then walks every finding. `score.ts` buckets scope per `fixture::layer` via `scopeBucketKey`.\n\nConsequence: a mention finding located in a file scoped for the components layer enters the precision denominator and can never match a component annotation, so it is counted a false positive. **Corpus precision is structurally deflated, not merely inconsistent.**\n\nThis is live in the build today — `corpus-precision.spec.ts` runs on a synthetic fixture, not a materialized repo, so it is in CI now. Worth fixing ahead of the rewrite so no interim number is cited from a scorer wrong in a known direction.\n\nStartable now — independent of the gate rulings.",
+  "type": "bug",
+  "status": "closed",
+  "priority": 1,
+  "assignee": "rap@endymion.com",
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "49bc1504-0560-48fd-ad6b-07ff93e490fd",
+      "author": "rap@endymion.com",
+      "text": "Rebase of reviewed per-layer precision fix onto current develop. Composer 2.5 planning on a new worktree from origin/develop. Branch to be named in the plan. Prior PR #9 conflicts because develop moved.",
+      "created_at": "2026-08-31T20:24:37.800690Z"
+    },
+    {
+      "id": "625ffa0e-9183-4aff-bc96-28bccd1ca96f",
+      "author": "home",
+      "text": "Landed on develop via PR #15 (per-annotation-layer exhaustive scope for corpus precision).",
+      "created_at": "2026-09-01T17:40:05.578208Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:01.577941Z",
+  "updated_at": "2026-09-01T17:40:05.590085Z",
+  "closed_at": "2026-09-01T17:40:05.590085Z",
+  "custom": {}
+}

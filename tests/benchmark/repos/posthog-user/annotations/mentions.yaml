@@ -1,0 +1,83 @@
+annotations:
+  - id: posthog-email-pii-signal
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: posthog/models/user.py
+      start_line: 247
+      end_line: 247
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Explicit Django email field for the analytics user
+    provenance:
+      proposed_by: pii-signal-backport
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: posthog-pending-email-pii-signal
+    layer: mentions
+    subject:
+      key: mention:email
+      name: pending_email
+    evidence:
+      file_path: posthog/models/user.py
+      start_line: 248
+      end_line: 248
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Explicit pending email address awaiting verification
+    provenance:
+      proposed_by: pii-signal-backport
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: posthog-distinct-id-pii-signal
+    layer: mentions
+    subject:
+      key: mention:user_identifier
+      name: distinct_id
+    evidence:
+      file_path: posthog/models/user.py
+      start_line: 249
+      end_line: 249
+    expected:
+      status: positive
+      labels:
+        - user_identifier
+        - legacy-key:pii:user_identifier
+    rationale: Unique pseudonymous identifier for the user
+    provenance:
+      proposed_by: pii-signal-backport
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: posthog-temporary-token-pii-signal
+    layer: mentions
+    subject:
+      key: mention:credential_secret
+      name: temporary_token
+    evidence:
+      file_path: posthog/models/user.py
+      start_line: 333
+      end_line: 333
+    expected:
+      status: positive
+      labels:
+        - credential_secret
+        - legacy-key:pii:credential_secret
+    rationale: Explicit temporary token field is secret-like authentication material
+    provenance:
+      proposed_by: pii-signal-backport
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

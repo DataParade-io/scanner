@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "7c788424-f3a8-4b47-bb61-54fef7e1052d",
+  "issue_id": "KDATAP-32c089f1-61b8-42c1-bfad-1af8da2609ba",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:27.745Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "KDATAP-08a0ac rules that human strings such as `flow:pii->checkr-api` are display forms rather than scorer identity. Correct — and the consequence needs stating before anyone estimates this programme.\n\nMeasured: 436 data-flow annotations, **424 distinct keys**, and **all 436 have bare endpoints** — `flow:user->stripe`, `flow:api-key->key_hash`, `flow:session->cookie`, `flow:password->wp_check_password`, `flow:failed-login->lockout`. The engine emits `flow:${componentKey}->${componentKey}`. Endpoints carry no `type:` prefix, and many are not components in any graph sense: a password, a session, a cookie, a lockout event. All 436 also carry a `subject.name`, and unlike mentions it is genuine prose restatement, so nothing is recoverable there.\n\n**No existing flow annotation has a scorer identity under the new contract, and none can be migrated mechanically.** Every endpoint must be resolved to a canonical component or typed-endpoint identity by hand.\n\nAlso inert today: 419 of 436 flow annotations carry the generic label `data_flow`, which `LAYER_GENERIC_LABELS` auto-passes. Semantic classification has to come from the new data-category fields; current gold has nothing to score it against.\n\n**Proposed decision.** Both: regold as its own tracked workstream (436 cases, human-bound, on the critical path), and publish data flows as **unscorable pending regold** in baseline series 1 rather than as a 0% strict layer. A layer reporting 0% strict on 436 unmigrated annotations is not a measurement.\n\nRejected: aliasing 424 prose keys, which is a hand-written answer key rather than a metric; deleting flow gold; reporting the layer as a detector failure.",
+        "to": "KDATAP-08a0ac rules that legacy human flow strings are display forms rather than scorer identity. The migration consequence must be explicit.\n\nMeasured: 436 annotations, 424 distinct keys, all with bare endpoints such as `flow:user->stripe`, `flow:session->cookie`, and `flow:password->wp_check_password`. Many endpoints are not components, all require typed endpoint adjudication, and 419 generic `data_flow` labels carry no semantic classification.\n\n**Proposed decision.**\n\n- Regold flows as a dedicated human-reviewed annotation workstream against typed canonical endpoints and data-category fields.\n- At migration start, legacy accepted flow rows become `needs_adjudication` until re-reviewed; they may not remain accepted through a compatibility alias.\n- Migration-readiness reports show the layer as unscorable pending regold.\n- Baseline series 1 does not freeze with an unscorable headline flow layer. It waits until all accepted flow rows are canonical and the baseline-readiness threshold for count and packet diversity is approved.\n- A legacy row may end accepted canonically, rejected, or still awaiting adjudication; it may not silently disappear from migration accounting.\n\nRejected: 424-entry alias answer key; deleting legacy flow gold; reporting legacy incompatibility as 0% detector recall; calling an unscorable migration audit the four-layer baseline."
+      },
+      "title": {
+        "from": "Rule the data-flow disposition: regold, and unscorable until regolded",
+        "to": "Rule the data-flow disposition: regold before the first baseline"
+      }
+    }
+  }
+}

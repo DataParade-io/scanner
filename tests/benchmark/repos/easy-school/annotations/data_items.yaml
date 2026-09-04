@@ -1,0 +1,239 @@
+annotations:
+  - id: easy-school-admission-no
+    layer: data_items
+    subject:
+      key: data_item:admission_no
+      name: admission_no
+    evidence:
+      file_path: students/models.py
+      start_line: 18
+      end_line: 18
+    expected:
+      status: positive
+      labels:
+        - user_identifier
+    rationale: admission_no is the unique student identifier.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: easy-school-student-first-name
+    layer: data_items
+    subject:
+      key: data_item:first_name
+      name: first_name
+    evidence:
+      file_path: students/models.py
+      start_line: 20
+      end_line: 20
+    expected:
+      status: positive
+      labels:
+        - first_name
+    rationale: Student first_name is a given name stored on the registry.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:first_name
+      proposed_concept_leaf: first_name
+      proposed_ancestry:
+        - person_name
+        - first_name
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-student-last-name
+    layer: data_items
+    subject:
+      key: data_item:last_name
+      name: last_name
+    evidence:
+      file_path: students/models.py
+      start_line: 21
+      end_line: 21
+    expected:
+      status: positive
+      labels:
+        - last_name
+    rationale: Student last_name is a family name stored on the registry.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:last_name
+      proposed_concept_leaf: last_name
+      proposed_ancestry:
+        - person_name
+        - last_name
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-student-dob
+    layer: data_items
+    subject:
+      key: data_item:date_of_birth
+      name: date_of_birth
+    evidence:
+      file_path: students/models.py
+      start_line: 23
+      end_line: 23
+    expected:
+      status: positive
+      labels:
+        - date_of_birth
+    rationale: date_of_birth is the student's birth date.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:date_of_birth
+      proposed_concept_leaf: date_of_birth
+      proposed_ancestry:
+        - date_of_birth
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-student-address
+    layer: data_items
+    subject:
+      key: data_item:address
+      name: address
+    evidence:
+      file_path: students/models.py
+      start_line: 25
+      end_line: 25
+    expected:
+      status: positive
+      labels:
+        - address
+    rationale: address is the student's postal address string.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:address
+      proposed_concept_leaf: address
+      proposed_ancestry:
+        - street_address
+        - address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-guardian-name
+    layer: data_items
+    subject:
+      key: data_item:name
+      name: name
+    evidence:
+      file_path: students/models.py
+      start_line: 58
+      end_line: 58
+    expected:
+      status: positive
+      labels:
+        - person_name
+    rationale: Guardian.name is the parent or guardian's personal name.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: easy-school-guardian-ssn
+    layer: data_items
+    subject:
+      key: data_item:social_security_number
+      name: social_security_number
+    evidence:
+      file_path: students/models.py
+      start_line: 61
+      end_line: 61
+    expected:
+      status: positive
+      labels:
+        - social_security_number
+    rationale: Guardian.social_security_number is a national identifier CharField.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-guardian-phone
+    layer: data_items
+    subject:
+      key: data_item:phone_number
+      name: phone_number
+    evidence:
+      file_path: students/models.py
+      start_line: 62
+      end_line: 62
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Guardian.phone_number is a contact telephone.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: easy-school-guardian-profession
+    layer: data_items
+    subject:
+      key: data_item:profession
+      name: profession
+    evidence:
+      file_path: students/models.py
+      start_line: 63
+      end_line: 63
+    expected:
+      status: positive
+      labels:
+        - employment_information
+    rationale: Guardian.profession is the parent or guardian's occupation.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill2
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

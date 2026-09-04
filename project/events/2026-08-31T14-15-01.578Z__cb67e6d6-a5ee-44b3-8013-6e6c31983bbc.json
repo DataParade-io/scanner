@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "cb67e6d6-a5ee-44b3-8013-6e6c31983bbc",
+  "issue_id": "KDATAP-60b9e7e6-531e-4fd6-a87f-482e02b7fc9d",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:15:01.578Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Corpus precision unions exhaustive scope across layers",
+    "description": "`scoreCorpusPrecision` builds one `scopeFiles` set from every positive annotation regardless of layer, then walks every finding. `score.ts` buckets scope per `fixture::layer` via `scopeBucketKey`.\n\nConsequence: a mention finding located in a file scoped for the components layer enters the precision denominator and can never match a component annotation, so it is counted a false positive. **Corpus precision is structurally deflated, not merely inconsistent.**\n\nThis is live in the build today — `corpus-precision.spec.ts` runs on a synthetic fixture, not a materialized repo, so it is in CI now. Worth fixing ahead of the rewrite so no interim number is cited from a scorer wrong in a known direction.\n\nStartable now — independent of the gate rulings.",
+    "issue_type": "bug",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}

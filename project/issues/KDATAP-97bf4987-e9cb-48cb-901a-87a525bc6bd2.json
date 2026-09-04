@@ -1,0 +1,42 @@
+{
+  "id": "KDATAP-97bf4987-e9cb-48cb-901a-87a525bc6bd2",
+  "title": "Baseline artifact schema and fingerprint block",
+  "description": "Define the immutable baseline artifact: canonical JSON plus deterministic Markdown, under a series identified by evaluation-contract version.\n\nFingerprint: scanner commit; corpus/gold digest; contract version; taxonomy and adapter-map digests; dependency-lock digest; all materialized source SHAs; review-state and status counts with provenance; deterministic configuration including AI disabled.\n\nThe artifact also embeds:\n\n- baseline-readiness result and invariant versions;\n- accepted canonical counts and packet diversity by layer;\n- migration-incomplete counts by reason;\n- metric computability states and denominators;\n- declared capability coverage as diagnostic metadata, never an adjusted recall denominator;\n- `predecessor`, with series 1 permitting `none`.\n\nJSON is the source artifact. Markdown is generated deterministically from it and CI verifies no drift. Materialization validation reuses existing manifest-SHA checks and records their results.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-4d9b3008-9fdb-4bcd-8f61-8c1f43c5ac1e",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "23cbc95f-5929-46be-b9ec-63dc483ff755",
+      "author": "claude",
+      "text": "## The PHP analyzer landing on `develop` moves the eligibility numbers by half\n\nPR #6 (`feature/php-analyzer`, merged as `3945aa3`) added `php` to `FileLanguage` and `.php` / `.phtml` to `getFileLanguage`. Recomputed against all 1,792 annotations:\n\n| | annotations ingest cannot open |\n| --- | ---: |\n| before the PHP analyzer | 960 (54%) |\n| **after** | **517 (29%)** |\n| moved into scope | **443** |\n\nPer packet:\n\n| packet | ineligible before | after |\n| --- | ---: | ---: |\n| wordpress | 243 / 243 | **0 / 243** |\n| drupal | 65 / 65 | **0 / 65** |\n| magento | 217 / 217 | **82 / 217** (the remainder is `.xml`) |\n\nStill ineligible by extension: `.rb` 415, `.xml` 82, `.swift` 18, `.example` 2. So the \"seven effectively unreadable packets\" figure quoted across this epic is now **four** — discourse, spree and redmine on Ruby, plus vapor on Swift.\n\n## What this changes\n\n**Correct the numbers wherever they are quoted as current.** 960/1,792 and \"7 packets\" appear in several issue descriptions and in the earlier review comments. Those were true when measured and are now stale. The earlier comments stand as a record of the pre-PHP state; the issue descriptions should be corrected, since people plan from them.\n\n**A new requirement for the baseline fingerprint.** This is the important part. Ingest language support is now a variable that moves headline recall by a large margin without any detector change — 443 annotations became eligible from a language analyzer alone. Two baselines taken across a language-support change are not comparable, and nothing in the fingerprint block currently records it.\n\nRecommend the baseline artifact record **the ingest language set** (the `FileLanguage` union, or a digest of it) alongside the scanner commit, and that a change to it start a new series with a bridge run, exactly as a contract change does. Without that, the first time someone adds Ruby the numbers jump and the artifact gives no way to tell that from a detector improvement.\n\n**Worth noting explicitly, because it looks like the thing this epic forbids and is not.** The PHP analyzer was independent language work, not a move to improve a score. But its effect on the corpus is precisely the \"fake eval win\" pattern the epic warns about, arriving by an honest route. That is the argument for the fingerprint requirement rather than an argument against the analyzer.\n",
+      "created_at": "2026-08-31T19:04:24.806357Z"
+    },
+    {
+      "id": "c9e88d4b-3a6e-41c4-8686-a66951e4f0df",
+      "author": "home",
+      "text": "## Recommendation: fingerprint effective eligibility, but keep scanner capability changes in the same series\n\nAdd an explicit effective eligibility-profile fingerprint. It should be per layer and cover language and extension handling, registered analyzers, exclusion and sensitive-path policy, ingest limits, relevant runtime configuration, and the resulting structured eligibility summary. A digest of the global FileLanguage union alone is too coarse.\n\nDo not automatically start a new baseline series when PHP, Ruby, or another scanner capability lands. Language support is scanner behavior, not an evaluation-contract change. Starting a new series would erase the product improvement that the comparison should expose and would conflict with the existing rule that scanner changes compare against the frozen baseline.\n\nFor a capability expansion, publish both:\n\n1. an overlap cohort restricted to packet-layer evidence evaluable under both scanner versions; and\n2. an expansion cohort containing newly evaluable evidence, alongside the complete current result.\n\nA bridge may run the new scanner with the previous capability allowlist to isolate other detector changes. Reserve a new immutable series for contract, gold, canonical taxonomy or mapping, and reviewed-scope changes.",
+      "created_at": "2026-08-31T19:38:11.130674Z"
+    },
+    {
+      "id": "e1451d33-84bc-4f0f-a85c-1c4b32ad5314",
+      "author": "home",
+      "text": "Landed on develop via PR #37 (baseline artifact schema and fingerprint block).",
+      "created_at": "2026-09-01T17:40:11.877552Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:16:11.389242Z",
+  "updated_at": "2026-09-01T17:40:11.889546Z",
+  "closed_at": "2026-09-01T17:40:11.889546Z",
+  "custom": {}
+}

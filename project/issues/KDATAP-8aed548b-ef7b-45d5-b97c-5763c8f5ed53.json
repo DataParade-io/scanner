@@ -1,0 +1,45 @@
+{
+  "id": "KDATAP-8aed548b-ef7b-45d5-b97c-5763c8f5ed53",
+  "title": "Migrate component gold to structured identity",
+  "description": "Migrate component gold onto structured canonical entities after the instance and cardinality rulings.\n\nLegacy shape:\n\n- 481 `type:<taxonomy subtype>` cases are mechanically classifiable;\n- 52 `third_party:<vendor>` cases assert vendor resolution;\n- 30 `actor:user` cases wait on the taxonomy ruling;\n- 53 duplicate repository/key groups cover 456 cases and require entity/evidence grouping rather than subtype collapse.\n\nMigration assigns a stable repo-local gold entity id, asserted type/subtype, optional asserted vendor, and all supporting evidence. It preserves code/display names as candidates without requiring them as product identity.\n\nRepeated subtype rows are grouped or kept distinct only from evidence-backed adjudication; never from arbitrary ordering. One known type-as-subtype label bug is corrected through its tracked bug.\n\nDefinition of done: every accepted component entity is canonical, same-subtype cardinality is preserved, and migration accounting covers every legacy component row.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-ea44fe23-55a2-4214-853c-6fee2f0aa308",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-471fdccc-30e6-4086-808d-137abf7d9ada",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "a5d612a0-54cb-4890-bf07-209e78f3c23c",
+      "author": "home",
+      "text": "Landed on develop via PR #29 (migrate component gold to structured identity).",
+      "created_at": "2026-09-01T17:40:11.045931Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:44.254832Z",
+  "updated_at": "2026-09-01T17:40:11.057847Z",
+  "closed_at": "2026-09-01T17:40:11.057847Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

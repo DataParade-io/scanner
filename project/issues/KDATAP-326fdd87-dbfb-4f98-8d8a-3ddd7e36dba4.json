@@ -1,0 +1,33 @@
+{
+  "id": "KDATAP-326fdd87-dbfb-4f98-8d8a-3ddd7e36dba4",
+  "title": "Closed one-to-one rule-id to concept-leaf map",
+  "description": "A closed, reviewed, versioned map from detector rule id to exactly one canonical concept leaf, with validation that it can never widen to a category.\n\nReplaces `EQUIVALENCE_GROUPS` and `PARENT_TO_CHILDREN` in `tests/eval/identity.ts`. Measured dependence on the current table: of 357 mention cases, 30 match a rule id exactly, **213 match only through the alias table**, and 114 match nothing. Expect measured mention recall to fall hard, correctly, on the first canonical run.\n\nThe map may not turn `ssn` into an exact match for every national identifier; parent/child are taxonomy relations reported separately, not equivalences. Validation test must assert one-to-one at the leaf and fail on any group-shaped entry.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-06634c34-c0d2-4f39-b994-50ae333b4a4a",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "64057888-47fa-4e11-91cb-609786c68072",
+      "author": "home",
+      "text": "Landed on develop via PR #24 (closed one-to-one rule-id to concept-leaf map).",
+      "created_at": "2026-09-01T17:40:08.361325Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:14:59.657950Z",
+  "updated_at": "2026-09-01T17:40:08.373495Z",
+  "closed_at": "2026-09-01T17:40:08.373495Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

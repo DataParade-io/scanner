@@ -1,0 +1,567 @@
+annotations:
+  - id: medusa-payment-to-stripe
+    layer: data_flows
+    subject:
+      key: flow:payment->stripe
+      name: Payment module to Stripe
+    evidence:
+      file_path: packages/medusa/src/modules/payment-stripe.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: payment-stripe.ts re-exports @medusajs/payment-stripe, routing payment operations to the Stripe provider package.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-stripe-provider (intra_overlap_same_entity).
+      source_entity_id: medusa::medusa-stripe-provider
+      target_entity_id: medusa::medusa-stripe-provider
+      proposed_data_categories:
+        - payment_card
+    flow_canonical:
+      identity_key: flow:third_party:payment_processor->third_party:payment_processor
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-stripe-provider
+      target_entity_id: medusa::medusa-stripe-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: payment_processor
+          component_subtype: payment_processor
+          vendor: stripe
+        target:
+          component_type: third_party
+          endpoint_key: payment_processor
+          component_subtype: payment_processor
+          vendor: stripe
+      data_categories:
+        - payment_card
+  - id: medusa-auth-emailpass-provider
+    layer: data_flows
+    subject:
+      key: flow:auth->emailpass-provider
+      name: Auth to email/password provider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-emailpass.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: auth-emailpass.ts registers the email/password auth provider that Medusa auth delegates credential checks to.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-emailpass-provider (intra_overlap_same_entity).
+      source_entity_id: medusa::medusa-emailpass-provider
+      target_entity_id: medusa::medusa-emailpass-provider
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-emailpass-provider
+      target_entity_id: medusa::medusa-emailpass-provider
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+  - id: medusa-not-customer-email-to-db
+    layer: data_flows
+    subject:
+      key: flow:customer-email->database
+      name: Customer email to database
+    evidence:
+      file_path: packages/medusa/src/modules/customer.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: negative
+      labels: []
+    rationale: customer.ts is a module registry stub; it does not show customer email persistence or query flows.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-not-order-to-customer
+    layer: data_flows
+    subject:
+      key: flow:order->customer
+      name: Order to customer
+    evidence:
+      file_path: packages/medusa/src/modules/order.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: negative
+      labels: []
+    rationale: order.ts only re-exports @medusajs/order and contains no order-to-customer data movement in scope.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-auth-to-github
+    layer: data_flows
+    subject:
+      key: flow:auth->github-provider
+      name: Auth to GitHub provider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-github.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: auth-github.ts re-exports @medusajs/auth-github for GitHub OAuth login.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-github-auth-provider (intra_single_component).
+      source_entity_id: medusa::medusa-github-auth-provider
+      target_entity_id: medusa::medusa-github-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-github-auth-provider
+      target_entity_id: medusa::medusa-github-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: github_auth
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: github_auth
+  - id: medusa-auth-to-oidc
+    layer: data_flows
+    subject:
+      key: flow:auth->oidc-provider
+      name: Auth to OIDC provider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-oidc.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: auth-oidc.ts routes authentication to the OIDC provider package.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-oidc-auth-provider (intra_overlap_same_entity).
+      source_entity_id: medusa::medusa-oidc-auth-provider
+      target_entity_id: medusa::medusa-oidc-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-oidc-auth-provider
+      target_entity_id: medusa::medusa-oidc-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: oidc
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: oidc
+  - id: medusa-auth-to-google
+    layer: data_flows
+    subject:
+      key: flow:auth->google-provider
+      name: Auth to Google provider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-google.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: auth-google.ts registers Google OAuth as an external auth provider.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-google-auth-provider (intra_single_component).
+      source_entity_id: medusa::medusa-google-auth-provider
+      target_entity_id: medusa::medusa-google-auth-provider
+    flow_canonical:
+      identity_key: flow:third_party:auth_provider->third_party:auth_provider
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-google-auth-provider
+      target_entity_id: medusa::medusa-google-auth-provider
+      endpoints:
+        source:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: google_auth
+        target:
+          component_type: third_party
+          endpoint_key: auth_provider
+          component_subtype: auth_provider
+          vendor: google_auth
+  - id: medusa-customer-module-export
+    layer: data_flows
+    subject:
+      key: flow:registry->customer-module
+      name: Registry to customer module
+    evidence:
+      file_path: packages/medusa/src/modules/customer.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: customer.ts re-exports @medusajs/customer for storefront identity records.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-customer-module (intra_single_component).
+      source_entity_id: medusa::medusa-customer-module
+      target_entity_id: medusa::medusa-customer-module
+    flow_canonical:
+      identity_key: flow:actor:customer->actor:customer
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-customer-module
+      target_entity_id: medusa::medusa-customer-module
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+        target:
+          component_type: actor
+          endpoint_key: customer
+          component_subtype: customer
+  - id: medusa-user-module-export
+    layer: data_flows
+    subject:
+      key: flow:registry->user-module
+      name: Registry to user module
+    evidence:
+      file_path: packages/medusa/src/modules/user.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: user.ts re-exports @medusajs/user for admin operator accounts.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-user-module (intra_single_component).
+      source_entity_id: medusa::medusa-user-module
+      target_entity_id: medusa::medusa-user-module
+    flow_canonical:
+      identity_key: flow:actor:admin->actor:admin
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-user-module
+      target_entity_id: medusa::medusa-user-module
+      endpoints:
+        source:
+          component_type: actor
+          endpoint_key: admin
+          component_subtype: admin
+        target:
+          component_type: actor
+          endpoint_key: admin
+          component_subtype: admin
+  - id: medusa-cache-to-redis
+    layer: data_flows
+    subject:
+      key: flow:cache->redis
+      name: Cache to Redis
+    evidence:
+      file_path: packages/medusa/src/modules/cache-redis.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: cache-redis.ts connects the cache module to the Redis implementation package.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on medusa-redis-cache-module (intra_overlap_same_entity).
+      source_entity_id: medusa::medusa-redis-cache-module
+      target_entity_id: medusa::medusa-redis-cache-module
+    flow_canonical:
+      identity_key: flow:asset:cache->asset:cache
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-redis-cache-module
+      target_entity_id: medusa::medusa-redis-cache-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: cache
+          component_subtype: cache
+        target:
+          component_type: asset
+          endpoint_key: cache
+          component_subtype: cache
+  - id: medusa-rbac-module-export
+    layer: data_flows
+    subject:
+      key: flow:registry->rbac
+      name: Registry to RBAC
+    evidence:
+      file_path: packages/medusa/src/modules/rbac.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: rbac.ts re-exports @medusajs/rbac for authorization checks on user actions.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-rbac-module (intra_single_component).
+      source_entity_id: medusa::medusa-rbac-module
+      target_entity_id: medusa::medusa-rbac-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-rbac-module
+      target_entity_id: medusa::medusa-rbac-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+  - id: medusa-notification-to-sendgrid
+    layer: data_flows
+    subject:
+      key: flow:notification->sendgrid
+      name: Notification to SendGrid
+    evidence:
+      file_path: packages/medusa/src/modules/notification-sendgrid.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: notification-sendgrid.ts routes outbound email through the SendGrid provider.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved medusa-notification-module from span content; negative decoys excluded.
+      source_entity_id: medusa::medusa-notification-module
+      target_entity_id: medusa::medusa-notification-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-notification-module
+      target_entity_id: medusa::medusa-notification-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+  - id: medusa-payment-module-export
+    layer: data_flows
+    subject:
+      key: flow:registry->payment
+      name: Registry to payment module
+    evidence:
+      file_path: packages/medusa/src/modules/payment.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: payment.ts re-exports @medusajs/payment for checkout payment orchestration.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-payment-module (intra_single_component).
+      source_entity_id: medusa::medusa-payment-module
+      target_entity_id: medusa::medusa-payment-module
+      proposed_data_categories:
+        - payment_card
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-payment-module
+      target_entity_id: medusa::medusa-payment-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      data_categories:
+        - payment_card
+  - id: medusa-order-module-export
+    layer: data_flows
+    subject:
+      key: flow:registry->order
+      name: Registry to order module
+    evidence:
+      file_path: packages/medusa/src/modules/order.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: order.ts re-exports @medusajs/order for order lifecycle management.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on medusa-order-module (intra_single_component).
+      source_entity_id: medusa::medusa-order-module
+      target_entity_id: medusa::medusa-order-module
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: medusa::medusa-order-module
+      target_entity_id: medusa::medusa-order-module
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+  - id: medusa-auth-root-export
+    layer: data_flows
+    subject:
+      key: flow:registry->auth
+      name: Registry to auth module
+    evidence:
+      file_path: packages/medusa/src/modules/auth.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: auth.ts re-exports @medusajs/auth so providers plug into the auth subsystem.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

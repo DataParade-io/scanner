@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "3b3fff47-054d-40cc-91aa-f58388e3757a",
+  "issue_id": "KDATAP-9122c4c9-05b9-44d5-b9c3-6dd22b0dfd83",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:27.875Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Replace the merged `scannedFiles` list with per-layer coverage and a reasoned outcome per evidence path.\n\n`scanRepoByManifestLayers` currently pushes orchestrator `files` and personal-data `filesScanned` into one array. A component case is therefore eligible because the PII matcher opened the file, even though the graph pass never parsed it — and it fails in the direction that inflates recall. This is a correctness fix, not a precision improvement.\n\nOutcomes: successfully evaluated, unsupported, excluded, `cap_exceeded`, missing, read/parse error. Only successfully evaluated evidence enters recall or negative denominators.\n\nRelated defect in the same function: when only personal-data layers are requested, `scannedFiles` is taken from whichever payload happened to be first (`payloadMentions ?? payloadRaw ?? payloadItems`).\n\nRepository-level entities need an explicit rule: an entity is eligible when at least one supporting evidence path is in that layer's successful ledger, and ineligible-reason counts are per entity, not per location.\n\nStartable now — independent of the gate rulings.",
+        "to": "Replace the merged `scannedFiles` list with a structured per-layer outcome ledger for every expected evidence path.\n\n`scanRepoByManifestLayers` currently unions orchestrator and personal-data file lists. This contaminates eligibility: a file processed by one layer can improperly enlarge another layer denominator, normally creating false negatives. Data-item any-match reuse can separately turn that contamination into false credit; one-to-one assignment fixes that different defect.\n\nThe ledger implements the complete reason model ruled on KDATAP-1b2294 and is emitted directly by ingest/layer processing rather than reconstructed from warning strings. It records the exact stage, normalized path, and reason.\n\nFor repository-level entities with multiple evidence locations:\n\n- eligible when at least one supporting location was successfully processed for that layer;\n- report full, partial, or no evidence coverage;\n- entity denominators count the entity once;\n- location/file coverage remains separately visible.\n\nRelated defect: personal-data-only scans currently take `scannedFiles` from whichever payload happens to be first. The new inventory and ledger remove that order dependence.\n\nDefinition of done: eligibility cannot be conferred across layers, all reason outcomes have contract tests, and materialized runs prove which packets actually encounter capacity limits."
+      },
+      "title": {
+        "from": "Per-layer coverage ledger with reasoned outcomes",
+        "to": "Per-layer structured eligibility ledger"
+      }
+    }
+  }
+}

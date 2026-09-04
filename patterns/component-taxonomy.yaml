@@ -1,0 +1,210 @@
+# Component Taxonomy — canonical source of truth
+#
+# This file defines every component type and subtype the scanner emits and
+# the corpus annotates against. Detector YAMLs (components.classifier.yaml,
+# third-party.classifier.yaml, actors.classifier.yaml) must map to subtypes
+# declared here. Corpus annotation subject keys use ${type}:${name} where
+# name is a detected instance; the subtype field aggregates metrics.
+#
+# When adding a new detector subtype, add it here first, then reference it
+# from the classifier YAML. Do not invent subtypes in detector code.
+
+# ---------------------------------------------------------------------------
+# Level 1: Types (stable, do not add without a schema migration)
+# ---------------------------------------------------------------------------
+types:
+  - id: asset
+    name: Asset
+    description: >-
+      Infrastructure, data stores, and services that live in the codebase
+      being scanned. Assets are things the code owns or declares.
+
+  - id: third_party
+    name: Third Party
+    description: >-
+      External vendor or API the codebase depends on. Third parties are
+      things the code calls out to but does not own.
+
+  - id: actor
+    name: Actor
+    description: >-
+      Human or external entity that interacts with the system. Actors are
+      the originators or recipients of data flows.
+
+# ---------------------------------------------------------------------------
+# Level 2: Subtypes (the annotation category; aggregate metrics here)
+# ---------------------------------------------------------------------------
+subtypes:
+  # --- Asset subtypes ---
+  - id: database
+    type: asset
+    description: >-
+      A data store the codebase connects to or declares. Includes SQL
+      databases, NoSQL stores, and managed DB resources (e.g. PostgreSQL,
+      MySQL, MongoDB, Redis, aws_db_instance).
+
+  - id: cache
+    type: asset
+    description: >-
+      An in-memory or ephemeral key-value store (e.g. Redis, Memcached).
+      Distinct from database when the code treats it as a cache layer.
+
+  - id: storage
+    type: asset
+    description: >-
+      A blob or object storage resource (e.g. S3 bucket, GCS bucket).
+
+  - id: api
+    type: asset
+    description: >-
+      An HTTP API surface the codebase exposes (routes, controllers,
+      handlers). The inbound entry point of a section.
+
+  - id: service
+    type: asset
+    description: >-
+      A background or internal service that is not an HTTP API entry point
+      (e.g. worker, scheduler, internal module).
+
+  - id: application
+    type: asset
+    description: >-
+      The main application or top-level deployable unit (e.g. Terraform
+      stack root, monorepo app package).
+
+  - id: function
+    type: asset
+    description: >-
+      A serverless function handler (e.g. AWS Lambda, GCP Cloud Function).
+
+  - id: container
+    type: asset
+    description: >-
+      A container or orchestration definition (e.g. Docker, Kubernetes).
+
+  - id: auth_service
+    type: asset
+    description: >-
+      An authentication or authorization service living inside the
+      codebase (e.g. local JWT middleware, session store). Distinct from
+      third_party auth providers like Auth0.
+
+  - id: config
+    type: asset
+    description: >-
+      A configuration source (config files, env variable access). Not a
+      runtime service.
+
+  # --- Third-party subtypes ---
+  - id: payment_processor
+    type: third_party
+    description: >-
+      A payment or card-processing vendor (e.g. Stripe, PayPal, Adyen,
+      Braintree).
+
+  - id: ai_provider
+    type: third_party
+    description: >-
+      An AI or LLM API vendor (e.g. OpenAI, Anthropic, Google AI).
+
+  - id: cloud_provider
+    type: third_party
+    description: >-
+      A cloud infrastructure vendor (e.g. AWS, GCP, Azure).
+
+  - id: saas_service
+    type: third_party
+    description: >-
+      A general SaaS integration (e.g. SendGrid, Twilio, Firebase,
+      Supabase, Sentry). Used when no more specific subtype applies.
+
+  - id: auth_provider
+    type: third_party
+    description: >-
+      An external identity or authentication provider (e.g. Auth0,
+      Google Auth, Okta). Distinct from in-codebase auth_service.
+
+  - id: email_provider
+    type: third_party
+    description: >-
+      An email sending or transactional email vendor (e.g. SendGrid,
+      Mailgun, Postmark).
+
+  - id: analytics
+    type: third_party
+    description: >-
+      A product analytics or event-tracking vendor (e.g. PostHog,
+      Mixpanel, Segment).
+
+  - id: monitoring
+    type: third_party
+    description: >-
+      An error monitoring or observability vendor (e.g. Sentry,
+      Datadog, New Relic).
+
+  - id: messaging
+    type: third_party
+    description: >-
+      A chat or messaging vendor (e.g. Twilio, Slack, SendBird).
+
+  - id: crm
+    type: third_party
+    description: >-
+      A CRM or customer-data platform vendor (e.g. Salesforce, HubSpot).
+
+  # --- Actor subtypes ---
+  - id: customer
+    type: actor
+    description: >-
+      An end-user or customer who interacts with the system via a web or
+      public API.
+
+  - id: employee
+    type: actor
+    description: >-
+      An internal or service-to-service actor (e.g. admin, staff,
+      background worker identity).
+
+  - id: admin
+    type: actor
+    description: >-
+      A privileged operator with elevated access (distinct from customer
+      when the code distinguishes admin roles).
+
+  - id: service_account
+    type: actor
+    description: >-
+      A non-human identity (e.g. IAM role, service principal) that
+      initiates flows.
+
+  - id: api_consumer
+    type: actor
+    description: >-
+      An API consumer identity injected for backend entrypoints where the
+      codebase exposes an HTTP API surface but no explicit actor was detected.
+
+# ---------------------------------------------------------------------------
+# Level 3: Known names (instances) — non-exhaustive; detectors add more
+# ---------------------------------------------------------------------------
+# Subject key = ${type}:${name}. For assets, name is the detected component
+# name (e.g. "pg", "main (aws_db_instance)"). For third parties, name is the
+# serviceName from third-party.classifier.yaml. For actors, name is "User".
+known_third_party_names:
+  payment_processor: [stripe, braintree, adyen, paypal]
+  ai_provider: [openai, anthropic, openrouter, google_ai, clipdrop, thenextleg, vectorizer]
+  cloud_provider: [aws, gcp, azure]
+  saas_service: [sendgrid, twilio, firebase, supabase, sentry]
+  auth_provider: [auth0, google_auth, okta]
+
+# ---------------------------------------------------------------------------
+# Rules
+# ---------------------------------------------------------------------------
+rules:
+  # When a detector could classify something as either asset or third_party,
+  # prefer third_party (e.g. a Stripe SDK is third_party:stripe, not asset:api).
+  prefer_third_party_over_asset: true
+
+  # Annotators pick a subtype from this file. They do not invent subtypes.
+  # If a detection does not fit any subtype, file a taxonomy change request
+  # rather than annotating with an ad-hoc subtype.
+  annotation_source_of_truth: this_file

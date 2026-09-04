@@ -1,0 +1,34 @@
+{
+  "id": "KDATAP-fafa9f76-0206-422f-9958-7107fb46c7d8",
+  "title": "Migrate mention gold to canonical keys and observed-token candidates",
+  "description": "Migrate mention gold onto canonical keys while preserving legacy source text for validation and adjudication.\n\nThree surfaces move together:\n\n1. all 29 `annotations/pii_signals.yaml` files rename to `mentions.yaml`;\n2. all 357 `pii:` subject keys leave the hard-coded loader exemption and map into canonical concept fields;\n3. 339 differing `subject.name` values are preserved as `observedTokenCandidate` with provenance.\n\nThe candidate is not automatically authoritative and never participates in matching. Mechanical migration validates it against pinned evidence; suspicious pairs such as `pii:email_address` / `clientID` move to adjudication rather than becoming canonical by copy.\n\nBlocked on the per-layer legacy-name ruling and the temporary compatibility loader. Definition of done: canonical accepted mention rows contain validated concepts and evidence, legacy names remain auditable, and no `pii_signals` or `pii:` exemption reaches scoring.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-95cfe105-1fd1-470a-b42c-35f229606178",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "4cf9aa71-a7ea-40c8-9e75-adde4f9a1723",
+      "author": "home",
+      "text": "Landed on develop via PR #28 (migrate mention gold to canonical keys and observed-token candidates).",
+      "created_at": "2026-09-01T17:40:11.017325Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:42.907763Z",
+  "updated_at": "2026-09-01T17:40:11.033298Z",
+  "closed_at": "2026-09-01T17:40:11.033298Z",
+  "custom": {}
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "8bded285-8d3f-4305-94b5-dccc75aaa129",
+  "issue_id": "KDATAP-1076a9e3-d2ab-4aec-8cd7-0784f947d1fe",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:40:03.150Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Scanner adapter emits canonical observations for components, data flows and the personal-data projections.\n\nReplaces `componentIdentity` (`${type}:${name.toLowerCase()}`) and `dataFlowIdentity` (`flow:${componentKey}->${componentKey}`) with structured fields. The taxonomy becomes an output vocabulary: nothing in `src/` currently reads `patterns/component-taxonomy.yaml` — the only consumer is `tests/unit/taxonomy.spec.ts`, a test-time containment check — so the engine has never been taught the vocabulary its gold is written in.\n\nBlocked on the component instance ruling, which decides whether `component.name` populates the instance field for assets.",
+        "to": "Scanner adapters emit versioned canonical observations for personal-data projections, components, and flows.\n\nAdapters populate only fields the scanner actually supports; they never copy labels or display names into identity. Component output carries taxonomy type/subtype, repo-local finding identity, optional resolved vendor, and all provenance. Flow output carries typed endpoints and data categories under the structured graph model.\n\nThe taxonomy becomes an adapter/output vocabulary even though production detection may retain internal names. Unknown or missing subtype is emitted as an explicit taxonomy/capability gap, never `undefined` identity.\n\nPersonal-data rules use the closed one-rule-to-one-leaf map. Raw hits remain diagnostic; mentions and repository-level data items derive from one inventory.\n\nBlocked on canonical types, component instance/cardinality, flow disposition, and the structured graph model."
+      }
+    }
+  }
+}

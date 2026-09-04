@@ -1,0 +1,56 @@
+{
+  "id": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+  "title": "Rule when instance is required on a component expectation",
+  "description": "KDATAP-08a0ac requires canonical instance/vendor when asserted plus one strict all-required-fields result. The migration reading decides whether component scoring is meaningful.\n\nAll 563 legacy component annotations carry `subject.name`. For 473 assets it is a code-level value; automatically requiring it would make strict recall structurally near zero. For 52 third-party rows the legacy key and name genuinely assert a vendor.\n\n**Proposed decision.**\n\n- Strict means all fields the gold record asserts, not every field the schema defines.\n- Vendor/instance is required only for records whose reviewed canonical gold asserts it.\n- Asset and actor display/code names are preserved as evidence candidates but are not automatically asserted instances.\n- Vendor-resolution metrics use their own denominator over records that assert a vendor, so 52 vendor cases cannot disappear inside 481 subtype-only cases.\n- Repo-local component entity/cardinality is a separate ruling; optional instance must not be abused to distinguish repeated same-subtype entities.\n\nRejected: every schema field required; every legacy name promoted to instance; vendor misses hidden inside a broad subtype score.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "1b0c82b3-0a54-49c3-8633-4a740ada3444",
+      "author": "claude",
+      "text": "## Measured \u2014 the gating assumption behind this ruling now has data\n\nI said the recommendation depended on `DetectedComponent.subType` actually being populated at runtime, since it is optional and some construction paths leave it undefined. That was the one unverified claim under the whole component argument. It is now measured: built `develop`, cloned two packets at their manifest commits, and ran the orchestrator with AI inference disabled.\n\n**subType coverage is 100% wherever components are emitted at all.**\n\n| target | files | components | carry subType |\n| --- | ---: | ---: | ---: |\n| `tests/fixtures/typescript-basic` | 6 | 5 | **5 (100%)** |\n| `easy-school` @ `69ad989` (Django) | 35 | 3 | **3 (100%)** |\n\n**The two identity schemes, side by side.** On `typescript-basic`:\n\n| emitted as `type:subType` | emitted as `type:name` (today) |\n| --- | --- |\n| `asset:api` \u00d72, `asset:database`, `actor:customer` | `asset:api`, `asset:root api`, `asset:pg`, `actor:user` |\n| `third_party:payment_processor` | `third_party:stripe` |\n\nAnd on `easy-school`: `asset:database`, `asset:application`, `actor:customer` by subtype, versus `asset:django orm`, `asset:es`, `actor:user` by name. That is literally the epic's own example \u2014 the engine emits `asset:django orm`, gold says `asset:database`, and the subtype field already holds `database`.\n\n**Scored against real gold.** easy-school has 3 positive component annotations (`asset:database` \u00d72, `actor:user`). Identity-only match, ignoring span and eligibility:\n\n| scheme | matched |\n| --- | ---: |\n| `type:name` \u2014 today | **1 / 3** |\n| `type:subType` | **2 / 3** |\n| hybrid: assets and actors by subtype, third_party by name | **2 / 3** |\n\n**This confirms the proposed decision, and sharpens it.** Note the third_party row: by subtype the engine emits `third_party:payment_processor`, by name `third_party:stripe`, and gold says `third_party:stripe`. So the split is not a compromise, it is what the data requires \u2014 assets and actors carry their claim in the subtype, third parties carry theirs in the name. Instance required only where gold asserts a vendor, exactly as proposed.\n\n## Two caveats that cut against over-claiming\n\n**1. Some of the 0% is genuine non-detection, not vocabulary.** `flask-login` @ `c8bba84` emits **zero components** \u2014 11 files ingested, nothing detected \u2014 while its gold claims `asset:auth_service` and `actor:user` as positives. No identity scheme rescues that packet. The 85% figure is the share of gold whose *vocabulary* is satisfiable; it is not a prediction of recall, because it assumes the component was detected at all. Worth a cheap spike measuring detection rate per packet before anyone forecasts what this ruling buys.\n\n**2. The remaining easy-school miss is the `actor:user` gap, and it points the other way.** Gold says `actor:user`; the engine emits subtype `customer`. So KDATAP-ea44fe \u2014 \"add `user` to the taxonomy\" \u2014 may be the wrong fix. It could equally be that the engine's actor subtype is wrong, or that gold should say `customer`. That issue needs a decision, not an addition. Commented there.\n\nSample is two packets and 3 gold cases, so treat the 1/3 \u2192 2/3 as directional rather than a rate. It is, as far as I can tell, the first time the engine has been run against corpus gold on this branch.\n",
+      "created_at": "2026-08-31T15:06:49.792925Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    },
+    {
+      "id": "7f864090-9aba-4ad6-b150-4d9364c3736b",
+      "author": "claude",
+      "text": "## Correction: my 1/3 \u2192 2/3 figure used set membership, not one-to-one\n\nKDATAP-471fdc names the thing that invalidates it. I scored the easy-school comparison as *\"is this gold key present in the set the engine emitted\"*. Sol's decision on KDATAP-89d1a6 requires **one-to-one assignment**, where a finding is consumed once. Rerunning the same data under that rule:\n\n| gold positive | | engine emitted |\n| --- | --- | --- |\n| `asset:database` | \u2714 consumes the one emitted database | `asset:database` |\n| `asset:database` | \u2718 nothing left to match | `asset:application` |\n| `actor:user` | \u2718 engine emitted subtype `customer` | `actor:customer` |\n\n**Under one-to-one, `type:subType` scores 1/3 \u2014 the same as `type:name` scores today.** My reported 2/3 was wrong for the contract we have actually agreed. The engine emitted one database component; the gold carries two `asset:database` annotations.\n\n## What survives, and what it now depends on\n\nThe vocabulary finding stands: `type:name` emits `asset:django orm`, which can never match `asset:database` under any cardinality rule, while `type:subType` emits the gold's own token. The identity fix is what makes the database *matchable at all*. What it is worth in recall is now entirely a question of the rule this issue is about.\n\nThree readings, with what easy-school scores under each:\n\n1. **Two gold annotations, two expected entities** \u2014 the engine must emit two distinct databases. Scores 1/3. Almost certainly wrong: it reads repeated evidence as duplicate infrastructure.\n2. **Consolidate repository-level entities before assignment**, per the unit defined on KDATAP-f6b6e7 \u2014 the two annotations become one expected database entity with two evidence locations. Gold becomes 2 entities, engine matches 1. **Scores 1/2.**\n3. **Cardinality-free concept coverage** \u2014 did the engine find *a* database. Scores 2/3, which is the number I originally reported, and it is the weakest of the three because it cannot see a scanner that misses the second of two real databases.\n\nReading 2 looks right and is consistent with the data-item consolidation already decided, but it needs stating explicitly, because the same gold shape appears everywhere: `asset:database` is used 182 times and `asset:api` 118 times across 29 packets, and nobody has checked how often repeated keys within one packet mean one entity versus several.\n\n**Worth measuring as part of this issue:** per packet, how many gold component annotations share a `type:subtype` key, and in how many of those cases the repeated annotations point at genuinely distinct infrastructure. That number decides whether consolidation is a safe default or a silent recall inflator.\n\nSample remains two packets and three gold cases, so all three figures are directional. The correction is the point, not the numbers.\n",
+      "created_at": "2026-08-31T18:12:41.709433Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    },
+    {
+      "id": "284ede2f-92d3-49fe-b7a0-7bbe8e72f14f",
+      "author": "home",
+      "text": "## Recommendation after the one-to-one correction\n\nApprove the proposed instance ruling. The corrected easy-school score changes the recall forecast, not the identity contract.\n\n- Strict success means every field explicitly asserted by reviewed gold, not every field available in the schema.\n- Legacy asset and actor subject.name values default to observed-name or evidence candidates; they are not automatically asserted instances.\n- A legacy third-party vendor token is an asserted vendor. The canonical schema should still permit an explicitly reviewed instance on any component type rather than hard-coding instances to third parties.\n- Optional instance must never be used to manufacture entity cardinality.\n\nThe subtype change remains necessary because it makes the gold claim expressible. The fact that one emitted database can only consume one expected item belongs to KDATAP-471fdc and should not be solved by weakening the instance rule.",
+      "created_at": "2026-08-31T19:38:11.086249Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    },
+    {
+      "id": "077e89c0-00a8-482c-825d-0a06244ee77f",
+      "author": "claude",
+      "text": "## Ratified\n\n**Strict success means every field reviewed gold explicitly asserts \u2014 not every field the schema defines.**\n\n- Legacy `asset` and `actor` `subject.name` values are observed-name or evidence candidates. They are not automatically asserted instances.\n- A legacy third-party vendor token is an asserted vendor.\n- The canonical schema permits an explicitly reviewed instance on any component type; instances are not hard-coded to third parties.\n- An optional instance must never be used to manufacture entity cardinality.\n\nThe subtype change stands because it makes the gold claim expressible. The corrected one-to-one score changes the recall forecast, not the identity contract; the one-emitted-database-consumes-one-expected-item problem belongs to KDATAP-471fdc and is not solved by weakening this rule.\n\nClosing. Implementation follows in the harness and gold-migration epics.\n",
+      "created_at": "2026-08-31T19:48:49.399456Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
+  "created_at": "2026-08-31T14:13:52.352294Z",
+  "updated_at": "2026-08-31T19:49:11.375320Z",
+  "closed_at": "2026-08-31T19:49:11.375320Z",
+  "custom": {},
+  "agent": null
+}

@@ -1,0 +1,78 @@
+annotations:
+  - id: medusa-no-customer-email-signal
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: packages/medusa/src/modules/customer.ts
+      start_line: 1
+      end_line: 3
+    expected:
+      status: negative
+      labels: []
+    rationale: customer.ts re-exports the customer package and does not declare or handle email fields in scope.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-no-user-name-signal
+    layer: mentions
+    subject:
+      key: mention:person_name
+      name: first_name
+    evidence:
+      file_path: packages/medusa/src/modules/user.ts
+      start_line: 1
+      end_line: 3
+    expected:
+      status: negative
+      labels:
+        - legacy-key:pii:person_name
+    rationale: user.ts is a module registry export with no user name properties in the reviewed files.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-auth-emailpass-password-signal
+    layer: mentions
+    subject:
+      key: mention:password
+      name: EmailPassAuthProvider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-emailpass.ts
+      start_line: 1
+      end_line: 1
+    expected:
+      status: negative
+      labels: []
+    rationale: auth-emailpass.ts only re-exports EmailPassAuthProvider; it does not declare a password field or credential value.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: medusa-no-phone-signal
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: packages/medusa/src/modules/order.ts
+      start_line: 1
+      end_line: 3
+    expected:
+      status: negative
+      labels: []
+    rationale: order.ts contains no phone number fields or handling in the scoped module registry files.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

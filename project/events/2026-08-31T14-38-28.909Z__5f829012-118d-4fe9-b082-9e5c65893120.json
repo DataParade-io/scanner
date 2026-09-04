@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "5f829012-118d-4fe9-b082-9e5c65893120",
+  "issue_id": "KDATAP-8aed548b-ef7b-45d5-b97c-5763c8f5ed53",
+  "event_type": "field_updated",
+  "occurred_at": "2026-08-31T14:38:28.909Z",
+  "actor_id": "home",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "Migrate component gold onto the structured canonical representation.\n\n| gold key shape | instances | migration |\n| --- | ---: | --- |\n| `type:<taxonomy subtype id>` — `asset:database` x182, `asset:api` x118, `asset:auth_service` x110, `asset:service` x41, `asset:cache` x14, `asset:config` x8, `actor:customer`, `actor:admin` | 481 | mechanical: every rest is a literal `component-taxonomy.yaml` id |\n| `third_party:<vendor>` — auth0 x17, stripe x13, supabase x5, sendgrid x5, and 8 more | 52 | mechanical; retains the instance field |\n| `actor:user` | 30 | blocked on the taxonomy gaining `user` |\n\nOf the 12 distinct vendors, six are outside `known_third_party_names`: `github_auth`, `twitter_auth`, `facebook_auth`, `oidc`, `ldap`, `checkr`.\n\nBlocked on the component instance ruling, which decides whether the 473 asset `subject.name` values (`directus_users`, `LocalAuthDriver`, `UsersService`) become the canonical instance or stay evidence/display.",
+        "to": "Migrate component gold onto structured canonical entities after the instance and cardinality rulings.\n\nLegacy shape:\n\n- 481 `type:<taxonomy subtype>` cases are mechanically classifiable;\n- 52 `third_party:<vendor>` cases assert vendor resolution;\n- 30 `actor:user` cases wait on the taxonomy ruling;\n- 53 duplicate repository/key groups cover 456 cases and require entity/evidence grouping rather than subtype collapse.\n\nMigration assigns a stable repo-local gold entity id, asserted type/subtype, optional asserted vendor, and all supporting evidence. It preserves code/display names as candidates without requiring them as product identity.\n\nRepeated subtype rows are grouped or kept distinct only from evidence-backed adjudication; never from arbitrary ordering. One known type-as-subtype label bug is corrected through its tracked bug.\n\nDefinition of done: every accepted component entity is canonical, same-subtype cardinality is preserved, and migration accounting covers every legacy component row."
+      }
+    }
+  }
+}

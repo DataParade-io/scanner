@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-95cfe105-1fd1-470a-b42c-35f229606178",
+  "title": "Rule the meaning of subject.name per layer",
+  "description": "KDATAP-d6eabf rules that display names are never identity inputs and that `subject.name` may not rescue a mismatch. The loader still needs a lossless, per-layer migration rule.\n\nMeasured legacy shape:\n\n| layer | legacy name content |\n| --- | --- |\n| mentions | 339 of 357 differ from the key; often the observed source token |\n| data items | 61 of 436 differ from the key; often casing, accessor, or alternate source spelling |\n| components: asset/actor | code-level name or display text |\n| components: third party | usually the asserted vendor |\n| data flows | prose restating the legacy key |\n\n**Proposed decision.**\n\n- Mentions and data items: preserve `subject.name` as an `observedTokenCandidate` with provenance. Do not promote it automatically to authoritative source identity or concept. Validate it against evidence and adjudicate discrepancies such as `pii:email_address` / `clientID`.\n- Assets and actors: preserve as observed code/display evidence, not a required canonical instance.\n- Third parties: preserve as a vendor candidate and validate it against the asserted canonical vendor.\n- Flows: retain only as legacy migration provenance; it is not a canonical endpoint or matching field.\n\nNo layer may use the candidate or display value to rescue identity. Canonical source identity and concept fields are populated only after mechanical validation or human adjudication.\n\nRejected: a single global rule; dropping potentially useful observed text; blindly promoting all names; keeping `subject.name` as a matching token.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "f4a829cf-870a-4c29-a12a-7ec2a5e31d8a",
+      "author": "home",
+      "text": "## Worker ruling: preserve legacy names as evidence, never identity\n\nImplement the proposed per-layer rule with an evidence-linked plural representation. A single entity-level observedTokenCandidate is insufficient after repository-level consolidation.\n\n### Required loader behavior\n\n- Mentions: preserve legacy subject.name as a candidate observed source token attached to that exact occurrence and evidence location.\n- Data items: preserve observed tokens as a collection attached to their originating evidence locations. Consolidating a repository-level data item must not discard alternate spellings or provenance.\n- Assets and actors: preserve names as observed code or display evidence. They are not required canonical instances.\n- Third parties: preserve the name as a vendor candidate and cross-check it against the canonical vendor asserted by reviewed gold. A mismatch requires adjudication.\n- Data flows: retain the name only as legacy display and migration provenance. It is not an endpoint or semantic field.\n\nEach preserved observation must retain its value, evidence reference, provenance, and validation state such as verified, unverified, or contradicted. Canonical accepted gold may populate concept or source identity only after mechanical evidence validation or human adjudication.\n\n### Prohibited behavior\n\n- Never copy a candidate name into canonical identity automatically.\n- Never use a name, display value, or finding label to rescue a canonical key mismatch.\n- Never collapse multiple observed tokens on a consolidated data item into one arbitrary value.\n- Never discard a contradictory value such as pii:email_address paired with clientID; route it to adjudication.\n\n### Completion checks\n\nRemove the current matching path where conceptTokensForCase includes subject.name. Add contract tests proving that a wrong canonical key remains a strict miss even when the legacy name matches the finding, and that consolidation preserves every evidence-linked observed token.",
+      "created_at": "2026-08-31T20:05:32.784278Z"
+    },
+    {
+      "id": "acc93023-10a8-4fde-9588-994dcd0d416f",
+      "author": "home",
+      "text": "Ruling locked on develop (830a400): subject.name preserved as observedTokenCandidate per layer; never rescues identity.",
+      "created_at": "2026-09-01T17:40:07.416127Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:13:51.856235Z",
+  "updated_at": "2026-09-01T17:40:07.427901Z",
+  "closed_at": "2026-09-01T17:40:07.427901Z",
+  "custom": {}
+}

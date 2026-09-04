@@ -1,0 +1,433 @@
+annotations:
+  - id: directus-login-email-to-users-table
+    layer: data_flows
+    subject:
+      key: flow:login-email->directus_users
+      name: Login email to directus_users
+    evidence:
+      file_path: api/src/auth/drivers/local.ts
+      start_line: 25
+      end_line: 35
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: LocalAuthDriver.getUserID queries directus_users by lowercased email to resolve the account before password verification.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - email_address
+  - id: directus-login-to-sessions-table
+    layer: data_flows
+    subject:
+      key: flow:login->directus_sessions
+      name: Login to directus_sessions
+    evidence:
+      file_path: api/src/services/authentication.ts
+      start_line: 291
+      end_line: 298
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: After successful authentication, AuthenticationService inserts a refresh token and session metadata into directus_sessions.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-local-router-to-auth-service
+    layer: data_flows
+    subject:
+      key: flow:local-router->authentication-service
+      name: Local router to AuthenticationService
+    evidence:
+      file_path: api/src/auth/drivers/local.ts
+      start_line: 93
+      end_line: 96
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: The local auth POST handler passes validated email and password to AuthenticationService.login, which issues tokens.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-password-verify-bcrypt
+    layer: data_flows
+    subject:
+      key: flow:password->bcrypt-verify
+      name: Password to bcrypt verify
+    evidence:
+      file_path: api/src/auth/drivers/local.ts
+      start_line: 39
+      end_line: 45
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: LocalAuthDriver.verify compares the login password to the bcrypt hash on the user row.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-local-verify from span content; negative decoys excluded.
+      source_entity_id: directus::directus-local-verify
+      target_entity_id: directus::directus-local-verify
+      proposed_data_categories:
+        - password
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-verify
+      target_entity_id: directus::directus-local-verify
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - password
+  - id: directus-login-select-user
+    layer: data_flows
+    subject:
+      key: flow:login->directus_users-select
+      name: Login to directus_users select
+    evidence:
+      file_path: api/src/services/authentication.ts
+      start_line: 106
+      end_line: 112
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: AuthenticationService.login selects id, email, password, and provider from directus_users.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-jwt-to-accountability
+    layer: data_flows
+    subject:
+      key: flow:jwt->accountability
+      name: JWT to accountability
+    evidence:
+      file_path: api/src/middleware/authenticate.ts
+      start_line: 49
+      end_line: 49
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: authenticate resolves the request token into req.accountability via getAccountabilityForToken.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-suspend-on-rate-limit
+    layer: data_flows
+    subject:
+      key: flow:failed-login->suspended
+      name: Failed login to suspended
+    evidence:
+      file_path: api/src/services/authentication.ts
+      start_line: 149
+      end_line: 152
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: When login attempts are exhausted, AuthenticationService sets directus_users.status to suspended.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-local-get-user-id
+    layer: data_flows
+    subject:
+      key: flow:email->user-id
+      name: Email to user id
+    evidence:
+      file_path: api/src/auth/drivers/local.ts
+      start_line: 25
+      end_line: 35
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: LocalAuthDriver.getUserID queries directus_users by lowercased email to resolve the account.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      proposed_data_categories:
+        - email_address
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-local-auth-driver
+      target_entity_id: directus::directus-local-auth-driver
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - email_address
+  - id: directus-auth-driver-users-service
+    layer: data_flows
+    subject:
+      key: flow:auth-driver->users-service
+      name: Auth driver to UsersService
+    evidence:
+      file_path: api/src/auth/auth.ts
+      start_line: 13
+      end_line: 17
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: AuthDriver.getUsersService constructs a UsersService bound to the Knex connection.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-login-emitter-filter
+    layer: data_flows
+    subject:
+      key: flow:payload->auth-login-filter
+      name: Payload to auth.login filter
+    evidence:
+      file_path: api/src/services/authentication.ts
+      start_line: 114
+      end_line: 127
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: AuthenticationService emits an auth.login filter with the pending user id and provider.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-auth-emitter-filter from span content; negative decoys excluded.
+      source_entity_id: directus::directus-auth-emitter-filter
+      target_entity_id: directus::directus-auth-emitter-filter
+      proposed_flow_type: database_query
+      proposed_data_categories:
+        - password
+        - email
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-auth-emitter-filter
+      target_entity_id: directus::directus-auth-emitter-filter
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+      flow_type: database_query
+      data_categories:
+        - password
+        - email
+  - id: directus-inactive-user-reject
+    layer: data_flows
+    subject:
+      key: flow:inactive-user->error
+      name: Inactive user to error
+    evidence:
+      file_path: api/src/services/authentication.ts
+      start_line: 129
+      end_line: 133
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: AuthenticationService rejects logins when the user status is not active or provider mismatches.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-extract-token-bearer
+    layer: data_flows
+    subject:
+      key: flow:authorization-header->token
+      name: Authorization header to token
+    evidence:
+      file_path: api/src/middleware/extract-token.ts
+      start_line: 9
+      end_line: 20
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: extract-token pulls the bearer or session cookie token onto req.token for downstream auth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Accepted intra-component lineage on directus-extract-token-middleware (intra_single_component).
+      source_entity_id: directus::directus-extract-token-middleware
+      target_entity_id: directus::directus-extract-token-middleware
+      proposed_data_categories:
+        - access_token
+        - session
+    flow_canonical:
+      identity_key: flow:asset:auth_service->asset:auth_service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-extract-token-middleware
+      target_entity_id: directus::directus-extract-token-middleware
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+        target:
+          component_type: asset
+          endpoint_key: auth_service
+          component_subtype: auth_service
+      data_categories:
+        - access_token
+        - session
+  - id: directus-clear-invalid-session-cookie
+    layer: data_flows
+    subject:
+      key: flow:invalid-token->clear-cookie
+      name: Invalid token to clear cookie
+    evidence:
+      file_path: api/src/middleware/authenticate.ts
+      start_line: 52
+      end_line: 54
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: authenticate clears the session cookie when the token is invalid but matches the cookie value.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: directus-users-service-collection
+    layer: data_flows
+    subject:
+      key: flow:users-service->directus_users
+      name: UsersService to directus_users
+    evidence:
+      file_path: api/src/services/users.ts
+      start_line: 42
+      end_line: 42
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: UsersService is constructed for the directus_users collection used throughout auth flows.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: medium
+      candidate_notes: Entity picker resolved directus-users-service from span content; negative decoys excluded.
+      source_entity_id: directus::directus-users-service
+      target_entity_id: directus::directus-users-service
+    flow_canonical:
+      identity_key: flow:asset:service->asset:service
+      disposition_candidate: intra_component_lineage
+      source_entity_id: directus::directus-users-service
+      target_entity_id: directus::directus-users-service
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service
+        target:
+          component_type: asset
+          endpoint_key: service
+          component_subtype: service

@@ -1,0 +1,43 @@
+{
+  "id": "KDATAP-ea44fe23-55a2-4214-853c-6fee2f0aa308",
+  "title": "Resolve the actor:user gap",
+  "description": "Add `user` to `patterns/component-taxonomy.yaml` and reconcile it with the injected user actor.\n\n30 component annotations use `actor:user` while `user` is not a declared subtype — `customer` and `admin` are. Under \"the taxonomy is authoritative for type and subtype\", those 30 cannot be migrated until the taxonomy declares it.\n\n`src/classifier/application-injection.ts` already injects a user actor via `getInjectedUserActorSubtype`, so the engine holds an opinion the taxonomy does not record. Reconcile both in one pass.\n\nStartable now — independent of the gate rulings.",
+  "type": "chore",
+  "status": "closed",
+  "priority": 1,
+  "assignee": "rap@endymion.com",
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "3920eeff-09e8-4626-8a5d-e4d011f564cd",
+      "author": "claude",
+      "text": "## Measured: this may be the wrong fix\n\nRan the orchestrator against `easy-school` @ `69ad989` (AI inference disabled). Gold there claims `actor:user`. The engine emits an actor whose subtype is **`customer`** — a declared taxonomy subtype. Same on `tests/fixtures/typescript-basic`: subtype `customer`, while the engine's *name* for it is `user`.\n\nSo the two sides do not disagree about the entity, they disagree about what to call its role — and the taxonomy already declares `customer`, which is what the engine picks.\n\nThat makes three candidate resolutions, not one:\n\n1. **Add `user` to the taxonomy** — as this issue currently proposes. Cheapest, but it leaves two subtypes for one concept and the engine still emits `customer`, so the 30 gold cases keep missing.\n2. **Retarget the gold** to `actor:customer`, treating `user` as the annotators' informal name for the declared subtype. Mechanical, 30 cases, and it makes them matchable immediately.\n3. **Fix the engine's actor subtype assignment**, if `customer` is genuinely wrong for an authenticated end user in a Django app that has no customer concept — `easy-school` is a school management app, where `customer` reads as a mis-classification.\n\n`src/classifier/application-injection.ts` picks this via `getInjectedUserActorSubtype`, so option 3 is a small, contained change.\n\nMy read is that option 3 plus option 2 is right — `customer` looks like a genuine misclassification in a non-commerce app, and once the engine emits a defensible actor subtype the gold should be retargeted to it rather than the taxonomy growing a near-synonym. But this needs a decision from someone with a view on what `actor:` subtypes are *for*, which is why it should not be filed as a one-line taxonomy addition.\n\nRetitling suggested: \"Resolve the actor:user gap\" rather than \"Add user to the component taxonomy\".\n",
+      "created_at": "2026-08-31T15:04:57.760215Z"
+    },
+    {
+      "id": "f51c3ea2-5141-493e-b1a9-482ab17d80d1",
+      "author": "claude",
+      "text": "## Measured: the gold already says what each `actor:user` means\n\nSol's amendment on KDATAP-77d2b0 — that `actor:user` is a legacy generic key rather than a missing subtype — is correct, and the gold settles it. All 30 `actor:user` annotations carry a declared taxonomy subtype in their labels:\n\n| label carried | count | already a declared subtype |\n| --- | ---: | --- |\n| `customer` | 23 | yes |\n| `admin` | 4 | yes |\n| `employee` | 3 | yes |\n\nThirty of thirty. There is no annotation whose intent is unrecoverable, so the migration is mechanical: key on the subtype the label already asserts, and keep `user` as provenance.\n\nThe `subject.name` values point the same way — `Student`, `Employee`, `Owner`, `WP_User`, `AnonymousUser`, `merchant_customer_id`. These are different roles that a single `user` subtype would flatten.\n\n**This contradicts what is in PR #10**, which adds `user` (and `api_consumer`) to the taxonomy. Adding `user` creates a near-synonym for `customer`, leaves all 30 annotations keyed on the vaguer of the two, and gives detectors two defensible answers for one role. Recommend the taxonomy addition be dropped from that PR and this issue become the migration instead. The Checkr label fix in the same PR is unaffected and should still land.\n\nI was wrong earlier: I framed this as \"the taxonomy is missing `user`\" and listed retargeting the gold as only one of three options. The label data shows retargeting is the only one that does not degrade the vocabulary.\n",
+      "created_at": "2026-08-31T19:43:06.075498Z"
+    },
+    {
+      "id": "d54a8c9e-88c3-465f-9c07-936c028aab81",
+      "author": "rap@endymion.com",
+      "text": "Composer 2.5 planning: mechanical gold retarget of 30 actor:user keys to the subtype already on each label (customer/admin/employee). Do not add a user subtype. PR #10 taxonomy addition is rejected per the label census on this issue.",
+      "created_at": "2026-08-31T20:24:37.987811Z"
+    },
+    {
+      "id": "6aaff4cc-f4b0-40b5-93e4-5d386b0be4ac",
+      "author": "home",
+      "text": "Landed on develop via PR #17 (retarget actor:user gold to declared actor subtypes).",
+      "created_at": "2026-09-01T17:40:05.602003Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:44.695729Z",
+  "updated_at": "2026-09-01T17:40:05.617034Z",
+  "closed_at": "2026-09-01T17:40:05.617034Z",
+  "custom": {}
+}

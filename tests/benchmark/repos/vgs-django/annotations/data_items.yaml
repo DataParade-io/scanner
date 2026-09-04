@@ -1,0 +1,51 @@
+annotations:
+  - id: vgs-django-ssn
+    layer: data_items
+    subject:
+      key: data_item:social_security_number
+      name: social_security_number
+    evidence:
+      file_path: app/models.py
+      start_line: 5
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - social_security_number
+    rationale: PiiData.social_security_number stores SSN as a CharField.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:ssn
+      proposed_concept_leaf: social_security_number
+      proposed_ancestry:
+        - national_identifier
+        - social_security_number
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: vgs-django-dln
+    layer: data_items
+    subject:
+      key: data_item:driver_license_number
+      name: driver_license_number
+    evidence:
+      file_path: app/models.py
+      start_line: 6
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - national_identifier
+    rationale: PiiData.driver_license_number stores a driver license identifier.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

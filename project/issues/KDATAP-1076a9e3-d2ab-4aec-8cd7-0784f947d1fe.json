@@ -1,0 +1,49 @@
+{
+  "id": "KDATAP-1076a9e3-d2ab-4aec-8cd7-0784f947d1fe",
+  "title": "Scanner adapters emit canonical observations",
+  "description": "Scanner adapters emit versioned canonical observations for personal-data projections, components, and flows.\n\nAdapters populate only fields the scanner actually supports; they never copy labels or display names into identity. Component output carries taxonomy type/subtype, repo-local finding identity, optional resolved vendor, and all provenance. Flow output carries typed endpoints and data categories under the structured graph model.\n\nThe taxonomy becomes an adapter/output vocabulary even though production detection may retain internal names. Unknown or missing subtype is emitted as an explicit taxonomy/capability gap, never `undefined` identity.\n\nPersonal-data rules use the closed one-rule-to-one-leaf map. Raw hits remain diagnostic; mentions and repository-level data items derive from one inventory.\n\nBlocked on canonical types, component instance/cardinality, flow disposition, and the structured graph model.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-06634c34-c0d2-4f39-b994-50ae333b4a4a",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-00e64acd-d680-4fc7-949f-7e51e0c6c8c2",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-471fdccc-30e6-4086-808d-137abf7d9ada",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-2e8f9fd7-8d8d-44ac-881c-0817f10eea7c",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-32c089f1-61b8-42c1-bfad-1af8da2609ba",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "05d8bbcb-4891-42ba-9e60-d24d53da22ee",
+      "author": "home",
+      "text": "Landed on develop via PR #27 (scanner adapters emit canonical observations).",
+      "created_at": "2026-09-01T17:40:08.385623Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:14:59.151863Z",
+  "updated_at": "2026-09-01T17:40:08.397824Z",
+  "closed_at": "2026-09-01T17:40:08.397824Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

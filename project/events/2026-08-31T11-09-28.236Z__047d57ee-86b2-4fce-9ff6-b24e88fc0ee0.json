@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "047d57ee-86b2-4fce-9ff6-b24e88fc0ee0",
+  "issue_id": "KDATAP-f6b6e7a3-8899-46aa-a2d9-0c797d9fcbd3",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T11:09:28.236Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "As an evaluation owner, I want one list of layers that Jest fixtures and corpus packets share, so that we do not double-count the same regex or ignore a grade we claim to care about.\n\n## Current mess\n\n| Surface | Layers |\n| --- | --- |\n| Jest fixture eval | `raw-hits`, `mentions`, `data-items`, `components`, `data-flows` |\n| Corpus YAML | `components`, `data_flows`, `pii_signals`, `data_items` (no `raw_hits` packets) |\n| Load path | `pii_signals` → canonical `mentions`; files may be `pii_signals.yaml` |\n| Personal-data engine | `matchPiiSignalsInFiles` once; raw-hits vs mentions differ only by key prefix (`raw_hit:` vs `mention:`). Documented limitation: they are isomorphic until mentions gain a real roll-up. |\n\nGround-truth schema sells five grades. Corpus gold was curated as four, with `pii_signals` meaning “line-level PII signal,” which we now call mentions.\n\nIf corpus grew `raw_hits` annotations that duplicate `pii_signals` line-for-line, recall would count the same hit twice. If we never gold `raw_hits`, Jest’s extra grade is a fixture-only toy and must not be mixed into corpus headlines.\n\n## Questions to answer\n\n- Canonical corpus layers going forward: four (mentions not pii_signals in filenames too) or five with distinct mention roll-up?\n- Rename gold files `pii_signals.yaml` → `mentions.yaml`, or keep the alias forever?\n- Are raw-hits a production grade or a debug view of the same matcher?\n- How do data-items (rolled-up identity-only) relate to mentions (span) so we do not treat them as independent proof of the same field?\n- Initiative title is still “Four-layer scanner evaluation system” while docs say five. Which is the product?\n\n## Not this task\n\nDo not invent a mention roll-up algorithm here unless the decision is “mentions must differ.” Do not duplicate 325 PII records into `raw_hits.yaml`.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+    "priority": 1,
+    "status": "open",
+    "title": "One layer model for Jest and corpus"
+  }
+}

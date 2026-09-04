@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "3d28f6a4-6b09-4b5d-bc82-0d4e6c81cd62",
+  "issue_id": "KDATAP-57a3ed80-5e1f-4390-ac42-51652936a890",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:15:02.059Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "One personal-data inventory with full provenance",
+    "description": "Personal-data matching runs once per repository; raw-hit, mention and data-item projections derive from that one inventory.\n\nTwo defects to close together:\n\n1. `scanRepoByManifestLayers` claims in a comment that \"personal-data matching runs at most once\" while the body calls `collectPersonalDataFindings` up to three times, each running its own `ingestFileSystem` and `matchPiiSignalsInFiles`.\n2. `hitsToDataItemFindings` collapses hits by key and keeps a **single arbitrary location**, chosen by `hit.evidence.filePath < existing.filePath` — lexicographically first. Every other supporting location is discarded, which makes evidence-strength matching arbitrary under one-to-one assignment.\n\nFindings must preserve all provenance locations. Fixing only the gold-side consolidation while the finding still carries one lexicographically-chosen path leaves the defect in place.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}
