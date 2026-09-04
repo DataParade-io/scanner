@@ -41,6 +41,13 @@ import {
   detectPhpServerlessHandlersFromConfig as detectPhpServerlessHandlersFromConfigAdapter,
 } from "./detectors/php";
 import {
+  detectRubyAuthFromConfig as detectRubyAuthFromConfigAdapter,
+  detectRubyDatabaseConnectionsFromConfig as detectRubyDatabaseConnectionsFromConfigAdapter,
+  detectRubyDatabaseYmlFromConfig as detectRubyDatabaseYmlFromConfigAdapter,
+  detectRubyRoutesFromConfig as detectRubyRoutesFromConfigAdapter,
+  detectRubyServicesFromConfig as detectRubyServicesFromConfigAdapter,
+} from "./detectors/ruby";
+import {
   detectJvmAuthFromConfig as detectJvmAuthFromConfigAdapter,
   detectJvmDatabaseConnectionsFromConfig as detectJvmDatabaseConnectionsFromConfigAdapter,
   detectJvmEnvAndConfigFromConfig as detectJvmEnvAndConfigFromConfigAdapter,
@@ -275,6 +282,14 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(...detectPhpExternalApisFromConfigAdapter(ctx, config));
   findings.push(...detectPhpRoutesFromConfigAdapter(ctx, config));
   findings.push(...detectPhpServerlessHandlersFromConfigAdapter(ctx, config));
+
+  findings.push(
+    ...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config),
+  );
+  findings.push(...detectRubyDatabaseYmlFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyAuthFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyRoutesFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyServicesFromConfigAdapter(ctx, config));
 
   findings.push(...detectJvmDatabaseConnectionsFromConfigAdapter(ctx, config));
   findings.push(...detectJvmAuthFromConfigAdapter(ctx, config));

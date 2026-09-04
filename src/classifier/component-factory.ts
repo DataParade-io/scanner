@@ -493,13 +493,6 @@ function decideComponentTypeAndSubType(
   }
 
   for (const finding of group.findings) {
-    if (
-      finding.pattern !== "terraform_resource" &&
-      finding.pattern !== "terraform_module" &&
-      finding.pattern !== "terraform_provider"
-    ) {
-      continue;
-    }
     const explicit = finding.properties?.componentSubType;
     if (typeof explicit === "string" && explicit.trim()) {
       chosenSubType = explicit.trim();

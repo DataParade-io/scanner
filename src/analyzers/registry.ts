@@ -10,9 +10,13 @@ import { createCSharpAnalyzer } from "./csharp";
 import { createPythonAnalyzer } from "./python";
 import { createTerraformAnalyzer } from "./terraform";
 import { createTypeScriptAnalyzer } from "./typescript";
+import { createRubyAnalyzer } from "./ruby";
 import { loadTerraformPatternConfig } from "./terraform/terraform-detection-config";
 import { detectTerraformPatterns } from "./terraform/detector";
 import type { TerraformModuleCallManifest } from "./terraform/terraform-module-manifest";
+import { detectRubyDatabaseYmlFromConfig } from "../patterns/detectors/ruby";
+import { loadUnifiedPatternConfig } from "../patterns/config";
+import { isRailsDatabaseYmlPath, normalizeRubyPath } from "./ruby/parser";
 
 const typeScriptAnalyzer = createTypeScriptAnalyzer();
 const pythonAnalyzer = createPythonAnalyzer();
@@ -22,6 +26,7 @@ const phpAnalyzer = createPhpAnalyzer();
 const jvmAnalyzer = createJvmAnalyzer();
 const cSharpAnalyzer = createCSharpAnalyzer();
 const terraformAnalyzer = createTerraformAnalyzer();
+const rubyAnalyzer = createRubyAnalyzer();
 
 const registry = new Map<FileLanguage, Analyzer>([
   ["python", pythonAnalyzer],
@@ -36,6 +41,7 @@ const registry = new Map<FileLanguage, Analyzer>([
   ["terraform", terraformAnalyzer],
   ["typescript", typeScriptAnalyzer],
   ["javascript", typeScriptAnalyzer],
+  ["ruby", rubyAnalyzer],
 ]);
 
 export interface RunAnalyzersOptions {
@@ -72,6 +78,24 @@ export function runAnalyzers(
     if (file.language === "terraform") {
       findings.push(...detectTerraformPatterns(file, tfConfig, tfOpts));
       continue;
+    }
+
+    if (file.language === "yaml") {
+      const normalizedPath = normalizeRubyPath(file.path);
+      if (isRailsDatabaseYmlPath(normalizedPath)) {
+        const rubyConfig = loadUnifiedPatternConfig();
+        findings.push(
+          ...detectRubyDatabaseYmlFromConfig(
+            {
+              language: "ruby",
+              file,
+              normalizedPath,
+              strippedContent: file.content,
+            },
+            rubyConfig,
+          ),
+        );
+      }
     }
 
     const analyzer = registry.get(file.language);

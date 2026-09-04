@@ -1,0 +1,117 @@
+# Ruby / Rails pattern config. patternId values must exist in components.classifier.yaml.
+#
+# Line-based rules use filePathRegex + contentRegex on stripped source.
+# database_yml rules also apply when ingest language is yaml (see ruby detector).
+
+active_record:
+  patternId: database_connection
+  filePathRegex: "(?:^|/)app/models/.+\\.rb$"
+  classRegex: "^\\s*(?:class|module)\\s+([\\w:]+)\\b"
+  confidence: 0.9
+
+database_yml:
+  patternId: database_connection
+  filePathRegex: "(?:^|/)config/database\\.ya?ml(?:\\.example)?$"
+  adapterRegex: "^\\s*adapter:\\s*(\\w+)"
+  databaseNameRegex: "^\\s*database:\\s*([\\w_-]+)"
+  confidence: 0.9
+  drivers:
+    postgresql: postgres
+    postgres: postgres
+    mysql2: mysql
+    mysql: mysql
+    sqlite3: sqlite
+    sqlite: sqlite
+
+routes:
+  frameworks:
+    - id: rails
+      patternId: express_route
+      filePathRegex: "(?:^|/)config/routes\\.rb$"
+      confidence: 0.9
+      routeRegexes:
+        - regex: "\\b(get|post|put|patch|delete|options|match)\\s+[\"']([^\"']+)[\"']"
+          methodGroup: 1
+          pathGroup: 2
+
+auth:
+  libraries:
+    - id: rails_session_store
+      patternId: auth_middleware
+      filePathRegex: "(?:^|/)config/initializers/.*session"
+      contentRegexes:
+        - "\\bsession_store\\b"
+      strategy: session_cookie
+      confidence: 0.9
+
+    - id: has_secure_password
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bhas_secure_password\\b"
+      strategy: bcrypt
+      confidence: 0.85
+
+    - id: bcrypt
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bBCrypt::"
+        - "\\bpassword_digest\\b"
+      strategy: bcrypt
+      confidence: 0.85
+
+    - id: authenticate
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bdef\\s+authenticate\\w*\\b"
+        - "\\bbefore_action\\s+:authenticate"
+        - "\\bcurrent_user\\b"
+        - "\\btry_to_login\\b"
+        - "\\bcheck_password\\b"
+      strategy: session
+      confidence: 0.85
+
+    - id: auth_token_model
+      patternId: auth_middleware
+      filePathRegex: "(?:^|/)app/models/.*(?:auth_token|api_key|user_identity)\\.rb$"
+      contentRegexes:
+        - "^\\s*class\\s+\\w+"
+      strategy: token
+      confidence: 0.85
+
+cache:
+  clients:
+    - id: redis_initializer
+      patternId: database_connection
+      databaseType: redis
+      componentSubType: cache
+      filePathRegex: "(?:^|/)config/initializers/.*redis"
+      contentRegexes:
+        - "\\bRedis\\.new\\b"
+        - "\\bDiscourse\\.redis\\b"
+        - "\\bredis\\.ping\\b"
+        - "\\bREDIS\\b"
+      confidence: 0.9
+
+    - id: rails_cache_store
+      patternId: database_connection
+      databaseType: redis
+      componentSubType: cache
+      contentRegexes:
+        - "\\bconfig\\.cache_store\\s*=\\s*:redis"
+        - "\\b:redis_cache_store\\b"
+      confidence: 0.85
+
+services:
+  - id: rails_service_class
+    patternId: auth_middleware
+    componentSubType: service
+    filePathRegex: "(?:^|/)app/services/.+\\.rb$"
+    classRegex: "^\\s*(?:class|module)\\s+([\\w:]*Service)\\b"
+    confidence: 0.85
+
+  - id: rails_concern_processing
+    patternId: auth_middleware
+    componentSubType: service
+    filePathRegex: "(?:^|/)app/(?:services|models/concerns)/.*(?:processing|workflow)\\.rb$"
+    classRegex: "^\\s*(?:class|module)\\s+([\\w:]*(?:Processing|Workflow))\\b"
+    confidence: 0.8

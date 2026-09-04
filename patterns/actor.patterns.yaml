@@ -16,6 +16,18 @@ regexes:
   # Backend: simple admin role checks
   ts_role_admin: "\\b(isAdmin|is_admin)\\b|\\brole[s]?\\s*[:=]\\s*['\"]admin['\"]"
 
+  # Ruby/Rails end-user model
+  ruby_user_model_file: "(?:^|/)app/models/user\\.rb$"
+
+  # Ruby/Rails customer model (Spree and similar)
+  ruby_customer_model_file: "(?:^|/)app/models/(?:.*/)?customer\\.rb$"
+
+  # Ruby/Rails namespaced customer (Spree)
+  ruby_spree_customer_model: "(?:^|/)app/models/spree/customer\\.rb$"
+
+  # Ruby/Rails employee user model (Redmine)
+  ruby_redmine_user_model: "(?:^|/)app/models/user\\.rb$"
+
 rules:
   # Frontend web customer: useSession hook representing logged-in customer user
   - id: web_actor_frontend_session
@@ -48,4 +60,44 @@ rules:
       roleNames:
         - admin
       sourceContext: backend_role_check
+
+  - id: web_actor_ruby_user_model
+    patternId: web_actor
+    name: Customer
+    file_path_regex: ruby_user_model_file
+    content_regex: "^\\s*class\\s+User\\s*<\\s*(?:ActiveRecord::Base|ApplicationRecord)"
+    confidence: 0.9
+    properties:
+      actorType: customer
+      sourceContext: rails_user_model
+
+  - id: web_actor_ruby_customer_model
+    patternId: web_actor
+    name: Customer
+    file_path_regex: ruby_customer_model_file
+    content_regex: "^\\s*(?:class|module)\\s+(?:Customer|Spree::Customer)\\b"
+    confidence: 0.9
+    properties:
+      actorType: customer
+      sourceContext: rails_customer_model
+
+  - id: web_actor_ruby_spree_customer
+    patternId: web_actor
+    name: Customer
+    file_path_regex: ruby_spree_customer_model
+    content_regex: "^\\s*class\\s+Customer\\b"
+    confidence: 0.9
+    properties:
+      actorType: customer
+      sourceContext: rails_spree_customer_model
+
+  - id: service_actor_ruby_redmine_user
+    patternId: service_actor
+    name: Employee
+    file_path_regex: ruby_redmine_user_model
+    content_regex: "\\b(?:try_to_login|check_password|hashed_password)\\b"
+    confidence: 0.85
+    properties:
+      actorType: employee
+      sourceContext: rails_redmine_user_model
 
