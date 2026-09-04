@@ -20,6 +20,7 @@ const ORCHESTRATOR_LAYER_LANGUAGES = new Set<FileLanguage>([
   "java",
   "kotlin",
   "terraform",
+  "ruby",
 ]);
 
 /** Languages personal-data (PII) layers can layer-process after ingest. */
