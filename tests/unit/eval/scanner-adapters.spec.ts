@@ -85,7 +85,7 @@ describe("scanner canonical adapters", () => {
 
   it("uses taxonomy subtype for component conceptLeaf, never component name", async () => {
     const scan = await scanCanonicalComponents("typescript-basic");
-    const pg = scan.findings.find((entry) => entry.identity.identityKey === "asset:pg");
+    const pg = scan.findings.find((entry) => entry.identity.identityKey === "asset:database");
     expect(pg).toBeDefined();
     expect(pg!.classification.componentSubtype).toBe("database");
     expect(pg!.classification.conceptLeaf).toBe("database");

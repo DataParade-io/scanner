@@ -69,9 +69,9 @@ export interface PreflightMaterializationResult {
   missing: MaterializationMissingError[];
 }
 
-/** Scheme A — `${type}:${name.toLowerCase()}` (today's production identity). */
+/** Scheme A — `${type}:${name.toLowerCase()}` (legacy per-instance identity). */
 export function componentIdentityTypeName(component: DetectedComponent): string {
-  return componentIdentity(component);
+  return `${component.type}:${component.name.toLowerCase()}`;
 }
 
 /** Scheme B — `${type}:${subType}`; falls back to scheme A when subType is absent. */
