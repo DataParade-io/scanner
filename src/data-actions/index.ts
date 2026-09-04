@@ -4,6 +4,7 @@ import type { FileInfo, RawFinding } from "../core/types";
 import type { DataActionAssignment } from "../core/types/data-action";
 import { deriveFromTopology } from "./derive-from-topology";
 import { deriveFromPatterns } from "./derive-from-patterns";
+import { deriveFromSubtypes } from "./derive-from-subtypes";
 import { mergeAssignmentsOntoComponents } from "./merge-assignments";
 
 export {
@@ -27,6 +28,11 @@ export {
 } from "./derive-from-patterns";
 export type { DeriveFromPatternsOptions } from "./derive-from-patterns";
 export {
+  deriveFromSubtypes,
+  SUBTYPE_STORE_SUBTYPES,
+  TERRAFORM_GATEWAY_SUBTYPES,
+} from "./derive-from-subtypes";
+export {
   loadDataActionRuleCatalog,
   loadDataActionRules,
   clearDataActionRulesCacheForTest,
@@ -48,6 +54,8 @@ export {
 export interface RunDataActionPhaseOptions {
   /** Kill-switch for pattern rulepack (YAML `enabled` still applies when omitted). */
   enableDataActionPatterns?: boolean;
+  /** Kill-switch for subtype / Terraform defaults. */
+  enableDataActionSubtypes?: boolean;
 }
 
 function mergeProposedMaps(
@@ -64,8 +72,8 @@ function mergeProposedMaps(
 }
 
 /**
- * Deterministic data-action phase: topology → pattern rules → merge onto components.
- * `findings` reserved for future subtype/classifier defaults (task 1.3).
+ * Deterministic data-action phase:
+ * topology → patterns → subtype/Terraform defaults → merge onto components.
  */
 export function runDataActionPhase(
   components: DetectedComponent[],
@@ -81,7 +89,11 @@ export function runDataActionPhase(
           enabled: options.enableDataActionPatterns,
         })
       : new Map<string, DataActionAssignment[]>();
+  const subtypes =
+    options.enableDataActionSubtypes === false
+      ? new Map<string, DataActionAssignment[]>()
+      : deriveFromSubtypes(components);
 
-  const proposed = mergeProposedMaps(topology, patterns);
+  const proposed = mergeProposedMaps(topology, patterns, subtypes);
   mergeAssignmentsOntoComponents(components, proposed);
 }
