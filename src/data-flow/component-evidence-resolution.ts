@@ -130,6 +130,7 @@ function lineDistanceToLocation(
 function resolveNearestSpanInFile(
   components: DetectedComponent[],
   evidence: EvidenceSpan,
+  preferredSubTypes: string[] = [],
 ): DetectedComponent | undefined {
   const normalizedPath = normalizeEvidencePath(evidence.filePath);
   const ranked: Array<{ component: DetectedComponent; distance: number }> = [];
@@ -166,10 +167,28 @@ function resolveNearestSpanInFile(
   if (!best) {
     return undefined;
   }
-  if (ranked.length >= 2 && ranked[1]!.distance === best.distance) {
-    return undefined;
+
+  const tied = ranked.filter((entry) => entry.distance === best.distance);
+  if (tied.length === 1) {
+    return best.component;
   }
-  return best.component;
+
+  for (const subType of preferredSubTypes) {
+    const preferred = tied.filter((entry) => entry.component.subType === subType);
+    if (preferred.length === 1) {
+      return preferred[0]!.component;
+    }
+    if (subType === "customer") {
+      const customerActors = tied.filter(
+        (entry) => entry.component.type === "actor" && entry.component.subType === "customer",
+      );
+      if (customerActors.length === 1) {
+        return customerActors[0]!.component;
+      }
+    }
+  }
+
+  return undefined;
 }
 
 function inferPreferredSubTypes(
@@ -180,7 +199,7 @@ function inferPreferredSubTypes(
   const text = `${span}\n${contextSpan}`;
   const preferred: string[] = [];
 
-  if (/jwt|tokenkey|verification_token|authenticate|signon|auth_token/i.test(text)) {
+  if (/jwt|tokenkey|verification_token|authenticate|signon|auth_token|session_store|has_secure_password|check_password/i.test(text)) {
     preferred.push("auth_service");
   }
   if (
@@ -189,8 +208,11 @@ function inferPreferredSubTypes(
   ) {
     preferred.push("database");
   }
-  if (/customer|User\.email|actor/i.test(text)) {
+  if (/customer|User\.email|actor|belongs_to\s+:customer/i.test(text)) {
     preferred.push("customer");
+  }
+  if (/session_store|has_secure_password/i.test(text)) {
+    preferred.unshift("auth_service");
   }
   if (/<route\s+url=|routes\.rb|webapi\.xml/i.test(text)) {
     preferred.push("api");
@@ -307,10 +329,85 @@ function resolveModuleReexport(
 function resolveRailsModelFile(
   components: DetectedComponent[],
   evidence: EvidenceSpan,
+  span: string = "",
+  preferredSubTypes: string[] = [],
 ): DetectedComponent | undefined {
   const path = normalizeEvidencePath(evidence.filePath);
-  if (!/\/app\/models\/.*\.rb$/i.test(path) && !/_model\.rb$/i.test(path)) {
+  if (!/(?:^|\/)app\/models\/.*\.rb$/i.test(path) && !/_model\.rb$/i.test(path)) {
     return undefined;
+  }
+
+  const isUserModel =
+    /(?:^|\/)app\/models\/user\.rb$/i.test(path) ||
+    /(?:^|\/)app\/models\/.*\/user\.rb$/i.test(path);
+  const isUserPasswordModel = /(?:^|\/)app\/models\/user_password\.rb$/i.test(path);
+
+  if (
+    isUserPasswordModel &&
+    /password_validator|UserPasswordValidator|raw_password/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    if (authServices.length === 1) {
+      return authServices[0];
+    }
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
+    /user_second_factor\.rb$/i.test(path) &&
+    /\bscope\s+:\w*totp/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    if (authServices.length === 1) {
+      return authServices[0];
+    }
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
+    isUserModel &&
+    /\bafter_(?:create|save|update)\s+:/i.test(span)
+  ) {
+    const customerActors = componentsInSameFile(components, evidence).filter(
+      (component) => component.type === "actor" && component.subType === "customer",
+    );
+    if (customerActors.length === 1) {
+      return customerActors[0];
+    }
+  }
+
+  if (
+    isUserModel &&
+    /password|email|user_password|has_one|belongs_to/i.test(span)
+  ) {
+    const customerActors = componentsInSameFile(components, evidence).filter(
+      (component) => component.type === "actor" && component.subType === "customer",
+    );
+    if (customerActors.length === 1) {
+      return customerActors[0];
+    }
+  }
+
+  if (
+    isUserModel &&
+    /check_password|try_to_login|hashed_password|authenticate/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    if (authServices.length === 1) {
+      return authServices[0];
+    }
   }
 
   const strict = resolveStrictOverlap(components, evidence);
@@ -318,8 +415,13 @@ function resolveRailsModelFile(
     return strict;
   }
 
-  const preferredSubTypes = ["customer", "database", "actor"];
-  for (const subType of preferredSubTypes) {
+  const nearest = resolveNearestSpanInFile(components, evidence, preferredSubTypes);
+  if (nearest) {
+    return nearest;
+  }
+
+  const subtypePreference = ["customer", "database", "actor", ...preferredSubTypes];
+  for (const subType of [...new Set(subtypePreference)]) {
     const sameFile = componentsInSameFile(components, evidence).filter(
       (component) => component.subType === subType,
     );
@@ -328,7 +430,43 @@ function resolveRailsModelFile(
     }
   }
 
-  return resolveNearestSpanInFile(components, evidence);
+  return undefined;
+}
+
+function resolveRailsInitializerFile(
+  components: DetectedComponent[],
+  evidence: EvidenceSpan,
+  span: string,
+  contextSpan: string,
+): DetectedComponent | undefined {
+  const path = normalizeEvidencePath(evidence.filePath);
+  if (!/(?:^|\/)config\/initializers\/.*\.rb$/i.test(path)) {
+    return undefined;
+  }
+
+  const text = `${span}\n${contextSpan}`;
+  if (!/session_store|has_secure_password|authenticate/i.test(text)) {
+    return undefined;
+  }
+
+  const strict = resolveStrictOverlap(components, evidence);
+  if (strict) {
+    return strict;
+  }
+
+  const nearest = resolveNearestSpanInFile(components, evidence, ["auth_service"]);
+  if (nearest) {
+    return nearest;
+  }
+
+  const authInFile = componentsInSameFile(components, evidence).filter(
+    (component) => component.subType === "auth_service",
+  );
+  if (authInFile.length === 1) {
+    return authInFile[0];
+  }
+
+  return undefined;
 }
 
 function pathModuleHint(filePath: string): string | undefined {
@@ -407,7 +545,7 @@ function resolveConfigRouteFile(
     return overlapping[0];
   }
 
-  const nearest = resolveNearestSpanInFile(components, evidence);
+  const nearest = resolveNearestSpanInFile(components, evidence, preferredSubTypes);
   if (nearest) {
     return nearest;
   }
@@ -528,7 +666,22 @@ export function resolveComponentForEvidence(
     return moduleReexport;
   }
 
-  const railsModel = resolveRailsModelFile(components, evidence);
+  const railsInitializer = resolveRailsInitializerFile(
+    components,
+    evidence,
+    span,
+    contextSpan,
+  );
+  if (railsInitializer) {
+    return railsInitializer;
+  }
+
+  const railsModel = resolveRailsModelFile(
+    components,
+    evidence,
+    span,
+    preferredSubTypes,
+  );
   if (railsModel) {
     return railsModel;
   }

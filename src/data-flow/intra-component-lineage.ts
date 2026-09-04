@@ -7,13 +7,14 @@ import { normalizeProjectPath } from "./import-graph";
 import {
   CRYPTO_AUTH_PATTERNS,
   hasIntraComponentTransformationEvidence,
+  hasPersonalDataAssociationReference,
   hasStrongTransformationOnSpan,
   inferDataCategoriesFromSpan,
   inferFlowTypeFromSpan,
   isOrmModelSpan,
+  isRailsFileLevelDeclarationSpan,
   isRouteDeclarationSpan,
   isRouteDeclarationWithPersonalData,
-  MODEL_ASSOCIATION_PATTERNS,
   PERSISTENCE_PATTERNS,
   piiRuleIdToDataCategory,
   ROUTE_DECLARATION_PATTERNS,
@@ -113,19 +114,35 @@ function hasPersonalDataReference(span: string, contextSpan: string): boolean {
     return true;
   }
 
+  if (hasPersonalDataAssociationReference(span, contextSpan)) {
+    return true;
+  }
+
   return false;
+}
+
+function isRubyAuthMethodSpan(span: string): boolean {
+  return /\b(?:check_password|try_to_login!?|find_by_login)\b/i.test(span);
+}
+
+function shouldCollectCategoriesFromSpanOnly(span: string): boolean {
+  return isRailsFileLevelDeclarationSpan(span);
 }
 
 function collectDataCategories(span: string, contextSpan: string): string[] {
   const categories = new Set<string>();
+  const spanOnlyCategories = shouldCollectCategoriesFromSpanOnly(span);
+  const inferContext = spanOnlyCategories ? span : contextSpan;
 
-  for (const rule of loadPiiSignalRules()) {
-    if (rule.patterns.some((pattern) => pattern.test(span))) {
-      categories.add(piiRuleIdToDataCategory(rule.id));
+  if (!spanOnlyCategories && !isRubyAuthMethodSpan(span)) {
+    for (const rule of loadPiiSignalRules()) {
+      if (rule.patterns.some((pattern) => pattern.test(span))) {
+        categories.add(piiRuleIdToDataCategory(rule.id));
+      }
     }
   }
 
-  for (const category of inferDataCategoriesFromSpan(span, contextSpan)) {
+  for (const category of inferDataCategoriesFromSpan(span, inferContext)) {
     categories.add(category);
   }
 
@@ -152,6 +169,17 @@ function collectDataCategories(span: string, contextSpan: string): string[] {
 }
 
 function intraComponentFlowType(span: string, contextSpan: string): DetectedDataFlow["type"] {
+  if (/\b(?:check_password|try_to_login!?|find_by_login)\b/i.test(span)) {
+    return "data_transfer";
+  }
+
+  if (isRailsFileLevelDeclarationSpan(span)) {
+    if (/\bafter_(?:create|save|update)\s+:/i.test(span)) {
+      return "database_query";
+    }
+    return "data_transfer";
+  }
+
   const text = `${span}\n${contextSpan}`;
   if (isOrmModelSpan(span) || isOrmModelSpan(contextSpan)) {
     return inferFlowTypeFromSpan(span, contextSpan);
@@ -212,6 +240,9 @@ function isImportOrLiteralLine(span: string): boolean {
 function isFileLevelDeclaration(span: string, contextSpan: string): boolean {
   const text = `${span}\n${contextSpan}`;
   if (ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(text))) {
+    return true;
+  }
+  if (isRailsFileLevelDeclarationSpan(span)) {
     return true;
   }
   if (
@@ -322,9 +353,9 @@ function dedupeKey(
   componentId: string,
   type: DetectedDataFlow["type"],
   filePath: string,
-  scopeStartLine: number,
+  anchorLine: number,
 ): string {
-  return `${componentId}\t${type}\t${normalizeProjectPath(filePath)}\t${scopeStartLine}`;
+  return `${componentId}\t${type}\t${normalizeProjectPath(filePath)}\t${anchorLine}`;
 }
 
 export function detectIntraComponentLineage(
@@ -366,7 +397,15 @@ export function detectIntraComponentLineage(
         if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
           continue;
         }
-        if (!hasPersonalDataReference(span, span)) {
+        const piiScope = isRouteDeclarationSpan(span, contextSpan)
+          ? `${span}\n${contextSpan}`
+          : isRailsFileLevelDeclarationSpan(span)
+            ? span
+            : contextSpan;
+        if (
+          !hasPersonalDataReference(span, piiScope) &&
+          !hasPersonalDataAssociationReference(span, piiScope)
+        ) {
           continue;
         }
         if (!hasStrongTransformationOnSpan(span)) {
@@ -394,7 +433,11 @@ export function detectIntraComponentLineage(
         continue;
       }
 
-      const key = dedupeKey(component.id, flowType, file.path, scope.startLine);
+      const dedupeAnchorLine =
+        isFileLevelDeclaration(span, contextSpan) || isRubyAuthMethodSpan(span)
+          ? spanLine
+          : scope.startLine;
+      const key = dedupeKey(component.id, flowType, file.path, dedupeAnchorLine);
       const categories = collectDataCategories(span, contextSpan);
       const score = transformationScore(span, contextSpan);
       const candidate = {
