@@ -14,7 +14,7 @@ export type {
   FinalizeDeterministicScanInput,
 } from "./core/pipeline/deterministic-scan";
 
-export { buildDiagramGraphFromScanResult } from "./core/pipeline/graph-mapping";
+export { buildDiagramGraphFromScanResult, selectPrimaryDataAction } from "./core/pipeline/graph-mapping";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
 export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
