@@ -1319,4 +1319,83 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
       expect(new Set(ids).size).toBe(ids.length);
     });
   });
+
+  describe("intra-component lineage", () => {
+    it("emits multiple self-loop flows per file when distinct lines transform PII", () => {
+      const files: FileInfo[] = [
+        {
+          path: "core/auth.go",
+          name: "auth.go",
+          language: "go",
+          size: 256,
+          content: [
+            "func hashPassword(password string) {",
+            "  hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)",
+            "}",
+            "func verifyPassword(password string) {",
+            "  ok := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))",
+            "}",
+          ].join("\n"),
+        },
+      ];
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "auth_service",
+          name: "Auth Service",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "core/auth.go", startLine: 1, endLine: 5 }],
+        }),
+      ];
+
+      const flows = detectDataFlows(files, components, []);
+      const selfLoops = flows.filter(
+        (flow) => flow.sourceComponentId === flow.targetComponentId,
+      );
+      const lines = selfLoops
+        .map((flow) => flow.sourceLocation?.startLine)
+        .filter((line): line is number => line !== undefined);
+
+      expect(lines.length).toBe(2);
+      expect(new Set(lines).size).toBe(2);
+    });
+
+    it("emits self-loop flows when PII transforms within one component", () => {
+      const files: FileInfo[] = [
+        {
+          path: "core/field_password.go",
+          name: "field_password.go",
+          language: "go",
+          size: 128,
+          content: [
+            "func setValue(password string) {",
+            "  hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)",
+            "}",
+          ].join("\n"),
+        },
+      ];
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "auth_service",
+          name: "Auth Service",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [
+            { filePath: "core/field_password.go", startLine: 1, endLine: 3 },
+          ],
+        }),
+      ];
+
+      const flows = detectDataFlows(files, components, []);
+      const selfLoops = flows.filter(
+        (flow) => flow.sourceComponentId === flow.targetComponentId,
+      );
+
+      expect(selfLoops.length).toBeGreaterThanOrEqual(1);
+      expect(selfLoops.some((flow) => flow.type === "data_transfer")).toBe(true);
+      expect(selfLoops.some((flow) => flow.dataCategories?.includes("password"))).toBe(
+        true,
+      );
+    });
+  });
 });

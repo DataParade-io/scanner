@@ -1,0 +1,46 @@
+{
+  "id": "KDATAP-8e7756fb-e380-4140-a0cc-3e33c84a6605",
+  "title": "Regold data flows against canonical endpoints",
+  "description": "Regold the data-flow layer against canonical typed endpoints and data-category fields.\n\nThe 436 legacy annotations use 424 distinct bare prose keys. At the start of this pass, legacy accepted rows transition to `needs_adjudication`; no compatibility alias keeps them accepted.\n\nEach row is reviewed against pinned evidence and ends as:\n\n- accepted with canonical source/target endpoint identities, data categories, evidence, and review provenance;\n- rejected with rationale; or\n- still `needs_adjudication`, visibly blocking readiness thresholds.\n\nMechanical parsing may propose candidates but cannot accept them. Human review resolves component/data endpoint type and identity. Generic `data_flow` labels are replaced by meaningful canonical semantic fields when evidence supports them.\n\nThe pass accounts for all 436 legacy rows. Unresolved rows appear in migration readiness; baseline series 1 waits for the approved canonical count and packet-diversity threshold.",
+  "type": "annotation",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-32c089f1-61b8-42c1-bfad-1af8da2609ba",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-2e8f9fd7-8d8d-44ac-881c-0817f10eea7c",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5cef8132-fb8a-48e6-8049-c3e3ec3ec78f",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-25646119-f4d7-4a88-913d-1cf6000c5643",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "ecb940a4-3245-4fc1-be06-a7e30794ee26",
+      "author": "home",
+      "text": "Closing: labeling pass completed; dispositions applied via KDATAP-47e331 (PR #52) and canonical blocks via KDATAP-7e5b94 (PR #54). 146 accepted / 17 rejected / 273 unresolved, each tracked as a finding.",
+      "created_at": "2026-09-02T17:06:34.081046Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-08-31T14:15:43.814249Z",
+  "updated_at": "2026-09-02T17:06:34.109502Z",
+  "closed_at": "2026-09-02T17:06:34.109502Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

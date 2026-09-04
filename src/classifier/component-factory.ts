@@ -211,8 +211,26 @@ function groupFindings(
         displayName = packageDisplayName ?? toDisplayName(framework, framework);
       } else {
         const sectionId = getSectionIdFromProperties(finding.properties);
-        key = `${MERGED_HTTP_ROUTE_GROUP_KEY_PREFIX}:${sectionId}`;
-        displayName = MERGED_HTTP_ROUTE_DISPLAY_NAME;
+        const rawLower = finding.name.toLowerCase();
+        const isGenericRoute =
+          rawLower === "api" ||
+          rawLower === "http api" ||
+          rawLower === "route handler" ||
+          /^(get|post|put|delete|patch|options|head)\s+/.test(rawLower);
+        const routeLabel = normalizeApiDisplayName(
+          finding.name,
+          finding.properties,
+        );
+        if (!isGenericRoute) {
+          const filePath = finding.location.filePath
+            .replace(/\\/g, "/")
+            .toLowerCase();
+          key = `${sectionId}::route::${routeLabel.toLowerCase()}::${filePath}`;
+          displayName = routeLabel;
+        } else {
+          key = `${MERGED_HTTP_ROUTE_GROUP_KEY_PREFIX}:${sectionId}`;
+          displayName = MERGED_HTTP_ROUTE_DISPLAY_NAME;
+        }
       }
     } else if (
       finding.pattern === "terraform_resource" ||
@@ -235,7 +253,8 @@ function groupFindings(
       const sectionId = getSectionIdFromProperties(finding.properties);
       const keyBase =
         normalized || finding.name.trim().toLowerCase() || "<unknown>";
-      key = `${sectionId}::${keyBase}`;
+      const filePath = finding.location.filePath.replace(/\\/g, "/").toLowerCase();
+      key = `${sectionId}::${keyBase}::${filePath}`;
       displayName = toDisplayName(keyBase, keyBase);
     }
 
@@ -474,13 +493,6 @@ function decideComponentTypeAndSubType(
   }
 
   for (const finding of group.findings) {
-    if (
-      finding.pattern !== "terraform_resource" &&
-      finding.pattern !== "terraform_module" &&
-      finding.pattern !== "terraform_provider"
-    ) {
-      continue;
-    }
     const explicit = finding.properties?.componentSubType;
     if (typeof explicit === "string" && explicit.trim()) {
       chosenSubType = explicit.trim();

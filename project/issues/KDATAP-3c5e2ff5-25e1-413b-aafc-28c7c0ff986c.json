@@ -1,0 +1,37 @@
+{
+  "id": "KDATAP-3c5e2ff5-25e1-413b-aafc-28c7c0ff986c",
+  "title": "CI validation and materialized run policy",
+  "description": "CI validates schema, contract fixtures, digests and deterministic rendering on every pull request, against a representative pinned smoke subset.\n\nFull materialized-corpus execution is scheduled, manual or release-gated — cloning 29 upstream repositories per pull request is unsuitable, and the existing `benchmark:materialize` is opt-in for that reason.\n\nAny published full baseline must include authenticated materialization validation.",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-97bf4987-e9cb-48cb-901a-87a525bc6bd2",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-2b97871c-6920-447b-b4db-974ba46d356d",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1d3b66b6-4c4b-46cf-9585-57cd16e43b0e",
+      "author": "home",
+      "text": "Landed on develop via PR #39 (CI smoke validation and materialized corpus policy).",
+      "created_at": "2026-09-01T17:40:11.925528Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:16:12.857034Z",
+  "updated_at": "2026-09-01T17:40:11.938411Z",
+  "closed_at": "2026-09-01T17:40:11.938411Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

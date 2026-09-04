@@ -1,0 +1,43 @@
+{
+  "id": "KDATAP-53db5e7c-46cd-469a-8cef-91f66da12352",
+  "title": "Corpus precision via exhaustive scopes",
+  "description": "Compute real precision on benchmark corpus repos by declaring exhaustive file scopes in annotations. Extra scanner hits in those files are false positives without a per-repo negative.",
+  "type": "epic",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "548ffc22-1cc6-4690-b8a5-1dc185eea497",
+      "author": "ryan",
+      "text": "Extra data_item fill from existing packet includes is on dataparade-cli main (ff6cfd4). Canonical accepted positives: components 519, data_flows 419, pii_signals 325, data_items 302.",
+      "created_at": "2026-08-30T22:33:01.315113Z"
+    },
+    {
+      "id": "831eec7a-7687-4c88-ab80-fa96e20fc0ce",
+      "author": "ryan",
+      "text": "Corpus evals after dataparade-cli main ff6cfd4 (accepted gold: 519/419/325/302).\n\nJest fixtures: scanner tests/eval 6 suites / 14 tests pass; CLI tests/eval 3 suites / 3 tests pass.\n\nCorpus `pnpm exec ts-node --transpile-only tests/benchmark/run-benchmark.ts` (29 packets, 1717 accepted cases): 984 unread (57%) — PHP/Ruby/Swift/Rust evidence the CLI scanner did not ingest (wordpress, magento, discourse, redmine, spree, drupal, vapor, hyperswitch). Scored packets with ingest: keycloak recall 22.2% / prec 12.5%; medusa-customer 25.0% / 63.6%; easy-school 17.4% / 30.8%; saleor 15.6% / 11.1%; gitea 16.7% / 18.2%; most others 0–9% recall. `pnpm run benchmark:run` itself fails tsc (`.ts` import extensions).\n\nPlexus `evaluate accuracy` / Cucumber GraphQL path did not complete: Virtuus proxy fails startup (`PLEXUS_PROXY_AUTH_MODE=trusted_open requires PLEXUS_BACKEND_MODE=local`). scan-findings cucumber scenarios that do not start GraphQL passed.",
+      "created_at": "2026-08-30T22:42:25.945438Z"
+    },
+    {
+      "id": "29069f44-710b-4697-8aa8-1b95368b36c3",
+      "author": "ryan",
+      "text": "State as of scanner develop 3554088: 29-packet gold plus corpus runner live in this repo (imported KDATAP-4d43ce, merged). Canonical home is scanner, not public dataparade-cli. Exhaustive-scope wiring exists; remaining honesty problems (unread-as-FN, two scorers, identity aliases) are KDATAP-77d2b0 children — do not cite the old CLI mixed-bag run (984 unread / tsc failure) as current. This epic stays open as the precision-via-scopes parent until 77d2b0 decisions are implemented.",
+      "created_at": "2026-08-31T11:11:56.975469Z"
+    },
+    {
+      "id": "c29a1978-212e-4395-9d3c-5dd3da3de163",
+      "author": "home",
+      "text": "Epic complete: corpus precision via exhaustive scopes implemented; KDATAP-77d2b0 decisions now on develop; all children were already closed.",
+      "created_at": "2026-09-01T17:40:12.311506Z"
+    }
+  ],
+  "created_at": "2026-08-30T16:42:07.436044Z",
+  "updated_at": "2026-09-01T17:40:12.324919Z",
+  "closed_at": "2026-09-01T17:40:12.324919Z",
+  "custom": {}
+}

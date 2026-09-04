@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "3a5aaa52-d4b4-41b4-b613-d7ff5b583f95",
+  "issue_id": "KDATAP-d6eabf07-bf11-4fd9-afb8-95d6008999ce",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T11:09:28.115Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "As an evaluation owner, I want one subject-key and label vocabulary shared by gold, adapters, scorer, and docs, so that corpus recall measures the scanner instead of the alias table.\n\n## Current mess\n\nThree vocabularies coexist:\n\n1. **Corpus gold** (29 packets): mentions/PII keys are taxonomy (`pii:email_address`, `pii:national_identifier`, `pii:person_name`) with gold labels like `person_name` / `national_identifier`. Data-item keys are source fields (`data_item:uid`, `data_item:social_security_number`).\n2. **Scanner findings**: `mention:${ruleId}`, `raw_hit:${ruleId}`, `data_item:${ruleId}` from `patterns/pii-signals.rules.yaml` (e.g. `email`, `ssn`) and rule labels (`user_email`, `social_security_number`).\n3. **Written contract** (`tests/eval/ground-truth-schema.md`): still says exact `mention:${conceptId}` with `conceptId === ruleId`.\n\n`tests/eval/identity.ts` maps (1) onto (2) with equivalence groups (email ≡ email_address ≡ user_email; ssn ≡ social_security_number ≡ national_identifier) plus parent/child label rules (`person_name` satisfied by `first_name`). Fixture Jest cases already use scanner identities, so they never exercise this bridge.\n\n## Why it blocks scanner work\n\nIf we optimize the matcher so an alias group lights up, recall goes up and we will think the engine improved. Gold and the engine may still disagree on what a “social security number” *is*. Conversely, a real matcher improvement that emits the gold taxonomy would look like a regression if we later delete aliases without rewriting gold.\n\n`national_identifier` sitting in the same equivalence group as `ssn` is an example of a policy choice, not a fact. Driver-license gold often shares the `pii:national_identifier` key and relies on `subject.name` to disambiguate. That is too easy to get wrong under identity-only data-item matching.\n\n## Questions to answer\n\n- Canonical keys: gold taxonomy, matcher rule ids, or adapters that translate findings into gold shape so the scorer stays exact?\n- Canonical labels: gold taxonomy parents, matcher rule labels, or a published map with no fuzzy groups?\n- Do we rewrite 1.8k gold keys, change adapters, or keep a *minimal* explicit map (not open-ended token groups)?\n- What happens to fixture cases (`mention:email`) after the decision?\n- How do docs, `normalizeSubjectKey`, and Plexus identities stay in lockstep?\n\n## Not this task\n\nDo not retune PII regexes to chase alias matches. Do not silently rewrite gold in this design task.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+    "priority": 1,
+    "status": "open",
+    "title": "One identity vocabulary for gold, adapters, and docs"
+  }
+}

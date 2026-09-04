@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "708bf348-b8c0-45d2-804f-3a9940598875",
+  "issue_id": "KDATAP-66259d77-1cc9-4963-865a-d857c7176628",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-30T16:42:54.844Z",
+  "actor_id": "ryan",
+  "payload": {
+    "assignee": null,
+    "description": "Scanner emits asset:aiosqlite, asset:asyncpg, and asset:pymysql on python-basic/app.py when only psycopg2 is imported. These are false positives; the drivers share 'connect' as a callName and psycopg2.connect triggers them. Tracked by bug KDATAP-0f7953.",
+    "issue_type": "finding",
+    "labels": [],
+    "parent": "KDATAP-405fcd32-59ce-4ec4-bd3b-4ec6a52f31a4",
+    "priority": 2,
+    "status": "open",
+    "title": "python-basic: phantom drivers must not fire"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "KDATAP-543fbf08-ebdc-4b74-8032-82c0a729994d",
+  "title": "Composer 2.5 swarm: propose annotations on new repos",
+  "description": "For each new repo, spawn a Composer 2.5 agent to read source files and propose annotations (positive/negative/ambiguous) with evidence spans and labels. Output YAML annotation files.",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-d0db518a-4b58-4f9c-a105-7e3649639f48",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "f0ecd4de-2277-4cbb-9bcf-36bd548bde94",
+      "author": "ryan",
+      "text": "Composer 2.5 swarm launched on remaining 9 repos: strapi, flask-login, exposed, vapor, supabase-js, auth0-express, drupal, medusa. All 19 new repos now being annotated. First batch (9 repos) complete: spring-petclinic 6, redmine 35, pocketbase 28, spree 28, orchard-core 36, directus 30, magento 35, wordpress 34, discourse 38 = 263 proposed annotations.",
+      "created_at": "2026-08-30T18:55:37.846523Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "b2ee4058-4b44-46fb-834a-14b776a7a2cb",
+      "author": "ryan",
+      "text": "Composer chat proposals were not written to YAML. Reloaded 7 local Composer 2.5 writers to emit annotation files for the 17 remaining expansion repos. flask-login and spring-petclinic gold YAML is on dataparade-cli cursor/corpus-expansion-2fd9. Manifest coverage layers corrected to components/data_flows/pii_signals/data_items.",
+      "created_at": "2026-08-30T21:14:38.980717Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "1941debb-1484-4934-8376-6ecb7bcde154",
+      "author": "ryan",
+      "text": "Composer writers finished. Proposed four-layer YAML is on dataparade-cli cursor/corpus-expansion-2fd9 for all 19 expansion repos. Grok on-disk span refine still running. Still proposed, not accepted.",
+      "created_at": "2026-08-30T21:20:18.136342Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "9496f434-248b-434b-947f-9fe76001303f",
+      "author": "ryan",
+      "text": "Grok on-disk refine finished: 411 proposed records checked, 33 patched, 378 left as-is. Still proposed. Human accept is next.",
+      "created_at": "2026-08-30T21:29:04.367074Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "68e32bbc-1fda-4055-a310-15f2489c662a",
+      "author": "ryan",
+      "text": "Ryan accepted the Grok-refined expansion gold without a second human pass. 520 expansion annotations are review_state accepted on dataparade-cli cursor/corpus-expansion-2fd9. Original ten corpus repos unchanged (75 still proposed).",
+      "created_at": "2026-08-30T21:32:36.133828Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "9c5eca56-13ab-4892-a8f6-05611f41bfb2",
+      "author": "ryan",
+      "text": "Composer swarm finished. Proposed YAML was Grok-checked and accepted. Fill-to-200 is on dataparade-cli main (5c05f27).",
+      "created_at": "2026-08-30T21:51:29.210379Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-08-30T17:46:59.457848Z",
+  "updated_at": "2026-08-30T21:51:29.218352Z",
+  "closed_at": "2026-08-30T21:51:29.218352Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

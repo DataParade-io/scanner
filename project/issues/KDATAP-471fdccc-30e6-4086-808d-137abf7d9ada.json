@@ -1,0 +1,47 @@
+{
+  "id": "KDATAP-471fdccc-30e6-4086-808d-137abf7d9ada",
+  "title": "Define component entity identity and same-subtype cardinality",
+  "description": "Type and subtype are classification fields, not sufficient repository-entity identity.\n\nMeasured accepted component gold contains 53 duplicate repository/key groups covering 456 cases, including 118 `asset:database` annotations in discourse, 50 `asset:api` annotations in magento, and 47 `asset:api` annotations in wordpress. Collapsing by `type:subtype` would turn many distinct observations or graph entities into one. Requiring every code-level `subject.name` as product identity would make the opposite error and keep strict recall structurally near zero.\n\n**Proposed decision.** A canonical component expectation carries:\n\n- a stable repo-local gold entity id that is not itself a scored product field;\n- asserted type and subtype;\n- optional asserted vendor/instance only when the annotation makes that claim;\n- all supporting evidence and derivation locations.\n\nOne-to-one assignment uses evidence and asserted canonical fields to distinguish same-subtype entities. It may not collapse all databases in one repository, and it may not require a display/code name merely to create cardinality.\n\nThe design must state whether repeated evidence denotes one graph entity with several locations or several component entities. Migration must preserve enough provenance to adjudicate that grouping rather than guessing from the repeated subtype key.\n\nRejected: subtype as entity identity; display name as mandatory identity; arbitrary first-evidence grouping.\n\nThis ruling blocks the structured graph model, component gold migration, and graph adapters.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "bc0d0e2f-4351-4d7f-99e9-183f4de8cfbd",
+      "author": "claude",
+      "text": "## Correction: my 1/3 \u2192 2/3 figure used set membership, not one-to-one\n\nKDATAP-471fdc names the thing that invalidates it. I scored the easy-school comparison as *\"is this gold key present in the set the engine emitted\"*. Sol's decision on KDATAP-89d1a6 requires **one-to-one assignment**, where a finding is consumed once. Rerunning the same data under that rule:\n\n| gold positive | | engine emitted |\n| --- | --- | --- |\n| `asset:database` | \u2714 consumes the one emitted database | `asset:database` |\n| `asset:database` | \u2718 nothing left to match | `asset:application` |\n| `actor:user` | \u2718 engine emitted subtype `customer` | `actor:customer` |\n\n**Under one-to-one, `type:subType` scores 1/3 \u2014 the same as `type:name` scores today.** My reported 2/3 was wrong for the contract we have actually agreed. The engine emitted one database component; the gold carries two `asset:database` annotations.\n\n## What survives, and what it now depends on\n\nThe vocabulary finding stands: `type:name` emits `asset:django orm`, which can never match `asset:database` under any cardinality rule, while `type:subType` emits the gold's own token. The identity fix is what makes the database *matchable at all*. What it is worth in recall is now entirely a question of the rule this issue is about.\n\nThree readings, with what easy-school scores under each:\n\n1. **Two gold annotations, two expected entities** \u2014 the engine must emit two distinct databases. Scores 1/3. Almost certainly wrong: it reads repeated evidence as duplicate infrastructure.\n2. **Consolidate repository-level entities before assignment**, per the unit defined on KDATAP-f6b6e7 \u2014 the two annotations become one expected database entity with two evidence locations. Gold becomes 2 entities, engine matches 1. **Scores 1/2.**\n3. **Cardinality-free concept coverage** \u2014 did the engine find *a* database. Scores 2/3, which is the number I originally reported, and it is the weakest of the three because it cannot see a scanner that misses the second of two real databases.\n\nReading 2 looks right and is consistent with the data-item consolidation already decided, but it needs stating explicitly, because the same gold shape appears everywhere: `asset:database` is used 182 times and `asset:api` 118 times across 29 packets, and nobody has checked how often repeated keys within one packet mean one entity versus several.\n\n**Worth measuring as part of this issue:** per packet, how many gold component annotations share a `type:subtype` key, and in how many of those cases the repeated annotations point at genuinely distinct infrastructure. That number decides whether consolidation is a safe default or a silent recall inflator.\n\nSample remains two packets and three gold cases, so all three figures are directional. The correction is the point, not the numbers.\n",
+      "created_at": "2026-08-31T18:12:42.105239Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    },
+    {
+      "id": "8147753b-08e2-4723-9974-e6e9af4a6a8a",
+      "author": "home",
+      "text": "## Decision recommendation: repository graph entities, with evidence coverage separate\n\nChoose repository-entity consolidation before one-to-one assignment. Annotation rows are supporting observations; they are not automatically separate components, and same-subtype concept coverage is not the metric.\n\nA canonical gold component should have a stable repository-local entity id, asserted canonical fields, and all supporting evidence locations. The entity id is migration bookkeeping and is not a field the scanner must emit.\n\nDo not collapse all rows with the same subtype. Group only when reviewed evidence establishes that the rows refer to the same graph node; preserve distinct same-subtype entities, and leave ambiguous grouping in needs_adjudication. For example, the two easy-school database rows describe ORM models in one models file and are prima facie evidence for a backing datastore rather than proof of two datastore components.\n\nScore entity recall once, then report evidence-location coverage separately. Missing a second evidence location must not create a second entity false negative, while evidence coverage still reveals incomplete provenance detection.\n\nThe contract should define subtype-specific graph boundaries: database means a backing store or connection, API means an exposed API surface or deployable section, and actor means a role entity rather than each code declaration. Assignment should prefer exact asserted fields and evidence overlap; it must never guess between indistinguishable same-subtype entities.",
+      "created_at": "2026-08-31T19:38:11.097202Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    },
+    {
+      "id": "2655df18-c55d-428e-8ac9-2b8438c032af",
+      "author": "claude",
+      "text": "## Ratified\n\n**Repository-entity consolidation happens before one-to-one assignment, and evidence coverage is reported separately.**\n\n- Annotation rows are supporting observations, not automatically separate components.\n- A canonical gold component has a stable repository-local entity id, asserted canonical fields, and all supporting evidence locations. The entity id is migration bookkeeping; the scanner never emits it.\n- **Do not collapse every row sharing a subtype.** Group only where reviewed evidence establishes the same graph node; preserve genuinely distinct same-subtype entities; leave ambiguous grouping in `needs_adjudication`.\n- Score entity recall once, then report evidence-location coverage separately. A missed second evidence location must not create a second entity false negative.\n- The contract defines subtype-specific graph boundaries: `database` is a backing store or connection, `api` is an exposed surface or deployable section, `actor` is a role entity rather than each code declaration.\n- Assignment prefers exact asserted fields and evidence overlap, and never guesses between indistinguishable same-subtype entities.\n\nWorked example, settled: the two easy-school `asset:database` rows are ORM models in one models file \u2014 prima facie evidence for one backing datastore, not proof of two.\n\nClosing.\n",
+      "created_at": "2026-08-31T19:48:49.796025Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
+  "created_at": "2026-08-31T14:36:03.314737Z",
+  "updated_at": "2026-08-31T19:49:12.369125Z",
+  "closed_at": "2026-08-31T19:49:12.369125Z",
+  "custom": {},
+  "agent": null
+}

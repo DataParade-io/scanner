@@ -1,0 +1,43 @@
+{
+  "id": "KDATAP-b702ea01-ec01-419c-9e87-8eb07d2ec66a",
+  "title": "Fix remaining readiness gate blockers: 44 component decoys + 2 medusa scopes",
+  "description": "Fix the 75 remaining readiness gate blockers (44 component decoys + 2 medusa scopes + 29 materializations are environment-only).\n\n1. **44 component decoy LOADER_EXEMPTION**: Negative decoy components (e.g. discourse-not-stripe, auth0-express-not-supabase) have review_state: accepted but expected.status: negative. The compat loader correctly yields needs_adjudication, but the gate flags LOADER_EXEMPTION. Fix: change review_state to rejected for these 44 negative decoy components (they are negatives, not accepted gold).\n\n2. **2 SCOPE_MISSING_OR_UNREVIEWED**: Medusa is missing data_items and mentions scope files in its layer-scopes.yaml. Fix: add the missing scope files with accepted review provenance.\n\nAfter this, the gate should report 29 blockers (MATERIALIZATION_INVALID only — environment, not code).\n\nLocks:\n- Do not run scan() or use detector output.\n- Do not change expected.status or labels — only review_state for the 44 decoys.\n- Do not touch positive components (563 accepted positives are correct).\n- Bump corpus-gold.digest if YAML changes.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "34ac5105-cfbd-451a-980a-53094aecf9ec",
+      "author": "home",
+      "text": "Starting fix: 44 component decoy review_state → rejected + 2 medusa scope files. Worktree /tmp/scanner-b702ea-readiness-fix branch cursor/fix-readiness-blockers-b702ea.",
+      "created_at": "2026-09-02T11:22:23.163996Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "54053da4-9b67-419f-a4fa-1fe4b4d9c141",
+      "author": "home",
+      "text": "## Readiness dry-run (post-fix)\n\n**PR:** https://github.com/DataParade-io/scanner/pull/55\n\n| Metric | Before | After |\n|--------|--------|-------|\n| Total blockers | 75 | 29 |\n| LOADER_EXEMPTION | 44 | 0 |\n| SCOPE_MISSING_OR_UNREVIEWED | 2 | 0 |\n| MATERIALIZATION_INVALID | 29 | 29 |\n\n```\nreadiness.status: fail\nreadiness.blockers: 29\n  - MATERIALIZATION_INVALID (auth0-express): auth0-express: missing (path does not exist)\n  - MATERIALIZATION_INVALID (directus): directus: missing (path does not exist)\n  - MATERIALIZATION_INVALID (discourse): discourse: missing (path does not exist)\n  - MATERIALIZATION_INVALID (drupal): drupal: missing (path does not exist)\n  - MATERIALIZATION_INVALID (easy-school): easy-school: missing (path does not exist)\n  - MATERIALIZATION_INVALID (exposed): exposed: missing (path does not exist)\n  - MATERIALIZATION_INVALID (flask-login): flask-login: missing (path does not exist)\n  - MATERIALIZATION_INVALID (ghost): ghost: missing (path does not exist)\n  - MATERIALIZATION_INVALID (gitea): gitea: missing (path does not exist)\n  - MATERIALIZATION_INVALID (hyperswitch-vault): hyperswitch-vault: missing (path does not exist)\n  - MATERIALIZATION_INVALID (keycloak): keycloak: missing (path does not exist)\n  - MATERIALIZATION_INVALID (magento): magento: missing (path does not exist)\n  - MATERIALIZATION_INVALID (medusa): medusa: missing (path does not exist)\n  - MATERIALIZATION_INVALID (medusa-customer): medusa-customer: missing (path does not exist)\n  - MATERIALIZATION_INVALID (nopcommerce): nopcommerce: missing (path does not exist)\n  - MATERIALIZATION_INVALID (orchard-core): orchard-core: missing (path does not exist)\n  - MATERIALIZATION_INVALID (ory-kratos-password): ory-kratos-password: missing (path does not exist)\n  - MATERIALIZATION_INVALID (pocketbase): pocketbase: missing (path does not exist)\n  - MATERIALIZATION_INVALID (posthog-user): posthog-user: missing (path does not exist)\n  - MATERIALIZATION_INVALID (redmine): redmine: missing (path does not exist)\n  - MATERIALIZATION_INVALID (saleor): saleor: missing (path does not exist)\n  - MATERIALIZATION_INVALID (spree): spree: missing (path does not exist)\n  - MATERIALIZATION_INVALID (spring-petclinic): spring-petclinic: missing (path does not exist)\n  - MATERIALIZATION_INVALID (strapi): strapi: missing (path does not exist)\n  - MATERIALIZATION_INVALID (supabase-js): supabase-js: missing (path does not exist)\n  - MATERIALIZATION_INVALID (vapor): vapor: missing (path does not exist)\n  - MATERIALIZATION_INVALID (vgs-django): vgs-django: missing (path does not exist)\n  - MATERIALIZATION_INVALID (wordpress): wordpress: missing (path does not exist)\n  - MATERIALIZATION_INVALID (yjdh-employee): yjdh-employee: missing (path does not exist)\n```\n\n**Tests:** `pnpm test` — 145 suites, 924 passed, 1 skipped.\n",
+      "created_at": "2026-09-02T11:27:31.957738Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d23b6592-5505-431b-83fb-9008cfc96257",
+      "author": "home",
+      "text": "PR #55 merged (d100381). 44 decoys → rejected, 2 medusa scopes added. Readiness blockers 75 → 29 (MATERIALIZATION_INVALID only). Closed.",
+      "created_at": "2026-09-02T11:32:06.841003Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T11:22:18.595228Z",
+  "updated_at": "2026-09-02T11:32:06.841003Z",
+  "closed_at": "2026-09-02T11:32:06.812009Z",
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

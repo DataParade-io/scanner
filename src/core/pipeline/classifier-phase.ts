@@ -11,6 +11,7 @@ import {
   synthesizeSectionApiNodes,
 } from "../../classifier/classify";
 import { enhanceComponents } from "../../classifier/enhance";
+import { enforceComponentTaxonomy } from "../../classifier/component-taxonomy";
 import { FRONTEND_FRAMEWORK_HINTS_SET } from "../../patterns/frontend-frameworks";
 
 export interface ClassifierPhaseOptions {
@@ -116,8 +117,8 @@ export function runClassifierPhase(
   const mergedFrameworkHelpers = collapseManifestFrontendFrameworkAssets(enhanced);
   const withSectionApiNodes = synthesizeSectionApiNodes(mergedFrameworkHelpers);
 
-  return injectActorIfMissing(withSectionApiNodes).filter(
-    (component) => component.confidence >= options.minimumConfidence,
-  );
+  return enforceComponentTaxonomy(
+    injectActorIfMissing(withSectionApiNodes),
+  ).filter((component) => component.confidence >= options.minimumConfidence);
 }
 

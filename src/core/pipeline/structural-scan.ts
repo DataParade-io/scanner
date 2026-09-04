@@ -13,9 +13,10 @@ import type { FileLanguage } from "../types/file";
 import type { ServiceSection } from "../sectioning/discover-service-sections";
 import { validateScanResult } from "../schema/scan-result.schema";
 import {
-  ingestFileSystem,
+  ingestFileSystemWithOutcomes,
   resolveScanFilesystemEntry,
 } from "../../ingest/file-system";
+import type { PathEligibilityOutcome } from "../../ingest/eligibility";
 import { runAnalyzers } from "../../analyzers/registry";
 import { buildTerraformModuleCallManifest } from "../../analyzers/terraform/terraform-module-manifest";
 import {
@@ -134,6 +135,8 @@ export interface StructuralScanPhaseResult {
   totalLines: number;
   languageStats: LanguageParserStats[];
   terraformScanSummary?: TerraformScanSummary;
+  ingestOutcomes: PathEligibilityOutcome[];
+  allIngestedFiles: FileInfo[];
 }
 
 export interface StructuralScanResult {
@@ -154,13 +157,15 @@ export async function runStructuralScanPhase(
   const { scanRootDir, ingestTarget } =
     await resolveScanFilesystemEntry(rootPath);
 
-  const allFiles = await ingestFileSystem(ingestTarget, {
+  const ingestResult = await ingestFileSystemWithOutcomes(ingestTarget, {
     onWarning: warn,
     excludePaths: config.excludePaths,
   });
+  const allIngestedFiles = ingestResult.files;
+  const ingestOutcomes = ingestResult.outcomes;
 
   // Apply language filtering and excludePaths from configuration.
-  let files = allFiles;
+  let files = allIngestedFiles;
 
   if (config.languages && config.languages.length > 0) {
     const allowed = new Set(config.languages);
@@ -491,6 +496,8 @@ export async function runStructuralScanPhase(
     totalLines,
     languageStats,
     terraformScanSummary,
+    ingestOutcomes,
+    allIngestedFiles,
   };
 }
 

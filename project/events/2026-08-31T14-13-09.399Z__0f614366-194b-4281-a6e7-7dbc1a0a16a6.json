@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "0f614366-194b-4281-a6e7-7dbc1a0a16a6",
+  "issue_id": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:13:09.399Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Reproducible corpus baseline",
+    "description": "Produce the first citable corpus baseline as an immutable, contract-versioned artifact, per the decision on KDATAP-955d82.\n\nSpecify the schema and rendering first; produce numbers only after the harness and gold migration land. A baseline published today would be a table of artifacts: 563 component cases scoring near zero on a vocabulary mismatch, 436 flow cases unable to match at all, 213 of 357 mention cases matching only through the alias table, and 960 of 1,792 annotations sitting on files ingest cannot open.\n\nSeries 1 has no predecessor to bridge from. `benchmark:run` has never been published as a baseline on scanner `develop`, the last full run used the CLI copy with the pre-fix runner, and `precision.ts` is wrong in a known direction. Manufacturing a bridge from those would be false continuity.\n\nDefinition of done: a committed JSON artifact plus deterministic Markdown rendering, carrying the full fingerprint block, validated in CI, with series 1 frozen and `predecessor: none` recorded.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+    "labels": []
+  }
+}

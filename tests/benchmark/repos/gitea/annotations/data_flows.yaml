@@ -1,0 +1,64 @@
+annotations:
+  - id: gitea-token-hash-persisted
+    layer: data_flows
+    subject:
+      key: flow:access-token->database
+      name: AccessToken to store
+    evidence:
+      file_path: models/auth/access_token.go
+      start_line: 19
+      end_line: 27
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: AccessToken persists UID and TokenHash into the auth store; Token is omitted from xorm.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: flow
+      disposition_candidate: intra_component_lineage
+      candidate_confidence: high
+      candidate_notes: Accepted intra-component lineage on gitea-access-token-database (intra_overlap_same_entity).
+      source_entity_id: gitea::gitea-access-token-database
+      target_entity_id: gitea::gitea-access-token-database
+      proposed_flow_type: database_query
+    flow_canonical:
+      identity_key: flow:asset:database->asset:database
+      disposition_candidate: intra_component_lineage
+      source_entity_id: gitea::gitea-access-token-database
+      target_entity_id: gitea::gitea-access-token-database
+      endpoints:
+        source:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+        target:
+          component_type: asset
+          endpoint_key: database
+          component_subtype: database
+      flow_type: database_query
+  - id: gitea-token-to-hash
+    layer: data_flows
+    subject:
+      key: flow:token->token-hash
+      name: Token to TokenHash
+    evidence:
+      file_path: models/auth/access_token.go
+      start_line: 51
+      end_line: 52
+    expected:
+      status: positive
+      labels:
+        - data_flow
+    rationale: setNewTokenValue hashes the generated bearer token into TokenHash before database insert.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

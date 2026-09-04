@@ -559,6 +559,29 @@ describe("Python analyzer patterns - DP-P0-CLI-703", () => {
     expect(dbFindings.some((f) => f.properties.databaseType === "elasticsearch")).toBe(true);
   });
 
+  it("does not cross-fire phantom drivers on a shared connect callName", () => {
+    const content = [
+      "from fastapi import FastAPI",
+      "import psycopg2",
+      "import requests",
+      "",
+      "app = FastAPI()",
+      "conn = psycopg2.connect('postgres://example')",
+      "response = requests.get('https://api.openai.com/v1/models')",
+      "",
+    ].join("\n");
+
+    const file = makePythonFile(content, "app.py");
+    const findings = detectPythonPatterns(file);
+    const dbFindings = findings.filter((f) => f.pattern === "database_connection");
+    const clients = dbFindings.map((f) => f.properties.client);
+
+    expect(clients).toContain("psycopg2");
+    expect(clients).not.toContain("aiosqlite");
+    expect(clients).not.toContain("asyncpg");
+    expect(clients).not.toContain("pymysql");
+  });
+
   it("does not match routes commented out in Python sources", () => {
     const content = [
       "from fastapi import FastAPI",

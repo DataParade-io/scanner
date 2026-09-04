@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "f7dcb396-fb60-47bf-b59b-acada3c1623b",
+  "issue_id": "KDATAP-b1813569-d0e5-4be6-9bf2-167d756175cb",
+  "event_type": "issue_created",
+  "occurred_at": "2026-08-31T14:14:57.620Z",
+  "actor_id": "claude",
+  "payload": {
+    "title": "Canonical evaluation representation",
+    "description": "Behaviour spec for the versioned canonical evaluation representation that both gold loaders and scanner adapters emit before scoring.\n\nThe representation separates observation identity; exact semantic concept leaf and taxonomy ancestry; component type, subtype and instance/vendor; evidence locations; and display names. Display names and finding labels are never identity inputs.\n\n```gherkin\nFeature: Canonical evaluation representation\nScenario: Gold and scanner findings meet in one representation\n  Given a corpus annotation and a scanner finding for the same evidence\n  When each is loaded through its adapter\n  Then both are canonical observations carrying the same contract version\n  And identity, concept leaf, classification, instance and evidence are separate fields\n\nScenario: A display name cannot rescue a key mismatch\n  Given a canonical expectation whose identity does not match a finding\n  When the finding's display name equals the expectation's display name\n  Then the observations do not match\n\nScenario: An ancestor concept is not an exact match\n  Given an expectation whose concept leaf is a driver licence\n  When a finding carries the national identifier ancestor concept\n  Then exact-leaf correctness is not credited\n  And ancestor-category correctness is reported separately\n```\n\nBlocked on the `subject.name` ruling, which decides what the source-name field receives per layer.",
+    "issue_type": "story",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-85f48ecb-6c80-44dd-9d02-cd6e6712ec27",
+    "labels": []
+  }
+}

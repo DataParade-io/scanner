@@ -1,0 +1,176 @@
+annotations:
+  - id: spring-petclinic-owner-first-name
+    layer: data_items
+    subject:
+      key: data_item:firstName
+      name: firstName
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/model/Person.java
+      start_line: 31
+      end_line: 34
+    expected:
+      status: positive
+      labels:
+        - first_name
+    rationale: Person.firstName is a persisted given name on Owner (and other person subtypes).
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:first_name
+      proposed_concept_leaf: first_name
+      proposed_ancestry:
+        - person_name
+        - first_name
+      candidate_confidence: low
+      evidence_validation: verified
+  - id: spring-petclinic-owner-last-name
+    layer: data_items
+    subject:
+      key: data_item:lastName
+      name: lastName
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/model/Person.java
+      start_line: 36
+      end_line: 39
+    expected:
+      status: positive
+      labels:
+        - last_name
+    rationale: Person.lastName is a persisted family name used for owner search and display.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:last_name
+      proposed_concept_leaf: last_name
+      proposed_ancestry:
+        - person_name
+        - last_name
+      candidate_confidence: low
+      evidence_validation: verified
+  - id: spring-petclinic-owner-address
+    layer: data_items
+    subject:
+      key: data_item:address
+      name: address
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
+      start_line: 51
+      end_line: 53
+    expected:
+      status: positive
+      labels:
+        - address
+    rationale: Owner.address is a required street address column on the customer record.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:address
+      proposed_concept_leaf: address
+      proposed_ancestry:
+        - street_address
+        - address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: spring-petclinic-owner-city
+    layer: data_items
+    subject:
+      key: data_item:city
+      name: city
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
+      start_line: 55
+      end_line: 57
+    expected:
+      status: positive
+      labels:
+        - city
+    rationale: Owner.city is a required city column on the customer address.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: spring-petclinic-owner-telephone
+    layer: data_items
+    subject:
+      key: data_item:telephone
+      name: telephone
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
+      start_line: 59
+      end_line: 62
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Owner.telephone is validated as a 10-digit phone number on the customer record.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: high
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: spring-petclinic-pet-name-not-person
+    layer: data_items
+    subject:
+      key: data_item:name
+      name: name
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/model/NamedEntity.java
+      start_line: 33
+      end_line: 35
+    expected:
+      status: negative
+      labels: []
+    rationale: NamedEntity.name on Pet is the animal's name, not a human person_name field.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: spring-petclinic-pet-birthdate-not-human
+    layer: data_items
+    subject:
+      key: data_item:birthDate
+      name: birthDate
+    evidence:
+      file_path: src/main/java/org/springframework/samples/petclinic/owner/Pet.java
+      start_line: 48
+      end_line: 50
+    expected:
+      status: negative
+      labels: []
+    rationale: Pet.birthDate is the animal's date of birth, not a human date_of_birth field.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30

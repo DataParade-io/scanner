@@ -1,0 +1,438 @@
+annotations:
+  - id: medusa-auth-module
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: AuthModule
+    evidence:
+      file_path: packages/medusa/src/modules/auth.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: auth.ts registers the in-process Medusa auth module via @medusajs/auth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-auth-module
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: medusa-customer-module
+    layer: components
+    subject:
+      key: actor:customer
+      name: CustomerModule
+    evidence:
+      file_path: packages/medusa/src/modules/customer.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - customer
+    rationale: customer.ts exports the CustomerModule that represents storefront
+      customers in the Medusa module registry.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-customer-module
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
+  - id: medusa-stripe-provider
+    layer: components
+    subject:
+      key: third_party:stripe
+      name: StripePaymentProvider
+    evidence:
+      file_path: packages/medusa/src/modules/payment-stripe.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - payment_processor
+    rationale: payment-stripe.ts wires the Stripe payment provider from
+      @medusajs/payment-stripe.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-stripe-provider
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
+  - id: medusa-google-auth-provider
+    layer: components
+    subject:
+      key: third_party:google_auth
+      name: GoogleAuthProvider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-google.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: auth-google.ts registers Google as an external identity provider for
+      Medusa auth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-google-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: google_auth
+  - id: medusa-sendgrid-email-provider
+    layer: components
+    subject:
+      key: third_party:sendgrid
+      name: SendGridNotificationProvider
+    evidence:
+      file_path: packages/medusa/src/modules/notification-sendgrid.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - email_provider
+    rationale: notification-sendgrid.ts wires SendGrid as the transactional email
+      notification provider.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-sendgrid-email-provider
+      identity_key: third_party:email_provider
+      component_type: third_party
+      component_subtype: email_provider
+      vendor: sendgrid
+  - id: medusa-not-auth0
+    layer: components
+    subject:
+      key: third_party:auth0
+      name: Auth0
+    evidence:
+      file_path: packages/medusa/src/modules/auth.ts
+      start_line: 1
+      end_line: 1
+    expected:
+      status: negative
+      labels: []
+    rationale: The auth module re-exports @medusajs/auth; these registry files do
+      not integrate Auth0 directly.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
+  - id: medusa-not-database-asset
+    layer: components
+    subject:
+      key: asset:database
+      name: Database
+    evidence:
+      file_path: packages/medusa/src/modules/customer.ts
+      start_line: 1
+      end_line: 6
+    expected:
+      status: negative
+      labels: []
+    rationale: Module registry files delegate to package implementations and do not
+      declare database connections in scope.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-not-database-asset
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: medusa-user-module
+    layer: components
+    subject:
+      key: actor:admin
+      name: UserModule
+    evidence:
+      file_path: packages/medusa/src/modules/user.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - admin
+    rationale: user.ts registers the Medusa admin user module from @medusajs/user.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-user-module
+      identity_key: actor:admin
+      component_type: actor
+      component_subtype: admin
+  - id: medusa-github-auth-provider
+    layer: components
+    subject:
+      key: third_party:github_auth
+      name: GithubAuthProvider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-github.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: auth-github.ts wires GitHub as an external identity provider for
+      Medusa auth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-github-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: github_auth
+  - id: medusa-oidc-auth-provider
+    layer: components
+    subject:
+      key: third_party:oidc
+      name: OidcAuthProvider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-oidc.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: auth-oidc.ts registers an OpenID Connect provider for federated login.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-oidc-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: oidc
+  - id: medusa-redis-cache-module
+    layer: components
+    subject:
+      key: asset:cache
+      name: RedisCacheModule
+    evidence:
+      file_path: packages/medusa/src/modules/cache-redis.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - cache
+    rationale: cache-redis.ts exposes the Redis cache module used by Medusa services.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-redis-cache-module
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
+  - id: medusa-rbac-module
+    layer: components
+    subject:
+      key: asset:service
+      name: RbacModule
+    evidence:
+      file_path: packages/medusa/src/modules/rbac.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: rbac.ts registers role-based access control via @medusajs/rbac.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-rbac-module
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: medusa-payment-module
+    layer: components
+    subject:
+      key: asset:service
+      name: PaymentModule
+    evidence:
+      file_path: packages/medusa/src/modules/payment.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: payment.ts exports the core payment module registry entry.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-payment-module
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: medusa-order-module
+    layer: components
+    subject:
+      key: asset:service
+      name: OrderModule
+    evidence:
+      file_path: packages/medusa/src/modules/order.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - service
+    rationale: order.ts re-exports the order module that links customers to purchases.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-order-module
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: medusa-emailpass-provider
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: EmailPassAuthProvider
+    evidence:
+      file_path: packages/medusa/src/modules/auth-emailpass.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: auth-emailpass.ts registers local email/password authentication for Medusa.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-emailpass-provider
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: medusa-notification-module
+    layer: components
+    subject:
+      key: asset:service
+      name: NotificationModule
+    evidence:
+      file_path: packages/medusa/src/modules/notification-sendgrid.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - email_provider
+    rationale: notification-sendgrid.ts wires SendGrid for transactional customer email.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-notification-module
+      identity_key: asset:service
+      component_type: asset
+      component_subtype: service
+  - id: medusa-auth-registry
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: AuthModuleRegistry
+    evidence:
+      file_path: packages/medusa/src/modules/auth.ts
+      start_line: 1
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: auth.ts is the root module registry that loads Medusa authentication
+      providers.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: medusa::medusa-auth-registry
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service

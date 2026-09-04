@@ -1,0 +1,295 @@
+import * as fs from "fs";
+import path from "path";
+import YAML from "yaml";
+
+import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "../../benchmark/manifest";
+import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
+import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical";
+import { annotationsToEvalCases } from "../../benchmark/to-eval-cases";
+
+const PATTERNS_ROOT = path.join(__dirname, "../../../patterns");
+const TAXONOMY_PATH = path.join(PATTERNS_ROOT, "component-taxonomy.yaml");
+
+const ACTOR_USER_MIGRATION_IDS = [
+  "auth0-express-customer-actor",
+  "directus-admin-actor",
+  "directus-user-type",
+  "discourse-user-actor",
+  "drupal-user-actor",
+  "easy-school-student-actor",
+  "flask-login-customer-actor",
+  "gitea-user-actor",
+  "hyperswitch-merchant-customer-actor",
+  "keycloak-user-actor",
+  "magento-customer-actor",
+  "medusa-customer-user-actor",
+  "nopcommerce-customer-actor",
+  "orchard-user-actor",
+  "orchard-iuser-abstraction",
+  "pocketbase-customer-actor",
+  "posthog-user-actor",
+  "redmine-employee-actor",
+  "redmine-anonymous-user-actor",
+  "redmine-group-actor",
+  "saleor-customer-actor",
+  "spree-customer-actor",
+  "spring-petclinic-customer-actor",
+  "strapi-admin-actor",
+  "strapi-admin-user-content-type",
+  "supabase-js-customer-actor",
+  "vapor-customer-actor",
+  "wordpress-wp-user-actor",
+  "wordpress-comment-actor",
+  "yjdh-employee-actor",
+] as const;
+
+const ALLOWED_ACTOR_LABELS = new Set(["customer", "admin", "employee"]);
+
+function loadActorSubtypeIds(): Set<string> {
+  const raw = fs.readFileSync(TAXONOMY_PATH, "utf8");
+  const parsed = YAML.parse(raw) as {
+    subtypes: { id: string; type: string }[];
+  };
+  return new Set(
+    parsed.subtypes.filter((subtype) => subtype.type === "actor").map((subtype) => subtype.id),
+  );
+}
+
+describe("imported corpus gold", () => {
+  const repoKeys = listBenchmarkRepoKeys();
+  const benchmarkRoot = path.join(__dirname, "../../benchmark");
+
+  it("ships 29 pinned packets", () => {
+    expect(repoKeys).toHaveLength(29);
+  });
+
+  it("loads accepted annotations for every declared layer", () => {
+    let totalAnnotations = 0;
+    let acceptedEvalCases = 0;
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const manifest = loadBenchmarkManifest(repoDir);
+      expect(manifest.commit).toMatch(/^[a-f0-9]{40}$/);
+
+      for (const layer of manifest.coverage.layers) {
+        const annotations = loadAnnotations(repoDir, layer);
+        const cases = annotationsToEvalCases(annotations, repoKey);
+        totalAnnotations += annotations.length;
+        acceptedEvalCases += cases.length;
+        expect(annotations.length).toBeGreaterThan(0);
+      }
+    }
+
+    expect(totalAnnotations).toBeGreaterThan(1500);
+    // KDATAP-a0e80b: 275 source-token data-item rows demoted from accepted → needs_adjudication;
+    // KDATAP-9b83f6: five suffix-vs-label false accepts demoted (redmine email + four password verifiers).
+    // KDATAP-25b2f4: 113 data-item adjudication accepts applied; exposed-schema-password-not-data-item flipped reject.
+    // KDATAP-6b1c67: 27 slice-2 data-item adjudication accepts + 43 rejects applied from slice-2 ledger.
+    // KDATAP-47e331: 146 flow adjudication accepts + 17 rejects applied from adjudication ledger.
+    // KDATAP-a7c36b: 12 slice-2 flow adjudication accepts applied from slice-2 ledger (PR #62).
+    // KDATAP-b702ea: 44 negative component decoys demoted accepted → rejected (LOADER_EXEMPTION fix).
+    expect(acceptedEvalCases).toBe(896);
+  });
+
+  it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
+    const repoDir = path.join(benchmarkRoot, "repos", "wordpress");
+    const annotations = loadAnnotations(repoDir, "components");
+    const sample = annotations.find((entry) => entry.subject.key === "asset:database");
+    expect(sample).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+
+    expect(record.identity.identityKey).toBe("asset:database");
+    expect(record.classification.componentSubtype).toBe("database");
+    expect(record.optionalAssertion?.instance).toBeUndefined();
+    expect(record.contractVersion).toBeTruthy();
+  });
+
+  it("does not store exhaustive_scope_files on annotations (KDATAP-f9bb0f)", () => {
+    const violations: string[] = [];
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const annotationsDir = path.join(repoDir, "annotations");
+      for (const fileName of fs.readdirSync(annotationsDir)) {
+        if (!fileName.endsWith(".yaml")) {
+          continue;
+        }
+        const text = fs.readFileSync(path.join(annotationsDir, fileName), "utf8");
+        if (text.includes("exhaustive_scope_files")) {
+          violations.push(`${repoKey}/${fileName}`);
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("stores reviewed precision scope in layer-scopes.yaml (KDATAP-f9bb0f)", () => {
+    let scopedPackets = 0;
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const scopesPath = path.join(repoDir, "layer-scopes.yaml");
+      if (!fs.existsSync(scopesPath)) {
+        continue;
+      }
+      scopedPackets += 1;
+      const scopes = loadLayerScopes(repoDir);
+      expect(scopes.size).toBeGreaterThan(0);
+      for (const layer of loadBenchmarkManifest(repoDir).coverage.layers) {
+        const canonical = layer === "pii_signals" ? "mentions" : layer;
+        if (scopes.has(canonical as typeof layer)) {
+          const record = scopes.get(canonical as typeof layer)!;
+          expect(record.provenance.review_state).toBe("accepted");
+          expect(record.exhaustive_scope_files.length).toBeGreaterThan(0);
+        }
+      }
+    }
+
+    expect(scopedPackets).toBe(29);
+  });
+
+  it("does not use actor:user in component gold (KDATAP-ea44fe)", () => {
+    const violations: string[] = [];
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const annotations = loadAnnotations(repoDir, "components");
+      for (const annotation of annotations) {
+        if (annotation.subject.key === "actor:user") {
+          violations.push(`${repoKey}:${annotation.id}`);
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("retargets former actor:user gold to declared actor subtypes", () => {
+    const migrated = new Map<
+      string,
+      { key: string; labels: string[]; name: string | undefined }
+    >();
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const annotations = loadAnnotations(repoDir, "components");
+      for (const annotation of annotations) {
+        if (ACTOR_USER_MIGRATION_IDS.includes(annotation.id as (typeof ACTOR_USER_MIGRATION_IDS)[number])) {
+          migrated.set(annotation.id, {
+            key: annotation.subject.key,
+            labels: annotation.expected.labels,
+            name: annotation.subject.name,
+          });
+        }
+      }
+    }
+
+    expect(migrated.size).toBe(ACTOR_USER_MIGRATION_IDS.length);
+
+    const suffixCounts = { customer: 0, admin: 0, employee: 0 };
+
+    for (const id of ACTOR_USER_MIGRATION_IDS) {
+      const row = migrated.get(id);
+      expect(row).toBeDefined();
+
+      expect(row!.labels).toHaveLength(1);
+      expect(ALLOWED_ACTOR_LABELS.has(row!.labels[0])).toBe(true);
+      expect(row!.key).toBe(`actor:${row!.labels[0]}`);
+
+      const suffix = row!.key.slice("actor:".length);
+      if (suffix === "customer" || suffix === "admin" || suffix === "employee") {
+        suffixCounts[suffix] += 1;
+      }
+
+      expect(row!.name?.trim().length).toBeGreaterThan(0);
+    }
+
+    expect(suffixCounts).toEqual({ customer: 23, admin: 4, employee: 3 });
+  });
+
+  it("uses only declared actor subtypes for actor:* component gold keys", () => {
+    const actorSubtypeIds = loadActorSubtypeIds();
+    const violations: string[] = [];
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const annotations = loadAnnotations(repoDir, "components");
+      for (const annotation of annotations) {
+        const key = annotation.subject.key;
+        if (!key.startsWith("actor:")) {
+          continue;
+        }
+        const suffix = key.slice("actor:".length);
+        if (!actorSubtypeIds.has(suffix)) {
+          violations.push(`${repoKey}:${annotation.id}:${key}`);
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it("migrated mention gold uses mentions.yaml with canonical keys (KDATAP-fafa9f)", () => {
+    const legacyFiles: string[] = [];
+    const piiKeyViolations: string[] = [];
+    let acceptedMentions = 0;
+    let adjudicationMentions = 0;
+
+    for (const repoKey of repoKeys) {
+      const repoDir = path.join(benchmarkRoot, "repos", repoKey);
+      const legacyPath = path.join(repoDir, "annotations", "pii_signals.yaml");
+      if (fs.existsSync(legacyPath)) {
+        legacyFiles.push(`${repoKey}/pii_signals.yaml`);
+      }
+
+      const manifest = loadBenchmarkManifest(repoDir);
+      if (!manifest.coverage.layers.includes("mentions")) {
+        continue;
+      }
+
+      const mentionsPath = path.join(repoDir, "annotations", "mentions.yaml");
+      expect(fs.existsSync(mentionsPath)).toBe(true);
+
+      const annotations = loadAnnotations(repoDir, "mentions");
+      for (const annotation of annotations) {
+        if (annotation.subject.key.startsWith("pii:")) {
+          piiKeyViolations.push(`${repoKey}:${annotation.id}`);
+        }
+        if (annotation.provenance.review_state === "accepted") {
+          acceptedMentions += 1;
+        }
+        if (annotation.provenance.review_state === "needs_adjudication") {
+          adjudicationMentions += 1;
+        }
+      }
+    }
+
+    expect(legacyFiles).toEqual([]);
+    expect(piiKeyViolations).toEqual([]);
+    expect(acceptedMentions).toBe(79);
+    expect(adjudicationMentions).toBe(278);
+  });
+
+  it("maps accepted corpus mention:email to concept leaf email_address (KDATAP-fafa9f)", () => {
+    const repoDir = path.join(benchmarkRoot, "repos", "directus");
+    const annotations = loadAnnotations(repoDir, "mentions");
+    const sample = annotations.find(
+      (entry) =>
+        entry.subject.key === "mention:email" &&
+        entry.provenance.review_state === "accepted",
+    );
+    expect(sample).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+
+    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.classification.conceptLeaf).toBe("email_address");
+    expect(record.disposition).toBe("accepted");
+    expect(record.observedTokenCandidates?.some((token) => token.value === sample!.subject.name)).toBe(
+      true,
+    );
+  });
+});

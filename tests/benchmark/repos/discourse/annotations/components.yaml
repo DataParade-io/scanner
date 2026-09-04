@@ -1,0 +1,4156 @@
+annotations:
+  - id: discourse-postgresql-database
+    layer: components
+    subject:
+      key: asset:database
+      name: discourse_development
+    evidence:
+      file_path: config/database.yml
+      start_line: 10
+      end_line: 11
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: database.yml configures a PostgreSQL adapter and database name for
+      ActiveRecord persistence.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-postgresql-database
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-redis-cache
+    layer: components
+    subject:
+      key: asset:cache
+      name: redis
+    evidence:
+      file_path: config/initializers/001-redis.rb
+      start_line: 9
+      end_line: 11
+    expected:
+      status: positive
+      labels:
+        - cache
+    rationale: The Redis initializer validates Discourse.redis connectivity and
+      version, treating Redis as an ephemeral cache layer.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-redis-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
+  - id: discourse-session-auth-service
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: discourse_cookie_store
+    evidence:
+      file_path: config/initializers/100-session_store.rb
+      start_line: 5
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: Rails session_store configures Discourse's local cookie-based session
+      authentication with key _forum_session.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-session-auth-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-auth-token-service
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserAuthToken
+    evidence:
+      file_path: app/models/user_auth_token.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserAuthToken manages in-app session tokens, rotation, and lookup for
+      authenticated requests.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-auth-token-service
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-session-api
+    layer: components
+    subject:
+      key: asset:api
+      name: SessionController
+    evidence:
+      file_path: config/routes.rb
+      start_line: 551
+      end_line: 551
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes session create/destroy and forgot_password
+      endpoints as the HTTP login surface.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-session-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-site-api
+    layer: components
+    subject:
+      key: asset:api
+      name: SiteController
+    evidence:
+      file_path: config/routes.rb
+      start_line: 78
+      end_line: 78
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: The site route maps to SiteController#site, a public HTTP API entry
+      point for site metadata.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-site-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-google-auth-provider
+    layer: components
+    subject:
+      key: third_party:google_auth
+      name: Google OAuth2
+    evidence:
+      file_path: config/site_settings.yml
+      start_line: 758
+      end_line: 764
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: Site settings declare enable_google_oauth2_logins plus client id and
+      secret for Google OAuth2 authentication.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-google-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: google_auth
+  - id: discourse-sendgrid-email-provider
+    layer: components
+    subject:
+      key: third_party:sendgrid
+      name: SendGrid
+    evidence:
+      file_path: config/routes.rb
+      start_line: 38
+      end_line: 38
+    expected:
+      status: positive
+      labels:
+        - email_provider
+    rationale: routes.rb registers a POST webhook endpoint for SendGrid inbound
+      email events.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-sendgrid-email-provider
+      identity_key: third_party:email_provider
+      component_type: third_party
+      component_subtype: email_provider
+      vendor: sendgrid
+  - id: discourse-user-actor
+    layer: components
+    subject:
+      key: actor:customer
+      name: User
+    evidence:
+      file_path: app/models/user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - customer
+    rationale: The User ActiveRecord model is the forum end-user account, not a
+      staff-only or service identity.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-actor
+      identity_key: actor:customer
+      component_type: actor
+      component_subtype: customer
+  - id: discourse-not-stripe
+    layer: components
+    subject:
+      key: third_party:stripe
+      name: Stripe
+    evidence:
+      file_path: config/routes.rb
+      start_line: 38
+      end_line: 38
+    expected:
+      status: negative
+      labels: []
+    rationale: The reviewed routes and models handle sessions, users, and email
+      webhooks. No Stripe payment integration appears in this scope.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-not-stripe
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: stripe
+  - id: discourse-not-auth0
+    layer: components
+    subject:
+      key: third_party:auth0
+      name: Auth0
+    evidence:
+      file_path: config/initializers/009-omniauth.rb
+      start_line: 6
+      end_line: 7
+    expected:
+      status: negative
+      labels: []
+    rationale: OmniAuth is configured for Discourse authenticators such as Google
+      OAuth2, but Auth0 is not referenced in the reviewed files.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-not-auth0
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: auth0
+  - id: discourse-model-admin-dashboard-data
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminDashboardData
+    evidence:
+      file_path: app/models/admin_dashboard_data.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminDashboardData is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-dashboard-data
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-admin-dashboard-general-data
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminDashboardGeneralData
+    evidence:
+      file_path: app/models/admin_dashboard_general_data.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminDashboardGeneralData is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-dashboard-general-data
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-admin-dashboard-index-data
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminDashboardIndexData
+    evidence:
+      file_path: app/models/admin_dashboard_index_data.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminDashboardIndexData is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-dashboard-index-data
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-admin-dashboard-report
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminDashboardReport
+    evidence:
+      file_path: app/models/admin_dashboard_report.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminDashboardReport is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-dashboard-report
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-admin-dashboard-section
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminDashboardSection
+    evidence:
+      file_path: app/models/admin_dashboard_section.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminDashboardSection is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-dashboard-section
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-admin-notice
+    layer: components
+    subject:
+      key: asset:database
+      name: AdminNotice
+    evidence:
+      file_path: app/models/admin_notice.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AdminNotice is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-admin-notice
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-allowed-pm-user
+    layer: components
+    subject:
+      key: asset:database
+      name: AllowedPmUser
+    evidence:
+      file_path: app/models/allowed_pm_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AllowedPmUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-allowed-pm-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-anonymous-user
+    layer: components
+    subject:
+      key: asset:database
+      name: AnonymousUser
+    evidence:
+      file_path: app/models/anonymous_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AnonymousUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-anonymous-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-api-key
+    layer: components
+    subject:
+      key: asset:database
+      name: ApiKey
+    evidence:
+      file_path: app/models/api_key.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ApiKey is an ActiveRecord model in the Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-api-key
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-api-key-scope
+    layer: components
+    subject:
+      key: asset:database
+      name: ApiKeyScope
+    evidence:
+      file_path: app/models/api_key_scope.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ApiKeyScope is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-api-key-scope
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-associated-group
+    layer: components
+    subject:
+      key: asset:database
+      name: AssociatedGroup
+    evidence:
+      file_path: app/models/associated_group.rb
+      start_line: 2
+      end_line: 2
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: AssociatedGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-associated-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-backup-draft-post
+    layer: components
+    subject:
+      key: asset:database
+      name: BackupDraftPost
+    evidence:
+      file_path: app/models/backup_draft_post.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: BackupDraftPost is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-backup-draft-post
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-backup-draft-topic
+    layer: components
+    subject:
+      key: asset:database
+      name: BackupDraftTopic
+    evidence:
+      file_path: app/models/backup_draft_topic.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: BackupDraftTopic is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-backup-draft-topic
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-badge-grouping
+    layer: components
+    subject:
+      key: asset:database
+      name: BadgeGrouping
+    evidence:
+      file_path: app/models/badge_grouping.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: BadgeGrouping is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-badge-grouping
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-bookmark
+    layer: components
+    subject:
+      key: asset:database
+      name: Bookmark
+    evidence:
+      file_path: app/models/bookmark.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Bookmark is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-bookmark
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-browser-pageview-session-engagement
+    layer: components
+    subject:
+      key: asset:database
+      name: BrowserPageviewSessionEngagement
+    evidence:
+      file_path: app/models/browser_pageview_session_engagement.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: BrowserPageviewSessionEngagement is a pageview rollup table, not an
+      authentication service.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-browser-pageview-session-engagement
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-browser-pageview-session-engagement-daily-rollup
+    layer: components
+    subject:
+      key: asset:database
+      name: BrowserPageviewSessionEngagementDailyRollup
+    evidence:
+      file_path: app/models/browser_pageview_session_engagement_daily_rollup.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: BrowserPageviewSessionEngagementDailyRollup is a pageview rollup
+      table, not an authentication service.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-browser-pageview-session-engagement-daily-rollup
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-group
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryGroup
+    evidence:
+      file_path: app/models/category_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-moderation-group
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryModerationGroup
+    evidence:
+      file_path: app/models/category_moderation_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryModerationGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-moderation-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-posting-review-group
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryPostingReviewGroup
+    evidence:
+      file_path: app/models/category_posting_review_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryPostingReviewGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-posting-review-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-required-tag-group
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryRequiredTagGroup
+    evidence:
+      file_path: app/models/category_required_tag_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryRequiredTagGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-required-tag-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-tag-group
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryTagGroup
+    evidence:
+      file_path: app/models/category_tag_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryTagGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-tag-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-category-user
+    layer: components
+    subject:
+      key: asset:database
+      name: CategoryUser
+    evidence:
+      file_path: app/models/category_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: CategoryUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-category-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-digest-email-site-setting
+    layer: components
+    subject:
+      key: asset:database
+      name: DigestEmailSiteSetting
+    evidence:
+      file_path: app/models/digest_email_site_setting.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: DigestEmailSiteSetting is an ActiveRecord persistence model, not an
+      end-user actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-digest-email-site-setting
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-dismissed-topic-user
+    layer: components
+    subject:
+      key: asset:database
+      name: DismissedTopicUser
+    evidence:
+      file_path: app/models/dismissed_topic_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: DismissedTopicUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-dismissed-topic-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-draft
+    layer: components
+    subject:
+      key: asset:database
+      name: Draft
+    evidence:
+      file_path: app/models/draft.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Draft is an ActiveRecord model in the Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-draft
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-draft-sequence
+    layer: components
+    subject:
+      key: asset:database
+      name: DraftSequence
+    evidence:
+      file_path: app/models/draft_sequence.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: DraftSequence is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-draft-sequence
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-change-request
+    layer: components
+    subject:
+      key: asset:database
+      name: EmailChangeRequest
+    evidence:
+      file_path: app/models/email_change_request.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: EmailChangeRequest is an ActiveRecord persistence model, not an
+      end-user actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-change-request
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-level-site-setting
+    layer: components
+    subject:
+      key: asset:database
+      name: EmailLevelSiteSetting
+    evidence:
+      file_path: app/models/email_level_site_setting.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: EmailLevelSiteSetting is an ActiveRecord persistence model, not an
+      end-user actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-level-site-setting
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-log
+    layer: components
+    subject:
+      key: asset:database
+      name: EmailLog
+    evidence:
+      file_path: app/models/email_log.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: EmailLog is an ActiveRecord persistence model, not an end-user actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-log
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-login-code
+    layer: components
+    subject:
+      key: asset:database
+      name: EmailLoginCode
+    evidence:
+      file_path: app/models/email_login_code.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: EmailLoginCode is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-login-code
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-style
+    layer: components
+    subject:
+      key: asset:database
+      name: EmailStyle
+    evidence:
+      file_path: app/models/email_style.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: EmailStyle is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-style
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-email-token
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: EmailToken
+    evidence:
+      file_path: app/models/email_token.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: EmailToken is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-email-token
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-model-group
+    layer: components
+    subject:
+      key: asset:database
+      name: Group
+    evidence:
+      file_path: app/models/group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Group is an ActiveRecord model in the Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-archived-message
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupArchivedMessage
+    evidence:
+      file_path: app/models/group_archived_message.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupArchivedMessage is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-archived-message
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-associated-group
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupAssociatedGroup
+    evidence:
+      file_path: app/models/group_associated_group.rb
+      start_line: 2
+      end_line: 2
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupAssociatedGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-associated-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-category-notification-default
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupCategoryNotificationDefault
+    evidence:
+      file_path: app/models/group_category_notification_default.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupCategoryNotificationDefault is an ActiveRecord model in the
+      Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-category-notification-default
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-custom-field
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupCustomField
+    evidence:
+      file_path: app/models/group_custom_field.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupCustomField is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-custom-field
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-history
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupHistory
+    evidence:
+      file_path: app/models/group_history.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupHistory is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-history
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-mention
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupMention
+    evidence:
+      file_path: app/models/group_mention.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupMention is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-mention
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-request
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupRequest
+    evidence:
+      file_path: app/models/group_request.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupRequest is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-request
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-tag-notification-default
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupTagNotificationDefault
+    evidence:
+      file_path: app/models/group_tag_notification_default.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupTagNotificationDefault is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-tag-notification-default
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-group-user
+    layer: components
+    subject:
+      key: asset:database
+      name: GroupUser
+    evidence:
+      file_path: app/models/group_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: GroupUser is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-group-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-ignored-user
+    layer: components
+    subject:
+      key: asset:database
+      name: IgnoredUser
+    evidence:
+      file_path: app/models/ignored_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: IgnoredUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-ignored-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-incoming-email
+    layer: components
+    subject:
+      key: asset:database
+      name: IncomingEmail
+    evidence:
+      file_path: app/models/incoming_email.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: IncomingEmail is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-incoming-email
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-invite
+    layer: components
+    subject:
+      key: asset:database
+      name: Invite
+    evidence:
+      file_path: app/models/invite.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Invite is the invitation row stored for onboarding, not a live actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-invite
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-invite-redeemer
+    layer: components
+    subject:
+      key: asset:database
+      name: InviteRedeemer
+    evidence:
+      file_path: app/models/invite_redeemer.rb
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: InviteRedeemer is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-invite-redeemer
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-invited-group
+    layer: components
+    subject:
+      key: asset:database
+      name: InvitedGroup
+    evidence:
+      file_path: app/models/invited_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: InvitedGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-invited-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-invited-user
+    layer: components
+    subject:
+      key: asset:database
+      name: InvitedUser
+    evidence:
+      file_path: app/models/invited_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: InvitedUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-invited-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-like-notification-frequency-site-setting
+    layer: components
+    subject:
+      key: asset:database
+      name: LikeNotificationFrequencySiteSetting
+    evidence:
+      file_path: app/models/like_notification_frequency_site_setting.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: LikeNotificationFrequencySiteSetting is an ActiveRecord model in the
+      Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-like-notification-frequency-site-setting
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-muted-user
+    layer: components
+    subject:
+      key: asset:database
+      name: MutedUser
+    evidence:
+      file_path: app/models/muted_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: MutedUser is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-muted-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-notification
+    layer: components
+    subject:
+      key: asset:database
+      name: Notification
+    evidence:
+      file_path: app/models/notification.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Notification is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-notification
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-notification-level-when-replying-site-setting
+    layer: components
+    subject:
+      key: asset:database
+      name: NotificationLevelWhenReplyingSiteSetting
+    evidence:
+      file_path: app/models/notification_level_when_replying_site_setting.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: NotificationLevelWhenReplyingSiteSetting is an ActiveRecord model in
+      the Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-notification-level-when-replying-site-setting
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-oauth2-user-info
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: Oauth2UserInfo
+    evidence:
+      file_path: app/models/oauth2_user_info.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: Oauth2UserInfo is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-oauth2-user-info
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-model-reviewable-user
+    layer: components
+    subject:
+      key: asset:database
+      name: ReviewableUser
+    evidence:
+      file_path: app/models/reviewable_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ReviewableUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-reviewable-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-screened-email
+    layer: components
+    subject:
+      key: asset:database
+      name: ScreenedEmail
+    evidence:
+      file_path: app/models/screened_email.rb
+      start_line: 7
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ScreenedEmail is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-screened-email
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-shared-draft
+    layer: components
+    subject:
+      key: asset:database
+      name: SharedDraft
+    evidence:
+      file_path: app/models/shared_draft.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: SharedDraft is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-shared-draft
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-shelved-notification
+    layer: components
+    subject:
+      key: asset:database
+      name: ShelvedNotification
+    evidence:
+      file_path: app/models/shelved_notification.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ShelvedNotification is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-shelved-notification
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-site-setting-group
+    layer: components
+    subject:
+      key: asset:database
+      name: SiteSettingGroup
+    evidence:
+      file_path: app/models/site_setting_group.rb
+      start_line: 7
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: SiteSettingGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-site-setting-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-skipped-email-log
+    layer: components
+    subject:
+      key: asset:database
+      name: SkippedEmailLog
+    evidence:
+      file_path: app/models/skipped_email_log.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: SkippedEmailLog is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-skipped-email-log
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-tag-group
+    layer: components
+    subject:
+      key: asset:database
+      name: TagGroup
+    evidence:
+      file_path: app/models/tag_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TagGroup is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-tag-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-tag-group-membership
+    layer: components
+    subject:
+      key: asset:database
+      name: TagGroupMembership
+    evidence:
+      file_path: app/models/tag_group_membership.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TagGroupMembership is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-tag-group-membership
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-tag-group-permission
+    layer: components
+    subject:
+      key: asset:database
+      name: TagGroupPermission
+    evidence:
+      file_path: app/models/tag_group_permission.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TagGroupPermission is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-tag-group-permission
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-tag-user
+    layer: components
+    subject:
+      key: asset:database
+      name: TagUser
+    evidence:
+      file_path: app/models/tag_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TagUser is an ActiveRecord model in the Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-tag-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-allowed-group
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicAllowedGroup
+    evidence:
+      file_path: app/models/topic_allowed_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicAllowedGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-allowed-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-allowed-user
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicAllowedUser
+    evidence:
+      file_path: app/models/topic_allowed_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicAllowedUser is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-allowed-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-featured-users
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicFeaturedUsers
+    evidence:
+      file_path: app/models/topic_featured_users.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicFeaturedUsers is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-featured-users
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-group
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicGroup
+    evidence:
+      file_path: app/models/topic_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicGroup is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-invite
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicInvite
+    evidence:
+      file_path: app/models/topic_invite.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicInvite is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-invite
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-participant-groups-summary
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicParticipantGroupsSummary
+    evidence:
+      file_path: app/models/topic_participant_groups_summary.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicParticipantGroupsSummary is an ActiveRecord model in the
+      Discourse identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-participant-groups-summary
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-topic-user
+    layer: components
+    subject:
+      key: asset:database
+      name: TopicUser
+    evidence:
+      file_path: app/models/topic_user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: TopicUser is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-topic-user
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-action
+    layer: components
+    subject:
+      key: asset:database
+      name: UserAction
+    evidence:
+      file_path: app/models/user_action.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserAction is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-action
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-api-key
+    layer: components
+    subject:
+      key: asset:database
+      name: UserApiKey
+    evidence:
+      file_path: app/models/user_api_key.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserApiKey is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-api-key
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-api-key-client
+    layer: components
+    subject:
+      key: asset:database
+      name: UserApiKeyClient
+    evidence:
+      file_path: app/models/user_api_key_client.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserApiKeyClient is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-api-key-client
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-api-key-client-scope
+    layer: components
+    subject:
+      key: asset:database
+      name: UserApiKeyClientScope
+    evidence:
+      file_path: app/models/user_api_key_client_scope.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserApiKeyClientScope is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-api-key-client-scope
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-api-key-scope
+    layer: components
+    subject:
+      key: asset:database
+      name: UserApiKeyScope
+    evidence:
+      file_path: app/models/user_api_key_scope.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserApiKeyScope is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-api-key-scope
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-archived-message
+    layer: components
+    subject:
+      key: asset:database
+      name: UserArchivedMessage
+    evidence:
+      file_path: app/models/user_archived_message.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserArchivedMessage is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-archived-message
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-associated-account
+    layer: components
+    subject:
+      key: asset:database
+      name: UserAssociatedAccount
+    evidence:
+      file_path: app/models/user_associated_account.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserAssociatedAccount is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-associated-account
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-associated-group
+    layer: components
+    subject:
+      key: asset:database
+      name: UserAssociatedGroup
+    evidence:
+      file_path: app/models/user_associated_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserAssociatedGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-associated-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-auth-token
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserAuthToken
+    evidence:
+      file_path: app/models/user_auth_token.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserAuthToken is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-auth-token
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-model-user-auth-token-log
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserAuthTokenLog
+    evidence:
+      file_path: app/models/user_auth_token_log.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserAuthTokenLog is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-auth-token-log
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-model-user-avatar
+    layer: components
+    subject:
+      key: asset:database
+      name: UserAvatar
+    evidence:
+      file_path: app/models/user_avatar.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserAvatar is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-avatar
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-badge
+    layer: components
+    subject:
+      key: asset:database
+      name: UserBadge
+    evidence:
+      file_path: app/models/user_badge.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserBadge is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-badge
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-badges
+    layer: components
+    subject:
+      key: asset:database
+      name: UserBadges
+    evidence:
+      file_path: app/models/user_badges.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserBadges is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-badges
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-bookmark-list
+    layer: components
+    subject:
+      key: asset:database
+      name: UserBookmarkList
+    evidence:
+      file_path: app/models/user_bookmark_list.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserBookmarkList is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-bookmark-list
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-custom-field
+    layer: components
+    subject:
+      key: asset:database
+      name: UserCustomField
+    evidence:
+      file_path: app/models/user_custom_field.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserCustomField is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-custom-field
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-email
+    layer: components
+    subject:
+      key: asset:database
+      name: UserEmail
+    evidence:
+      file_path: app/models/user_email.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserEmail is an ActiveRecord persistence model, not an end-user actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-email
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-export
+    layer: components
+    subject:
+      key: asset:database
+      name: UserExport
+    evidence:
+      file_path: app/models/user_export.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserExport is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-export
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-field
+    layer: components
+    subject:
+      key: asset:database
+      name: UserField
+    evidence:
+      file_path: app/models/user_field.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserField is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-field
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-field-option
+    layer: components
+    subject:
+      key: asset:database
+      name: UserFieldOption
+    evidence:
+      file_path: app/models/user_field_option.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserFieldOption is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-field-option
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-history
+    layer: components
+    subject:
+      key: asset:database
+      name: UserHistory
+    evidence:
+      file_path: app/models/user_history.rb
+      start_line: 6
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserHistory is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-history
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-ip-address-history
+    layer: components
+    subject:
+      key: asset:database
+      name: UserIpAddressHistory
+    evidence:
+      file_path: app/models/user_ip_address_history.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserIpAddressHistory is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-ip-address-history
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-notification-schedule
+    layer: components
+    subject:
+      key: asset:database
+      name: UserNotificationSchedule
+    evidence:
+      file_path: app/models/user_notification_schedule.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserNotificationSchedule is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-notification-schedule
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-open-id
+    layer: components
+    subject:
+      key: asset:database
+      name: UserOpenId
+    evidence:
+      file_path: app/models/user_open_id.rb
+      start_line: 4
+      end_line: 4
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserOpenId is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-open-id
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-option
+    layer: components
+    subject:
+      key: asset:database
+      name: UserOption
+    evidence:
+      file_path: app/models/user_option.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserOption is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-option
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-password
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserPassword
+    evidence:
+      file_path: app/models/user_password.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserPassword is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-password
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-model-user-profile
+    layer: components
+    subject:
+      key: asset:database
+      name: UserProfile
+    evidence:
+      file_path: app/models/user_profile.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserProfile is an ActiveRecord persistence model, not an end-user
+      actor type.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-profile
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-profile-view
+    layer: components
+    subject:
+      key: asset:database
+      name: UserProfileView
+    evidence:
+      file_path: app/models/user_profile_view.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserProfileView is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-profile-view
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-required-fields-version
+    layer: components
+    subject:
+      key: asset:database
+      name: UserRequiredFieldsVersion
+    evidence:
+      file_path: app/models/user_required_fields_version.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserRequiredFieldsVersion is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-required-fields-version
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-search
+    layer: components
+    subject:
+      key: asset:database
+      name: UserSearch
+    evidence:
+      file_path: app/models/user_search.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserSearch is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-search
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-search-data
+    layer: components
+    subject:
+      key: asset:database
+      name: UserSearchData
+    evidence:
+      file_path: app/models/user_search_data.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserSearchData is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-search-data
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-second-factor
+    layer: components
+    subject:
+      key: asset:database
+      name: UserSecondFactor
+    evidence:
+      file_path: app/models/user_second_factor.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserSecondFactor is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-second-factor
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-security-key
+    layer: components
+    subject:
+      key: asset:database
+      name: UserSecurityKey
+    evidence:
+      file_path: app/models/user_security_key.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserSecurityKey is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-security-key
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-stat
+    layer: components
+    subject:
+      key: asset:database
+      name: UserStat
+    evidence:
+      file_path: app/models/user_stat.rb
+      start_line: 2
+      end_line: 2
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserStat is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-stat
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-status
+    layer: components
+    subject:
+      key: asset:database
+      name: UserStatus
+    evidence:
+      file_path: app/models/user_status.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserStatus is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-status
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-summary
+    layer: components
+    subject:
+      key: asset:database
+      name: UserSummary
+    evidence:
+      file_path: app/models/user_summary.rb
+      start_line: 5
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserSummary is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-summary
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-upload
+    layer: components
+    subject:
+      key: asset:database
+      name: UserUpload
+    evidence:
+      file_path: app/models/user_upload.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserUpload is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-upload
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-visit
+    layer: components
+    subject:
+      key: asset:database
+      name: UserVisit
+    evidence:
+      file_path: app/models/user_visit.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserVisit is an ActiveRecord model in the Discourse identity/session
+      surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-visit
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-visit-daily-rollup
+    layer: components
+    subject:
+      key: asset:database
+      name: UserVisitDailyRollup
+    evidence:
+      file_path: app/models/user_visit_daily_rollup.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserVisitDailyRollup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-visit-daily-rollup
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-user-warning
+    layer: components
+    subject:
+      key: asset:database
+      name: UserWarning
+    evidence:
+      file_path: app/models/user_warning.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserWarning is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-user-warning
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-username-validator
+    layer: components
+    subject:
+      key: asset:database
+      name: UsernameValidator
+    evidence:
+      file_path: app/models/username_validator.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UsernameValidator is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-username-validator
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-model-watched-word-group
+    layer: components
+    subject:
+      key: asset:database
+      name: WatchedWordGroup
+    evidence:
+      file_path: app/models/watched_word_group.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: WatchedWordGroup is an ActiveRecord model in the Discourse
+      identity/session surface.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-model-watched-word-group
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-users-api
+    layer: components
+    subject:
+      key: asset:api
+      name: UsersController
+    evidence:
+      file_path: config/routes.rb
+      start_line: 170
+      end_line: 170
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes UsersController as an HTTP entry point.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-users-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-session-csrf-api
+    layer: components
+    subject:
+      key: asset:api
+      name: SessionController csrf
+    evidence:
+      file_path: config/routes.rb
+      start_line: 598
+      end_line: 598
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes SessionController csrf as an HTTP entry point.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-session-csrf-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-login-api
+    layer: components
+    subject:
+      key: asset:api
+      name: StaticController login
+    evidence:
+      file_path: config/routes.rb
+      start_line: 622
+      end_line: 622
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes StaticController login as an HTTP entry point.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-login-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-admin-users-api
+    layer: components
+    subject:
+      key: asset:api
+      name: Admin::UsersController
+    evidence:
+      file_path: config/routes.rb
+      start_line: 130
+      end_line: 130
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes Admin::UsersController as an HTTP entry point.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-admin-users-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-webhooks-mailgun-api
+    layer: components
+    subject:
+      key: asset:api
+      name: WebhooksController mailgun
+    evidence:
+      file_path: config/routes.rb
+      start_line: 32
+      end_line: 32
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: routes.rb exposes WebhooksController mailgun as an HTTP entry point.
+    provenance:
+      proposed_by: grok-4.6-fill-to-200
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-webhooks-mailgun-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-user-email-model
+    layer: components
+    subject:
+      key: asset:database
+      name: UserEmail
+    evidence:
+      file_path: app/models/user_email.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserEmail persists primary and secondary email addresses for forum
+      accounts.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-email-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-user-password-model
+    layer: components
+    subject:
+      key: asset:database
+      name: UserPassword
+    evidence:
+      file_path: app/models/user_password.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserPassword stores salted password hashes for local authentication.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-password-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-user-profile-model
+    layer: components
+    subject:
+      key: asset:database
+      name: UserProfile
+    evidence:
+      file_path: app/models/user_profile.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserProfile stores public profile fields linked to user accounts.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-profile-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-user-api-key-model
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserApiKey
+    evidence:
+      file_path: app/models/user_api_key.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserApiKey issues scoped API keys for programmatic user access.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-api-key-model
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-oauth2-user-info-model
+    layer: components
+    subject:
+      key: asset:database
+      name: Oauth2UserInfo
+    evidence:
+      file_path: app/models/oauth2_user_info.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Oauth2UserInfo stores provider profile data for social logins.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-oauth2-user-info-model
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-user-second-factor-model
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserSecondFactor
+    evidence:
+      file_path: app/models/user_second_factor.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserSecondFactor stores TOTP and backup second-factor secrets for users.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-second-factor-model
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-email-login-code-model
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: EmailLoginCode
+    evidence:
+      file_path: app/models/email_login_code.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: EmailLoginCode stores one-time email login codes for passwordless sign-in.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-email-login-code-model
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-api-key-model
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: ApiKey
+    evidence:
+      file_path: app/models/api_key.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: ApiKey manages global API keys hashed before persistence.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-api-key-model
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-forgot-password-api
+    layer: components
+    subject:
+      key: asset:api
+      name: forgot_password
+    evidence:
+      file_path: config/routes.rb
+      start_line: 554
+      end_line: 554
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: forgot_password routes password reset requests into SessionController.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-forgot-password-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-sso-session-api
+    layer: components
+    subject:
+      key: asset:api
+      name: session_sso
+    evidence:
+      file_path: config/routes.rb
+      start_line: 594
+      end_line: 594
+    expected:
+      status: positive
+      labels:
+        - api
+    rationale: session/sso routes external SSO login attempts through SessionController.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-sso-session-api
+      identity_key: asset:api
+      component_type: asset
+      component_subtype: api
+  - id: discourse-github-auth-provider
+    layer: components
+    subject:
+      key: third_party:github_auth
+      name: GitHub OAuth
+    evidence:
+      file_path: config/site_settings.yml
+      start_line: 820
+      end_line: 820
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: Site settings enable_github_logins with client id and secret for
+      GitHub OAuth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-github-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: github_auth
+  - id: discourse-twitter-auth-provider
+    layer: components
+    subject:
+      key: third_party:twitter_auth
+      name: Twitter OAuth
+    evidence:
+      file_path: config/site_settings.yml
+      start_line: 795
+      end_line: 795
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: Site settings enable_twitter_logins for Twitter/X social authentication.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-twitter-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: twitter_auth
+  - id: discourse-facebook-auth-provider
+    layer: components
+    subject:
+      key: third_party:facebook_auth
+      name: Facebook OAuth
+    evidence:
+      file_path: config/site_settings.yml
+      start_line: 807
+      end_line: 807
+    expected:
+      status: positive
+      labels:
+        - auth_provider
+    rationale: Site settings enable_facebook_logins for Facebook social authentication.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-facebook-auth-provider
+      identity_key: third_party:auth_provider
+      component_type: third_party
+      component_subtype: auth_provider
+      vendor: facebook_auth
+  - id: discourse-omniauth-middleware
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: OmniAuth
+    evidence:
+      file_path: config/initializers/009-omniauth.rb
+      start_line: 6
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: OmniAuth middleware orchestrates external OAuth login flows for Discourse.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-omniauth-middleware
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-rails-failover-config
+    layer: components
+    subject:
+      key: asset:config
+      name: rails_failover
+    evidence:
+      file_path: config/initializers/002-rails_failover.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - config
+    rationale: rails_failover initializer configures database failover behavior for
+      user persistence.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-rails-failover-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
+  - id: discourse-site-settings-config
+    layer: components
+    subject:
+      key: asset:config
+      name: site_settings
+    evidence:
+      file_path: config/initializers/005-site_settings.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - config
+    rationale: site_settings initializer loads Discourse site settings including
+      auth toggles.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-site-settings-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
+  - id: discourse-rack-cors-config
+    layer: components
+    subject:
+      key: asset:config
+      name: rack_cors
+    evidence:
+      file_path: config/initializers/008-rack-cors.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: positive
+      labels:
+        - config
+    rationale: rack-cors initializer configures cross-origin access for session APIs.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-rack-cors-config
+      identity_key: asset:config
+      component_type: asset
+      component_subtype: config
+  - id: discourse-postgresql-adapter
+    layer: components
+    subject:
+      key: asset:database
+      name: postgresql
+    evidence:
+      file_path: config/database.yml
+      start_line: 10
+      end_line: 10
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: database.yml selects the postgresql adapter for ActiveRecord user models.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-postgresql-adapter
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-redis-ping
+    layer: components
+    subject:
+      key: asset:cache
+      name: Discourse.redis
+    evidence:
+      file_path: config/initializers/001-redis.rb
+      start_line: 9
+      end_line: 9
+    expected:
+      status: positive
+      labels:
+        - cache
+    rationale: The Redis initializer validates Discourse.redis connectivity used for
+      caching.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-redis-ping
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
+  - id: discourse-session-cookie-key
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: _forum_session
+    evidence:
+      file_path: config/initializers/100-session_store.rb
+      start_line: 5
+      end_line: 5
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: session_store binds authenticated session state to the _forum_session
+      cookie.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-session-cookie-key
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-password-validator
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserPasswordValidator
+    evidence:
+      file_path: app/models/user_password.rb
+      start_line: 47
+      end_line: 47
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: password_validator enforces password policy before hashes are stored.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-password-validator
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-api-key-scopes
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserApiKeyScope
+    evidence:
+      file_path: app/models/user_api_key.rb
+      start_line: 13
+      end_line: 13
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserApiKey declares scoped permissions for issued API keys.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-api-key-scopes
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-auth-token-lookup
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserAuthToken.lookup
+    evidence:
+      file_path: app/models/user_auth_token.rb
+      start_line: 145
+      end_line: 145
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: UserAuthToken.lookup resolves hashed session tokens to user sessions.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-auth-token-lookup
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-totp-scope
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: UserSecondFactor.totps
+    evidence:
+      file_path: app/models/user_second_factor.rb
+      start_line: 13
+      end_line: 13
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: totps scope selects enabled TOTP second-factor records for a user.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-totp-scope
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-user-email-primary
+    layer: components
+    subject:
+      key: asset:database
+      name: primary email
+    evidence:
+      file_path: app/models/user_email.rb
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: primary validation enforces one primary email address per user account.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-email-primary
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-user-profile-bio
+    layer: components
+    subject:
+      key: asset:database
+      name: bio_raw
+    evidence:
+      file_path: app/models/user_profile.rb
+      start_line: 15
+      end_line: 15
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: bio_raw stores user-authored profile biography text.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-profile-bio
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-oauth-email-column
+    layer: components
+    subject:
+      key: asset:database
+      name: oauth email
+    evidence:
+      file_path: app/models/oauth2_user_info.rb
+      start_line: 20
+      end_line: 20
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: Oauth2UserInfo persists provider email addresses from social logins.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-oauth-email-column
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-associated-account-provider
+    layer: components
+    subject:
+      key: asset:database
+      name: provider_uid
+    evidence:
+      file_path: app/models/user_associated_account.rb
+      start_line: 23
+      end_line: 23
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: UserAssociatedAccount stores external provider_uid values for linked
+      logins.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-associated-account-provider
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-ip-address-validation
+    layer: components
+    subject:
+      key: asset:database
+      name: ip_address
+    evidence:
+      file_path: app/models/user_ip_address_history.rb
+      start_line: 7
+      end_line: 7
+    expected:
+      status: positive
+      labels:
+        - database
+    rationale: ip_address validation records unique client IPs per user history.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-ip-address-validation
+      identity_key: asset:database
+      component_type: asset
+      component_subtype: database
+  - id: discourse-global-api-key-hash
+    layer: components
+    subject:
+      key: asset:auth_service
+      name: ApiKey.hash_key
+    evidence:
+      file_path: app/models/api_key.rb
+      start_line: 26
+      end_line: 26
+    expected:
+      status: positive
+      labels:
+        - auth_service
+    rationale: ApiKey hashes raw keys before storing key_hash in the database.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-global-api-key-hash
+      identity_key: asset:auth_service
+      component_type: asset
+      component_subtype: auth_service
+  - id: discourse-not-supabase
+    layer: components
+    subject:
+      key: third_party:supabase
+      name: Supabase
+    evidence:
+      file_path: app/models/user.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: negative
+      labels: []
+    rationale: User accounts persist through ActiveRecord to PostgreSQL. No Supabase
+      client appears in this scope.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-not-supabase
+      identity_key: third_party:saas_service
+      component_type: third_party
+      component_subtype: saas_service
+      vendor: supabase
+  - id: discourse-user-email-not-cache
+    layer: components
+    subject:
+      key: asset:cache
+      name: UserEmail
+    evidence:
+      file_path: app/models/user_email.rb
+      start_line: 3
+      end_line: 3
+    expected:
+      status: negative
+      labels: []
+    rationale: UserEmail is an ActiveRecord model backed by PostgreSQL, not a Redis
+      cache layer.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-user-email-not-cache
+      identity_key: asset:cache
+      component_type: asset
+      component_subtype: cache
+  - id: discourse-not-paypal
+    layer: components
+    subject:
+      key: third_party:paypal
+      name: PayPal
+    evidence:
+      file_path: config/routes.rb
+      start_line: 128
+      end_line: 128
+    expected:
+      status: negative
+      labels: []
+    rationale: User routes handle forum accounts only. No PayPal payment integration
+      appears in the reviewed files.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    canonical:
+      entity_id: discourse::discourse-not-paypal
+      identity_key: third_party:payment_processor
+      component_type: third_party
+      component_subtype: payment_processor
+      vendor: paypal

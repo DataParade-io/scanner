@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-4d9b3008-9fdb-4bcd-8f61-8c1f43c5ac1e",
+  "title": "Define declared capability coverage without changing recall",
+  "description": "The corpus contains two different populations that must not be called the same kind of unreachable.\n\n1. A valid canonical concept exists, but the scanner commit and versioned adapter map declare no detector support for it. This is a real strict false negative.\n2. Legacy gold contains a source field/token but no adjudicated canonical concept. This is incomplete migration, not an accepted detector miss.\n\nMeasured legacy input includes 114 mention cases with no current rule at any alias and 308 of 436 data-item annotations keyed primarily on source field names. The latter cannot enter a canonical baseline until adjudicated.\n\n**Proposed decision.** Report `declaredCapabilitySupported` and aggregate `declaredCapabilityCoverage` beside the full canonical denominator. The declaration is derived from the closed adapter/rule map for the exact scanner commit and its digest is recorded in the artifact.\n\nRaw recall always uses every accepted canonical evaluable positive. Capability coverage never replaces a recall denominator, never suppresses a miss, never defines baseline-series identity, and never becomes an adjusted gate. It changes when detector capability changes and exists only to explain why a valid miss occurred.\n\nSource-token-only records move to `needs_adjudication` or are rejected until they carry a canonical concept. They are reported in migration readiness, not as permanent false negatives.\n\nRejected: recall over reachable only; `documentedGap` suppression; treating incomplete gold as valid unsupported concepts; one unexplained recall number.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-77d2b0c5-9a21-4989-95f2-36545ed41c29",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "cfcadc9c-eb82-4ac4-ac2c-50d1e5b55504",
+      "author": "home",
+      "text": "## Worker ruling: full recall plus separate semantic and capability records\n\nImplement the proposed diagnostic without changing any recall denominator.\n\nA valid accepted canonical concept with no declared detector support is an evaluable strict false negative. A source-token-only legacy record with no adjudicated canonical concept is migration-incomplete and cannot enter accepted baseline gold.\n\n### Keep two versioned artifacts separate\n\n1. Canonicalization map: defines what each detector observation means and maps a rule id to one canonical concept leaf. This is evaluation-contract semantics. A semantic remap requires contract versioning and the appropriate bridge or new series.\n2. Capability manifest: declares which canonical leaves the exact scanner commit, enabled rules, analyzers, and runtime configuration can emit. This is scanner capability. Adding support changes the run fingerprint and diagnostics, not baseline-series identity.\n\nDo not use one mutable adapter table to serve both purposes. Adding a new rule for an existing canonical leaf is a capability change; changing the meaning of an existing observation is a semantic contract change.\n\n### Required reporting\n\nFor every accepted canonical evaluable positive, emit declaredCapabilitySupported with the reason and capability-manifest version. Report capability coverage per layer in both forms:\n\n- case-weighted coverage: supported accepted cases divided by all accepted canonical evaluable cases;\n- distinct-leaf coverage: supported canonical leaves divided by distinct canonical leaves present in gold.\n\nUse declared supported terminology, not reachable. Declared support does not guarantee that a detector will fire.\n\nRaw recall always includes the full accepted canonical evaluable denominator. Capability coverage never suppresses a miss, changes a gate denominator, or creates a new baseline series.\n\n### Migration handling and tests\n\nSource-token-only records move to needs_adjudication or rejected until they carry a reviewed canonical concept. Add tests for a valid unsupported concept remaining a false negative, an incomplete legacy record staying outside baseline metrics, a capability addition leaving series identity unchanged, and a semantic remap requiring contract-version handling.",
+      "created_at": "2026-08-31T20:05:32.811741Z"
+    },
+    {
+      "id": "e3bb7b25-974c-469e-be32-f5af4edd3004",
+      "author": "home",
+      "text": "Ruling locked on develop (830a400): declaredCapabilityCoverage reported beside full recall; never replaces denominator.",
+      "created_at": "2026-09-01T17:40:07.466807Z"
+    }
+  ],
+  "created_at": "2026-08-31T14:13:54.182833Z",
+  "updated_at": "2026-09-01T17:40:07.477943Z",
+  "closed_at": "2026-09-01T17:40:07.477943Z",
+  "custom": {}
+}

@@ -1,0 +1,196 @@
+annotations:
+  - id: supabase-js-access-token-item
+    layer: data_items
+    subject:
+      key: data_item:access_token
+      name: access_token
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 355
+      end_line: 355
+    expected:
+      status: positive
+      labels:
+        - access_token
+    rationale: access_token is stored on Session and propagated to Authorization headers via fetchWithAuth.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: supabase-js-refresh-token-item
+    layer: data_items
+    subject:
+      key: data_item:refresh_token
+      name: refresh_token
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 359
+      end_line: 359
+    expected:
+      status: positive
+      labels:
+        - credential_secret
+    rationale: refresh_token is persisted in the session and posted to the refresh grant endpoint; it is a credential secret, not the API bearer access_token.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: supabase-js-user-id-item
+    layer: data_items
+    subject:
+      key: data_item:id
+      name: id
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 491
+      end_line: 492
+    expected:
+      status: positive
+      labels:
+        - user_identifier
+    rationale: User.id is the stable Supabase Auth user identifier returned in sessions.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: needs_adjudication
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: supabase-js-email-item
+    layer: data_items
+    subject:
+      key: data_item:email
+      name: email
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 503
+      end_line: 503
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: User.email is a personal contact field on the authenticated user object.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: high
+      candidate_notes: "Tier A: suffix maps to closed concept map; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: supabase-js-apikey-not-pii
+    layer: data_items
+    subject:
+      key: data_item:apikey
+      name: apikey
+    evidence:
+      file_path: packages/core/supabase-js/src/lib/fetch.ts
+      start_line: 86
+      end_line: 88
+    expected:
+      status: negative
+      labels: []
+    rationale: apikey is the project API key header, not an end-user personal data field.
+    provenance:
+      proposed_by: composer-2.5-swarm
+      proposed_at: 2026-08-30
+      review_state: rejected
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+  - id: supabase-js-new-email
+    layer: data_items
+    subject:
+      key: data_item:new_email
+      name: new_email
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 499
+      end_line: 499
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: User.new_email is the pending mailbox during email change.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill2
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:email
+      proposed_concept_leaf: email_address
+      proposed_ancestry:
+        - email_address
+      candidate_confidence: high
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: supabase-js-phone
+    layer: data_items
+    subject:
+      key: data_item:phone
+      name: phone
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 504
+      end_line: 504
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: User.phone is the account telephone number.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill2
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: high
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
+  - id: supabase-js-new-phone
+    layer: data_items
+    subject:
+      key: data_item:new_phone
+      name: new_phone
+    evidence:
+      file_path: packages/core/auth-js/src/lib/types.ts
+      start_line: 500
+      end_line: 500
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: User.new_phone is the pending telephone during phone change.
+    provenance:
+      proposed_by: grok-4.6-data-item-fill2
+      proposed_at: 2026-08-30
+      review_state: accepted
+      reviewed_by: grok-4.6-refine
+      reviewed_at: 2026-08-30
+    candidate:
+      kind: data_item
+      proposed_identity_key: data_item:phone_number
+      proposed_concept_leaf: phone_number
+      proposed_ancestry:
+        - phone_number
+      candidate_confidence: high
+      candidate_notes: "Tier B: expected.labels concept_leaf maps to rule_id; legacy subject.key preserved pending human acceptance."
+      evidence_validation: verified
