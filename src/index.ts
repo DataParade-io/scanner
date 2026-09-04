@@ -67,10 +67,27 @@ export {
   normalizeDataActionToken,
   deriveFromTopology,
   STORAGE_SUBTYPES,
+  deriveFromPatterns,
+  pathsReferToSameFile,
+  loadDataActionRuleCatalog,
+  loadDataActionRules,
+  clearDataActionRulesCacheForTest,
+  ruleAppliesToLanguage,
+  DATA_ACTION_RULE_LANGUAGES,
   mergeAssignmentsOntoComponents,
   mergeOneAssignment,
   readDataActions,
   hasVerb,
   runDataActionPhase,
 } from "./data-actions";
-export type { DataAction, DataActionFrameworkAnchor } from "./data-actions";
+export type {
+  DataAction,
+  DataActionFrameworkAnchor,
+  DataActionPatternRule,
+  DataActionRuleCatalog,
+  DataActionRuleLanguage,
+  DeriveFromPatternsOptions,
+  RunDataActionPhaseOptions,
+} from "./data-actions";
+
+

@@ -8,7 +8,7 @@ import { scoreEvalCases } from "../../score";
 describe("eval/layers/data-actions", () => {
   const fixtures = [...new Set(dataActionEvalCases.map((caseRecord) => caseRecord.fixture))];
 
-  it("scores topology-backed verbs; documentedGap remains until 1.2–1.3", async () => {
+  it("scores topology+pattern verbs; documentedGap remains until 1.3 gap flip", async () => {
     const scanned = await Promise.all(fixtures.map(scanFixtureDataActionAssignments));
     const scanResults = scanned.map((entry) => entry.scanResult);
     const report = scoreEvalCases(dataActionEvalCases, scanResults);
@@ -22,7 +22,7 @@ describe("eval/layers/data-actions", () => {
     expect(report.scores.unreadCount).toBe(0);
     expect(report.scores.negativeCasePassRate).toBe(1);
 
-    // Topology (1.1) lifts some store/disclose/collect; pattern verbs stay gaps.
+    // Topology + patterns lift many verbs; subtype/gap flip waits on 1.3.
     const documentedGapMisses = report.caseResults.filter(
       (result) => result.documentedGap && !result.matched,
     );

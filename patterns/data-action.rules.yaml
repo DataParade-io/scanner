@@ -1,0 +1,553 @@
+# Data-action pattern rules (PRD §4.3.2).
+# Consumed by src/data-actions/rule-loader.ts + derive-from-patterns.ts.
+#
+# Schema:
+# - enabled: kill-switch for the whole catalog (default true)
+# - data_action_rules[]:
+#   - id: unique rule id
+#   - action: canonical DataAction verb
+#   - patterns: regex strings (compiled case-insensitive, per line)
+#   - languages: optional FileLanguage list; omit = all languages
+#   - require_pii_cooccurrence: when true, line must also match a PII signal
+#   - qualifier: optional transform qualifier
+#   - assert_relay_with_corroboration: when true and action=relay, emit asserted
+#     relay with TopologyEvidence.corroboration = rule id (never topology-only)
+#
+# Coverage posture: fixture idioms (TS/Python/PHP/Java/.NET) + language-family
+# minimums for Go, Terraform, C++, Rust. Prefer high-signal idioms; topology
+# still owns subtype store / outbound disclose.
+
+enabled: true
+
+data_action_rules:
+  # =========================================================================
+  # collect
+  # =========================================================================
+  - id: da-collect-geolocation-js
+    action: collect
+    languages: [typescript, javascript]
+    patterns:
+      - "navigator\\.geolocation"
+      - "getCurrentPosition\\s*\\("
+
+  - id: da-collect-form-express
+    action: collect
+    languages: [typescript, javascript]
+    patterns:
+      - "app\\.post\\s*\\(\\s*[\"'][^\"']*(signup|register|subscribe)"
+      - "req\\.body\\.(email|name|phone|ssn)"
+
+  - id: da-collect-analytics-js
+    action: collect
+    languages: [typescript, javascript]
+    patterns:
+      - "analytics\\.(load|track|identify)\\s*\\("
+      - "\\b(segment|mixpanel|posthog)\\.(init|load|track|identify)\\s*\\("
+
+  - id: da-collect-python-web
+    action: collect
+    languages: [python]
+    patterns:
+      - "@app\\.(post|put)\\s*\\(\\s*[\"'][^\"']*(signup|register|users)"
+      - "@router\\.(post|put)\\s*\\("
+      - "request\\.(json|form|args|GET|POST)\\b"
+      - "payload\\.get\\(\\s*[\"'](email|name|phone)"
+
+  - id: da-collect-php-request
+    action: collect
+    languages: [php]
+    patterns:
+      - "\\$_(POST|REQUEST|GET)\\s*\\["
+      - "\\$payload\\s*\\[\\s*['\"](email|name|phone)"
+      - "\\$request->(input|get|post)\\s*\\("
+      - "->validated\\s*\\("
+
+  - id: da-collect-jvm-web
+    action: collect
+    languages: [java, kotlin]
+    patterns:
+      - "@(Post|Put|Request)Mapping\\s*\\([^)]*(signup|register|/users)"
+      - "@RequestBody"
+      - "@RequestParam\\s*\\([^)]*email"
+      - "request\\.getParameter\\s*\\(\\s*[\"'](email|name|phone)"
+
+  - id: da-collect-csharp-web
+    action: collect
+    languages: [csharp]
+    patterns:
+      - "\\[Http(Post|Put)\\]"
+      - "FromBody|FromForm|FromQuery"
+      - "Request\\.(Form|Query)\\["
+      - "dto\\.(Email|Name|Phone)"
+
+  - id: da-collect-go-web
+    action: collect
+    languages: [go]
+    patterns:
+      - "r\\.(ParseForm|FormValue|PostFormValue)\\s*\\("
+      - "c\\.(Bind|ShouldBind|Query|PostForm)\\s*\\("
+      - "json\\.NewDecoder\\([^)]*\\)\\.Decode"
+
+  - id: da-collect-rust-web
+    action: collect
+    languages: [rust]
+    patterns:
+      - "extract::(Json|Form|Query)\\s*<"
+      - "#\\[post\\(|#\\[put\\("
+
+  - id: da-collect-cpp-cgi
+    action: collect
+    languages: [cpp]
+    patterns:
+      - "cgi\\.get\\s*\\(|getenv\\s*\\(\\s*\"QUERY_STRING\""
+
+  # =========================================================================
+  # store (pattern-backed; complements subtype topology)
+  # =========================================================================
+  - id: da-store-sql-dml
+    action: store
+    patterns:
+      - "\\bINSERT\\s+INTO\\b"
+      - "\\bUPSERT\\b"
+      - "\\bMERGE\\s+INTO\\b"
+      - "\\bREPLACE\\s+INTO\\b"
+
+  - id: da-store-orm-js
+    action: store
+    languages: [typescript, javascript]
+    patterns:
+      - "\\.save\\s*\\("
+      - "\\.insert\\s*\\("
+      - "\\.create\\s*\\(\\s*\\{"
+      - "putObject\\s*\\("
+      - "\\.put\\s*\\(\\s*\\{"
+
+  - id: da-store-python-persist
+    action: store
+    languages: [python]
+    patterns:
+      - "\\.execute\\s*\\(\\s*[f\"'].*INSERT"
+      - "session\\.add\\s*\\(|\\.commit\\s*\\("
+      - "Model\\.objects\\.(create|update_or_create|bulk_create)\\s*\\("
+      - "collection\\.(insert_one|insert_many|update_one)\\s*\\("
+
+  - id: da-store-php-persist
+    action: store
+    languages: [php]
+    patterns:
+      - "->(execute|exec)\\s*\\("
+      - "->save\\s*\\(|->create\\s*\\("
+      - "DB::(insert|table)\\s*\\("
+
+  - id: da-store-jvm-persist
+    action: store
+    languages: [java, kotlin]
+    patterns:
+      - "\\.persist\\s*\\(|\\.merge\\s*\\("
+      - "repository\\.save\\s*\\("
+      - "jdbcTemplate\\.(update|batchUpdate)\\s*\\("
+      - "PreparedStatement"
+
+  - id: da-store-csharp-persist
+    action: store
+    languages: [csharp]
+    patterns:
+      - "\\.AddAsync\\s*\\(|\\.SaveChanges(Async)?\\s*\\("
+      - "ExecuteNonQuery(Async)?\\s*\\("
+      - "SqlCommand|NpgsqlCommand"
+
+  - id: da-store-go-persist
+    action: store
+    languages: [go]
+    patterns:
+      - "db\\.(Exec|NamedExec)\\s*\\("
+      - "\\.Create\\s*\\(|gorm\\.|ent\\."
+      - "bucket\\.Put|s3\\.(PutObject|Upload)"
+
+  - id: da-store-rust-persist
+    action: store
+    languages: [rust]
+    patterns:
+      - "sqlx::query!|diesel::insert_into|\\.execute\\s*\\("
+
+  - id: da-store-terraform-storage
+    action: store
+    languages: [terraform]
+    patterns:
+      - "resource\\s+\"(aws_db_instance|aws_rds_cluster|aws_s3_bucket|aws_dynamodb_table|google_sql_database_instance|google_storage_bucket|azurerm_storage_account|azurerm_postgresql)"
+      - "resource\\s+\"(aws_elasticache|aws_efs_file_system|aws_fsx)"
+
+  # =========================================================================
+  # transform
+  # =========================================================================
+  - id: da-transform-hash-js
+    action: transform
+    qualifier: pseudonymized
+    languages: [typescript, javascript]
+    patterns:
+      - "createHash\\s*\\("
+      - "crypto\\.createHash"
+      - "\\.update\\([^)]*\\)\\.digest\\s*\\("
+
+  - id: da-transform-hash-python
+    action: transform
+    qualifier: pseudonymized
+    languages: [python]
+    patterns:
+      - "hashlib\\.(sha256|sha512|md5|blake2)"
+      - "\\.hexdigest\\s*\\("
+
+  - id: da-transform-hash-php
+    action: transform
+    qualifier: pseudonymized
+    languages: [php]
+    patterns:
+      - "\\bhash\\s*\\(\\s*['\"]sha"
+      - "password_hash\\s*\\(|hash_hmac\\s*\\("
+
+  - id: da-transform-hash-jvm
+    action: transform
+    qualifier: pseudonymized
+    languages: [java, kotlin]
+    patterns:
+      - "MessageDigest\\.getInstance"
+      - "DigestUtils\\.(sha|md5)"
+
+  - id: da-transform-hash-csharp
+    action: transform
+    qualifier: pseudonymized
+    languages: [csharp]
+    patterns:
+      - "SHA256\\.(Create|HashData)|MD5\\.Create"
+      - "IncrementalHash\\.CreateHash"
+
+  - id: da-transform-hash-go
+    action: transform
+    qualifier: pseudonymized
+    languages: [go]
+    patterns:
+      - "sha256\\.(Sum256|New)|md5\\.Sum|hmac\\.New"
+
+  - id: da-transform-hash-rust
+    action: transform
+    qualifier: pseudonymized
+    languages: [rust]
+    patterns:
+      - "Sha256::|sha2::|blake3::"
+
+  - id: da-transform-hash-cpp
+    action: transform
+    qualifier: pseudonymized
+    languages: [cpp]
+    patterns:
+      - "EVP_sha256|SHA256\\s*\\(|openssl/sha"
+
+  - id: da-transform-anonymize
+    action: transform
+    qualifier: anonymized
+    patterns:
+      - "\\banonymize[A-Za-z_]*\\s*\\("
+      - "\\bpseudonymize[A-Za-z_]*\\s*\\("
+      - "\\bmask[A-Za-z_]*(Email|Pii|PII|Phone)\\s*\\("
+
+  - id: da-transform-aggregate
+    action: transform
+    patterns:
+      - "\\baggregate[A-Za-z_]*\\s*\\("
+      - "\\.reduce\\s*\\("
+      - "GROUP\\s+BY"
+
+  # =========================================================================
+  # generate
+  # =========================================================================
+  - id: da-generate-score-infer
+    action: generate
+    patterns:
+      - "\\bscore[A-Za-z_]*\\s*\\("
+      - "\\binfer[A-Za-z_]*\\s*\\("
+      - "\\bderive[A-Za-z_]*\\s*\\("
+      - "\\bpredict[A-Za-z_]*\\s*\\("
+
+  - id: da-generate-ml-python
+    action: generate
+    languages: [python]
+    patterns:
+      - "\\.predict\\s*\\(|model\\.fit\\s*\\("
+      - "openai\\.(ChatCompletion|completions)|anthropic\\."
+
+  # =========================================================================
+  # use
+  # =========================================================================
+  - id: da-use-decision
+    action: use
+    patterns:
+      - "\\bapprove[A-Za-z_]*\\s*\\("
+      - "\\bselectPlan\\s*\\("
+      - "\\bisAdult\\s*\\("
+      - "\\bauthorize[A-Za-z_]*\\s*\\("
+      - "\\bcanAccess[A-Za-z_]*\\s*\\("
+
+  # =========================================================================
+  # combine
+  # =========================================================================
+  - id: da-combine-merge-join
+    action: combine
+    patterns:
+      - "\\bmerge[A-Za-z_]*\\s*\\("
+      - "\\bjoin[A-Za-z_]*\\s*\\("
+      - "\\benrich[A-Za-z_]*\\s*\\("
+      - "\\bLEFT\\s+JOIN\\b|\\bINNER\\s+JOIN\\b"
+
+  # =========================================================================
+  # display
+  # =========================================================================
+  - id: da-display-js
+    action: display
+    languages: [typescript, javascript]
+    patterns:
+      - "res\\.(send|json|render)\\s*\\("
+      - "render[A-Za-z_]*\\s*\\([^)]*email"
+      - "showSsn"
+
+  - id: da-display-python
+    action: display
+    languages: [python]
+    patterns:
+      - "return\\s+(JSONResponse|HTMLResponse|PlainTextResponse)\\s*\\("
+      - "templates\\.TemplateResponse\\s*\\("
+      - "render_template\\s*\\("
+
+  - id: da-display-php
+    action: display
+    languages: [php]
+    patterns:
+      - "echo\\s+.*\\$(email|name|ssn|user)"
+      - "->(json|view)\\s*\\("
+      - "response\\(\\)->json\\s*\\("
+
+  - id: da-display-jvm
+    action: display
+    languages: [java, kotlin]
+    patterns:
+      - "ResponseEntity\\.(ok|status)"
+      - "model\\.addAttribute\\s*\\("
+      - "@ResponseBody"
+
+  - id: da-display-csharp
+    action: display
+    languages: [csharp]
+    patterns:
+      - "return\\s+(Ok|View|Json)\\s*\\("
+      - "ContentResult|JsonResult"
+
+  - id: da-display-go
+    action: display
+    languages: [go]
+    patterns:
+      - "json\\.NewEncoder\\([^)]*\\)\\.Encode"
+      - "c\\.(JSON|HTML|String)\\s*\\("
+      - "template\\.Execute\\s*\\("
+
+  # =========================================================================
+  # log (gated on PII co-occurrence on the same line)
+  # =========================================================================
+  - id: da-log-js
+    action: log
+    require_pii_cooccurrence: true
+    languages: [typescript, javascript]
+    patterns:
+      - "\\blogger\\.(info|error|debug|warn|log)\\s*\\("
+      - "\\bconsole\\.(log|info|error|warn|debug)\\s*\\("
+      - "\\bpino\\.(info|error|debug|warn)\\s*\\("
+      - "\\bwinston\\.(info|error|debug|warn|log)\\s*\\("
+
+  - id: da-log-python
+    action: log
+    require_pii_cooccurrence: true
+    languages: [python]
+    patterns:
+      - "\\blogger\\.(info|error|debug|warning|exception)\\s*\\("
+      - "\\blogging\\.(info|error|debug|warning|exception)\\s*\\("
+      - "\\blog\\.(info|error|debug|warning|exception)\\s*\\("
+
+  - id: da-log-php
+    action: log
+    require_pii_cooccurrence: true
+    languages: [php]
+    patterns:
+      - "\\berror_log\\s*\\("
+      - "\\blogger->(info|error|debug|warning|notice)\\s*\\("
+      - "Log::(info|error|debug|warning|notice)\\s*\\("
+      - "->(info|error|debug|warning)\\s*\\([^)]*\\$"
+
+  - id: da-log-jvm
+    action: log
+    require_pii_cooccurrence: true
+    languages: [java, kotlin]
+    patterns:
+      - "\\blog\\.(info|error|debug|warn|trace)\\s*\\("
+      - "LoggerFactory\\.getLogger|slf4j"
+      - "log\\.(info|error|debug|warn)f?\\s*\\("
+
+  - id: da-log-csharp
+    action: log
+    require_pii_cooccurrence: true
+    languages: [csharp]
+    patterns:
+      - "_?logger\\.(LogInformation|LogError|LogWarning|LogDebug|LogTrace)\\s*\\("
+      - "Log\\.(Information|Error|Warning|Debug)\\s*\\("
+      - "ILogger<|Serilog"
+
+  - id: da-log-go
+    action: log
+    require_pii_cooccurrence: true
+    languages: [go]
+    patterns:
+      - "log\\.(Printf|Println|Fatalf|Print)\\s*\\("
+      - "logrus\\.(Info|Error|Debug|Warn|WithFields)"
+      - "zap\\.(L|S)\\(\\)\\.(Info|Error|Debug|Warn)"
+      - "slog\\.(Info|Error|Debug|Warn)\\s*\\("
+
+  - id: da-log-rust
+    action: log
+    require_pii_cooccurrence: true
+    languages: [rust]
+    patterns:
+      - "\\b(info|error|debug|warn|trace)!\\s*\\("
+      - "tracing::(info|error|debug|warn)"
+
+  - id: da-log-cpp
+    action: log
+    require_pii_cooccurrence: true
+    languages: [cpp]
+    patterns:
+      - "SPDLOG_(INFO|ERROR|DEBUG|WARN)|spdlog::"
+      - "std::(cout|cerr)\\s*<<"
+      - "syslog\\s*\\("
+
+  - id: da-log-terraform
+    action: log
+    require_pii_cooccurrence: true
+    languages: [terraform]
+    patterns:
+      - "resource\\s+\"(aws_cloudwatch_log_group|aws_cloudwatch_log_stream|google_logging)"
+
+  # =========================================================================
+  # delete
+  # =========================================================================
+  - id: da-delete-sql
+    action: delete
+    patterns:
+      - "\\bDELETE\\s+FROM\\b"
+      - "\\bTRUNCATE\\s+TABLE\\b"
+
+  - id: da-delete-js
+    action: delete
+    languages: [typescript, javascript]
+    patterns:
+      - "app\\.delete\\s*\\("
+      - "method:\\s*[\"']DELETE[\"']"
+      - "\\.(erase|purge|destroy|deleteOne|findByIdAndDelete)\\s*\\("
+      - "RETENTION_TTL|ttl[_-]?days|expires[_-]?after"
+
+  - id: da-delete-python
+    action: delete
+    languages: [python]
+    patterns:
+      - "@app\\.delete\\s*\\(|@router\\.delete\\s*\\("
+      - "\\.delete\\s*\\(|\\.unlink\\s*\\("
+      - "Query\\(.*\\.delete\\(\\)|objects\\.filter.*\\.delete\\s*\\("
+
+  - id: da-delete-php
+    action: delete
+    languages: [php]
+    patterns:
+      - "->(delete|destroy|forceDelete)\\s*\\("
+      - "Route::delete\\s*\\("
+
+  - id: da-delete-jvm
+    action: delete
+    languages: [java, kotlin]
+    patterns:
+      - "@DeleteMapping|@Delete\\b"
+      - "repository\\.delete(ById|All)?\\s*\\("
+      - "HttpDelete|RequestMethod\\.DELETE"
+
+  - id: da-delete-csharp
+    action: delete
+    languages: [csharp]
+    patterns:
+      - "\\[HttpDelete\\]"
+      - "\\.Remove\\s*\\(|\\.ExecuteDelete(Async)?\\s*\\("
+
+  - id: da-delete-go
+    action: delete
+    languages: [go]
+    patterns:
+      - "http\\.MethodDelete|DELETE\\s+\""
+      - "\\.Delete\\s*\\(|db\\.Exec\\([^)]*DELETE"
+
+  - id: da-delete-rust
+    action: delete
+    languages: [rust]
+    patterns:
+      - "#\\[delete\\(|Method::DELETE|diesel::delete"
+
+  - id: da-delete-terraform-lifecycle
+    action: delete
+    languages: [terraform]
+    patterns:
+      - "lifecycle\\s*\\{[^}]*prevent_destroy\\s*=\\s*false"
+      - "expiration\\s*\\{|noncurrent_version_expiration"
+
+  # =========================================================================
+  # relay corroboration (asserted only with rule id as corroboration)
+  # =========================================================================
+  - id: da-relay-js-proxy
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [typescript, javascript]
+    patterns:
+      - "createProxyMiddleware\\s*\\("
+      - "http-proxy|httpProxy|http-proxy-middleware"
+      - "passthroughGateway\\s*\\("
+      - "\\bforwardWebhook\\s*\\("
+
+  - id: da-relay-python-proxy
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [python]
+    patterns:
+      - "\\bProxyMiddleware\\b|StreamingHttpResponse"
+      - "httpx\\.(stream|AsyncClient).*proxy|aiohttp\\.ClientSession"
+
+  - id: da-relay-jvm-gateway
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [java, kotlin]
+    patterns:
+      - "Zuul|SpringCloudGateway|GatewayFilter|RouteLocator"
+      - "HttpProxy|ProxyServlet"
+
+  - id: da-relay-csharp-proxy
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [csharp]
+    patterns:
+      - "Yarp|ReverseProxy|MapReverseProxy|HttpForwarder"
+
+  - id: da-relay-go-proxy
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [go]
+    patterns:
+      - "httputil\\.NewSingleHostReverseProxy|ReverseProxy\\s*\\{"
+      - "proxy\\.Director|oxy/forward"
+
+  - id: da-relay-terraform-gateway
+    action: relay
+    assert_relay_with_corroboration: true
+    languages: [terraform]
+    patterns:
+      - "resource\\s+\"(aws_api_gateway_rest_api|aws_api_gatewayv2_api|aws_lb|aws_alb|google_compute_url_map|azurerm_application_gateway)"
+      - "resource\\s+\"(aws_cloudfront_distribution|cloudflare_)"
