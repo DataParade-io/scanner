@@ -3,7 +3,9 @@ import { withExhaustiveScope } from "../../exhaustive-scopes";
 
 /**
  * Data-action ground truth from fixture intent + PRD — never from scan() output.
- * ≥3 positives per canonical verb; all positives use documentedGap until derivation lands.
+ * ≥3 positives per canonical verb. Cases that derivation already covers omit
+ * documentedGap; remaining intentional fixture subjects keep documentedGap until
+ * component detection + patterns attach (follow-ups after 1.3).
  */
 const dataActionEvalCaseList: EvalCase[] = [
   // --- store (≥3 from existing fixtures) ---
@@ -13,7 +15,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "asset:pg", name: "Pg" },
     evidence: { file_path: "db-client-import.ts", start_line: 1, end_line: 1 },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale:
       "pg-backed database asset persists subject data (PRD store / retention).",
   },
@@ -23,7 +25,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "asset:main (aws_db_instance)", name: "Main (aws_db_instance)" },
     evidence: { file_path: "main.tf", start_line: 5, end_line: 10 },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale: "aws_db_instance.main is managed PostgreSQL storage (DA-4 store).",
   },
   {
@@ -32,7 +34,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "asset:data (aws_s3_bucket)", name: "Data (aws_s3_bucket)" },
     evidence: { file_path: "main.tf", start_line: 12, end_line: 14 },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale: "aws_s3_bucket.data is object storage retention (DA-4 store).",
   },
   {
@@ -45,7 +47,7 @@ const dataActionEvalCaseList: EvalCase[] = [
       start_line: 11,
       end_line: 11,
     },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale: "Hikari JDBC PostgreSQL URL is a database persistence target.",
   },
 
@@ -56,7 +58,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "third_party:stripe", name: "Stripe" },
     evidence: { file_path: "external-api.ts", start_line: 6, end_line: 6 },
-    expected: { status: "positive", labels: ["disclose"], documentedGap: true },
+    expected: { status: "positive", labels: ["disclose"] },
     rationale: "Outbound fetch to api.stripe.com discloses data to a third party.",
   },
   {
@@ -65,7 +67,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "third_party:openai", name: "Openai" },
     evidence: { file_path: "app.py", start_line: 11, end_line: 11 },
-    expected: { status: "positive", labels: ["disclose"], documentedGap: true },
+    expected: { status: "positive", labels: ["disclose"] },
     rationale: "requests.get to api.openai.com is outbound disclosure to OpenAI.",
   },
   {
@@ -78,7 +80,7 @@ const dataActionEvalCaseList: EvalCase[] = [
       start_line: 31,
       end_line: 31,
     },
-    expected: { status: "positive", labels: ["disclose"], documentedGap: true },
+    expected: { status: "positive", labels: ["disclose"] },
     rationale: "RestTemplate POST of customer payload to Stripe discloses PII.",
   },
   {
@@ -87,7 +89,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "third_party:stripe", name: "Stripe" },
     evidence: { file_path: "src/Api/Api.csproj", start_line: 1, end_line: 1 },
-    expected: { status: "positive", labels: ["disclose"], documentedGap: true },
+    expected: { status: "positive", labels: ["disclose"] },
     rationale: "Stripe.net package indicates outbound payment disclosure sink.",
   },
 
@@ -394,7 +396,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     layer: "data-actions",
     subject: { key: "asset:npgsql", name: "Npgsql" },
     evidence: { file_path: "src/Api/Api.csproj", start_line: 1, end_line: 1 },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale: "Npgsql package is a PostgreSQL persistence client (store).",
   },
 
@@ -514,7 +516,7 @@ const dataActionEvalCaseList: EvalCase[] = [
       start_line: 1,
       end_line: 1,
     },
-    expected: { status: "positive", labels: ["store"], documentedGap: true },
+    expected: { status: "positive", labels: ["store"] },
     rationale:
       "Spring Data JPA repository is a persistence asset (store); same subject also deletes via repository.delete.",
   },
