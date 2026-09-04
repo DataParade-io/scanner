@@ -116,6 +116,10 @@ function getFileLanguage(filePath: string): FileLanguage | undefined {
     return "rust";
   }
 
+  if (ext === ".rb") {
+    return "ruby";
+  }
+
   if (ext === ".java") {
     return "java";
   }

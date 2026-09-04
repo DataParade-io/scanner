@@ -22,6 +22,8 @@ import type { CSharpPatternConfig } from "../analyzers/csharp/csharp-detection-c
 import { loadCSharpPatternConfig } from "../analyzers/csharp/csharp-detection-config";
 import type { TerraformPatternConfig } from "../analyzers/terraform/terraform-detection-config";
 import { loadTerraformPatternConfig } from "../analyzers/terraform/terraform-detection-config";
+import type { RubyPatternConfig } from "../analyzers/ruby/ruby-detection-config";
+import { loadRubyPatternConfig } from "../analyzers/ruby/ruby-detection-config";
 
 export interface UnifiedPatternConfig {
   actors: ActorDetectionConfig;
@@ -36,6 +38,7 @@ export interface UnifiedPatternConfig {
   cpp: CppPatternConfig;
   csharp: CSharpPatternConfig;
   terraform: TerraformPatternConfig;
+  ruby: RubyPatternConfig;
 }
 
 let cachedUnifiedConfig: UnifiedPatternConfig | undefined;
@@ -259,6 +262,22 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(c.patternId));
   }
 
+  // Ruby / Rails.
+  emittedPatternIds.add(String(unified.ruby.activeRecord.patternId));
+  emittedPatternIds.add(String(unified.ruby.databaseYml.patternId));
+  for (const fw of unified.ruby.routes.frameworks) {
+    emittedPatternIds.add(String(fw.patternId));
+  }
+  for (const lib of unified.ruby.auth.libraries) {
+    emittedPatternIds.add(String(lib.patternId));
+  }
+  for (const client of unified.ruby.cache.clients) {
+    emittedPatternIds.add(String(client.patternId));
+  }
+  for (const svc of unified.ruby.services) {
+    emittedPatternIds.add(String(svc.patternId));
+  }
+
   // Third-party external API pattern.
   for (const svc of unified.thirdParty.services) {
     emittedPatternIds.add(String(svc.patternId));
@@ -328,6 +347,7 @@ export function loadUnifiedPatternConfig(): UnifiedPatternConfig {
   const cpp = loadCppPatternConfig();
   const csharp = loadCSharpPatternConfig();
   const terraform = loadTerraformPatternConfig();
+  const ruby = loadRubyPatternConfig();
 
   const unified: UnifiedPatternConfig = {
     actors,
@@ -342,6 +362,7 @@ export function loadUnifiedPatternConfig(): UnifiedPatternConfig {
     cpp,
     csharp,
     terraform,
+    ruby,
   };
 
   validateUnifiedPatternConfig(unified);

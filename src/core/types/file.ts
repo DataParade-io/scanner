@@ -13,7 +13,8 @@ export type FileLanguage =
   | "kotlin"
   | "terraform"
   | "dockerfile"
-  | "rust";
+  | "rust"
+  | "ruby";
 
 export interface FileInfo {
   path: string;
