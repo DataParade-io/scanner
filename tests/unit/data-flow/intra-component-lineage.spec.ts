@@ -372,5 +372,246 @@ describe("data-flow/intra-component-lineage", () => {
       const { flows } = detectIntraComponentLineage([file], components, 0);
       expect(flows.length).toBeGreaterThanOrEqual(1);
     });
+
+    it("emits a self-loop flow for Rails session_store initializer", () => {
+      const file = makeFile(
+        "config/initializers/100-session_store.rb",
+        [
+          "# frozen_string_literal: true",
+          "",
+          "Rails.application.config.session_store :cookie_store, key: \"_forum_session\"",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "session_auth",
+          name: "discourse_cookie_store",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [
+            { filePath: "config/initializers/100-session_store.rb", startLine: 3, endLine: 3 },
+          ],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows[0]?.sourceComponentId).toBe("session_auth");
+      expect(flows[0]?.targetComponentId).toBe("session_auth");
+      expect(flows[0]?.sourceLocation?.startLine).toBe(3);
+      expect(flows[0]?.dataCategories).toContain("session");
+    });
+
+    it("emits a self-loop flow for has_one :user_password in User model", () => {
+      const file = makeFile(
+        "app/models/user.rb",
+        [
+          "class User < ApplicationRecord",
+          "  has_one :user_password",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "user_actor",
+          name: "User",
+          type: "actor",
+          subType: "customer",
+          sourceLocations: [{ filePath: "app/models/user.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows[0]?.sourceComponentId).toBe("user_actor");
+      expect(flows[0]?.sourceLocation?.startLine).toBe(2);
+      expect(flows[0]?.type).toBe("data_transfer");
+      expect(flows[0]?.dataCategories).toContain("password");
+    });
+
+    it("emits a self-loop flow for belongs_to :customer in Order model", () => {
+      const file = makeFile(
+        "spree/core/app/models/spree/order.rb",
+        [
+          "module Spree",
+          "  class Order < Spree::Base",
+          "    belongs_to :customer",
+          "  end",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "order_model",
+          name: "Order",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [
+            { filePath: "spree/core/app/models/spree/order.rb", startLine: 2, endLine: 2 },
+          ],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows[0]?.sourceComponentId).toBe("order_model");
+      expect(flows[0]?.sourceLocation?.startLine).toBe(3);
+      expect(flows[0]?.type).toBe("data_transfer");
+    });
+
+    it("emits a self-loop flow for validates :email in model", () => {
+      const file = makeFile(
+        "app/models/user_email.rb",
+        [
+          "class UserEmail < ApplicationRecord",
+          "  validates :email, presence: true",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "user_email_model",
+          name: "UserEmail",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [{ filePath: "app/models/user_email.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows[0]?.sourceLocation?.startLine).toBe(2);
+      expect(flows[0]?.dataCategories).toContain("email");
+    });
+
+    it("emits a self-loop flow for check_password in user.rb method", () => {
+      const file = makeFile(
+        "app/models/user.rb",
+        [
+          "class User < ApplicationRecord",
+          "  def try_to_login!(login, password)",
+          "    user = find_by_login(login)",
+          "    return false unless user&.check_password?(password)",
+          "  end",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "user_auth",
+          name: "User Auth",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "app/models/user.rb", startLine: 1, endLine: 5 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows.length).toBeGreaterThanOrEqual(1);
+      expect(flows.some((flow) => flow.dataCategories?.includes("password"))).toBe(true);
+      expect(flows.some((flow) => flow.type === "data_transfer")).toBe(true);
+    });
+
+    it("emits a self-loop flow for validates :primary with email category only", () => {
+      const file = makeFile(
+        "app/models/user_email.rb",
+        [
+          "class UserEmail < ActiveRecord::Base",
+          "  belongs_to :user",
+          "  validates :primary, uniqueness: { scope: [:user_id] }, if: %i[user_id primary]",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "user_email_primary",
+          name: "UserEmail Primary",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [{ filePath: "app/models/user_email.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const primaryFlow = flows.find((flow) => flow.sourceLocation?.startLine === 3);
+      expect(primaryFlow).toBeDefined();
+      expect(primaryFlow?.dataCategories).toEqual(["email"]);
+    });
+
+    it("emits a self-loop flow for scope :totps in UserSecondFactor model", () => {
+      const file = makeFile(
+        "app/models/user_second_factor.rb",
+        [
+          "class UserSecondFactor < ActiveRecord::Base",
+          "  belongs_to :user",
+          "  scope :totps, -> { where(method: UserSecondFactor.methods[:totp], enabled: true) }",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "totp_scope",
+          name: "TOTP Scope",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "app/models/user_second_factor.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const totpFlow = flows.find((flow) => flow.sourceLocation?.startLine === 3);
+      expect(totpFlow).toBeDefined();
+      expect(totpFlow?.sourceComponentId).toBe("totp_scope");
+      expect(totpFlow?.type).toBe("data_transfer");
+    });
+
+    it("emits a self-loop flow for after_create on User model", () => {
+      const file = makeFile(
+        "app/models/user.rb",
+        [
+          "class User < ApplicationRecord",
+          "  after_create :create_user_stat",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "user_actor",
+          name: "User",
+          type: "actor",
+          subType: "customer",
+          sourceLocations: [{ filePath: "app/models/user.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const statFlow = flows.find((flow) => flow.sourceLocation?.startLine === 2);
+      expect(statFlow).toBeDefined();
+      expect(statFlow?.sourceComponentId).toBe("user_actor");
+      expect(statFlow?.type).toBe("database_query");
+    });
+
+    it("skips belongs_to :category without personal-data association", () => {
+      const file = makeFile(
+        "app/models/post.rb",
+        [
+          "class Post < ApplicationRecord",
+          "  belongs_to :category",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "post_model",
+          name: "Post",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [{ filePath: "app/models/post.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      expect(flows).toHaveLength(0);
+    });
   });
 });

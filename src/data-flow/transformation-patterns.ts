@@ -58,6 +58,7 @@ export const ROUTE_DECLARATION_PATTERNS = [
   /<route\s+url=/i,
   /soapOperation=/i,
   /^\s*(get|post|put|delete|patch)\s+['"][^'"]+['"]\s*=>/i,
+  /^\s*(get|post|put|delete|patch)\s+['"][^'"]+['"]/i,
 ];
 
 export const MODEL_ASSOCIATION_PATTERNS = [
@@ -67,10 +68,29 @@ export const MODEL_ASSOCIATION_PATTERNS = [
   /\bafter_create\s+:/i,
   /\bafter_save\s+:/i,
   /\bafter_update\s+:/i,
-  /\bscope\s+:\w+\s*,/i,
+  /\bscope\s+:(?:\w*(?:user|customer|email|password|session|token|totp|api_key)\w*)\b/i,
   /\bvalidates\s+:/i,
   /\bnormalizes\s+:/i,
   /<\s*ActiveRecord::Base/i,
+  /\bhas_secure_password\b/i,
+];
+
+export const RAILS_INITIALIZER_PATTERNS = [
+  /\bsession_store\b/i,
+  /\bhas_secure_password\b/i,
+];
+
+export const PERSONAL_DATA_ASSOCIATION_PATTERNS = [
+  /\b(?:has_one|has_many|belongs_to)\s+:(?:user_password|user_email|primary_email|email|password|session|token|customer|user)\b/i,
+  /\bscope\s+:\w*totp\w*\b/i,
+  /\bvalidates\s+:(?:email|password|session|primary)\b/i,
+  /\bnormalizes\s+:(?:email|password)\b/i,
+  /\bafter_(?:create|save|update)\s+:(?:user|email|password|session|token|customer)\w*/i,
+  /\bafter_(?:create|save|update)\s+:\w*(?:user|customer|email|password|session|token)\w*/i,
+  /\bsession_store\b/i,
+  /\bhas_secure_password\b/i,
+  /\bcheck_password\b/i,
+  /\bhashed_password\b/i,
 ];
 
 export const LOOKUP_PATTERNS = [
@@ -254,7 +274,35 @@ export function isDeclarationOnlySpan(span: string): boolean {
 }
 
 export function isOrmModelSpan(span: string): boolean {
-  return ORM_PATTERNS.some((pattern) => pattern.test(span));
+  if (isRailsFileLevelDeclarationSpan(span)) {
+    return true;
+  }
+  return (
+    ORM_PATTERNS.some((pattern) => pattern.test(span)) ||
+    /<\s*(?:ActiveRecord::Base|ApplicationRecord)/i.test(span)
+  );
+}
+
+export function isRailsFileLevelDeclarationSpan(span: string): boolean {
+  if (MODEL_ASSOCIATION_PATTERNS.some((pattern) => pattern.test(span))) {
+    return true;
+  }
+  return RAILS_INITIALIZER_PATTERNS.some((pattern) => pattern.test(span));
+}
+
+function isRubyClassHeaderSpan(span: string): boolean {
+  return (
+    /^\s*(?:class|module)\s+\w+/i.test(span) &&
+    !isRailsFileLevelDeclarationSpan(span)
+  );
+}
+
+export function hasPersonalDataAssociationReference(
+  span: string,
+  contextSpan: string,
+): boolean {
+  const text = `${span}\n${contextSpan}`;
+  return PERSONAL_DATA_ASSOCIATION_PATTERNS.some((pattern) => pattern.test(text));
 }
 
 export function isRouteDeclarationSpan(span: string, contextSpan: string): boolean {
@@ -278,6 +326,10 @@ export function hasIntraComponentTransformationEvidence(
   span: string,
   contextSpan: string,
 ): boolean {
+  if (isRubyClassHeaderSpan(span)) {
+    return false;
+  }
+
   const text = `${span}\n${contextSpan}`;
 
   if (matchesAnyPattern(text, ALL_TRANSFORMATION_PATTERN_GROUPS.flat())) {
@@ -325,6 +377,12 @@ const FLOW_TYPE_PATTERNS: Array<{ type: DataFlowType; patterns: RegExp[] }> = [
       /\bhas_one\s+:/i,
       /\bhas_many\s+:/i,
       /\bbelongs_to\s+:/i,
+      /\bvalidates\s+:/i,
+      /\bnormalizes\s+:/i,
+      /\bafter_create\s+:/i,
+      /\bafter_save\s+:/i,
+      /<\s*ApplicationRecord/i,
+      /<\s*ActiveRecord::Base/i,
       /\bfind_by_\w+/i,
       /\.whereRaw\s*\(/i,
       /SELECT\s+\*/i,
@@ -372,9 +430,19 @@ const DATA_CATEGORY_PATTERNS: Array<{ category: string; patterns: RegExp[] }> = 
       /GenerateFromPassword/i,
     ],
   },
-  { category: "email", patterns: [/\bemail\b/i] },
-  { category: "access_token", patterns: [/\baccess_token\b/i, /\bid_token\b/i] },
-  { category: "session", patterns: [/\bsession\b/i, /\bcookie\b/i] },
+  { category: "email", patterns: [/\bemail\b/i, /\bvalidates\s+:email\b/i, /\bvalidates\s+:primary\b/i] },
+  {
+    category: "access_token",
+    patterns: [/\baccess_token\b/i, /\bid_token\b/i, /\b:token\b/i],
+  },
+  {
+    category: "session",
+    patterns: [/\bsession\b/i, /\bcookie\b/i, /\bsession_store\b/i],
+  },
+  {
+    category: "username",
+    patterns: [/\bbelongs_to\s+:customer\b/i, /\bhas_one\s+:user\b/i],
+  },
   { category: "social_security_number", patterns: [/\bssn\b/i, /social_security/i] },
   { category: "phone_number", patterns: [/\bphone\b/i] },
   { category: "address", patterns: [/\baddress\b/i] },
@@ -409,6 +477,20 @@ export function inferDataCategoriesFromSpan(span: string, contextSpan: string): 
   for (const entry of DATA_CATEGORY_PATTERNS) {
     if (entry.patterns.some((pattern) => pattern.test(text))) {
       categories.add(entry.category);
+    }
+  }
+  if (hasPersonalDataAssociationReference(span, contextSpan)) {
+    if (/password|user_password|hashed_password|check_password|has_secure_password/i.test(text)) {
+      categories.add("password");
+    }
+    if (/\b(?:validates|normalizes)\s+:email\b|:email\b|primary_email|user_email|:primary\b/i.test(text)) {
+      categories.add("email");
+    }
+    if (/session|session_store|cookie/i.test(text)) {
+      categories.add("session");
+    }
+    if (/\bbelongs_to\s+:customer\b/i.test(text)) {
+      categories.add("username");
     }
   }
   return [...categories].sort((left, right) => left.localeCompare(right));
