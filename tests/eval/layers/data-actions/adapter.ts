@@ -38,8 +38,11 @@ function readAssignments(component: DetectedComponent): DataActionAssignment[] {
 /**
  * One LayerFinding per asserted verb. Candidates are omitted (never gold-positive).
  * Multi-verb nodes therefore emit multiple findings sharing the same identity key.
+ * Shared by fixture eval and corpus `scanRepoByManifestLayers`.
  */
-function toLayerFindings(component: DetectedComponent): LayerFinding[] {
+export function componentDataActionFindings(
+  component: DetectedComponent,
+): LayerFinding[] {
   const key = componentIdentity(component);
   const findings: LayerFinding[] = [];
 
@@ -121,7 +124,7 @@ export async function scanFixtureDataActions(fixture: string): Promise<FixtureSc
 
   return fixtureScanResultWithLedger(
     fixture,
-    scanResult.components.flatMap(toLayerFindings),
+    scanResult.components.flatMap(componentDataActionFindings),
     layerLedger,
   );
 }
@@ -143,7 +146,7 @@ export async function scanFixtureDataActionAssignments(fixture: string): Promise
   return {
     scanResult: fixtureScanResultWithLedger(
       fixture,
-      scanResult.components.flatMap(toLayerFindings),
+      scanResult.components.flatMap(componentDataActionFindings),
       layerLedger,
     ),
     asserted: collectAssertedAssignments(scanResult.components),

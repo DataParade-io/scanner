@@ -164,12 +164,19 @@ describe("scorecard-vector", () => {
               evaluablePositives: 3,
               matchedPositives: 2,
             }),
+            "data-actions": reportWithDenominators("data-actions", {
+              evaluablePositives: 5,
+              matchedPositives: 1,
+            }),
           },
         },
       ],
     });
 
     expect(Object.keys(vector.layers).sort()).toEqual([...HEADLINE_LAYERS].sort());
+    expect(vector.layers).not.toHaveProperty("data-actions");
+    expect(Object.keys(vector.diagnostic)).toEqual(["raw-hits"]);
+    expect(vector.diagnostic).not.toHaveProperty("data-actions");
     expect(vector.diagnostic["raw-hits"].scores.denominators.evaluablePositives).toBe(3);
     assertNoCrossLayerScalar(vector);
   });

@@ -13,6 +13,7 @@ import type { SourceLocation } from "../../src/core/types/file";
 import type { BenchmarkLayer } from "./schema";
 import type { EvalLayer, FixtureScanResult, LayerFinding } from "../eval/types";
 import { componentIdentity } from "../eval/layers/components/adapter";
+import { componentDataActionFindings } from "../eval/layers/data-actions/adapter";
 import { dataFlowIdentity } from "../eval/layers/data-flows/adapter";
 import { personalDataFindingToLayerFinding } from "../eval/layers/personal-data-adapter";
 import { normalizeEvalPath } from "../../src/eval/path";
@@ -32,6 +33,7 @@ const BENCHMARK_TO_EVAL_LAYER: Record<string, EvalLayer> = {
   raw_hits: "raw-hits",
   mentions: "mentions",
   data_items: "data-items",
+  data_actions: "data-actions",
   pii_signals: "mentions",
 };
 
@@ -93,6 +95,17 @@ function toDataFlowFinding(
   };
 }
 
+function toDataActionFindings(component: DetectedComponent): LayerFinding[] {
+  return componentDataActionFindings(component).map((finding) => ({
+    ...finding,
+    sourceFilePaths: finding.sourceFilePaths.map(normalizeRepoRelativePath),
+    sourceLines: finding.sourceLines.map((line) => ({
+      ...line,
+      file_path: normalizeRepoRelativePath(line.file_path),
+    })),
+  }));
+}
+
 function tagPersonalDataFinding(
   finding: ReturnType<typeof personalDataFindingToLayerFinding>,
   layer: EvalLayer,
@@ -141,7 +154,8 @@ export async function scanRepoByManifestLayers(
     Record<EvalLayer, ReturnType<typeof layerLedgerFromOutcomes>>
   > = {};
 
-  const needsOrchestrator = wanted.has("components") || wanted.has("data_flows");
+  const needsOrchestrator =
+    wanted.has("components") || wanted.has("data_flows") || wanted.has("data_actions");
   const needsPersonalData = layers.some((layer) =>
     PERSONAL_DATA_BENCHMARK_LAYERS.has(layer),
   );
@@ -173,6 +187,14 @@ export async function scanRepoByManifestLayers(
       findings.push(
         ...scanResult.dataFlows.map((flow) => toDataFlowFinding(flow, componentsById)),
       );
+    }
+
+    if (wanted.has("data_actions")) {
+      eligibilityLedgers["data-actions"] = layerLedgerFromOutcomes(
+        "data-actions",
+        orchestratorLedgers["data-actions"] ?? [],
+      );
+      findings.push(...scanResult.components.flatMap(toDataActionFindings));
     }
   }
 
