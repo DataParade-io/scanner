@@ -1,0 +1,64 @@
+annotations:
+- id: hyperswitch-locker-store
+  layer: data_actions
+  subject:
+    key: asset:locker
+    name: Locker
+  evidence:
+    file_path: src/routes/data/types.rs
+    start_line: 197
+    end_line: 205
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Locker SecretDataManager holds encrypted card payloads for the vault (PRD store). Cross-ref
+    hyperswitch-locker-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: hyperswitch-locker-transform
+  layer: data_actions
+  subject:
+    key: asset:locker
+    name: Locker
+  evidence:
+    file_path: src/routes/data/types.rs
+    start_line: 202
+    end_line: 204
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: "set_decrypted_data wraps payload via Encryptable::from_decrypted_data \u2014 cryptographic\
+    \ transformation of card data (PRD transform). Multi-verb with store."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: hyperswitch-locker-delete
+  layer: data_actions
+  subject:
+    key: asset:locker
+    name: Locker
+  evidence:
+    file_path: src/routes/data/types.rs
+    start_line: 139
+    end_line: 143
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: DeleteCardRequest models explicit card disposal by card_reference (PRD delete / disposal).
+    Same vault subject as store/transform.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

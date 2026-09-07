@@ -1,0 +1,64 @@
+annotations:
+- id: posthog-user-store
+  layer: data_actions
+  subject:
+    key: asset:user
+    name: User
+  evidence:
+    file_path: posthog/models/user.py
+    start_line: 232
+    end_line: 247
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: PostHog User model persists account identity fields including email (PRD store). Cross-ref
+    posthog-user-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: posthog-user-transform
+  layer: data_actions
+  subject:
+    key: asset:user
+    name: User
+  evidence:
+    file_path: posthog/models/user.py
+    start_line: 267
+    end_line: 267
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: "anonymize_data boolean drives redaction of email in analytics metadata (line ~639) \u2014\
+    \ anonymization transform qualifier (PRD transform). Multi-verb with store."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: posthog-user-delete
+  layer: data_actions
+  subject:
+    key: asset:user
+    name: User
+  evidence:
+    file_path: posthog/models/user.py
+    start_line: 600
+    end_line: 605
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: "User.leave deletes OrganizationMembership for the user \u2014 disposal of membership linkage\
+    \ (PRD delete)."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

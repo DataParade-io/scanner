@@ -1,0 +1,42 @@
+annotations:
+- id: keycloak-userentity-store
+  layer: data_actions
+  subject:
+    key: asset:user_entity
+    name: USER_ENTITY
+  evidence:
+    file_path: model/jpa/src/main/java/org/keycloak/models/jpa/entities/UserEntity.java
+    start_line: 60
+    end_line: 85
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: USER_ENTITY JPA table persists username, names, and email (PRD store). Subject uses table
+    name lowercased. Cross-ref keycloak-user-entity-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: keycloak-credential-store
+  layer: data_actions
+  subject:
+    key: asset:credential
+    name: CREDENTIAL
+  evidence:
+    file_path: model/jpa/src/main/java/org/keycloak/models/jpa/entities/CredentialEntity.java
+    start_line: 43
+    end_line: 68
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: CREDENTIAL entity persists secretData/credentialData/salt (PRD store). Cross-ref keycloak-credential-entity-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

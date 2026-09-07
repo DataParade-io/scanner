@@ -1,0 +1,104 @@
+annotations:
+- id: petclinic-owners-store
+  layer: data_actions
+  subject:
+    key: asset:owners
+    name: owners
+  evidence:
+    file_path: src/main/java/org/springframework/samples/petclinic/owner/Owner.java
+    start_line: 49
+    end_line: 62
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Owner JPA entity persists address, city, telephone (PRD store). Cross-ref spring-petclinic-owners-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: petclinic-ownercontroller-collect
+  layer: data_actions
+  subject:
+    key: asset:ownercontroller
+    name: OwnerController
+  evidence:
+    file_path: src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+    start_line: 77
+    end_line: 84
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: "POST /owners/new binds Owner form fields then saves \u2014 first capture of owner PII (PRD\
+    \ collect). Cross-ref spring-petclinic-owner-api."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: petclinic-ownercontroller-store
+  layer: data_actions
+  subject:
+    key: asset:ownercontroller
+    name: OwnerController
+  evidence:
+    file_path: src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+    start_line: 84
+    end_line: 84
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: owners.save(owner) persists the collected Owner on the same controller (multi-verb collect+store).
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: petclinic-ownercontroller-display
+  layer: data_actions
+  subject:
+    key: asset:ownercontroller
+    name: OwnerController
+  evidence:
+    file_path: src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java
+    start_line: 169
+    end_line: 175
+  expected:
+    status: positive
+    labels:
+    - display
+  rationale: "showOwner loads Owner and adds it to the view model for ownerDetails \u2014 presenting PII\
+    \ (PRD display)."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: petclinic-vets-cache-store
+  layer: data_actions
+  subject:
+    key: asset:vets
+    name: vets
+  evidence:
+    file_path: src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java
+    start_line: 35
+    end_line: 37
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: JCache createCache("vets") retains vet listings in cache (PRD store / cache alias). Cross-ref
+    spring-petclinic-vets-cache.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

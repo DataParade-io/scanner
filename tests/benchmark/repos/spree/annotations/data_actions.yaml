@@ -1,0 +1,250 @@
+annotations:
+- id: spree-customers-store
+  layer: data_actions
+  subject:
+    key: asset:spree_customers
+    name: spree_customers
+  evidence:
+    file_path: spree/core/app/models/spree/customer.rb
+    start_line: 7
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::Customer maps to spree_customers and validates/persists email (PRD store). Cross-ref
+    spree-customer-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-creditcard-store
+  layer: data_actions
+  subject:
+    key: asset:creditcard
+    name: CreditCard
+  evidence:
+    file_path: spree/core/app/models/spree/credit_card.rb
+    start_line: 2
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::CreditCard persists payment-source attributes (last_digits, gateway profiles) via
+    ActiveRecord (PRD store). Cross-ref spree-credit-card-source.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-paymentsource-store
+  layer: data_actions
+  subject:
+    key: asset:paymentsource
+    name: PaymentSource
+  evidence:
+    file_path: spree/core/app/models/spree/payment_source.rb
+    start_line: 2
+    end_line: 2
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::PaymentSource is an AR model retaining payment source records (PRD store). Cross-ref
+    spree-payment-source-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-gatewaycustomer-store
+  layer: data_actions
+  subject:
+    key: asset:gatewaycustomer
+    name: GatewayCustomer
+  evidence:
+    file_path: spree/core/app/models/spree/gateway_customer.rb
+    start_line: 2
+    end_line: 2
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::GatewayCustomer persists gateway customer profile linkage (PRD store). Cross-ref spree-gateway-customer-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-payment-store
+  layer: data_actions
+  subject:
+    key: asset:payment
+    name: Payment
+  evidence:
+    file_path: spree/core/app/models/spree/payment.rb
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::Payment model retains payment records for orders (PRD store). Cross-ref spree-payment-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-address-store
+  layer: data_actions
+  subject:
+    key: asset:address
+    name: Address
+  evidence:
+    file_path: spree/core/app/models/spree/address.rb
+    start_line: 2
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::Address persists shipping/billing address fields (PRD store). Cross-ref spree-address-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-order-store
+  layer: data_actions
+  subject:
+    key: asset:order
+    name: Order
+  evidence:
+    file_path: spree/core/app/models/spree/order.rb
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Spree::Order persists checkout order state and associations (PRD store). Cross-ref spree-order-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-paymentprocessing-disclose
+  layer: data_actions
+  subject:
+    key: asset:paymentprocessing
+    name: PaymentProcessing
+  evidence:
+    file_path: spree/core/app/models/concerns/spree/purchase/payment_processing.rb
+    start_line: 15
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: process_payments! sends payments through the payment gateway (outbound disclosure to the
+    processor). Cross-ref spree-payment-processing-service.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-paymentprocessing-use
+  layer: data_actions
+  subject:
+    key: asset:paymentprocessing
+    name: PaymentProcessing
+  evidence:
+    file_path: spree/core/app/models/concerns/spree/purchase/payment_processing.rb
+    start_line: 22
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - use
+  rationale: authorize_payments!/capture_payments! consume payment data for authorization/capture decisioning
+    without being the system of record (PRD use). Multi-verb with disclose.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-paymentmethod-disclose
+  layer: data_actions
+  subject:
+    key: asset:paymentmethod
+    name: PaymentMethod
+  evidence:
+    file_path: spree/core/app/models/spree/payment_method.rb
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: Spree::PaymentMethod represents configured gateway methods used to send payment data outbound
+    (PRD disclose). Cross-ref spree-payment-method-model.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-createuseraccount-collect
+  layer: data_actions
+  subject:
+    key: asset:createuseraccount
+    name: CreateUserAccount
+  evidence:
+    file_path: spree/core/app/services/spree/orders/create_user_account.rb
+    start_line: 7
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: "CreateUserAccount.call accepts order + accepts_email_marketing and invokes customer_create_workflow\
+    \ \u2014 capturing customer account data from checkout (PRD collect). Cross-ref spree-create-user-account-service."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: spree-customer-auth-store
+  layer: data_actions
+  subject:
+    key: asset:customer
+    name: Customer
+  evidence:
+    file_path: spree/core/app/models/spree/customer.rb
+    start_line: 13
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: "has_secure_password and email validation on Customer retain credentials/identity for auth\
+    \ (PRD store on auth-adjacent asset). Cross-ref spree-customer-auth-service; subject uses name Customer\
+    \ \u2192 asset:customer."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
