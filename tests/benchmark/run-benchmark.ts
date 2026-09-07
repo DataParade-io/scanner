@@ -203,6 +203,7 @@ function printRepoResult(result: BenchmarkRepoResult): void {
     "components",
     "data-flows",
     "raw-hits",
+    "data-actions",
   ];
   for (const layer of layerOrder) {
     const layerScore = layerScores[layer];
@@ -210,7 +211,10 @@ function printRepoResult(result: BenchmarkRepoResult): void {
       continue;
     }
     const layerCases = evalCases.filter((entry) => entry.layer === layer);
-    const label = layer === "raw-hits" ? `Diagnostic ${layer}:` : `Layer ${layer}:`;
+    const label =
+      layer === "raw-hits" || layer === "data-actions"
+        ? `Diagnostic ${layer}:`
+        : `Layer ${layer}:`;
     printScoreBlock(label, layerScore, layerCases);
   }
 

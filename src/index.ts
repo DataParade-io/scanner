@@ -14,7 +14,7 @@ export type {
   FinalizeDeterministicScanInput,
 } from "./core/pipeline/deterministic-scan";
 
-export { buildDiagramGraphFromScanResult } from "./core/pipeline/graph-mapping";
+export { buildDiagramGraphFromScanResult, selectPrimaryDataAction } from "./core/pipeline/graph-mapping";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
 export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
@@ -56,3 +56,41 @@ export {
   discoverServiceSections,
   tagFindingsWithServiceSections,
 } from "./core/sectioning/discover-service-sections";
+
+export {
+  DATA_ACTIONS,
+  DATA_ACTION_ALIASES,
+  DATA_ACTION_FRAMEWORK_ANCHORS,
+  DATA_ACTION_SET,
+  isDataAction,
+  normalizeDataAction,
+  normalizeDataActionToken,
+  deriveFromTopology,
+  STORAGE_SUBTYPES,
+  deriveFromPatterns,
+  pathsReferToSameFile,
+  deriveFromSubtypes,
+  SUBTYPE_STORE_SUBTYPES,
+  TERRAFORM_GATEWAY_SUBTYPES,
+  loadDataActionRuleCatalog,
+  loadDataActionRules,
+  clearDataActionRulesCacheForTest,
+  ruleAppliesToLanguage,
+  DATA_ACTION_RULE_LANGUAGES,
+  mergeAssignmentsOntoComponents,
+  mergeOneAssignment,
+  readDataActions,
+  hasVerb,
+  runDataActionPhase,
+} from "./data-actions";
+export type {
+  DataAction,
+  DataActionFrameworkAnchor,
+  DataActionPatternRule,
+  DataActionRuleCatalog,
+  DataActionRuleLanguage,
+  DeriveFromPatternsOptions,
+  RunDataActionPhaseOptions,
+} from "./data-actions";
+
+

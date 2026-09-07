@@ -9,6 +9,7 @@ export type ConversionKind =
   | "component_structured_identity"
   | "component_canonical_block"
   | "flow_canonical_block"
+  | "data_action_structured_identity"
   | "rule_id_to_concept_leaf"
   | "legacy_subject_name"
   | "expected_labels_provenance"

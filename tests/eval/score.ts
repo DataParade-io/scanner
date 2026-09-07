@@ -19,7 +19,7 @@ export const HEADLINE_LAYERS = [
 export type HeadlineLayer = (typeof HEADLINE_LAYERS)[number];
 
 /** Diagnostic-only layers — scanned and reported but excluded from headline vector gates. */
-export const DIAGNOSTIC_LAYERS = ["raw-hits"] as const;
+export const DIAGNOSTIC_LAYERS = ["raw-hits", "data-actions"] as const;
 
 export type DiagnosticLayer = (typeof DIAGNOSTIC_LAYERS)[number];
 
@@ -29,6 +29,7 @@ const EVAL_LAYERS: EvalLayer[] = [
   "raw-hits",
   "mentions",
   "data-items",
+  "data-actions",
 ];
 
 export function scoreEvalCasesByLayer(

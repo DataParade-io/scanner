@@ -1,0 +1,42 @@
+annotations:
+- id: saleor-account-store
+  layer: data_actions
+  subject:
+    key: asset:account
+    name: account
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 169
+    end_line: 173
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Saleor User model persists unique email and name fields (PRD store). Cross-ref saleor-account-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: saleor-address-store
+  layer: data_actions
+  subject:
+    key: asset:address
+    name: Address
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 63
+    end_line: 74
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: "Address model in the same account module persists name, street, and phone (PRD store) \u2014\
+    \ additional store subject in scope."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

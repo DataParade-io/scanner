@@ -1,0 +1,162 @@
+annotations:
+  - id: drupal-users-store
+    layer: data_actions
+    subject:
+      key: asset:users
+      name: users
+    evidence:
+      file_path: core/modules/user/src/Entity/User.php
+      start_line: 520
+      end_line: 543
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      User entity baseFieldDefinitions declare name, pass (hashed), and mail as
+      persisted fields on users / users_field_data (PRD store). Cross-ref
+      components drupal-users-database.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userstorage-store
+    layer: data_actions
+    subject:
+      key: asset:userstorage
+      name: UserStorage
+    evidence:
+      file_path: core/modules/user/src/UserStorage.php
+      start_line: 20
+      end_line: 38
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      UserStorage.doSaveFieldItems writes user field items through
+      SqlContentEntityStorage (PRD store). Cross-ref components
+      drupal-user-storage-database.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userloginform-collect
+    layer: data_actions
+    subject:
+      key: asset:userloginform
+      name: UserLoginForm
+    evidence:
+      file_path: core/modules/user/src/Form/UserLoginForm.php
+      start_line: 128
+      end_line: 151
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      UserLoginForm.buildForm defines required username and password fields that
+      capture credentials from the data subject on POST /user/login (PRD collect).
+      Cross-ref components drupal-login-form-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userauthenticationcontroller-collect
+    layer: data_actions
+    subject:
+      key: asset:userauthenticationcontroller
+      name: UserAuthenticationController
+    evidence:
+      file_path: core/modules/user/src/Controller/UserAuthenticationController.php
+      start_line: 204
+      end_line: 215
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      login() decodes JSON credentials.name and credentials.pass from the request
+      body — first capture of subject credentials on the HTTP login API (PRD
+      collect). Cross-ref components drupal-http-login-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userauthenticationcontroller-display
+    layer: data_actions
+    subject:
+      key: asset:userauthenticationcontroller
+      name: UserAuthenticationController
+    evidence:
+      file_path: core/modules/user/src/Controller/UserAuthenticationController.php
+      start_line: 229
+      end_line: 248
+    expected:
+      status: positive
+      labels:
+        - display
+    rationale: >-
+      After successful auth, login() encodes current_user uid/roles/name into the
+      JSON response — presenting stored identity to the caller (PRD display;
+      multi-verb with collect). Cross-ref components drupal-http-login-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userregistrationresource-collect
+    layer: data_actions
+    subject:
+      key: asset:userregistrationresource
+      name: UserRegistrationResource
+    evidence:
+      file_path: core/modules/user/src/Plugin/rest/resource/UserRegistrationResource.php
+      start_line: 91
+      end_line: 110
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      post() accepts a UserInterface account from the REST registration body and
+      validates name/mail before persistence — first capture of registrant PII
+      (PRD collect). Cross-ref components drupal-user-registration-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: drupal-userregistrationresource-store
+    layer: data_actions
+    subject:
+      key: asset:userregistrationresource
+      name: UserRegistrationResource
+    evidence:
+      file_path: core/modules/user/src/Plugin/rest/resource/UserRegistrationResource.php
+      start_line: 112
+      end_line: 113
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      post() calls $account->save() to persist the newly registered user (PRD
+      store; multi-verb collect+store on the same API). Cross-ref components
+      drupal-user-registration-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
