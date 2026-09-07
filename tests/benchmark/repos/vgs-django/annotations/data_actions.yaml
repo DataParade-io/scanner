@@ -1,0 +1,137 @@
+annotations:
+  - id: vgs-django-database-store
+    layer: data_actions
+    subject:
+      key: asset:database
+      name: Database
+    evidence:
+      file_path: app/models.py
+      start_line: 4
+      end_line: 6
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      PiiData CharFields for social_security_number and driver_license_number
+      persist subject PII via Django ORM (PRD store / retention). Cross-ref
+      components vgs-django-database-pii.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: vgs-django-checkr-disclose
+    layer: data_actions
+    subject:
+      key: third_party:checkr
+      name: Checkr
+    evidence:
+      file_path: app/checker_client.py
+      start_line: 44
+      end_line: 48
+    expected:
+      status: positive
+      labels:
+        - disclose
+    rationale: >-
+      CheckerClient.create_candidate POSTs ssn and driver_license_number to
+      Checkr /v1/candidates (PRD disclose to third party). Cross-ref
+      components vgs-django-third-party-checkr.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: vgs-django-api-collect
+    layer: data_actions
+    subject:
+      key: asset:api
+      name: Api
+    evidence:
+      file_path: app/views.py
+      start_line: 91
+      end_line: 96
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      views.add reads SSN and driver_license_number from request.POST before
+      persisting PiiData — first capture from the data subject (PRD collect).
+      Same node also stores, displays, and discloses.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: vgs-django-api-store
+    layer: data_actions
+    subject:
+      key: asset:api
+      name: Api
+    evidence:
+      file_path: app/views.py
+      start_line: 94
+      end_line: 96
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      views.add constructs PiiData and calls save(), persisting captured SSN/DLN
+      on the same API handler that collects and later discloses to Checkr.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: vgs-django-api-display
+    layer: data_actions
+    subject:
+      key: asset:api
+      name: Api
+    evidence:
+      file_path: app/views.py
+      start_line: 47
+      end_line: 54
+    expected:
+      status: positive
+      labels:
+        - display
+    rationale: >-
+      views.get_data returns social_security_number and driver_license_number in
+      a JSON HTTP response — presenting stored PII to a caller (PRD display).
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: vgs-django-api-disclose
+    layer: data_actions
+    subject:
+      key: asset:api
+      name: Api
+    evidence:
+      file_path: app/views.py
+      start_line: 68
+      end_line: 73
+    expected:
+      status: positive
+      labels:
+        - disclose
+    rationale: >-
+      views.check loads stored PII and calls create_candidate with ssn/dln,
+      sending subject data outbound to Checkr (calling-side disclose on the
+      multi-verb API node).
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
