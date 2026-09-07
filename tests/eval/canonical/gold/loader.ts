@@ -32,6 +32,7 @@ const CORPUS_TO_CANONICAL_LAYER: Record<BenchmarkLayer, CanonicalLayer> = {
   components: "components",
   data_flows: "data-flows",
   data_items: "data-items",
+  data_actions: "data-actions",
   raw_hits: "raw-hits",
   mentions: "mentions",
   pii_signals: "mentions",
@@ -269,6 +270,30 @@ function resolveComponentIdentity(
   };
 }
 
+function resolveDataActionIdentity(
+  record: AnnotationRecord,
+): Pick<
+  ResolvedGoldFields,
+  "identityKey" | "conceptLeaf" | "conceptAncestry" | "componentType" | "observedTokenCandidates"
+> {
+  const legacyKey = record.subject.key.trim().toLowerCase();
+  const { prefix } = parseKeyPrefix(legacyKey);
+  const verb =
+    record.expected.labels.find((label) => !label.startsWith("legacy-key:"))?.trim().toLowerCase() ??
+    "";
+  const observedTokenCandidates = legacyKey
+    ? [tokenCandidate(legacyKey, 0, "legacy-subject-key")]
+    : [];
+
+  return {
+    identityKey: legacyKey,
+    componentType: prefix || undefined,
+    conceptLeaf: verb,
+    conceptAncestry: verb ? [verb] : [],
+    observedTokenCandidates,
+  };
+}
+
 function resolveFlowIdentity(
   record: AnnotationRecord,
 ): Pick<
@@ -397,6 +422,14 @@ function resolveGoldFields(
     case "data-flows": {
       const identity = resolveFlowIdentity(record);
       partial = { ...identity, observedTokenCandidates: [] };
+      break;
+    }
+    case "data-actions": {
+      const identity = resolveDataActionIdentity(record);
+      partial = {
+        ...identity,
+        observedTokenCandidates: identity.observedTokenCandidates,
+      };
       break;
     }
     default:

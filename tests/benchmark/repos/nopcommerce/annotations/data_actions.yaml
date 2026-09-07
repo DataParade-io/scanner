@@ -1,0 +1,189 @@
+annotations:
+  - id: nopcommerce-customer-store
+    layer: data_actions
+    subject:
+      key: asset:customer
+      name: Customer
+    evidence:
+      file_path: src/Libraries/Nop.Core/Domain/Customers/Customer.cs
+      start_line: 24
+      end_line: 94
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Customer domain entity declares Username, Email, FirstName, LastName,
+      DateOfBirth, StreetAddress, Phone and related profile columns as persisted
+      properties (PRD store). Cross-ref components nopcommerce-customer-database;
+      actor:customer deliberately omitted (DA-1).
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerpassword-store
+    layer: data_actions
+    subject:
+      key: asset:customerpassword
+      name: CustomerPassword
+    evidence:
+      file_path: src/Libraries/Nop.Core/Domain/Customers/CustomerPassword.cs
+      start_line: 18
+      end_line: 31
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      CustomerPassword entity persists Password, PasswordFormatId, and
+      PasswordSalt for credential history (PRD store). Cross-ref components
+      nopcommerce-customer-password-entity.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-externalauthenticationrecord-store
+    layer: data_actions
+    subject:
+      key: asset:externalauthenticationrecord
+      name: ExternalAuthenticationRecord
+    evidence:
+      file_path: src/Libraries/Nop.Core/Domain/Customers/ExternalAuthenticationRecord.cs
+      start_line: 15
+      end_line: 35
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      ExternalAuthenticationRecord persists Email, ExternalIdentifier, and OAuth
+      token fields linked to a customer (PRD store). Cross-ref components
+      nopcommerce-external-auth-record-db.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerregistrationservice-collect
+    layer: data_actions
+    subject:
+      key: asset:customerregistrationservice
+      name: CustomerRegistrationService
+    evidence:
+      file_path: src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs
+      start_line: 285
+      end_line: 305
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      RegisterCustomerAsync assigns request.Email / request.Username onto the
+      customer after validating registration input — first capture of registrant
+      identity on this service (PRD collect). Cross-ref components
+      nopcommerce-customer-registration-service.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerregistrationservice-transform
+    layer: data_actions
+    subject:
+      key: asset:customerregistrationservice
+      name: CustomerRegistrationService
+    evidence:
+      file_path: src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs
+      start_line: 314
+      end_line: 324
+    expected:
+      status: positive
+      labels:
+        - transform
+    rationale: >-
+      RegisterCustomerAsync hashes or encrypts request.Password via
+      CreatePasswordHash / EncryptText before retention (PRD transform). Cross-ref
+      components nopcommerce-customer-registration-service.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerregistrationservice-store
+    layer: data_actions
+    subject:
+      key: asset:customerregistrationservice
+      name: CustomerRegistrationService
+    evidence:
+      file_path: src/Libraries/Nop.Services/Customers/CustomerRegistrationService.cs
+      start_line: 326
+      end_line: 351
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      After hashing, RegisterCustomerAsync calls InsertCustomerPasswordAsync and
+      UpdateCustomerAsync to retain credentials and profile (PRD store; multi-verb
+      collect+transform+store). Cross-ref components
+      nopcommerce-customer-registration-service.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerservice-store
+    layer: data_actions
+    subject:
+      key: asset:customerservice
+      name: CustomerService
+    evidence:
+      file_path: src/Libraries/Nop.Services/Customers/CustomerService.cs
+      start_line: 647
+      end_line: 659
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      CustomerService.InsertCustomerAsync / UpdateCustomerAsync persist Customer
+      rows through IRepository<Customer> (PRD store). Cross-ref components
+      nopcommerce-customer-service-layer /
+      nopcommerce-customer-repository.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: nopcommerce-customerpasswordrepository-store
+    layer: data_actions
+    subject:
+      key: asset:customerpasswordrepository
+      name: CustomerPasswordRepository
+    evidence:
+      file_path: src/Libraries/Nop.Services/Customers/CustomerService.cs
+      start_line: 1495
+      end_line: 1498
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      InsertCustomerPasswordAsync inserts CustomerPassword via
+      _customerPasswordRepository (PRD store). Cross-ref components
+      nopcommerce-customer-password-repository.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted

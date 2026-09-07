@@ -1,0 +1,85 @@
+annotations:
+- id: auth0-express-auth0-disclose
+  layer: data_actions
+  subject:
+    key: third_party:auth0
+    name: Auth0
+  evidence:
+    file_path: lib/client.js
+    start_line: 160
+    end_line: 160
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: "OIDC client is configured against issuerBaseURL (Auth0) \u2014 tokens/identity go to the\
+    \ IdP (PRD disclose). Cross-ref auth0-express-auth-provider."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: auth0-express-appsession-transform
+  layer: data_actions
+  subject:
+    key: asset:appsession
+    name: appSession
+  evidence:
+    file_path: lib/appSession.js
+    start_line: 154
+    end_line: 158
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: "encryptSync encrypts the session JSON into JWE cookies \u2014 cryptographic transform of\
+    \ session/PII claims (PRD transform). Cross-ref auth0-express-auth-service."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: auth0-express-appsession-delete
+  layer: data_actions
+  subject:
+    key: asset:appsession
+    name: appSession
+  evidence:
+    file_path: lib/appSession.js
+    start_line: 247
+    end_line: 248
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: Session store _destroy removes prior session state when regenerating/clearing (PRD delete).
+    Multi-verb with transform.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: auth0-express-appsession-store
+  layer: data_actions
+  subject:
+    key: asset:appsession
+    name: appSession
+  evidence:
+    file_path: lib/appSession.js
+    start_line: 251
+    end_line: 254
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: _set persists encrypted session data into the session store (PRD store). Multi-verb node
+    with transform/delete.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

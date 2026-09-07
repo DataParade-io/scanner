@@ -17,6 +17,7 @@ import { dropCrossSectionServiceFlows } from "../../data-flow/drop-cross-section
 import { runStructuralScanPhase } from "./structural-scan";
 import { runClassifierPhase } from "./classifier-phase";
 import { runDataFlowPhase } from "./dataflow-phase";
+import { runDataActionPhase } from "../../data-actions";
 import {
   sortComponentsDeterministically,
   sortDataFlowsDeterministically,
@@ -144,6 +145,16 @@ export async function runDeterministicScanPhases(
       errors.push(`data-flow: ${message}`);
       dataFlows = [];
     }
+  }
+
+  try {
+    runDataActionPhase(components, dataFlows, files, findings);
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Unknown error during data-action derivation.";
+    errors.push(`data-actions: ${message}`);
   }
 
   sortComponentsDeterministically(components);

@@ -20,6 +20,7 @@ const LAYER_GENERIC_LABELS: Record<CanonicalLayer, ReadonlySet<string>> = {
   mentions: new Set(["pii", "pii_signal", "mention"]),
   "raw-hits": new Set(["pii", "pii_signal", "raw_hit"]),
   "data-items": new Set(["data_item", "dataitem"]),
+  "data-actions": new Set(["data_action"]),
 };
 
 function metaById(

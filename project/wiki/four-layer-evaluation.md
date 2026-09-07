@@ -4,6 +4,8 @@ The scanner measures detection quality at four **headline layers** — `mentions
 
 A fifth Jest layer, `raw-hits`, is **diagnostic only**. It is scanned, reported in fixture eval, and included as a scorecard sidecar (`diagnostic.raw-hits`), but it does not participate in headline gates.
 
+A sixth Jest layer, `data-actions`, is also **diagnostic only** (privacy verbs on nodes). It is exercised in fixture eval via `pnpm run eval:data-actions` and is **not** a `scorecard-vector/2` headline gate or part of the `diagnostic.raw-hits` sidecar.
+
 ## Headline layers
 
 | Layer | Layer key | What it measures | Identity prefix |
@@ -32,6 +34,15 @@ raw_hit:email (line 42) ──► diagnostic span check (not a headline gate)
 
 Raw hits use the same heuristic matcher as mentions today but carry `raw_hit:` identity and feed the diagnostic sidecar only.
 
+### Diagnostic data-actions
+
+```text
+asset:pg     + label store    ──► diagnostic verb presence (not a headline gate)
+third_party:stripe + disclose ──► diagnostic verb presence (not a headline gate)
+```
+
+Data-actions reuse component identity (`${type}:${name}`); expected labels are asserted canonical verbs from `properties.dataActions`. Candidates (`status: candidate`) are never gold-positive labels.
+
 ### Graph layers
 
 - **Component** keys use `${type}:${name.toLowerCase()}` (for example `third_party:stripe`, `asset:pg`).
@@ -58,7 +69,7 @@ Ground-truth case shape is defined in [tests/eval/ground-truth-schema.md](../../
 | Spec source | TypeScript cases in `layers/*/cases.ts` | `.feature` files under `features/` |
 | Runner | `jest tests/eval/**/*.test.ts` | `pnpm test:features` (Cucumber) |
 | Scanner bridge | Layer `adapter.ts` files call ingest/scan or PII matchers | Steps spawn local GraphQL, load gold Items, run `plexus evaluate accuracy` |
-| Layers exercised today | All Jest layers including diagnostic `raw-hits` | Span Overlap recall (`scanner-recall-evaluation.feature`); personal-data recall via Raw Hit Span, Mention Span, and Subject Identity (`scanner-layer-evaluation.feature`, skipped when a score class is not installed) |
+| Layers exercised today | All Jest layers including diagnostic `raw-hits` and `data-actions` | Span Overlap recall (`scanner-recall-evaluation.feature`); personal-data recall via Raw Hit Span, Mention Span, and Subject Identity (`scanner-layer-evaluation.feature`, skipped when a score class is not installed) |
 | Metrics | Shared `tests/eval/score.ts` (per-layer recall, label accuracy, precision, negatives) | Plexus Evaluation record + headline recall from scorecard metrics |
 
 Jest stays the fast, deterministic fixture harness. Plexus exercises end-to-end evaluation storage and scorecard integration against a local GraphQL process.
@@ -70,6 +81,7 @@ pnpm test tests/eval/                    # all layer eval tests
 pnpm run eval:components
 pnpm run eval:data-flows
 pnpm test tests/eval/layers/raw-hits/    # diagnostic layer
+pnpm run eval:data-actions               # diagnostic layer (after adapter/cases land)
 pnpm test tests/eval/layers/mentions/
 pnpm test tests/eval/layers/data-items/
 pnpm test:features                       # Gherkin / Plexus scenarios (layer eval skips without SubjectIdentityScore)

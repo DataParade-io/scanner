@@ -33,6 +33,7 @@ const LAYER_MAP: Record<AnnotationRecord["layer"], EvalLayer> = {
   raw_hits: "raw-hits",
   mentions: "mentions",
   data_items: "data-items",
+  data_actions: "data-actions",
   pii_signals: "mentions",
 };
 

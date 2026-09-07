@@ -1,0 +1,315 @@
+annotations:
+- id: wordpress-wpdb-store
+  layer: data_actions
+  subject:
+    key: asset:wpdb
+    name: wpdb
+  evidence:
+    file_path: src/wp-includes/class-wpdb.php
+    start_line: 55
+    end_line: 55
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: wpdb is WordPress's MySQL access layer that persists site and user rows (PRD store). Cross-ref
+    wordpress-database.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-insert-user-store
+  layer: data_actions
+  subject:
+    key: asset:wp_insert_user
+    name: wp_insert_user
+  evidence:
+    file_path: src/wp-includes/user.php
+    start_line: 2574
+    end_line: 2577
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: wp_insert_user writes user_login/user_email/user_pass (and related fields) via $wpdb->insert/$wpdb->update
+    into wp_users (PRD store). Cross-ref wordpress-wp-insert-user.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-add-user-meta-store
+  layer: data_actions
+  subject:
+    key: asset:add_user_meta
+    name: add_user_meta
+  evidence:
+    file_path: src/wp-includes/user.php
+    start_line: 1247
+    end_line: 1248
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: add_user_meta persists arbitrary user metadata (including session_tokens and profile fields)
+    into usermeta (PRD store). Cross-ref wordpress-add-user-meta.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-hash-password-transform
+  layer: data_actions
+  subject:
+    key: asset:wp_hash_password
+    name: wp_hash_password
+  evidence:
+    file_path: src/wp-includes/pluggable.php
+    start_line: 2812
+    end_line: 2819
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: wp_hash_password HMAC-prehashes then bcrypt-hashes plaintext passwords before retention
+    (PRD transform / pseudonymization). Cross-ref wordpress-wp-hash-password.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-set-password-store
+  layer: data_actions
+  subject:
+    key: asset:wp_set_password
+    name: wp_set_password
+  evidence:
+    file_path: src/wp-includes/pluggable.php
+    start_line: 3112
+    end_line: 3120
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: wp_set_password hashes then $wpdb->update's user_pass on the users table (PRD store). Cross-ref
+    wordpress-wp-set-password.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-mail-disclose
+  layer: data_actions
+  subject:
+    key: asset:wp_mail
+    name: wp_mail
+  evidence:
+    file_path: src/wp-includes/pluggable.php
+    start_line: 189
+    end_line: 189
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: wp_mail sends message bodies and recipient addresses through the outbound mail path (PHPMailer/SMTP)
+    — disclosure of account/PII content off-box (PRD disclose). Cross-ref wordpress-wp-mail-service.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-phpmailer-disclose
+  layer: data_actions
+  subject:
+    key: asset:phpmailer
+    name: PHPMailer
+  evidence:
+    file_path: src/wp-includes/PHPMailer/PHPMailer.php
+    start_line: 1663
+    end_line: 1669
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: PHPMailer::send prepares and posts the message via the configured mailer/SMTP transport
+    (PRD disclose). Cross-ref wordpress-phpmailer-service.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-application-passwords-store
+  layer: data_actions
+  subject:
+    key: asset:wp_application_passwords
+    name: WP_Application_Passwords
+  evidence:
+    file_path: src/wp-includes/class-wp-application-passwords.php
+    start_line: 111
+    end_line: 113
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: create_new_application_password appends the hashed app password and persists via set_user_application_passwords
+    / user meta (PRD store). Cross-ref wordpress-application-passwords.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-application-passwords-transform
+  layer: data_actions
+  subject:
+    key: asset:wp_application_passwords
+    name: WP_Application_Passwords
+  evidence:
+    file_path: src/wp-includes/class-wp-application-passwords.php
+    start_line: 98
+    end_line: 99
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: Application password plaintext is hashed with hash_password/wp_fast_hash before retention
+    (PRD transform). Multi-verb with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-session-tokens-store
+  layer: data_actions
+  subject:
+    key: asset:wp_session_tokens
+    name: WP_Session_Tokens
+  evidence:
+    file_path: src/wp-includes/class-wp-session-tokens.php
+    start_line: 118
+    end_line: 151
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: WP_Session_Tokens::create attaches IP/UA/login metadata and persists the session verifier
+    (PRD store). Cross-ref wordpress-session-tokens-service.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-session-tokens-delete
+  layer: data_actions
+  subject:
+    key: asset:wp_session_tokens
+    name: WP_Session_Tokens
+  evidence:
+    file_path: src/wp-includes/class-wp-session-tokens.php
+    start_line: 172
+    end_line: 175
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: WP_Session_Tokens::destroy clears a session verifier (update_session with null) — removal
+    of retained session state (PRD delete). Multi-verb with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-object-cache-store
+  layer: data_actions
+  subject:
+    key: asset:wp_object_cache
+    name: WP_Object_Cache
+  evidence:
+    file_path: src/wp-includes/class-wp-object-cache.php
+    start_line: 25
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: WP_Object_Cache retains keyed objects in memory (and drop-in backends) to avoid repeated
+    DB reads — cache retention (PRD store). Cross-ref wordpress-cache.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-wp-cache-set-store
+  layer: data_actions
+  subject:
+    key: asset:wp_cache_set
+    name: wp_cache_set
+  evidence:
+    file_path: src/wp-includes/cache.php
+    start_line: 108
+    end_line: 108
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: wp_cache_set writes values into the object cache (PRD store). Cross-ref wordpress-wp-cache-set.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-rest-users-collect
+  layer: data_actions
+  subject:
+    key: asset:wp_rest_users_controller
+    name: WP_REST_Users_Controller
+  evidence:
+    file_path: src/wp-includes/rest-api/endpoints/class-wp-rest-users-controller.php
+    start_line: 581
+    end_line: 600
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: create_item accepts REST request fields (email, username, password, etc.) via prepare_item_for_database
+    — intake from the data subject / caller (PRD collect). Cross-ref wordpress-rest-users-api.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: wordpress-rest-users-store
+  layer: data_actions
+  subject:
+    key: asset:wp_rest_users_controller
+    name: WP_REST_Users_Controller
+  evidence:
+    file_path: src/wp-includes/rest-api/endpoints/class-wp-rest-users-controller.php
+    start_line: 650
+    end_line: 650
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: create_item calls wp_insert_user to persist the prepared user record (PRD store). Multi-verb
+    with collect.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

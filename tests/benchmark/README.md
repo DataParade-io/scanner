@@ -105,13 +105,13 @@ pnpm run benchmark:run
 pnpm run benchmark:run --include-proposed vgs-django
 ```
 
-`benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints per-layer recall, label accuracy, precision, and unread counts. Raw hits are labeled diagnostic. There is no cross-layer overall score.
+`benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints per-layer recall, label accuracy, precision, and unread counts. Raw hits and corpus `data_actions` (privacy verbs) are labeled diagnostic. The fixture `data-actions` layer is the same diagnostic contract — scored by `eval:data-actions` and by `benchmark:run` when a packet declares `data_actions`, but never a scorecard headline gate. There is no cross-layer overall score.
 
 The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
 
 ## Four-layer scorecard vector (opt-in)
 
-`benchmark:scorecard` emits the headline evaluation vector: `mentions`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates.
+`benchmark:scorecard` emits the headline evaluation vector: `mentions`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates. Corpus and fixture `data-actions` remain diagnostic-only — scored by `benchmark:run` / `eval:data-actions`, excluded from `scorecard-vector/2` headlines, and not part of the `diagnostic.raw-hits` sidecar.
 
 ```bash
 pnpm run benchmark:materialize vgs-django

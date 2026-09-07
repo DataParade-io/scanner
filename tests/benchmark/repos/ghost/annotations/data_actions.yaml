@@ -1,0 +1,235 @@
+annotations:
+- id: ghost-members-schema-store
+  layer: data_actions
+  subject:
+    key: asset:members
+    name: members
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 649
+    end_line: 654
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: "members.email is a required unique column in the Ghost schema \u2014 member identity email\
+    \ is retained (PRD store). Cross-ref ghost-members-schema-database / ghost-members-database."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-users-schema-store
+  layer: data_actions
+  subject:
+    key: asset:users
+    name: users
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 269
+    end_line: 279
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Staff users table schema persists name, password, and email (PRD store). Cross-ref ghost-users-database.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-stripe-disclose
+  layer: data_actions
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: ghost/core/core/server/services/stripe/stripe-api.js
+    start_line: 404
+    end_line: 408
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: "StripeAPIService.createCustomer calls this._stripe.customers.create \u2014 outbound disclosure\
+    \ to Stripe (PRD disclose). Cross-ref ghost-stripe-integration."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-payments-disclose
+  layer: data_actions
+  subject:
+    key: asset:paymentsservice
+    name: PaymentsService
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/services/payments-service.js
+    start_line: 246
+    end_line: 250
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: PaymentsService.createCustomerForMember sends member email/name to stripeAPIService.createCustomer
+    (calling-side disclose). Cross-ref ghost-payments-service.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-payments-store
+  layer: data_actions
+  subject:
+    key: asset:paymentsservice
+    name: PaymentsService
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/services/payments-service.js
+    start_line: 252
+    end_line: 257
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: "After Stripe customer create, PaymentsService persists StripeCustomerModel rows (member_id,\
+    \ customer_id, email) \u2014 local retention alongside disclose (multi-verb node)."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-checkout-disclose
+  layer: data_actions
+  subject:
+    key: asset:createcheckoutsession
+    name: createCheckoutSession
+  evidence:
+    file_path: ghost/core/core/server/services/stripe/stripe-api.js
+    start_line: 668
+    end_line: 668
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: >-
+    stripe-api createCheckoutSession calls this._stripe.checkout.sessions.create
+    — outbound payment session disclosure to Stripe (PRD disclose). Cross-ref
+    ghost-stripe-checkout-api.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-member-controller-collect
+  layer: data_actions
+  subject:
+    key: asset:membercontroller
+    name: MemberController
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/controllers/member-controller.js
+    start_line: 40
+    end_line: 42
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: "MemberController.updateEmailAddress reads req.body.email \u2014 captures member email from\
+    \ the request (PRD collect). Cross-ref ghost-member-controller-api."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-member-repository-store
+  layer: data_actions
+  subject:
+    key: asset:memberrepository
+    name: MemberRepository
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 526
+    end_line: 532
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: >-
+    MemberRepository.create calls this._Member.add with memberData/labels,
+    persisting new members (PRD store). Cross-ref ghost-member-repository-service.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-members-api-collect
+  layer: data_actions
+  subject:
+    key: asset:membersapi
+    name: MembersAPI
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/members-api.js
+    start_line: 436
+    end_line: 438
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: MembersAPI orchestrates member signup/session flows that capture member identity (PRD collect).
+    Cross-ref ghost-members-api.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-router-controller-collect
+  layer: data_actions
+  subject:
+    key: asset:routercontroller
+    name: RouterController
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/controllers/router-controller.js
+    start_line: 913
+    end_line: 914
+  expected:
+    status: positive
+    labels:
+    - collect
+  rationale: >-
+    RouterController.sendMagicLink reads req.body.email as the member identity
+    capture for signup/signin (PRD collect). Cross-ref ghost-router-controller-api.
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: ghost-member-controller-disclose
+  layer: data_actions
+  subject:
+    key: asset:membercontroller
+    name: MemberController
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/controllers/member-controller.js
+    start_line: 70
+    end_line: 75
+  expected:
+    status: positive
+    labels:
+    - disclose
+  rationale: "updateEmailAddress calls _sendEmailWithMagicLink with the captured email \u2014 outbound\
+    \ disclosure of email for magic-link delivery (multi-verb with collect)."
+  provenance:
+    proposed_by: data-actions-5.2-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted

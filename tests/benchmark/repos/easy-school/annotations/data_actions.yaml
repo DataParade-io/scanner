@@ -1,0 +1,46 @@
+annotations:
+  - id: easy-school-database-store
+    layer: data_actions
+    subject:
+      key: asset:database
+      name: Database
+    evidence:
+      file_path: students/models.py
+      start_line: 57
+      end_line: 61
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Guardian.social_security_number is a Django CharField persisted via ORM
+      (PRD store). Cross-ref components easy-school-database-guardian-ssn.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: easy-school-student-store
+    layer: data_actions
+    subject:
+      key: asset:student
+      name: Student
+    evidence:
+      file_path: students/models.py
+      start_line: 17
+      end_line: 23
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Student model persists admission_no, name, gender, and date_of_birth as
+      ORM columns (PRD store). Cross-ref components easy-school-database-student;
+      subject key uses component name Student → asset:student.
+    provenance:
+      proposed_by: data-actions-5.2-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted

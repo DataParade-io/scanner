@@ -2,7 +2,7 @@
 
 Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts` and delegates to the published boundary in `src/eval/` (`@dataparade/scanner/eval`). See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
 
-Four **headline layers** form the evaluation vector. `raw-hits` is **diagnostic only** — scanned and reported but excluded from headline gates. There is **no cross-layer scalar**.
+Four **headline layers** form the evaluation vector. `raw-hits` and `data-actions` are **diagnostic only** — scanned and reported but excluded from headline gates. There is **no cross-layer scalar**.
 
 ## Headline layers
 
@@ -13,13 +13,14 @@ Four **headline layers** form the evaluation vector. `raw-hits` is **diagnostic 
 | Components | `pnpm run eval:components` | `${type}:${name}` | key + span + labels |
 | Data flows | `pnpm run eval:data-flows` | `flow:…` | key + span + labels |
 
-## Diagnostic layer
+## Diagnostic layers
 
 | Layer | Script | Identity prefix | Match semantics |
 | --- | --- | --- | --- |
 | Raw hits | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels (diagnostic; not a headline gate) |
+| Data actions | `pnpm run eval:data-actions` | `${type}:${name}` | key + span + asserted verb labels (diagnostic; not a `scorecard-vector/2` headline gate) |
 
-Personal-data layers share heuristic rules but differ in roll-up. Graph layers use the deterministic `scan()` pipeline.
+Personal-data layers share heuristic rules but differ in roll-up. Graph layers and `data-actions` use the deterministic `scan()` pipeline. Do not add empty layer stubs under `layers/data-actions/` until gold cases land.
 
 ## Layout
 
@@ -79,6 +80,7 @@ Positives marked `documentedGap` remain in recall denominators as measured misse
 pnpm test tests/eval/
 pnpm run eval:components
 pnpm run eval:raw-hits
+pnpm run eval:data-actions
 pnpm run eval:mentions
 pnpm run eval:data-items
 pnpm run eval:data-flows

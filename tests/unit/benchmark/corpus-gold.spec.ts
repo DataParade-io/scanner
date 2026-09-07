@@ -89,7 +89,9 @@ describe("imported corpus gold", () => {
     // KDATAP-47e331: 146 flow adjudication accepts + 17 rejects applied from adjudication ledger.
     // KDATAP-a7c36b: 12 slice-2 flow adjudication accepts applied from slice-2 ledger (PR #62).
     // KDATAP-b702ea: 44 negative component decoys demoted accepted → rejected (LOADER_EXEMPTION fix).
-    expect(acceptedEvalCases).toBe(896);
+    // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
+    // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
+    expect(acceptedEvalCases).toBe(1016);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {

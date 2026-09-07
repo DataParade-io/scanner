@@ -1,0 +1,258 @@
+annotations:
+  - id: magento-customer-store
+    layer: data_actions
+    subject:
+      key: asset:customer
+      name: Customer
+    evidence:
+      file_path: app/code/Magento/Customer/Model/Customer.php
+      start_line: 34
+      end_line: 41
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Customer model declares getEmail / setPasswordHash accessors for persisted
+      account identity and credential hash fields (PRD store). ResourceModel
+      Customer._beforeSave also binds email onto customer_entity. Cross-ref
+      components magento-customer-model / magento-customer-entity-database;
+      actor:customer omitted (DA-1).
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-customer-transform
+    layer: data_actions
+    subject:
+      key: asset:customer
+      name: Customer
+    evidence:
+      file_path: app/code/Magento/Customer/Model/Customer.php
+      start_line: 609
+      end_line: 625
+    expected:
+      status: positive
+      labels:
+        - transform
+    rationale: >-
+      setPassword / hashPassword call EncryptorInterface.getHash to convert
+      plaintext passwords into salted hashes before retention (PRD transform;
+      multi-verb with store). Cross-ref components magento-customer-model.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-address-store
+    layer: data_actions
+    subject:
+      key: asset:address
+      name: Address
+    evidence:
+      file_path: app/code/Magento/Customer/Model/Address.php
+      start_line: 153
+      end_line: 169
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Address.updateData loads AddressInterface postal/profile attributes onto
+      the customer address entity retained in EAV tables (PRD store). Cross-ref
+      components magento-address-model.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-addressresource-store
+    layer: data_actions
+    subject:
+      key: asset:addressresource
+      name: AddressResource
+    evidence:
+      file_path: app/code/Magento/Customer/Model/ResourceModel/Address.php
+      start_line: 99
+      end_line: 99
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      Address resource getEntityType sets type customer_address — the SQL/EAV
+      persistence layer for address PII (PRD store). Cross-ref components
+      magento-address-resource-model.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-createpost-collect
+    layer: data_actions
+    subject:
+      key: asset:createpost
+      name: CreatePost
+    evidence:
+      file_path: app/code/Magento/Customer/Controller/Account/CreatePost.php
+      start_line: 384
+      end_line: 389
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      CreatePost.execute extracts customer/address from the registration request
+      and reads password params — first capture of registrant PII (PRD collect).
+      Cross-ref components magento-create-post-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-createpost-store
+    layer: data_actions
+    subject:
+      key: asset:createpost
+      name: CreatePost
+    evidence:
+      file_path: app/code/Magento/Customer/Controller/Account/CreatePost.php
+      start_line: 397
+      end_line: 398
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      CreatePost calls accountManagement.createAccount to persist the collected
+      customer and password hash (PRD store; multi-verb collect+store). Cross-ref
+      components magento-create-post-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-editpost-collect
+    layer: data_actions
+    subject:
+      key: asset:editpost
+      name: EditPost
+    evidence:
+      file_path: app/code/Magento/Customer/Controller/Account/EditPost.php
+      start_line: 382
+      end_line: 387
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      populateNewCustomerDataObject uses CustomerExtractor.extract on the account
+      edit POST — capturing updated profile fields from the subject (PRD collect).
+      Cross-ref components magento-edit-post-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-editpost-store
+    layer: data_actions
+    subject:
+      key: asset:editpost
+      name: EditPost
+    evidence:
+      file_path: app/code/Magento/Customer/Controller/Account/EditPost.php
+      start_line: 266
+      end_line: 266
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      EditPost.execute calls customerRepository.save($customerCandidate) to
+      retain edited account fields (PRD store; multi-verb collect+store).
+      Cross-ref components magento-edit-post-api.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-accountmanagement-store
+    layer: data_actions
+    subject:
+      key: asset:accountmanagement
+      name: AccountManagement
+    evidence:
+      file_path: app/code/Magento/Customer/Model/AccountManagement.php
+      start_line: 854
+      end_line: 875
+    expected:
+      status: positive
+      labels:
+        - store
+    rationale: >-
+      createAccount hashes the password then createAccountWithPasswordHash /
+      customerRepository.save persists the new customer (PRD store). Cross-ref
+      components magento-account-management-auth-service /
+      magento-create-account-service.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-accountmanagement-transform
+    layer: data_actions
+    subject:
+      key: asset:accountmanagement
+      name: AccountManagement
+    evidence:
+      file_path: app/code/Magento/Customer/Model/AccountManagement.php
+      start_line: 1101
+      end_line: 1104
+    expected:
+      status: positive
+      labels:
+        - transform
+    rationale: >-
+      createPasswordHash uses encryptor.getHash($password, true) — password
+      hashing transform used by createAccount / changePassword (PRD transform;
+      multi-verb with store). Cross-ref components
+      magento-account-management-auth-service.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
+  - id: magento-customerextractor-collect
+    layer: data_actions
+    subject:
+      key: asset:customerextractor
+      name: CustomerExtractor
+    evidence:
+      file_path: app/code/Magento/Customer/Model/CustomerExtractor.php
+      start_line: 73
+      end_line: 85
+    expected:
+      status: positive
+      labels:
+        - collect
+    rationale: >-
+      CustomerExtractor.extract builds CustomerInterface from form request data
+      via extractData/compactData — first capture of customer attributes from the
+      HTTP form (PRD collect). Cross-ref components magento-customer-extractor.
+    provenance:
+      proposed_by: data-actions-tier-c-agent
+      proposed_at: 2026-09-07
+      reviewed_by: source-adjudication
+      reviewed_at: 2026-09-07
+      review_state: accepted
