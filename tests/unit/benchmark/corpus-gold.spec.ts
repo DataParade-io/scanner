@@ -86,7 +86,8 @@ describe("imported corpus gold", () => {
     // KDATAP-9b83f6: five suffix-vs-label false accepts demoted (redmine email + four password verifiers).
     // KDATAP-25b2f4: 113 data-item adjudication accepts applied; exposed-schema-password-not-data-item flipped reject.
     // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
-    expect(acceptedEvalCases).toBe(808);
+    // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
+    expect(acceptedEvalCases).toBe(875);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {

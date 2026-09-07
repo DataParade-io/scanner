@@ -1,0 +1,542 @@
+annotations:
+- id: discourse-useremail-store
+  layer: data_actions
+  subject:
+    key: asset:useremail
+    name: UserEmail
+  evidence:
+    file_path: app/models/user_email.rb
+    start_line: 3
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserEmail ActiveRecord model validates and persists primary/secondary email addresses
+    (PRD store). Cross-ref discourse-user-email-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userpassword-store
+  layer: data_actions
+  subject:
+    key: asset:userpassword
+    name: UserPassword
+  evidence:
+    file_path: app/models/user_password.rb
+    start_line: 3
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserPassword persists password_hash/salt/algorithm columns for local auth (PRD store).
+    Cross-ref discourse-user-password-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userpassword-transform
+  layer: data_actions
+  subject:
+    key: asset:userpassword
+    name: UserPassword
+  evidence:
+    file_path: app/models/user_password.rb
+    start_line: 56
+    end_line: 61
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: ensure_password_is_hashed PBKDF2-hashes @raw_password into password_hash before save
+    (PRD transform). Multi-verb with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userauthtoken-store
+  layer: data_actions
+  subject:
+    key: asset:userauthtoken
+    name: UserAuthToken
+  evidence:
+    file_path: app/models/user_auth_token.rb
+    start_line: 100
+    end_line: 120
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserAuthToken.generate! creates a row with hashed auth_token, client_ip, and user_agent
+    (PRD store). Cross-ref discourse-user-auth-token.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userauthtoken-transform
+  layer: data_actions
+  subject:
+    key: asset:userauthtoken
+    name: UserAuthToken
+  evidence:
+    file_path: app/models/user_auth_token.rb
+    start_line: 109
+    end_line: 110
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: generate! hashes the raw session token before persistence (PRD transform). Multi-verb with
+    store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userprofile-store
+  layer: data_actions
+  subject:
+    key: asset:userprofile
+    name: UserProfile
+  evidence:
+    file_path: app/models/user_profile.rb
+    start_line: 3
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserProfile persists bio_raw, website, location and related profile fields (PRD store).
+    Cross-ref discourse-user-profile-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-oauth2userinfo-store
+  layer: data_actions
+  subject:
+    key: asset:oauth2userinfo
+    name: Oauth2UserInfo
+  evidence:
+    file_path: app/models/oauth2_user_info.rb
+    start_line: 3
+    end_line: 3
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Oauth2UserInfo table retains provider email/name/uid for social logins (PRD store). Cross-ref
+    discourse-oauth2-user-info.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userassociatedaccount-store
+  layer: data_actions
+  subject:
+    key: asset:userassociatedaccount
+    name: UserAssociatedAccount
+  evidence:
+    file_path: app/models/user_associated_account.rb
+    start_line: 3
+    end_line: 3
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserAssociatedAccount persists provider credentials/info/extra JSON and provider_uid (PRD
+    store). Cross-ref discourse-user-associated-account.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userassociatedaccount-delete
+  layer: data_actions
+  subject:
+    key: asset:userassociatedaccount
+    name: UserAssociatedAccount
+  evidence:
+    file_path: app/models/user_associated_account.rb
+    start_line: 6
+    end_line: 10
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: cleanup! delete_all removes orphaned associated-account rows holding PII when user_id is
+    null (PRD delete). Multi-verb with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emailtoken-store
+  layer: data_actions
+  subject:
+    key: asset:emailtoken
+    name: EmailToken
+  evidence:
+    file_path: app/models/email_token.rb
+    start_line: 3
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: EmailToken persists email + token_hash for confirmation/login flows (PRD store). Cross-ref
+    discourse-email-token.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emailtoken-transform
+  layer: data_actions
+  subject:
+    key: asset:emailtoken
+    name: EmailToken
+  evidence:
+    file_path: app/models/email_token.rb
+    start_line: 98
+    end_line: 99
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: hash_token SHA256-digests the raw email token before storage (PRD transform). Multi-verb
+    with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-invite-store
+  layer: data_actions
+  subject:
+    key: asset:invite
+    name: Invite
+  evidence:
+    file_path: app/models/invite.rb
+    start_line: 3
+    end_line: 40
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Invite persists invitee email and related onboarding fields (PRD store). Cross-ref discourse-invite-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-userapikey-store
+  layer: data_actions
+  subject:
+    key: asset:userapikey
+    name: UserApiKey
+  evidence:
+    file_path: app/models/user_api_key.rb
+    start_line: 3
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserApiKey persists key_hash and scopes for user API access (PRD store). Cross-ref discourse-user-api-key.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-apikey-store
+  layer: data_actions
+  subject:
+    key: asset:apikey
+    name: ApiKey
+  evidence:
+    file_path: app/models/api_key.rb
+    start_line: 3
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: ApiKey persists hashed admin/system API keys (PRD store). Cross-ref discourse-api-key.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-apikey-transform
+  layer: data_actions
+  subject:
+    key: asset:apikey
+    name: ApiKey
+  evidence:
+    file_path: app/models/api_key.rb
+    start_line: 96
+    end_line: 97
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: ApiKey.hash_key SHA256-hashes raw API keys before comparison/storage (PRD transform). Multi-verb
+    with store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-usersecondfactor-store
+  layer: data_actions
+  subject:
+    key: asset:usersecondfactor
+    name: UserSecondFactor
+  evidence:
+    file_path: app/models/user_second_factor.rb
+    start_line: 3
+    end_line: 3
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserSecondFactor persists TOTP/backup-code second-factor records (PRD store). Cross-ref
+    discourse-user-second-factor-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-usersecuritykey-store
+  layer: data_actions
+  subject:
+    key: asset:usersecuritykey
+    name: UserSecurityKey
+  evidence:
+    file_path: app/models/user_security_key.rb
+    start_line: 3
+    end_line: 3
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserSecurityKey persists WebAuthn public_key credentials (PRD store). Cross-ref discourse-user-security-key.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-useripaddresshistory-store
+  layer: data_actions
+  subject:
+    key: asset:useripaddresshistory
+    name: UserIpAddressHistory
+  evidence:
+    file_path: app/models/user_ip_address_history.rb
+    start_line: 3
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: UserIpAddressHistory retains per-user ip_address history (PRD store). Cross-ref discourse-user-ip-history.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emailchangerequest-store
+  layer: data_actions
+  subject:
+    key: asset:emailchangerequest
+    name: EmailChangeRequest
+  evidence:
+    file_path: app/models/email_change_request.rb
+    start_line: 3
+    end_line: 10
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: EmailChangeRequest persists new_email / old_email tokens for address changes (PRD store).
+    Cross-ref discourse-email-change-request.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-screenedemail-store
+  layer: data_actions
+  subject:
+    key: asset:screenedemail
+    name: ScreenedEmail
+  evidence:
+    file_path: app/models/screened_email.rb
+    start_line: 7
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: ScreenedEmail stores watched/blocked email addresses used at signup (PRD store). Cross-ref
+    discourse-screened-email.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emaillogincode-store
+  layer: data_actions
+  subject:
+    key: asset:emaillogincode
+    name: EmailLoginCode
+  evidence:
+    file_path: app/models/email_login_code.rb
+    start_line: 22
+    end_line: 31
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: EmailLoginCode.generate! creates rows with email and code_hash for passwordless login (PRD
+    store). Cross-ref discourse-email-login-code-model.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emaillogincode-transform
+  layer: data_actions
+  subject:
+    key: asset:emaillogincode
+    name: EmailLoginCode
+  evidence:
+    file_path: app/models/email_login_code.rb
+    start_line: 37
+    end_line: 41
+  expected:
+    status: positive
+    labels:
+    - transform
+  rationale: hash_code HMAC-SHA256s the one-time code before retention (PRD transform). Multi-verb with
+    store.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-emaillogincode-delete
+  layer: data_actions
+  subject:
+    key: asset:emaillogincode
+    name: EmailLoginCode
+  evidence:
+    file_path: app/models/email_login_code.rb
+    start_line: 29
+    end_line: 29
+  expected:
+    status: positive
+    labels:
+    - delete
+  rationale: generate! delete_all clears prior codes for the email before inserting a new one (PRD delete).
+    Multi-verb with store/transform.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-postgresql-store
+  layer: data_actions
+  subject:
+    key: asset:postgresql
+    name: postgresql
+  evidence:
+    file_path: config/database.yml
+    start_line: 10
+    end_line: 11
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: database.yml configures PostgreSQL as the persistence backend for Discourse models (PRD
+    store). Cross-ref discourse-postgresql.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-redis-store
+  layer: data_actions
+  subject:
+    key: asset:redis
+    name: redis
+  evidence:
+    file_path: config/initializers/001-redis.rb
+    start_line: 9
+    end_line: 11
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: Redis initializer connects Discourse.redis as a cache/session retention store (PRD store).
+    Cross-ref discourse-redis.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
+- id: discourse-forum-session-store
+  layer: data_actions
+  subject:
+    key: asset:_forum_session
+    name: _forum_session
+  evidence:
+    file_path: config/initializers/100-session_store.rb
+    start_line: 5
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - store
+  rationale: discourse_cookie_store session key _forum_session retains authenticated session state (PRD
+    store). Cross-ref discourse-forum-session.
+  provenance:
+    proposed_by: data-actions-tier-c-agent
+    proposed_at: '2026-09-07'
+    reviewed_by: source-adjudication
+    reviewed_at: '2026-09-07'
+    review_state: accepted
