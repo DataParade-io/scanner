@@ -211,6 +211,21 @@ const PERSONAL_DATA_ROUTE_PATH_PATTERNS = [
   /password/i,
   /account/i,
   /session/i,
+  /email/i,
+  /profile/i,
+  /auth/i,
+  /login/i,
+  /register/i,
+  /member/i,
+  /billing/i,
+  /payment/i,
+  /address/i,
+  /token/i,
+  /credential/i,
+  /employee/i,
+  /patient/i,
+  /checkout/i,
+  /identity/i,
 ];
 
 export function hasPersonalDataRouteReference(span: string, contextSpan: string): boolean {
@@ -219,7 +234,11 @@ export function hasPersonalDataRouteReference(span: string, contextSpan: string)
   ) ?? '';
   const urlMatch =
     routeLine.match(/url\s*=\s*["']([^"']+)["']/i) ??
-    routeLine.match(/^\s*(?:get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s*=>/i);
+    routeLine.match(/^\s*(?:get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s*=>/i) ??
+    routeLine.match(/Route::(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
+    routeLine.match(/(?:app|router)\.(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
+    routeLine.match(/@(?:app|\w+_bp)\.route\s*\(\s*['"]([^'"]+)['"]/i) ??
+    routeLine.match(/\br\.(?:GET|POST|PUT|DELETE|PATCH)\s*\(\s*["']([^"']+)["']/);
   const url = urlMatch?.[1] ?? routeLine;
   return PERSONAL_DATA_ROUTE_PATH_PATTERNS.some((pattern) => pattern.test(url));
 }

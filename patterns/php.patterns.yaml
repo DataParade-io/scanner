@@ -92,6 +92,15 @@ db_clients:
       - Magento\Framework\DB
     confidence: 0.85
 
+  - id: magento_abstract_model
+    patternId: database_connection
+    databaseType: sql
+    filePathRegex: "(?:^|/)app/code/.+/Model/.+\\.php$"
+    contentRegexes:
+      - 'extends\s+\\?Magento\\Framework\\Model\\AbstractModel\b'
+      - 'extends\s+AbstractModel\b'
+    confidence: 0.85
+
 pdo_dsn:
   patternId: database_connection
   regex: 'new\s+\\?PDO\s*\(\s*["'']([^"'']+)["'']'

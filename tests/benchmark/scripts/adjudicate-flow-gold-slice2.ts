@@ -228,15 +228,16 @@ function main(): void {
 
   const rows = listUnresolvedFlowRows();
   const ledger = buildSlice2FlowAdjudicationLedger(rows);
+  const expectedRows = rows.length;
 
-  if (ledger.totalRows !== 273) {
-    throw new Error(`Expected 273 ledger entries, got ${ledger.totalRows}`);
+  if (ledger.totalRows !== expectedRows) {
+    throw new Error(`Expected ${expectedRows} ledger entries, got ${ledger.totalRows}`);
   }
 
   const dispositionTotal =
     ledger.dispositions.accept + ledger.dispositions.reject + ledger.dispositions.unresolved;
-  if (dispositionTotal !== 273) {
-    throw new Error(`Disposition accounting mismatch: ${dispositionTotal} !== 273`);
+  if (dispositionTotal !== expectedRows) {
+    throw new Error(`Disposition accounting mismatch: ${dispositionTotal} !== ${expectedRows}`);
   }
 
   printSummary(ledger);
