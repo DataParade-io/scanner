@@ -24,6 +24,7 @@ import {
   classificationIdentityKey,
   resolveComponentSubtype,
 } from "../compat/component-taxonomy";
+import { DATA_ACTION_SET, type DataAction } from "../../../../src/data-actions/taxonomy";
 import type { MigrationDiagnostic } from "../compat/types";
 import { evalCaseToAnnotationRecord } from "./fixture-input";
 import type { EvalCase } from "../../types";
@@ -270,28 +271,103 @@ function resolveComponentIdentity(
   };
 }
 
+function isDataActionVerbLabel(label: string): boolean {
+  const normalized = label.trim().toLowerCase();
+  return DATA_ACTION_SET.has(normalized as DataAction);
+}
+
+/**
+ * Legacy data-action rows often carry only verb labels (store, disclose, …).
+ * Infer asset subtype hints from the subject-key suffix when labels omit taxonomy.
+ */
+function inferComponentLabelsForLegacyAssetKey(
+  componentType: string,
+  keySuffix: string,
+): readonly string[] {
+  if (componentType !== "asset") {
+    return [];
+  }
+  const lower = keySuffix.trim().toLowerCase();
+  if (
+    lower.includes("jdbc") ||
+    lower.includes("jpa") ||
+    lower === "pg" ||
+    lower === "npgsql" ||
+    lower === "psycopg2" ||
+    lower.includes("db_instance")
+  ) {
+    return ["database"];
+  }
+  if (lower.includes("s3_bucket") || lower.includes("bucket")) {
+    return ["storage"];
+  }
+  return [];
+}
+
 function resolveDataActionIdentity(
   record: AnnotationRecord,
 ): Pick<
   ResolvedGoldFields,
   "identityKey" | "conceptLeaf" | "conceptAncestry" | "componentType" | "observedTokenCandidates"
 > {
-  const legacyKey = record.subject.key.trim().toLowerCase();
-  const { prefix } = parseKeyPrefix(legacyKey);
-  const verb =
-    record.expected.labels.find((label) => !label.startsWith("legacy-key:"))?.trim().toLowerCase() ??
-    "";
+  const legacyKey = record.subject.key.trim();
   const observedTokenCandidates = legacyKey
-    ? [tokenCandidate(legacyKey, 0, "legacy-subject-key")]
+    ? [tokenCandidate(legacyKey.trim().toLowerCase(), 0, "legacy-subject-key")]
     : [];
 
-  return {
-    identityKey: legacyKey,
-    componentType: prefix || undefined,
-    conceptLeaf: verb,
-    conceptAncestry: verb ? [verb] : [],
-    observedTokenCandidates,
-  };
+  const verb =
+    record.expected.labels
+      .find((label) => !label.startsWith("legacy-key:") && isDataActionVerbLabel(label))
+      ?.trim()
+      .toLowerCase() ?? "";
+
+  const componentHintLabels = record.expected.labels.filter(
+    (label) => !label.startsWith("legacy-key:") && !isDataActionVerbLabel(label),
+  );
+
+  const { prefix, rest } = parseKeyPrefix(legacyKey);
+
+  if (prefix === "third_party") {
+    return {
+      identityKey: `${prefix}:${rest.trim().toLowerCase()}`,
+      componentType: prefix,
+      conceptLeaf: verb,
+      conceptAncestry: verb ? [verb] : [],
+      observedTokenCandidates,
+    };
+  }
+
+  const labelsForComponent =
+    componentHintLabels.length > 0
+      ? componentHintLabels
+      : inferComponentLabelsForLegacyAssetKey(prefix, rest);
+
+  try {
+    const componentGold = resolveComponentIdentity({
+      ...record,
+      expected: {
+        ...record.expected,
+        labels: [...labelsForComponent],
+      },
+    });
+
+    return {
+      identityKey: componentGold.identityKey,
+      componentType: componentGold.componentType,
+      conceptLeaf: verb,
+      conceptAncestry: verb ? [verb] : [],
+      observedTokenCandidates,
+    };
+  } catch {
+    // Intentional fixture gaps keep legacy subject keys until component detection lands.
+    return {
+      identityKey: legacyKey.trim().toLowerCase(),
+      componentType: prefix || undefined,
+      conceptLeaf: verb,
+      conceptAncestry: verb ? [verb] : [],
+      observedTokenCandidates,
+    };
+  }
 }
 
 function resolveFlowIdentity(

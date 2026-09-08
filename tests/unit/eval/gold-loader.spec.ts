@@ -9,6 +9,7 @@ import {
 import { evalCaseToAnnotationRecord } from "../../eval/canonical/gold/fixture-input";
 import type { AnnotationRecord } from "../../benchmark/schema";
 import { componentEvalCases } from "../../eval/layers/components/cases";
+import { dataActionEvalCases } from "../../eval/layers/data-actions/cases";
 import { dataFlowEvalCases } from "../../eval/layers/data-flows/cases";
 import { mentionEvalCases } from "../../eval/layers/mentions/cases";
 import { loadAnnotations } from "../../benchmark/manifest";
@@ -198,6 +199,27 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
       const { record } = loadCanonicalGoldFromEvalCase(caseRecord);
       expect(record.disposition).toBe("needs_adjudication");
     }
+  });
+
+  it("resolves data-action store rows to hybrid component identity keys", () => {
+    const fixtureCase = dataActionEvalCases.find((entry) => entry.id === "ts-pg-store");
+    expect(fixtureCase).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!);
+
+    expect(record.identity.identityKey).toBe("asset:database");
+    expect(record.classification.conceptLeaf).toBe("store");
+    expect(record.observedTokenCandidates?.some((token) => token.value === "asset:pg")).toBe(true);
+  });
+
+  it("preserves third-party vendor keys on data-action disclose rows", () => {
+    const fixtureCase = dataActionEvalCases.find((entry) => entry.id === "ts-stripe-disclose");
+    expect(fixtureCase).toBeDefined();
+
+    const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!);
+
+    expect(record.identity.identityKey).toBe("third_party:stripe");
+    expect(record.classification.conceptLeaf).toBe("disclose");
   });
 
   it("maps fixture mention:username through concept-map fallback", () => {
