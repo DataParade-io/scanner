@@ -1,4 +1,5 @@
 import {
+  assignDataItemsOneToOne,
   assignOneToOne,
   buildAcceptedGoldExpectation,
   buildScannerFinding,
@@ -73,5 +74,76 @@ describe("assignOneToOne scoped collision handling", () => {
       expect.arrayContaining(["gold-username-a", "gold-username-b"]),
     );
     expect(result.unmatchedFindingIds).toContain("finding-username");
+  });
+});
+
+describe("assignDataItemsOneToOne evidence-scoped slices", () => {
+  it("credits one same-key gold for a rolled-up multi-location finding", () => {
+    const expectations = [
+      withId(
+        buildAcceptedGoldExpectation({
+          layer: "data-items",
+          identityKey: "data_item:username",
+          conceptLeaf: "username",
+          evidenceLocations: [sampleEvidence("src/a.yml", 1, 1)],
+        }),
+        "gold-username-a",
+      ),
+      withId(
+        buildAcceptedGoldExpectation({
+          layer: "data-items",
+          identityKey: "data_item:username",
+          conceptLeaf: "username",
+          evidenceLocations: [sampleEvidence("src/b.yml", 2, 2)],
+        }),
+        "gold-username-b",
+      ),
+      withId(
+        buildAcceptedGoldExpectation({
+          layer: "data-items",
+          identityKey: "data_item:password",
+          conceptLeaf: "password",
+          evidenceLocations: [sampleEvidence("src/a.yml", 3, 3)],
+        }),
+        "gold-password",
+      ),
+    ];
+
+    const usernameFinding = withId(
+      buildScannerFinding({
+        layer: "data-items",
+        identityKey: "data_item:username",
+        conceptLeaf: "username",
+        evidenceLocations: [
+          sampleEvidence("src/a.yml", 1, 1),
+          sampleEvidence("src/b.yml", 2, 2),
+        ],
+      }),
+      "finding-username",
+    );
+    const passwordFinding = withId(
+      buildScannerFinding({
+        layer: "data-items",
+        identityKey: "data_item:password",
+        conceptLeaf: "password",
+        evidenceLocations: [sampleEvidence("src/a.yml", 3, 3)],
+      }),
+      "finding-password",
+    );
+
+    const result = assignDataItemsOneToOne(expectations, [
+      usernameFinding,
+      passwordFinding,
+    ]);
+
+    expect(result.pairs).toEqual(
+      expect.arrayContaining([
+        { expectationId: "gold-password", findingId: "finding-password" },
+      ]),
+    );
+    expect(
+      result.pairs.filter((pair) => pair.findingId === "finding-username"),
+    ).toHaveLength(1);
+    expect(result.unmatchedExpectationIds).toContain("gold-username-b");
   });
 });

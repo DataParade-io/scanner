@@ -1,4 +1,4 @@
-import { assignOneToOne, type AssignmentResult } from "./canonical/assignment";
+import { assignDataItemsOneToOne, assignOneToOne, type AssignmentResult } from "./canonical/assignment";
 import { computeMetricComputability } from "./canonical/computability";
 import { conceptCorrectness, negativeObservationCandidate } from "./canonical/match";
 import type {
@@ -118,7 +118,10 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
     return meta?.isRecallEvaluable && !meta.unread;
   });
 
-  const assignment = assignOneToOne([...evaluableExpectations], [...findings]);
+  const assignment =
+    layer === "data-items"
+      ? assignDataItemsOneToOne([...evaluableExpectations], [...findings])
+      : assignOneToOne([...evaluableExpectations], [...findings]);
   const pairByExpectationId = new Map(
     assignment.pairs.map((pair) => [pair.expectationId, pair.findingId]),
   );

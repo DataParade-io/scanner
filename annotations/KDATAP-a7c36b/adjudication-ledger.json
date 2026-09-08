@@ -1,8 +1,8 @@
 {
   "task": "KDATAP-a7c36b",
-  "totalRows": 273,
+  "totalRows": 261,
   "dispositions": {
-    "accept": 12,
+    "accept": 0,
     "reject": 0,
     "unresolved": 261
   },
@@ -13,18 +13,13 @@
       "unresolved": 157
     },
     "intra_single_component": {
-      "accept": 11,
+      "accept": 0,
       "reject": 0,
       "unresolved": 104
-    },
-    "entity_picker_resolved": {
-      "accept": 1,
-      "reject": 0,
-      "unresolved": 0
     }
   },
-  "contestedCount": 40,
-  "categoryCorrectionCount": 10,
+  "contestedCount": 28,
+  "categoryCorrectionCount": 0,
   "demotedAcceptCount": 28,
   "entries": [
     {
@@ -86,40 +81,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "unresolved source for slug 'login'; unresolved target for slug 'auth0'; no component candidates via overlap or rationale+same-file"
-    },
-    {
-      "annotationId": "directus-login-email-to-users-table",
-      "repoKey": "directus",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "ba63b43af23d7815c0b8ea5705508333bbd69e8beb6ceafe9c6468954802a5d2",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "directus-local-auth-driver"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "directus::directus-local-auth-driver",
-      "targetEntityId": "directus::directus-local-auth-driver",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).",
-        "source_entity_id": "directus::directus-local-auth-driver",
-        "target_entity_id": "directus::directus-local-auth-driver",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on directus-local-auth-driver.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
     },
     {
       "annotationId": "directus-login-to-sessions-table",
@@ -207,40 +168,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "unresolved source for slug 'failed-login'; ambiguous target match for slug 'suspended'"
-    },
-    {
-      "annotationId": "directus-local-get-user-id",
-      "repoKey": "directus",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "ba63b43af23d7815c0b8ea5705508333bbd69e8beb6ceafe9c6468954802a5d2",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "directus-local-auth-driver"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "directus::directus-local-auth-driver",
-      "targetEntityId": "directus::directus-local-auth-driver",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on directus-local-auth-driver (intra_single_component).",
-        "source_entity_id": "directus::directus-local-auth-driver",
-        "target_entity_id": "directus::directus-local-auth-driver",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on directus-local-auth-driver.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
     },
     {
       "annotationId": "directus-auth-driver-users-service",
@@ -999,42 +926,6 @@
       "rationale": "unresolved source for slug 'login'; unresolved target for slug 'csrf_token'; no component candidates via overlap or rationale+same-file"
     },
     {
-      "annotationId": "drupal-reset-password-to-notification",
-      "repoKey": "drupal",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "2bb162a78797ba0432582d55c636359842f7418ed900ac67e800ab87d657ce15",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "drupal-password-reset-api"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "drupal::drupal-password-reset-api",
-      "targetEntityId": "drupal::drupal-password-reset-api",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on drupal-password-reset-api (intra_single_component).",
-        "source_entity_id": "drupal::drupal-password-reset-api",
-        "target_entity_id": "drupal::drupal-password-reset-api",
-        "proposed_data_categories": [
-          "password",
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on drupal-password-reset-api.",
-      "proposedDataCategories": [
-        "password",
-        "email_address"
-      ]
-    },
-    {
       "annotationId": "drupal-one-time-login-url-flow",
       "repoKey": "drupal",
       "sourceBucket": "unresolved",
@@ -1341,41 +1232,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "unresolved source for slug 'member'; unresolved target for slug 'entitlement_token'; no component candidates via overlap or rationale+same-file"
-    },
-    {
-      "annotationId": "ghost-stripe-customer-create",
-      "repoKey": "ghost",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "fe1b9da395ae1ff08e0b6a9a296e9642cd6ab529308fd30ec3560bcb52f42cfe",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "ghost-payments-service"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "ghost::ghost-payments-service",
-      "targetEntityId": "ghost::ghost-payments-service",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on ghost-payments-service (intra_single_component).",
-        "source_entity_id": "ghost::ghost-payments-service",
-        "target_entity_id": "ghost::ghost-payments-service",
-        "proposed_flow_type": "api_call",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on ghost-payments-service.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
     },
     {
       "annotationId": "ghost-auth-middleware-unauthorized-wrap",
@@ -2641,74 +2497,6 @@
       "rationale": "Flow candidate exists but source span does not verify the flow claim."
     },
     {
-      "annotationId": "pocketbase-password-to-bcrypt-hash",
-      "repoKey": "pocketbase",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "dfe854f899a42b78ca3b87dc31d47050a16fed3aa7fc7f64acc6a9278447682a",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "pocketbase-password-field-type"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "pocketbase::pocketbase-password-field-type",
-      "targetEntityId": "pocketbase::pocketbase-password-field-type",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on pocketbase-password-field-type (intra_single_component).",
-        "source_entity_id": "pocketbase::pocketbase-password-field-type",
-        "target_entity_id": "pocketbase::pocketbase-password-field-type",
-        "proposed_data_categories": [
-          "password"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on pocketbase-password-field-type.",
-      "proposedDataCategories": [
-        "password"
-      ]
-    },
-    {
-      "annotationId": "pocketbase-hash-to-database",
-      "repoKey": "pocketbase",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "aba9505b6451800aaa427966866c70d9757cb16e24343b5b9950bc1943ac7d07",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "pocketbase-password-field-type"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "pocketbase::pocketbase-password-field-type",
-      "targetEntityId": "pocketbase::pocketbase-password-field-type",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on pocketbase-password-field-type (intra_single_component).",
-        "source_entity_id": "pocketbase::pocketbase-password-field-type",
-        "target_entity_id": "pocketbase::pocketbase-password-field-type",
-        "proposed_data_categories": [
-          "password"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on pocketbase-password-field-type.",
-      "proposedDataCategories": [
-        "password"
-      ]
-    },
-    {
       "annotationId": "pocketbase-set-email-to-record",
       "repoKey": "pocketbase",
       "sourceBucket": "unresolved",
@@ -2901,44 +2689,6 @@
       "rationale": "unresolved source for slug 'record'; unresolved target for slug 'refresh_token_key'; no component candidates via overlap or rationale+same-file"
     },
     {
-      "annotationId": "posthog-user-email-persisted",
-      "repoKey": "posthog-user",
-      "sourceBucket": "entity_picker_resolved",
-      "migrationBucket": "unresolved",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "e04a01b3c3b4d0b18a1a8bbb75c180618ec0780c9905a8be5a6f0141ceb11e9e",
-      "overlapComponentIds": [
-        "posthog-user-database"
-      ],
-      "rationaleComponentIds": [
-        "posthog-user-database",
-        "posthog-user-actor"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "posthog-user::posthog-user-database",
-      "targetEntityId": "posthog-user::posthog-user-database",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Entity picker resolved posthog-user-database from span content; negative decoys excluded.",
-        "source_entity_id": "posthog-user::posthog-user-database",
-        "target_entity_id": "posthog-user::posthog-user-database",
-        "proposed_flow_type": "database_query",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Span references posthog-user-database; attributed as intra-component lineage.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
-    },
-    {
       "annotationId": "posthog-password-to-hash",
       "repoKey": "posthog-user",
       "sourceBucket": "unresolved",
@@ -3057,40 +2807,6 @@
       "rationale": "ambiguous target match for slug 'user'"
     },
     {
-      "annotationId": "redmine-email-normalize-address",
-      "repoKey": "redmine",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "72242577123e2efd7196194eb09fa5a3537eb2e46b61b20b048d7134a029ae05",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "redmine-email-address-model"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "redmine::redmine-email-address-model",
-      "targetEntityId": "redmine::redmine-email-address-model",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on redmine-email-address-model (intra_single_component).",
-        "source_entity_id": "redmine::redmine-email-address-model",
-        "target_entity_id": "redmine::redmine-email-address-model",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on redmine-email-address-model.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
-    },
-    {
       "annotationId": "redmine-password-check-local-hash",
       "repoKey": "redmine",
       "sourceBucket": "unresolved",
@@ -3164,44 +2880,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "unresolved source for slug 'oauth-info'; unresolved target for slug 'customer'; no component candidates via overlap or rationale+same-file"
-    },
-    {
-      "annotationId": "spree-address-to-customer-profile",
-      "repoKey": "spree",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "1349d375334084343e226a38de2a06f55e47a68192393a7095a4b4d0f5c98d3d",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "spree-address-model"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "spree::spree-address-model",
-      "targetEntityId": "spree::spree-address-model",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on spree-address-model (intra_single_component).",
-        "source_entity_id": "spree::spree-address-model",
-        "target_entity_id": "spree::spree-address-model",
-        "proposed_data_categories": [
-          "phone_number",
-          "first_name",
-          "last_name"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on spree-address-model.",
-      "proposedDataCategories": [
-        "phone_number",
-        "first_name",
-        "last_name"
-      ]
     },
     {
       "annotationId": "spree-gateway-customer-profile-id",
@@ -3426,81 +3104,6 @@
       "rationale": "unresolved source for slug 'login-body'; unresolved target for slug 'passport'; no component candidates via overlap or rationale+same-file"
     },
     {
-      "annotationId": "strapi-forgot-email-query",
-      "repoKey": "strapi",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "682b98c1b6a229b3b4f698fc33b0a158014e55d045080ff3c9bc9c5d9ea05ae4",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "strapi-forgot-password-service"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "strapi::strapi-forgot-password-service",
-      "targetEntityId": "strapi::strapi-forgot-password-service",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on strapi-forgot-password-service (intra_single_component).",
-        "source_entity_id": "strapi::strapi-forgot-password-service",
-        "target_entity_id": "strapi::strapi-forgot-password-service",
-        "proposed_data_categories": [
-          "email_address"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on strapi-forgot-password-service.",
-      "proposedDataCategories": [
-        "email_address"
-      ]
-    },
-    {
-      "annotationId": "strapi-reset-email-send",
-      "repoKey": "strapi",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "5fbf62c5b81f99e422bf7b1948faa8d7b44e8e6a34765d1c4a31df4f8bc001fb",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "strapi-forgot-password-service"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "strapi::strapi-forgot-password-service",
-      "targetEntityId": "strapi::strapi-forgot-password-service",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on strapi-forgot-password-service (intra_single_component).",
-        "source_entity_id": "strapi::strapi-forgot-password-service",
-        "target_entity_id": "strapi::strapi-forgot-password-service",
-        "proposed_flow_type": "api_call",
-        "proposed_data_categories": [
-          "email_address",
-          "username",
-          "first_name",
-          "last_name"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on strapi-forgot-password-service.",
-      "proposedDataCategories": [
-        "email_address",
-        "username",
-        "first_name",
-        "last_name"
-      ]
-    },
-    {
       "annotationId": "strapi-check-credentials-email-query",
       "repoKey": "strapi",
       "sourceBucket": "unresolved",
@@ -3619,40 +3222,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "unresolved source for slug 'authenticatable'; unresolved target for slug 'session'; no component candidates via overlap or rationale+same-file"
-    },
-    {
-      "annotationId": "wordpress-password-to-hash",
-      "repoKey": "wordpress",
-      "sourceBucket": "intra_single_component",
-      "migrationBucket": "intra_component_lineage",
-      "migrationConfidence": "low",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "7110f6fcd2f080adfa010051c936a0adc33742624db7379459054ad23d2fa211",
-      "overlapComponentIds": [],
-      "rationaleComponentIds": [
-        "wordpress-wp-insert-user"
-      ],
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "finalDispositionCandidate": "intra_component_lineage",
-      "sourceEntityId": "wordpress::wordpress-wp-insert-user",
-      "targetEntityId": "wordpress::wordpress-wp-insert-user",
-      "candidate": {
-        "kind": "flow",
-        "disposition_candidate": "intra_component_lineage",
-        "candidate_confidence": "medium",
-        "candidate_notes": "Accepted intra-component lineage on wordpress-wp-insert-user (intra_single_component).",
-        "source_entity_id": "wordpress::wordpress-wp-insert-user",
-        "target_entity_id": "wordpress::wordpress-wp-insert-user",
-        "proposed_data_categories": [
-          "password"
-        ]
-      },
-      "rationale": "Source verifies flow claim; intra-component lineage on wordpress-wp-insert-user.",
-      "proposedDataCategories": [
-        "password"
-      ]
     },
     {
       "annotationId": "wordpress-session-to-usermeta",

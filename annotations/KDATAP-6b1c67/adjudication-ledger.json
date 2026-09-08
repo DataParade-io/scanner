@@ -1,35 +1,30 @@
 {
   "task": "KDATAP-6b1c67",
-  "totalRows": 247,
+  "totalRows": 177,
   "dispositions": {
-    "accept": 27,
-    "reject": 43,
+    "accept": 0,
+    "reject": 0,
     "unresolved": 177
   },
   "bySourceBucket": {
     "tier_e_never_auto_map": {
       "accept": 0,
-      "reject": 10,
+      "reject": 0,
       "unresolved": 33
     },
     "ambiguous": {
-      "accept": 2,
-      "reject": 12,
+      "accept": 0,
+      "reject": 0,
       "unresolved": 38
     },
     "tier_c_category_unmapped": {
-      "accept": 25,
-      "reject": 15,
-      "unresolved": 106
-    },
-    "negative_adjudication": {
       "accept": 0,
-      "reject": 6,
-      "unresolved": 0
+      "reject": 0,
+      "unresolved": 106
     }
   },
-  "labelCorrectionCount": 25,
-  "contestedCount": 27,
+  "labelCorrectionCount": 0,
+  "contestedCount": 0,
   "entries": [
     {
       "annotationId": "auth0-express-access-token-item",
@@ -65,39 +60,6 @@
       "rationale": "Ambiguous status without closed-map leaf."
     },
     {
-      "annotationId": "auth0-express-sub-item",
-      "repoKey": "auth0-express",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "b6b9cbab68d79c3d955c3b824c60249433da608c44778c54f0f308246588c39f",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "auth0-express-sid-item",
-      "repoKey": "auth0-express",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "5d9e301c7686fd1c75b887066c46bb1b6f5c57054143024c909268298d4f0f20",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "auth0-express-login-route-not-pii",
-      "repoKey": "auth0-express",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "247a553283487653d9e31090fb1ca3be13b9799a054674bda15f71c6960eb651",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "directus-user-id",
       "repoKey": "directus",
       "sourceBucket": "tier_e_never_auto_map",
@@ -107,33 +69,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Suffix 'id' has no closed-map leaf and source does not support deterministic resolution."
-    },
-    {
-      "annotationId": "directus-user-password",
-      "repoKey": "directus",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "084aee6ad9f4e40c23750caf14f86f98fe06988199826af4b23143953423b73f",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'password' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "password: string | null;",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
     },
     {
       "annotationId": "directus-session-token",
@@ -158,17 +93,6 @@
       "rationale": "Suffix 'access_token' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "directus-external-identifier",
-      "repoKey": "directus",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "41741cba5a5fc476ae4efb7ca0f33e8b527aac685896bb467e6838340c2aa8a1",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "directus-session-token-type",
       "repoKey": "directus",
       "sourceBucket": "tier_e_never_auto_map",
@@ -178,44 +102,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Suffix 'token' has no closed-map leaf and source does not support deterministic resolution."
-    },
-    {
-      "annotationId": "directus-share-password",
-      "repoKey": "directus",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "4715d35a5a32e346ee5d7a6dbc348b15aafb21ecf776194cbb65277a8b53f8ca",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'share_password' as password via closed concept map.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "credential_secret"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "share_password?: string;",
-        "rationale": "Category or conflicting label 'credential_secret' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
-      "annotationId": "discourse-user-id",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0cea7eadea38e75436fb78dd07a67178fa834c9f751aa2d8cb329d893a54dbbd",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "discourse-name",
@@ -229,17 +115,6 @@
       "rationale": "Suffix 'name' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "discourse-password-hash",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "2bbf9c3e61497cd15bf67cd86b77aa635ceaab8ceab93d1cabef085cc77a1a66",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "discourse-api-key-bearer",
       "repoKey": "discourse",
       "sourceBucket": "tier_e_never_auto_map",
@@ -249,39 +124,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Suffix 'key' has no closed-map leaf and source does not support deterministic resolution."
-    },
-    {
-      "annotationId": "discourse-oauth2-uid",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "aeea328afbd8413930573c47461dfc2e80c1af9d7d49cfb2139502b88f6f1b7c",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-oauth2-name",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "d3645c6c027be9eb17219c3322754d7f4184e1173604ba152d9b6e3b6d6cd6c5",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-associated-provider-uid",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "425645674e50f28f4010a9cdf1b21d554843bbb2073a9b7cf39c318ede9d3521",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "discourse-profile-location",
@@ -306,28 +148,6 @@
       "rationale": "Ambiguous status without closed-map leaf."
     },
     {
-      "annotationId": "discourse-user-ip-address",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "d769cd8ffe016116b3c99f97c961abd8a0d6a15e5177d8432ea80a465a653a1b",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-registration-ip",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "e9c60aa802d91e270cd189838ee4396fa97c3fd5914877fe509d9c6fde9c350a",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "discourse-invite-email-token",
       "repoKey": "discourse",
       "sourceBucket": "tier_c_category_unmapped",
@@ -350,28 +170,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "discourse-user-password-raw",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "78dd281cb98dcbe06a84934b8f890bc87169699c07bb75c05950fd4d5f50803b",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms password verifier/hash storage rather than plaintext password."
-    },
-    {
-      "annotationId": "discourse-email-token-hash",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "f56fca58906920cd9a138eedf4cb236caa729558c60c8037c2570bf7da946782",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "discourse-email-token-raw",
       "repoKey": "discourse",
       "sourceBucket": "tier_e_never_auto_map",
@@ -381,28 +179,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Suffix 'token' has no closed-map leaf and source does not support deterministic resolution."
-    },
-    {
-      "annotationId": "discourse-auth-token-hash",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0254eea9639cee77544779dae6c07877c4334b4b8856c5b122cbb9f5a9d88b3f",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-auth-token-client-ip",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "e4f4722a2a4445afa8454fa56ed420cb09c0cd70b30d0e5fa8723e178e9d964c",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "discourse-unhashed-auth-token",
@@ -416,45 +192,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "discourse-sso-external-name",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "d1d69b60feb5fca1d1e1c65adef9cb58aeb5eca32bc878284de6f8f1f9b2403f",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-sso-external-username",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "721de7f4b249e2317890dfe4a9559de19280a08155a6707e6c248b69fc17282c",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies 'external_username' as username via closed concept map.",
-      "conceptLeaf": "username",
-      "identityKey": "data_item:username",
-      "conceptAncestry": [
-        "user_identifier",
-        "username"
-      ],
-      "labelCorrection": {
-        "before": [
-          "user_identifier"
-        ],
-        "after": [
-          "username"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "#  external_username               :string",
-        "rationale": "Category or conflicting label 'user_identifier' replaced by source-confirmed concept leaf 'username'."
-      }
-    },
-    {
       "annotationId": "discourse-sso-external-id",
       "repoKey": "discourse",
       "sourceBucket": "tier_c_category_unmapped",
@@ -464,28 +201,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "discourse-unsubscribe-key",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "69374ac5393eff3fcee357d931f052c09a08cb12a7b6cb34dc3c86ef3e0bd20e",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "discourse-totp-data",
-      "repoKey": "discourse",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "7a5f85d94d76121f433ae2145c794afdde128819fc8c32a3504a30bea3f2db6d",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "discourse-webauthn-credential-id",
@@ -521,33 +236,6 @@
       "rationale": "Suffix 'name' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "drupal-pass",
-      "repoKey": "drupal",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "d67c327f74a08b392107cce9908224e72ae27c888933740e597fb64957e7e43e",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'pass' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "$fields['pass'] = BaseFieldDefinition::create('password')\n      ->setLabel(t('Password'))\n      ->setDescription(t('The password of this user (hashed).'))",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
       "annotationId": "drupal-get-account-name",
       "repoKey": "drupal",
       "sourceBucket": "tier_e_never_auto_map",
@@ -559,60 +247,6 @@
       "rationale": "Suffix 'name' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "drupal-login-pass-credential",
-      "repoKey": "drupal",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "d606a0cd44ec96e5c2eff681c36e5153612c81ce95e75549f9dfa2931bd9132f",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'pass' as password via closed concept map.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "credential_secret"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "$form['pass'] = [\n      '#type' => 'password',\n      '#title' => $this->t('Password'),",
-        "rationale": "Category or conflicting label 'credential_secret' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
-      "annotationId": "drupal-http-login-pass",
-      "repoKey": "drupal",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "7da6f5f9689dfeb8473913ba9d158c7fede1619c3cf2419a20fb4ffc643d80b7",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'credentials.pass' as password via closed concept map.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "credential_secret"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "$authenticated = $this->userAuth->authenticateAccount($account, $credentials['pass']) && $account->id();",
-        "rationale": "Category or conflicting label 'credential_secret' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
       "annotationId": "drupal-one-time-hash",
       "repoKey": "drupal",
       "sourceBucket": "tier_c_category_unmapped",
@@ -622,28 +256,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "drupal-timezone-ambiguous",
-      "repoKey": "drupal",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0ec25582800d93f190b4a460e6c422989b7df9183a4c2f063149f0e223a06736",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "drupal-logout-token-ambiguous",
-      "repoKey": "drupal",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "c2d8299f036637ea9353c58da1c8e86eebfc47a77d82cdf7880d8731581e0ad5",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "easy-school-admission-no",
@@ -701,17 +313,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "exposed-no-email-field",
-      "repoKey": "exposed",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "907124a8431952e0116675c26e4a9775168199f8615e9a31ba0a4a596d6c351d",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms explicit negative or non-PII metadata."
-    },
-    {
       "annotationId": "flask-login-user-id-from-mixin",
       "repoKey": "flask-login",
       "sourceBucket": "tier_e_never_auto_map",
@@ -756,33 +357,6 @@
       "rationale": "Suffix 'name' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "ghost-staff-password-item",
-      "repoKey": "ghost",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "10a6a819e5fddb511c34afebeee0c29726b10fc525ab1b36432b5b282ef8811c",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'password' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "password: { type: 'string', maxlength: 60, nullable: false },",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
       "annotationId": "ghost-member-uuid-item",
       "repoKey": "ghost",
       "sourceBucket": "tier_e_never_auto_map",
@@ -814,33 +388,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "ghost-staff-user-password",
-      "repoKey": "ghost",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "10a6a819e5fddb511c34afebeee0c29726b10fc525ab1b36432b5b282ef8811c",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'password' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "password: { type: 'string', maxlength: 60, nullable: false },",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
     },
     {
       "annotationId": "ghost-staff-user-slug",
@@ -909,28 +456,6 @@
       "rationale": "Suffix 'token' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "gitea-token-owner-id",
-      "repoKey": "gitea",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0c92f8c50aa13a03f4f03292745c806bb8c1a6baf7d1bf80fd149f12f3d297bf",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Suffix 'uid' is a surrogate primary or foreign key, not personal data."
-    },
-    {
-      "annotationId": "gitea-token-name",
-      "repoKey": "gitea",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "32ae22fa84bfc3b5bddd98c71fbc749490758c56b2d4bdf55b37bda40ab63bc5",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "gitea-access-token",
       "repoKey": "gitea",
       "sourceBucket": "tier_e_never_auto_map",
@@ -953,34 +478,6 @@
       "rationale": "Suffix 'id' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "gitea-username",
-      "repoKey": "gitea",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "60046b73fc34b2a8a797d19a7c3551b843cdabe19c8958be16045b4fc2d05bd2",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies 'UserName' as username via closed concept map.",
-      "conceptLeaf": "username",
-      "identityKey": "data_item:username",
-      "conceptAncestry": [
-        "user_identifier",
-        "username"
-      ],
-      "labelCorrection": {
-        "before": [
-          "user_identifier"
-        ],
-        "after": [
-          "username"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "UserName string `json:\"login\"`",
-        "rationale": "Category or conflicting label 'user_identifier' replaced by source-confirmed concept leaf 'username'."
-      }
-    },
-    {
       "annotationId": "gitea-external-login-name",
       "repoKey": "gitea",
       "sourceBucket": "tier_c_category_unmapped",
@@ -990,17 +487,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "gitea-avatar-url",
-      "repoKey": "gitea",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "c3b0492a173fd1639a29fdf86d4ca8207c727bcbd3d277d681671c3d60572acd",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "gitea-profile-url",
@@ -1146,28 +632,6 @@
       "rationale": "Ambiguous status without closed-map leaf."
     },
     {
-      "annotationId": "hyperswitch-store-card-reference",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "8d4c798893e861d3f12ff1ba44e1a7c0ec01003ef7bdaa98b25f9c14277fb382",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "hyperswitch-store-merchant-customer-id",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "1c02c6ae6ec4446fd93659d2b80709b41dd276126ea4e58a7ba890cf8baca320",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "hyperswitch-requestor-card-reference",
       "repoKey": "hyperswitch-vault",
       "sourceBucket": "ambiguous",
@@ -1201,28 +665,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "hyperswitch-retrieve-merchant-customer-id",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "adc75a3715f39b3fb4790cd36ba7e6f63459a5e213edfc9df4dd650c633953e4",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "hyperswitch-retrieve-card-reference",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "159fcc6eeb6c40076070eba3f70fa06af68d96e281c63eb93511f8cf57706ef0",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
       "annotationId": "hyperswitch-retrieve-card-container",
       "repoKey": "hyperswitch-vault",
       "sourceBucket": "tier_c_category_unmapped",
@@ -1243,28 +685,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "hyperswitch-delete-merchant-customer-id",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "a855268cc860776baa8e2deb661fd71c6aae8296b32d7bbd711e6b7b40b2b993",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
-    },
-    {
-      "annotationId": "hyperswitch-delete-card-reference",
-      "repoKey": "hyperswitch-vault",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "500fcc734e1ca0a8b8fcd11d1718c4c7325ec62ff8c6c54d047c88781115624e",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "hyperswitch-fingerprint-data",
@@ -1322,17 +742,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "keycloak-user-id",
-      "repoKey": "keycloak",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "8e8561a53ee00f9c9a673c27278dfaa5f365a8731f84f09db8ddec60a066bb42",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Suffix 'id' is a surrogate primary or foreign key, not personal data."
-    },
-    {
       "annotationId": "keycloak-user-label",
       "repoKey": "keycloak",
       "sourceBucket": "ambiguous",
@@ -1377,62 +786,6 @@
       "rationale": "Suffix 'id' has no closed-map leaf and source does not support deterministic resolution."
     },
     {
-      "annotationId": "magento-customer-firstname",
-      "repoKey": "magento",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "929d532bec497f762a55cb47b87de3623e597629c79b53554eac8863e7157e5f",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'FIRSTNAME' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "const FIRSTNAME = 'firstname';",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "magento-customer-lastname",
-      "repoKey": "magento",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "773f8267dbbd465c7b949a131edffef3dd6688931628e555231209a681ab3140",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'LASTNAME' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "const LASTNAME = 'lastname';",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
-    },
-    {
       "annotationId": "magento-address-street",
       "repoKey": "magento",
       "sourceBucket": "tier_c_category_unmapped",
@@ -1453,17 +806,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "magento-password-hash",
-      "repoKey": "magento",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "304218f080455f3180c2f6737df160e1d8fb4dbb76c0a28b52fb691677851163",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "magento-rp-token",
@@ -1519,62 +861,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "magento-address-firstname",
-      "repoKey": "magento",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "ba483b0bb7ac492c6ae8e8eeddc537202486d7b2c8adac4264224abb85b4cb41",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies 'firstname' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "public function getFirstname();",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "magento-address-lastname",
-      "repoKey": "magento",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "cac940b36ee1ddfcac2a9400fd06ab1c079c513039f25ba69b55c7f5d3b5e371",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies 'lastname' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "public function getLastname();",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
     },
     {
       "annotationId": "magento-customer-prefix",
@@ -1643,39 +929,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "medusa-no-customer-email-item",
-      "repoKey": "medusa",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "65f23dcde35287449594c2f70ce5e8af78c62d2bff93b9b5adedaf638acbe62c",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms explicit negative or non-PII metadata."
-    },
-    {
-      "annotationId": "medusa-no-user-first-name-item",
-      "repoKey": "medusa",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "37df12bf686717da3e3646053e5252c2dddb73521b5c7f0ff6c1e8e0368d3973",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms explicit negative or non-PII metadata."
-    },
-    {
-      "annotationId": "medusa-no-customer-phone-item",
-      "repoKey": "medusa",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "65f23dcde35287449594c2f70ce5e8af78c62d2bff93b9b5adedaf638acbe62c",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms explicit negative or non-PII metadata."
-    },
-    {
       "annotationId": "medusa-user-id",
       "repoKey": "medusa-customer",
       "sourceBucket": "tier_e_never_auto_map",
@@ -1685,17 +938,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Suffix 'id' has no closed-map leaf and source does not support deterministic resolution."
-    },
-    {
-      "annotationId": "medusa-user-avatar",
-      "repoKey": "medusa-customer",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "952e8290ff2fb2504b2bf9d955de1b8a6d5100ae5418510e7a19a3e1135516b0",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "medusa-user-metadata",
@@ -1775,22 +1017,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "nopcommerce-customer-password",
-      "repoKey": "nopcommerce",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "5a24a8ae4a081ffcd8be29a914e8240ff911bc2351a5290f5675868c8af8c712",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies 'Password' as password via closed concept map.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ]
-    },
-    {
       "annotationId": "nopcommerce-oauth-access-token",
       "repoKey": "nopcommerce",
       "sourceBucket": "tier_c_category_unmapped",
@@ -1800,62 +1026,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "nopcommerce-customer-first-name",
-      "repoKey": "nopcommerce",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0c516eeca6e32571d62d1e17c2b680bd3b3561351e93e233d12a7dd738bb957f",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'FirstName' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "public string FirstName { get; set; }",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "nopcommerce-customer-last-name",
-      "repoKey": "nopcommerce",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "e516f2085287383bd8b117bac5725b4305b1682c252cce1a28114445d52e0abb",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'LastName' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "public string LastName { get; set; }",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
     },
     {
       "annotationId": "nopcommerce-street-address",
@@ -1935,17 +1105,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "orchard-user-password-hash",
-      "repoKey": "orchard-core",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "6d9b5bf5d56d5319a02df5ef6c1a783121eba0feb9f07cffcd933c69bfa9c5e1",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms password hash or verifier storage, not plaintext password data item."
-    },
-    {
       "annotationId": "orchard-user-id",
       "repoKey": "orchard-core",
       "sourceBucket": "tier_c_category_unmapped",
@@ -2021,28 +1180,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "ory-hashed-password",
-      "repoKey": "ory-kratos-password",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "e364a5f059b4a05225bffbace1bcc747916856c794036ba6e27518fc9b0cd271",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms password hash or verifier storage, not plaintext password data item."
-    },
-    {
-      "annotationId": "pocketbase-record-id",
-      "repoKey": "pocketbase",
-      "sourceBucket": "tier_e_never_auto_map",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "67d69c7b882353b66a041989f82078375a46c2a7862309923e6a8830652bf9a9",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Suffix 'id' is a surrogate primary or foreign key, not personal data."
     },
     {
       "annotationId": "pocketbase-password-hash",
@@ -2155,73 +1292,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "redmine-user-firstname",
-      "repoKey": "redmine",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "386cc4a35d8f8a6d8e5faf76b4acf6a21764873977c0e4b6199cdf0cc7a49a8a",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'firstname' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "validates_length_of :firstname, :maximum => 30",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "redmine-user-lastname",
-      "repoKey": "redmine",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "c4da21ab7945c62a58c568a7eb170b362994d045cf7ea516f408accb19cfbf30",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'lastname' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "validates_length_of :lastname, :maximum => 255",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
-    },
-    {
-      "annotationId": "redmine-hashed-password",
-      "repoKey": "redmine",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "afd93989e2dc7d449819140b3234f1dc31357063f369d2233d6af6db33140095",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms password hash or verifier storage, not plaintext password data item."
-    },
-    {
       "annotationId": "redmine-api-key",
       "repoKey": "redmine",
       "sourceBucket": "tier_c_category_unmapped",
@@ -2264,17 +1334,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "redmine-auth-source-id",
-      "repoKey": "redmine",
-      "sourceBucket": "negative_adjudication",
-      "evidenceValidation": "unverified",
-      "evidenceSpanHash": "765ebf7ff588888650109d5ad1aa7b6551b30cefcdbdc2c326b94027d9f1d125",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "redmine-remote-ip",
@@ -2374,17 +1433,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Ambiguous status without closed-map leaf."
-    },
-    {
-      "annotationId": "saleor-avatar",
-      "repoKey": "saleor",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "ae27069b872de9c3b371866f68097522c605d8f839f1a5b08a1acf53e96d4a67",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms infrastructure, surrogate, or non-mapped metadata — not personal-data gold."
     },
     {
       "annotationId": "saleor-jwt-token-key",
@@ -2519,62 +1567,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "spree-address-firstname",
-      "repoKey": "spree",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "6115f819d004c56a549d1665fa81fe0b6dcb21f10afd185382b5dc828b886b27",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'firstname' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "validates :firstname, :lastname, if: :require_name?",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "spree-address-lastname",
-      "repoKey": "spree",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "6115f819d004c56a549d1665fa81fe0b6dcb21f10afd185382b5dc828b886b27",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'lastname' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "validates :firstname, :lastname, if: :require_name?",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
-    },
-    {
       "annotationId": "spree-address-city",
       "repoKey": "spree",
       "sourceBucket": "tier_c_category_unmapped",
@@ -2586,62 +1578,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "spring-petclinic-owner-first-name",
-      "repoKey": "spring-petclinic",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "c2850abe07d9061b97291350184316d1fab4fcf13a7fee58c1029d12001c644a",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'firstName' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "@Column(length = 30)\n\t@Size(max = 30)\n\t@NotBlank\n\tprivate String firstName;",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "spring-petclinic-owner-last-name",
-      "repoKey": "spring-petclinic",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "c3f1740bfb3f6f52df453ba24f66144d45c05ab03a11b1efbce00e9a165e372c",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'lastName' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "@Column(length = 30)\n\t@Size(max = 30)\n\t@NotBlank\n\tprivate String lastName;",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
-    },
-    {
       "annotationId": "spring-petclinic-owner-city",
       "repoKey": "spring-petclinic",
       "sourceBucket": "tier_c_category_unmapped",
@@ -2651,89 +1587,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "strapi-user-firstname",
-      "repoKey": "strapi",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "aafcfe5d40287422330c1baa87a52ce22779ced17877383fbce4f54b70e8f8fe",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'firstname' as first_name via closed concept map.",
-      "conceptLeaf": "first_name",
-      "identityKey": "data_item:first_name",
-      "conceptAncestry": [
-        "person_name",
-        "first_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "first_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "firstname: {",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'first_name'."
-      }
-    },
-    {
-      "annotationId": "strapi-user-lastname",
-      "repoKey": "strapi",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "a2414fb425370e1c1e029a9be3746f21bb43af8535b0060ddbac4393e67128b2",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'lastname' as last_name via closed concept map.",
-      "conceptLeaf": "last_name",
-      "identityKey": "data_item:last_name",
-      "conceptAncestry": [
-        "person_name",
-        "last_name"
-      ],
-      "labelCorrection": {
-        "before": [
-          "person_name"
-        ],
-        "after": [
-          "last_name"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "lastname: {",
-        "rationale": "Category or conflicting label 'person_name' replaced by source-confirmed concept leaf 'last_name'."
-      }
-    },
-    {
-      "annotationId": "strapi-user-password",
-      "repoKey": "strapi",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "407ea0ac922df4a3bb9dc9980706f7f22a0a66ca2bd265a3c19cc599b0c6bf62",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'password' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "password: {\n      type: 'password',\n      minLength: 6,\n      configurable: false,\n      required: false,\n      private: true,\n      searchable: false,",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
     },
     {
       "annotationId": "strapi-reset-password-token",
@@ -2890,33 +1743,6 @@
       "rationale": "No concept-map leaf matches suffix, name, or alias."
     },
     {
-      "annotationId": "wordpress-user-pass",
-      "repoKey": "wordpress",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "7a46c5e1027cb6e2bdc014bb6d53f7cbfaeb52ac287fd4c171292889e4f3a05e",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "medium",
-      "rationale": "Source verifies plaintext password field 'user_pass' as password.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ],
-      "labelCorrection": {
-        "before": [
-          "password_verifier"
-        ],
-        "after": [
-          "password"
-        ],
-        "change_type": "annotation_defect",
-        "evidence": "* @property string     $user_pass",
-        "rationale": "Category or conflicting label 'password_verifier' replaced by source-confirmed concept leaf 'password'."
-      }
-    },
-    {
       "annotationId": "wordpress-display-name",
       "repoKey": "wordpress",
       "sourceBucket": "tier_c_category_unmapped",
@@ -2937,22 +1763,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "Ambiguous status without closed-map leaf."
-    },
-    {
-      "annotationId": "wordpress-insert-user-pass-plaintext",
-      "repoKey": "wordpress",
-      "sourceBucket": "ambiguous",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "4db3f4944328d1cde3a8d77456eb88aedb4c1496a6bc78ada6eace89235a8c42",
-      "contested": true,
-      "disposition": "accept",
-      "confidence": "high",
-      "rationale": "Source verifies 'user_pass' as password via closed concept map.",
-      "conceptLeaf": "password",
-      "identityKey": "data_item:password",
-      "conceptAncestry": [
-        "password"
-      ]
     },
     {
       "annotationId": "wordpress-user-id-property",
@@ -2997,17 +1807,6 @@
       "disposition": "unresolved",
       "confidence": "low",
       "rationale": "No concept-map leaf matches suffix, name, or alias."
-    },
-    {
-      "annotationId": "wordpress-application-password-hash",
-      "repoKey": "wordpress",
-      "sourceBucket": "tier_c_category_unmapped",
-      "evidenceValidation": "verified",
-      "evidenceSpanHash": "0dbe0342fee717aa2496820064c25a087dd4b32cdc9348cf613bd1df03329582",
-      "contested": false,
-      "disposition": "reject",
-      "confidence": "high",
-      "rationale": "Source confirms password hash or verifier storage, not plaintext password data item."
     },
     {
       "annotationId": "wordpress-comment-author-ip",
