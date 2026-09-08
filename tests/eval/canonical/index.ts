@@ -74,6 +74,7 @@ export {
 } from "./bridge";
 
 export {
+  assignDataItemsOneToOne,
   assignOneToOne,
   oneFindingCannotSatisfyBoth,
 } from "../../../src/eval/canonical/assignment";
