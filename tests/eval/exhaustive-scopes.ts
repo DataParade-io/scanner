@@ -11,6 +11,7 @@ import type { EvalCase } from "./types";
 export const EXHAUSTIVE_SCOPE_FILES: Record<string, string[]> = {
   "typescript-basic": [
     "app/route.ts",
+    "db-client-import.d.ts",
     "db-client-import.ts",
     "db.ts",
     "external-api.ts",
