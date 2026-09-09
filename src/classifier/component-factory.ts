@@ -221,12 +221,20 @@ function groupFindings(
           finding.name,
           finding.properties,
         );
-        if (!isGenericRoute) {
-          const filePath = finding.location.filePath
-            .replace(/\\/g, "/")
-            .toLowerCase();
-          key = `${sectionId}::route::${routeLabel.toLowerCase()}::${filePath}`;
-          displayName = routeLabel;
+        const filePath = finding.location.filePath
+          .replace(/\\/g, "/")
+          .toLowerCase();
+        const frameworkRaw = finding.properties?.framework;
+        const framework =
+          typeof frameworkRaw === "string" ? frameworkRaw.trim().toLowerCase() : "";
+        const isRailsRouteDeclaration =
+          framework === "rails" && filePath.endsWith("config/routes.rb");
+        if (!isGenericRoute || isRailsRouteDeclaration) {
+          const lineAnchor = isRailsRouteDeclaration
+            ? `::L${finding.location.startLine}`
+            : "";
+          key = `${sectionId}::route::${routeLabel.toLowerCase()}::${filePath}${lineAnchor}`;
+          displayName = isRailsRouteDeclaration ? finding.name.trim() : routeLabel;
         } else {
           key = `${MERGED_HTTP_ROUTE_GROUP_KEY_PREFIX}:${sectionId}`;
           displayName = MERGED_HTTP_ROUTE_DISPLAY_NAME;
