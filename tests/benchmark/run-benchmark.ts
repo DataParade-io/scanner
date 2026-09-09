@@ -95,6 +95,36 @@ export interface BenchmarkRepoResult {
 
 export interface RunBenchmarkOptions extends RunBenchmarkRepoOptions {
   repoKeys?: string[];
+  /** Maximum number of repository scans to run in parallel (default 1). */
+  concurrency?: number;
+}
+
+export async function runWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  runItem: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const limit = Math.max(1, Math.min(concurrency, items.length));
+  const results = new Array<R>(items.length);
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    while (true) {
+      const index = nextIndex;
+      nextIndex += 1;
+      if (index >= items.length) {
+        return;
+      }
+      results[index] = await runItem(items[index], index);
+    }
+  }
+
+  await Promise.all(Array.from({ length: limit }, () => worker()));
+  return results;
 }
 
 function loadEvalCasesForRepo(
@@ -155,12 +185,11 @@ export async function runBenchmark(
 ): Promise<BenchmarkRepoResult[]> {
   const repoKeys =
     options.repoKeys ?? listBenchmarkRepoKeys(options.benchmarkRoot);
+  const concurrency = options.concurrency ?? 1;
 
-  const results: BenchmarkRepoResult[] = [];
-  for (const repoKey of repoKeys) {
-    results.push(await runBenchmarkRepo(repoKey, options));
-  }
-  return results;
+  return runWithConcurrency(repoKeys, concurrency, (repoKey) =>
+    runBenchmarkRepo(repoKey, options),
+  );
 }
 
 function formatRate(value: number | null): string {
@@ -232,6 +261,18 @@ function printRepoResult(result: BenchmarkRepoResult): void {
   }
 }
 
+function parseConcurrency(args: string[]): number | undefined {
+  const concurrencyArg = args.find((arg) => arg.startsWith("--concurrency="));
+  if (!concurrencyArg) {
+    return undefined;
+  }
+  const value = Number.parseInt(concurrencyArg.slice("--concurrency=".length), 10);
+  if (!Number.isFinite(value) || value < 1) {
+    throw new Error(`Invalid --concurrency value: ${concurrencyArg}`);
+  }
+  return value;
+}
+
 function parseReviewStates(args: string[]): {
   reviewStates?: ReviewState[];
   includeProposed?: boolean;
@@ -259,6 +300,7 @@ function isProvisionalRun(options: ToEvalCasesOptions): boolean {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const { reviewStates, includeProposed } = parseReviewStates(args);
+  const concurrency = parseConcurrency(args);
   const repoKeys = args.filter(
     (arg) => !arg.startsWith("--"),
   );
@@ -267,6 +309,7 @@ async function main(): Promise<void> {
     repoKeys: repoKeys.length > 0 ? repoKeys : undefined,
     includeProposed,
     reviewStates,
+    concurrency,
   };
 
   if (isProvisionalRun(options)) {

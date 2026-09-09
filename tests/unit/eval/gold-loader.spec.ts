@@ -264,4 +264,41 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
 
     expect(needsAdjudicationAfterRoundTrip).toBe(0);
   });
+
+  it("preserves accepted data_item candidate identity through eval-case round-trip", () => {
+    const benchmarkRoot = path.join(__dirname, "../../benchmark");
+    const repoDir = path.join(benchmarkRoot, "repos", "easy-school");
+    const annotations = loadAnnotations(repoDir, "data_items");
+    const acceptedWithCandidate = annotations.filter(
+      (annotation) =>
+        annotation.provenance.review_state === "accepted" &&
+        annotation.expected.status === "positive" &&
+        annotation.candidate?.kind === "data_item" &&
+        annotation.candidate.proposed_identity_key !== annotation.subject.key,
+    );
+
+    expect(acceptedWithCandidate.length).toBeGreaterThan(0);
+
+    for (const annotation of acceptedWithCandidate) {
+      const evalCase = annotationToEvalCase(annotation, "easy-school");
+      expect(evalCase).not.toBeNull();
+      expect(evalCase!.dataItemCandidate?.proposed_identity_key).toBe(
+        annotation.candidate?.kind === "data_item"
+          ? annotation.candidate.proposed_identity_key
+          : undefined,
+      );
+
+      const roundTripped = evalCaseToAnnotationRecord(evalCase!);
+      const { record } = loadCanonicalGoldFromAnnotation(roundTripped, {
+        repoKey: "easy-school",
+      });
+
+      expect(record.identity.identityKey).toBe(
+        annotation.candidate?.kind === "data_item"
+          ? annotation.candidate.proposed_identity_key
+          : annotation.subject.key,
+      );
+      expect(isAcceptedEvaluablePositive(record)).toBe(true);
+    }
+  });
 });

@@ -55,17 +55,13 @@ function lineRangesOverlap(
   return a.start_line <= b.end_line && b.start_line <= a.end_line;
 }
 
-/**
- * Higher scores win identity-monopoly tie-breaks among slice pairs for the same
- * parent finding and identity key.
- */
-function dataItemSlicePairStrength(
+function evidenceOverlapStrength(
   expectation: CanonicalGoldExpectation,
-  slice: CanonicalScannerFinding,
+  finding: CanonicalScannerFinding,
 ): number {
   let best = 0;
   for (const expected of expectation.evidenceLocations) {
-    for (const actual of slice.evidenceLocations) {
+    for (const actual of finding.evidenceLocations) {
       if (normalizePath(expected.file_path) !== normalizePath(actual.file_path)) {
         continue;
       }
@@ -76,7 +72,7 @@ function dataItemSlicePairStrength(
         best = Math.max(best, 3);
       } else if (lineRangesOverlap(expected, actual)) {
         best = Math.max(best, 2);
-      } else if (expectation.evidenceLocations.length > 1) {
+      } else {
         best = Math.max(best, 1);
       }
     }
@@ -90,55 +86,10 @@ function collapseSliceAssignment(
   sliceAssignment: AssignmentResult,
   sliceToParent: Map<string, string>,
 ): AssignmentResult {
-  const expectationById = new Map(expectations.map((entry) => [entry.id, entry]));
-  const sliceById = new Map<string, SliceFinding>();
-  for (const finding of findings) {
-    for (const slice of expandDataItemFindingToSlices(finding)) {
-      sliceById.set(slice.id, slice);
-    }
-  }
-
-  const monopolyGroups = new Map<
-    string,
-    Array<{ expectationId: string; findingId: string; sliceId: string }>
-  >();
-
-  for (const pair of sliceAssignment.pairs) {
-    const parentFindingId = sliceToParent.get(pair.findingId) ?? pair.findingId;
-    const parentFinding = findings.find((entry) => entry.id === parentFindingId);
-    if (!parentFinding) {
-      continue;
-    }
-
-    const monopolyKey = `${parentFindingId}::${parentFinding.identity.identityKey}`;
-    const group = monopolyGroups.get(monopolyKey) ?? [];
-    group.push({
-      expectationId: pair.expectationId,
-      findingId: parentFindingId,
-      sliceId: pair.findingId,
-    });
-    monopolyGroups.set(monopolyKey, group);
-  }
-
-  const pairs: AssignmentPair[] = [];
-  for (const group of monopolyGroups.values()) {
-    const ranked = [...group].sort((left, right) => {
-      const leftExpectation = expectationById.get(left.expectationId)!;
-      const rightExpectation = expectationById.get(right.expectationId)!;
-      const leftSlice = sliceById.get(left.sliceId)!;
-      const rightSlice = sliceById.get(right.sliceId)!;
-      const leftScore = dataItemSlicePairStrength(leftExpectation, leftSlice);
-      const rightScore = dataItemSlicePairStrength(rightExpectation, rightSlice);
-      if (rightScore !== leftScore) {
-        return rightScore - leftScore;
-      }
-      return left.expectationId.localeCompare(right.expectationId);
-    });
-    pairs.push({
-      expectationId: ranked[0].expectationId,
-      findingId: ranked[0].findingId,
-    });
-  }
+  const pairs: AssignmentPair[] = sliceAssignment.pairs.map((pair) => ({
+    expectationId: pair.expectationId,
+    findingId: sliceToParent.get(pair.findingId) ?? pair.findingId,
+  }));
 
   const matchedExpectationIds = new Set(pairs.map((pair) => pair.expectationId));
   const matchedFindingIds = new Set(pairs.map((pair) => pair.findingId));
@@ -155,12 +106,182 @@ function collapseSliceAssignment(
   };
 }
 
+interface ScoredAssignmentPair extends AssignmentPair {
+  strength: number;
+}
+
+function assignDataItemSlicesOneToOne(
+  expectations: Array<CanonicalGoldExpectation & { id: string }>,
+  slices: Array<SliceFinding & { id: string }>,
+): AssignmentResult {
+  const blockedExpectationIds = new Set<string>();
+  for (const expectation of expectations) {
+    const parentsPerSliceKey = new Map<string, Set<string>>();
+    for (const slice of slices) {
+      if (!findingCouldMatchExpectation(expectation, slice)) {
+        continue;
+      }
+      const sliceKey = evidenceLocationKey(slice.evidenceLocations[0]);
+      const parents = parentsPerSliceKey.get(sliceKey) ?? new Set<string>();
+      parents.add(slice.parentFindingId);
+      parentsPerSliceKey.set(sliceKey, parents);
+    }
+    for (const parents of parentsPerSliceKey.values()) {
+      if (parents.size > 1) {
+        blockedExpectationIds.add(expectation.id);
+        break;
+      }
+    }
+  }
+
+  const scoredPairs: ScoredAssignmentPair[] = [];
+
+  for (const expectation of expectations) {
+    if (blockedExpectationIds.has(expectation.id)) {
+      continue;
+    }
+    let bestStrength = 0;
+    for (const slice of slices) {
+      if (!findingCouldMatchExpectation(expectation, slice)) {
+        continue;
+      }
+      bestStrength = Math.max(
+        bestStrength,
+        evidenceOverlapStrength(expectation, slice),
+      );
+    }
+
+    if (bestStrength === 0) {
+      continue;
+    }
+
+    for (const slice of slices) {
+      if (!findingCouldMatchExpectation(expectation, slice)) {
+        continue;
+      }
+      const strength = evidenceOverlapStrength(expectation, slice);
+      if (strength !== bestStrength) {
+        continue;
+      }
+      scoredPairs.push({
+        expectationId: expectation.id,
+        findingId: slice.id,
+        strength,
+      });
+    }
+  }
+
+  scoredPairs.sort((left, right) => {
+    if (right.strength !== left.strength) {
+      return right.strength - left.strength;
+    }
+    const expectationCmp = left.expectationId.localeCompare(right.expectationId);
+    if (expectationCmp !== 0) {
+      return expectationCmp;
+    }
+    return left.findingId.localeCompare(right.findingId);
+  });
+
+  const usedExpectationIds = new Set<string>();
+  const usedSliceIds = new Set<string>();
+  const pairs: AssignmentPair[] = [];
+  let competingExpectationsPerSlice = 0;
+
+  for (const pair of scoredPairs) {
+    if (usedExpectationIds.has(pair.expectationId)) {
+      continue;
+    }
+    if (usedSliceIds.has(pair.findingId)) {
+      competingExpectationsPerSlice += 1;
+      continue;
+    }
+    pairs.push({
+      expectationId: pair.expectationId,
+      findingId: pair.findingId,
+    });
+    usedExpectationIds.add(pair.expectationId);
+    usedSliceIds.add(pair.findingId);
+  }
+
+  const expectationById = new Map(expectations.map((entry) => [entry.id, entry]));
+  const assignedExpectationBySlice = new Map(
+    pairs.map((pair) => [pair.findingId, pair.expectationId]),
+  );
+
+  for (const expectation of expectations) {
+    if (
+      blockedExpectationIds.has(expectation.id) ||
+      usedExpectationIds.has(expectation.id)
+    ) {
+      continue;
+    }
+
+    let bestStrength = 0;
+    const candidateSliceIds: string[] = [];
+    for (const slice of slices) {
+      if (!findingCouldMatchExpectation(expectation, slice)) {
+        continue;
+      }
+      const strength = evidenceOverlapStrength(expectation, slice);
+      if (strength === 0) {
+        continue;
+      }
+      if (strength > bestStrength) {
+        bestStrength = strength;
+        candidateSliceIds.length = 0;
+        candidateSliceIds.push(slice.id);
+      } else if (strength === bestStrength) {
+        candidateSliceIds.push(slice.id);
+      }
+    }
+
+    for (const sliceId of candidateSliceIds) {
+      if (!usedSliceIds.has(sliceId)) {
+        continue;
+      }
+      const assignedExpectationId = assignedExpectationBySlice.get(sliceId);
+      if (!assignedExpectationId) {
+        continue;
+      }
+      const assignedExpectation = expectationById.get(assignedExpectationId);
+      if (
+        assignedExpectation?.identity.identityKey !==
+        expectation.identity.identityKey
+      ) {
+        continue;
+      }
+      pairs.push({
+        expectationId: expectation.id,
+        findingId: sliceId,
+      });
+      usedExpectationIds.add(expectation.id);
+      competingExpectationsPerSlice -= 1;
+      break;
+    }
+  }
+
+  const matchedExpectationIds = new Set(pairs.map((pair) => pair.expectationId));
+  const matchedSliceIds = new Set(pairs.map((pair) => pair.findingId));
+
+  return {
+    pairs,
+    unmatchedExpectationIds: expectations
+      .filter((expectation) => !matchedExpectationIds.has(expectation.id))
+      .map((expectation) => expectation.id),
+    unmatchedFindingIds: slices
+      .filter((slice) => !matchedSliceIds.has(slice.id))
+      .map((slice) => slice.id),
+    ambiguous:
+      blockedExpectationIds.size > 0 || competingExpectationsPerSlice > 0,
+  };
+}
+
 /**
- * Data-items assignment: evidence-scoped slices unblock rolled-up findings that
- * match multiple gold rows, then identity monopoly caps one gold per parent
- * finding per identity key.
+ * Rolled personal-data assignment: evidence-scoped slices let rolled-up
+ * findings credit each accepted gold row that overlaps a distinct evidence
+ * location (or co-located duplicate rows on the same slice).
  */
-export function assignDataItemsOneToOne(
+function assignRolledPersonalDataOneToOne(
   expectations: Array<CanonicalGoldExpectation & { id: string }>,
   findings: Array<CanonicalScannerFinding & { id: string }>,
 ): AssignmentResult {
@@ -174,13 +295,117 @@ export function assignDataItemsOneToOne(
     }
   }
 
-  const sliceAssignment = assignOneToOne(expectations, slices);
+  const sliceAssignment = assignDataItemSlicesOneToOne(expectations, slices);
   return collapseSliceAssignment(
     expectations,
     findings,
     sliceAssignment,
     sliceToParent,
   );
+}
+
+/** @see assignRolledPersonalDataOneToOne */
+export const assignDataItemsOneToOne = assignRolledPersonalDataOneToOne;
+
+/** Mentions share the same rolled-finding slice assignment as data-items. */
+export const assignMentionsOneToOne = assignRolledPersonalDataOneToOne;
+
+/**
+ * Data-flow assignment: when duplicate gold rows match one finding, credit the
+ * strongest evidence overlap instead of blocking the finding entirely.
+ * Findings matching multiple gold rows still block the expectation (contract).
+ */
+export function assignDataFlowsOneToOne(
+  expectations: Array<CanonicalGoldExpectation & { id: string }>,
+  findings: Array<CanonicalScannerFinding & { id: string }>,
+): AssignmentResult {
+  const candidatePairs: AssignmentPair[] = [];
+
+  for (const expectation of expectations) {
+    for (const finding of findings) {
+      if (findingCouldMatchExpectation(expectation, finding)) {
+        candidatePairs.push({
+          expectationId: expectation.id,
+          findingId: finding.id,
+        });
+      }
+    }
+  }
+
+  const expectationById = new Map(expectations.map((entry) => [entry.id, entry]));
+  const findingById = new Map(findings.map((entry) => [entry.id, entry]));
+  const expectationsPerFinding = new Map<string, string[]>();
+  const findingsPerExpectation = new Map<string, string[]>();
+
+  for (const pair of candidatePairs) {
+    const byFinding = expectationsPerFinding.get(pair.findingId) ?? [];
+    byFinding.push(pair.expectationId);
+    expectationsPerFinding.set(pair.findingId, byFinding);
+
+    const byExpectation = findingsPerExpectation.get(pair.expectationId) ?? [];
+    byExpectation.push(pair.findingId);
+    findingsPerExpectation.set(pair.expectationId, byExpectation);
+  }
+
+  const blockedExpectationIds = new Set<string>();
+  for (const [expectationId, findingIds] of findingsPerExpectation) {
+    if (findingIds.length > 1) {
+      blockedExpectationIds.add(expectationId);
+    }
+  }
+
+  const pairs: AssignmentPair[] = [];
+  let competingExpectationsPerFinding = 0;
+
+  for (const [findingId, expectationIds] of expectationsPerFinding) {
+    const eligibleExpectationIds = expectationIds.filter(
+      (expectationId) => !blockedExpectationIds.has(expectationId),
+    );
+    if (eligibleExpectationIds.length === 0) {
+      continue;
+    }
+
+    if (eligibleExpectationIds.length > 1) {
+      competingExpectationsPerFinding += 1;
+    }
+
+    const finding = findingById.get(findingId)!;
+    const ranked = [...eligibleExpectationIds].sort((leftId, rightId) => {
+      const leftScore = evidenceOverlapStrength(
+        expectationById.get(leftId)!,
+        finding,
+      );
+      const rightScore = evidenceOverlapStrength(
+        expectationById.get(rightId)!,
+        finding,
+      );
+      if (rightScore !== leftScore) {
+        return rightScore - leftScore;
+      }
+      return leftId.localeCompare(rightId);
+    });
+
+    pairs.push({
+      expectationId: ranked[0],
+      findingId,
+    });
+  }
+
+  const ambiguous =
+    blockedExpectationIds.size > 0 || competingExpectationsPerFinding > 0;
+  const matchedExpectationIds = new Set(pairs.map((pair) => pair.expectationId));
+  const matchedFindingIds = new Set(pairs.map((pair) => pair.findingId));
+
+  return {
+    pairs,
+    unmatchedExpectationIds: expectations
+      .filter((expectation) => !matchedExpectationIds.has(expectation.id))
+      .map((expectation) => expectation.id),
+    unmatchedFindingIds: findings
+      .filter((finding) => !matchedFindingIds.has(finding.id))
+      .map((finding) => finding.id),
+    ambiguous,
+  };
 }
 
 /**

@@ -1,6 +1,7 @@
 /** Fixture evaluation types — aligns with tests/benchmark/schema.ts and ground-truth-schema.md */
 
 import type {
+  DataItemAnnotationCandidate,
   FlowAnnotationCanonical,
   FlowAnnotationCandidate,
 } from "../benchmark/schema";
@@ -58,6 +59,8 @@ export interface EvalCase {
   flow_canonical?: FlowAnnotationCanonical;
   /** Non-scoring flow migration audit block when carried through eval cases. */
   flowCandidate?: FlowAnnotationCandidate;
+  /** Non-scoring data-item migration audit block when carried through eval cases. */
+  dataItemCandidate?: DataItemAnnotationCandidate;
 }
 
 export interface LayerFinding {

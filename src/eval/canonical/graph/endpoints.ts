@@ -12,6 +12,14 @@ function normalizeToken(token: string): string {
   return token.trim().toLowerCase();
 }
 
+function normalizeFlowDataCategoryToken(token: string): string {
+  const normalized = normalizeToken(token);
+  if (normalized === "email") {
+    return "email_address";
+  }
+  return normalized;
+}
+
 /**
  * Parse a single component endpoint key `type:name` (e.g. `asset:api`).
  * Returns null for prose keys without a type prefix (e.g. `password`).
@@ -122,8 +130,8 @@ export function flowDataCategoriesMatch(
   expected: readonly string[],
   actual: readonly string[],
 ): boolean {
-  const normalizedExpected = expected.map(normalizeToken).sort();
-  const normalizedActual = actual.map(normalizeToken).sort();
+  const normalizedExpected = expected.map(normalizeFlowDataCategoryToken).sort();
+  const normalizedActual = actual.map(normalizeFlowDataCategoryToken).sort();
   if (normalizedExpected.length !== normalizedActual.length) {
     return false;
   }

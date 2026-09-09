@@ -3,6 +3,7 @@ import {
   parseTypedFlowKeyOrThrow,
   ProseFlowKeyError,
   flowEndpointsMatch,
+  flowDataCategoriesMatch,
   typedComponentEndpointsMatch,
 } from "../../eval/canonical";
 
@@ -69,5 +70,10 @@ describe("flow endpoint matching", () => {
       optionalAssertion: { vendor: "checkr" },
     };
     expect(typedComponentEndpointsMatch(expected, actual)).toBe(false);
+  });
+
+  it("treats email and email_address as equivalent flow data categories", () => {
+    expect(flowDataCategoriesMatch(["email"], ["email_address"])).toBe(true);
+    expect(flowDataCategoriesMatch(["email_address"], ["email"])).toBe(true);
   });
 });

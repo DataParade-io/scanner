@@ -5,7 +5,9 @@ import {
 import {
   buildPersonalDataFindingsPayload,
   buildPersonalDataInventory,
+  buildPersonalDataInventoryFromIngest,
 } from "../../src/eval-layers/collect-personal-data-findings";
+import type { OrchestratorLedgerContext } from "../../src/core/pipeline/orchestrator-result";
 import { buildOrchestratorEvalLedgers } from "../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../src/core/types/component";
 import type { DetectedDataFlow } from "../../src/core/types/data-flow";
@@ -158,12 +160,15 @@ export async function scanRepoByManifestLayers(
     PERSONAL_DATA_BENCHMARK_LAYERS.has(layer),
   );
 
+  let sharedIngest: OrchestratorLedgerContext | undefined;
+
   if (needsOrchestrator) {
     const config = createDefaultScanConfiguration({ enableAiInference: false });
     const { scanResult, ledgerContext } = await scan(repoRoot, config);
     if (!ledgerContext) {
       throw new Error("Orchestrator scan missing ledger context");
     }
+    sharedIngest = ledgerContext;
     const orchestratorLedgers = buildOrchestratorEvalLedgers(ledgerContext);
 
     if (wanted.has("components")) {
@@ -197,7 +202,12 @@ export async function scanRepoByManifestLayers(
   }
 
   if (needsPersonalData) {
-    const inventory = await buildPersonalDataInventory(repoRoot);
+    const inventory = sharedIngest
+      ? buildPersonalDataInventoryFromIngest(
+          sharedIngest.allIngestedFiles,
+          sharedIngest.ingestOutcomes,
+        )
+      : await buildPersonalDataInventory(repoRoot);
 
     for (const benchmarkLayer of layers) {
       if (!PERSONAL_DATA_BENCHMARK_LAYERS.has(benchmarkLayer)) {

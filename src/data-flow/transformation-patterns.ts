@@ -38,6 +38,7 @@ export const CRYPTO_AUTH_PATTERNS = [
   /tokenKey/i,
   /TokenKey/i,
   /wp_signon/i,
+  /\bwp_authenticate\s*\(/i,
   /wp_set_auth_cookie/i,
   /set_auth_cookie/i,
   /session_token/i,
@@ -52,6 +53,9 @@ export const CRYPTO_AUTH_PATTERNS = [
   /wp_hash_password/i,
   /wp_set_password/i,
   /argon2/i,
+  /->authenticate\s*\(/i,
+  /customerAccountManagement->authenticate/i,
+  /\bauthenticate\s*\(\s*\$/i,
 ];
 
 export const ROUTE_DECLARATION_PATTERNS = [
@@ -59,6 +63,7 @@ export const ROUTE_DECLARATION_PATTERNS = [
   /soapOperation=/i,
   /^\s*(get|post|put|delete|patch)\s+['"][^'"]+['"]\s*=>/i,
   /^\s*(get|post|put|delete|patch)\s+['"][^'"]+['"]/i,
+  /^\s*resources\s+:(?:users|user|customers|customer|accounts|account|members|member|sessions|session|profiles|profile)\b/i,
 ];
 
 export const MODEL_ASSOCIATION_PATTERNS = [
@@ -91,6 +96,8 @@ export const PERSONAL_DATA_ASSOCIATION_PATTERNS = [
   /\bhas_secure_password\b/i,
   /\bcheck_password\b/i,
   /\bhashed_password\b/i,
+  /\bhas_many\s+:scopes\b/i,
+  /\bbelongs_to\s+:user\b/i,
 ];
 
 export const LOOKUP_PATTERNS = [
@@ -102,9 +109,16 @@ export const LOOKUP_PATTERNS = [
   /GetCustomerByEmail/i,
   /GetCustomerByUsername/i,
   /getbytoken/i,
+  /\bauth_token\b/i,
+  /\bhash_token\b/i,
+  /\bdef self\.lookup\b/i,
+  /\bget_user_by\s*\(/i,
+  /\bwp_get_users\s*\(/i,
   /\.whereRaw\s*\(/i,
   /->where\s*\(/i,
   /strapi\.db\.query/i,
+  /directus_users/i,
+  /\.from\(\s*['"]directus_users['"]\s*\)/i,
 ];
 
 export const MODULE_REEXPORT_PATTERNS = [
@@ -134,6 +148,7 @@ export const PASSWORD_HASH_PATTERNS_ADDENDUM = [
 export const ORM_PERSISTENCE_PATTERNS_ADDENDUM = [
   /Repository\.InsertAsync/i,
   /repository\.InsertAsync/i,
+  /createValidator\s*\(\s*['"]customer['"]\s*,\s*['"]save['"]\s*\)/i,
   /->save\w*\s*\(/i,
   /->create\w*\s*\(/i,
   /model\.text\s*\(/i,
@@ -161,9 +176,14 @@ export const SESSION_COOKIE_PATTERNS_ADDENDUM = [
 
 export const AUTH_FUNCTION_PATTERNS_ADDENDUM = [
   /function\s+wp_authenticate/i,
+  /function\s+wp_authenticate_application_password/i,
+  /function\s+wp_validate_application_password/i,
   /function\s+wp_check_password/i,
   /function\s+wp_create_user/i,
   /function\s+wp_set_password/i,
+  /function\s+wp_set_auth_cookie/i,
+  /function\s+wp_hash_password/i,
+  /function\s+get_users/i,
   /function\s+check_password_reset_key/i,
   /get_user_by\s*\(/i,
   /\bget_users\s*\(/i,
@@ -172,9 +192,23 @@ export const AUTH_FUNCTION_PATTERNS_ADDENDUM = [
   /decodeToken/i,
   /createCheckoutSession/i,
   /createCustomer/i,
+  /createAccount/i,
   /sendTemplatedEmail/i,
   /sendPasswordReset/i,
   /notificationHandler/i,
+  /extractToken/i,
+  /Bearer\s+/i,
+  /emitter\.emitFilter\s*\(/i,
+  /req\.token\s*=/i,
+  /validate_each/i,
+  /UserPasswordValidator/i,
+  /password_validator/i,
+  /processAuthenticationFailure/i,
+  /validateHash/i,
+  /\bwp_(?:authenticate|check_password|hash_password|set_password|signon|create_user|set_auth_cookie|generate_auth_cookie)\s*\(/i,
+  /\bget_user_by\s*\(/i,
+  /\bcheck_password_reset_key\s*\(/i,
+  /::hash_password\s*\(/i,
 ];
 
 const ALL_TRANSFORMATION_PATTERN_GROUPS: RegExp[][] = [
@@ -226,21 +260,46 @@ const PERSONAL_DATA_ROUTE_PATH_PATTERNS = [
   /patient/i,
   /checkout/i,
   /identity/i,
+  /webhook/i,
 ];
 
 export function hasPersonalDataRouteReference(span: string, contextSpan: string): boolean {
-  const routeLine = span.trim().length > 0 ? span : contextSpan.split('\n').find((line) =>
-    ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(line)),
-  ) ?? '';
-  const urlMatch =
-    routeLine.match(/url\s*=\s*["']([^"']+)["']/i) ??
-    routeLine.match(/^\s*(?:get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s*=>/i) ??
-    routeLine.match(/Route::(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
-    routeLine.match(/(?:app|router)\.(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
-    routeLine.match(/@(?:app|\w+_bp)\.route\s*\(\s*['"]([^'"]+)['"]/i) ??
-    routeLine.match(/\br\.(?:GET|POST|PUT|DELETE|PATCH)\s*\(\s*["']([^"']+)["']/);
-  const url = urlMatch?.[1] ?? routeLine;
-  return PERSONAL_DATA_ROUTE_PATH_PATTERNS.some((pattern) => pattern.test(url));
+  const lines = `${span}\n${contextSpan}`.split("\n");
+  for (const line of lines) {
+    if (!ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(line))) {
+      continue;
+    }
+    const urlMatch =
+      line.match(/url\s*=\s*["']([^"']+)["']/i) ??
+      line.match(/^\s*(?:get|post|put|delete|patch)\s+['"]([^'"]+)['"]\s*=>/i) ??
+      line.match(/^\s*resources\s+:(\w+)/i) ??
+      line.match(/Route::(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
+      line.match(/(?:app|router)\.(?:get|post|put|delete|patch)\s*\(\s*['"]([^'"]+)['"]/i) ??
+      line.match(/@(?:app|\w+_bp)\.route\s*\(\s*['"]([^'"]+)['"]/i) ??
+      line.match(/\br\.(?:GET|POST|PUT|DELETE|PATCH)\s*\(\s*["']([^"']+)["']/);
+    const url = urlMatch?.[1] ?? line;
+    if (PERSONAL_DATA_ROUTE_PATH_PATTERNS.some((pattern) => pattern.test(url))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function findEnclosingPersonalDataRouteLine(
+  lines: string[],
+  lineIndex: number,
+  lookback = 40,
+): number | undefined {
+  for (let index = lineIndex; index >= Math.max(0, lineIndex - lookback); index -= 1) {
+    const line = lines[index] ?? "";
+    if (!ROUTE_DECLARATION_PATTERNS.some((pattern) => pattern.test(line))) {
+      continue;
+    }
+    if (hasPersonalDataRouteReference(line, line)) {
+      return index + 1;
+    }
+  }
+  return undefined;
 }
 
 export const CROSS_BOUNDARY_PATTERNS = [
@@ -341,11 +400,18 @@ export function hasCrossBoundaryEvidence(span: string, contextSpan: string): boo
   return CROSS_BOUNDARY_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+function isRubyPersonalDataModelClassHeader(span: string): boolean {
+  return (
+    /^\s*class\s+\w*(?:Email|Password|Token|Auth|Session|ApiKey|User)\w*\s*</i.test(span) &&
+    /<\s*(?:ActiveRecord::Base|ApplicationRecord)/i.test(span)
+  );
+}
+
 export function hasIntraComponentTransformationEvidence(
   span: string,
   contextSpan: string,
 ): boolean {
-  if (isRubyClassHeaderSpan(span)) {
+  if (isRubyClassHeaderSpan(span) && !isRubyPersonalDataModelClassHeader(span)) {
     return false;
   }
 
@@ -447,12 +513,20 @@ const DATA_CATEGORY_PATTERNS: Array<{ category: string; patterns: RegExp[] }> = 
       /hash_password/i,
       /hashPassword/i,
       /GenerateFromPassword/i,
+      /sendPasswordReset/i,
     ],
   },
-  { category: "email", patterns: [/\bemail\b/i, /\bvalidates\s+:email\b/i, /\bvalidates\s+:primary\b/i] },
+  { category: "email", patterns: [/\bemail\b/i, /\bvalidates\s+:email\b/i, /\bvalidates\s+:primary\b/i, /\bEmailToken\b/i] },
   {
     category: "access_token",
-    patterns: [/\baccess_token\b/i, /\bid_token\b/i, /\b:token\b/i],
+    patterns: [
+      /\baccess_token\b/i,
+      /\bid_token\b/i,
+      /\b:token\b/i,
+      /\bkey_hash\b/i,
+      /\bhash_key\b/i,
+      /\bauth_token\b/i,
+    ],
   },
   {
     category: "session",

@@ -11,6 +11,8 @@ import {
   hasStrongTransformationOnSpan,
   inferDataCategoriesFromSpan,
   inferFlowTypeFromSpan,
+  findEnclosingPersonalDataRouteLine,
+  hasPersonalDataRouteReference,
   isOrmModelSpan,
   isRailsFileLevelDeclarationSpan,
   isRouteDeclarationSpan,
@@ -43,10 +45,15 @@ const PERSONAL_DATA_FIELD_PATTERNS = [
   /user_pass/i,
 ];
 
-const FUNCTION_DEF_PATTERNS = [
+const SCOPE_ENCLOSING_DEF_PATTERNS = [
   /^\s*(export\s+)?(async\s+)?function\s+\w+/,
   /^\s*func\s+\w+/,
-  /^\s*(public|private|protected|internal|static)\s+.*\([^)]*\)\s*[{;]/,
+  /^\s*constructor\s*\(/,
+  /^\s*(?:public|private|protected|internal|static)\s+(?:async\s+)?\w+\s*\(/,
+  /^\s*(?:public|private|protected|internal|static)\s+.*\([^)]*\)\s*:\s*[^{;]+\s*\{/,
+  /^\s*(?:public|private|protected|internal|static)\s+.*\([^)]*\)\s*[{;]/,
+  /^\s*(?:public|private|protected|internal|static|final|abstract)\s+function\s+\w+/,
+  /^\s*def\s+self\.\w+/,
   /^\s*def\s+\w+/,
   /^\s*async\s+def\s+\w+/,
   /^\s*async\s+[_\w]+\s*\(/,
@@ -54,10 +61,14 @@ const FUNCTION_DEF_PATTERNS = [
   /^\s*[_\w]+\s*=\s*function\s*\(/,
   /^\s*\w+\s*=\s*(async\s+)?\([^)]*\)\s*=>/,
   /^\s*\w+\s*=\s*function\s*\(/,
-  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*\{/,
-  /^\s*(public|private|protected|static|async)?\s*[_\w]+\s*\([^)]*\)\s*$/,
+  /^\s*(public|private|protected|static|async)?\s*(?!if\b|while\b|for\b|switch\b|catch\b|elseif\b|else\b|foreach\b|do\b|unless\b|until\b)[_\w]+\s*\([^)]*\)\s*\{/,
   /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s*<[^>]+>\s+\w+\s*\(/,
   /^\s*(public|private|protected|internal|virtual|override|async|\s)+Task\s+\w+\s*\(/,
+];
+
+const FUNCTION_DEF_PATTERNS = [
+  ...SCOPE_ENCLOSING_DEF_PATTERNS,
+  /^\s*(public|private|protected|static|async)?\s*(?!if\b|while\b|for\b|switch\b|catch\b|elseif\b|else\b|foreach\b|do\b|unless\b|until\b)[_\w]+\s*\([^)]*\)\s*$/,
 ];
 
 const CLASS_DEF_PATTERNS = [
@@ -125,16 +136,76 @@ function isRubyAuthMethodSpan(span: string): boolean {
   return /\b(?:check_password|try_to_login!?|find_by_login)\b/i.test(span);
 }
 
-function shouldCollectCategoriesFromSpanOnly(span: string): boolean {
-  return isRailsFileLevelDeclarationSpan(span);
+function isAuthCredentialTransformationSpan(span: string): boolean {
+  return (
+    /->authenticate\s*\(/i.test(span) ||
+    /customerAccountManagement->authenticate/i.test(span) ||
+    /\bwp_signon\b/i.test(span) ||
+    /\bwp_authenticate\b/i.test(span) ||
+    /argon2\.verify/i.test(span) ||
+    /bcrypt\.compare/i.test(span) ||
+    /\b(?:hash_key|key_hash)\b/i.test(span) ||
+    /ApiKey\.hash_key/i.test(span)
+  );
+}
+
+function isAuthUserLookupSpan(span: string, contextSpan: string): boolean {
+  const text = `${span}\n${contextSpan}`;
+  return (
+    /directus_users/i.test(text) &&
+    /\.from\(|whereRaw|\.select\(/i.test(span)
+  );
+}
+
+function normalizeFlowDataCategory(category: string): string {
+  if (category === "email") {
+    return "email_address";
+  }
+  return category;
+}
+
+function isPasswordVerificationSpan(span: string): boolean {
+  return /argon2\.verify|bcrypt\.compare|wp_check_password|check_password/i.test(span);
+}
+
+function shouldCollectCategoriesFromSpanOnly(span: string, contextSpan: string): boolean {
+  return (
+    isRailsFileLevelDeclarationSpan(span) ||
+    isRouteDeclarationSpan(span, contextSpan) ||
+    isAuthUserLookupSpan(span, contextSpan) ||
+    isPasswordVerificationSpan(span)
+  );
+}
+
+function shouldSkipPiiRuleCategoryHarvest(span: string): boolean {
+  return isRubyAuthMethodSpan(span) || isAuthCredentialTransformationSpan(span);
+}
+
+function shouldInferCategoriesFromSpanOnly(span: string, contextSpan: string): boolean {
+  return (
+    shouldCollectCategoriesFromSpanOnly(span, contextSpan) ||
+    /argon2\.verify|bcrypt\.compare/i.test(span)
+  );
 }
 
 function collectDataCategories(span: string, contextSpan: string): string[] {
-  const categories = new Set<string>();
-  const spanOnlyCategories = shouldCollectCategoriesFromSpanOnly(span);
-  const inferContext = spanOnlyCategories ? span : contextSpan;
+  if (isAuthEmitterFilterSpan(span, contextSpan)) {
+    const text = `${span}\n${contextSpan}`;
+    const categories = new Set<string>();
+    if (/password/i.test(text)) {
+      categories.add("password");
+    }
+    if (/\bemail\b/i.test(text)) {
+      categories.add("email");
+    }
+    return [...categories].sort((left, right) => left.localeCompare(right));
+  }
 
-  if (!spanOnlyCategories && !isRubyAuthMethodSpan(span)) {
+  const categories = new Set<string>();
+  const spanOnlyCategories = shouldCollectCategoriesFromSpanOnly(span, contextSpan);
+  const inferContext = shouldInferCategoriesFromSpanOnly(span, contextSpan) ? span : contextSpan;
+
+  if (!spanOnlyCategories && !shouldSkipPiiRuleCategoryHarvest(span)) {
     for (const rule of loadPiiSignalRules()) {
       if (rule.patterns.some((pattern) => pattern.test(span))) {
         categories.add(piiRuleIdToDataCategory(rule.id));
@@ -165,10 +236,29 @@ function collectDataCategories(span: string, contextSpan: string): string[] {
     }
   }
 
-  return [...categories].sort((left, right) => left.localeCompare(right));
+  return [...categories]
+    .map(normalizeFlowDataCategory)
+    .sort((left, right) => left.localeCompare(right));
 }
 
 function intraComponentFlowType(span: string, contextSpan: string): DetectedDataFlow["type"] {
+  const text = `${span}\n${contextSpan}`;
+  if (/emitter\.emitFilter\s*\(/i.test(span) && /auth\.login/i.test(text)) {
+    return "database_query";
+  }
+
+  if (isUserCollectionBindingSpan(span)) {
+    return "data_transfer";
+  }
+
+  if (
+    isAuthCredentialTransformationSpan(span) ||
+    isAuthUserLookupSpan(span, contextSpan) ||
+    isPasswordVerificationSpan(span)
+  ) {
+    return "data_transfer";
+  }
+
   if (/\b(?:check_password|try_to_login!?|find_by_login)\b/i.test(span)) {
     return "data_transfer";
   }
@@ -180,7 +270,6 @@ function intraComponentFlowType(span: string, contextSpan: string): DetectedData
     return "data_transfer";
   }
 
-  const text = `${span}\n${contextSpan}`;
   if (isOrmModelSpan(span) || isOrmModelSpan(contextSpan)) {
     return inferFlowTypeFromSpan(span, contextSpan);
   }
@@ -213,13 +302,53 @@ function hasCustomerEntityInScope(scopeText: string, span: string): boolean {
   return /repository\.\w*Insert/i.test(span) || /InsertCustomer/i.test(span);
 }
 
-function coOccursInFunctionScope(span: string, scopeText: string): boolean {
+function hasUserCollectionReference(span: string, scopeText: string): boolean {
+  return /directus_users|super\(\s*['"]directus_users['"]/i.test(`${span}\n${scopeText}`);
+}
+
+function isUserCollectionBindingSpan(span: string): boolean {
+  return /super\(\s*['"]directus_users['"]/i.test(span);
+}
+
+function isAuthEmitterFilterSpan(span: string, contextSpan: string): boolean {
+  const text = `${span}\n${contextSpan}`;
+  return /emitter\.emitFilter\s*\(/i.test(span) && /auth\.login/i.test(text);
+}
+
+function isWordPressAuthFunctionDefinitionSpan(span: string): boolean {
+  return /^\s*function\s+(?:wp_(?:authenticate(?:_application_password|_username_password)?|check_password|hash_password|set_password|signon|create_user|get_user|set_auth_cookie|validate_auth_cookie|clear_auth_cookie|get_current_user|validate_application_password)|get_users|check_password_reset_key|username_exists|email_exists)\b/i.test(
+    span,
+  );
+}
+
+function isWordPressAuthCallSpan(span: string): boolean {
+  return /\b(?:wp_(?:authenticate|check_password|hash_password|set_password|signon|create_user|set_auth_cookie|generate_auth_cookie|get_users)|get_user_by|check_password_reset_key)\s*\(/i.test(
+    span,
+  ) || /::hash_password\s*\(/i.test(span);
+}
+
+function isHighSignalPersonalDataTransformationSpan(span: string): boolean {
+  return (
+    /sendPasswordReset|createValidator\s*\(\s*['"]customer['"]\s*,\s*['"]save['"]\s*\)|processAuthenticationFailure/i.test(
+      span,
+    ) || isWordPressAuthCallSpan(span)
+  );
+}
+
+function coOccursInFunctionScope(span: string, scopeText: string, contextSpan: string): boolean {
   if (!hasStrongTransformationOnSpan(span)) {
     return false;
   }
+  if (isUserCollectionBindingSpan(span) || isAuthEmitterFilterSpan(span, contextSpan)) {
+    return true;
+  }
+  if (isHighSignalPersonalDataTransformationSpan(span)) {
+    return true;
+  }
   return (
     hasPersonalDataReference(span, scopeText) ||
-    hasCustomerEntityInScope(scopeText, span)
+    hasCustomerEntityInScope(scopeText, span) ||
+    hasUserCollectionReference(span, scopeText)
   );
 }
 
@@ -245,6 +374,9 @@ function isFileLevelDeclaration(span: string, contextSpan: string): boolean {
   if (isRailsFileLevelDeclarationSpan(span)) {
     return true;
   }
+  if (isWordPressAuthFunctionDefinitionSpan(span)) {
+    return true;
+  }
   if (
     isOrmModelSpan(span) &&
     /EmailField|PasswordField|PlainPassword|user_pass/i.test(span)
@@ -263,15 +395,12 @@ function findEnclosingScope(
   lines: string[],
   lineIndex: number,
 ): { startLine: number; endLine: number; text: string } {
-  const contextStart = Math.max(0, lineIndex - CONTEXT_LINE_RADIUS);
-  const contextEnd = Math.min(lines.length - 1, lineIndex + CONTEXT_LINE_RADIUS);
-
   let scopeStart = lineIndex;
   let scopeEnd = lineIndex;
 
   for (let index = lineIndex; index >= 0; index -= 1) {
     const line = lines[index] ?? "";
-    if (FUNCTION_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
+    if (SCOPE_ENCLOSING_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
       scopeStart = index;
       break;
     }
@@ -281,32 +410,54 @@ function findEnclosingScope(
     }
   }
 
-  const baseIndent = countIndent(lines[scopeStart] ?? "");
+  const scopeLine = lines[scopeStart] ?? "";
+  const isRubyScope = /^\s*(?:def|class|module)\s+/.test(scopeLine);
+
+  let bodyStart = scopeStart;
+  if (!isRubyScope) {
+    for (let index = scopeStart; index < lines.length; index += 1) {
+      if ((lines[index] ?? "").includes("{")) {
+        bodyStart = index;
+        break;
+      }
+    }
+  }
+
   let braceDepth = 0;
   let foundOpenBrace = false;
 
-  for (let index = scopeStart; index < lines.length; index += 1) {
-    const line = lines[index] ?? "";
-    for (const char of line) {
-      if (char === "{") {
-        braceDepth += 1;
-        foundOpenBrace = true;
-      } else if (char === "}") {
-        braceDepth -= 1;
+  if (!isRubyScope) {
+    for (let index = bodyStart; index < lines.length; index += 1) {
+      const line = lines[index] ?? "";
+      for (const char of line) {
+        if (char === "{") {
+          braceDepth += 1;
+          foundOpenBrace = true;
+        } else if (char === "}") {
+          braceDepth -= 1;
+        }
+      }
+
+      scopeEnd = index;
+
+      if (foundOpenBrace && braceDepth <= 0 && index > bodyStart) {
+        break;
       }
     }
+  }
 
-    scopeEnd = index;
-
-    if (foundOpenBrace && braceDepth <= 0 && index > scopeStart) {
-      break;
-    }
-
-    if (!foundOpenBrace && index > scopeStart) {
-      const indent = countIndent(line);
-      if (line.trim().length > 0 && indent <= baseIndent && index > lineIndex) {
-        scopeEnd = index - 1;
-        break;
+  if (!foundOpenBrace) {
+    if (isRubyScope) {
+      const scopeIndent = countIndent(scopeLine);
+      for (let index = scopeStart + 1; index < lines.length; index += 1) {
+        const line = lines[index] ?? "";
+        if (!/^\s*end\b/.test(line)) {
+          continue;
+        }
+        if (countIndent(line) === scopeIndent) {
+          scopeEnd = index;
+          break;
+        }
       }
     }
   }
@@ -318,18 +469,91 @@ function findEnclosingScope(
   };
 }
 
+function isClassScopeLine(line: string): boolean {
+  return CLASS_DEF_PATTERNS.some((pattern) => pattern.test(line));
+}
+
+function isScopeHeaderSpan(span: string): boolean {
+  return SCOPE_ENCLOSING_DEF_PATTERNS.some((pattern) => pattern.test(span));
+}
+
+/**
+ * Skip method/function header lines that only borrow auth keywords from the
+ * identifier. They should not consume the per-scope dedupe slot ahead of the
+ * real transformation line inside the body.
+ */
+function isBareScopeHeaderSpan(span: string, contextSpan: string): boolean {
+  if (!isScopeHeaderSpan(span)) {
+    return false;
+  }
+  if (isRouteDeclarationSpan(span, contextSpan) || isRailsFileLevelDeclarationSpan(span)) {
+    return false;
+  }
+  if (isWordPressAuthFunctionDefinitionSpan(span)) {
+    return false;
+  }
+  if (/^\s*(?:async\s+)?def\s+/.test(span)) {
+    return false;
+  }
+  if (/->|=>|=\s*(?:\$this->|\w+::)/.test(span)) {
+    return false;
+  }
+  return true;
+}
+
+function isSpanAnchoredDedupeSpan(span: string, contextSpan: string): boolean {
+  if (isUserCollectionBindingSpan(span) || isAuthEmitterFilterSpan(span, contextSpan)) {
+    return true;
+  }
+  return (
+    isUserCollectionBindingSpan(span) ||
+    isAuthEmitterFilterSpan(span, contextSpan) ||
+    isWordPressAuthFunctionDefinitionSpan(span) ||
+    isWordPressAuthCallSpan(span) ||
+    /session->logout|->createAccount\(|sendPasswordResetConfirmationEmail|createValidator\s*\(\s*['"]customer['"]/i.test(
+      span,
+    )
+  );
+}
+
+function shouldPreferCandidateFlow(
+  candidateSpan: string,
+  candidateLine: number,
+  existingSpan: string,
+  existingLine: number,
+  score: number,
+  existingScore: number,
+): boolean {
+  if (score > existingScore) {
+    return true;
+  }
+  if (score < existingScore) {
+    return false;
+  }
+
+  const candidateHeader = isScopeHeaderSpan(candidateSpan);
+  const existingHeader = isScopeHeaderSpan(existingSpan);
+  if (candidateHeader && !existingHeader) {
+    return true;
+  }
+  if (!candidateHeader && existingHeader) {
+    return false;
+  }
+
+  return candidateLine > existingLine;
+}
+
 function transformationPriority(span: string, contextSpan: string): number {
-  const text = `${span}\n${contextSpan}`;
   if (
-    CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(text)) &&
-    /[\.(]|:=/.test(text)
+    CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(span)) &&
+    /[\.(]|:=/.test(span)
   ) {
     return 4;
   }
-  if (CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(text))) {
+  if (CRYPTO_AUTH_PATTERNS.some((pattern) => pattern.test(span))) {
     return 3;
   }
-  if (PERSISTENCE_PATTERNS.some((pattern) => pattern.test(text))) {
+  if (PERSISTENCE_PATTERNS.some((pattern) => pattern.test(span))) {
     return 2;
   }
   if (isOrmModelSpan(span) || isOrmModelSpan(contextSpan)) {
@@ -339,11 +563,19 @@ function transformationPriority(span: string, contextSpan: string): number {
 }
 
 function transformationScore(span: string, contextSpan: string): number {
+  if (isWordPressAuthFunctionDefinitionSpan(span)) {
+    return 5000;
+  }
   let score = transformationPriority(span, contextSpan) * 1000;
-  const text = `${span}\n${contextSpan}`;
-  if (/GenerateFromPassword|DriverValue|\.Email\s*\(/i.test(text)) {
+  if (/GenerateFromPassword|DriverValue|\.Email\s*\(/i.test(span)) {
     score += 200;
-  } else if (/bcrypt\.|\.save\s*\(/i.test(text)) {
+  } else if (/customerAccountManagement->authenticate|->authenticate\s*\(/i.test(span)) {
+    score += 300;
+  } else if (/session->logout|->createAccount\(|sendPasswordResetConfirmationEmail/i.test(span)) {
+    score += 250;
+  } else if (isWordPressAuthCallSpan(span)) {
+    score += 200;
+  } else if (/bcrypt\.|\.save\s*\(/i.test(span)) {
     score += 100;
   }
   return score;
@@ -385,61 +617,99 @@ export function detectIntraComponentLineage(
       }
 
       const contextSpan = buildContextSpan(file.content, spanLine);
-      if (!hasIntraComponentTransformationEvidence(span, contextSpan)) {
-        continue;
-      }
-      if (!spanAnchorsEvidence(span, contextSpan)) {
+      if (isBareScopeHeaderSpan(span, contextSpan)) {
         continue;
       }
       const scope = findEnclosingScope(lines, lineIndex);
+      const enclosingRouteLine = findEnclosingPersonalDataRouteLine(lines, lineIndex);
+      const insidePersonalDataRouteBlock =
+        enclosingRouteLine !== undefined && spanLine > enclosingRouteLine;
 
-      if (isFileLevelDeclaration(span, contextSpan)) {
-        if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
+      let flowSpan = span;
+      let flowContextSpan = contextSpan;
+
+      if (insidePersonalDataRouteBlock) {
+        flowSpan = lines[enclosingRouteLine - 1] ?? "";
+        flowContextSpan = buildContextSpan(file.content, enclosingRouteLine);
+        if (!hasPersonalDataRouteReference(flowSpan, flowContextSpan)) {
           continue;
         }
-        const piiScope = isRouteDeclarationSpan(span, contextSpan)
-          ? `${span}\n${contextSpan}`
-          : isRailsFileLevelDeclarationSpan(span)
-            ? span
-            : contextSpan;
-        if (
-          !hasPersonalDataReference(span, piiScope) &&
-          !hasPersonalDataAssociationReference(span, piiScope)
-        ) {
-          continue;
-        }
-        if (!hasStrongTransformationOnSpan(span)) {
+        if (!hasStrongTransformationOnSpan(flowSpan)) {
           continue;
         }
       } else {
-        if (!coOccursInFunctionScope(span, scope.text)) {
+        if (!hasIntraComponentTransformationEvidence(span, contextSpan)) {
+          continue;
+        }
+        if (!spanAnchorsEvidence(span, contextSpan)) {
+          continue;
+        }
+
+        if (isFileLevelDeclaration(span, contextSpan)) {
+          if (isRouteDeclarationSpan(span, contextSpan) && !isRouteDeclarationWithPersonalData(span, contextSpan)) {
+            continue;
+          }
+          const piiScope = isRouteDeclarationSpan(span, contextSpan)
+            ? `${span}\n${contextSpan}`
+          : isRailsFileLevelDeclarationSpan(span)
+            ? `${span}\n${contextSpan}`
+            : isWordPressAuthFunctionDefinitionSpan(span)
+              ? `${span}\n${contextSpan}`
+              : contextSpan;
+          if (
+            !hasPersonalDataReference(span, piiScope) &&
+            !hasPersonalDataAssociationReference(span, piiScope)
+          ) {
+            continue;
+          }
+          if (!hasStrongTransformationOnSpan(span)) {
+            continue;
+          }
+        } else if (!coOccursInFunctionScope(span, scope.text, contextSpan)) {
           continue;
         }
       }
 
-      const flowType = intraComponentFlowType(span, contextSpan);
+      const fileLevelFlow =
+        insidePersonalDataRouteBlock ||
+        isFileLevelDeclaration(span, contextSpan) ||
+        isRubyAuthMethodSpan(span);
+
+      const flowType = intraComponentFlowType(flowSpan, flowContextSpan);
+      let evidenceStartLine = spanLine;
+      let evidenceEndLine = spanLine;
+      if (insidePersonalDataRouteBlock) {
+        evidenceStartLine = enclosingRouteLine;
+        evidenceEndLine = Math.max(spanLine, scope.endLine);
+      } else if (!fileLevelFlow && !isClassScopeLine(lines[scope.startLine - 1] ?? "")) {
+        evidenceEndLine = Math.max(spanLine, scope.endLine);
+      }
+
       const evidence = {
         filePath: file.path,
-        startLine: spanLine,
-        endLine: spanLine,
+        startLine: evidenceStartLine,
+        endLine: evidenceEndLine,
       };
 
       const component = resolveComponentForEvidence(components, evidence, {
         flowType,
-        span,
-        contextSpan,
+        span: flowSpan,
+        contextSpan: flowContextSpan,
       });
       if (!component) {
         continue;
       }
 
-      const dedupeAnchorLine =
-        isFileLevelDeclaration(span, contextSpan) || isRubyAuthMethodSpan(span)
+      const dedupeAnchorLine = fileLevelFlow
+        ? insidePersonalDataRouteBlock
+          ? enclosingRouteLine
+          : spanLine
+        : isSpanAnchoredDedupeSpan(span, contextSpan)
           ? spanLine
           : scope.startLine;
       const key = dedupeKey(component.id, flowType, file.path, dedupeAnchorLine);
-      const categories = collectDataCategories(span, contextSpan);
-      const score = transformationScore(span, contextSpan);
+      const categories = collectDataCategories(flowSpan, flowContextSpan);
+      const score = transformationScore(flowSpan, flowContextSpan);
       const candidate = {
         id: "",
         sourceComponentId: component.id,
@@ -448,9 +718,9 @@ export function detectIntraComponentLineage(
         confidence: INTRA_LINEAGE_CONFIDENCE,
         sourceLocation: {
           filePath: file.path,
-          startLine: spanLine,
-          endLine: spanLine,
-          code: span.trim() || undefined,
+          startLine: evidenceStartLine,
+          endLine: evidenceEndLine,
+          code: flowSpan.trim() || span.trim() || undefined,
         },
         dataCategories: categories,
         targetScope: "local" as const,
@@ -459,7 +729,19 @@ export function detectIntraComponentLineage(
       };
 
       const existing = bestByKey.get(key);
-      if (!existing || score > existing.score) {
+      const existingAnchorLine = existing?.flow.sourceLocation?.startLine ?? 0;
+      const existingSpan = existing?.flow.sourceLocation?.code ?? "";
+      if (
+        !existing ||
+        shouldPreferCandidateFlow(
+          flowSpan,
+          spanLine,
+          existingSpan,
+          existingAnchorLine,
+          score,
+          existing.score,
+        )
+      ) {
         bestByKey.set(key, {
           flow: candidate,
           score,

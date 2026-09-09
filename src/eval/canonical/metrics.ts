@@ -1,4 +1,9 @@
-import { assignDataItemsOneToOne, assignOneToOne } from "./assignment";
+import {
+  assignDataFlowsOneToOne,
+  assignDataItemsOneToOne,
+  assignMentionsOneToOne,
+  assignOneToOne,
+} from "./assignment";
 import type { AssignmentResult } from "./assignment";
 import type {
   AcceptedCanonicalGoldExpectation,
@@ -51,6 +56,10 @@ export function computeStrictRecall(
   const assignment =
     layer === "data-items"
       ? assignDataItemsOneToOne(positives, findings)
+      : layer === "mentions"
+        ? assignMentionsOneToOne(positives, findings)
+      : layer === "data-flows"
+        ? assignDataFlowsOneToOne(positives, findings)
       : assignOneToOne(positives, findings);
   return computeStrictRecallFromAssignment(positives, assignment);
 }

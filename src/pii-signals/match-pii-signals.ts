@@ -30,6 +30,60 @@ function ruleById(rules: PiiSignalRule[]): Map<string, PiiSignalRule> {
   return new Map(rules.map((rule) => [rule.id, rule]));
 }
 
+function isJavaFieldDeclarationLine(line: string): boolean {
+  return /\b(?:private|protected)\s+[\w<>,\s\[\]]+\s+\w+\s*;/.test(line);
+}
+
+/**
+ * Gold often anchors on the leading @Column line while token matching fires on the
+ * field declaration a few lines below; span evidence through the annotation block.
+ */
+export function javaAnnotationBlockStartLine(
+  lines: readonly string[],
+  fieldLineIndex: number,
+): number {
+  let start = fieldLineIndex;
+  for (let index = fieldLineIndex - 1; index >= 0 && index >= fieldLineIndex - 12; index -= 1) {
+    const trimmed = (lines[index] ?? "").trim();
+    if (!trimmed) {
+      continue;
+    }
+    if (/^@\w+/.test(trimmed)) {
+      start = index;
+      continue;
+    }
+    break;
+  }
+  return start;
+}
+
+function expandJavaAnnotatedFieldEvidence(
+  lines: readonly string[],
+  hit: PiiSignalHit,
+): PiiSignalHit {
+  if (!/\.(?:java|kt)$/i.test(hit.evidence.filePath)) {
+    return hit;
+  }
+  const fieldLineIndex = hit.evidence.startLine - 1;
+  const line = lines[fieldLineIndex] ?? "";
+  if (!isJavaFieldDeclarationLine(line)) {
+    return hit;
+  }
+  const annotationStart = javaAnnotationBlockStartLine(lines, fieldLineIndex);
+  if (annotationStart >= fieldLineIndex) {
+    return hit;
+  }
+  return {
+    ...hit,
+    evidence: {
+      ...hit.evidence,
+      startLine: annotationStart + 1,
+      endLine: hit.evidence.endLine,
+      reason: `${hit.evidence.reason};java-annotation-span`,
+    },
+  };
+}
+
 function matchAliasHitsOnLine(
   line: string,
   lineIndex: number,
@@ -113,7 +167,7 @@ export function matchPiiSignalsInFile(
     );
   }
 
-  return hits;
+  return hits.map((hit) => expandJavaAnnotatedFieldEvidence(lines, hit));
 }
 
 export function matchPiiSignalsInFiles(

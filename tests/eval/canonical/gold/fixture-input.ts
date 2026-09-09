@@ -42,5 +42,8 @@ export function evalCaseToAnnotationRecord(caseRecord: EvalCase): AnnotationReco
     ...(caseRecord.flowCandidate !== undefined
       ? { candidate: caseRecord.flowCandidate }
       : {}),
+    ...(caseRecord.dataItemCandidate !== undefined
+      ? { candidate: caseRecord.dataItemCandidate }
+      : {}),
   };
 }

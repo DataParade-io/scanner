@@ -99,6 +99,9 @@ export function annotationToEvalCase(
     ...(annotation.candidate?.kind === "flow"
       ? { flowCandidate: annotation.candidate }
       : {}),
+    ...(annotation.candidate?.kind === "data_item"
+      ? { dataItemCandidate: annotation.candidate }
+      : {}),
   };
 }
 

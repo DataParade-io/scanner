@@ -197,6 +197,30 @@ auth:
       strategy: oauth2
       confidence: 0.85
 
+    - id: auth_driver
+      patternId: auth_middleware
+      contentRegexes:
+        - "class\\s+\\w+AuthDriver\\s+extends\\s+AuthDriver"
+        - "extends\\s+AuthDriver\\b"
+      strategy: local
+      confidence: 0.85
+
+    - id: token_middleware
+      patternId: auth_middleware
+      contentRegexes:
+        - "req\\.token\\s*="
+        - ":\\s*RequestHandler\\s*=\\s*\\(req"
+      strategy: bearer_token
+      confidence: 0.85
+
+    - id: service_class
+      patternId: auth_middleware
+      filePathRegex: "(?:^|/)services/.+\\.(?:ts|tsx)$"
+      contentRegexes:
+        - "export\\s+class\\s+(\\w+Service)\\b"
+      componentSubType: service
+      confidence: 0.85
+
 serverless:
   handlers:
     - id: aws_lambda

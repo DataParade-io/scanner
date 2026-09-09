@@ -75,6 +75,7 @@ function parseCliArgs(args: string[]): {
   includeProposed?: boolean;
   reviewStates?: ReviewState[];
   writeReportPath?: string;
+  concurrency?: number;
 } {
   const reviewStatesArg = args.find((arg) => arg.startsWith("--review-states="));
   let reviewStates: ReviewState[] | undefined;
@@ -100,6 +101,16 @@ function parseCliArgs(args: string[]): {
     }
   }
 
+  const concurrencyArg = args.find((arg) => arg.startsWith("--concurrency="));
+  let concurrency: number | undefined;
+  if (concurrencyArg) {
+    const value = Number.parseInt(concurrencyArg.slice("--concurrency=".length), 10);
+    if (!Number.isFinite(value) || value < 1) {
+      throw new Error(`Invalid --concurrency value: ${concurrencyArg}`);
+    }
+    concurrency = value;
+  }
+
   const repoKeys = args.filter(
     (arg) =>
       !arg.startsWith("--") &&
@@ -111,6 +122,7 @@ function parseCliArgs(args: string[]): {
     includeProposed: args.includes("--include-proposed"),
     reviewStates,
     writeReportPath,
+    concurrency,
   };
 }
 
@@ -125,13 +137,15 @@ function isProvisionalRun(options: RunFourLayerScorecardOptions): boolean {
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const { repoKeys, includeProposed, reviewStates, writeReportPath } = parseCliArgs(args);
+  const { repoKeys, includeProposed, reviewStates, writeReportPath, concurrency } =
+    parseCliArgs(args);
 
   const options: RunFourLayerScorecardOptions = {
     repoKeys: repoKeys.length > 0 ? repoKeys : undefined,
     includeProposed,
     reviewStates,
     writeReportPath,
+    concurrency,
   };
 
   if (isProvisionalRun(options)) {

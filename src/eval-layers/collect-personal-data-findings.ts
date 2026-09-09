@@ -151,4 +151,8 @@ export async function collectPersonalDataFindings(
   return buildPersonalDataFindingsPayload(inventory, layer);
 }
 
-export { buildPersonalDataInventory, type PersonalDataInventory } from "./personal-data-inventory";
+export {
+  buildPersonalDataInventory,
+  buildPersonalDataInventoryFromIngest,
+  type PersonalDataInventory,
+} from "./personal-data-inventory";

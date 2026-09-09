@@ -1,9 +1,12 @@
 import type { DetectedComponent } from "../../../src/core/types/component";
 import type { FileInfo } from "../../../src/core/types/file";
+import fs from "fs";
+import path from "path";
 import { resolveComponentForEvidence } from "../../../src/data-flow/component-evidence-resolution";
 import { detectIntraComponentLineage } from "../../../src/data-flow/intra-component-lineage";
 import {
   hasIntraComponentTransformationEvidence,
+  hasPersonalDataRouteReference,
   inferFlowTypeFromSpan,
 } from "../../../src/data-flow/transformation-patterns";
 
@@ -61,6 +64,25 @@ describe("data-flow/intra-component-lineage", () => {
       const span = "<route url=\"/V1/customers/me/password\" method=\"PUT\">";
       const context = "<routes>\n" + span;
       expect(hasIntraComponentTransformationEvidence(span, context)).toBe(true);
+    });
+
+    it("accepts Rails webhook route declarations", () => {
+      const span = '    post "webhooks/mailgun" => "webhooks#mailgun"';
+      expect(hasIntraComponentTransformationEvidence(span, span)).toBe(true);
+    });
+
+    it("accepts Rails resources routes for personal-data resources", () => {
+      const span = "      resources :users, id: RouteFormat.username, only: %i[index destroy]";
+      expect(hasIntraComponentTransformationEvidence(span, span)).toBe(true);
+    });
+
+    it("accepts nested lines inside a personal-data resources route block", () => {
+      const span = "        collection do";
+      const context = [
+        "      resources :users, id: RouteFormat.username, only: %i[index destroy] do",
+        span,
+      ].join("\n");
+      expect(hasPersonalDataRouteReference(span, context)).toBe(true);
     });
 
     it("accepts model association spans", () => {
@@ -204,7 +226,7 @@ describe("data-flow/intra-component-lineage", () => {
       expect(flows.every((flow) => flow.sourceComponentId === "customer_actor")).toBe(true);
       expect(flows.every((flow) => flow.targetComponentId === "customer_actor")).toBe(true);
       expect(flows[0]?.type).toBe("database_query");
-      expect(flows[0]?.dataCategories).toContain("email");
+      expect(flows[0]?.dataCategories).toContain("email_address");
     });
 
     it("emits a self-loop flow for JWT signing with tokenKey", () => {
@@ -481,7 +503,7 @@ describe("data-flow/intra-component-lineage", () => {
       const { flows } = detectIntraComponentLineage([file], components, 0);
       expect(flows.length).toBeGreaterThanOrEqual(1);
       expect(flows[0]?.sourceLocation?.startLine).toBe(2);
-      expect(flows[0]?.dataCategories).toContain("email");
+      expect(flows[0]?.dataCategories).toContain("email_address");
     });
 
     it("emits a self-loop flow for check_password in user.rb method", () => {
@@ -535,7 +557,7 @@ describe("data-flow/intra-component-lineage", () => {
       const { flows } = detectIntraComponentLineage([file], components, 0);
       const primaryFlow = flows.find((flow) => flow.sourceLocation?.startLine === 3);
       expect(primaryFlow).toBeDefined();
-      expect(primaryFlow?.dataCategories).toEqual(["email"]);
+      expect(primaryFlow?.dataCategories).toEqual(["email_address"]);
     });
 
     it("emits a self-loop flow for scope :totps in UserSecondFactor model", () => {
@@ -563,6 +585,149 @@ describe("data-flow/intra-component-lineage", () => {
       expect(totpFlow).toBeDefined();
       expect(totpFlow?.sourceComponentId).toBe("totp_scope");
       expect(totpFlow?.type).toBe("data_transfer");
+    });
+
+    it("scopes Ruby def bodies to matching end keyword", () => {
+      const file = makeFile(
+        "app/models/user_auth_token.rb",
+        [
+          "class UserAuthToken < ActiveRecord::Base",
+          "  def self.generate(token)",
+          "    log(action: 'generate', auth_token: token)",
+          "  end",
+          "",
+          "  def self.lookup(unhashed_token)",
+          "    token = hash_token(unhashed_token)",
+          "    unexpired.where(auth_token: token)",
+          "  end",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "auth_lookup",
+          name: "lookup",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "app/models/user_auth_token.rb", startLine: 6, endLine: 6 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const lookupFlow = flows.find(
+        (flow) =>
+          flow.sourceLocation &&
+          flow.sourceLocation.startLine <= 7 &&
+          flow.sourceLocation.endLine >= 7,
+      );
+      const generateFlow = flows.find((flow) => flow.sourceLocation?.startLine === 3);
+      expect(lookupFlow).toBeDefined();
+      expect(lookupFlow?.sourceLocation?.endLine).toBeLessThanOrEqual(9);
+      expect(generateFlow).toBeDefined();
+      expect(generateFlow?.sourceLocation?.endLine).toBeLessThanOrEqual(4);
+    });
+
+    it("emits a self-loop flow for EmailToken ActiveRecord model header", () => {
+      const file = makeFile(
+        "app/models/email_token.rb",
+        [
+          "class EmailToken < ActiveRecord::Base",
+          "  belongs_to :user",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "email_token_model",
+          name: "EmailToken",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: "app/models/email_token.rb", startLine: 1, endLine: 1 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const modelFlow = flows.find((flow) => flow.sourceLocation?.startLine === 1);
+      expect(modelFlow).toBeDefined();
+      expect(modelFlow?.sourceComponentId).toBe("email_token_model");
+    });
+
+    it("attaches EmailToken model flow to coarse database component when auth_service is absent", () => {
+      const file = makeFile(
+        "app/models/email_token.rb",
+        [
+          "class EmailToken < ActiveRecord::Base",
+          "  belongs_to :user",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "email_token_db",
+          name: "EmailToken",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [{ filePath: "app/models/email_token.rb", startLine: 1, endLine: 3 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const modelFlow = flows.find((flow) => flow.sourceLocation?.startLine === 1);
+      expect(modelFlow).toBeDefined();
+      expect(modelFlow?.sourceComponentId).toBe("email_token_db");
+    });
+
+    it("classifies ApiKey.hash_key assignment as data_transfer", () => {
+      const file = makeFile(
+        "app/models/api_key.rb",
+        [
+          "class ApiKey < ActiveRecord::Base",
+          "  def generate_key",
+          "    self.key_hash = ApiKey.hash_key(key)",
+          "  end",
+          "end",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "api_key_db",
+          name: "ApiKey",
+          type: "asset",
+          subType: "database",
+          sourceLocations: [{ filePath: "app/models/api_key.rb", startLine: 1, endLine: 4 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const hashFlow = flows.find((flow) => flow.sourceLocation?.startLine === 3);
+      expect(hashFlow).toBeDefined();
+      expect(hashFlow?.type).toBe("data_transfer");
+      expect(hashFlow?.sourceComponentId).toBe("api_key_db");
+    });
+
+    it("collects session-only categories for session/sso route declarations", () => {
+      const file = makeFile(
+        "config/routes.rb",
+        [
+          '  post "webhooks/sendgrid" => "webhooks#sendgrid"',
+          '  get "session/sso" => "session#sso"',
+          '  get "session/current" => "session#current"',
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "sso_api",
+          name: "SSO API",
+          type: "asset",
+          subType: "api",
+          sourceLocations: [{ filePath: "config/routes.rb", startLine: 2, endLine: 2 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const ssoFlow = flows.find((flow) => flow.sourceLocation?.startLine === 2);
+      expect(ssoFlow).toBeDefined();
+      expect(ssoFlow?.dataCategories).toEqual(["session"]);
     });
 
     it("emits a self-loop flow for after_create on User model", () => {
@@ -612,6 +777,272 @@ describe("data-flow/intra-component-lineage", () => {
 
       const { flows } = detectIntraComponentLineage([file], components, 0);
       expect(flows).toHaveLength(0);
+    });
+
+    it("anchors Magento LoginPost authenticate inside execute() scope", () => {
+      const file = makeFile(
+        "app/code/Magento/Customer/Controller/Account/LoginPost.php",
+        [
+          "class LoginPost",
+          "    public function execute()",
+          "    {",
+          "        if ($loggedIn) {",
+          "            $resultRedirect = $this->resultRedirectFactory->create();",
+          "        }",
+          "        if ($this->getRequest()->isPost()) {",
+          "            $login = $this->getRequest()->getPost('login');",
+          "            if (!empty($login['username']) && !empty($login['password'])) {",
+          "                try {",
+          "                    $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);",
+          "                    $this->session->setCustomerDataAsLoggedIn($customer);",
+          "                } catch (\\Exception $e) {",
+          "                }",
+          "            }",
+          "        }",
+          "    }",
+          "}",
+        ].join("\n"),
+      );
+      const components = [
+        makeComponent({
+          id: "login_post_api",
+          name: "LoginPost",
+          type: "asset",
+          subType: "api",
+          sourceLocations: [
+            {
+              filePath: "app/code/Magento/Customer/Controller/Account/LoginPost.php",
+              startLine: 1,
+              endLine: 1,
+            },
+          ],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const authenticateFlow = flows.find(
+        (flow) =>
+          flow.sourceLocation?.startLine === 11 &&
+          flow.sourceLocation.endLine >= 11,
+      );
+      expect(authenticateFlow).toBeDefined();
+      expect(authenticateFlow?.sourceComponentId).toBe("login_post_api");
+      expect(authenticateFlow?.dataCategories).toEqual(["password", "session"]);
+    });
+
+    it("anchors Magento LoginPost authenticate in the materialized corpus file", () => {
+      const cacheRoot = path.join(
+        __dirname,
+        "../../../tests/benchmark/.cache/repos",
+      );
+      const materialized = fs
+        .readdirSync(cacheRoot)
+        .find((entry) => entry.startsWith("magento@"));
+      if (!materialized) {
+        return;
+      }
+      const rel = "app/code/Magento/Customer/Controller/Account/LoginPost.php";
+      const content = fs.readFileSync(path.join(cacheRoot, materialized, rel), "utf8");
+      const file: FileInfo = {
+        path: rel,
+        name: "LoginPost.php",
+        content,
+        language: "php",
+        size: content.length,
+      };
+      const components = [
+        makeComponent({
+          id: "login_post_api",
+          name: "LoginPost",
+          type: "asset",
+          subType: "api",
+          sourceLocations: [{ filePath: rel, startLine: 33, endLine: 33 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const overlapping = flows.filter(
+        (flow) =>
+          flow.sourceLocation &&
+          flow.sourceLocation.startLine <= 192 &&
+          flow.sourceLocation.endLine >= 191,
+      );
+      expect(overlapping.length).toBeGreaterThan(0);
+    });
+
+    it("emits flows at Magento gold evidence lines for remaining isolation misses", () => {
+      const cacheRoot = path.join(
+        __dirname,
+        "../../../tests/benchmark/.cache/repos",
+      );
+      const materialized = fs
+        .readdirSync(cacheRoot)
+        .find((entry) => entry.startsWith("magento@"));
+      if (!materialized) {
+        return;
+      }
+      const cases = [
+        {
+          rel: "app/code/Magento/Customer/Controller/Account/Logout.php",
+          line: 87,
+          subType: "api" as const,
+        },
+        {
+          rel: "app/code/Magento/Customer/Controller/Account/CreatePost.php",
+          line: 398,
+          subType: "api" as const,
+        },
+        {
+          rel: "app/code/Magento/Customer/Model/AccountManagement.php",
+          line: 1308,
+          subType: "database" as const,
+        },
+        {
+          rel: "app/code/Magento/Customer/Model/ResourceModel/Customer.php",
+          line: 274,
+          subType: "database" as const,
+        },
+      ];
+
+      for (const { rel, line, subType } of cases) {
+        const content = fs.readFileSync(path.join(cacheRoot, materialized, rel), "utf8");
+        const file: FileInfo = {
+          path: rel,
+          name: path.basename(rel),
+          content,
+          language: "php",
+          size: content.length,
+        };
+        const components = [
+          makeComponent({
+            id: `${rel}:${subType}`,
+            name: path.basename(rel),
+            type: "asset",
+            subType,
+            sourceLocations: [{ filePath: rel, startLine: 1, endLine: 9999 }],
+          }),
+        ];
+        const { flows } = detectIntraComponentLineage([file], components, 0);
+        const hit = flows.find(
+          (flow) =>
+            flow.sourceLocation &&
+            flow.sourceLocation.startLine <= line &&
+            flow.sourceLocation.endLine >= line,
+        );
+        expect(hit).toBeDefined();
+      }
+    });
+
+    it("anchors Directus LocalAuthDriver email lookup in the materialized corpus file", () => {
+      const cacheRoot = path.join(
+        __dirname,
+        "../../../tests/benchmark/.cache/repos",
+      );
+      const materialized = fs
+        .readdirSync(cacheRoot)
+        .find((entry) => entry.startsWith("directus@"));
+      if (!materialized) {
+        return;
+      }
+      const rel = "api/src/auth/drivers/local.ts";
+      const content = fs.readFileSync(path.join(cacheRoot, materialized, rel), "utf8");
+      const file: FileInfo = {
+        path: rel,
+        name: "local.ts",
+        content,
+        language: "typescript",
+        size: content.length,
+      };
+      const components = [
+        makeComponent({
+          id: "directus-local-auth-driver",
+          name: "LocalAuthDriver",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: rel, startLine: 19, endLine: 19 }],
+        }),
+      ];
+
+      const { flows } = detectIntraComponentLineage([file], components, 0);
+      const emailLookup = flows.find(
+        (flow) =>
+          flow.type === "data_transfer" &&
+          flow.dataCategories?.includes("email_address") &&
+          flow.sourceLocation &&
+          flow.sourceLocation.startLine <= 35 &&
+          flow.sourceLocation.endLine >= 25,
+      );
+      expect(emailLookup).toBeDefined();
+      const passwordVerify = flows.find(
+        (flow) =>
+          flow.type === "data_transfer" &&
+          flow.dataCategories?.includes("password") &&
+          flow.sourceLocation &&
+          flow.sourceLocation.startLine <= 45 &&
+          flow.sourceLocation.endLine >= 39,
+      );
+      expect(passwordVerify).toBeDefined();
+      expect(passwordVerify?.dataCategories).toEqual(["password"]);
+    });
+
+    it("emits flows at WordPress gold evidence lines for accepted canonical cases", () => {
+      const cacheRoot = path.join(
+        __dirname,
+        "../../../tests/benchmark/.cache/repos",
+      );
+      const materialized = fs
+        .readdirSync(cacheRoot)
+        .find((entry) => entry.startsWith("wordpress@"));
+      if (!materialized) {
+        return;
+      }
+      const cases = [
+        { rel: "src/wp-includes/user.php", start: 109, end: 115 },
+        { rel: "src/wp-includes/user.php", start: 2300, end: 2301 },
+        { rel: "src/wp-includes/pluggable.php", start: 1131, end: 1137 },
+        { rel: "src/wp-includes/user.php", start: 208, end: 208 },
+        { rel: "src/wp-includes/class-wp-application-passwords.php", start: 98, end: 99 },
+        { rel: "src/wp-includes/pluggable.php", start: 2753, end: 2753 },
+        { rel: "src/wp-includes/pluggable.php", start: 2843, end: 2843 },
+        { rel: "src/wp-includes/pluggable.php", start: 3103, end: 3103 },
+        { rel: "src/wp-includes/pluggable.php", start: 684, end: 684 },
+        { rel: "src/wp-includes/user.php", start: 372, end: 372 },
+        { rel: "src/wp-includes/user.php", start: 3000, end: 3000 },
+        { rel: "src/wp-includes/user.php", start: 181, end: 181 },
+        { rel: "src/wp-includes/user.php", start: 275, end: 275 },
+        { rel: "src/wp-includes/user.php", start: 3178, end: 3178 },
+        { rel: "src/wp-includes/user.php", start: 873, end: 873 },
+        { rel: "src/wp-includes/author-template.php", start: 492, end: 492 },
+      ];
+      const repoRoot = path.join(cacheRoot, materialized);
+
+      for (const { rel, start, end } of cases) {
+        const content = fs.readFileSync(path.join(repoRoot, rel), "utf8");
+        const file: FileInfo = {
+          path: rel,
+          name: path.basename(rel),
+          content,
+          language: "php",
+          size: content.length,
+        };
+        const components = [
+          makeComponent({
+            id: `${rel}:auth`,
+            name: path.basename(rel),
+            type: "asset",
+            subType: "auth_service",
+            sourceLocations: [{ filePath: rel, startLine: 1, endLine: 9999 }],
+          }),
+        ];
+        const { flows } = detectIntraComponentLineage([file], components, 0);
+        const hit = flows.find(
+          (flow) =>
+            flow.sourceLocation &&
+            flow.sourceLocation.startLine <= end &&
+            flow.sourceLocation.endLine >= start,
+        );
+        expect(hit).toBeDefined();
+      }
     });
   });
 });

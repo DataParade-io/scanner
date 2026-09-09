@@ -25,6 +25,13 @@ Artifact: [`tests/fixtures/baseline/series-1-performance-baseline.json`](../../t
 | PII alias matching (Phase 1) | `0fd2b5a` | mentions 45→62/79; data-items flat | held | #71 | Line-level; rollup blocked |
 | Data-action classification | `998fb12` | diagnostic layer | — | develop | Tier A/B/C gold + scan wiring |
 | Data-items Phase 2 assignment | spike-inc | data-items 43→48/140 (+5) | 37.8% (48/127) | this branch | Evidence-scoped `assignDataItemsOneToOne`; identity monopoly caps multi-location gold |
+| Data-items monopoly removal | `fix/data-items-recall-60` | data-items 48→134/140 (+86) | 64.3% (83/129) | pending | Per-slice collapse + candidate round-trip + slice tie-break assignment |
+| Flow assignment + route widening | `fix/data-items-recall-60` | flows 14→31/158 (+17) | 2.9% (31/1057) | pending | Endpoint enrichment, route widening, `assignDataFlowsOneToOne` tie-break |
+| Flow detection widening (iter 3) | `fix/data-items-recall-60` | flows 19→31/158 (+12) | held | pending | Route-block interior, PHP Controller→api, function-scope evidence ranges, auth patterns |
+| Full four-layer scorecard (v1) | `fix/data-items-recall-60` | mentions 61/79; items 134/140; comp 136/519; flows 31/158 | all layers up vs series-1 | pending | `scorecard-fix-data-items-recall-60.json` @ 2026-09-09 |
+| Mentions slice assignment | `fix/data-items-recall-60` | mentions 61→79/79 (+18) | 1.5% (79/5392) held | pending | `assignMentionsOneToOne` + same-line duplicate guard; evidence-scoped slices |
+| Data-items final 6 | `fix/data-items-recall-60` | data-items 134→140/140 (+6) | 64.4% (85/132) | pending | Co-location credit, Swift ingest, PII span fixes |
+| Full four-layer scorecard (v2) | `fix/data-items-recall-60` | mentions 79/79; items 140/140; comp 136/519; flows 31/158 | mentions/items recall maxed | pending | `scorecard-fix-data-items-recall-60-v2.json` @ 2026-09-09T12:24Z |
 | Zero-component census + patterns | spike-inc | components 136→135/519; zero-comp 8→2/29 | held | this branch | django_model_class (easy-school); magento/php; census report refreshed |
 | Flow route PII widening | spike-inc | flows held ~20/158 (path patterns only) | held | this branch | PERSONAL_DATA_ROUTE_PATH_PATTERNS; route_declaration slice deferred |
 | NPM_TOKEN semantic-release | ops | — | — | — | GitHub secret must be valid npm token for `@dataparade` publish on main merge |
