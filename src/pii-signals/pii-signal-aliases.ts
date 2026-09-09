@@ -59,6 +59,12 @@ export const PII_SIGNAL_ALIASES: Readonly<Record<string, string>> = {
   // Go / framework-specific compound tokens
   fieldnameemail: "email",
 
+  // Accessor methods that imply stored personal-data fields
+  getemail: "email",
+  get_email: "email",
+  getpassword: "password",
+  get_password: "password",
+
   // Bare field name — matched only with declaration context (see CONTEXT_GATED_ADDRESS_TOKENS)
   address: "address",
 };
@@ -124,7 +130,8 @@ export function isBareAddressFieldDeclaration(
     /\baddress\s*[=:;]/.test(line) ||
     /\b(?:String|CharField|TextField|varchar|text)\s+address\b/i.test(line) ||
     /\baddress\s*=\s*models\./i.test(line) ||
-    /\bprivate\s+\w+\s+address\s*;/.test(line)
+    /\bprivate\s+\w+\s+address\s*;/.test(line) ||
+    /\bvalidates(?:_\w+)*\s+:\w*address\b/i.test(line)
   );
 }
 

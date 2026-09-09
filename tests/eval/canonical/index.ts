@@ -74,7 +74,9 @@ export {
 } from "./bridge";
 
 export {
+  assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
+  assignMentionsOneToOne,
   assignOneToOne,
   oneFindingCannotSatisfyBoth,
 } from "../../../src/eval/canonical/assignment";

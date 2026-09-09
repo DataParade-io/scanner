@@ -36,6 +36,17 @@ describe("pii-signal-aliases", () => {
     ).toBe(false);
   });
 
+  it("allows address in Rails validation declarations", () => {
+    expect(
+      resolveAliasRuleIdsForToken(
+        "address",
+        "validates_presence_of :address",
+        "validates_presence_of :".length,
+        "email_address.rb",
+      ),
+    ).toEqual(["address"]);
+  });
+
   it("gates plain password outside password modules", () => {
     expect(isPlainPasswordFieldDeclaration("Plain string", "models/user.go")).toBe(
       false,

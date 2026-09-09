@@ -1,4 +1,10 @@
-import { assignDataItemsOneToOne, assignOneToOne, type AssignmentResult } from "./canonical/assignment";
+import {
+  assignDataFlowsOneToOne,
+  assignDataItemsOneToOne,
+  assignMentionsOneToOne,
+  assignOneToOne,
+  type AssignmentResult,
+} from "./canonical/assignment";
 import { computeMetricComputability } from "./canonical/computability";
 import { conceptCorrectness, negativeObservationCandidate } from "./canonical/match";
 import type {
@@ -121,6 +127,10 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
   const assignment =
     layer === "data-items"
       ? assignDataItemsOneToOne([...evaluableExpectations], [...findings])
+      : layer === "mentions"
+        ? assignMentionsOneToOne([...evaluableExpectations], [...findings])
+      : layer === "data-flows"
+        ? assignDataFlowsOneToOne([...evaluableExpectations], [...findings])
       : assignOneToOne([...evaluableExpectations], [...findings]);
   const pairByExpectationId = new Map(
     assignment.pairs.map((pair) => [pair.expectationId, pair.findingId]),

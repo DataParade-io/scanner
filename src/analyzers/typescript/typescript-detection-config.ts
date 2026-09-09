@@ -41,6 +41,8 @@ interface RawAuthLibraryConfig extends RawWithPatternId {
   /** Regexes that match auth usage (e.g. passport.authenticate("jwt")). */
   regexes?: string[];
   contentRegexes?: string[];
+  filePathRegex?: string;
+  componentSubType?: string;
   strategy?: string;
 }
 
@@ -144,6 +146,8 @@ export interface AuthLibraryConfig extends WithPatternId {
   importFragments: string[];
   callRegexes: RegExp[];
   contentRegexes: RegExp[];
+  filePathRegex?: RegExp;
+  componentSubType?: string;
   strategy?: string;
   confidence: number;
 }
@@ -295,6 +299,10 @@ function normalizeRawConfig(raw: RawTypeScriptPatternConfig): TypeScriptPatternC
         importFragments: lib.importFragments ?? [],
         callRegexes: compileRegexList(lib.regexes),
         contentRegexes: compileRegexList(lib.contentRegexes),
+        filePathRegex: lib.filePathRegex
+          ? compileRegex(lib.filePathRegex)
+          : undefined,
+        componentSubType: lib.componentSubType,
         strategy: lib.strategy,
         confidence: lib.confidence ?? DEFAULT_CONFIDENCE,
       };

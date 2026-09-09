@@ -14,7 +14,8 @@ export type FileLanguage =
   | "terraform"
   | "dockerfile"
   | "rust"
-  | "ruby";
+  | "ruby"
+  | "swift";
 
 export interface FileInfo {
   path: string;

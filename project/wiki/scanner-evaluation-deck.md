@@ -306,8 +306,8 @@ The proposed rows are not weak labels — they are honest uncertainty (no closed
 | Layer | Recall | Precision |
 |---|---|---|
 | Mentions | 78.5% (62/79) | ~1.2% (62/5350) |
-| Data items | 34.3% (48/140) | 37.8% (48/127) |
-| Components | 26.0% (135/519) | 43.7% (135/309) |
-| Data flows | 12.7% (20/158) baseline; route slice in progress | ~3.6% |
+| Data items | 43.6% (61/140) | 37.8% (48/127) |
+| Data flows | 12.0% (19/158) | 2.6% (19/723) |
+| Components | 26.0% (135/519) | 43.4% (135/311) |
 
-The reference baseline at `6d241f8` never changes. Phase 2 assignment (`assignDataItemsOneToOne`) recovers +5 data-item recall (43→48); identity monopoly still caps multi-location gold on rolled findings. Flow widening target remains 40+/158; zero-component packets down to 2/29 (vapor Swift, hyperswitch-vault Rust ingest gaps).
+The reference baseline at `6d241f8` never changes. Phase 2 assignment plus per-slice collapse recovers data-item recall to 61/140. Flow assignment tie-break and Rails route widening moved flows to 19/158; target remains 40+/158. Zero-component packets down to 2/29 (vapor Swift, hyperswitch-vault Rust ingest gaps).

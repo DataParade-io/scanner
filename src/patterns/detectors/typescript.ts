@@ -332,17 +332,24 @@ export function detectTypeScriptAuthFromConfig(
   const tsCfg = config.typescript;
 
   for (const lib of tsCfg.auth.libraries) {
+    if (lib.filePathRegex && !lib.filePathRegex.test(ctx.normalizedPath)) {
+      continue;
+    }
+
     if (lib.contentRegexes.length > 0) {
       for (const regex of lib.contentRegexes) {
         const contentMatches = findLineMatches(content, regex);
         for (const { line, match } of contentMatches) {
           findings.push({
             pattern: lib.patternId,
-            name: lib.id,
+            name: match[1] ?? lib.id,
             confidence: lib.confidence,
             location: createLocationFromLine(ctx.file, line, match[0]),
             properties: {
               ...(lib.strategy ? { strategy: lib.strategy } : {}),
+              ...(lib.componentSubType
+                ? { componentSubType: lib.componentSubType }
+                : {}),
             },
           });
         }

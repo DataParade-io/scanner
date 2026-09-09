@@ -120,6 +120,10 @@ function getFileLanguage(filePath: string): FileLanguage | undefined {
     return "ruby";
   }
 
+  if (ext === ".swift") {
+    return "swift";
+  }
+
   if (ext === ".java") {
     return "java";
   }

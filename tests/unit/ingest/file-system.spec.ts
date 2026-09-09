@@ -158,6 +158,24 @@ describe("ingest/file-system - DP-P0-CLI-101", () => {
     }
   });
 
+  it("maps .swift files to swift language", async () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "dp-cli-ingest-swift-"));
+    try {
+      fs.writeFileSync(
+        path.join(tempRoot, "BasicAuthorization.swift"),
+        "public struct BasicAuthorization { public let username: String }\n",
+        "utf8",
+      );
+
+      const files = await ingestFileSystem(tempRoot);
+
+      expect(files).toHaveLength(1);
+      expect(files[0]?.language).toBe("swift");
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it("maps .tf and .tfvars to terraform language", async () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "dp-cli-ingest-tf-"));
     try {

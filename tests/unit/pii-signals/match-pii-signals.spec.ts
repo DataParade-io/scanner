@@ -201,6 +201,63 @@ describe("matchPiiSignalsInFile", () => {
     ]);
   });
 
+  it("spans Java @Column evidence back to the annotation block start", () => {
+    const content = [
+      "",
+      "\t@Column(length = 30)",
+      "\t@NotBlank",
+      "\tprivate String firstName;",
+    ].join("\n");
+
+    const hits = matchPiiSignalsInFile(
+      { filePath: "Person.java", content },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "first_name",
+        evidence: expect.objectContaining({
+          startLine: 2,
+          endLine: 4,
+          reason: expect.stringContaining("java-annotation-span"),
+        }),
+      }),
+    ]);
+  });
+
+  it("matches getEmail accessors via identifier alias", () => {
+    const hits = matchPiiSignalsInFile(
+      { filePath: "User.php", content: "public function getEmail() {" },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "email",
+        evidence: expect.objectContaining({
+          reason: "matched pii:email alias:getEmail",
+        }),
+      }),
+    ]);
+  });
+
+  it("matches Rails validates_presence_of :address via gated address alias", () => {
+    const hits = matchPiiSignalsInFile(
+      { filePath: "email_address.rb", content: "validates_presence_of :address" },
+      rules,
+    );
+
+    expect(hits).toEqual([
+      expect.objectContaining({
+        id: "address",
+        evidence: expect.objectContaining({
+          reason: "matched pii:address alias:address",
+        }),
+      }),
+    ]);
+  });
+
   it("matches getter forms via camelCase token splitting", () => {
     const content = [
       "public function getFirstname();",

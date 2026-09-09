@@ -195,9 +195,14 @@ function inferPreferredSubTypes(
   flowType: DataFlowType | undefined,
   span: string,
   contextSpan: string,
+  filePath?: string,
 ): string[] {
   const text = `${span}\n${contextSpan}`;
   const preferred: string[] = [];
+
+  if (filePath && /\/Controller\//i.test(normalizeEvidencePath(filePath))) {
+    preferred.push("api");
+  }
 
   if (/jwt|tokenkey|verification_token|authenticate|signon|auth_token|session_store|has_secure_password|check_password/i.test(text)) {
     preferred.push("auth_service");
@@ -375,6 +380,58 @@ function resolveRailsModelFile(
   }
 
   if (
+    /user_api_key\.rb$/i.test(path) &&
+    /\bhas_many\s+:scopes\b/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
+    /user_auth_token\.rb$/i.test(path) &&
+    /\bdef self\.lookup\b/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
+    /api_key\.rb$/i.test(path) &&
+    /(?:hash_key|key_hash)/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
+    /email_token\.rb$/i.test(path) &&
+    /^\s*class\s+EmailToken\b/i.test(span)
+  ) {
+    const authServices = componentsInSameFile(components, evidence).filter(
+      (component) => component.subType === "auth_service",
+    );
+    const nearestAuth = resolveNearestSpanInFile(authServices, evidence, ["auth_service"]);
+    if (nearestAuth) {
+      return nearestAuth;
+    }
+  }
+
+  if (
     isUserModel &&
     /\bafter_(?:create|save|update)\s+:/i.test(span)
   ) {
@@ -517,9 +574,164 @@ function resolveModuleHintComponent(
   return undefined;
 }
 
+function resolvePhpControllerFile(
+  components: DetectedComponent[],
+  evidence: EvidenceSpan,
+): DetectedComponent | undefined {
+  const path = normalizeEvidencePath(evidence.filePath);
+  if (!/\/Controller\/.+\.php$/i.test(path)) {
+    return undefined;
+  }
+
+  const apiComponents = componentsInSameFile(components, evidence).filter(
+    (component) => component.subType === "api",
+  );
+  if (apiComponents.length === 1) {
+    return apiComponents[0];
+  }
+
+  return resolveNearestSpanInFile(components, evidence, ["api"]);
+}
+
+function resolveTypeScriptAuthEvidenceFile(
+  components: DetectedComponent[],
+  evidence: EvidenceSpan,
+): DetectedComponent | undefined {
+  const path = normalizeEvidencePath(evidence.filePath);
+  if (
+    !/\/(?:auth\/(?:drivers|middleware)|middleware)\/.+\.(?:ts|tsx|js|jsx)$/i.test(path)
+  ) {
+    return undefined;
+  }
+
+  const authInFile = componentsInSameFile(components, evidence).filter(
+    (component) => component.subType === "auth_service",
+  );
+  if (authInFile.length === 1) {
+    return authInFile[0];
+  }
+
+  const nearest = resolveNearestSpanInFile(components, evidence, ["auth_service"]);
+  if (nearest) {
+    return nearest;
+  }
+
+  const authComponents = components.filter(
+    (component) => component.subType === "auth_service",
+  );
+  if (authComponents.length === 1) {
+    return authComponents[0];
+  }
+
+  return undefined;
+}
+
+function resolveTypeScriptServiceFile(
+  components: DetectedComponent[],
+  evidence: EvidenceSpan,
+): DetectedComponent | undefined {
+  const path = normalizeEvidencePath(evidence.filePath);
+  if (!/\/services\/.+\.(?:ts|tsx|js|jsx)$/i.test(path)) {
+    return undefined;
+  }
+
+  const servicesInFile = componentsInSameFile(components, evidence).filter(
+    (component) =>
+      component.subType === "service" || component.subType === "auth_service",
+  );
+  if (servicesInFile.length === 1) {
+    return servicesInFile[0];
+  }
+
+  const nearest = resolveNearestSpanInFile(servicesInFile, evidence, [
+    "service",
+    "auth_service",
+  ]);
+  if (nearest) {
+    return nearest;
+  }
+
+  const serviceComponents = components.filter(
+    (component) => component.subType === "service",
+  );
+  if (serviceComponents.length === 1) {
+    return serviceComponents[0];
+  }
+
+  return undefined;
+}
+
+function resolveThirdPartyWebhookRoute(
+  components: DetectedComponent[],
+  evidence: EvidenceSpan,
+  span: string,
+): DetectedComponent | undefined {
+  const path = normalizeEvidencePath(evidence.filePath);
+  if (!path.endsWith("routes.rb")) {
+    return undefined;
+  }
+
+  const vendorMatch = span.match(/webhooks\/(sendgrid|mailgun|postmark|mandrill|sparkpost)/i);
+  if (!vendorMatch) {
+    return undefined;
+  }
+
+  const vendor = vendorMatch[1].toLowerCase();
+  const strict = resolveStrictOverlap(components, evidence);
+  if (strict && strict.type === "third_party") {
+    return strict;
+  }
+
+  const sameFileCandidates = componentsInSameFile(components, evidence).filter((component) => {
+    if (component.type !== "third_party") {
+      return false;
+    }
+    const serviceName = String(component.properties?.serviceName ?? "").toLowerCase();
+    const vendorProp = String(component.properties?.vendor ?? "").toLowerCase();
+    const name = component.name.toLowerCase();
+    return serviceName === vendor || vendorProp === vendor || name.includes(vendor);
+  });
+
+  if (sameFileCandidates.length === 1) {
+    return sameFileCandidates[0];
+  }
+  if (sameFileCandidates.length > 1) {
+    const nearest = resolveNearestSpanInFile(sameFileCandidates, evidence, [
+      "email_provider",
+      "saas_service",
+    ]);
+    if (nearest) {
+      return nearest;
+    }
+  }
+
+  const globalCandidates = components.filter((component) => {
+    if (component.type !== "third_party") {
+      return false;
+    }
+    const serviceName = String(component.properties?.serviceName ?? "").toLowerCase();
+    const vendorProp = String(component.properties?.vendor ?? "").toLowerCase();
+    const name = component.name.toLowerCase();
+    return serviceName === vendor || vendorProp === vendor || name.includes(vendor);
+  });
+  if (globalCandidates.length === 1) {
+    return globalCandidates[0];
+  }
+  const nearestGlobal = resolveNearestSpanInFile(globalCandidates, evidence, [
+    "email_provider",
+    "saas_service",
+  ]);
+  if (nearestGlobal) {
+    return nearestGlobal;
+  }
+
+  return undefined;
+}
+
 function resolveConfigRouteFile(
   components: DetectedComponent[],
   evidence: EvidenceSpan,
+  span: string,
   preferredSubTypes: string[] = ["api"],
 ): DetectedComponent | undefined {
   const path = normalizeEvidencePath(evidence.filePath);
@@ -530,6 +742,25 @@ function resolveConfigRouteFile(
 
   if (!isRouteConfig) {
     return undefined;
+  }
+
+  const webhookRoute = resolveThirdPartyWebhookRoute(components, evidence, span);
+  if (webhookRoute) {
+    return webhookRoute;
+  }
+
+  if (/webhooks\/(?:sendgrid|mailgun|postmark|mandrill|sparkpost)/i.test(span)) {
+    const overlapping = componentsInSameFile(components, evidence).filter((component) =>
+      component.sourceLocations?.some((location) => spansOverlap(evidence, location)),
+    );
+    const nearestWebhook = resolveNearestSpanInFile(overlapping, evidence, [
+      "email_provider",
+      "api",
+      "third_party",
+    ]);
+    if (nearestWebhook) {
+      return nearestWebhook;
+    }
   }
 
   const strict = resolveStrictOverlap(components, evidence);
@@ -650,11 +881,28 @@ export function resolveComponentForEvidence(
     options.flowType,
     span,
     contextSpan,
+    evidence.filePath,
   );
+
+  const phpController = resolvePhpControllerFile(components, evidence);
+  if (phpController) {
+    return phpController;
+  }
+
+  const tsAuthFile = resolveTypeScriptAuthEvidenceFile(components, evidence);
+  if (tsAuthFile) {
+    return tsAuthFile;
+  }
+
+  const tsServiceFile = resolveTypeScriptServiceFile(components, evidence);
+  if (tsServiceFile) {
+    return tsServiceFile;
+  }
 
   const configRoute = resolveConfigRouteFile(
     components,
     evidence,
+    span,
     preferredSubTypes,
   );
   if (configRoute) {
