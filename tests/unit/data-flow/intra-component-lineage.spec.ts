@@ -38,6 +38,16 @@ function makeFile(path: string, content: string): FileInfo {
   };
 }
 
+function findMaterializedCacheEntry(
+  cacheRoot: string,
+  prefix: string,
+): string | undefined {
+  if (!fs.existsSync(cacheRoot)) {
+    return undefined;
+  }
+  return fs.readdirSync(cacheRoot).find((entry) => entry.startsWith(prefix));
+}
+
 describe("data-flow/intra-component-lineage", () => {
   describe("transformation gates", () => {
     it("accepts bcrypt password hashing spans", () => {
@@ -835,9 +845,7 @@ describe("data-flow/intra-component-lineage", () => {
         __dirname,
         "../../../tests/benchmark/.cache/repos",
       );
-      const materialized = fs
-        .readdirSync(cacheRoot)
-        .find((entry) => entry.startsWith("magento@"));
+      const materialized = findMaterializedCacheEntry(cacheRoot, "magento@");
       if (!materialized) {
         return;
       }
@@ -875,9 +883,7 @@ describe("data-flow/intra-component-lineage", () => {
         __dirname,
         "../../../tests/benchmark/.cache/repos",
       );
-      const materialized = fs
-        .readdirSync(cacheRoot)
-        .find((entry) => entry.startsWith("magento@"));
+      const materialized = findMaterializedCacheEntry(cacheRoot, "magento@");
       if (!materialized) {
         return;
       }
@@ -938,9 +944,7 @@ describe("data-flow/intra-component-lineage", () => {
         __dirname,
         "../../../tests/benchmark/.cache/repos",
       );
-      const materialized = fs
-        .readdirSync(cacheRoot)
-        .find((entry) => entry.startsWith("directus@"));
+      const materialized = findMaterializedCacheEntry(cacheRoot, "directus@");
       if (!materialized) {
         return;
       }
@@ -990,9 +994,7 @@ describe("data-flow/intra-component-lineage", () => {
         __dirname,
         "../../../tests/benchmark/.cache/repos",
       );
-      const materialized = fs
-        .readdirSync(cacheRoot)
-        .find((entry) => entry.startsWith("wordpress@"));
+      const materialized = findMaterializedCacheEntry(cacheRoot, "wordpress@");
       if (!materialized) {
         return;
       }
