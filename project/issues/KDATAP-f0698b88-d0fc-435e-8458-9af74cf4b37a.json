@@ -1,0 +1,20 @@
+{
+  "id": "KDATAP-f0698b88-d0fc-435e-8458-9af74cf4b37a",
+  "title": "Known SSN repositories yield an SSN data item",
+  "description": "As a scanner evaluator, I want a Gherkin spec that runs the scanner against a pinned GitHub repository known to track SSNs, so that we can observe an SSN data item in the data-items evaluation layer.\n\nFeature: Ground-truth repository evaluation\n\n  Scenario: Corpus names a GitHub repo known to track SSNs\n    Given the easy-school benchmark packet\n    Then its manifest pins ZeroCoolHacker/easy-school\n    And accepted gold includes a social_security_number data item\n\n  @requires-materialized-corpus\n  Scenario Outline: Known SSN repositories yield an SSN data item\n    Given the pinned \"<repo>\" repository known to track SSNs\n    When I run the scanner data-items evaluation layer\n    Then I should get an SSN data item\n\n    Examples:\n      | repo        |\n      | easy-school |\n      | vgs-django  |\n\n  @requires-materialized-corpus\n  Scenario: Accepted gold SSN on easy-school is recalled\n    Given the pinned easy-school repository known to track SSNs\n    And accepted gold for easy-school-guardian-ssn\n    When I score the data-items layer against the scan\n    Then the SSN case is a match",
+  "type": "story",
+  "status": "in_progress",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-65ea6549-1afc-46c7-aefc-c1c348128a80",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-14T19:08:51.746233Z",
+  "updated_at": "2026-09-14T19:09:02.188745Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}
