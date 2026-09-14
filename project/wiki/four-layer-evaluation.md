@@ -69,7 +69,7 @@ Ground-truth case shape is defined in [tests/eval/ground-truth-schema.md](../../
 | Spec source | TypeScript cases in `layers/*/cases.ts` | `.feature` files under `features/` |
 | Runner | `jest tests/eval/**/*.test.ts` | `pnpm test:features` (Cucumber) |
 | Scanner bridge | Layer `adapter.ts` files call ingest/scan or PII matchers | Steps spawn local GraphQL, load gold Items, run `plexus evaluate accuracy` |
-| Layers exercised today | All Jest layers including diagnostic `raw-hits` and `data-actions` | Span Overlap recall (`scanner-recall-evaluation.feature`); personal-data recall via Raw Hit Span, Mention Span, and Subject Identity (`scanner-layer-evaluation.feature`, skipped when a score class is not installed) |
+| Layers exercised today | All Jest layers including diagnostic `raw-hits` and `data-actions` | Span Overlap recall (`scanner-recall-evaluation.feature`); personal-data recall via Raw Hit Span, Mention Span, and Subject Identity (`scanner-layer-evaluation.feature`, skipped when a score class is not installed); pinned GitHub SSN packets (`ground-truth-repo-evaluation.feature`, live scans skip unless materialized) |
 | Metrics | Shared `tests/eval/score.ts` (per-layer recall, label accuracy, precision, negatives) | Plexus Evaluation record + headline recall from scorecard metrics |
 
 Jest stays the fast, deterministic fixture harness. Plexus exercises end-to-end evaluation storage and scorecard integration against a local GraphQL process.

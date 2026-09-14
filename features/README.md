@@ -63,9 +63,12 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
+| `ground-truth-repo-evaluation.feature` | Data items (headline) | Pinned GitHub corpus packets (easy-school, vgs-django) yield an SSN data item; live scans skip unless materialized |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
 `scanner-layer-evaluation` scenarios are skipped automatically when a required Plexus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
+
+`ground-truth-repo-evaluation` live-scan scenarios are tagged `@requires-materialized-corpus` and skip when `tests/benchmark/.cache/repos/<key>@<commit>/` is missing. Run `pnpm run benchmark:materialize easy-school` (or `vgs-django`) to execute them. Corpus-declaration scenarios always run.
 
 ### Layer evaluation scores and findings bridge
 
