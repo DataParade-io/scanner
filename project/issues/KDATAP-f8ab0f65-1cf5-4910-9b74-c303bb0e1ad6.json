@@ -1,0 +1,49 @@
+{
+  "id": "KDATAP-f8ab0f65-1cf5-4910-9b74-c303bb0e1ad6",
+  "title": "Skip corpus-cache lineage tests when the cache dir is missing",
+  "description": "CI \\`pnpm test\\` fails on runners that have never materialized benchmark packets:\n\n\\`ENOENT: no such file or directory, scandir tests/benchmark/.cache/repos\\`\n\nin \\`tests/unit/data-flow/intra-component-lineage.spec.ts\\`. Those tests already intend to no-op when a packet is absent; they must also no-op when the cache directory itself is absent.\n\nDo not clone in CI.",
+  "type": "bug",
+  "status": "in_progress",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "9baa4e48-8b09-447c-b47c-3dbb1030d41a",
+      "author": "home",
+      "text": "Branch cursor/skip-missing-corpus-cache-1f4a. Treat a missing .cache/repos directory as skip, same as a missing packet.",
+      "created_at": "2026-09-14T19:16:43.881736Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "3a53d2fd-51c0-4bf5-9213-b6f94a6c2e72",
+      "author": "home",
+      "text": "Parent plan for Composer 2.5: worktree /tmp/scanner-f8ab0f-cache-skip on existing branch cursor/skip-missing-corpus-cache-1f4a. Only tests/unit/data-flow/intra-component-lineage.spec.ts. Prove skip when .cache/repos is missing (CI condition). No gold/detector/Gherkin edits. Do not share the manager checkout.",
+      "created_at": "2026-09-14T19:18:26.151123Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "4db538a4-f8ac-4c94-90d6-6aa920f61c17",
+      "author": "home",
+      "text": "Worktree gate: implementer owns /tmp/scanner-f8ab0f-cache-skip on cursor/skip-missing-corpus-cache-1f4a. Acceptance isolated at /tmp/scanner-f8ab0f-acceptance. Parent vacated the product branch.",
+      "created_at": "2026-09-14T19:19:52.630458Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "e158c9b6-17bc-47e7-b788-5c3895af96a4",
+      "author": "home",
+      "text": "Acceptance approved (missing cache dir and empty cache dir both 40/40). Diff review: single helper, four call sites, no product/gold changes. Waiting on GitHub test job before merge to develop.",
+      "created_at": "2026-09-14T19:20:44.675143Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-14T19:16:31.731660Z",
+  "updated_at": "2026-09-14T19:20:44.675163Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}
