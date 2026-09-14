@@ -44,6 +44,16 @@ Then(
   },
 );
 
+Then(
+  "the discovered files include ground-truth-repo-evaluation.feature",
+  function () {
+    assert.ok(
+      featureFileNames.includes("ground-truth-repo-evaluation.feature"),
+      `Expected ground-truth-repo-evaluation.feature among: ${featureFileNames.join(", ")}`,
+    );
+  },
+);
+
 Given("the Jest configuration for this repository", function () {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const jestConfig = require(join(repoRoot, "jest.config.cjs")) as {
