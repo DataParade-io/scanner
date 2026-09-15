@@ -11,7 +11,7 @@ The Python analyzer emits `RawFinding[]` using the **shared pattern IDs** from `
 - `config_file`
 - `env_variable`
 
-These pattern IDs align with the TypeScript/JavaScript analyzer so that the classifier and data-flow detector can treat Python and TS/JS findings consistently.
+These pattern IDs align with the TypeScript/JavaScript analyzer so that the classifier and data-flow detector can treat Python and TS/JS discoveries (`RawFinding`) consistently.
 
 ## Route / Handler Detection (`express_route`)
 
@@ -22,7 +22,7 @@ The Python analyzer reuses the `express_route` pattern ID for web routes and han
 - **Detected when:**
   - The module imports `FastAPI` or any symbol from `fastapi`.
   - A function has a decorator starting with `app.get`, `app.post`, `app.put`, `app.delete`, or `app.patch`.
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `express_route`
   - `name`: `"<METHOD> <function_name>"` (e.g. `GET read_item`)
   - `properties`:
@@ -46,7 +46,7 @@ async def read_item(item_id: int):
 - **Detected when:**
   - The module imports from `flask` or imports `Flask`.
   - A function has a decorator starting with `app.route`, `bp.route`, or `blueprint.route`.
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `express_route`
   - `name`: `"FLASK_ROUTE <function_name>"`
   - `properties`:
@@ -69,7 +69,7 @@ def list_users():
 - **Detected when:**
   - The file path ends with `urls.py` or imports start with `django.`.
   - A line contains `path("...")`, `re_path("...")`, or `url("...")`.
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `express_route`
   - `name`: `"DJANGO_ROUTE <path>"`
   - `properties`:
@@ -92,7 +92,7 @@ urlpatterns = [
 - **Detected when:**
   - The module imports Starlette (module name contains `"starlette"`).
   - A function has a decorator starting with `app.route`.
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `express_route`
   - `name`: `"STARLETTE_ROUTE <function_name>"`
   - `properties`:
@@ -103,7 +103,7 @@ urlpatterns = [
 - **Detected when:**
   - The module imports from `bottle` or imports `Bottle`.
   - A function has decorators `@route`, `@get`, `@post`, `@put`, or `@delete`.
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `express_route`
   - `name`: `"BOTTLE_ROUTE <function_name>"`
   - `properties`:
@@ -160,7 +160,7 @@ The Python analyzer emits `external_api_call` for HTTP clients and SDKs.
 
 ### SDKs
 
-The analyzer also emits `external_api_call` findings when the module imports:
+The analyzer also emits `external_api_call` discoveries when the module imports:
 
 - `boto3` → `name`: `"boto3_client"`, `serviceName`: `"aws"`
 - `stripe` → `name`: `"stripe_sdk"`, `serviceName`: `"stripe"`
@@ -170,7 +170,7 @@ The analyzer also emits `external_api_call` findings when the module imports:
 
 ## Auth Patterns (`auth_middleware`)
 
-The Python analyzer emits `auth_middleware` findings for common auth patterns.
+The Python analyzer emits `auth_middleware` discoveries for common auth patterns.
 
 - **JWT-based auth**
   - Detected when:
@@ -195,7 +195,7 @@ The Python analyzer emits `auth_middleware` findings for common auth patterns.
   - The module imports `os`, and lines reference:
     - `os.environ["KEY"]` or `os.environ['KEY']`
     - `os.getenv("KEY")` or `os.getenv('KEY')`
-- **Emitted finding:**
+- **Emitted discovery (`RawFinding`):**
   - `pattern`: `env_variable`
   - `name`: `"os.environ[KEY]"`
   - `properties.key`: `"KEY"`

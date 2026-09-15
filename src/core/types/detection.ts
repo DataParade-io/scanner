@@ -32,6 +32,7 @@ export const PATTERN_IDS: readonly PatternId[] = [
   "terraform_provider",
 ];
 
+/** Raw Discovery / pattern hit. Not an OCSF Finding. */
 export interface RawFinding {
   pattern: PatternId;
   name: string;

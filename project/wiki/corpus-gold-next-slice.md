@@ -15,7 +15,7 @@ Continues **KDATAP-182788** (corpus gold from source, not the scanner).
 
 1. **Data flows** — 261 proposed rows; use `tests/benchmark/scripts/adjudicate-flow-gold-slice2.ts` to generate packets from pinned source + concept map.
 2. **Data items** — 177 proposed; `adjudicate-data-item-gold-slice2.ts`.
-3. **Mentions** — 278 proposed YAML rows without per-label findings; requires mentions-specific labeling pass.
+3. **Mentions** — 278 proposed YAML rows without per-label Kanbus gold cards; requires mentions-specific labeling pass.
 
 ## Workflow (no scanner input)
 

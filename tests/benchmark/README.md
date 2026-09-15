@@ -107,7 +107,7 @@ pnpm run benchmark:run --include-proposed vgs-django
 
 `benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints per-layer recall, label accuracy, precision, and unread counts. Raw hits and corpus `data_actions` (privacy verbs) are labeled diagnostic. The fixture `data-actions` layer is the same diagnostic contract — scored by `eval:data-actions` and by `benchmark:run` when a packet declares `data_actions`, but never a scorecard headline gate. There is no cross-layer overall score.
 
-The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
+The corpus runner tags discoveries by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
 
 ## Four-layer scorecard vector (opt-in)
 

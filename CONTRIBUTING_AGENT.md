@@ -46,10 +46,10 @@ Project key prefix: KDATAP.
 
 Hierarchy: initiative -> epic -> task -> sub-task.
 
-Non-hierarchical types: bug, story, chore, finding, annotation.
+Non-hierarchical types: bug, story, chore, finding (Kanbus gold-label review card — not a scanner Discovery and not an OCSF Finding), annotation.
 
 Only hierarchy types may be parents.
-Initiatives are top-level milestones; they may contain epics only. Tasks, stories, bugs, chores, findings, and annotations must roll up under an epic (or sub-task under task). Creating those types directly under an initiative is a violation of The Way.
+Initiatives are top-level milestones; they may contain epics only. Tasks, stories, bugs, chores, Kanbus findings (gold-label review cards), and annotations must roll up under an epic (or sub-task under task). Creating those types directly under an initiative is a violation of The Way.
 
 Permitted relationships are fixed and not to be altered.
 
@@ -102,11 +102,11 @@ Bugs restore violated behavior.
 
 Chores maintain the ground on which behavior stands.
 
-Findings name one gold label. They stay **proposed** until a person moves them to **accepted** or **rejected**. Do not file per-layer sub-tasks for one finding.
+Kanbus **finding** issues name one gold-label review card. They stay **proposed** until a person moves them to **accepted** or **rejected**. Do not file per-layer sub-tasks for one Kanbus finding. This is not scanner Discovery output and not an OCSF Finding. See [Discovery vs Finding](./project/wiki/discovery-vs-finding.md).
 
 Annotations name one labeling pass over a fixture or corpus repo. Record the pass in `annotations/<id>/pass.md`.
 
-Stories still require Gherkin. Findings and annotations do not.
+Stories still require Gherkin. Kanbus findings and annotations do not.
 
 Markdown under `findings/` and `annotations/` is the flywheel record. Agents may edit those files. Do not edit JSON under `project/issues/` or `project/events/`.
 

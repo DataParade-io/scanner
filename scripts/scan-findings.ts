@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Emit structural scanner findings as JSON for detector Score evaluation.
+ * Emit structural scanner discoveries as JSON for detector Score evaluation.
  *
  * Usage:
  *   npx ts-node scripts/scan-findings.ts --root <materialized-dir>

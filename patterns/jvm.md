@@ -114,7 +114,7 @@ also resolves the plain URI schemes Spring uses for non-relational stores
 
 **Only the driver token is ever recorded.** JDBC URLs and Spring datasource
 properties routinely carry credentials; the value itself never reaches a
-finding. There is a test asserting a fixture password does not survive.
+discovery. There is a test asserting a fixture password does not survive.
 
 ## Spring configuration is a first-class source
 

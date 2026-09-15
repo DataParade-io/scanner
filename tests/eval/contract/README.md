@@ -15,7 +15,7 @@ The same suite is required on every pull request via `pnpm run ci:smoke` (see `t
 | File | Cases |
 | --- | --- |
 | `cases/eligibility.ts` | All 11 `EligibilityReason` values at the evaluator boundary |
-| `cases/duplicate-findings.ts` | One finding → one gold row; duplicate findings → ambiguous |
+| `cases/duplicate-findings.ts` | One discovery → one gold row; duplicate discoveries → ambiguous |
 | `cases/zero-positive-scope.ts` | Reviewed closed-world scope with zero evaluable positives |
 | `cases/paths.ts` | Path normalization and contract rejection (absolute, traversing, malformed) |
 | `cases/observed-tokens.ts` | Observed tokens do not rescue strict identity |

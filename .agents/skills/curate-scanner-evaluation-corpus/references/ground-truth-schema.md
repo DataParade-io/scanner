@@ -52,7 +52,7 @@ provenance:
 
 ## Exhaustive scope requirements
 
-To calculate true precision, declare a scope in which every relevant scanner finding can be judged. A list of selected positive and negative lines is not exhaustive.
+To calculate true precision, declare a scope in which every relevant scanner discovery can be judged. A list of selected positive and negative lines is not exhaustive.
 
 For each included file:
 
