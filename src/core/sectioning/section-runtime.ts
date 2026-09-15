@@ -134,7 +134,9 @@ export function sectionHasRuntimeCodeComponents(
 
 /**
  * Whether a workspace section should receive a synthetic application hub and
- * default User actor (tooling-only packages like cli/docs/utils are skipped).
+ * default User actor during primary package injection.
+ * Occupied sections (including third_party-only tooling packages) are also
+ * covered later by {@link ensureApplicationHubsForOccupiedSections}.
  */
 export function sectionQualifiesForSyntheticApplication(
   section: ServiceSection,

@@ -7,6 +7,7 @@ export {
 } from "./postprocessing";
 export {
   injectApplicationAssetsPerSectionIfMissing,
+  ensureApplicationHubsForOccupiedSections,
   injectApplicationAssetIfMissing,
   injectActorIfMissing,
   synthesizeSectionApiNodes,
