@@ -8,6 +8,9 @@ import {
   PREFERRED_WEB_APP_FRAMEWORKS,
 } from "./main-application-selection";
 import {
+  isConcreteServiceSectionId,
+  isScaffoldOrTemplatePackageSection,
+  isTerraformStackSection,
   sectionQualifiesForSyntheticApplication,
   shouldInjectUserActorForMainApp,
 } from "../core/sectioning/section-runtime";
@@ -195,6 +198,113 @@ export function injectApplicationAssetsPerSectionIfMissing(
           ? { package_name: section.packageName }
           : {}),
         ...(section.isPrimaryMonorepoPackage === true
+          ? { is_primary_monorepo_package: true }
+          : {}),
+        sourceContext: INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT,
+      },
+      description: undefined,
+      dataFlowIds: undefined,
+    });
+  }
+
+  return synthetic.length > 0 ? [...components, ...synthetic] : components;
+}
+
+function sectionHasMainAppHubCandidate(
+  components: DetectedComponent[],
+  sectionId: string,
+  mainAppSubtypes: Set<string>,
+): boolean {
+  for (const c of components) {
+    if (c.type !== "asset") continue;
+    if (getSectionIdFromProperties(c.properties) !== sectionId) continue;
+    if (
+      c.properties?.isMainApplication === true ||
+      c.properties?.isMainApplication === "true"
+    ) {
+      return true;
+    }
+    if (c.subType === undefined || !mainAppSubtypes.has(c.subType)) continue;
+    if (isExcludedFromMainApplicationHub(c)) continue;
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Ensures every concrete service section that already has classified components
+ * also has a main-application hub. Covers third_party-only / tooling packages
+ * that primary-only injection may miss, and section_ids present on components
+ * even when late-scoped relative to discovery.
+ */
+export function ensureApplicationHubsForOccupiedSections(
+  components: DetectedComponent[],
+  sections: ServiceSection[] = [],
+): DetectedComponent[] {
+  if (!components || components.length === 0) return [];
+
+  const { mainAppSubtypes } = loadPropertyDetectionConfig().enhance;
+  const chosenSubType = chooseMainAppSubType(mainAppSubtypes);
+  const sectionById = new Map(sections.map((s) => [s.id, s]));
+
+  const occupiedSectionIds = new Set<string>();
+  for (const c of components) {
+    const sid = getSectionIdFromProperties(c.properties);
+    if (!isConcreteServiceSectionId(sid)) continue;
+    occupiedSectionIds.add(sid);
+  }
+
+  const synthetic: DetectedComponent[] = [];
+  const sortedSectionIds = [...occupiedSectionIds].sort((a, b) =>
+    a.localeCompare(b),
+  );
+
+  for (const sid of sortedSectionIds) {
+    if (sectionHasMainAppHubCandidate(components, sid, mainAppSubtypes)) {
+      continue;
+    }
+    if (sectionHasMainAppHubCandidate([...components, ...synthetic], sid, mainAppSubtypes)) {
+      continue;
+    }
+
+    const discovered = sectionById.get(sid);
+    const sectionProbe = discovered ?? {
+      id: sid,
+      label: sid,
+      role: "service" as const,
+      sectionDir: sid,
+      manifestPaths: [] as string[],
+      packageName: undefined as string | undefined,
+    };
+
+    if (isTerraformStackSection(sectionProbe)) continue;
+    if (isScaffoldOrTemplatePackageSection(sectionProbe)) continue;
+
+    const label =
+      (discovered?.label && discovered.label.trim()) ||
+      getSectionLabelFromProperties(
+        components.find(
+          (c) => getSectionIdFromProperties(c.properties) === sid,
+        )?.properties,
+      ) ||
+      sid;
+
+    synthetic.push({
+      id: getNextComponentId([...components, ...synthetic]),
+      name: label,
+      type: "asset",
+      subType: chosenSubType,
+      confidence: 1,
+      detectedFrom: [],
+      sourceLocations: [],
+      properties: {
+        section_id: sid,
+        section_label: label,
+        section_role: discovered?.role ?? "service",
+        ...(discovered?.packageName
+          ? { package_name: discovered.packageName }
+          : {}),
+        ...(discovered?.isPrimaryMonorepoPackage === true
           ? { is_primary_monorepo_package: true }
           : {}),
         sourceContext: INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT,

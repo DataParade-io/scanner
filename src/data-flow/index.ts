@@ -4,6 +4,7 @@ export { rewireFlowsThroughApplication } from "./rewire";
 export { ensureActorToAppFlow } from "./ensure-actor-flow";
 export {
   ensureManifestDeclaredThirdPartyFlows,
+  ensureHubToOrphanThirdPartyFlows,
   isManifestOnlyThirdPartyComponent,
 } from "./ensure-manifest-declared-flows";
 export { ensureMainToUnlinkedSectionApiFlows } from "./ensure-section-api-flows";
