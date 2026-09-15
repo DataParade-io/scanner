@@ -57,7 +57,7 @@ particular database is in use.
 Sources are pre-processed by `stripCommentsPreservingLayout()` with
 `backtickStrings` enabled, so Go raw strings (`` `SELECT ... -- x` ``) survive
 intact while comments are blanked to spaces and line numbers are preserved.
-Commented-out routes produce no findings.
+Commented-out routes produce no discoveries.
 
 ---
 

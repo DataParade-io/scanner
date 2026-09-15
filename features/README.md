@@ -1,6 +1,6 @@
 # Gherkin feature specs
 
-Executable behavior specs for Plexus-backed evaluation. Gherkin files here are the spec source of truth.
+Executable behavior specs for Plexus-backed evaluation. Gherkin files here are the spec source of truth. Scanner output in these specs is **Discovery** (not an OCSF Finding). Kanbus issue type `finding` is a gold-label review card only. See [Discovery vs Finding](../project/wiki/discovery-vs-finding.md).
 
 ## Commands
 
@@ -59,9 +59,9 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 | Scenario file | Layer(s) | What it proves |
 |---------------|----------|----------------|
 | `scanner-recall-evaluation.feature` | Mentions (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
-| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Identity, Mention Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Mention Span (`SubjectSpanOverlapScore`) via layer findings commands; unread skip and ingested miss behavior |
+| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Identity, Mention Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Mention Span (`SubjectSpanOverlapScore`) via layer discovery commands; unread skip and ingested miss behavior |
 | `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
-| `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
+| `scan-findings.feature` | Components / pipeline | Scanner Discovery shape (`ScanResult` + raw pattern hits) for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
 | `ground-truth-repo-evaluation.feature` | Data items (headline) | Pinned GitHub corpus packets (easy-school, vgs-django) yield an SSN data item; live scans skip unless materialized |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
@@ -70,11 +70,11 @@ Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval
 
 `ground-truth-repo-evaluation` live-scan scenarios are tagged `@requires-materialized-corpus` and skip when `tests/benchmark/.cache/repos/<key>@<commit>/` is missing. Run `pnpm run benchmark:materialize easy-school` (or `vgs-django`) to execute them. Corpus-declaration scenarios always run.
 
-### Layer evaluation scores and findings bridge
+### Layer evaluation scores and discovery bridge
 
 Layer evaluation invokes Plexus scores **directly as Python modules** (no GraphQL server, no `plexus evaluate accuracy` CLI). Step definitions call `features/scripts/run-layer-score-eval.py` via the Plexus venv Python (`PYTHON` env).
 
-| Score | Plexus class | Identity prefix | Findings command |
+| Score | Plexus class | Identity prefix | Discovery command |
 |-------|--------------|-----------------|------------------|
 | Subject Identity | SubjectIdentityScore | `data_item:` | `scripts/scan-layer-findings.ts` |
 | Raw Hit Identity | SubjectIdentityScore | `raw_hit:` | `scripts/scan-layer-findings.ts` |
@@ -82,7 +82,7 @@ Layer evaluation invokes Plexus scores **directly as Python modules** (no GraphQ
 | Raw Hit Span | SubjectSpanOverlapScore | `raw_hit:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
 | Mention Span | SubjectSpanOverlapScore | `mention:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
 
-Identity scores match on `subjectKey` only. Span scores require flattened `filePath` / `startLine` / `endLine` on each finding; `flatten-span-findings.ts` expands `evidenceLocations` from the layer scanner payload.
+Identity scores match on `subjectKey` only. Span scores require flattened `filePath` / `startLine` / `endLine` on each discovery; `flatten-span-findings.ts` expands `evidenceLocations` from the layer scanner payload.
 
 ### Gherkin datasets vs Jest `cases.ts` patterns
 

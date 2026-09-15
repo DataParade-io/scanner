@@ -149,6 +149,7 @@ export interface TerraformScanSummary {
   jsonFindingsMerged: number;
 }
 
+/** Published Discovery bundle: components + dataFlows. Product noun is Discovery; code symbol stays ScanResult. */
 export interface ScanResult {
   components: DetectedComponent[];
   dataFlows: DetectedDataFlow[];

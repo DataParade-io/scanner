@@ -2,6 +2,8 @@
 
 Deterministic DataParade scan engine: ingest → analyzers → YAML patterns → classifier → data-flow → `ScanResult`.
 
+The published bundle’s code symbol is **`ScanResult`**. The product/docs noun for that bundle (and raw pattern hits) is **Discovery**. **Finding** is reserved for OCSF-ish security events — this repo has none. Kanbus issue type `finding` is a gold-label review card only. See [Discovery vs Finding](./project/wiki/discovery-vs-finding.md).
+
 ## Public API
 
 ```ts

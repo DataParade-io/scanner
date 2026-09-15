@@ -100,7 +100,7 @@ export interface CanonicalGoldExpectation extends CanonicalRecordFields {
   entityId?: string;
 }
 
-/** Canonical scanner finding — never emits gold `entityId`. */
+/** Canonical scanner discovery (eval IR). TypeScript name is leftover; not an OCSF Finding. */
 export type CanonicalScannerFinding = CanonicalRecordFields;
 
 export interface AcceptedCanonicalGoldExpectation extends CanonicalGoldExpectation {

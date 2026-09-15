@@ -1,6 +1,9 @@
 @canonical-ir-spec
 Feature: Canonical evaluation representation
 
+  # Locked scenario titles still say "finding" for CanonicalScannerFinding (leftover symbol).
+  # In product language that object is a scanner Discovery, not an OCSF Finding.
+
   # Source: KDATAP-b18135
   Scenario: Gold and scanner findings meet in one representation
     Given canonical gold and a scanner finding for the same evidence

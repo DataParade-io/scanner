@@ -2,7 +2,7 @@
 
 Schema version: `ground-truth/1`.
 
-Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
+Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only. Scanner output scored here is **Discovery** (not an OCSF Finding); see [Discovery vs Finding](../../project/wiki/discovery-vs-finding.md).
 
 Subject keys are stable identities used in Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
 
@@ -23,7 +23,7 @@ Personal-data headline layers share heuristic rules (`patterns/pii-signals.rules
 
 | Layer | Jest key | Corpus layer | Role |
 | --- | --- | --- | --- |
-| Raw hits | `raw-hits` | `raw_hits` | YAML heuristic pattern match before roll-up (one finding per line hit). Fixture eval and scorecard sidecar (`diagnostic.raw-hits`) only — not a headline gate. |
+| Raw hits | `raw-hits` | `raw_hits` | YAML heuristic pattern match before roll-up (one discovery / `RawFinding` per line hit). Fixture eval and scorecard sidecar (`diagnostic.raw-hits`) only — not a headline gate. |
 | Data actions | `data-actions` | `data_actions` | Privacy verbs on component nodes (`properties.dataActions`). Fixture eval diagnostic only — **not** a `scorecard-vector/2` headline gate; not in the `diagnostic.raw-hits` sidecar. |
 
 ## Identity rules
@@ -67,13 +67,13 @@ Scoring lives in `tests/eval/score.ts`. Headline metrics are computed per layer;
 
 Each ground-truth case carries an `expected.status`:
 
-- `positive` — scanner should emit a matching finding
-- `negative` — scanner must not emit a matching finding at the evidence span (or identity for data items)
+- `positive` — scanner should emit a matching discovery
+- `negative` — scanner must not emit a matching discovery at the evidence span (or identity for data items)
 - `ambiguous` — excluded from pass/fail gates
 
 Positives may set `documentedGap: true` for known scanner misses. They remain in recall denominators for reporting; CI gates exclude them when asserting pass/fail.
 
-**Precision** is not computed from negatives. Mark files as `exhaustiveScopeFiles` on gold cases. Then every scanner finding in those files is a precision denominator item; it is a true positive only if it matches some accepted positive gold case. A repository that does not use Stripe is not recorded as a negative. If the scanner emits Stripe there anyway, that unmatched finding lowers precision.
+**Precision** is not computed from negatives. Mark files as `exhaustiveScopeFiles` on gold cases. Then every scanner discovery in those files is a precision denominator item; it is a true positive only if it matches some accepted positive gold case. A repository that does not use Stripe is not recorded as a negative. If the scanner emits Stripe there anyway, that unmatched discovery lowers precision.
 
 ## Corpus layout
 
@@ -81,7 +81,7 @@ Benchmark manifests and annotation YAML use snake_case layer names (`mentions`, 
 
 ## Precision via exhaustive file scopes
 
-Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `evaluateCanonical` (via `scoreEvalCases`) treats those files as a closed world per fixture×layer bucket: every scanner finding with source locations in them is a precision denominator item, and it is a true positive only if it is assigned to an accepted positive gold case on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings are excluded from the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
+Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `evaluateCanonical` (via `scoreEvalCases`) treats those files as a closed world per fixture×layer bucket: every scanner discovery with source locations in them is a precision denominator item, and it is a true positive only if it is assigned to an accepted positive gold case on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless discoveries are excluded from the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
 
 ## Metric computability
 
@@ -93,7 +93,7 @@ Precision and recall null rates carry an explicit per-metric **computability sta
 | `reviewed_scope_unprocessed` | Scope declared but not successfully processed on the layer ledger |
 | `processed_scope_zero_predictions` | Processed scope with zero in-scope predictions |
 | `migration_incomplete_or_not_ready` | Layer gold or compat migration not ready for headline scoring |
-| `unscorable_provenance` | Only locationless or otherwise unscoreable findings |
+| `unscorable_provenance` | Only locationless or otherwise unscoreable discoveries |
 | `computable` | Metric has a valid denominator |
 
 Recall and precision use separate states and denominators. See `scorecard-vector/2` in `tests/benchmark/README.md`.

@@ -1,6 +1,6 @@
 # Corpus Gold Status
 
-Row-level observability for the corpus gold migration (KDATAP-b0d5e2). Finding counts in the live tables are queried from the board at render time.
+Row-level observability for the corpus gold migration (KDATAP-b0d5e2). **Kanbus finding** counts in the live tables are gold-label review cards queried from the board at render time — not scanner Discoveries and not OCSF Findings.
 
 ## Current totals (YAML gold)
 
@@ -8,13 +8,13 @@ Row-level observability for the corpus gold migration (KDATAP-b0d5e2). Finding c
 | --- | ---: | ---: | ---: | ---: | --- |
 | **Data items** | 436 | 140 | 119 | 177 | Adjudicated and applied (PR #50, slice KDATAP-6b1c67) |
 | **Data flows** | 436 | 158 | 17 | 261 | Adjudicated and applied (PR #52, #54; slice KDATAP-a7c36b PR #62) |
-| Components | 481 | 481 | 0 | 0 | Accepted (prior passes; not tracked as per-label findings) |
-| Mentions | 357 | 357 | 0 | 0 | Accepted (prior passes; not tracked as per-label findings) |
+| Components | 481 | 481 | 0 | 0 | Accepted (prior passes; not tracked as per-label Kanbus findings) |
+| Mentions | 357 | 357 | 0 | 0 | Accepted (prior passes; not tracked as per-label Kanbus findings) |
 | **Corpus total** | **1710** | **1136** | **136** | **438** | |
 
-Each data-item and data-flow row has one finding issue under KDATAP-b0d5e2. Mapping onto the custom board: YAML `accepted` -> finding `accepted`, `rejected` -> finding `rejected`, `needs_adjudication` -> finding `proposed`. Sample-app Jest findings are in Done.
+Each data-item and data-flow row has one Kanbus finding (gold-label review card) under KDATAP-b0d5e2. Mapping onto the custom board: YAML `accepted` -> Kanbus finding `accepted`, `rejected` -> Kanbus finding `rejected`, `needs_adjudication` -> Kanbus finding `proposed`. Sample-app Jest gold cards are in Done.
 
-## Live finding board
+## Live Kanbus finding board
 
 These counts are what the custom board columns show.
 
@@ -23,9 +23,9 @@ These counts are what the custom board columns show.
 | Proposed | {{ count(type="finding", status="proposed") }} | 438 | Unresolved corpus labels |
 | Accepted | {{ count(status="accepted") }} | 298 | Human-accepted gold labels |
 | Rejected | {{ count(type="finding", status="rejected") }} | 136 | Human-rejected labels |
-| **Total findings** | **{{ count(type="finding") }}** | **888** | Drift if this is not 888 |
+| **Total Kanbus findings** | **{{ count(type="finding") }}** | **888** | Drift if this is not 888 |
 
-Layer split for the 872 corpus findings:
+Layer split for the 872 corpus Kanbus findings:
 
 | Layer | Accepted | Rejected | Proposed | Total |
 | --- | ---: | ---: | ---: | ---: |
@@ -106,7 +106,7 @@ flowchart LR
 - AI adjudicates rows from pinned source + taxonomy (no scanner output).
 - Humans accept the packet by sampling the spot-check queue, not row-by-row.
 - `--apply` mechanically flips YAML and bumps the digest.
-- Unresolved rows stay `needs_adjudication` / finding `proposed` and are excluded from headline metrics.
+- Unresolved rows stay `needs_adjudication` / Kanbus finding `proposed` and are excluded from headline metrics.
 
 ## What's next
 

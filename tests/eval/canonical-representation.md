@@ -6,7 +6,7 @@ Behaviour specification for the versioned canonical representation emitted by bo
 
 **Prohibition (all layers):** candidates, labels, and display names never rescue identity.
 
-The current `${type}:${name}` subject keys in `ground-truth-schema.md` are **legacy**. This document defines the canonical contract that replaces overloaded key strings and the `EvalCase` / `LayerFinding` pair as scoring currency.
+The current `${type}:${name}` subject keys in `ground-truth-schema.md` are **legacy**. This document defines the canonical contract that replaces overloaded key strings and the `EvalCase` / `LayerFinding` pair as scoring currency. `LayerFinding` / `CanonicalScannerFinding` are leftover TypeScript names for scanner **Discovery** evidence — not OCSF Findings. See [Discovery vs Finding](../../project/wiki/discovery-vs-finding.md).
 
 Headline layers: `mentions`, `data-items`, `components`, and `data-flows`. The `raw-hits` and `data-actions` layers are diagnostic only and do not participate in headline gates.
 
@@ -14,14 +14,14 @@ Headline layers: `mentions`, `data-items`, `components`, and `data-flows`. The `
 
 ## Contract envelope
 
-Every canonical expectation and finding carries:
+Every canonical gold expectation and scanner discovery carries:
 
 | Field | Role |
 | --- | --- |
 | `contractVersion` | Evaluation-contract semantics. Changes when canonicalization-map meaning changes (semantic remap). |
 | `adapterMapVersion` | Scanner capability manifest digest for the exact scanner commit, enabled rules, analyzers, and runtime configuration. |
 
-Gold and scanner findings for the same evidence must carry the same `contractVersion` after adapter normalization. The canonicalization map (what observations mean) and the capability manifest (what the scanner can emit) are **separate versioned artifacts** — do not use one mutable table for both.
+Gold and scanner discoveries for the same evidence must carry the same `contractVersion` after adapter normalization. The canonicalization map (what observations mean) and the capability manifest (what the scanner can emit) are **separate versioned artifacts** — do not use one mutable table for both.
 
 ---
 
@@ -170,7 +170,7 @@ Baseline series 1 uses an approved canonical graph-flow subset declared upfront 
 
 | Layer | Rule |
 | --- | --- |
-| Exact-leaf | Credited only when the finding's asserted concept leaf matches the expectation's asserted leaf. |
+| Exact-leaf | Credited only when the discovery's asserted concept leaf matches the expectation's asserted leaf. |
 | Ancestor-category | Reported separately. An ancestor match (for example `national_identifier` when the leaf is `driver_licence`) does not credit exact-leaf correctness. |
 
 ---
@@ -180,5 +180,5 @@ Baseline series 1 uses an approved canonical graph-flow subset declared upfront 
 Both gold and scanner adapters produce the same canonical representation shape:
 
 - Entity identity, asserted classification, optional vendor/instance, and evidence are **separate fields**.
-- After adapter normalization, gold expectations and scanner findings for the same evidence share `contractVersion`.
+- After adapter normalization, gold expectations and scanner discoveries for the same evidence share `contractVersion`.
 - Implementation: KDATAP-06634c (types), adapters epic (gold/scanner bridges).
