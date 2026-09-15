@@ -35,7 +35,7 @@ C++ sources are pre-processed by `stripCommentsPreservingLayout()`
 (`cli/src/analyzers/shared/strip-comments.ts`) before any line-based rule runs.
 Comments are replaced with spaces so line numbers stay accurate, and string
 literals are preserved — a URL like `"https://api.example.com"` must not be
-truncated at its `//`. Commented-out routes therefore produce no findings.
+truncated at its `//`. Commented-out routes therefore produce no discoveries.
 
 ### Header matching
 
@@ -73,7 +73,7 @@ int main() {
 }
 ```
 
-**Emitted finding:**
+**Emitted discovery (`RawFinding`):**
 
 - `pattern`: `express_route`
 - `name`: `"<METHOD> <path>"` when the framework encodes a method, otherwise

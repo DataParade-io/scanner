@@ -1,6 +1,8 @@
-Feature: Scanner findings for a detector Score
+Feature: Scanner discoveries for a detector Score
 
-  Scenario: A materialized tree yields file and line findings
+  # Discovery = scanner output / code evidence. Finding is reserved for OCSF-ish events.
+
+  Scenario: A materialized tree yields file and line discoveries
     Given a tiny source tree on disk
-    When I request scanner findings for that tree
-    Then the results include a finding with a file path and line span
+    When I request scanner discoveries for that tree
+    Then the results include a discovery with a file path and line span

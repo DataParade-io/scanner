@@ -10,7 +10,7 @@ In progress:
 None.
 {% endif %}
 
-Open (not findings; those are tracked on [corpus gold status](corpus-gold-status.md)):
+Open (not Kanbus findings; those gold-label cards are tracked on [corpus gold status](corpus-gold-status.md)):
 
 {% for issue in query(status="open", sort="priority") %}
 {% if issue.type != "finding" %}

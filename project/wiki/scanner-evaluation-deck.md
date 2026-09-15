@@ -2,6 +2,8 @@
 
 A slide deck for explaining how the four-layer scanner evaluation system works. Each slide is a Mermaid diagram plus a short explanation. Scroll through, or copy each block into a renderer (GitHub, Notion, Mermaid Live Editor).
 
+**Nouns:** the scanner emits **Discoveries** (code evidence / `ScanResult` + raw pattern hits). **Finding** means an OCSF-ish security event — this repo has none. **Kanbus finding** means a gold-label review card. See [Discovery vs Finding](discovery-vs-finding.md).
+
 ---
 
 ## Slide 1 — The big picture
@@ -16,7 +18,7 @@ flowchart LR
     end
     subgraph scanner [Scanner]
         S1[scan source]
-        S2[emit findings per layer]
+        S2[emit discoveries per layer]
     end
     subgraph gold [Corpus gold]
         G1[human-reviewed labels]
@@ -33,7 +35,7 @@ flowchart LR
     Fix --> scanner
 ```
 
-The scanner reads pinned source code and emits findings at four layers. We compare those findings to human-reviewed gold labels and compute recall and precision per layer. Low metrics expose scanner defects — which we then fix — without touching the gold.
+The scanner reads pinned source code and emits Discoveries at four layers. We compare those Discoveries to human-reviewed gold labels and compute recall and precision per layer. Low metrics expose scanner defects — which we then fix — without touching the gold.
 
 ---
 
@@ -90,8 +92,8 @@ flowchart LR
         A2["write canonical block"]
         A3["bump digest"]
     end
-    subgraph board [Kanbus findings]
-        B1["one finding per row<br/>proposed -> accepted / rejected"]
+    subgraph board [Kanbus gold cards]
+        B1["one Kanbus finding per row<br/>proposed -> accepted / rejected"]
     end
 
     source --> propose
@@ -101,7 +103,7 @@ flowchart LR
     apply --> board
 ```
 
-Every annotation row starts `needs_adjudication` (finding `proposed`). An AI adjudicates from source + concept map and produces a packet. A human accepts the packet. Only then does `--apply` flip the YAML and sync the board. Unresolved rows stay `proposed` — they are not weak labels, they are honest uncertainty.
+Every annotation row starts `needs_adjudication` (Kanbus finding `proposed`). An AI adjudicates from source + concept map and produces a packet. A human accepts the packet. Only then does `--apply` flip the YAML and sync the board. Unresolved rows stay `proposed` — they are not weak labels, they are honest uncertainty.
 
 ---
 
@@ -113,7 +115,7 @@ How a scorecard is produced from gold + scanner output.
 flowchart LR
     subgraph in [Inputs]
         G["gold YAML<br/>(accepted rows)"]
-        S["scanner findings<br/>(scan output)"]
+        S["scanner discoveries<br/>(scan output)"]
     end
     subgraph canonical [Canonical load]
         C1["loadCanonicalGold<br/>+ flow_canonical endpoints"]
@@ -121,7 +123,7 @@ flowchart LR
     end
     subgraph score [Scorecard vector]
         SC1["per-layer recall<br/>matched positives / evaluable positives"]
-        SC2["per-layer precision<br/>matched / all scanner findings in scope"]
+        SC2["per-layer precision<br/>matched / all scanner discoveries in scope"]
     end
     subgraph gate [Readiness gate]
         RG1{"scorable or pending?"}
@@ -135,7 +137,7 @@ flowchart LR
     gate -->|"floors unmet"| Out2["pending: layer skipped"]
 ```
 
-Each layer is scored independently. Recall = matched positive gold / all evaluable positives. Precision = matched valid findings / all scanner findings inside exhaustively annotated scopes. A layer reports only when its readiness floors are met; otherwise it is `pending` and skipped.
+Each layer is scored independently. Recall = matched positive gold / all evaluable positives. Precision = matched valid discoveries / all scanner discoveries inside exhaustively annotated scopes. A layer reports only when its readiness floors are met; otherwise it is `pending` and skipped.
 
 ---
 
@@ -292,10 +294,10 @@ xychart-beta
 ```
 
 Read it as progress per layer:
-- **Components** 92.2% (519/563) — essentially done; labeled in earlier passes, no per-label findings on the board.
+- **Components** 92.2% (519/563) — essentially done; labeled in earlier passes, no per-label Kanbus gold cards on the board.
 - **Data flows** 36.2% (158/436) — slice-2 adjudication applied; 261 still proposed.
 - **Data items** 32.1% (140/436) — slice-2 adjudication applied; 177 still proposed.
-- **Mentions** 22.1% (79/357) — 278 still proposed, 0 rejected; the next corpus slice (mentions YAML without per-label findings) is where those get resolved.
+- **Mentions** 22.1% (79/357) — 278 still proposed, 0 rejected; the next corpus slice (mentions YAML without per-label Kanbus gold cards) is where those get resolved.
 
 The proposed rows are not weak labels — they are honest uncertainty (no closed concept-map leaf, or weak evidence). They stay out of the headline metric denominators until a human accepts a packet.
 

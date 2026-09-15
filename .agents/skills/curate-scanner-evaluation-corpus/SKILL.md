@@ -48,7 +48,7 @@ Use this decision order:
 
 1. Determine what the code represents in its application domain.
 2. Apply the written taxonomy definition.
-3. Decide whether the finding belongs to the evaluated output layer.
+3. Decide whether the discovery belongs to the evaluated output layer.
 4. Assign canonical labels only after the prior decisions.
 5. Mark unresolved cases `ambiguous` and exclude them from headline metric denominators.
 
@@ -74,11 +74,11 @@ Compute metrics only within evaluable, declared scopes.
 - Recall: matched positive ground truth divided by all evaluable positives.
 - Label accuracy: correctly labelled matches divided by matched positives.
 - Correct-label recall: correctly labelled matches divided by all evaluable positives.
-- Precision: matched valid findings divided by all scanner findings inside exhaustively annotated scopes.
+- Precision: matched valid discoveries divided by all scanner discoveries inside exhaustively annotated scopes.
 - Negative-case pass rate: explicit negative cases left clean. Never present this as precision.
 - Unread: cases whose exact files were not scanned. Report separately.
 
-Count every unmatched scanner finding inside an exhaustively annotated scope as a false positive or route it to adjudication before publishing precision. Normalize paths and line ranges, but require layer-specific identity when multiple findings can overlap a location.
+Count every unmatched scanner discovery inside an exhaustively annotated scope as a false positive or route it to adjudication before publishing precision. Normalize paths and line ranges, but require layer-specific identity when multiple discoveries can overlap a location.
 
 Report two change sets whenever the corpus changed:
 

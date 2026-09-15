@@ -37,7 +37,7 @@ Given("a tiny source tree on disk", function () {
   w.rootPath = fixtureRoot;
 });
 
-When("I request scanner findings for that tree", async function () {
+When("I request scanner discoveries for that tree", async function () {
   const w = getWorld(this);
   assert.ok(w.rootPath, "fixture root path must be set");
 
@@ -46,22 +46,22 @@ When("I request scanner findings for that tree", async function () {
 });
 
 Then(
-  "the results include a finding with a file path and line span",
+  "the results include a discovery with a file path and line span",
   function () {
     const w = getWorld(this);
-    assert.ok(Array.isArray(w.findings), "findings must be an array");
-    assert.ok(w.findings!.length > 0, "expected at least one finding");
+    assert.ok(Array.isArray(w.findings), "discoveries must be an array");
+    assert.ok(w.findings!.length > 0, "expected at least one discovery");
 
     const finding = w.findings!.find(isEvalFinding);
     assert.ok(
       finding,
-      "expected a finding with filePath, startLine, and endLine",
+      "expected a discovery with filePath, startLine, and endLine",
     );
-    assert.ok(finding.filePath.length > 0, "finding filePath must be non-empty");
-    assert.ok(finding.startLine >= 1, "finding startLine must be positive");
+    assert.ok(finding.filePath.length > 0, "discovery filePath must be non-empty");
+    assert.ok(finding.startLine >= 1, "discovery startLine must be positive");
     assert.ok(
       finding.endLine >= finding.startLine,
-      "finding endLine must be >= startLine",
+      "discovery endLine must be >= startLine",
     );
   },
 );

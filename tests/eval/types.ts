@@ -49,7 +49,7 @@ export interface EvalCase {
   expected: EvalExpected;
   rationale: string;
   /**
-   * Files exhaustively reviewed for this fixture. When set, scanner findings
+   * Files exhaustively reviewed for this fixture. When set, scanner discoveries
    * with source locations in these files contribute to precision. Extra scanner
    * hits in this closed world are false positives; a missing vendor is not
    * recorded as a negative case.
@@ -63,6 +63,7 @@ export interface EvalCase {
   dataItemCandidate?: DataItemAnnotationCandidate;
 }
 
+/** Eval-layer Discovery row. TypeScript name is leftover; not an OCSF Finding. */
 export interface LayerFinding {
   key: string;
   labels: string[];
@@ -73,8 +74,8 @@ export interface LayerFinding {
     end_line: number;
   }>;
   /**
-   * When set, scoring only compares this finding to cases of the same layer.
-   * Untagged findings (fixture adapters) participate in every layer of the
+   * When set, scoring only compares this discovery to cases of the same layer.
+   * Untagged discoveries (fixture adapters) participate in every layer of the
    * score call — fixture tests score one layer at a time.
    */
   layer?: EvalLayer;

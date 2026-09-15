@@ -33,7 +33,7 @@ This repository uses [Kanbus](https://kanb.us) for issue tracking. Initialize yo
 - New issues use the **KDATAP** key prefix.
 - Do not use `kbs create --local` or `project-local/`.
 - Do not edit JSON under `project/issues/` or `project/events/` by hand; use `kbs` commands only.
-- Eval gold review uses issue type **finding** (one gold label). Findings stay **proposed** until a person moves them to **accepted** or **rejected**. Optional pass notes live in `annotations/<id>/`.
+- Eval gold review uses Kanbus issue type **finding** (one gold-label review card under `findings/`). That is not a scanner Discovery and not an OCSF Finding. Kanbus findings stay **proposed** until a person moves them to **accepted** or **rejected**. Optional pass notes live in `annotations/<id>/`. See [Discovery vs Finding](./project/wiki/discovery-vs-finding.md).
 
 ## Development
 
@@ -63,7 +63,7 @@ Gherkin feature specs live under `features/` and are the source of truth for Ple
 | `pnpm run eval:mentions` | Personal-data mention layer ground-truth eval |
 | `pnpm run eval:data-items` | Rolled-up data-item layer ground-truth eval |
 
-Layer findings for Plexus SubjectIdentityScore:
+Layer discoveries for Plexus SubjectIdentityScore (`scripts/scan-layer-findings.ts` is the leftover script name):
 
 ```bash
 node -r ts-node/register scripts/scan-layer-findings.ts --root <fixture-dir> --layer raw-hits|mentions|data-items

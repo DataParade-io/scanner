@@ -1,6 +1,6 @@
 # Gold review on the board
 
-Each corpus data-item and data-flow row is a **finding**. The custom board tracks review with three statuses:
+Each corpus data-item and data-flow row is a **Kanbus finding** — a gold-label review card (`--type finding`, artifacts under `findings/`). That is not a scanner Discovery and not an OCSF Finding. The custom board tracks review with three statuses:
 
 | Column | Meaning |
 | --- | --- |
@@ -8,7 +8,7 @@ Each corpus data-item and data-flow row is a **finding**. The custom board track
 | Accepted | Human-accepted gold |
 | Rejected | Not gold |
 
-Do not file per-layer sub-tasks for one finding.
+Do not file per-layer sub-tasks for one Kanbus finding.
 
 **Annotation** cards are labeling-pass notes. They are not the per-label queue. Sample-app Jest gold is finished and sits in Done.
 

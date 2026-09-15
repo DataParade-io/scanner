@@ -651,7 +651,7 @@ Given(
   },
 );
 
-Given("no matching subject identity finding", function (this: ScannerLayerWorld) {
+Given("no matching subject identity discovery", function (this: ScannerLayerWorld) {
   const w = getWorld(this);
   assert.ok(w.datasetFile, "dataset file must be set");
   const dataset = readFileSync(w.datasetFile, "utf8");

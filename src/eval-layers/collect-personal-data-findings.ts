@@ -18,6 +18,7 @@ export interface PersonalDataEvidence {
   endLine: number;
 }
 
+/** Personal-data eval Discovery evidence. Not an OCSF Finding. */
 export interface PersonalDataFinding {
   subjectKey: string;
   labels: string[];

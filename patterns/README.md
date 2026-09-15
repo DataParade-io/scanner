@@ -14,7 +14,8 @@ Patterns are configured in two layers:
   validates it, compiles regexes, and applies them to `FileInfo` plus the TS/JS
   code model.
 
-Each detected match produces a `RawFinding` object using the shared `PatternId`
+Each detected match produces a `RawFinding` object — a raw **Discovery** /
+pattern hit, not an OCSF Finding — using the shared `PatternId`
 union from `cli/src/core/types/detection.ts`. The YAML file controls **what**
 we look for (libraries, regexes, keys); the TypeScript engine controls **how**
 those patterns are applied.
@@ -273,7 +274,7 @@ parties.
 Actor detection is configured in a shared YAML file:
 
 -- `cli/patterns/actor.patterns.yaml` – defines regexes and rules for emitting
-  `web_actor` and `service_actor` findings, and attaches basic properties such
+  `web_actor` and `service_actor` discoveries, and attaches basic properties such
   as `actorType`, `roleNames`, and `sourceContext`.
 
 The classifier maps these pattern IDs to actors via `classifier/components.classifier.yaml`:
@@ -289,19 +290,19 @@ The TypeScript/JavaScript analyzer loads `actor.patterns.yaml` through
 
 - **Frontend session hook**
   - File path matches `hooks/useSession.ts` / `hooks/useSession.tsx`.
-  - Emits a `web_actor` finding named `"Customer"` with:
+  - Emits a `web_actor` discovery named `"Customer"` with:
     - `properties.actorType = "customer"`
     - `properties.sourceContext = "frontend_session"`.
 
 - **Backend controllers using `req.user`**
   - Content contains `req.user` (e.g. NestJS/Express controllers).
-  - Emits a `web_actor` finding named `"Customer"` with:
+  - Emits a `web_actor` discovery named `"Customer"` with:
     - `properties.actorType = "customer"`
     - `properties.sourceContext = "backend_controller"`.
 
 - **Backend admin role checks**
   - Content contains simple admin role checks (e.g. `isAdmin`, `role: "admin"`).
-  - Emits a `service_actor` finding named `"Admin user"` with:
+  - Emits a `service_actor` discovery named `"Admin user"` with:
     - `properties.actorType = "employee"`
     - `properties.roleNames = ["admin"]`
     - `properties.sourceContext = "backend_role_check"`.

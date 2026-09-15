@@ -13,6 +13,7 @@ export const EVALUATION_DOC_PATHS = [
   "README.md",
   "CONTRIBUTING_AGENT.md",
   "project/wiki/index.md",
+  "project/wiki/discovery-vs-finding.md",
   "project/wiki/four-layer-evaluation.md",
   "project/wiki/eval-flywheel.md",
   "tests/eval/README.md",

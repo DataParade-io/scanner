@@ -20,11 +20,11 @@ Regenerate all provider snapshots from `cli/` with **`pnpm run generate:terrafor
 | `terraform_module` | `module` block. |
 | `terraform_provider` | `provider` block (emitted as a `third_party` component). |
 
-## Finding properties (representative)
+## Discovery properties (representative)
 
 - `terraform_address`: stable resource key used for cross-reference flow edges.
 - `terraform_references`: other addresses referenced from the block body (string array), including references from **merged satellite** blocks (see below).
-- `terraform_satellites` (optional): when a child resource is configured as a **satellite** of a primary resource in YAML (e.g. S3 ACL / ownership controls scoped by `bucket = …`), it is **not** emitted as its own node; metadata is attached here on the parent finding.
+- `terraform_satellites` (optional): when a child resource is configured as a **satellite** of a primary resource in YAML (e.g. S3 ACL / ownership controls scoped by `bucket = …`), it is **not** emitted as its own node; metadata is attached here on the parent discovery.
 - `resource_type`, `block_name`, `cloud_provider`, `componentSubType` (classifier hint).
 - `section_id` / `section_label`: derived from the file path for layout grouping.
 - After **`applyDeterministicInferenceFallbacks`** (same pipeline step as TypeScript scans), matching AWS/Azure/Kubernetes/… resources may also have **`managed_by_provider`**, **`managed_service_key`**, and **`generated_by: "provider_topology_fallback"`** when they align with `provider-topology.rules.yaml` managed service nodes (e.g. labels **Aws S3**, **Aws Lambda**, **Kubernetes workload**). This mirrors TS SDK topology and enables the same provider→managed edge styling in graph export. Resources not covered by a managed node still get a **`provider → resource`** `api_call` via **`appendTerraformBareProviderAttachmentFlows`** inside that fallback pass.
