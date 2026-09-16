@@ -195,9 +195,7 @@ describe("classifier/classify - DP-P0-CLI-201", () => {
     // Raw SQL helper findings (sql_query_detected) should not become
     // standalone components; they only flag raw SQL usage. We still expect
     // the primary database client component to be present.
-    const dbComponent = components.find(
-      (c) => c.properties.client === "pg",
-    );
+    const dbComponent = components.find((c) => c.properties.client === "pg");
     const rawSqlComponent = components.find(
       (c) => c.name === "Sql Query Detected",
     );
@@ -395,12 +393,8 @@ describe("classifier/classify - DP-P0-CLI-201", () => {
 
     const urlProp = component.properties.url;
     expect(Array.isArray(urlProp)).toBe(true);
-    expect(urlProp).toContain(
-      "https://api.openai.com/v1/chat/completions",
-    );
-    expect(urlProp).toContain(
-      "https://api.openai.com/v1/embeddings",
-    );
+    expect(urlProp).toContain("https://api.openai.com/v1/chat/completions");
+    expect(urlProp).toContain("https://api.openai.com/v1/embeddings");
 
     // Determinism: running classification twice with the same input
     // should yield the same shape (ignoring generated IDs).
@@ -409,6 +403,59 @@ describe("classifier/classify - DP-P0-CLI-201", () => {
     expect(again.type).toBe(component.type);
     expect(again.subType).toBe(component.subType);
     expect(again.name).toBe(component.name);
+  });
+
+  it("unions per-property evidence from grouped findings", () => {
+    const findings: RawFinding[] = [
+      makeFinding({
+        pattern: "external_api_call",
+        name: "Stripe",
+        location: makeLocation({ startLine: 3, endLine: 3 }),
+        properties: {
+          serviceName: "stripe",
+          integration_method: "api",
+          propertyEvidence: {
+            integration_method: [
+              {
+                filePath: "src/example.ts",
+                startLine: 3,
+                endLine: 3,
+                reason: "property.patterns.yaml:external_api_call",
+              },
+            ],
+          },
+        },
+      }),
+      makeFinding({
+        pattern: "external_api_call",
+        name: "Stripe",
+        location: makeLocation({ startLine: 8, endLine: 8 }),
+        properties: {
+          serviceName: "stripe",
+          integration_method: "api",
+          propertyEvidence: {
+            integration_method: [
+              {
+                filePath: "src/example.ts",
+                startLine: 8,
+                endLine: 8,
+                reason: "property.patterns.yaml:external_api_call",
+              },
+            ],
+          },
+        },
+      }),
+    ];
+
+    const [component] = classifyRawFindings(findings);
+    const propertyEvidence = component.properties.propertyEvidence as Record<
+      string,
+      Array<{ startLine: number }>
+    >;
+
+    expect(
+      propertyEvidence.integration_method.map((ref) => ref.startLine),
+    ).toEqual([3, 8]);
   });
 
   it("skips third-party components detected only from manifest metadata files", () => {
@@ -693,7 +740,10 @@ describe("classifier/classify - actors", () => {
       makeFinding({
         pattern: "express_route",
         name: "GET /a",
-        location: makeLocation({ filePath: "packages/a/src/server.ts", startLine: 10 }),
+        location: makeLocation({
+          filePath: "packages/a/src/server.ts",
+          startLine: 10,
+        }),
         properties: {
           httpMethod: "GET",
           path: "/a",
@@ -705,7 +755,10 @@ describe("classifier/classify - actors", () => {
       makeFinding({
         pattern: "express_route",
         name: "POST /a/items",
-        location: makeLocation({ filePath: "packages/a/src/routes/items.ts", startLine: 3 }),
+        location: makeLocation({
+          filePath: "packages/a/src/routes/items.ts",
+          startLine: 3,
+        }),
         properties: {
           httpMethod: "POST",
           path: "/a/items",
@@ -717,7 +770,10 @@ describe("classifier/classify - actors", () => {
       makeFinding({
         pattern: "express_route",
         name: "GET /b",
-        location: makeLocation({ filePath: "packages/b/src/server.ts", startLine: 5 }),
+        location: makeLocation({
+          filePath: "packages/b/src/server.ts",
+          startLine: 5,
+        }),
         properties: {
           httpMethod: "GET",
           path: "/b",
@@ -813,12 +869,8 @@ describe("classifier/classify - DP-P0-CLI-202", () => {
 
     const components = classifyRawFindings(findings);
 
-    const aws = components.find((c) =>
-      c.name.toLowerCase().includes("aws"),
-    );
-    const gcp = components.find((c) =>
-      c.name.toLowerCase().includes("gcp"),
-    );
+    const aws = components.find((c) => c.name.toLowerCase().includes("aws"));
+    const gcp = components.find((c) => c.name.toLowerCase().includes("gcp"));
     const azure = components.find((c) =>
       c.name.toLowerCase().includes("azure"),
     );
@@ -1388,9 +1440,7 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
     const frontend = deduped.find(
       (c) => c.properties.section_id === "frontend",
     );
-    const backend = deduped.find(
-      (c) => c.properties.section_id === "backend",
-    );
+    const backend = deduped.find((c) => c.properties.section_id === "backend");
 
     expect(frontend).toBeDefined();
     expect(backend).toBeDefined();
@@ -1587,7 +1637,9 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
     );
     expect(postgresLike).toBeDefined();
     expect(redisLike).toBeDefined();
-    expect(postgresLike?.properties.client || postgresLike?.properties.databaseType).toBeTruthy();
+    expect(
+      postgresLike?.properties.client || postgresLike?.properties.databaseType,
+    ).toBeTruthy();
     expect(redisLike?.properties.client).toBe("redis");
   });
 
@@ -1675,18 +1727,12 @@ describe("classifier/classify - DP-P0-CLI-205", () => {
     const classified = classifyRawFindings(findings);
     const deduped = dedupeComponents(classified);
 
-    const stripe = deduped.find((c) =>
-      c.name.toLowerCase().includes("stripe"),
-    );
+    const stripe = deduped.find((c) => c.name.toLowerCase().includes("stripe"));
     const sendgrid = deduped.find((c) =>
       c.name.toLowerCase().includes("sendgrid"),
     );
-    const auth0 = deduped.find((c) =>
-      c.name.toLowerCase().includes("auth0"),
-    );
-    const aws = deduped.find((c) =>
-      c.name.toLowerCase().includes("aws"),
-    );
+    const auth0 = deduped.find((c) => c.name.toLowerCase().includes("auth0"));
+    const aws = deduped.find((c) => c.name.toLowerCase().includes("aws"));
 
     expect(stripe).toBeDefined();
     expect(stripe?.type).toBe("third_party");
@@ -1723,14 +1769,12 @@ describe("classifier/classify - DP-P0-CLI-205", () => {
     const actors = deduped.filter((c) => c.type === "actor");
 
     expect(assets.length).toBeGreaterThanOrEqual(1);
-    expect(
-      assets.some((c) => c.subType === "database"),
-    ).toBe(true);
+    expect(assets.some((c) => c.subType === "database")).toBe(true);
 
     expect(thirdParties.length).toBeGreaterThanOrEqual(1);
-    expect(
-      thirdParties.some((c) => c.subType === "payment_processor"),
-    ).toBe(true);
+    expect(thirdParties.some((c) => c.subType === "payment_processor")).toBe(
+      true,
+    );
 
     expect(actors.length).toBeGreaterThanOrEqual(2);
 
@@ -1746,5 +1790,3 @@ describe("classifier/classify - DP-P0-CLI-205", () => {
     expect(mainApps[0].name).toBe("mixed-project");
   });
 });
-
-
