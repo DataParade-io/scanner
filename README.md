@@ -25,6 +25,16 @@ Four headline layers (`mentions`, `data-items`, `components`, `data-flows`) form
 
 Fixture ground truth lives under `tests/eval/layers/` with shared scoring in `tests/eval/score.ts` (delegates to `src/eval/`). Run `pnpm test tests/eval/` for deterministic Jest eval, or `pnpm run test:features` for Plexus Gherkin scenarios. See [tests/eval/README.md](./tests/eval/README.md) and [project/wiki/four-layer-evaluation.md](./project/wiki/four-layer-evaluation.md).
 
+## Ontology Discovery export
+
+Map `ScanResult` components and dataFlows to ontology **0.2.0** `Discovery` records (`source=scan` only):
+
+```ts
+import { exportScanDiscoveries } from "@dataparade/scanner/discovery";
+```
+
+See [src/discovery/README.md](./src/discovery/README.md). Ontology pin: `v0.2.0` @ `0656c5d9a6ce0d31440c63327ce597ce8df4414f`.
+
 ## Development
 
 ```bash
