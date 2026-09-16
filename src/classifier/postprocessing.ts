@@ -136,15 +136,23 @@ function buildComponentDedupeKey(
     return `asset:database:${sectionId}:${getDatabaseCanonicalKey(component)}`;
   }
 
-  if (
-    component.type === "asset" &&
-    component.subType === "auth_service" &&
-    component.sourceLocations[0]?.filePath
-  ) {
-    const primaryFile = component.sourceLocations[0].filePath
-      .replace(/\\/g, "/")
-      .toLowerCase();
-    return `asset:auth_service:${sectionId}:${primaryFile}`;
+  if (component.type === "asset" && component.subType === "auth_service") {
+    // Distinct auth services in one section stay separate (they carry distinct
+    // names); the same library detected across many files collapses to one node.
+    const normalized = normalizeComponentName(
+      component.name,
+      nameNormalization,
+    );
+    const keyName = normalized || component.name.trim().toLowerCase();
+    if (keyName) {
+      return `asset:auth_service:${sectionId}:${keyName}`;
+    }
+    const primaryFile = component.sourceLocations[0]?.filePath;
+    if (primaryFile) {
+      return `asset:auth_service:${sectionId}:${primaryFile
+        .replace(/\\/g, "/")
+        .toLowerCase()}`;
+    }
   }
 
   if (component.type === "third_party") {

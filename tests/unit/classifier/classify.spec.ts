@@ -1037,6 +1037,69 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
     expect(regionProp).toContain("eu-west-1");
   });
 
+  it("merges same-named auth_service assets detected across several files", () => {
+    const components: DetectedComponent[] = [
+      "backend/package.json",
+      "backend/src/auth/strategies/auth0.strategy.ts",
+      "backend/src/auth/guards/auth0.guard.ts",
+    ].map((filePath, index) =>
+      makeComponent({
+        id: `cmp_${index + 1}`,
+        name: "Passport",
+        type: "asset",
+        subType: "auth_service",
+        sourceLocations: [{ filePath, startLine: 1, endLine: 1 }],
+        properties: { section_id: "backend" },
+      }),
+    );
+
+    const deduped = dedupeComponents(components);
+
+    expect(deduped).toHaveLength(1);
+    expect(deduped[0].sourceLocations.map((loc) => loc.filePath)).toEqual([
+      "backend/package.json",
+      "backend/src/auth/guards/auth0.guard.ts",
+      "backend/src/auth/strategies/auth0.strategy.ts",
+    ]);
+  });
+
+  it("keeps distinct auth_service assets in one section separate", () => {
+    const components: DetectedComponent[] = [
+      makeComponent({
+        id: "cmp_1",
+        name: "wp_set_auth_cookie",
+        type: "asset",
+        subType: "auth_service",
+        sourceLocations: [
+          {
+            filePath: "src/wp-includes/pluggable.php",
+            startLine: 1,
+            endLine: 1,
+          },
+        ],
+        properties: { section_id: "root" },
+      }),
+      makeComponent({
+        id: "cmp_2",
+        name: "WP_Session_Tokens",
+        type: "asset",
+        subType: "auth_service",
+        sourceLocations: [
+          {
+            filePath: "src/wp-includes/class-wp-session-tokens.php",
+            startLine: 1,
+            endLine: 1,
+          },
+        ],
+        properties: { section_id: "root" },
+      }),
+    ];
+
+    const deduped = dedupeComponents(components);
+
+    expect(deduped).toHaveLength(2);
+  });
+
   it("does not merge components that share a name but differ in type", () => {
     const components: DetectedComponent[] = [
       makeComponent({
