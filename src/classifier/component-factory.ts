@@ -21,6 +21,10 @@ import {
   NON_RUNTIME_METADATA_FILE_NAMES,
 } from "../patterns/flow-source-patterns";
 import { isTerraformOmittedFromServiceGraphResourceType } from "../analyzers/terraform/terraform-utility-resource";
+import {
+  ensureLocationEvidenceForValuedKeys,
+  mergePropertyEvidenceMaps,
+} from "./property-evidence";
 
 interface FindingGroup {
   key: string;
@@ -40,7 +44,7 @@ function normalizeComponentName(
   rawName: string,
   rules: NameNormalizationConfig,
 ): string {
-  let name = rawName.trim();
+  const name = rawName.trim();
   if (!name) return "";
   let lower = name.toLowerCase();
 
@@ -61,10 +65,7 @@ function normalizeComponentName(
 
   if (rules.trimChars && rules.trimChars.length > 0) {
     const escaped = escapeForCharClass(rules.trimChars);
-    const boundaryRegex = new RegExp(
-      `^[${escaped}]+|[${escaped}]+$`,
-      "g",
-    );
+    const boundaryRegex = new RegExp(`^[${escaped}]+|[${escaped}]+$`, "g");
     lower = lower.replace(boundaryRegex, "").trim();
   }
 
@@ -88,9 +89,7 @@ function toDisplayName(normalized: string, fallback: string): string {
   return base
     .split(/\s+/)
     .map((part) =>
-      part.length === 0
-        ? part
-        : part.charAt(0).toUpperCase() + part.slice(1),
+      part.length === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1),
     )
     .join(" ");
 }
@@ -203,7 +202,10 @@ function groupFindings(
         const packageDisplayName =
           typeof packageNameRaw === "string" && packageNameRaw.trim()
             ? toDisplayName(
-                normalizeComponentName(packageNameRaw, config.nameNormalization),
+                normalizeComponentName(
+                  packageNameRaw,
+                  config.nameNormalization,
+                ),
                 packageNameRaw,
               )
             : undefined;
@@ -253,7 +255,9 @@ function groupFindings(
       const sectionId = getSectionIdFromProperties(finding.properties);
       const keyBase =
         normalized || finding.name.trim().toLowerCase() || "<unknown>";
-      const filePath = finding.location.filePath.replace(/\\/g, "/").toLowerCase();
+      const filePath = finding.location.filePath
+        .replace(/\\/g, "/")
+        .toLowerCase();
       key = `${sectionId}::${keyBase}::${filePath}`;
       displayName = toDisplayName(keyBase, keyBase);
     }
@@ -322,7 +326,8 @@ function findThirdPartyMatch(
   const client = props.client;
   const urlProp = props.url;
 
-  if (typeof serviceName === "string") candidates.push(serviceName.toLowerCase());
+  if (typeof serviceName === "string")
+    candidates.push(serviceName.toLowerCase());
   if (typeof client === "string") candidates.push(client.toLowerCase());
   if (typeof urlProp === "string" && /^https?:\/\//i.test(urlProp.trim())) {
     candidates.push(urlProp.toLowerCase());
@@ -341,7 +346,8 @@ function findThirdPartyMatch(
   }
 
   const inferred = inferThirdPartyFromLiteralHttpUrl(finding);
-  if (inferred) return syntheticThirdPartyEntry(inferred.serviceName, inferred.subType);
+  if (inferred)
+    return syntheticThirdPartyEntry(inferred.serviceName, inferred.subType);
   return undefined;
 }
 
@@ -366,6 +372,12 @@ function mergeProperties(
   source: Record<string, unknown>,
 ): void {
   for (const [key, value] of Object.entries(source)) {
+    if (key === "propertyEvidence") {
+      const merged = mergePropertyEvidenceMaps(target.propertyEvidence, value);
+      if (merged) target.propertyEvidence = merged;
+      else delete target.propertyEvidence;
+      continue;
+    }
     if (!(key in target)) {
       target[key] = value;
       continue;
@@ -383,9 +395,7 @@ function mergeProperties(
   }
 }
 
-function dedupeSourceLocations(
-  locations: SourceLocation[],
-): SourceLocation[] {
+function dedupeSourceLocations(locations: SourceLocation[]): SourceLocation[] {
   const seen = new Set<string>();
   const result: SourceLocation[] = [];
   for (const loc of locations) {
@@ -405,7 +415,10 @@ function compareSourceLocations(a: SourceLocation, b: SourceLocation): number {
   return 0;
 }
 
-function compareDetectedFromRefs(a: DetectedFromRef, b: DetectedFromRef): number {
+function compareDetectedFromRefs(
+  a: DetectedFromRef,
+  b: DetectedFromRef,
+): number {
   const patternCmp = String(a.pattern).localeCompare(String(b.pattern));
   if (patternCmp !== 0) return patternCmp;
 
@@ -424,9 +437,7 @@ function isNonRuntimeMetadataPath(filePath: string): boolean {
   return NON_RUNTIME_METADATA_EXTENSIONS.some((ext) => fileName.endsWith(ext));
 }
 
-function buildDetectedFromRefs(
-  findings: RawFinding[],
-): DetectedFromRef[] {
+function buildDetectedFromRefs(findings: RawFinding[]): DetectedFromRef[] {
   const seen = new Set<string>();
   const result: DetectedFromRef[] = [];
   for (const finding of findings) {
@@ -458,9 +469,8 @@ function decideComponentTypeAndSubType(
   const databaseTypes: string[] = [];
 
   for (const finding of group.findings) {
-    const patternDefault = patternDefaultsById[
-      finding.pattern
-    ] as PatternDefaultConfig | undefined;
+    const patternDefault = patternDefaultsById[finding.pattern] as
+      PatternDefaultConfig | undefined;
     if (patternDefault && patternDefault.priority < bestPriority) {
       bestPriority = patternDefault.priority;
       chosenType = patternDefault.type;
@@ -568,7 +578,9 @@ export function classifyRawFindings(
     if (
       type === "third_party" &&
       group.findings.length > 0 &&
-      group.findings.every((f) => isNonRuntimeMetadataPath(f.location.filePath)) &&
+      group.findings.every((f) =>
+        isNonRuntimeMetadataPath(f.location.filePath),
+      ) &&
       !group.findings.some(
         (f) => f.properties?.sourceContext === "dependency_manifest",
       )
@@ -616,7 +628,13 @@ export function classifyRawFindings(
 
     const mergedProperties: Record<string, unknown> = {};
     for (const finding of group.findings) {
-      mergeProperties(mergedProperties, finding.properties);
+      const findingProperties = { ...finding.properties };
+      ensureLocationEvidenceForValuedKeys(
+        findingProperties,
+        finding.location,
+        `finding:${finding.pattern}`,
+      );
+      mergeProperties(mergedProperties, findingProperties);
     }
 
     if (
@@ -653,7 +671,10 @@ export function classifyRawFindings(
     }
 
     if (component.type === "asset" && component.subType === "api") {
-      component.name = normalizeApiDisplayName(component.name, mergedProperties);
+      component.name = normalizeApiDisplayName(
+        component.name,
+        mergedProperties,
+      );
     }
 
     components.push(component);
@@ -667,4 +688,3 @@ export function classifyRawFindings(
 
   return components;
 }
-

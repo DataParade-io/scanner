@@ -1,0 +1,26 @@
+{
+  "id": "KDATAP-4cc87c25-2680-4dad-bd28-a8f990e0c8e9",
+  "title": "Scanner emits evidence for every grounded property",
+  "description": "",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f9cd292e-d820-4536-8046-9ff834f9df97",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "561b07e2-569f-45b8-b890-55201ad2d4c0",
+      "author": "os",
+      "text": "As a DataParade user, I want each scanner-derived property to include source evidence, so that I can verify why the value was inferred.\n\nFeature: Per-property scanner evidence\n  Scenario: Grounded properties retain citations\n    Given a scanner finding with a source location\n    When rules and heuristics produce component properties\n    Then each non-empty user property includes one or more evidence rows\n    And grouping and postprocessing preserve the union of evidence rows\n\n  Scenario: Ungrounded heuristics stay empty\n    Given a component without source locations or detected-from locations\n    When scanner heuristics run\n    Then they do not set a property value that requires evidence",
+      "created_at": "2026-09-16T10:50:46.140415Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-16T10:50:35.635617Z",
+  "updated_at": "2026-09-16T10:50:46.140415Z",
+  "closed_at": null,
+  "custom": {}
+}
