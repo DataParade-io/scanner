@@ -4,7 +4,7 @@ import { dedupeDataFlows } from "./dedupe";
 import { rewireFlowsThroughApplication } from "./rewire";
 import { dropCrossSectionServiceFlows } from "./drop-cross-section-flows";
 import { ensureActorToAppFlow, ensureInjectedProjectMainToTerraformProviderHub } from "./ensure-actor-flow";
-import { ensureManifestDeclaredThirdPartyFlows } from "./ensure-manifest-declared-flows";
+import { ensureManifestDeclaredThirdPartyFlows, ensureHubToOrphanThirdPartyFlows } from "./ensure-manifest-declared-flows";
 import { ensureMainToUnlinkedSectionApiFlows } from "./ensure-section-api-flows";
 
 function getSectionId(component: DetectedComponent | undefined): string {
@@ -79,9 +79,13 @@ export function postprocessDataFlows(
     components,
     withTerraform,
   );
-  const withSectionApis = ensureMainToUnlinkedSectionApiFlows(
+  const withOrphanThirdParties = ensureHubToOrphanThirdPartyFlows(
     components,
     withManifest,
+  );
+  const withSectionApis = ensureMainToUnlinkedSectionApiFlows(
+    components,
+    withOrphanThirdParties,
   );
   return dropCrossSectionServiceFlows(components, withSectionApis);
 }
