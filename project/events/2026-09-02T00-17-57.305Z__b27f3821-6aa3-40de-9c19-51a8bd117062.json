@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "b27f3821-6aa3-40de-9c19-51a8bd117062",
+  "issue_id": "KDATAP-25b2f474-1d4a-4279-bfcc-b6a73343714a",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-02T00:17:57.305Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "AI adjudication pass over the 431 data-item rows currently `needs_adjudication` after a0e80b + 9b83f6.\n\nFor each row, read pinned source at the evidence span, apply `patterns/personal-data-concept-map.yaml`, and propose a final disposition:\n\n- **accept** with canonical `concept_leaf` (from map only; no invented leaves) — source clearly is that concept\n- **reject** with rationale — source is not personal data, not on this layer, or negative\n- **unresolved** with reason — genuinely ambiguous; flag for later\n\nOutput: an adjudication ledger with a proposed disposition for every row. Human gate is at the packet level (sample + bucket counts), not row-by-row, because humans will not review hundreds of rows.\n\nLocks:\n- Ontology only from `personal-data-concept-map.yaml`. No invented leaves. No `no-concept` escape.\n- Do not run `scan()` or use detector output.\n- Legacy `subject.key` preserved.\n- `expected.labels` may be corrected only if the source clearly contradicts the label (annotation defect, not scanner alignment).\n- Follow `.agents/skills/curate-scanner-evaluation-corpus/SKILL.md` Correct ground truth.\n\nOpen question for the plan: does AI write `review_state: accepted/rejected` directly in YAML, or propose in a ledger and a mechanical flip runs after human packet-accept? Planner recommends; manager decides.",
+    "issue_type": "annotation",
+    "labels": [],
+    "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+    "priority": 1,
+    "status": "open",
+    "title": "Adjudicate data-item gold dispositions (accept/reject/unresolved)"
+  }
+}

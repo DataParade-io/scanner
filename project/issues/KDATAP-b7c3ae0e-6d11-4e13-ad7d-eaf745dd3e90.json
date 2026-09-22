@@ -3,7 +3,7 @@
   "title": "Enable data-flows metric: count within-component flows",
   "description": "Change the readiness gate to count intra_component_lineage flows as evaluable positives for data-flows. Re-freeze baseline with flow metrics.",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 0,
   "assignee": null,
   "creator": null,
@@ -17,11 +17,55 @@
       "text": "Starting: change readiness policy to count intra flows for data-flows, then re-freeze baseline.",
       "created_at": "2026-09-02T15:03:39.905584Z",
       "comment_type": "default"
+    },
+    {
+      "id": "0a1d8d7b-05ec-4163-9aeb-e1e9953e2c77",
+      "author": "home",
+      "text": "Restarting: this is the closing step for the four-layer scorecard. Data-flows metric is 0.0/0.0 on develop because the gate only counts graph_edge; the 158 accepted flows are mostly intra_component_lineage. Dispatching plan-only pass: rebase on develop, fix the materialization-check code path, resolve remaining blockers, re-freeze baseline, merge. No scanner alignment beyond the policy line.",
+      "created_at": "2026-09-02T23:56:22.395403Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "85253e41-b45a-402d-84f0-602ea1410370",
+      "author": "home",
+      "text": "Plan-only pass (v2 worktree): worktree at /tmp/scanner-b7c3ae-flow-metric, branch cursor/enable-flow-metric-b7c3ae-v2, HEAD c2d9d0b (develop + #62). Dry-run on develop: 0 scope blockers; 1 MATERIALIZATION_INVALID from inverted checkMaterializations when requireMaterializations=false. All 158 accepted flows are intra_component_lineage (0 graph_edge). Awaiting manager authorization before implementation.",
+      "created_at": "2026-09-02T23:57:26.229530Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "a9403443-b855-46ed-b575-476c18f3fae4",
+      "author": "home",
+      "text": "Plan approved. Worktree verified at /tmp/scanner-b7c3ae-flow-metric on cursor/enable-flow-metric-b7c3ae-v2 @ c2d9d0b (= origin/develop). Implementation authorized. Dry-run confirms 0 scope blockers, 1 materialization-code blocker to fix. All 158 flows are intra_component_lineage. Do not weaken tests; re-freeze baseline from current gold; digest from clean tree.",
+      "created_at": "2026-09-03T00:04:16.515250Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "1ff57107-15a2-496f-987e-5f3565c6124d",
+      "author": "home",
+      "text": "Implementation complete on cursor/enable-flow-metric-b7c3ae-v2: policy + flow-readiness wiring, checkMaterializations fix, baseline re-frozen (158 flows / 140 items, data-flows scorable). ci:smoke 100/100 pass. Opening PR to develop.",
+      "created_at": "2026-09-03T00:29:36.773951Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "e290bc95-0a1b-41ca-a3a2-93fc35104c34",
+      "author": "home",
+      "text": "PR #63 opened to develop (cursor/enable-flow-metric-b7c3ae-v2 @ ce62917). ci:smoke 100/100. Baseline: 158 flows / 140 items, data-flows scorable. Awaiting manager close + merge.",
+      "created_at": "2026-09-03T00:29:54.032382Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "e2f93aa7-1355-4f65-856d-06d58900da9e",
+      "author": "home",
+      "text": "Follow-up bug fixed in PR #64 (merged to develop 6d241f8). Data-flows recall denominator now 158; round-trip regression test added.",
+      "created_at": "2026-09-03T02:18:57.614908Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-02T15:03:34.992425Z",
-  "updated_at": "2026-09-02T15:03:39.905584Z",
-  "closed_at": null,
+  "updated_at": "2026-09-03T02:19:08.474552Z",
+  "closed_at": "2026-09-03T02:19:08.474552Z",
+  "right_now_summary": "Data-flows now counts 158 intra-component flows, with the recall fix merged and tested.",
+  "right_now_updated_at": "2026-09-09T13:01:03.172615Z",
   "custom": {
     "project_label": "KDATAP",
     "source": "shared"

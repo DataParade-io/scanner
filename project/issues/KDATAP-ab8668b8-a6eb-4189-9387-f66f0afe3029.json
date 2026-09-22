@@ -1,0 +1,49 @@
+{
+  "id": "KDATAP-ab8668b8-a6eb-4189-9387-f66f0afe3029",
+  "title": "Detect intra-component flows for Ruby repos (discourse/redmine/spree)",
+  "description": "Components now exist on discourse/redmine/spree (136/519 after PR #69) but their ~37 gold data-flows score 0. The flow detector emits flows with correct identity keys (flow:asset:api->asset:database) but they don't match gold, which expects intra-component lineage on specific entities (e.g. discourse::discourse-session-auth-service). Make the intra-component flow detector emit self-loops for Ruby repos that match gold entity/evidence alignment. Do not change gold. Measure against pinned baseline; data-flows recall up from 10/158, precision not cratered, other layers unchanged.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "b7833a90-c85c-4351-b509-ba0720d0574e",
+      "author": "home",
+      "text": "Plan approved. Worktree verified at /tmp/scanner-ruby-flows on cursor/ruby-intra-flows @ b3a342e (= origin/develop). Implementation authorized. Root cause: 4 flow-detector gaps (PII gate, evidence anchoring, component resolution, cross-subtype noise). Fix: Ruby file-level declaration path, PII signals for Rails association symbols, line-anchored dedupe, Ruby initializer/model resolution, ORM span + flow type. Flow detector only; no component/gold/other-layer changes. Target: data-flows 10/158 -> 20+, precision not cratered, other layers unchanged.",
+      "created_at": "2026-09-04T03:27:07.608179Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "8ead2bf8-fb24-4bab-a3ba-a91317dedacf",
+      "author": "home",
+      "text": "Scorecard v4: data-flows 20/158 (discourse 4/16, redmine 1/12, spree 3/9). mentions 45/79, items 43/140, components 136/519 unchanged. Committing and opening PR to develop.",
+      "created_at": "2026-09-04T07:43:09.967196Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "8610b481-4c75-43ff-86c8-4934c1bc26ba",
+      "author": "home",
+      "text": "PR opened: https://github.com/DataParade-io/scanner/pull/70 — data-flows 20/158, other layers unchanged. Awaiting review/merge.",
+      "created_at": "2026-09-04T07:43:29.542630Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "0f3bfc28-74aa-42cf-994d-6b5be70772ab",
+      "author": "home",
+      "text": "Merged PR #70 to develop. Data-flows 10->20/158 (precision 3.6%, up from 3.0%). 10 genuine new matches (discourse 4, redmine 1, spree 3, wordpress 2) with evidence overlap. Other layers unchanged. Redmine 1/12 and remaining discourse/spree gaps are follow-up. Closing.",
+      "created_at": "2026-09-04T08:16:14.482819Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-04T03:24:04.810725Z",
+  "updated_at": "2026-09-04T08:16:14.505126Z",
+  "closed_at": "2026-09-04T08:16:14.505126Z",
+  "right_now_summary": "PR #70 merged, raising data-flow matches from 10 to 20 of 158 while leaving other layers unchanged.",
+  "right_now_updated_at": "2026-09-09T13:02:53.590907Z",
+  "custom": {}
+}

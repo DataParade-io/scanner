@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "e9ecf072-38d1-4e14-a599-a9e137835f22",
+  "issue_id": "KDATAP-9b83f635-dfc9-42ad-978b-b4464ecbc1db",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T21:05:39.855Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Correct ground truth (corpus skill), not scanner alignment.\n\nFive KDATAP-a0e80b Tier A rows remain `accepted` with a suffix-derived concept that contradicts pinned source and `expected.labels`. Leave a0e80b in awaiting-review; this is a separate correction pass.\n\n| id | wrong leaf / key | source truth |\n| --- | --- | --- |\n| redmine-email-address | `address` (street) | email (`URI::MailTo::EMAIL_REGEXP`) |\n| directus-user-password | `password` | argon2 hash / `password_verifier` |\n| ghost-staff-password-item | `password` | hashed credential |\n| pocketbase-password-hash | `password` | bcrypt verifier |\n| strapi-user-password | `password` | bcrypt hash |\n\nDo:\n\n- Demote these five to `needs_adjudication` so they are not accepted gold with the wrong concept.\n- Fix or withhold the `candidate` leaf so it does not propose the contradicted suffix mapping. Ontology only from `patterns/personal-data-concept-map.yaml`. If `password_verifier` is not a scored leaf, withhold a leaf and keep adjudication.\n- Do not run `scan()` or use detector output.\n- Do not rewrite other data-item rows, flows, or components.\n- Do not write `review_state: accepted`.\n- Record before/after in `pass.md`.\n\nParent decision (b0d5e2): labels are expected to expose scanner defects. This slice only fixes annotation truth.",
+    "issue_type": "annotation",
+    "labels": [],
+    "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+    "priority": 1,
+    "status": "open",
+    "title": "Correct five mislabeled accepted data-item concepts"
+  }
+}

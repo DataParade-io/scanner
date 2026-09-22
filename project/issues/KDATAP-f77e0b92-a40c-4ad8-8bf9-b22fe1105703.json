@@ -1,0 +1,56 @@
+{
+  "id": "KDATAP-f77e0b92-a40c-4ad8-8bf9-b22fe1105703",
+  "title": "Pin baseline scanner performance at develop 6d241f8",
+  "description": "Capture the four-layer scorecard (recall/precision) at current develop (6d241f8) as the pinned reference baseline. Materialize clones, run the scorecard, record the numbers in a baseline-performance doc/artifact. This is the reference every scanner-improvement slice diffs against. Do not change scanner code or gold.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "40553a8d-9589-4b43-a2ed-2f5a6174d00f",
+      "author": "home",
+      "text": "Starting: plan-only pass to capture and pin the four-layer baseline at develop 6d241f8.",
+      "created_at": "2026-09-03T12:57:00.478603Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "8fc5e936-9821-4338-93d7-2d7d80a9e90d",
+      "author": "home",
+      "text": "## Plan-only pass (awaiting manager authorization)\n\n**Worktree:** `/tmp/scanner-f77e0b-baseline` on `cursor/pin-baseline-performance` @ `6d241f8`.\n\n**Scope:** measurement + committed artifacts/docs only. No scanner code, no gold YAML, no freeze-baseline overwrite.\n\n**Capture (authorized phase):**\n1. Pre-flight: clean tree, `git rev-parse HEAD` = `6d241f8`.\n2. Reuse clones: symlink worktree `tests/benchmark/.cache` → primary `/Users/home/Projects/scanner/tests/benchmark/.cache` (29 repos present).\n3. `pnpm install --frozen-lockfile` (if needed).\n4. `pnpm run benchmark:validate-materializations` (all 29 valid).\n5. `pnpm run benchmark:scorecard -- --write-report tests/fixtures/baseline/series-1-performance-baseline.json`.\n\n**Artifacts to add:**\n- `tests/fixtures/baseline/series-1-performance-baseline.json` (schema `performance-baseline/1`, embed full `scorecard-vector/2` + headline summary + SHA/timestamp).\n- `tests/fixtures/baseline/series-1-performance-baseline.md` (generated human table).\n- `project/wiki/baseline-performance.md` (append-only history; row 1 = reference @ 6d241f8).\n\n**Diff policy for improvement slices:** re-run scorecard, compare per-layer recall/precision numerators+denominators vs pinned reference; PR shows delta; append new history row (never overwrite reference JSON).\n\n**Note:** existing `series-1-baseline-artifact.json` is corpus fingerprint baseline @ `384d7f3` — different purpose/commit; leave untouched.",
+      "created_at": "2026-09-03T12:57:54.620006Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "9f8773fa-5dee-4661-a089-789c3a10e9c4",
+      "author": "home",
+      "text": "Plan approved. Worktree verified at /tmp/scanner-f77e0b-baseline on cursor/pin-baseline-performance @ 6d241f8 (= origin/develop). Implementation authorized: capture four-layer scorecard, write series-1-performance-baseline.{json,md} (new schema, do not overwrite corpus baseline), append-only wiki history. Measurement + doc only; no scanner or gold changes.",
+      "created_at": "2026-09-03T12:58:30.399779Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "dafb6ae8-e6d9-4a4f-830e-bf56a54810ae",
+      "author": "home",
+      "text": "Implementation complete. Scorecard captured @ 6d241f8 (numbers match expected). Committed performance-baseline artifacts + wiki. PR opened to develop — awaiting merge before worktree teardown.",
+      "created_at": "2026-09-03T13:01:23.911210Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "c0a36997-88ad-4ea3-89f4-d0e7e7f298c3",
+      "author": "home",
+      "text": "Merged PR #65 to develop. Baseline pinned at 6d241f8: mentions 33/79, 38/140, 3/519, 0/158. Reference artifact immutable; improvement slices append. Closing.",
+      "created_at": "2026-09-03T13:06:47.279698Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-03T12:56:57.779702Z",
+  "updated_at": "2026-09-03T13:06:47.301049Z",
+  "closed_at": "2026-09-03T13:06:47.301049Z",
+  "right_now_summary": "Baseline performance is pinned at 6d241f8, with scorecard artifacts and history recorded.",
+  "right_now_updated_at": "2026-09-09T13:03:10.038711Z",
+  "custom": {}
+}

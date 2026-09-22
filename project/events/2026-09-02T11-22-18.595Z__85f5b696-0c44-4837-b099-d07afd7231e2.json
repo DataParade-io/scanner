@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "85f5b696-0c44-4837-b099-d07afd7231e2",
+  "issue_id": "KDATAP-b702ea01-ec01-419c-9e87-8eb07d2ec66a",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-02T11:22:18.595Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Fix the 75 remaining readiness gate blockers (44 component decoys + 2 medusa scopes + 29 materializations are environment-only).\n\n1. **44 component decoy LOADER_EXEMPTION**: Negative decoy components (e.g. discourse-not-stripe, auth0-express-not-supabase) have review_state: accepted but expected.status: negative. The compat loader correctly yields needs_adjudication, but the gate flags LOADER_EXEMPTION. Fix: change review_state to rejected for these 44 negative decoy components (they are negatives, not accepted gold).\n\n2. **2 SCOPE_MISSING_OR_UNREVIEWED**: Medusa is missing data_items and mentions scope files in its layer-scopes.yaml. Fix: add the missing scope files with accepted review provenance.\n\nAfter this, the gate should report 29 blockers (MATERIALIZATION_INVALID only — environment, not code).\n\nLocks:\n- Do not run scan() or use detector output.\n- Do not change expected.status or labels — only review_state for the 44 decoys.\n- Do not touch positive components (563 accepted positives are correct).\n- Bump corpus-gold.digest if YAML changes.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "priority": 0,
+    "status": "open",
+    "title": "Fix remaining readiness gate blockers: 44 component decoys + 2 medusa scopes"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "id": "KDATAP-6b1c67b7-cd51-427f-a781-6f7c1580f029",
+  "title": "Adjudicate remaining proposed data-item findings",
+  "description": "Adjudicate the 247 Proposed data-item findings from pinned source + `patterns/personal-data-concept-map.yaml`.\n\nDisposition per row: accept, reject, or leave unresolved. Do not use scanner output as gold. Do not rewrite labels to match the scanner.\n\nOutput: adjudication ledger + packet for human accept. Finding issues stay Proposed until the packet is accepted; then `--apply` and board statuses follow YAML (accepted / rejected / proposed).\n\nOut of scope: scanner changes, data-flow rows (273, later slice), new repositories.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-182788f4-5749-4d39-a333-bd0e1d002ffd",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "0de13615-7457-4b52-ad27-68a00ae0206a",
+      "author": "home",
+      "text": "Starting: plan-only pass for adjudicating 247 Proposed data-item findings. Follow corpus skill. No scanner alignment.",
+      "created_at": "2026-09-02T22:04:14.106292Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "292ebf00-7d43-4b9f-b85a-1f81145c608a",
+      "author": "home",
+      "text": "Plan-only pass complete. Awaiting manager authorization before worktree + implementation.",
+      "created_at": "2026-09-02T22:05:50.542919Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "ebd9bb37-9271-4154-b7dd-945655326ebe",
+      "author": "home",
+      "text": "Plan review (not authorized).\n\nReject a numeric accept ceiling. Accept only when pinned source + closed concept map support it; otherwise unresolved. A quota would bias gold.\n\nWorktree named `/tmp/scanner-6b1c67-data-items` on `cursor/adjudicate-data-items-6b1c67` from `origin/develop` — create that first; do not start adjudication until it is verified on disk.\n\nDo not blindly `materialize --all`. Reuse existing pinned clones if they already match manifests.\n\nNo `scan()`. Findings stay Proposed until packet accept then `--apply`.",
+      "created_at": "2026-09-02T22:06:45.462921Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "50311cdf-4021-4031-b214-4edbc7374e0e",
+      "author": "home",
+      "text": "Plan review applied: no accept ceiling. Worktree created at /tmp/scanner-6b1c67-data-items on cursor/adjudicate-data-items-6b1c67 @ origin/develop (8cb55e7). Stopped — awaiting manager tree verification and implementation authorization.",
+      "created_at": "2026-09-02T22:06:56.318293Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "379b6e77-5d76-41de-a856-d6f554a015dd",
+      "author": "home",
+      "text": "Worktree verified at /tmp/scanner-6b1c67-data-items on cursor/adjudicate-data-items-6b1c67 @ 8cb55e7 (= origin/develop). Implementation authorized. No accept ceiling. No scan(). Packet accept before --apply.",
+      "created_at": "2026-09-02T22:07:14.987936Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "29b336d5-3d69-45ea-87f9-07f1184288e5",
+      "author": "home",
+      "text": "Slice-2 packet ready for Ryan. Ledger: annotations/KDATAP-6b1c67/adjudication-ledger.json (247 entries: 30 accept / 43 reject / 174 unresolved). pass.md + spot-check queue (43 rows). YAML unchanged. Findings stay proposed. No --apply.",
+      "created_at": "2026-09-02T22:10:37.625841Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "878ec211-51b8-426f-91ff-106986a70d99",
+      "author": "home",
+      "text": "Packet send-back: do not map refresh/session tokens to the `password` leaf.\n\nThe closed concept map has `password` only — no `credential_secret` / refresh-token leaf. `auth0-express-refresh-token-item`, `directus-session-token`, and `supabase-js-refresh-token-item` must be unresolved, not accept. That assignment invents a leaf.\n\nfirstname/lastname and plaintext password fields can stay. Re-run ledger + pass.md. Still no --apply, no finding status flips.",
+      "created_at": "2026-09-02T22:11:18.197790Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "8b61b323-c16a-4eed-9a34-82ddc3cd4272",
+      "author": "home",
+      "text": "Send-back fix applied: removed credential_secret→password branch for OAuth/session tokens. Revised ledger: 27 accept / 43 reject / 177 unresolved. Token rows auth0-express-refresh-token-item, directus-session-token, supabase-js-refresh-token-item now unresolved. pass.md updated. YAML unchanged.",
+      "created_at": "2026-09-02T22:11:41.923034Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "5dd20881-7a7e-4562-a67e-7c17b95f8719",
+      "author": "home",
+      "text": "Ryan accepted the slice-2 data-item packet (27 accept / 43 reject / 177 unresolved). Apply authorized.",
+      "created_at": "2026-09-02T22:13:32.808358Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "bf504584-4727-4ea4-a68c-34c19f24b161",
+      "author": "home",
+      "text": "Applied slice-2 ledger: 27 accept / 43 reject / 177 unresolved. YAML + digest updated. Findings synced. Tests green. Opening PR.",
+      "created_at": "2026-09-02T22:14:49.166610Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "f4b97ece-125c-405f-adc1-db2383a8d146",
+      "author": "home",
+      "text": "CI send-back on PR #61: nopcommerce-customer-password and wordpress-insert-user-pass-plaintext are YAML-accepted but canonical disposition still needs_adjudication (LOADER_EXEMPTION). Apply must write the candidate/canonical block, not only review_state.",
+      "created_at": "2026-09-02T22:16:26.368536Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "6133d735-be9c-41db-8e44-f307fe74f27d",
+      "author": "home",
+      "text": "CI still red on PR #61: corpus-gold digest pin sha256:b4d5ede2… does not match computed sha256:61d65fa2…. Recompute from a clean tree of the pushed commit; do not weaken the pin test.",
+      "created_at": "2026-09-02T22:18:57.504328Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "91eb1f33-cf03-41f4-a95e-a71e83074f45",
+      "author": "home",
+      "text": "Digest pin corrected to sha256:61d65fa2… (committed YAML). Waiting on smoke, then merge to develop.",
+      "created_at": "2026-09-02T22:20:08.403612Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "076e7575-6f00-452a-b544-5fae963fc872",
+      "author": "home",
+      "text": "Merged PR #61 to develop (5417484). Slice-2 gold live: data items 140 accepted / 119 rejected / 177 proposed. Closing.",
+      "created_at": "2026-09-02T22:24:21.830125Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "458361f7-7f9a-425e-b42a-1c321cc67614",
+      "author": "home",
+      "text": "PR #61 squash-merged to develop. Worktree /tmp/scanner-6b1c67-data-items removed; local branch deleted.",
+      "created_at": "2026-09-02T22:24:54.366338Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T22:04:05.904117Z",
+  "updated_at": "2026-09-02T22:24:54.366338Z",
+  "closed_at": "2026-09-02T22:24:21.852404Z",
+  "right_now_summary": "The adjudication ledger is merged, with slice-2 gold recording 140 accepted, 119 rejected, and 177 proposed findings.",
+  "right_now_updated_at": "2026-09-09T02:06:55.014221Z",
+  "custom": {}
+}

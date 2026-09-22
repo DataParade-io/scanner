@@ -1,0 +1,35 @@
+{
+  "id": "KDATAP-1ea0f65d-4efc-4fda-a0ad-75e21c5c5fd6",
+  "title": "Improve data-items detector recall (38/140 -> 60+)",
+  "description": "Data items recall is 43/140 (30.7%) on develop; baseline was 38/140 (27.1%). The +5 came from Ruby ingestion side effects, not data-items detector work. Target the data-items detector to improve recall toward 60+/140 without cratering precision, other layers unchanged. Investigate why the data-items detector misses ~97 of 140 gold positives. Do not change gold. Measure against pinned baseline.",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "9cbfbfb4-874f-4f47-b4b0-0a8d3924d81c",
+      "author": "home",
+      "text": "Plan approved. Worktree verified at /tmp/scanner-data-items on cursor/improve-data-items @ 86873e5 (= origin/develop). Implementation authorized. Root cause: 57 collision misses (rollup, not pattern-fixable) + 27 pattern gaps (compound tokens). Phase 1: token-aware alias matching (Approach A, reuses EVIDENCE_ALIAS_TO_RULE) to catch the 27 pattern misses -> ~70/140. Do NOT change rollup in Phase 1 (precision would crater). Precision gate: scoped >= 30%. No gold/eval/other-detector changes. Target: data-items 43/140 -> 60+, other layers unchanged.",
+      "created_at": "2026-09-04T08:34:42.577801Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "6dce6be5-5f0f-4203-9a01-291ffa223eb4",
+      "author": "home",
+      "text": "Round wind-down: Phase 1 merged via PR #71.\n\nScorecard (vs pinned baseline 6d241f8):\n- mentions: 33/79 → 62/79 (+29, side effect of alias matching)\n- data-items: 38/140 → 43/140 (unchanged this PR; rollup collisions block further gains)\n- components: 3/519 → 136/519 (prior slices)\n- data-flows: 0/158 → 20/158 (prior slices)\n\nPhase 1 target (60+ data-items recall) NOT met. Root cause confirmed: repo-wide rollup + assignOneToOne collision blocking (~57 misses). Phase 2 (rollup refactor) required for data-items target.\n\nClosing Phase 1 task. Phase 2 should be a new task under the epic.",
+      "created_at": "2026-09-04T10:21:23.439249Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-04T08:16:41.551238Z",
+  "updated_at": "2026-09-04T10:21:23.522133Z",
+  "closed_at": "2026-09-04T10:21:23.522133Z",
+  "right_now_summary": "Phase 1 is merged, but recall remains 43/140; Phase 2 must address rollup collisions to reach 60+.",
+  "right_now_updated_at": "2026-09-09T13:02:32.050239Z",
+  "custom": {}
+}

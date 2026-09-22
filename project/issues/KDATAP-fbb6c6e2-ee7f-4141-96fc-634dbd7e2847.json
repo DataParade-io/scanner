@@ -1,0 +1,98 @@
+{
+  "id": "KDATAP-fbb6c6e2-ee7f-4141-96fc-634dbd7e2847",
+  "title": "Improve data-flow recall across benchmark",
+  "description": "",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-30e15299-4c4f-4173-9303-fb9f2a54435c",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "ec69d302-0ee4-4ced-8cfb-8455038f32d2",
+      "author": "home",
+      "text": "Flows-first plan: preserve mentions/data-items at 100%; first verify and port duplicate-gold assignment fix, then target Magento webapi.xml routes, WordPress auth lineage, and Medusa re-exports. Benchmarks and full tests are required before closure.",
+      "created_at": "2026-09-14T20:51:20.457867Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "feec7c18-de5c-4a11-8c6b-51d4bcfb504e",
+      "author": "home",
+      "text": "Phase 0: added failing duplicate-gold flow spec, implemented strongest-overlap tie credit, and committed as 7089d40. Full suite: 1109 passed, 4 corpus-materialization tests failed because the develop worktree lacks tests/benchmark/.cache/repos; targeted assignment suite and build pass.",
+      "created_at": "2026-09-14T20:53:30.028603Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "7ddbd92a-fe18-4bf0-8672-a99d4d55867f",
+      "author": "home",
+      "text": "Phase 1 implementation committed as 00504b3: generic route declarations now classify as api_call, and Magento webapi.xml module-hint resolution deterministically selects an API component when overlap is absent. Added focused regression specs. Magento repository materialized for benchmark verification.",
+      "created_at": "2026-09-14T20:57:00.570695Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "01db5b0e-8ffc-4671-845e-314e1567e97b",
+      "author": "home",
+      "text": "Magento verification: XML was previously excluded from ingest/evaluation, so webapi.xml emitted no flows. Added XML language support and allowed analyzer-less XML config through component/data-flow layers (f4ec114), deterministic Magento module API resolution, and exact route-line evidence anchoring (00504b3, 2eff022). After preserving canonical omitted-flow_type defaults (08ad6e4), Magento data-flow recall improved from 3/42 (7.1%) to 37/42 (88.1%); mentions/data-items remained 100%.",
+      "created_at": "2026-09-14T21:04:04.341592Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "c7fda02c-a02b-4f29-ba72-82d9a835c574",
+      "author": "home",
+      "text": "WordPress Phase 2: added canonical adapter regression and endpoint enrichment for auth functions in pluggable.php/user.php/class-wp-session-tokens.php when scan resolution yields generic service. Committed ef536dd. Rebuilt full WordPress benchmark is running; result pending.",
+      "created_at": "2026-09-14T21:08:57.590635Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "193df5fc-4408-47d1-8c9a-3ea7ed1346ee",
+      "author": "home",
+      "text": "WordPress benchmark verified: data-flow recall improved from 0/16 to 5/16 (31.3%) with ef536dd; components remain 0/90, mentions/data-items remain 100%. Remaining WP misses need additional detector/component resolution work.",
+      "created_at": "2026-09-14T21:18:23.786033Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d02483a8-773f-4cbd-86c0-517d17013c30",
+      "author": "home",
+      "text": "Medusa verified: data-flow recall improved from 0/12 to 11/12 (91.7%), precision 68.8%. Implemented module re-export detection, Medusa fallback component ownership, subtype/vendor endpoint mapping, and deduplication; committed across the latest develop commits. One accepted flow remains unmatched; components remain 1/15.",
+      "created_at": "2026-09-14T21:27:09.823244Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "0c1ecf09-1838-4e50-aa6c-dffbc9b035ba",
+      "author": "home",
+      "text": "Regression verification: 1118 tests passed, 1 skipped. One materialization-validation test fails only because 26 benchmark repos are absent from this worktree cache; no implementation test regressions observed. Aggregate scorecard v3 launched with concurrency 3.",
+      "created_at": "2026-09-14T21:28:16.759474Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d56171c3-67e6-497b-b97d-766ed88d6eaa",
+      "author": "home",
+      "text": "Aggregate scorecard attempt failed immediately because benchmark caches were incomplete. Started sequential materialization of the remaining pinned repositories; once complete, rerun scorecard-flows-first-v3.",
+      "created_at": "2026-09-14T21:28:56.951021Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "93264b38-e6c4-4233-b6a8-16288e7502b7",
+      "author": "home",
+      "text": "Stopping point requested by stakeholder. Verified slices landed on develop: Magento 37/42 flows (88.1%), WordPress 5/16 (31.3%), Medusa 11/12 (91.7%); mentions/data-items stayed at 100% in tested repos. Full suite: 1118 passed, 1 skipped; one failure is missing-cache materialization validation. Full v3 scorecard was blocked by missing 26 repo caches; remaining materialization was stopped to limit usage. Task remains open for future redmine/discourse work and aggregate scorecard.",
+      "created_at": "2026-09-14T21:30:41.596960Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "ad43545f-edd4-432f-aa35-75953abb1de5",
+      "author": "home",
+      "text": "Work paused after stakeholder usage limit. Current committed implementation is on local develop through 63cc077; no code commit is pending. Remaining: full corpus materialization/scorecard v3, plus redmine/discourse and broader component recall.",
+      "created_at": "2026-09-14T22:01:12.287052Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-14T20:51:11.754108Z",
+  "updated_at": "2026-09-14T22:01:12.287078Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

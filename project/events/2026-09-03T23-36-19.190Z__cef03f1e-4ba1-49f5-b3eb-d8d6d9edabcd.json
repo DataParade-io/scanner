@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "cef03f1e-4ba1-49f5-b3eb-d8d6d9edabcd",
+  "issue_id": "KDATAP-2e250c10-2675-4e6d-ac97-a94e01ba91ef",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-03T23:36:19.190Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Components recall is 3/519 (0.6%). Two root causes: (1) scanner under-detects components (2 for pocketbase vs 7 gold); (2) identity-key mismatch — scanner uses type:name (per-instance, e.g. asset:pocketbase-database), gold uses type:subtype (per-class, e.g. asset:database). Even detected components don't score. Gold is mostly asset:database (181), asset:api (118), asset:auth_service (109). Fix the classifier to detect these classes and fix the identity key to subtype-based (or normalize in scoring). This unblocks the flow slice (40+ route flows need detected components for endpoints). Do not change gold. Measure against pinned baseline; recall up, precision not cratered.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+    "priority": 0,
+    "status": "open",
+    "title": "Detect component classes (database/api/auth_service) with subtype identity"
+  }
+}

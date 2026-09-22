@@ -1,0 +1,28 @@
+{
+  "id": "KDATAP-600b5b9b-13a6-47db-9095-f718579c0ccc",
+  "title": "Data-items Phase 2: evidence-scoped assignment (43/140 -> 60+)",
+  "description": "Phase 1 (#71) added token-aware PII aliases; line-level detection ~135/140 but scorecard recall stuck at 43/140 because hitsToDataItemFindings rolls all hits per data_item:{ruleId} into one finding, and assignOneToOne blocks findings that match multiple gold expectations (~57 collision misses).\n\nGoal: raise data-items recall to 60+/140 without cratering precision (>=30%), no regressions on mentions/components/data-flows.\n\nConstraints:\n- Do NOT change gold\n- Preserve intentional regression: data-item-jvm-username-multi-file must stay matched:false (one rolled-up finding cannot satisfy two same-key gold rows in fixture harness)\n- Preserve: single rolled-up finding per data_item:key with multiple sourceLines (eval.test.ts lines 36-52)\n- Measure vs pinned baseline at tests/fixtures/baseline/series-1-performance-baseline.json (6d241f8)\n\nInvestigate: evidence-scoped assignment, per-location pairing, or rollup refactor. PR #71 noted simulated 115/140 at 35% precision with per-line expansion but broke multi-file guard — find approach that satisfies both.\n\nWorktree: /tmp/scanner-d26093-rollup on branch cursor/data-items-rollup from origin/develop (0fd2b5a).",
+  "type": "task",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-d260930a-038f-43e0-8ade-253d81f5416a",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "63897065-3e6d-45cc-98c5-c850c5b2b3c7",
+      "author": "home",
+      "text": "Cancelled — user requested wind-down after round 1. No implementation.",
+      "created_at": "2026-09-04T10:52:21.320735Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-04T10:51:33.638483Z",
+  "updated_at": "2026-09-04T10:52:21.320735Z",
+  "closed_at": "2026-09-04T10:52:21.299055Z",
+  "right_now_summary": "The team is investigating evidence-scoped assignment to improve data-item recall without hurting precision.",
+  "right_now_updated_at": "2026-09-09T13:02:20.590889Z",
+  "custom": {}
+}

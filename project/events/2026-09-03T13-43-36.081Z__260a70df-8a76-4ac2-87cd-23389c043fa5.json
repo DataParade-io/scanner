@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "260a70df-8a76-4ac2-87cd-23389c043fa5",
+  "issue_id": "KDATAP-90ef14cd-8e7b-4924-95c2-5993fc91724a",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-03T13:43:36.081Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "PR #66 landed the intra-component lineage detector: data-flows recall 0->1/158, precision 1/48 (47 false positives). Tighten emission to reduce FPs while keeping the 1 TP (pocketbase-password-to-bcrypt-hash) and not regressing other layers. Investigate the 47 FPs by repo (ghost 10, pocketbase 7, directus/keycloak/posthog-user/saleor/strapi 4 each, etc.). Likely candidates: pattern specificity, dedupe, disposition gating. Measure against the pinned baseline; recall must not drop below 1/158, precision should rise. Do not change gold.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+    "priority": 1,
+    "status": "open",
+    "title": "Tighten intra-component flow detection precision (47 FPs at 1 TP)"
+  }
+}

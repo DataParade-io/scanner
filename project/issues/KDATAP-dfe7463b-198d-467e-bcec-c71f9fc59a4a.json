@@ -1,0 +1,49 @@
+{
+  "id": "KDATAP-dfe7463b-198d-467e-bcec-c71f9fc59a4a",
+  "title": "Ruby analyzer + patterns for Discourse/Redmine/Spree component detection",
+  "description": "Split from KDATAP-2e250c. Discourse/Redmine/Spree emit 0 components because there is no Ruby analyzer. New src/analyzers/ruby/ + patterns/ruby.patterns.yaml (Rails routes, ActiveRecord, session auth, Redis cache) + registry + language detection. Unblocks ~25+ Discourse/Redmine flows. Do not change gold. Measure against pinned baseline.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "5784dc9d-a0f6-4e8f-adc3-434ce9069506",
+      "author": "home",
+      "text": "Starting: plan-only pass for Ruby analyzer + patterns (Rails routes, ActiveRecord, session auth, Redis cache). Unblocks Discourse/Redmine/Spree components and ~25+ flows. No gold changes.",
+      "created_at": "2026-09-04T01:30:55.405459Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "2e3b5366-95cc-435c-b335-b8eabafe6369",
+      "author": "home",
+      "text": "Plan approved. Worktree verified at /tmp/scanner-dfe746-ruby on cursor/ruby-analyzer @ faec1b3 (= origin/develop). Implementation authorized. Mirror PHP contract: new src/analyzers/ruby/ + patterns/ruby.patterns.yaml + ingest .rb + layer-capability + registry. Patterns: ActiveRecord, Rails routes, session/auth, Redis cache, database.yml, service. Classifier tweak: honor componentSubType override for cache/service. Precision gates: client property for dedupe, path gates, auth-specific tokens. Unblocks Discourse/Redmine/Spree components + flows. No gold changes.",
+      "created_at": "2026-09-04T01:34:08.017985Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "161ba468-3318-450d-bd26-0efd4eee0867",
+      "author": "home",
+      "text": "PR #69 is CONFLICTING with develop (PR #68 identity fix landed after branch). Send-back: rebase cursor/ruby-analyzer onto current origin/develop, resolve the conflict in component-factory.ts/postprocessing.ts (PR #68 added subtype identity; PR #69 added componentSubType override — both changes must coexist). Push the rebase. Do not merge. Acceptance is running in parallel.",
+      "created_at": "2026-09-04T02:24:08.479124Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "a180c44f-030d-4fae-afd1-54bf89eb4f40",
+      "author": "home",
+      "text": "Merged PR #69 to develop. Components 3->136/519 (44.3% precision) — discourse 109/156, redmine 3/18, spree 8/16. Mentions 33->45, items 38->43 (Ruby ingestion). Data-flows 10/158 unchanged (Ruby flow unblock did not materialize — separate flow-detector slice needed). No gold/concept/data-flow-detector changes. Closing.",
+      "created_at": "2026-09-04T03:23:39.222579Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-03T23:38:48.295386Z",
+  "updated_at": "2026-09-04T03:23:39.244607Z",
+  "closed_at": "2026-09-04T03:23:39.244607Z",
+  "right_now_summary": "Ruby analyzer and patterns are merged, improving component detection; data-flow support still needs separate work.",
+  "right_now_updated_at": "2026-09-09T13:02:59.289529Z",
+  "custom": {}
+}

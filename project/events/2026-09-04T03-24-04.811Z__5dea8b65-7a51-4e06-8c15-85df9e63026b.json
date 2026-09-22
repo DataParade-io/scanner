@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "5dea8b65-7a51-4e06-8c15-85df9e63026b",
+  "issue_id": "KDATAP-ab8668b8-a6eb-4189-9387-f66f0afe3029",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-04T03:24:04.811Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Components now exist on discourse/redmine/spree (136/519 after PR #69) but their ~37 gold data-flows score 0. The flow detector emits flows with correct identity keys (flow:asset:api->asset:database) but they don't match gold, which expects intra-component lineage on specific entities (e.g. discourse::discourse-session-auth-service). Make the intra-component flow detector emit self-loops for Ruby repos that match gold entity/evidence alignment. Do not change gold. Measure against pinned baseline; data-flows recall up from 10/158, precision not cratered, other layers unchanged.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+    "priority": 0,
+    "status": "open",
+    "title": "Detect intra-component flows for Ruby repos (discourse/redmine/spree)"
+  }
+}

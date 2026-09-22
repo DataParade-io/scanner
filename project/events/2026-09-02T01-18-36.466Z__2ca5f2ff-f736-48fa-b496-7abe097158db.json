@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "2ca5f2ff-f736-48fa-b496-7abe097158db",
+  "issue_id": "KDATAP-47e33169-a94a-43f6-91c5-7afe1d8217da",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-02T01:18:36.466Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "AI adjudication pass over the 436 data-flow rows currently `needs_adjudication` after 8e7756 + a49e94.\n\nFor each row, read pinned source at the evidence span, apply the flow taxonomy and component gold, and propose a final disposition:\n\n- **accept** with canonical typed endpoints and data categories — source clearly shows a cross-component or intra-component flow\n- **reject** with rationale — not a data flow, or negative\n- **unresolved** with reason — genuinely ambiguous endpoint matching\n\nOutput: an adjudication ledger with a proposed disposition for every row. Human gate is at the packet level (sample + bucket counts), not row-by-row.\n\nLocks:\n- Do not run `scan()` or use detector output.\n- Component gold is already accepted; use it as input for endpoint typing.\n- Legacy `subject.key` preserved.\n- Follow `.agents/skills/curate-scanner-evaluation-corpus/SKILL.md` Correct ground truth.\n- Negative components (e.g. `wordpress-not-stripe`) must not be attributed as flow carriers.\n- Same ledger-then-flip pattern as 25b2f4 (data items): AI writes ledger, Ryan accepts packet, --apply flips YAML later.",
+    "issue_type": "annotation",
+    "labels": [],
+    "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+    "priority": 1,
+    "status": "open",
+    "title": "Adjudicate flow gold dispositions (accept/reject/unresolved)"
+  }
+}

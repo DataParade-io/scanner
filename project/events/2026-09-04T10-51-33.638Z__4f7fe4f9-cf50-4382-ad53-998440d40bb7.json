@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "4f7fe4f9-cf50-4382-ad53-998440d40bb7",
+  "issue_id": "KDATAP-600b5b9b-13a6-47db-9095-f718579c0ccc",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-04T10:51:33.638Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Phase 1 (#71) added token-aware PII aliases; line-level detection ~135/140 but scorecard recall stuck at 43/140 because hitsToDataItemFindings rolls all hits per data_item:{ruleId} into one finding, and assignOneToOne blocks findings that match multiple gold expectations (~57 collision misses).\n\nGoal: raise data-items recall to 60+/140 without cratering precision (>=30%), no regressions on mentions/components/data-flows.\n\nConstraints:\n- Do NOT change gold\n- Preserve intentional regression: data-item-jvm-username-multi-file must stay matched:false (one rolled-up finding cannot satisfy two same-key gold rows in fixture harness)\n- Preserve: single rolled-up finding per data_item:key with multiple sourceLines (eval.test.ts lines 36-52)\n- Measure vs pinned baseline at tests/fixtures/baseline/series-1-performance-baseline.json (6d241f8)\n\nInvestigate: evidence-scoped assignment, per-location pairing, or rollup refactor. PR #71 noted simulated 115/140 at 35% precision with per-line expansion but broke multi-file guard — find approach that satisfies both.\n\nWorktree: /tmp/scanner-d26093-rollup on branch cursor/data-items-rollup from origin/develop (0fd2b5a).",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-d260930a-038f-43e0-8ade-253d81f5416a",
+    "priority": 0,
+    "status": "open",
+    "title": "Data-items Phase 2: evidence-scoped assignment (43/140 -> 60+)"
+  }
+}

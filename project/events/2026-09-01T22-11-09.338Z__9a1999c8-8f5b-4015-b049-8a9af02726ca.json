@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "9a1999c8-8f5b-4015-b049-8a9af02726ca",
+  "issue_id": "KDATAP-a49e94c6-8ef3-4891-8e6d-078c2c25d40d",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-01T22:11:09.338Z",
+  "actor_id": "home",
+  "payload": {
+    "assignee": null,
+    "description": "Correct ground truth on flow candidate buckets (corpus skill). Ryan accepted GLM advisory on KDATAP-8e7756; parent pass returns to labeling until these are fixed.\n\n| id | packet | defect | fix |\n| --- | --- | --- | --- |\n| saleor-user-email-persisted | saleor | sole `graph_edge` is Django Model declaring own columns; inconsistent with unresolved twins sharing `flow:user-model->database` | `disposition_candidate: intra_component_lineage` (or `unresolved` with notes); align with medusa-customer-user-email-persisted / keycloak-user-entity-persist |\n| wordpress-signon-to-auth-cookie | wordpress | lineage attributes credentials→auth-cookie flow to negative `wordpress-not-stripe` | re-route to positive auth-cookie component or mark `unresolved`; do not attribute flow to negative component |\n\nLocks:\n- Edit only these two `data_flows.yaml` rows (+ ledger/pass if needed).\n- Do not run `scan()` or use detector output.\n- Do not write `review_state: accepted`.\n- Do not rewrite `subject.key` / `expected.labels`.\n- Bump `corpus-gold.digest` if YAML changes.\n- Parent KDATAP-8e7756 stays labeling until this lands and Ryan re-accepts the flow worksheet.",
+    "issue_type": "annotation",
+    "labels": [],
+    "parent": "KDATAP-b0d5e252-86ef-415d-aefd-95f9da839ac8",
+    "priority": 1,
+    "status": "open",
+    "title": "Correct two flow candidate mis-buckets from GLM review"
+  }
+}
