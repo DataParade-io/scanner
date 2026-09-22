@@ -1,0 +1,28 @@
+{
+  "id": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "title": "Improve scanner evaluation metrics against pinned baseline",
+  "description": "Improve scanner recall/precision on each layer against the pinned baseline performance. Gold is frozen; only scanner code changes. One task per layer gap in impact order: data-flows (0%), components (0.6%), data-items (27%), mentions (42%). Each slice: plan -> implement scanner code -> run scorecard -> diff vs baseline (recall up, precision not cratered) -> acceptance -> merge to develop -> update baseline record. Do not change gold. Do not merge to main.",
+  "type": "epic",
+  "status": "closed",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "538a3aeb-211f-4e5f-a61d-45eed69ba317",
+      "author": "home",
+      "text": "## Round wind-down (Sep 4 2026)\n\nEight scanner slices merged to develop since pinned baseline at 6d241f8 (#63–#71):\n\n| Layer | Baseline (6d241f8) | develop after round | Δ |\n|-------|-------------------|---------------------|---|\n| mentions | 33/79 (41.8%) | 62/79 (78.5%) | +29 |\n| data-items | 38/140 (27.1%) | 43/140 (30.7%) | +5 |\n| components | 3/519 (0.6%) | 136/519 (26.2%) | +133 |\n| data-flows | 0/158 (0%) | 20/158 (12.7%) | +20 |\n\nAll four layers improved; no layer regressed. Components and data-flows moved from near-zero to meaningful recall. Mentions improved substantially in the final slice (#71). Data-items improved modestly (+5 from Ruby side effects); the 60+ target requires Phase 2 rollup work (new task).\n\nMerged PRs: #63 enable flow metric, #64 flow_canonical round-trip, #65 pin baseline, #66 intra-component lineage, #67 widen flows, #68 component identity, #69 Ruby analyzer, #70 Ruby flows, #71 PII alias matching.\n\n**Stopping point:** Epic paused here. Next round should start with data-items Phase 2 (rollup/assignment collision fix) before more pattern work.",
+      "created_at": "2026-09-04T10:21:30.203585Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-03T12:56:54.349590Z",
+  "updated_at": "2026-09-04T10:21:30.360051Z",
+  "closed_at": "2026-09-04T10:21:30.360051Z",
+  "right_now_summary": "All scanner layers improved; the next work targets data-items rollup and assignment collisions.",
+  "right_now_updated_at": "2026-09-09T13:03:15.463406Z",
+  "custom": {}
+}
