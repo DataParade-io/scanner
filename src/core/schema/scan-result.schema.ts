@@ -74,6 +74,7 @@ export const detectedDataFlowSchema = z.object({
   description: z.string().optional(),
   confidence: z.number().min(0).max(1),
   sourceLocation: sourceLocationSchema.optional(),
+  sourceLocations: z.array(sourceLocationSchema).optional(),
   method: z.string().optional(),
   endpoint: z.string().optional(),
   dataCategories: z.array(z.string()).optional(),
