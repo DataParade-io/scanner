@@ -23,6 +23,7 @@ import {
   sortDataFlowsDeterministically,
 } from "./sorting";
 import type { OrchestratorScanResult } from "./orchestrator-result";
+import { enrichOrchestratorResultWithPersonalDataLayers } from "./enrich-personal-data-layers";
 import { assignStableComponentIds } from "./stable-component-ids";
 import { applyTerraformMinimalServiceScanResult } from "./terraform-minimal-services";
 import type { ServiceSection } from "../sectioning/discover-service-sections";
@@ -234,6 +235,8 @@ export function finalizeDeterministicScanResult(
     scanResult,
     files: work.files,
     findings: work.findings,
+    mentions: [],
+    dataItems: [],
     ledgerContext: {
       ingestOutcomes: work.ingestOutcomes,
       allIngestedFiles: work.allIngestedFiles,
@@ -254,5 +257,6 @@ export async function runDeterministicScan(
   onProgress?: (progress: ScanProgress) => void,
 ): Promise<OrchestratorScanResult> {
   const work = await runDeterministicScanPhases(rootPath, config, onProgress);
-  return finalizeDeterministicScanResult({ work }, onProgress);
+  const result = finalizeDeterministicScanResult({ work }, onProgress);
+  return enrichOrchestratorResultWithPersonalDataLayers(rootPath, result);
 }
