@@ -28,7 +28,7 @@ export function buildScanPersonalDataLayers(
         : undefined;
 
     return {
-      id: mentionIdentity(hit.id),
+      id: mentionIdentity(hit.id, hit.evidence.filePath, hit.evidence.startLine),
       filePath: hit.evidence.filePath,
       startLine: hit.evidence.startLine,
       endLine: hit.evidence.endLine,
@@ -44,7 +44,11 @@ export function buildScanPersonalDataLayers(
 
   for (const hit of inventory.hits) {
     const id = dataItemIdentity(hit.id);
-    const mentionId = mentionIdentity(hit.id);
+    const mentionId = mentionIdentity(
+      hit.id,
+      hit.evidence.filePath,
+      hit.evidence.startLine,
+    );
     let entry = dataItemsById.get(id);
     if (!entry) {
       entry = { labels: new Set(hit.labels), mentionIds: [] };
