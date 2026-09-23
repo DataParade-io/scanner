@@ -1,6 +1,7 @@
 import type { SourceLocation } from "../types/file";
 import { runStructuralScan } from "./structural-scan";
 
+/** File/line span from a scanner Discovery (`ScanResult` + raw pattern hits). */
 export interface EvalFinding {
   filePath: string;
   startLine: number;

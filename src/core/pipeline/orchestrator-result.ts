@@ -26,8 +26,10 @@ export interface ScanDataItem {
 }
 
 export interface OrchestratorScanResult {
+  /** Published Discovery bundle. Product noun is Discovery; code symbol stays ScanResult. */
   scanResult: ScanResult;
   files: FileInfo[];
+  /** Raw Discovery / pattern hits. Not OCSF Findings. */
   findings: RawFinding[];
   mentions: ScanMention[];
   dataItems: ScanDataItem[];

@@ -1,6 +1,6 @@
 # Fixture evaluation harness
 
-Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts` and delegates to the published boundary in `src/eval/` (`@dataparade/scanner/eval`). See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135).
+Deterministic evaluation against committed `tests/fixtures/*` trees. Ground truth lives beside layer adapters under `tests/eval/layers/`; shared scoring lives in `tests/eval/score.ts` and delegates to the published boundary in `src/eval/` (`@dataparade/scanner/eval`). See `ground-truth-schema.md` for layer identity and matching rules, and `canonical-representation.md` for the versioned canonical contract (KDATAP-b18135). Scanner output compared here is **Discovery** (not an OCSF Finding); see [Discovery vs Finding](../../project/wiki/discovery-vs-finding.md).
 
 Four **headline layers** form the evaluation vector. `raw-hits` and `data-actions` are **diagnostic only** — scanned and reported but excluded from headline gates. There is **no cross-layer scalar**.
 
@@ -68,7 +68,7 @@ Subject keys use `${type}:${name.toLowerCase()}`, aligned with `scan()` componen
 | `recall` | Matched evaluable positives ÷ all evaluable positives |
 | `labelAccuracy` | Correctly labelled matches ÷ matched positives |
 | `correctLabelRecall` | Correctly labelled matches ÷ evaluable positives |
-| `precision` | Scanner findings in `exhaustiveScopeFiles` that match an accepted **positive** ÷ all scanner findings in those files. Extra hits (including a Stripe finding in a repo that does not use Stripe) are false positives. Explicit negatives are not the precision denominator. |
+| `precision` | Scanner discoveries in `exhaustiveScopeFiles` that match an accepted **positive** ÷ all scanner discoveries in those files. Extra hits (including a Stripe discovery in a repo that does not use Stripe) are false positives. Explicit negatives are not the precision denominator. |
 | `negativeCasePassRate` | Clean explicit negatives ÷ negative cases (span-level must-not-fire checks, not precision) |
 | `unreadCount` | Cases whose evidence file was not scanned and is not in that case's exhaustive file list |
 

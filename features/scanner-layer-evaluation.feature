@@ -85,6 +85,6 @@ Feature: Scanner layer evaluation
   Scenario: Ingested miss still counts for layer recall
     Given the Raw Hit Span score is on the scorecard
     And a gold Item whose evidence file the layer scanner ingested
-    And no matching subject identity finding
+    And no matching subject identity discovery
     When I run plexus evaluate accuracy for the Raw Hit Span score
     Then that Item counts as a miss for layer evaluation

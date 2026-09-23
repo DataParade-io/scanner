@@ -52,7 +52,7 @@ how minimal APIs are detected.
 
 Sources are pre-processed by `stripCommentsPreservingLayout()` with
 `verbatimStrings` enabled, so `@"C:\path"` literals survive and commented-out
-routes produce no findings. Line numbers are preserved.
+routes produce no discoveries. Line numbers are preserved.
 
 ---
 
@@ -191,8 +191,8 @@ Package names are matched against both the third-party catalog and the
 namespaces usually coincide (`Npgsql`, `MongoDB.Driver`, `StackExchange.Redis`).
 
 `appsettings*.json` files are also collected. Each yields a `config_file`
-finding, and every entry under `ConnectionStrings` yields a
-`database_connection` finding with the engine inferred from the connection
+discovery, and every entry under `ConnectionStrings` yields a
+`database_connection` discovery with the engine inferred from the connection
 string (`Host=`/`Port=5432` → postgres, `mongodb://` → mongodb,
 `abortConnect=` → redis, `Initial Catalog=` → mssql, …).
 
