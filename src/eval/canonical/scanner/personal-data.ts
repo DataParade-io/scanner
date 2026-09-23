@@ -27,6 +27,23 @@ export function extractPersonalDataRuleId(subjectKey: string): string {
   throw new Error(`Personal data subject key missing known prefix: '${subjectKey}'`);
 }
 
+/** Gold and eval pairing use concept identity; scanner subject keys may include file+line. */
+export function personalDataConceptIdentityKey(
+  layer: PersonalDataEvalLayer,
+  ruleId: string,
+): string {
+  switch (layer) {
+    case "mentions":
+      return `mention:${ruleId}`;
+    case "raw-hits":
+      return `raw_hit:${ruleId}`;
+    case "data-items":
+      return `data_item:${ruleId}`;
+    default:
+      throw new Error(`Unsupported personal-data eval layer: ${layer}`);
+  }
+}
+
 function labelObservedTokens(labels: readonly string[]): ObservedTokenCandidate[] {
   if (labels.length === 0) {
     return [];
@@ -51,7 +68,7 @@ export function adaptPersonalDataFinding(
 
   return buildScannerFinding({
     layer: LAYER_BY_EVAL[layer],
-    identityKey: finding.subjectKey,
+    identityKey: personalDataConceptIdentityKey(layer, ruleId),
     conceptLeaf,
     conceptAncestry,
     evidenceLocations: finding.evidenceLocations.map((location) => ({
