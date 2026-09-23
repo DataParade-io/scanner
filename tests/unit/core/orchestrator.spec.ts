@@ -425,13 +425,13 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
 
     const loginMention = mentions.find(
       (row) =>
-        row.id === "mention:email" &&
+        row.id === "mention:email:src/auth/login.ts:13" &&
         row.filePath === "src/auth/login.ts" &&
         row.startLine === 13,
     );
     expect(loginMention).toEqual(
       expect.objectContaining({
-        id: "mention:email",
+        id: "mention:email:src/auth/login.ts:13",
         filePath: "src/auth/login.ts",
         startLine: 13,
         endLine: 13,
@@ -440,9 +440,35 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     );
 
     const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
+    expect(emailDataItem?.mentionIds).toContain("mention:email:src/auth/login.ts:13");
+    expect(emailDataItem).toEqual(
+      expect.objectContaining({
+        id: "data_item:email",
+        labels: ["user_email"],
+      }),
+    );
+  });
+
+  it("assigns distinct mention ids for the same rule on different lines", async () => {
+    const fixturesRoot = path.join(
+      __dirname,
+      "..",
+      "..",
+      "fixtures",
+      "pii-email-dual-line",
+    );
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { mentions, dataItems } = await scan(fixturesRoot, config);
+
+    const emailMentions = mentions.filter((row) => row.id.startsWith("mention:email:"));
+    expect(emailMentions.length).toBe(2);
+    expect(new Set(emailMentions.map((row) => row.id)).size).toBe(2);
+
+    const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
     expect(emailDataItem).toEqual({
       id: "data_item:email",
-      mentionIds: ["mention:email"],
+      mentionIds: emailMentions.map((row) => row.id).sort((a, b) => a.localeCompare(b)),
       labels: ["user_email"],
     });
   });
