@@ -423,8 +423,8 @@ describe("scanner canonical adapters", () => {
       scanCanonicalMentions("jvm-manifests-basic"),
       scanCanonicalRawHits("jvm-manifests-basic"),
     ]);
-    const mention = mentions.findings.find((entry) =>
-      entry.identity.identityKey.startsWith("mention:username:"),
+    const mention = mentions.findings.find(
+      (entry) => entry.identity.identityKey === "mention:username",
     );
     const raw = rawHits.findings.find((entry) => entry.identity.identityKey === "raw_hit:username");
     expect(mention).toBeDefined();
