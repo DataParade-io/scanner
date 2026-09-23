@@ -408,6 +408,45 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     expect(statsByLanguage.has("python")).toBe(true);
   });
 
+  it("exposes personal-data mentions and data items from the PII inventory layer", async () => {
+    const fixturesRoot = path.join(
+      __dirname,
+      "..",
+      "..",
+      "fixtures",
+      "pii-email-basic",
+    );
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { mentions, dataItems } = await scan(fixturesRoot, config);
+
+    expect(mentions.length).toBeGreaterThan(0);
+    expect(dataItems.length).toBeGreaterThan(0);
+
+    const loginMention = mentions.find(
+      (row) =>
+        row.id === "mention:email" &&
+        row.filePath === "src/auth/login.ts" &&
+        row.startLine === 13,
+    );
+    expect(loginMention).toEqual(
+      expect.objectContaining({
+        id: "mention:email",
+        filePath: "src/auth/login.ts",
+        startLine: 13,
+        endLine: 13,
+        labels: ["user_email"],
+      }),
+    );
+
+    const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
+    expect(emailDataItem).toEqual({
+      id: "data_item:email",
+      mentionIds: ["mention:email"],
+      labels: ["user_email"],
+    });
+  });
+
   it("keeps direct app -> postgres edges end-to-end when provider nodes are absent", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "dp-orch-provider-topology-"));
     try {
