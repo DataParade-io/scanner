@@ -45,7 +45,7 @@ describe("eval-layers/personal-data inventory", () => {
     ]);
     expect(mentions).toEqual([
       expect.objectContaining({
-        subjectKey: "mention:username",
+        subjectKey: "mention:username:application.yml:3",
         labels: ["username"],
         evidenceLocations: [
           {
@@ -134,7 +134,7 @@ describe("eval-layers/collectPersonalDataFindings", () => {
 
     expect(result.findings).toEqual([
       expect.objectContaining({
-        subjectKey: "mention:username",
+        subjectKey: "mention:username:application.yml:3",
         labels: ["username"],
       }),
     ]);

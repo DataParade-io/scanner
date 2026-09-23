@@ -16,7 +16,12 @@ export function extractPersonalDataRuleId(subjectKey: string): string {
   const normalized = subjectKey.trim().toLowerCase();
   for (const prefix of RULE_ID_PREFIXES) {
     if (normalized.startsWith(prefix)) {
-      return normalized.slice(prefix.length);
+      const rest = normalized.slice(prefix.length);
+      if (prefix === "mention:") {
+        const ruleEnd = rest.indexOf(":");
+        return ruleEnd === -1 ? rest : rest.slice(0, ruleEnd);
+      }
+      return rest;
     }
   }
   throw new Error(`Personal data subject key missing known prefix: '${subjectKey}'`);
