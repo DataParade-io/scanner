@@ -2,13 +2,19 @@ export {
   createDefaultScanConfiguration,
   scan,
 } from "./core/pipeline/orchestrator";
-export type { OrchestratorScanResult } from "./core/pipeline/orchestrator-result";
+export type {
+  OrchestratorScanResult,
+  ScanDataItem,
+  ScanMention,
+} from "./core/pipeline/orchestrator-result";
 
 export {
   emitScanProgress,
   finalizeDeterministicScanResult,
   runDeterministicScanPhases,
 } from "./core/pipeline/deterministic-scan";
+export { enrichOrchestratorResultWithPersonalDataLayers } from "./core/pipeline/enrich-personal-data-layers";
+export { buildScanPersonalDataLayers } from "./core/pipeline/build-scan-personal-data-layers";
 export type {
   DeterministicScanWork,
   FinalizeDeterministicScanInput,

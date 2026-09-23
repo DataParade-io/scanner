@@ -10,9 +10,26 @@ export interface OrchestratorLedgerContext {
   config: ScanConfiguration;
 }
 
+export interface ScanMention {
+  id: string;
+  filePath: string;
+  startLine: number;
+  endLine: number;
+  code?: string;
+  labels: string[];
+}
+
+export interface ScanDataItem {
+  id: string;
+  mentionIds: string[];
+  labels: string[];
+}
+
 export interface OrchestratorScanResult {
   scanResult: ScanResult;
   files: FileInfo[];
   findings: RawFinding[];
+  mentions: ScanMention[];
+  dataItems: ScanDataItem[];
   ledgerContext?: OrchestratorLedgerContext;
 }
