@@ -11,7 +11,11 @@ export { personalDataFindingToLayerFinding };
 
 export function mentionHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
   return personalDataFindingToLayerFinding({
-    subjectKey: mentionIdentity(hit.id),
+    subjectKey: mentionIdentity(
+      hit.id,
+      hit.evidence.filePath,
+      hit.evidence.startLine,
+    ),
     labels: [...hit.labels],
     evidenceLocations: [
       {

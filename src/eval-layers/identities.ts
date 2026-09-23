@@ -15,8 +15,12 @@ export function rawHitIdentity(ruleId: string): string {
   return `raw_hit:${ruleId}`;
 }
 
-export function mentionIdentity(ruleId: string): string {
-  return `mention:${dataItemConceptId(ruleId)}`;
+export function mentionIdentity(
+  ruleId: string,
+  filePath: string,
+  startLine: number,
+): string {
+  return `mention:${dataItemConceptId(ruleId)}:${filePath}:${startLine}`;
 }
 
 export function dataItemIdentity(ruleId: string): string {

@@ -67,7 +67,11 @@ function hitToRawFinding(hit: PiiSignalHit): PersonalDataFinding {
 
 function hitToMentionFinding(hit: PiiSignalHit): PersonalDataFinding {
   return {
-    subjectKey: mentionIdentity(hit.id),
+    subjectKey: mentionIdentity(
+      hit.id,
+      hit.evidence.filePath,
+      hit.evidence.startLine,
+    ),
     labels: [...hit.labels],
     evidenceLocations: [hitToEvidence(hit)],
   };
