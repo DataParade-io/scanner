@@ -1,0 +1,26 @@
+{
+  "id": "KDATAP-106c5f3d-8777-4094-aac8-7cafd4e75ff5",
+  "title": "Rails models emitted as database components",
+  "description": "",
+  "type": "bug",
+  "status": "in_progress",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-d9763c2f-0f1c-4d60-9e08-5bedb4810b3a",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "54d02ab7-aeb6-4161-b115-8a1be6564759",
+      "author": "os",
+      "text": "Observed behavior: Rails ActiveRecord models and concerns were emitted as database components, resources routes produced no API boundary, and Gemfile third parties such as Stripe were absent. Fix: keep model classes as evidence only, detect Rails route DSL boundaries, and map runtime Gemfile dependencies through canonical third-party detection. Proof: Ruby scanner tests pass (15/15), scanner builds and lints, and the consuming CLI suite passes (360/360). Commit: 4363d8ce2925e3457923432e3de1703e0f9ab46f.",
+      "created_at": "2026-09-24T18:27:25.420053Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-24T18:27:16.444920Z",
+  "updated_at": "2026-09-24T18:27:25.420053Z",
+  "closed_at": null,
+  "custom": {}
+}

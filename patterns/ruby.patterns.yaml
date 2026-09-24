@@ -2,12 +2,7 @@
 #
 # Line-based rules use filePathRegex + contentRegex on stripped source.
 # database_yml rules also apply when ingest language is yaml (see ruby detector).
-
-active_record:
-  patternId: database_connection
-  filePathRegex: "(?:^|/)app/models/.+\\.rb$"
-  classRegex: "^\\s*(?:class|module)\\s+([\\w:]+)\\b"
-  confidence: 0.9
+# ActiveRecord classes are domain evidence, not architecture components.
 
 database_yml:
   patternId: database_connection
@@ -33,6 +28,35 @@ routes:
         - regex: "\\b(get|post|put|patch|delete|options|match)\\s+[\"']([^\"']+)[\"']"
           methodGroup: 1
           pathGroup: 2
+          routeKind: verb
+        - regex: "\\bresources\\s+:([A-Za-z_]\\w*)"
+          pathGroup: 1
+          routeKind: resources
+        - regex: "\\bresources\\s+[\"']([^\"']+)[\"']"
+          pathGroup: 1
+          routeKind: resources
+        - regex: "\\bresource\\s+:([A-Za-z_]\\w*)"
+          pathGroup: 1
+          routeKind: resource
+        - regex: "\\bresource\\s+[\"']([^\"']+)[\"']"
+          pathGroup: 1
+          routeKind: resource
+        - regex: "\\bnamespace\\s+:([A-Za-z_]\\w*)"
+          pathGroup: 1
+          routeKind: namespace
+        - regex: "\\bnamespace\\s+[\"']([^\"']+)[\"']"
+          pathGroup: 1
+          routeKind: namespace
+        - regex: "\\bscope(?:\\s+path:)?\\s*[\"']([^\"']+)[\"']"
+          pathGroup: 1
+          routeKind: scope
+        - regex: "^\\s*member\\s+do\\b"
+          routeKind: member
+        - regex: "^\\s*collection\\s+do\\b"
+          routeKind: collection
+        - regex: "\\bmount\\s+.+?=>\\s*[\"']([^\"']+)[\"']"
+          pathGroup: 1
+          routeKind: mount
 
 auth:
   libraries:
@@ -59,24 +83,54 @@ auth:
       strategy: bcrypt
       confidence: 0.85
 
-    - id: authenticate
+    - id: devise
       patternId: auth_middleware
       contentRegexes:
-        - "\\bdef\\s+authenticate\\w*\\b"
-        - "\\bbefore_action\\s+:authenticate"
-        - "\\bcurrent_user\\b"
-        - "\\btry_to_login\\b"
-        - "\\bcheck_password\\b"
+        - "\\bdevise\\s+:[A-Za-z_]"
+        - "\\bauthenticate_[A-Za-z_]\\w*!?\\b"
+        - "\\bDevise\\."
+      strategy: devise
+      confidence: 0.9
+
+    - id: warden
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bWarden::"
+        - "\\b(?:request\\.)?env\\[[\"']warden[\"']\\]"
+      strategy: warden
+      confidence: 0.9
+
+    - id: omniauth
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bOmniAuth(?:\\.|::)"
+        - "\\bomniauth\\b"
+      strategy: oauth
+      confidence: 0.9
+
+    - id: jwt
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bJWT\\.(?:encode|decode)\\b"
+        - "\\brequire\\s+[\"']jwt[\"']"
+      strategy: jwt
+      confidence: 0.9
+
+    - id: rails_session
+      patternId: auth_middleware
+      contentRegexes:
+        - "\\bsession\\s*\\[[^\\]]+\\]"
+        - "\\breset_session\\b"
       strategy: session
       confidence: 0.85
 
-    - id: auth_token_model
+    - id: api_key
       patternId: auth_middleware
-      filePathRegex: "(?:^|/)app/models/.*(?:auth_token|api_key|user_identity)\\.rb$"
       contentRegexes:
-        - "^\\s*class\\s+\\w+"
-      strategy: token
-      confidence: 0.85
+        - '["''](?:X-API-Key|HTTP_X_API_KEY)["'']'
+        - "\\bheaders\\[[\"']Authorization[\"']\\].*\\bApi-Key\\b"
+      strategy: api_key
+      confidence: 0.9
 
 cache:
   clients:
@@ -101,17 +155,34 @@ cache:
         - "\\b:redis_cache_store\\b"
       confidence: 0.85
 
-services:
-  - id: rails_service_class
-    patternId: auth_middleware
-    componentSubType: service
-    filePathRegex: "(?:^|/)app/services/.+\\.rb$"
-    classRegex: "^\\s*(?:class|module)\\s+([\\w:]*Service)\\b"
-    confidence: 0.85
+external_apis:
+  httpClients:
+    - id: net_http
+      patternId: external_api_call
+      clientName: net_http
+      contentRegexes:
+        - "\\bNet::HTTP(?:\\.(?:get|post|put|patch|delete|request|start)|::(?:Get|Post|Put|Patch|Delete)\\b)"
+      confidence: 0.9
 
-  - id: rails_concern_processing
-    patternId: auth_middleware
-    componentSubType: service
-    filePathRegex: "(?:^|/)app/(?:services|models/concerns)/.*(?:processing|workflow)\\.rb$"
-    classRegex: "^\\s*(?:class|module)\\s+([\\w:]*(?:Processing|Workflow))\\b"
-    confidence: 0.8
+    - id: httparty
+      patternId: external_api_call
+      clientName: httparty
+      contentRegexes:
+        - "\\bHTTParty\\.(?:get|post|put|patch|delete|head|options)\\b"
+      confidence: 0.9
+
+    - id: faraday
+      patternId: external_api_call
+      clientName: faraday
+      contentRegexes:
+        - "\\bFaraday(?:\\.(?:get|post|put|patch|delete|head|new)|::Connection\\.new)\\b"
+      confidence: 0.9
+
+    - id: rest_client
+      patternId: external_api_call
+      clientName: rest_client
+      contentRegexes:
+        - "\\bRestClient\\.(?:get|post|put|patch|delete|head|options|execute)\\b"
+      confidence: 0.9
+
+services: []
