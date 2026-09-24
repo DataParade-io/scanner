@@ -19,7 +19,6 @@ import {
   findSourceComponent,
   getSectionIdFromComponent,
   getSectionIdFromFinding,
-  isConcreteServiceSectionId,
 } from "./source-resolution";
 import {
   buildImportAdjacency,
@@ -36,9 +35,9 @@ import {
 } from "./target-matching";
 import { detectInternalFetchCalls } from "./internal-fetch";
 import { detectIntraComponentLineage } from "./intra-component-lineage";
-import {
-  appendTerraformDataFlows,
-} from "./terraform-flows";
+import { appendTerraformDataFlows } from "./terraform-flows";
+import { resolveAuthMiddlewareTarget } from "./auth-middleware-target";
+import { findApplicationHubForFlows } from "./application-hub";
 
 function isManifestOrNonRuntimeMetadataFile(normalizedPath: string): boolean {
   const fileName = path.posix.basename(normalizedPath).toLowerCase();
@@ -49,55 +48,16 @@ function isManifestOrNonRuntimeMetadataFile(normalizedPath: string): boolean {
 function isClearlyFrontendRuntimeFile(normalizedPath: string): boolean {
   const p = normalizedPath.toLowerCase();
   if (p.includes("/app/api/")) return false;
-  if (FRONTEND_RUNTIME_PATH_MARKERS.some((marker) => p.includes(marker))) return true;
+  if (FRONTEND_RUNTIME_PATH_MARKERS.some((marker) => p.includes(marker)))
+    return true;
   return FRONTEND_RUNTIME_FILE_EXTENSIONS.some((ext) => p.endsWith(ext));
 }
 
 function isLikelyRouteHandlerFile(normalizedPath: string): boolean {
   const p = normalizedPath.toLowerCase();
-  if (ROUTE_HANDLER_PATH_MARKERS.some((marker) => p.includes(marker))) return true;
+  if (ROUTE_HANDLER_PATH_MARKERS.some((marker) => p.includes(marker)))
+    return true;
   return ROUTE_HANDLER_FILE_SUFFIXES.some((suffix) => p.endsWith(suffix));
-}
-
-function isAuthProviderThirdParty(component: DetectedComponent): boolean {
-  if (component.type !== "third_party") return false;
-  const serviceName = component.properties?.serviceName;
-  const normalizedService =
-    typeof serviceName === "string" ? serviceName.trim().toLowerCase() : "";
-  const normalizedName = (component.name || "").trim().toLowerCase();
-  return normalizedService.includes("auth0") || normalizedName.includes("auth0");
-}
-
-function findAuthMiddlewareTarget(
-  finding: RawFinding,
-  components: DetectedComponent[],
-): DetectedComponent | undefined {
-  const sectionId = getSectionIdFromFinding(finding);
-
-  const authServiceInSection = components.find(
-    (c) =>
-      c.type === "asset" &&
-      c.subType === "auth_service" &&
-      (!sectionId || getSectionIdFromComponent(c) === sectionId),
-  );
-  if (authServiceInSection) return authServiceInSection;
-
-  const authThirdPartyInSection = components.find(
-    (c) =>
-      isAuthProviderThirdParty(c) &&
-      (!sectionId || getSectionIdFromComponent(c) === sectionId),
-  );
-  if (authThirdPartyInSection) return authThirdPartyInSection;
-
-  // For concrete section-scoped findings, avoid cross-section fallback.
-  if (isConcreteServiceSectionId(sectionId)) {
-    return undefined;
-  }
-
-  return (
-    components.find((c) => c.type === "asset" && c.subType === "auth_service") ??
-    components.find((c) => isAuthProviderThirdParty(c))
-  );
 }
 
 /**
@@ -121,9 +81,7 @@ export function detectDataFlows(
 
   const sourceBySectionId = new Map<string, DetectedComponent | undefined>();
 
-  const getSourceForFinding = (
-    finding: RawFinding,
-  ): DetectedComponent => {
+  const getSourceForFinding = (finding: RawFinding): DetectedComponent => {
     const findingSectionId = getSectionIdFromFinding(finding);
     const key = findingSectionId ?? "__global__";
 
@@ -218,20 +176,20 @@ export function detectDataFlows(
     }
 
     if (finding.pattern === "auth_middleware") {
-      const target = findAuthMiddlewareTarget(finding, components);
-      if (
-        target &&
-        sourceComponent &&
-        target.id !== sourceComponent.id
-      ) {
+      const target = resolveAuthMiddlewareTarget(finding, components);
+      const authSource =
+        findApplicationHubForFlows(components, findingSectionId) ??
+        sectionApiSource ??
+        sourceComponent;
+      if (target && authSource && target.id !== authSource.id) {
         flows.push(
           buildFlow(
-            sourceComponent.id,
+            authSource.id,
             target.id,
             "api_call",
             finding,
             ++flowIndex,
-            sourceComponent,
+            authSource,
             target,
           ),
         );
@@ -246,7 +204,10 @@ export function detectDataFlows(
         sectionApiSource,
       );
       if (!target) {
-        target = findMergedHttpApiSurfaceComponent(components, sectionApiSource);
+        target = findMergedHttpApiSurfaceComponent(
+          components,
+          sectionApiSource,
+        );
       }
       if (target) {
         const flow = buildFlow(
@@ -263,7 +224,10 @@ export function detectDataFlows(
       continue;
     }
 
-    if (finding.pattern === "web_actor" || finding.pattern === "service_actor") {
+    if (
+      finding.pattern === "web_actor" ||
+      finding.pattern === "service_actor"
+    ) {
       const target = findTargetActorComponent(finding, components);
       if (target) {
         const flow = buildFlow(
@@ -280,7 +244,13 @@ export function detectDataFlows(
     }
   }
 
-  const internal = detectInternalFetchCalls(files, components, defaultSource, flowIndex, sections);
+  const internal = detectInternalFetchCalls(
+    files,
+    components,
+    defaultSource,
+    flowIndex,
+    sections,
+  );
   flows.push(...internal.flows);
   flowIndex = internal.nextIndex;
 
@@ -297,7 +267,9 @@ export function detectDataFlows(
 
   // Ensure section API nodes are visibly connected from the section main app.
   const existingFlowKeys = new Set(
-    flows.map((f) => `${f.sourceComponentId}::${f.targetComponentId}::${f.type}`),
+    flows.map(
+      (f) => `${f.sourceComponentId}::${f.targetComponentId}::${f.type}`,
+    ),
   );
   for (const component of components) {
     if (
@@ -339,4 +311,3 @@ export function detectDataFlows(
 
   return flows;
 }
-

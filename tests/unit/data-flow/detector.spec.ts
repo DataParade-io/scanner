@@ -196,7 +196,11 @@ describe("data-flow/detector - DP-P0-CLI-301", () => {
         makeFinding({
           pattern: "database_connection",
           name: "Primary Postgres",
-          location: makeLocation({ filePath: "src/db.ts", startLine: 10, endLine: 12 }),
+          location: makeLocation({
+            filePath: "src/db.ts",
+            startLine: 10,
+            endLine: 12,
+          }),
           properties: { client: "pg", databaseType: "postgresql" },
         }),
       ];
@@ -861,7 +865,9 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
       ];
 
       const flows = detectDataFlows(emptyFiles, components, findings);
-      const routeFlow = flows.find((f) => f.targetComponentId === "payments-service");
+      const routeFlow = flows.find(
+        (f) => f.targetComponentId === "payments-service",
+      );
       const mainToApi = flows.find(
         (f) =>
           f.sourceComponentId === "main-backend" &&
@@ -944,18 +950,25 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
         }),
       ];
 
-      const flows = detectDataFlows(files, components, [], [
-        {
-          id: "frontend",
-          label: "frontend",
-          role: "service",
-          sectionDir: "frontend",
-          manifestPaths: ["frontend/package.json"],
-        },
-      ]);
+      const flows = detectDataFlows(
+        files,
+        components,
+        [],
+        [
+          {
+            id: "frontend",
+            label: "frontend",
+            role: "service",
+            sectionDir: "frontend",
+            manifestPaths: ["frontend/package.json"],
+          },
+        ],
+      );
 
       const hasSelfLoop = flows.some(
-        (f) => f.sourceComponentId === "api-front" && f.targetComponentId === "api-front",
+        (f) =>
+          f.sourceComponentId === "api-front" &&
+          f.targetComponentId === "api-front",
       );
       expect(hasSelfLoop).toBe(false);
     });
@@ -1167,6 +1180,86 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
       expect(flows[0].targetComponentId).toBe("auth0-backend");
       expect(flows[0].type).toBe("api_call");
     });
+
+    it("creates distinct flows to Jwt and Devise when both auth_services exist", () => {
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "app",
+          name: "root API",
+          type: "asset",
+          subType: "api",
+          properties: { isMainApplication: true },
+        }),
+        makeComponent({
+          id: "jwt",
+          name: "Jwt",
+          type: "asset",
+          subType: "auth_service",
+        }),
+        makeComponent({
+          id: "devise",
+          name: "Devise",
+          type: "asset",
+          subType: "auth_service",
+        }),
+      ];
+      const findings: RawFinding[] = [
+        makeFinding({
+          pattern: "auth_middleware",
+          name: "jwt",
+          location: makeLocation({
+            filePath: "app/controllers/api.rb",
+            startLine: 2,
+          }),
+        }),
+        makeFinding({
+          pattern: "auth_middleware",
+          name: "devise",
+          location: makeLocation({
+            filePath: "app/models/user.rb",
+            startLine: 5,
+          }),
+        }),
+      ];
+      const flows = detectDataFlows(emptyFiles, components, findings);
+      expect(flows).toHaveLength(2);
+      const byTarget = Object.fromEntries(
+        flows.map((f) => [f.targetComponentId, f.sourceComponentId]),
+      );
+      expect(byTarget.jwt).toBe("app");
+      expect(byTarget.devise).toBe("app");
+      expect(flows.every((f) => f.type === "api_call")).toBe(true);
+    });
+
+    it("uses application hub as source for section-scoped auth findings", () => {
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "main",
+          name: "Backend",
+          type: "asset",
+          subType: "service",
+          properties: { isMainApplication: true, section_id: "backend" },
+        }),
+        makeComponent({
+          id: "jwt",
+          name: "Jwt",
+          type: "asset",
+          subType: "auth_service",
+          properties: { section_id: "backend" },
+        }),
+      ];
+      const findings: RawFinding[] = [
+        makeFinding({
+          pattern: "auth_middleware",
+          name: "jwt",
+          properties: { section_id: "backend" },
+        }),
+      ];
+      const flows = detectDataFlows(emptyFiles, components, findings);
+      expect(flows).toHaveLength(1);
+      expect(flows[0].sourceComponentId).toBe("main");
+      expect(flows[0].targetComponentId).toBe("jwt");
+    });
   });
 
   describe("edge cases", () => {
@@ -1273,7 +1366,14 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
       expect(flows).toHaveLength(2);
       const ids = flows.map((f) => f.id);
       expect(new Set(ids).size).toBe(2);
-      expect(flows.every((f) => typeof f.confidence === "number" && f.confidence >= 0 && f.confidence <= 1)).toBe(true);
+      expect(
+        flows.every(
+          (f) =>
+            typeof f.confidence === "number" &&
+            f.confidence >= 0 &&
+            f.confidence <= 1,
+        ),
+      ).toBe(true);
     });
 
     it("keeps unique flow ids when adding synthetic main->API edge after internal fetch flows", () => {
@@ -1306,15 +1406,20 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
           },
         }),
       ];
-      const flows = detectDataFlows(files, components, [], [
-        {
-          id: "frontend",
-          label: "frontend",
-          role: "service",
-          sectionDir: "frontend",
-          manifestPaths: ["frontend/package.json"],
-        },
-      ]);
+      const flows = detectDataFlows(
+        files,
+        components,
+        [],
+        [
+          {
+            id: "frontend",
+            label: "frontend",
+            role: "service",
+            sectionDir: "frontend",
+            manifestPaths: ["frontend/package.json"],
+          },
+        ],
+      );
       const ids = flows.map((f) => f.id);
       expect(new Set(ids).size).toBe(ids.length);
     });
@@ -1344,7 +1449,9 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
           name: "Auth Service",
           type: "asset",
           subType: "auth_service",
-          sourceLocations: [{ filePath: "core/auth.go", startLine: 1, endLine: 5 }],
+          sourceLocations: [
+            { filePath: "core/auth.go", startLine: 1, endLine: 5 },
+          ],
         }),
       ];
 
@@ -1392,10 +1499,12 @@ void fetch("https://clipdrop-api.co/remove-background/v1", { method: "POST" });
       );
 
       expect(selfLoops.length).toBeGreaterThanOrEqual(1);
-      expect(selfLoops.some((flow) => flow.type === "data_transfer")).toBe(true);
-      expect(selfLoops.some((flow) => flow.dataCategories?.includes("password"))).toBe(
+      expect(selfLoops.some((flow) => flow.type === "data_transfer")).toBe(
         true,
       );
+      expect(
+        selfLoops.some((flow) => flow.dataCategories?.includes("password")),
+      ).toBe(true);
     });
   });
 });
