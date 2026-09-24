@@ -9,6 +9,7 @@ interface RawRouteRegex {
   methodGroup?: number;
   pathGroup?: number;
   defaultMethod?: string;
+  routeKind?: string;
 }
 
 interface RawAuthLibraryConfig {
@@ -39,13 +40,16 @@ interface RawServiceConfig {
   confidence?: number;
 }
 
+interface RawExternalHttpClientConfig {
+  id: string;
+  patternId: string;
+  clientName?: string;
+  contentRegexes?: string[];
+  urlRegex?: string;
+  confidence?: number;
+}
+
 interface RawRubyPatternConfig {
-  active_record?: {
-    patternId: string;
-    filePathRegex?: string;
-    classRegex?: string;
-    confidence?: number;
-  };
   database_yml?: {
     patternId: string;
     filePathRegex?: string;
@@ -69,6 +73,9 @@ interface RawRubyPatternConfig {
   cache?: {
     clients?: RawCacheClientConfig[];
   };
+  external_apis?: {
+    httpClients?: RawExternalHttpClientConfig[];
+  };
   services?: RawServiceConfig[];
 }
 
@@ -77,13 +84,7 @@ export interface RubyRouteRegex {
   methodGroup?: number;
   pathGroup?: number;
   defaultMethod?: string;
-}
-
-export interface RubyActiveRecordConfig {
-  patternId: PatternId;
-  filePathRegex: RegExp;
-  classRegex: RegExp;
-  confidence: number;
+  routeKind?: string;
 }
 
 export interface RubyDatabaseYmlConfig {
@@ -131,8 +132,16 @@ export interface RubyServiceConfig {
   confidence: number;
 }
 
+export interface RubyExternalHttpClientConfig {
+  id: string;
+  patternId: PatternId;
+  clientName: string;
+  contentRegexes: RegExp[];
+  urlRegex: RegExp;
+  confidence: number;
+}
+
 export interface RubyPatternConfig {
-  activeRecord: RubyActiveRecordConfig;
   databaseYml: RubyDatabaseYmlConfig;
   routes: {
     frameworks: RubyRouteFrameworkConfig[];
@@ -142,6 +151,9 @@ export interface RubyPatternConfig {
   };
   cache: {
     clients: RubyCacheClientConfig[];
+  };
+  externalApis: {
+    httpClients: RubyExternalHttpClientConfig[];
   };
   services: RubyServiceConfig[];
 }
@@ -184,31 +196,29 @@ function normalizeRouteRegexes(
     methodGroup: entry.methodGroup,
     pathGroup: entry.pathGroup,
     defaultMethod: entry.defaultMethod,
+    routeKind: entry.routeKind,
   }));
 }
 
 function normalizeRawConfig(raw: RawRubyPatternConfig): RubyPatternConfig {
-  const ar = raw.active_record;
-  if (!ar?.classRegex || !ar.filePathRegex) {
-    throw new Error("ruby.patterns.yaml: active_record requires filePathRegex and classRegex");
-  }
-
   const dbYml = raw.database_yml;
   if (!dbYml?.adapterRegex || !dbYml.filePathRegex) {
-    throw new Error("ruby.patterns.yaml: database_yml requires filePathRegex and adapterRegex");
+    throw new Error(
+      "ruby.patterns.yaml: database_yml requires filePathRegex and adapterRegex",
+    );
   }
 
   return {
-    activeRecord: {
-      patternId: validatePatternId(ar.patternId, "ruby.active_record"),
-      filePathRegex: compileRegex(ar.filePathRegex, "ruby.active_record.filePathRegex"),
-      classRegex: compileRegex(ar.classRegex, "ruby.active_record.classRegex"),
-      confidence: ar.confidence ?? DEFAULT_CONFIDENCE,
-    },
     databaseYml: {
       patternId: validatePatternId(dbYml.patternId, "ruby.database_yml"),
-      filePathRegex: compileRegex(dbYml.filePathRegex, "ruby.database_yml.filePathRegex"),
-      adapterRegex: compileRegex(dbYml.adapterRegex, "ruby.database_yml.adapterRegex"),
+      filePathRegex: compileRegex(
+        dbYml.filePathRegex,
+        "ruby.database_yml.filePathRegex",
+      ),
+      adapterRegex: compileRegex(
+        dbYml.adapterRegex,
+        "ruby.database_yml.adapterRegex",
+      ),
       databaseNameRegex: compileRegex(
         dbYml.databaseNameRegex ?? "^\\s*database:\\s*([\\w_-]+)",
         "ruby.database_yml.databaseNameRegex",
@@ -219,7 +229,10 @@ function normalizeRawConfig(raw: RawRubyPatternConfig): RubyPatternConfig {
     routes: {
       frameworks: (raw.routes?.frameworks ?? []).map((fw) => ({
         id: fw.id,
-        patternId: validatePatternId(fw.patternId, `ruby.routes.frameworks.${fw.id}`),
+        patternId: validatePatternId(
+          fw.patternId,
+          `ruby.routes.frameworks.${fw.id}`,
+        ),
         filePathRegex: compileRegex(
           fw.filePathRegex ?? "(?:^|/)config/routes\\.rb$",
           `ruby.routes.frameworks.${fw.id}.filePathRegex`,
@@ -234,12 +247,21 @@ function normalizeRawConfig(raw: RawRubyPatternConfig): RubyPatternConfig {
     auth: {
       libraries: (raw.auth?.libraries ?? []).map((lib) => ({
         id: lib.id,
-        patternId: validatePatternId(lib.patternId, `ruby.auth.libraries.${lib.id}`),
+        patternId: validatePatternId(
+          lib.patternId,
+          `ruby.auth.libraries.${lib.id}`,
+        ),
         filePathRegex: lib.filePathRegex
-          ? compileRegex(lib.filePathRegex, `ruby.auth.libraries.${lib.id}.filePathRegex`)
+          ? compileRegex(
+              lib.filePathRegex,
+              `ruby.auth.libraries.${lib.id}.filePathRegex`,
+            )
           : undefined,
         contentRegexes: (lib.contentRegexes ?? []).map((pattern, index) =>
-          compileRegex(pattern, `ruby.auth.libraries.${lib.id}.contentRegexes[${index}]`),
+          compileRegex(
+            pattern,
+            `ruby.auth.libraries.${lib.id}.contentRegexes[${index}]`,
+          ),
         ),
         strategy: lib.strategy,
         confidence: lib.confidence ?? DEFAULT_CONFIDENCE,
@@ -248,14 +270,44 @@ function normalizeRawConfig(raw: RawRubyPatternConfig): RubyPatternConfig {
     cache: {
       clients: (raw.cache?.clients ?? []).map((client) => ({
         id: client.id,
-        patternId: validatePatternId(client.patternId, `ruby.cache.clients.${client.id}`),
+        patternId: validatePatternId(
+          client.patternId,
+          `ruby.cache.clients.${client.id}`,
+        ),
         databaseType: client.databaseType,
         componentSubType: client.componentSubType,
         filePathRegex: client.filePathRegex
-          ? compileRegex(client.filePathRegex, `ruby.cache.clients.${client.id}.filePathRegex`)
+          ? compileRegex(
+              client.filePathRegex,
+              `ruby.cache.clients.${client.id}.filePathRegex`,
+            )
           : undefined,
         contentRegexes: (client.contentRegexes ?? []).map((pattern, index) =>
-          compileRegex(pattern, `ruby.cache.clients.${client.id}.contentRegexes[${index}]`),
+          compileRegex(
+            pattern,
+            `ruby.cache.clients.${client.id}.contentRegexes[${index}]`,
+          ),
+        ),
+        confidence: client.confidence ?? DEFAULT_CONFIDENCE,
+      })),
+    },
+    externalApis: {
+      httpClients: (raw.external_apis?.httpClients ?? []).map((client) => ({
+        id: client.id,
+        patternId: validatePatternId(
+          client.patternId,
+          `ruby.external_apis.httpClients.${client.id}`,
+        ),
+        clientName: client.clientName ?? client.id,
+        contentRegexes: (client.contentRegexes ?? []).map((pattern, index) =>
+          compileRegex(
+            pattern,
+            `ruby.external_apis.httpClients.${client.id}.contentRegexes[${index}]`,
+          ),
+        ),
+        urlRegex: compileRegex(
+          client.urlRegex ?? "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]",
+          `ruby.external_apis.httpClients.${client.id}.urlRegex`,
         ),
         confidence: client.confidence ?? DEFAULT_CONFIDENCE,
       })),
