@@ -3,9 +3,15 @@ import type { DetectedDataFlow } from "../core/types/data-flow";
 import { dedupeDataFlows } from "./dedupe";
 import { rewireFlowsThroughApplication } from "./rewire";
 import { dropCrossSectionServiceFlows } from "./drop-cross-section-flows";
-import { ensureActorToAppFlow, ensureInjectedProjectMainToTerraformProviderHub } from "./ensure-actor-flow";
-import { ensureManifestDeclaredThirdPartyFlows, ensureHubToOrphanThirdPartyFlows } from "./ensure-manifest-declared-flows";
-import { ensureMainToUnlinkedSectionApiFlows } from "./ensure-section-api-flows";
+import {
+  ensureActorToAppFlow,
+  ensureInjectedProjectMainToTerraformProviderHub,
+} from "./ensure-actor-flow";
+import {
+  ensureManifestDeclaredThirdPartyFlows,
+  ensureHubToOrphanThirdPartyFlows,
+} from "./ensure-manifest-declared-flows";
+import { ensureHubToUnlinkedAssets } from "./ensure-hub-linked-assets";
 
 function getSectionId(component: DetectedComponent | undefined): string {
   const sid = component?.properties?.section_id;
@@ -46,7 +52,7 @@ function collapseSectionApiDuplicateOutboundFlows(
 
   return flows.filter((flow) => {
     const source = componentById.get(flow.sourceComponentId);
-    if (!isSectionApiNode(source)) return true;
+    if (!isSectionApiNode(source) || isMainApp(source)) return true;
     const sid = getSectionId(source);
     if (!sid) return true;
     const key = `${sid}::${flow.targetComponentId}::${flow.type}`;
@@ -59,6 +65,7 @@ function collapseSectionApiDuplicateOutboundFlows(
  * - structural deduplication
  * - rewiring actor → infra flows through the main application
  * - ensuring at least one actor → app flow per section
+ * - hub links to unlinked assets (auth, API, catch-all)
  */
 export function postprocessDataFlows(
   components: DetectedComponent[],
@@ -83,10 +90,9 @@ export function postprocessDataFlows(
     components,
     withManifest,
   );
-  const withSectionApis = ensureMainToUnlinkedSectionApiFlows(
+  const withHubLinkedAssets = ensureHubToUnlinkedAssets(
     components,
     withOrphanThirdParties,
   );
-  return dropCrossSectionServiceFlows(components, withSectionApis);
+  return dropCrossSectionServiceFlows(components, withHubLinkedAssets);
 }
-
