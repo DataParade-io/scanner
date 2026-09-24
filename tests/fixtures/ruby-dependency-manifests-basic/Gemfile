@@ -1,0 +1,15 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 7.1"
+gem "stripe"
+gem "twilio-ruby", require: "twilio-ruby"
+gem "aws-sdk-s3", group: :production
+gem "twitter"
+gem "googleauth"
+
+group :development, :test do
+  gem "rspec"
+  gem "sentry-ruby"
+end
+
+gem "rubocop", groups: [:development, :test]

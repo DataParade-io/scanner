@@ -8,6 +8,8 @@ const MANIFEST_FILE_NAMES = new Set([
   "pyproject.toml",
   "pipfile",
   "requirements.txt",
+  "gemfile",
+  "gemfile.lock",
 ]);
 
 function isManifestMetadataPath(filePath: string | undefined): boolean {
@@ -105,7 +107,7 @@ export function ensureManifestDeclaredThirdPartyFlows(
     flows,
     manifestThirdParties,
     "declared_dependency",
-    "Declared dependency (package.json)",
+    "Declared dependency (manifest)",
     0.65,
   );
 }

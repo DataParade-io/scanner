@@ -10,7 +10,10 @@ function normalizedPathOf(ctx: PatternContext): string {
   return (ctx.normalizedPath ?? ctx.file.path).replace(/\\/g, "/");
 }
 
-function pathMatches(normalizedPath: string, regex: RegExp | undefined): boolean {
+function pathMatches(
+  normalizedPath: string,
+  regex: RegExp | undefined,
+): boolean {
   if (!regex) return true;
   return regex.test(normalizedPath);
 }
@@ -39,46 +42,6 @@ function pushLineFinding(
     },
     properties: { ...(opts.properties ?? {}) },
   });
-}
-
-export function detectRubyActiveRecordFromConfig(
-  ctx: PatternContext,
-  config: UnifiedPatternConfig,
-): RawFinding[] {
-  if (ctx.language !== "ruby") return [];
-
-  const normalizedPath = normalizedPathOf(ctx);
-  const ar = config.ruby.activeRecord;
-  if (!pathMatches(normalizedPath, ar.filePathRegex)) return [];
-
-  const lines = sourceOf(ctx).split(/\r?\n/);
-  const findings: RawFinding[] = [];
-
-  for (let i = 0; i < lines.length; i += 1) {
-    const text = lines[i];
-    const match = ar.classRegex.exec(text);
-    if (!match) continue;
-
-    const className = match[1];
-    findings.push({
-      pattern: ar.patternId,
-      name: className,
-      confidence: ar.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: i + 1,
-        endLine: i + 1,
-        code: text.trim(),
-      },
-      properties: {
-        client: className,
-        framework: "rails",
-        modelKind: "active_record",
-      },
-    });
-  }
-
-  return findings;
 }
 
 export function detectRubyDatabaseYmlPatterns(
@@ -177,11 +140,20 @@ export function detectRubyRoutesFromConfig(
             : routeRegex.defaultMethod;
         const method = rawMethod ? rawMethod.toUpperCase() : undefined;
         const routePath =
-          routeRegex.pathGroup != null ? match[routeRegex.pathGroup] : undefined;
+          routeRegex.pathGroup != null
+            ? match[routeRegex.pathGroup]
+            : undefined;
+        const displayPath =
+          routePath &&
+          routeRegex.routeKind &&
+          ["resources", "resource", "namespace"].includes(
+            routeRegex.routeKind,
+          ) &&
+          !routePath.startsWith("/")
+            ? `/${routePath}`
+            : routePath;
 
-        const name = method
-          ? `${method} ${routePath ?? ""}`.trim()
-          : `${fw.id.toUpperCase()}_ROUTE ${routePath ?? ""}`.trim();
+        const name = method ? `${method} ${displayPath ?? ""}`.trim() : "API";
 
         pushLineFinding(findings, ctx, {
           pattern: fw.patternId,
@@ -191,8 +163,12 @@ export function detectRubyRoutesFromConfig(
           lineText: text,
           properties: {
             framework: fw.id,
+            isSectionApiNode: true,
             httpMethods: method ? [method] : [],
-            ...(routePath ? { path: routePath } : {}),
+            ...(displayPath ? { path: displayPath } : {}),
+            ...(routeRegex.routeKind
+              ? { routeKind: routeRegex.routeKind }
+              : {}),
           },
         });
       }
@@ -250,13 +226,18 @@ export function detectRubyCacheFromConfig(
   const findings: RawFinding[] = [];
 
   for (const client of config.ruby.cache.clients) {
-    if (client.filePathRegex && !pathMatches(normalizedPath, client.filePathRegex)) {
+    if (
+      client.filePathRegex &&
+      !pathMatches(normalizedPath, client.filePathRegex)
+    ) {
       continue;
     }
 
     for (let i = 0; i < lines.length; i += 1) {
       const text = lines[i];
-      const matchedRegex = client.contentRegexes.find((regex) => regex.test(text));
+      const matchedRegex = client.contentRegexes.find((regex) =>
+        regex.test(text),
+      );
       if (!matchedRegex) continue;
 
       pushLineFinding(findings, ctx, {
@@ -287,7 +268,9 @@ export function detectRubyServicesFromConfig(
   if (ctx.language !== "ruby") return [];
 
   const normalizedPath = normalizedPathOf(ctx);
-  if (!pathMatches(normalizedPath, /(?:^|\/)app\/(?:services|models\/concerns)\//)) {
+  if (
+    !pathMatches(normalizedPath, /(?:^|\/)app\/(?:services|models\/concerns)\//)
+  ) {
     // Individual service rules also have filePathRegex; still allow rule-level gates.
   }
 
@@ -322,14 +305,45 @@ export function detectRubyServicesFromConfig(
   return findings;
 }
 
+export function detectRubyExternalApisFromConfig(
+  ctx: PatternContext,
+  config: UnifiedPatternConfig,
+): RawFinding[] {
+  if (ctx.language !== "ruby") return [];
+
+  const lines = sourceOf(ctx).split(/\r?\n/);
+  const findings: RawFinding[] = [];
+
+  for (const client of config.ruby.externalApis.httpClients) {
+    for (let i = 0; i < lines.length; i += 1) {
+      const text = lines[i];
+      if (!client.contentRegexes.some((regex) => regex.test(text))) continue;
+
+      const url = client.urlRegex.exec(text)?.[1];
+      if (!url) continue;
+      pushLineFinding(findings, ctx, {
+        pattern: client.patternId,
+        name: `${client.clientName} ${url}`,
+        confidence: client.confidence,
+        lineIndex: i,
+        lineText: text,
+        properties: {
+          client: client.clientName,
+          httpClient: client.id,
+          url,
+        },
+      });
+    }
+  }
+
+  return findings;
+}
+
 export function detectRubyDatabaseConnectionsFromConfig(
   ctx: PatternContext,
   config: UnifiedPatternConfig,
 ): RawFinding[] {
   if (ctx.language !== "ruby") return [];
 
-  return [
-    ...detectRubyActiveRecordFromConfig(ctx, config),
-    ...detectRubyCacheFromConfig(ctx, config),
-  ];
+  return [...detectRubyCacheFromConfig(ctx, config)];
 }
