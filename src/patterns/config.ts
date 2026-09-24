@@ -74,7 +74,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
   for (const loader of unified.typescript.configLoaders) {
     emittedPatternIds.add(String(loader.patternId));
   }
-  emittedPatternIds.add(String(unified.typescript.heuristics.sqlKeyword.patternId));
+  emittedPatternIds.add(
+    String(unified.typescript.heuristics.sqlKeyword.patternId),
+  );
   for (const key of unified.typescript.configKeys.keys) {
     emittedPatternIds.add(String(key.patternId));
   }
@@ -104,7 +106,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(fw.patternId));
   }
   if (unified.python.envConfig.envVariable) {
-    emittedPatternIds.add(String(unified.python.envConfig.envVariable.patternId));
+    emittedPatternIds.add(
+      String(unified.python.envConfig.envVariable.patternId),
+    );
   }
   if (unified.python.envConfig.djangoSettings) {
     emittedPatternIds.add(
@@ -112,7 +116,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     );
   }
   if (unified.python.envConfig.dotenvConfig) {
-    emittedPatternIds.add(String(unified.python.envConfig.dotenvConfig.patternId));
+    emittedPatternIds.add(
+      String(unified.python.envConfig.dotenvConfig.patternId),
+    );
   }
   for (const c of unified.python.externalApis.httpClients) {
     emittedPatternIds.add(String(c.patternId));
@@ -167,7 +173,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(unified.php.envConfig.envVariable.patternId));
   }
   if (unified.php.envConfig.configLoaders) {
-    emittedPatternIds.add(String(unified.php.envConfig.configLoaders.patternId));
+    emittedPatternIds.add(
+      String(unified.php.envConfig.configLoaders.patternId),
+    );
   }
   if (unified.php.envConfig.configFile) {
     emittedPatternIds.add(String(unified.php.envConfig.configFile.patternId));
@@ -202,7 +210,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(unified.jvm.envConfig.propertyKeys.patternId));
   }
   if (unified.jvm.envConfig.configLoaders) {
-    emittedPatternIds.add(String(unified.jvm.envConfig.configLoaders.patternId));
+    emittedPatternIds.add(
+      String(unified.jvm.envConfig.configLoaders.patternId),
+    );
   }
   if (unified.jvm.envConfig.configFile) {
     emittedPatternIds.add(String(unified.jvm.envConfig.configFile.patternId));
@@ -248,7 +258,9 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     emittedPatternIds.add(String(handler.patternId));
   }
   if (unified.csharp.envConfig.envVariable) {
-    emittedPatternIds.add(String(unified.csharp.envConfig.envVariable.patternId));
+    emittedPatternIds.add(
+      String(unified.csharp.envConfig.envVariable.patternId),
+    );
   }
   if (unified.csharp.envConfig.configurationKeys) {
     emittedPatternIds.add(
@@ -256,14 +268,15 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     );
   }
   if (unified.csharp.envConfig.configFile) {
-    emittedPatternIds.add(String(unified.csharp.envConfig.configFile.patternId));
+    emittedPatternIds.add(
+      String(unified.csharp.envConfig.configFile.patternId),
+    );
   }
   for (const c of unified.csharp.externalApis.httpClients) {
     emittedPatternIds.add(String(c.patternId));
   }
 
   // Ruby / Rails.
-  emittedPatternIds.add(String(unified.ruby.activeRecord.patternId));
   emittedPatternIds.add(String(unified.ruby.databaseYml.patternId));
   for (const fw of unified.ruby.routes.frameworks) {
     emittedPatternIds.add(String(fw.patternId));
@@ -373,4 +386,3 @@ export function loadUnifiedPatternConfig(): UnifiedPatternConfig {
 
   return unified;
 }
-

@@ -22,14 +22,12 @@ function makeYamlFile(content: string, path: string): FileInfo {
 }
 
 describe("Ruby analyzer patterns", () => {
-  it("detects ActiveRecord models in app/models", () => {
+  it("keeps ActiveRecord models as evidence without emitting database components", () => {
     const content = "class User < ActiveRecord::Base\nend\n";
     const findings = detectRubyPatterns(makeRubyFile(content));
 
     const models = findings.filter((f) => f.pattern === "database_connection");
-    expect(models.some((m) => m.name === "User")).toBe(true);
-    expect(models.find((m) => m.name === "User")?.properties.client).toBe("User");
-    expect(models.find((m) => m.name === "User")?.properties.databaseType).toBeUndefined();
+    expect(models).toHaveLength(0);
   });
 
   it("detects Rails routes in config/routes.rb", () => {
@@ -64,15 +62,13 @@ describe("Ruby analyzer patterns", () => {
     );
     const auth = findings.filter((f) => f.pattern === "auth_middleware");
 
-    expect(auth.some((a) => a.properties.strategy === "session_cookie")).toBe(true);
+    expect(auth.some((a) => a.properties.strategy === "session_cookie")).toBe(
+      true,
+    );
   });
 
   it("detects Redis cache with componentSubType cache", () => {
-    const content = [
-      "redis = Redis.new",
-      "redis.ping",
-      "",
-    ].join("\n");
+    const content = ["redis = Redis.new", "redis.ping", ""].join("\n");
 
     const findings = detectRubyPatterns(
       makeRubyFile(content, "config/initializers/001-redis.rb"),
@@ -98,13 +94,15 @@ describe("Ruby analyzer patterns", () => {
     );
     const dbs = findings.filter((f) => f.pattern === "database_connection");
 
-    expect(dbs.some((d) => d.properties.databaseType === "postgres")).toBe(true);
-    expect(dbs.some((d) => d.properties.client === "discourse_development")).toBe(
+    expect(dbs.some((d) => d.properties.databaseType === "postgres")).toBe(
       true,
     );
+    expect(
+      dbs.some((d) => d.properties.client === "discourse_development"),
+    ).toBe(true);
   });
 
-  it("detects service classes under app/services", () => {
+  it("does not turn ordinary service classes into components", () => {
     const content = [
       "class PaymentProcessingService",
       "  def call",
@@ -120,7 +118,7 @@ describe("Ruby analyzer patterns", () => {
       (f) => f.properties.componentSubType === "service",
     );
 
-    expect(services.some((s) => s.name === "PaymentProcessingService")).toBe(true);
+    expect(services).toHaveLength(0);
   });
 
   it("detects User actor model for customer gold", () => {
@@ -137,8 +135,8 @@ describe("Ruby analyzer patterns", () => {
       makeRubyFile(content, "spec/models/user_spec.rb"),
     );
 
-    expect(findings.filter((f) => f.pattern === "database_connection")).toHaveLength(
-      0,
-    );
+    expect(
+      findings.filter((f) => f.pattern === "database_connection"),
+    ).toHaveLength(0);
   });
 });
