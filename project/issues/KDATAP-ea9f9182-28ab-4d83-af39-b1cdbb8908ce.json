@@ -1,0 +1,26 @@
+{
+  "id": "KDATAP-ea9f9182-28ab-4d83-af39-b1cdbb8908ce",
+  "title": "Ruby dependency manifests reveal third-party services",
+  "description": "",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-bfa0233c-c206-41ae-a6b1-7291f61d79f5",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "c1455955-5ef2-4fb3-9bea-0fe6ba3dd600",
+      "author": "os",
+      "text": "As a scanner user, I want Ruby dependency manifests analyzed, so that declared third-party services appear in canonical topology.\n\nFeature: Ruby dependency manifest analysis\n  Scenario: Runtime Ruby gems are declared in Gemfile and locked in Gemfile.lock\n    Given a Ruby service with direct runtime gems and development or test-only gems\n    When the structural scan analyzes its dependency manifests\n    Then recognized runtime gems produce canonical third-party findings with locked versions and dependency_manifest source context\n    And reliably identified development and test-only gems are excluded\n    And manifest-only third parties receive a service hub flow\n\nOut of scope: Ruby patterns, source detector/parser, data-action and evaluation gates, benchmark gold.",
+      "created_at": "2026-09-21T19:19:08.429950Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-21T19:19:00.191894Z",
+  "updated_at": "2026-09-21T19:19:08.429950Z",
+  "closed_at": null,
+  "custom": {}
+}

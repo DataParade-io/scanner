@@ -1,0 +1,54 @@
+{
+  "id": "KDATAP-d31b6d9f-5266-4950-a070-f45742acbc26",
+  "title": "Apply accepted Ruby taxonomy to benchmark gold",
+  "description": "",
+  "type": "task",
+  "status": "in_progress",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-bfa0233c-c206-41ae-a6b1-7291f61d79f5",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "34f92e4a-0d7c-413a-a9ed-4a33655cf5e8",
+      "author": "os",
+      "text": "Intent: apply the user-approved 2026-09-21 Ruby component taxonomy to discourse, spree, and redmine benchmark gold only. Internal Rails classes become negative component cases; actual datastores, caches, actors, auth mechanisms, APIs, and third parties remain positive. Preserve records and add an auditable corpus-change note; no scanner production changes.",
+      "created_at": "2026-09-21T20:07:34.752654Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "068b07cd-2aa3-4688-90f3-01be1e1d1e60",
+      "author": "os",
+      "text": "Applied the approved taxonomy as a corpus-only delta: 129 records changed from positive component labels to accepted negative cases with empty labels (Discourse 116, Spree 10, Redmine 3). Record IDs and provenance/canonical evidence were retained; all pinned evidence paths were validated. Added tests/benchmark/corpus-changes/2026-09-21-ruby-component-taxonomy.yaml with policy, per-repo IDs/counts, before/after corrections, rationale, approval date, and corpus/scanner separation. Manifests advanced annotation_version 4 -> 5. Validation: 3 suites/24 tests passed with --watchman=false; no lint diagnostics. Task remains in progress until the change lands.",
+      "created_at": "2026-09-21T20:09:38.222033Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "0ec99ed3-eac2-459f-91d3-16728981d293",
+      "author": "os",
+      "text": "Full-suite follow-up: readiness identified repository disposition semantics for the 129 negative rows. Updating only those IDs from review_state accepted to rejected while preserving reviewer/date, revising the correction ledger, and refreshing the corpus-gold digest via digestCorpusGold.",
+      "created_at": "2026-09-21T20:16:22.472935Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "3296b48e-7f5f-4cf3-9952-4f699ff6bacb",
+      "author": "os",
+      "text": "Follow-up complete: exactly 129 changed Ruby IDs now pair expected.status=negative/labels=[] with provenance.review_state=rejected; reviewer and reviewed_at values are retained. The correction ledger records accepted -> rejected review-state semantics. Refreshed tests/fixtures/baseline/pins/corpus-gold.digest through digestCorpusGold to sha256:c09682efb292cbb75c53f482c44e8318efa63b72991f6478cfe56cd55f99dca5. Updated corpus count pins to 887 accepted eval cases / 390 accepted components. The approved readiness floor remains 450, so the readiness spec now truthfully expects only LAYER_BELOW_ACCEPTED_FLOOR and verifies zero LOADER_EXEMPTION blockers. Required five suites plus component migration passed: 6 suites, 41 tests.",
+      "created_at": "2026-09-21T20:19:00.983974Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "38f1a4a0-0a24-4906-9d94-a0d9a62db915",
+      "author": "os",
+      "text": "Implementation and corpus correction complete pending landing: 129 internal-class component records reclassified as rejected negatives with audit ledger, manifests at annotation v5, readiness/digest/count pins refreshed, and corpus suites green. Scanner delta is tracked separately from corpus delta.",
+      "created_at": "2026-09-21T20:21:10.348536Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-21T20:07:23.160453Z",
+  "updated_at": "2026-09-21T20:21:10.348536Z",
+  "closed_at": null,
+  "custom": {}
+}
