@@ -23,14 +23,17 @@ function usingsAsImports(model: CSharpCompilationUnitModel): ImportLike[] {
       ]),
     ).filter(Boolean);
 
-    return { module: namespaceName, names };
+    return {
+      module: namespaceName,
+      names,
+      startLine: entry.location.startLine,
+      endLine: entry.location.endLine,
+    };
   });
 }
 
 /** Attributes are carried as decorator strings: both `HttpGet("x")` and `HttpGet`. */
-function attributesAsDecorators(
-  attributes: CSharpAttributeEntry[],
-): string[] {
+function attributesAsDecorators(attributes: CSharpAttributeEntry[]): string[] {
   const decorators = new Set<string>();
   for (const attribute of attributes) {
     decorators.add(attribute.raw);

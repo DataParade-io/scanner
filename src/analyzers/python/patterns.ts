@@ -15,6 +15,8 @@ function buildPythonPatternContext(
   const importsForEngine: ImportLike[] = imports.map((imp) => ({
     module: imp.module,
     names: imp.names,
+    startLine: imp.location.startLine,
+    endLine: imp.location.endLine,
   }));
 
   return {
