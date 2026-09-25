@@ -45,27 +45,38 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
   const benchmarkRoot = path.join(__dirname, "../../benchmark");
   const ledger = buildComponentMigrationLedger(benchmarkRoot);
 
-  it("accounts for all 519 accepted component rows (KDATAP-b702ea: 44 negative decoys demoted)", () => {
-    expect(ledger.totalRows).toBe(519);
-    expect(ledger.buckets.mechanical).toBe(473);
+  it("accounts for all 390 accepted component rows after Ruby taxonomy correction", () => {
+    expect(ledger.totalRows).toBe(390);
+    expect(ledger.buckets.mechanical).toBe(344);
     expect(ledger.buckets.vendor).toBe(16);
     expect(ledger.buckets.actor_user_retarget).toBe(30);
     expect(
-      ledger.buckets.mechanical + ledger.buckets.vendor + ledger.buckets.actor_user_retarget,
-    ).toBe(519);
+      ledger.buckets.mechanical +
+        ledger.buckets.vendor +
+        ledger.buckets.actor_user_retarget,
+    ).toBe(390);
   });
 
   it("assigns distinct entityIds and shared identityKey for discourse asset:database", () => {
     const discourseRows = ledger.entries.filter(
       (entry: ComponentMigrationLedgerEntry) =>
-        entry.repoKey === "discourse" && entry.legacySubjectKey === "asset:database",
+        entry.repoKey === "discourse" &&
+        entry.legacySubjectKey === "asset:database",
     );
 
-    expect(discourseRows).toHaveLength(118);
-    expect(new Set(discourseRows.map((row: ComponentMigrationLedgerEntry) => row.identityKey))).toEqual(
-      new Set(["asset:database"]),
-    );
-    expect(new Set(discourseRows.map((row: ComponentMigrationLedgerEntry) => row.entityId)).size).toBe(118);
+    expect(discourseRows).toHaveLength(2);
+    expect(
+      new Set(
+        discourseRows.map(
+          (row: ComponentMigrationLedgerEntry) => row.identityKey,
+        ),
+      ),
+    ).toEqual(new Set(["asset:database"]));
+    expect(
+      new Set(
+        discourseRows.map((row: ComponentMigrationLedgerEntry) => row.entityId),
+      ).size,
+    ).toBe(2);
   });
 
   it("never invents optionalAssertion.instance on migrated gold", () => {
@@ -76,7 +87,9 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
         if (annotation.provenance.review_state !== "accepted") {
           continue;
         }
-        const { record } = loadCanonicalGoldFromAnnotation(annotation, { repoKey });
+        const { record } = loadCanonicalGoldFromAnnotation(annotation, {
+          repoKey,
+        });
         expect(record.optionalAssertion?.instance).toBeUndefined();
       }
     }
@@ -96,7 +109,8 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
 
   it("maps third_party:checkr to saas_service subtype with vendor checkr", () => {
     const checkr = ledger.entries.find(
-      (entry: ComponentMigrationLedgerEntry) => entry.annotationId === "vgs-django-third-party-checkr",
+      (entry: ComponentMigrationLedgerEntry) =>
+        entry.annotationId === "vgs-django-third-party-checkr",
     );
     expect(checkr).toBeDefined();
     expect(checkr!.identityKey).toBe("third_party:saas_service");
@@ -106,7 +120,8 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
 
   it("does not use actor:user anywhere in corpus component gold", () => {
     const actorUser = ledger.entries.filter(
-      (entry: ComponentMigrationLedgerEntry) => entry.legacySubjectKey === "actor:user",
+      (entry: ComponentMigrationLedgerEntry) =>
+        entry.legacySubjectKey === "actor:user",
     );
     expect(actorUser).toHaveLength(0);
   });
@@ -114,7 +129,10 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
   it("covers every actor_user_retarget id from PR #17", () => {
     const retargeted = new Set(
       ledger.entries
-        .filter((entry: ComponentMigrationLedgerEntry) => entry.bucket === "actor_user_retarget")
+        .filter(
+          (entry: ComponentMigrationLedgerEntry) =>
+            entry.bucket === "actor_user_retarget",
+        )
         .map((entry: ComponentMigrationLedgerEntry) => entry.annotationId),
     );
     for (const id of ACTOR_USER_MIGRATION_IDS) {
@@ -131,7 +149,9 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
         if (annotation.provenance.review_state !== "accepted") {
           continue;
         }
-        expect(annotation.canonical?.entity_id).toBe(`${repoKey}::${annotation.id}`);
+        expect(annotation.canonical?.entity_id).toBe(
+          `${repoKey}::${annotation.id}`,
+        );
         expect(annotation.canonical?.identity_key).toBeTruthy();
       }
     }

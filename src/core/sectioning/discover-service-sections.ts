@@ -185,6 +185,7 @@ async function walkForManifests(
       lower === "vcpkg.json" ||
       lower === "conanfile.txt" ||
       lower === "conanfile.py";
+    const isRubyManifest = lower === "gemfile" || lower === "gemfile.lock";
 
     if (
       !isTsManifest &&
@@ -194,7 +195,8 @@ async function walkForManifests(
       !isDotnetProject &&
       !isGoModule &&
       !isJvmManifest &&
-      !isCppManifest
+      !isCppManifest &&
+      !isRubyManifest
     ) {
       continue;
     }

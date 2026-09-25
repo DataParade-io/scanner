@@ -1426,6 +1426,37 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
       expect(compacted.find((c) => c.id === "a_1")).toBeDefined();
       expect(compacted.find((c) => c.id === "tp_1")).toBeDefined();
     });
+
+    it("merges Rails auth evidence for the same concrete strategy", () => {
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "a_1",
+          name: "Has Secure Password",
+          type: "asset",
+          subType: "auth_service",
+          properties: {
+            section_id: "root",
+            framework: "rails",
+            strategy: "bcrypt",
+          },
+        }),
+        makeComponent({
+          id: "a_2",
+          name: "Bcrypt",
+          type: "asset",
+          subType: "auth_service",
+          properties: {
+            section_id: "root",
+            framework: "rails",
+            strategy: "bcrypt",
+          },
+        }),
+      ];
+
+      const compacted = compactAuthServiceComponents(components);
+      expect(compacted).toHaveLength(1);
+      expect(compacted[0].name).toBe("Bcrypt");
+    });
   });
 
   it("merges third_party components by serviceName even when names differ", () => {

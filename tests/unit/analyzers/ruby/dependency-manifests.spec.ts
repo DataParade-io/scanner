@@ -107,6 +107,22 @@ describe("Ruby dependency manifests", () => {
             sourceContext: "dependency_manifest",
           }),
         }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            serviceName: "twitter",
+            packageName: "twitter",
+            packageVersion: "8.0.0",
+            sourceContext: "dependency_manifest",
+          }),
+        }),
+        expect.objectContaining({
+          properties: expect.objectContaining({
+            serviceName: "google_identity",
+            packageName: "googleauth",
+            packageVersion: "1.15.0",
+            sourceContext: "dependency_manifest",
+          }),
+        }),
       ]),
     );
     expect(

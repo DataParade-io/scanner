@@ -2,7 +2,11 @@ import * as fs from "fs";
 import path from "path";
 import YAML from "yaml";
 
-import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "../../benchmark/manifest";
+import {
+  loadAnnotations,
+  loadBenchmarkManifest,
+  loadLayerScopes,
+} from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical";
 import { annotationsToEvalCases } from "../../benchmark/to-eval-cases";
@@ -51,7 +55,9 @@ function loadActorSubtypeIds(): Set<string> {
     subtypes: { id: string; type: string }[];
   };
   return new Set(
-    parsed.subtypes.filter((subtype) => subtype.type === "actor").map((subtype) => subtype.id),
+    parsed.subtypes
+      .filter((subtype) => subtype.type === "actor")
+      .map((subtype) => subtype.id),
   );
 }
 
@@ -89,18 +95,23 @@ describe("imported corpus gold", () => {
     // KDATAP-47e331: 146 flow adjudication accepts + 17 rejects applied from adjudication ledger.
     // KDATAP-a7c36b: 12 slice-2 flow adjudication accepts applied from slice-2 ledger (PR #62).
     // KDATAP-b702ea: 44 negative component decoys demoted accepted → rejected (LOADER_EXEMPTION fix).
+    // KDATAP-d31b6d: 129 internal Ruby classes demoted accepted → rejected by component taxonomy.
     // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
     // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
-    expect(acceptedEvalCases).toBe(1016);
+    expect(acceptedEvalCases).toBe(887);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
     const repoDir = path.join(benchmarkRoot, "repos", "wordpress");
     const annotations = loadAnnotations(repoDir, "components");
-    const sample = annotations.find((entry) => entry.subject.key === "asset:database");
+    const sample = annotations.find(
+      (entry) => entry.subject.key === "asset:database",
+    );
     expect(sample).toBeDefined();
 
-    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, {
+      warn: () => undefined,
+    });
 
     expect(record.identity.identityKey).toBe("asset:database");
     expect(record.classification.componentSubtype).toBe("database");
@@ -118,7 +129,10 @@ describe("imported corpus gold", () => {
         if (!fileName.endsWith(".yaml")) {
           continue;
         }
-        const text = fs.readFileSync(path.join(annotationsDir, fileName), "utf8");
+        const text = fs.readFileSync(
+          path.join(annotationsDir, fileName),
+          "utf8",
+        );
         if (text.includes("exhaustive_scope_files")) {
           violations.push(`${repoKey}/${fileName}`);
         }
@@ -179,7 +193,11 @@ describe("imported corpus gold", () => {
       const repoDir = path.join(benchmarkRoot, "repos", repoKey);
       const annotations = loadAnnotations(repoDir, "components");
       for (const annotation of annotations) {
-        if (ACTOR_USER_MIGRATION_IDS.includes(annotation.id as (typeof ACTOR_USER_MIGRATION_IDS)[number])) {
+        if (
+          ACTOR_USER_MIGRATION_IDS.includes(
+            annotation.id as (typeof ACTOR_USER_MIGRATION_IDS)[number],
+          )
+        ) {
           migrated.set(annotation.id, {
             key: annotation.subject.key,
             labels: annotation.expected.labels,
@@ -202,7 +220,11 @@ describe("imported corpus gold", () => {
       expect(row!.key).toBe(`actor:${row!.labels[0]}`);
 
       const suffix = row!.key.slice("actor:".length);
-      if (suffix === "customer" || suffix === "admin" || suffix === "employee") {
+      if (
+        suffix === "customer" ||
+        suffix === "admin" ||
+        suffix === "employee"
+      ) {
         suffixCounts[suffix] += 1;
       }
 
@@ -285,13 +307,17 @@ describe("imported corpus gold", () => {
     );
     expect(sample).toBeDefined();
 
-    const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
+    const { record } = loadCanonicalGoldFromAnnotation(sample!, {
+      warn: () => undefined,
+    });
 
     expect(record.identity.identityKey).toBe("mention:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.disposition).toBe("accepted");
-    expect(record.observedTokenCandidates?.some((token) => token.value === sample!.subject.name)).toBe(
-      true,
-    );
+    expect(
+      record.observedTokenCandidates?.some(
+        (token) => token.value === sample!.subject.name,
+      ),
+    ).toBe(true);
   });
 });

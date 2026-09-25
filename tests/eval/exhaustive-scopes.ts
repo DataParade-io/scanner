@@ -18,6 +18,17 @@ export const EXHAUSTIVE_SCOPE_FILES: Record<string, string[]> = {
     "server.ts",
   ],
   "python-basic": ["app.py"],
+  "ruby-basic": [
+    "Gemfile",
+    "app/controllers/api/users_controller.rb",
+    "app/models/concerns/searchable.rb",
+    "app/models/post.rb",
+    "app/models/user.rb",
+    "app/services/payment_sync.rb",
+    "config/database.yml",
+    "config/initializers/redis.rb",
+    "config/routes.rb",
+  ],
   "java-basic": [
     "src/main/java/com/acme/billing/config/DatabaseConfiguration.java",
     "src/main/java/com/acme/billing/data/CustomerRepository.java",
