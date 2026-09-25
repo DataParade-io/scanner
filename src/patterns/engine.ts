@@ -69,6 +69,10 @@ import {
 export interface ImportLike {
   module: string;
   names: string[];
+  /** 1-based line of the import statement when known. */
+  startLine?: number;
+  /** 1-based inclusive end line; defaults to startLine when omitted. */
+  endLine?: number;
 }
 
 export interface PatternContext {
@@ -138,15 +142,28 @@ function detectThirdPartyServicesFromImportsWithConfig(
   const findings: RawFinding[] = [];
 
   for (const svc of config.thirdParty.services) {
-    const hasImport = svc.importFragments.some((frag) =>
-      imports.some(
-        (imp) =>
+    const matchingImport = imports.find((imp) =>
+      svc.importFragments.some(
+        (frag) =>
           imp.module.includes(frag) ||
           imp.names.some((name) => name.includes(frag)),
       ),
     );
 
-    if (!hasImport) continue;
+    if (!matchingImport) continue;
+
+    const startLine =
+      typeof matchingImport.startLine === "number" &&
+      Number.isInteger(matchingImport.startLine) &&
+      matchingImport.startLine >= 1
+        ? matchingImport.startLine
+        : 1;
+    const endLine =
+      typeof matchingImport.endLine === "number" &&
+      Number.isInteger(matchingImport.endLine) &&
+      matchingImport.endLine >= startLine
+        ? matchingImport.endLine
+        : startLine;
 
     findings.push({
       pattern: svc.patternId,
@@ -154,8 +171,8 @@ function detectThirdPartyServicesFromImportsWithConfig(
       confidence: svc.confidence,
       location: {
         filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
+        startLine,
+        endLine,
       },
       properties: {
         client: svc.serviceName,
