@@ -16,7 +16,12 @@ function includesAsImports(model: CppTranslationUnitModel): ImportLike[] {
       new Set([header, lower, ...segments, segments[0] ?? ""]),
     ).filter(Boolean);
 
-    return { module: header, names };
+    return {
+      module: header,
+      names,
+      startLine: include.location.startLine,
+      endLine: include.location.endLine,
+    };
   });
 }
 

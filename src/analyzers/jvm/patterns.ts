@@ -24,7 +24,12 @@ function importsForEngine(model: JvmSourceFileModel): ImportLike[] {
       ]),
     ).filter(Boolean);
 
-    return { module: qualifiedName, names };
+    return {
+      module: qualifiedName,
+      names,
+      startLine: entry.location.startLine,
+      endLine: entry.location.endLine,
+    };
   });
 }
 
