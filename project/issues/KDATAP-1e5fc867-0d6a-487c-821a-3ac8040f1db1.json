@@ -1,0 +1,40 @@
+{
+  "id": "KDATAP-1e5fc867-0d6a-487c-821a-3ac8040f1db1",
+  "title": "Implement Ruby detector topology rules",
+  "description": "",
+  "type": "task",
+  "status": "in_progress",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-bfa0233c-c206-41ae-a6b1-7291f61d79f5",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "d85e7d6d-a402-4d1a-89cd-dea52efd8eab",
+      "author": "os",
+      "text": "Starting test-first implementation. Scope is limited to Ruby parser exclusions, YAML-backed Ruby topology rules, the shared pattern engine hook, and Ruby analyzer unit tests; manifest pipelines, eval gates, annotations, project files, and other repositories remain out of scope.",
+      "created_at": "2026-09-21T19:25:56.171220Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "674cb5cb-e23d-4176-bcf4-ab3e4568f577",
+      "author": "os",
+      "text": "Implemented the Ruby detector/topology rules test-first. ActiveRecord models and concerns no longer emit database components; ordinary services no longer emit auth/service components; root-level exclusions now cover spec, test, vendor, and db/migrate; Rails route DSL, concrete auth integrations, and Net::HTTP/HTTParty/Faraday/RestClient evidence are covered. Verification: 21 focused Jest tests passed, TypeScript build passed, focused ESLint passed, and scoped git diff checks passed. The task remains in progress until the change lands.",
+      "created_at": "2026-09-21T19:34:36.841004Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "43f57502-f029-423d-bd00-f31e8d175ce4",
+      "author": "os",
+      "text": "Implementation complete pending landing: Rails models/concerns/services no longer emit components; routes collapse to one section API; concrete auth mechanisms compact by strategy; actor path+content rules now require both; ungrounded HTTP clients no longer create nodes; diagram mapping suppresses self-loop lineage. Added ruby-basic regression and verified gathersight at 10 components/7 edges/0 self-loops.",
+      "created_at": "2026-09-21T20:21:10.293128Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-21T19:25:36.473153Z",
+  "updated_at": "2026-09-21T20:21:10.293128Z",
+  "closed_at": null,
+  "custom": {}
+}

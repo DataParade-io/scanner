@@ -1,0 +1,26 @@
+{
+  "id": "KDATAP-cd1a954b-f638-4d20-b53f-605a70d32fc7",
+  "title": "Ruby scans emit grounded topology",
+  "description": "",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-bfa0233c-c206-41ae-a6b1-7291f61d79f5",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "df5c501e-2a0d-4bfe-8b50-1fe88e06067a",
+      "author": "os",
+      "text": "As a scanner user, I want Ruby topology findings grounded in concrete infrastructure and framework evidence, so that Rails applications produce useful components without model, concern, controller, or ordinary service false positives.\n\nFeature: Ruby detector topology\n  Scenario: Scan Ruby and Rails source\n    Given Ruby source containing Rails routes, authentication integrations, database configuration, or external HTTP clients\n    When the Ruby analyzer detects topology\n    Then it emits grouped API, concrete authentication, database, cache, and external API evidence\n    And it does not emit ActiveRecord models, controllers, concerns, or ordinary service classes as components\n    And root-relative excluded paths are ignored",
+      "created_at": "2026-09-21T19:25:36.360546Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-21T19:18:58.827817Z",
+  "updated_at": "2026-09-21T19:25:36.360546Z",
+  "closed_at": null,
+  "custom": {}
+}

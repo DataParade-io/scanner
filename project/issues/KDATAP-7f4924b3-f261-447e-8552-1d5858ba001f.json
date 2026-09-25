@@ -1,0 +1,18 @@
+{
+  "id": "KDATAP-7f4924b3-f261-447e-8552-1d5858ba001f",
+  "title": "Absorb serverless handlers into Aws Lambda",
+  "description": "As a privacy engineer viewing a scan diagram, I want AWS Lambda entrypoint handlers absorbed into the Aws Lambda managed service node (with file:line evidence retained), so that I do not see a separate noisy Aws Lambda Handler bubble next to the backend hub.\n\n## Not included\n- Canvas parent/child nesting of handlers under Lambda\n- Collapsing Terraform aws_lambda_function resources (those stay as managed assets)\n\n## Gherkin\n\nFeature: Collapse serverless handlers into Aws Lambda\n\nScenario: Backend Nest Lambda entrypoint is absorbed\n  Given a section has a main-application hub and an Aws Lambda managed service\n  And a serverless handler asset was detected from lambda_handler findings\n  When connectivity repairs run\n  Then the serverless handler asset is not present in the graph\n  And the Aws Lambda node retains the handler source locations\n  And the section hub has a flow to Aws Lambda\n  And no disconnected_handler red flag is raised for that handler",
+  "type": "story",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46bc4786-f096-43b0-a25d-a83d42511f74",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-18T14:35:33.207045Z",
+  "updated_at": "2026-09-18T14:35:33.207045Z",
+  "closed_at": null,
+  "custom": {}
+}
