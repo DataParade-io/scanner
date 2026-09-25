@@ -42,16 +42,9 @@ const CLASS_REGEX =
 const MODULE_REGEX = /^\s*module\s+([A-Za-z_]\w*(?:::[A-Za-z_]\w*)*)/;
 const METHOD_DEF_REGEX = /^\s*def\s+(?:self\.)?([A-Za-z_]\w*[?!]?)/;
 const NEW_CALL_REGEX = /\bnew\s+([A-Za-z_:][\w:]*)\s*(?:\(|$)/g;
-const METHOD_CALL_REGEX = /\b([A-Za-z_][\w]*(?:\.[A-Za-z_]\w*)*)\s*(?:\(|\s|$)/g;
 
-const RUBY_SKIP_PATH_SEGMENTS = [
-  "/spec/",
-  "/test/",
-  "/vendor/",
-  "/db/migrate/",
-  "spec/",
-  "test/",
-];
+const RUBY_SKIP_PATH_REGEX =
+  /(?:^|\/)(?:spec|test|vendor|tmp|log|coverage|db\/migrate)(?:\/|$)|(?:^|\/)db\/schema\.rb$/i;
 
 function normalizePath(p: string): string {
   if (!p) return "";
@@ -77,9 +70,7 @@ function emptyModel(
 }
 
 function isSkippedRubyPath(normalizedPath: string): boolean {
-  const lower = normalizedPath.toLowerCase();
-  if (lower.startsWith("spec/") || lower.startsWith("test/")) return true;
-  return RUBY_SKIP_PATH_SEGMENTS.some((segment) => lower.includes(segment));
+  return RUBY_SKIP_PATH_REGEX.test(normalizedPath);
 }
 
 function locationAt(

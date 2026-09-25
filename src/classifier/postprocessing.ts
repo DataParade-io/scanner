@@ -543,5 +543,27 @@ export function compactAuthServiceComponents(
   components: DetectedComponent[],
 ): DetectedComponent[] {
   if (!components?.length) return [];
-  return components;
+
+  const canonicalized = components.map((component) => {
+    if (component.type !== "asset" || component.subType !== "auth_service") {
+      return component;
+    }
+
+    const framework = component.properties.framework;
+    const strategy = component.properties.strategy;
+    if (framework !== "rails" || typeof strategy !== "string") {
+      return component;
+    }
+
+    const canonicalStrategy =
+      strategy === "session_cookie" ? "session" : strategy.trim().toLowerCase();
+    if (!canonicalStrategy) return component;
+
+    return {
+      ...component,
+      name: toDisplayName(canonicalStrategy, canonicalStrategy),
+    };
+  });
+
+  return dedupeComponents(canonicalized);
 }

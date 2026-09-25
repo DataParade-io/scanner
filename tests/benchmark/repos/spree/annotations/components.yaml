@@ -87,15 +87,14 @@ annotations:
       start_line: 7
       end_line: 8
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: Customer maps to the spree_customers table, the persistent store for
-      buyer accounts.
+      status: negative
+      labels: []
+    rationale: >-
+      spree_customers is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -113,15 +112,14 @@ annotations:
       start_line: 15
       end_line: 20
     expected:
-      status: positive
-      labels:
-        - service
-    rationale: PaymentProcessing drives checkout payment workflows rather than
-      exposing an HTTP API surface.
+      status: negative
+      labels: []
+    rationale: >-
+      PaymentProcessing is an internal Ruby application service/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -217,15 +215,14 @@ annotations:
       start_line: 2
       end_line: 2
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: CreditCard stores tokenized card metadata and belongs to a customer
-      payment profile.
+      status: negative
+      labels: []
+    rationale: >-
+      CreditCard is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -243,15 +240,14 @@ annotations:
       start_line: 2
       end_line: 2
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: PaymentSource is the base class for saved payment instruments linked
-      to customers.
+      status: negative
+      labels: []
+    rationale: >-
+      PaymentSource is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -269,15 +265,14 @@ annotations:
       start_line: 2
       end_line: 2
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: GatewayCustomer maps a Spree customer to a payment gateway wallet
-      profile_id.
+      status: negative
+      labels: []
+    rationale: >-
+      GatewayCustomer is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -295,14 +290,14 @@ annotations:
       start_line: 4
       end_line: 4
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: Payment records checkout charges and links orders to payment sources.
+      status: negative
+      labels: []
+    rationale: >-
+      Payment is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -320,14 +315,14 @@ annotations:
       start_line: 4
       end_line: 4
     expected:
-      status: positive
-      labels:
-        - service
-    rationale: PaymentMethod configures gateway integrations used during checkout.
+      status: negative
+      labels: []
+    rationale: >-
+      PaymentMethod is an internal Ruby application service/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -396,15 +391,14 @@ annotations:
       start_line: 4
       end_line: 4
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: Address stores customer shipping and billing contact fields used at
-      checkout.
+      status: negative
+      labels: []
+    rationale: >-
+      Address is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -422,15 +416,14 @@ annotations:
       start_line: 4
       end_line: 4
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: Order is the checkout aggregate that references the customer and
-      payment records.
+      status: negative
+      labels: []
+    rationale: >-
+      Order is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -448,15 +441,14 @@ annotations:
       start_line: 6
       end_line: 6
     expected:
-      status: positive
-      labels:
-        - service
-    rationale: CreateUserAccount delegates guest checkout account creation to the
-      customer workflow.
+      status: negative
+      labels: []
+    rationale: >-
+      CreateUserAccount is an internal Ruby application service/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:

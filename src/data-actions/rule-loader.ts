@@ -23,12 +23,17 @@ export const DATA_ACTION_RULE_LANGUAGES = [
   "yaml",
   "env",
   "dockerfile",
+  "ruby",
 ] as const satisfies readonly FileLanguage[];
 
-export type DataActionRuleLanguage = (typeof DATA_ACTION_RULE_LANGUAGES)[number];
+export type DataActionRuleLanguage =
+  (typeof DATA_ACTION_RULE_LANGUAGES)[number];
 
 const dataActionRuleLanguageSchema = z.enum(
-  DATA_ACTION_RULE_LANGUAGES as unknown as [DataActionRuleLanguage, ...DataActionRuleLanguage[]],
+  DATA_ACTION_RULE_LANGUAGES as unknown as [
+    DataActionRuleLanguage,
+    ...DataActionRuleLanguage[],
+  ],
 );
 
 const dataActionRuleSchema = z.object({

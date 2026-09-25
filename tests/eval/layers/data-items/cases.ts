@@ -7,6 +7,19 @@ import { withExhaustiveScope } from "../../exhaustive-scopes";
  */
 const dataItemEvalCaseList: EvalCase[] = [
   {
+    id: "data-item-ruby-email",
+    fixture: "ruby-basic",
+    layer: "data-items",
+    subject: { key: "data_item:email", name: "email" },
+    evidence: {
+      file_path: "app/controllers/api/users_controller.rb",
+      start_line: 8,
+      end_line: 8,
+    },
+    expected: { status: "positive", labels: ["user_email"] },
+    rationale: "Rails strong parameters admit the customer's email field.",
+  },
+  {
     id: "data-item-jvm-username",
     fixture: "jvm-manifests-basic",
     layer: "data-items",
@@ -73,7 +86,8 @@ const dataItemEvalCaseList: EvalCase[] = [
       end_line: 9,
     },
     expected: { status: "positive", labels: ["user_email"] },
-    rationale: "Fixture contains an email data item (repository email parameter).",
+    rationale:
+      "Fixture contains an email data item (repository email parameter).",
   },
   {
     id: "data-item-dotnet-username",

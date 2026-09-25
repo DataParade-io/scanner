@@ -270,14 +270,14 @@ annotations:
       start_line: 20
       end_line: 23
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: EmailAddress persists user email addresses in the email_addresses table.
+      status: negative
+      labels: []
+    rationale: >-
+      EmailAddress is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -295,15 +295,14 @@ annotations:
       start_line: 20
       end_line: 21
     expected:
-      status: positive
-      labels:
-        - auth_service
-    rationale: Principal is the shared identity base class for users and groups
-      stored in the users table.
+      status: negative
+      labels: []
+    rationale: >-
+      Principal is an internal Ruby application service/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:
@@ -449,15 +448,14 @@ annotations:
       start_line: 19
       end_line: 20
     expected:
-      status: positive
-      labels:
-        - database
-    rationale: ApplicationRecord is the ActiveRecord base class backing all
-      persisted auth models.
+      status: negative
+      labels: []
+    rationale: >-
+      ApplicationRecord is an internal Ruby ActiveRecord model/class and is evidence within the Rails application, not an independently deployable architecture component. Concrete backing datastores and integrations require their own configuration or boundary evidence.
     provenance:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
-      review_state: accepted
+      review_state: rejected
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
     canonical:

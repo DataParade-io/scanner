@@ -86,6 +86,44 @@ const dataFlowEvalCaseList: EvalCase[] = [
       "The OpenAI HTTP call at this line must not be mislabeled as a Stripe third-party flow.",
   },
   {
+    id: "ruby-postgres-database-flow",
+    fixture: "ruby-basic",
+    layer: "data-flows",
+    subject: {
+      key: "flow:asset:api->asset:database",
+      name: "API → PostgreSQL",
+    },
+    evidence: { file_path: "config/database.yml", start_line: 2, end_line: 2 },
+    expected: { status: "positive", labels: ["database_query"] },
+    rationale:
+      "The Rails API persists data in its configured PostgreSQL store.",
+  },
+  {
+    id: "ruby-stripe-api-flow",
+    fixture: "ruby-basic",
+    layer: "data-flows",
+    subject: {
+      key: "flow:asset:api->third_party:stripe",
+      name: "API → Stripe",
+    },
+    evidence: { file_path: "Gemfile", start_line: 1, end_line: 1 },
+    expected: { status: "positive", labels: ["api_call"] },
+    rationale:
+      "The runtime Stripe dependency establishes the outbound integration.",
+  },
+  {
+    id: "ruby-customer-api-flow",
+    fixture: "ruby-basic",
+    layer: "data-flows",
+    subject: {
+      key: "flow:actor:customer->asset:api",
+      name: "Customer → API",
+    },
+    evidence: { file_path: "app/models/user.rb", start_line: 1, end_line: 1 },
+    expected: { status: "positive", labels: ["api_call"] },
+    rationale: "The customer interacts with the Rails API boundary.",
+  },
+  {
     id: "java-stripe-api-flow",
     fixture: "java-basic",
     layer: "data-flows",
@@ -124,12 +162,14 @@ const dataFlowEvalCaseList: EvalCase[] = [
       name: "Root API → JDBC PostgreSQL",
     },
     evidence: {
-      file_path: "src/main/java/com/acme/billing/config/DatabaseConfiguration.java",
+      file_path:
+        "src/main/java/com/acme/billing/config/DatabaseConfiguration.java",
       start_line: 11,
       end_line: 11,
     },
     expected: { status: "positive", labels: ["database_query"] },
-    rationale: "Root API queries the JDBC PostgreSQL asset from the Hikari URL.",
+    rationale:
+      "Root API queries the JDBC PostgreSQL asset from the Hikari URL.",
   },
   {
     id: "java-jpa-database-flow",
@@ -191,7 +231,11 @@ const dataFlowEvalCaseList: EvalCase[] = [
       key: "flow:asset:ledger->asset:jdbc:mongo",
       name: "Ledger → Mongo",
     },
-    evidence: { file_path: "src/main/resources/application.yml", start_line: 1, end_line: 1 },
+    evidence: {
+      file_path: "src/main/resources/application.yml",
+      start_line: 1,
+      end_line: 1,
+    },
     expected: { status: "positive", labels: ["database_query"] },
     rationale: "Ledger app queries Mongo from the Spring YAML uri.",
   },
@@ -203,7 +247,11 @@ const dataFlowEvalCaseList: EvalCase[] = [
       key: "flow:asset:ledger->asset:hikaricp",
       name: "Ledger → HikariCP",
     },
-    evidence: { file_path: "services/ledger/build.gradle.kts", start_line: 1, end_line: 1 },
+    evidence: {
+      file_path: "services/ledger/build.gradle.kts",
+      start_line: 1,
+      end_line: 1,
+    },
     expected: { status: "positive", labels: ["database_query"] },
     rationale: "Ledger app queries HikariCP from the Gradle module.",
   },
@@ -215,7 +263,11 @@ const dataFlowEvalCaseList: EvalCase[] = [
       key: "flow:asset:ledger->asset:mysql jdbc",
       name: "Ledger → MySQL JDBC",
     },
-    evidence: { file_path: "services/ledger/build.gradle.kts", start_line: 1, end_line: 1 },
+    evidence: {
+      file_path: "services/ledger/build.gradle.kts",
+      start_line: 1,
+      end_line: 1,
+    },
     expected: { status: "positive", labels: ["database_query"] },
     rationale: "Ledger app queries MySQL JDBC from the Gradle module.",
   },
@@ -229,7 +281,8 @@ const dataFlowEvalCaseList: EvalCase[] = [
     },
     evidence: { file_path: "src/Api/Api.csproj", start_line: 1, end_line: 1 },
     expected: { status: "positive", labels: ["database_query"] },
-    rationale: "API queries Npgsql from the project package and connection string.",
+    rationale:
+      "API queries Npgsql from the project package and connection string.",
   },
   {
     id: "dotnet-api-cache-flow",
@@ -239,7 +292,11 @@ const dataFlowEvalCaseList: EvalCase[] = [
       key: "flow:asset:api->asset:cache",
       name: "API → Cache",
     },
-    evidence: { file_path: "src/Api/appsettings.json", start_line: 1, end_line: 1 },
+    evidence: {
+      file_path: "src/Api/appsettings.json",
+      start_line: 1,
+      end_line: 1,
+    },
     expected: { status: "positive", labels: ["database_query"] },
     rationale: "API queries the cache connection string.",
   },

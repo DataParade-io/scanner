@@ -16,7 +16,9 @@ const BENCHMARK_ROOT = path.join(__dirname, "../../benchmark");
 
 describe("baseline readiness policy", () => {
   it("locks the approved policy version and floors", () => {
-    expect(BASELINE_READINESS_POLICY_VERSION).toBe("baseline-readiness-policy/1");
+    expect(BASELINE_READINESS_POLICY_VERSION).toBe(
+      "baseline-readiness-policy/1",
+    );
     expect(BASELINE_READINESS_POLICY.layerFloors.components).toEqual({
       minAcceptedCanonicalCount: 450,
       minDistinctPackets: 25,
@@ -51,23 +53,29 @@ describe("toHeadlineLayer", () => {
 describe("collectGoldPopulation layer mapping", () => {
   it("counts accepted canonical data-items and components on develop", () => {
     const population = collectGoldPopulation(BENCHMARK_ROOT);
-    expect(population.byLayer["data-items"].acceptedCanonicalCount).toBeGreaterThanOrEqual(100);
-    expect(population.byLayer["data-items"].packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
-      12,
-    );
-    expect(population.byLayer.components.acceptedCanonicalCount).toBeGreaterThanOrEqual(450);
-    expect(population.byLayer.components.packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
-      25,
-    );
-    expect(population.byLayer.mentions.acceptedCanonicalCount).toBeGreaterThanOrEqual(50);
+    expect(
+      population.byLayer["data-items"].acceptedCanonicalCount,
+    ).toBeGreaterThanOrEqual(100);
+    expect(
+      population.byLayer["data-items"].packetDiversity.distinctPackets,
+    ).toBeGreaterThanOrEqual(12);
+    expect(population.byLayer.components.acceptedCanonicalCount).toBe(390);
+    expect(
+      population.byLayer.components.packetDiversity.distinctPackets,
+    ).toBeGreaterThanOrEqual(25);
+    expect(
+      population.byLayer.mentions.acceptedCanonicalCount,
+    ).toBeGreaterThanOrEqual(50);
   });
 
   it("counts promoted accepted canonical data-flows", () => {
     const population = collectGoldPopulation(BENCHMARK_ROOT);
-    expect(population.byLayer["data-flows"].acceptedCanonicalCount).toBeGreaterThanOrEqual(158);
-    expect(population.byLayer["data-flows"].packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
-      1,
-    );
+    expect(
+      population.byLayer["data-flows"].acceptedCanonicalCount,
+    ).toBeGreaterThanOrEqual(158);
+    expect(
+      population.byLayer["data-flows"].packetDiversity.distinctPackets,
+    ).toBeGreaterThanOrEqual(1);
   });
 });
 
@@ -136,7 +144,9 @@ describe("checkLayerPopulationFloors", () => {
     };
 
     const blockers = checkLayerPopulationFloors(goldPopulation);
-    expect(blockers.some((blocker) => blocker.code === "FLOW_NO_CANONICAL_ACCEPTS")).toBe(true);
+    expect(
+      blockers.some((blocker) => blocker.code === "FLOW_NO_CANONICAL_ACCEPTS"),
+    ).toBe(true);
   });
 });
 
@@ -149,13 +159,15 @@ describe("checkLegacyOutcomesResolved", () => {
 describe("checkNoLegacyIdentityOnAccepted", () => {
   it("reports no loader exemptions after negative decoy review_state fix (KDATAP-b702ea)", () => {
     const blockers = checkNoLegacyIdentityOnAccepted(BENCHMARK_ROOT);
-    const loaderExemptions = blockers.filter((blocker) => blocker.code === "LOADER_EXEMPTION");
+    const loaderExemptions = blockers.filter(
+      (blocker) => blocker.code === "LOADER_EXEMPTION",
+    );
     expect(loaderExemptions).toEqual([]);
   });
 });
 
 describe("evaluateBaselineReadiness dry run", () => {
-  it("passes on develop without flow canonical blockers after promotion", () => {
+  it("reports the component population floor after the Ruby taxonomy correction", () => {
     const goldPopulation = collectGoldPopulation(BENCHMARK_ROOT);
     const readiness = evaluateBaselineReadiness({
       benchmarkRoot: BENCHMARK_ROOT,
@@ -165,22 +177,36 @@ describe("evaluateBaselineReadiness dry run", () => {
       requireRuntimeChecks: false,
     });
 
-    expect(readiness.status).toBe("pass");
+    expect(readiness.status).toBe("fail");
     expect(readiness.evaluatedAt).toBeTruthy();
-    expect(readiness.blockers.some((blocker) => blocker.code === "FLOW_NO_CANONICAL_ACCEPTS")).toBe(
-      false,
-    );
     expect(
       readiness.blockers.some(
-        (blocker) => blocker.code === "LOADER_EXEMPTION" && blocker.layer === "data-flows",
+        (blocker) => blocker.code === "FLOW_NO_CANONICAL_ACCEPTS",
       ),
     ).toBe(false);
-    expect(readiness.blockers.some((blocker) => blocker.code === "FLOW_NO_ENDPOINTS")).toBe(false);
     expect(
       readiness.blockers.some(
-        (blocker) => blocker.code === "LOADER_EXEMPTION" && blocker.layer === "components",
+        (blocker) =>
+          blocker.code === "LOADER_EXEMPTION" && blocker.layer === "data-flows",
       ),
     ).toBe(false);
-    expect(readiness.blockers).toHaveLength(0);
+    expect(
+      readiness.blockers.some(
+        (blocker) => blocker.code === "FLOW_NO_ENDPOINTS",
+      ),
+    ).toBe(false);
+    expect(
+      readiness.blockers.some(
+        (blocker) =>
+          blocker.code === "LOADER_EXEMPTION" && blocker.layer === "components",
+      ),
+    ).toBe(false);
+    expect(readiness.blockers).toEqual([
+      expect.objectContaining({
+        code: "LAYER_BELOW_ACCEPTED_FLOOR",
+        layer: "components",
+        message: "components: acceptedCanonicalCount 390 < floor 450",
+      }),
+    ]);
   });
 });

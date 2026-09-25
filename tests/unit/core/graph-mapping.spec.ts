@@ -58,6 +58,30 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(properties.security).toBeDefined();
   });
 
+  it("keeps intra-component lineage out of the diagram edge list", () => {
+    const scanResult: ScanResult = {
+      components: [asset("app", "Application", { section_id: "root" })],
+      dataFlows: [
+        {
+          id: "flow-self",
+          sourceComponentId: "app",
+          targetComponentId: "app",
+          type: "data_transfer",
+          confidence: 0.8,
+        },
+      ],
+      filesScanned: 1,
+      filesSkipped: 0,
+      totalLines: 1,
+      scanDurationMs: 1,
+      warnings: [],
+      errors: [],
+    };
+
+    const graph = buildDiagramGraphFromScanResult(scanResult);
+    expect(graph.edges).toHaveLength(0);
+  });
+
   it("maps all DetectedComponent and DetectedDataFlow properties into node data and DataFlowProperties", () => {
     const scanResult: ScanResult = {
       components: [
@@ -95,12 +119,13 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
             },
           },
         },
+        asset("component-2", "Target Service", { section_id: "root" }),
       ],
       dataFlows: [
         {
           id: "flow-1",
           sourceComponentId: "component-1",
-          targetComponentId: "component-1",
+          targetComponentId: "component-2",
           type: "api_call",
           description: "Health check endpoint",
           confidence: 0.9,
@@ -133,10 +158,14 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
 
     const graph = buildDiagramGraphFromScanResult(scanResult);
 
-    expect(graph.nodes).toHaveLength(1);
+    expect(graph.nodes).toHaveLength(2);
     expect(graph.edges).toHaveLength(1);
 
-    const node = graph.nodes[0];
+    const node = graph.nodes.find(
+      (candidate) => candidate.id === "component-1",
+    );
+    expect(node).toBeDefined();
+    if (!node) return;
     const nodeData = node.data as any;
 
     expect(nodeData.label).toBe("Test Application");
@@ -370,7 +399,8 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(managed?.position.y ?? 0).toBeGreaterThan(provider?.position.y ?? 0);
 
     const managedEdge = graph.edges.find((e) => e.id === "flow-1") as
-      (typeof graph.edges)[number] | undefined;
+      | (typeof graph.edges)[number]
+      | undefined;
     expect(managedEdge).toBeDefined();
     expect((managedEdge as any)?.sourceHandle).toBe("right-source");
     expect((managedEdge as any)?.targetHandle).toBe("left-target");

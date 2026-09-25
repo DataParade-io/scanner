@@ -7,6 +7,8 @@ const MANIFEST_ONLY_PATH_SUFFIXES = [
   "pyproject.toml",
   "pipfile",
   "requirements.txt",
+  "gemfile",
+  "gemfile.lock",
 ] as const;
 
 /** True when this section discovered a `package.json` under `sectionDir`. */

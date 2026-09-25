@@ -41,10 +41,7 @@ function findBySubtype(
   return components.filter((c) => c.type === type && c.subType === subType);
 }
 
-function hasAsserted(
-  components: DetectedComponent[],
-  action: string,
-): boolean {
+function hasAsserted(components: DetectedComponent[], action: string): boolean {
   return components.some((c) =>
     readAssignments(c).some(
       (a) => a.action === action && (a.status ?? "asserted") === "asserted",
@@ -108,9 +105,9 @@ describe("topology data-actions across language fixtures", () => {
       );
     } else {
       // Detector gap — still require actors clean and no bad relay.
-      expect(hasAsserted(components, "store") || hasAsserted(components, "disclose")).toBe(
-        true,
-      );
+      expect(
+        hasAsserted(components, "store") || hasAsserted(components, "disclose"),
+      ).toBe(true);
     }
 
     if (openai) {
@@ -153,11 +150,29 @@ describe("topology data-actions across language fixtures", () => {
     }
   }, 120_000);
 
+  it("data-actions-ruby: internal service stays hidden while database stores", async () => {
+    const { components } = await scanFixture("data-actions-ruby");
+    expect(
+      components.some((component) =>
+        component.name.toLowerCase().includes("privacyactionsservice"),
+      ),
+    ).toBe(false);
+
+    const asserted = new Set(
+      components.flatMap((component) => assertedVerbs(component)),
+    );
+
+    expect(Array.from(asserted)).toContain("store");
+    expect(assertedRelayWithoutCorroboration(components)).toEqual([]);
+  }, 120_000);
+
   it("java-basic: JDBC/database store + Stripe disclose path", async () => {
     const { components } = await scanFixture("java-basic");
     const databases = findBySubtype(components, "asset", "database");
     expect(databases.length).toBeGreaterThan(0);
-    expect(databases.some((d) => assertedVerbs(d).includes("store"))).toBe(true);
+    expect(databases.some((d) => assertedVerbs(d).includes("store"))).toBe(
+      true,
+    );
 
     const stripe = findByIdentity(components, "third_party:stripe");
     expect(stripe).toBeDefined();
@@ -181,7 +196,9 @@ describe("topology data-actions across language fixtures", () => {
   }, 120_000);
 
   it("dotnet-manifests-basic: Stripe/outbound disclose when flows exist", async () => {
-    const { components, dataFlows } = await scanFixture("dotnet-manifests-basic");
+    const { components, dataFlows } = await scanFixture(
+      "dotnet-manifests-basic",
+    );
     const stripe = findByIdentity(components, "third_party:stripe");
     expect(stripe).toBeDefined();
 

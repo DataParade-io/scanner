@@ -37,13 +37,29 @@ describe("Ruby parser", () => {
       "",
     ].join("\n");
 
-    const model = parseRubySourceFile(makeRubyFile(content, "config/initializers/redis.rb"));
-    expect(model.requires.map((r) => r.path)).toEqual(["redis", "../lib/helper"]);
+    const model = parseRubySourceFile(
+      makeRubyFile(content, "config/initializers/redis.rb"),
+    );
+    expect(model.requires.map((r) => r.path)).toEqual([
+      "redis",
+      "../lib/helper",
+    ]);
   });
 
-  it("skips spec and vendor paths", () => {
+  it.each([
+    "spec/models/user_spec.rb",
+    "/spec/models/user_spec.rb",
+    "vendor/bundle/gems/example.rb",
+    "/vendor/bundle/gems/example.rb",
+    "db/migrate/20260921000000_create_users.rb",
+    "/db/migrate/20260921000000_create_users.rb",
+    "db/schema.rb",
+    "tmp/cache/generated.rb",
+    "log/archive.rb",
+    "coverage/generated.rb",
+  ])("skips excluded root-relative path %s", (path) => {
     const content = "class User < ActiveRecord::Base\nend\n";
-    const model = parseRubySourceFile(makeRubyFile(content, "spec/models/user_spec.rb"));
+    const model = parseRubySourceFile(makeRubyFile(content, path));
     expect(model.classes).toHaveLength(0);
   });
 

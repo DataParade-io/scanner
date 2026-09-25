@@ -1,12 +1,6 @@
-import type {
-  DetectedComponent,
-  DetectedDataFlow,
-  ScanResult,
-} from "../types";
+import type { DetectedComponent, DetectedDataFlow, ScanResult } from "../types";
 import type { SourceLocation } from "../types/file";
-import type {
-  DataActionAssignment,
-} from "../types/data-action";
+import type { DataActionAssignment } from "../types/data-action";
 import { componentMayCarryDataActions } from "../types/data-action";
 import type { DataAction } from "../../data-actions/taxonomy";
 import {
@@ -71,12 +65,15 @@ function applyPrivacyDataActions(
   if (!componentMayCarryDataActions(component.type)) {
     return;
   }
-  const asserted = readComponentDataActions(component).filter(isAssertedDataAction);
+  const asserted =
+    readComponentDataActions(component).filter(isAssertedDataAction);
   if (asserted.length === 0) {
     return;
   }
   // Stable order for board export determinism.
-  const ordered = [...asserted].sort((a, b) => a.action.localeCompare(b.action));
+  const ordered = [...asserted].sort((a, b) =>
+    a.action.localeCompare(b.action),
+  );
   privacy.dataActions = ordered;
   const primary = selectPrimaryDataAction(ordered);
   if (primary) {
@@ -92,9 +89,10 @@ function stripCodeFromSourceLocation(
   return rest;
 }
 
-function stripCodeFromDetectedFromRef(
-  ref: { pattern: string; sourceLocation?: SourceLocation },
-): { pattern: string; sourceLocation?: SourceLocation } {
+function stripCodeFromDetectedFromRef(ref: {
+  pattern: string;
+  sourceLocation?: SourceLocation;
+}): { pattern: string; sourceLocation?: SourceLocation } {
   return {
     pattern: ref.pattern,
     sourceLocation: stripCodeFromSourceLocation(ref.sourceLocation),
@@ -180,9 +178,8 @@ function mapComponentToNode(
     (baseData as Record<string, unknown>).scanConfidence = component.confidence;
   }
   if (component.detectedFrom?.length) {
-    (baseData as Record<string, unknown>).detectedFrom = component.detectedFrom.map(
-      (ref) => stripCodeFromDetectedFromRef(ref),
-    );
+    (baseData as Record<string, unknown>).detectedFrom =
+      component.detectedFrom.map((ref) => stripCodeFromDetectedFromRef(ref));
   }
   if (component.sourceLocations?.length) {
     (baseData as Record<string, unknown>).sourceLocations =
@@ -217,7 +214,9 @@ function normalizeDataFlowType(type: DetectedDataFlow["type"]): string {
   return type;
 }
 
-function normalizeTransformation(transformation?: string[] | undefined): string {
+function normalizeTransformation(
+  transformation?: string[] | undefined,
+): string {
   if (!transformation || transformation.length === 0) {
     return "none";
   }
@@ -248,6 +247,12 @@ function mapDataFlowToEdge(
   flow: DetectedDataFlow,
   componentsById: ComponentByIdMap,
 ): DiagramEdgeSchema | undefined {
+  // Intra-component lineage is useful to scanner evaluation and data-action
+  // derivation, but a diagram edge from a node to itself is visual noise.
+  if (flow.sourceComponentId === flow.targetComponentId) {
+    return undefined;
+  }
+
   if (
     !componentsById.has(flow.sourceComponentId) ||
     !componentsById.has(flow.targetComponentId)
@@ -305,7 +310,11 @@ function mapDataFlowToEdge(
   for (const [key, value] of flowEntries) {
     if (value === undefined) continue;
     if (key in properties) continue;
-    if (key === "id" || key === "sourceComponentId" || key === "targetComponentId") {
+    if (
+      key === "id" ||
+      key === "sourceComponentId" ||
+      key === "targetComponentId"
+    ) {
       continue;
     }
     if (key === "type") continue;
@@ -354,12 +363,10 @@ export function buildDiagramGraphFromScanResult(
   >();
   for (const component of scanResult.components) {
     const sectionId = getSectionIdFromComponent(component);
-    const entry =
-      buckets.get(sectionId) ??
-      ({
-        label: getSectionLabelFromComponent(component),
-        components: [],
-      });
+    const entry = buckets.get(sectionId) ?? {
+      label: getSectionLabelFromComponent(component),
+      components: [],
+    };
     entry.components.push(component);
     buckets.set(sectionId, entry);
   }

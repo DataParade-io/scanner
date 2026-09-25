@@ -44,6 +44,7 @@ import {
   detectRubyAuthFromConfig as detectRubyAuthFromConfigAdapter,
   detectRubyDatabaseConnectionsFromConfig as detectRubyDatabaseConnectionsFromConfigAdapter,
   detectRubyDatabaseYmlFromConfig as detectRubyDatabaseYmlFromConfigAdapter,
+  detectRubyExternalApisFromConfig as detectRubyExternalApisFromConfigAdapter,
   detectRubyRoutesFromConfig as detectRubyRoutesFromConfigAdapter,
   detectRubyServicesFromConfig as detectRubyServicesFromConfigAdapter,
 } from "./detectors/ruby";
@@ -140,7 +141,8 @@ function detectThirdPartyServicesFromImportsWithConfig(
     const hasImport = svc.importFragments.some((frag) =>
       imports.some(
         (imp) =>
-          imp.module.includes(frag) || imp.names.some((name) => name.includes(frag)),
+          imp.module.includes(frag) ||
+          imp.names.some((name) => name.includes(frag)),
       ),
     );
 
@@ -195,10 +197,14 @@ function detectActorsFromConfig(
   for (const rule of rules) {
     let lineMatch: { line: number; code: string } | undefined;
 
-    if (rule.filePathRegex && rule.filePathRegex.test(normalizedPath)) {
-      lineMatch = { line: 1, code: firstLine };
-    } else if (rule.contentRegex) {
+    if (rule.filePathRegex && !rule.filePathRegex.test(normalizedPath)) {
+      continue;
+    }
+
+    if (rule.contentRegex) {
       lineMatch = findFirstLineMatch(content, rule.contentRegex);
+    } else if (rule.filePathRegex) {
+      lineMatch = { line: 1, code: firstLine };
     }
 
     if (!lineMatch) continue;
@@ -230,9 +236,7 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
 
   const findings: RawFinding[] = [];
 
-  findings.push(
-    ...detectThirdPartyServicesFromImportsWithConfig(ctx, config),
-  );
+  findings.push(...detectThirdPartyServicesFromImportsWithConfig(ctx, config));
   findings.push(
     ...detectTypeScriptJavaScriptExternalApisFromHttpClientsAdapter(
       ctx,
@@ -283,12 +287,11 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(...detectPhpRoutesFromConfigAdapter(ctx, config));
   findings.push(...detectPhpServerlessHandlersFromConfigAdapter(ctx, config));
 
-  findings.push(
-    ...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config),
-  );
+  findings.push(...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config));
   findings.push(...detectRubyDatabaseYmlFromConfigAdapter(ctx, config));
   findings.push(...detectRubyAuthFromConfigAdapter(ctx, config));
   findings.push(...detectRubyRoutesFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyExternalApisFromConfigAdapter(ctx, config));
   findings.push(...detectRubyServicesFromConfigAdapter(ctx, config));
 
   findings.push(...detectJvmDatabaseConnectionsFromConfigAdapter(ctx, config));
@@ -305,10 +308,7 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(
     ...detectTypeScriptServerlessHandlersFromConfigAdapter(ctx, config),
   );
-  findings.push(
-    ...detectTypeScriptExternalApisFromConfigAdapter(ctx, config),
-  );
+  findings.push(...detectTypeScriptExternalApisFromConfigAdapter(ctx, config));
 
   return findings;
 }
-

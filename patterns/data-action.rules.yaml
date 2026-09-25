@@ -101,6 +101,13 @@ data_action_rules:
     patterns:
       - "cgi\\.get\\s*\\(|getenv\\s*\\(\\s*\"QUERY_STRING\""
 
+  - id: da-collect-ruby-rails-strong-params
+    action: collect
+    languages: [ruby]
+    patterns:
+      - "params\\.require\\s*\\([^)]*\\)\\.permit\\s*\\("
+      - "params\\.expect\\s*\\("
+
   # =========================================================================
   # store (pattern-backed; complements subtype topology)
   # =========================================================================
@@ -169,6 +176,13 @@ data_action_rules:
     languages: [rust]
     patterns:
       - "sqlx::query!|diesel::insert_into|\\.execute\\s*\\("
+
+  - id: da-store-ruby-active-record
+    action: store
+    languages: [ruby]
+    patterns:
+      - "\\b[A-Z][A-Za-z0-9_:]*\\.(create|create!|update|update!|upsert|upsert_all)\\s*\\("
+      - "\\b[a-z_][A-Za-z0-9_]*\\.(save|save!|update|update!)\\s*(\\(|$)"
 
   - id: da-store-terraform-storage
     action: store
@@ -348,6 +362,13 @@ data_action_rules:
       - "c\\.(JSON|HTML|String)\\s*\\("
       - "template\\.Execute\\s*\\("
 
+  - id: da-display-ruby-rails-json
+    action: display
+    languages: [ruby]
+    patterns:
+      - "\\brender\\s+(status:\\s*[^,]+,\\s*)?json:\\s*"
+      - "\\brender\\s*\\(\\s*json:\\s*"
+
   # =========================================================================
   # log (gated on PII co-occurrence on the same line)
   # =========================================================================
@@ -432,6 +453,13 @@ data_action_rules:
     patterns:
       - "resource\\s+\"(aws_cloudwatch_log_group|aws_cloudwatch_log_stream|google_logging)"
 
+  - id: da-log-ruby-rails
+    action: log
+    require_pii_cooccurrence: true
+    languages: [ruby]
+    patterns:
+      - "\\b(Rails\\.)?logger\\.(debug|info|warn|error|fatal)\\s*\\("
+
   # =========================================================================
   # delete
   # =========================================================================
@@ -493,6 +521,13 @@ data_action_rules:
     patterns:
       - "#\\[delete\\(|Method::DELETE|diesel::delete"
 
+  - id: da-delete-ruby-active-record
+    action: delete
+    languages: [ruby]
+    patterns:
+      - "\\b[A-Z][A-Za-z0-9_:]*\\.(destroy|destroy_by|delete|delete_by|delete_all)\\s*\\("
+      - "\\b[a-z_][A-Za-z0-9_]*\\.(destroy|destroy!|delete)\\s*(\\(|$)"
+
   - id: da-delete-terraform-lifecycle
     action: delete
     languages: [terraform]
@@ -551,3 +586,14 @@ data_action_rules:
     patterns:
       - "resource\\s+\"(aws_api_gateway_rest_api|aws_api_gatewayv2_api|aws_lb|aws_alb|google_compute_url_map|azurerm_application_gateway)"
       - "resource\\s+\"(aws_cloudfront_distribution|cloudflare_)"
+
+  # =========================================================================
+  # disclose (outbound Ruby clients, gated on same-line PII)
+  # =========================================================================
+  - id: da-disclose-ruby-http-client
+    action: disclose
+    require_pii_cooccurrence: true
+    languages: [ruby]
+    patterns:
+      - "\\b(Faraday|HTTParty|RestClient)\\.(post|put|patch)\\s*\\("
+      - "\\bNet::HTTP\\.(post|post_form|put)\\s*\\("

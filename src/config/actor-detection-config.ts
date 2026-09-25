@@ -8,10 +8,7 @@ import fs from "fs";
 import path from "path";
 import YAML from "yaml";
 
-import {
-  type PatternId,
-  PATTERN_IDS,
-} from "../core/types/detection";
+import { type PatternId, PATTERN_IDS } from "../core/types/detection";
 
 export interface ActorRule {
   id: string;
@@ -53,7 +50,9 @@ function getConfigPath(): string {
   return path.join(cliRoot, "patterns", "actor.patterns.yaml");
 }
 
-function compileRegexes(raw: Record<string, string> | undefined): Record<string, RegExp> {
+function compileRegexes(
+  raw: Record<string, string> | undefined,
+): Record<string, RegExp> {
   const regexes: Record<string, RegExp> = {};
   if (!raw || typeof raw !== "object") return regexes;
   for (const [name, pattern] of Object.entries(raw)) {
@@ -62,11 +61,29 @@ function compileRegexes(raw: Record<string, string> | undefined): Record<string,
         regexes[name] = new RegExp(pattern, "i");
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        throw new Error(`actor-detection.regexes['${name}'] invalid regex: ${msg}`);
+        throw new Error(
+          `actor-detection.regexes['${name}'] invalid regex: ${msg}`,
+        );
       }
     }
   }
   return regexes;
+}
+
+function resolveRegex(
+  value: string | undefined,
+  regexes: Record<string, RegExp>,
+  context: string,
+): RegExp | undefined {
+  if (value == null) return undefined;
+  const configured = regexes[value];
+  if (configured) return configured;
+  try {
+    return new RegExp(value, "i");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    throw new Error(`${context} invalid regex: ${msg}`);
+  }
 }
 
 function validatePatternId(rawValue: unknown, context: string): PatternId {
@@ -114,14 +131,16 @@ export function loadActorDetectionConfig(): ActorDetectionConfig {
         `actor-detection.rules['${rawRule.id}']`,
       );
 
-      const filePathRegex =
-        rawRule.file_path_regex != null
-          ? regexes[rawRule.file_path_regex]
-          : undefined;
-      const contentRegex =
-        rawRule.content_regex != null
-          ? regexes[rawRule.content_regex]
-          : undefined;
+      const filePathRegex = resolveRegex(
+        rawRule.file_path_regex,
+        regexes,
+        `actor-detection.rules['${rawRule.id}'].file_path_regex`,
+      );
+      const contentRegex = resolveRegex(
+        rawRule.content_regex,
+        regexes,
+        `actor-detection.rules['${rawRule.id}'].content_regex`,
+      );
 
       if (!filePathRegex && !contentRegex) {
         // Skip rules that have neither file path nor content regex.
@@ -143,4 +162,3 @@ export function loadActorDetectionConfig(): ActorDetectionConfig {
   cached = { regexes, rules };
   return cached;
 }
-

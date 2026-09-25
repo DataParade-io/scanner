@@ -4,6 +4,19 @@ import { withExhaustiveScope } from "../../exhaustive-scopes";
 /** Ground-truth mention (file+line receipt) cases from committed fixtures. */
 const mentionEvalCaseList: EvalCase[] = [
   {
+    id: "mention-ruby-email",
+    fixture: "ruby-basic",
+    layer: "mentions",
+    subject: { key: "mention:email", name: "email mention" },
+    evidence: {
+      file_path: "app/controllers/api/users_controller.rb",
+      start_line: 8,
+      end_line: 8,
+    },
+    expected: { status: "positive", labels: ["user_email"] },
+    rationale: "Rails strong parameters contain an email-field mention.",
+  },
+  {
     id: "mention-jvm-yaml-username",
     fixture: "jvm-manifests-basic",
     layer: "mentions",
