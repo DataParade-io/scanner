@@ -1,0 +1,1966 @@
+candidates:
+- file: saleor/account/error_codes.py
+  line: 111
+  text: 'class SendConfirmationEmailErrorCode(Enum):'
+- file: saleor/account/events.py
+  line: 47
+  text: def customer_email_change_request_event(
+- file: saleor/account/events.py
+  line: 51
+  text: user_id=user_id, type=CustomerEvents.EMAIL_CHANGE_REQUEST, parameters=parameters
+- file: saleor/account/events.py
+  line: 55
+  text: def customer_email_changed_event(
+- file: saleor/account/events.py
+  line: 59
+  text: user_id=user_id, type=CustomerEvents.EMAIL_CHANGED, parameters=parameters
+- file: saleor/account/events.py
+  line: 92
+  text: def assigned_email_to_a_customer_event(
+- file: saleor/account/events.py
+  line: 93
+  text: '*, staff_user: User | None, app: App | None, new_email: str'
+- file: saleor/account/events.py
+  line: 99
+  text: type=CustomerEvents.EMAIL_ASSIGNED,
+- file: saleor/account/events.py
+  line: 100
+  text: 'parameters={"message": new_email},'
+- file: saleor/account/models.py
+  line: 172
+  text: email = models.EmailField(unique=True)
+- file: saleor/account/models.py
+  line: 181
+  text: last_confirm_email_request = models.DateTimeField(null=True, blank=True)
+- file: saleor/account/models.py
+  line: 220
+  text: USERNAME_FIELD = "email"
+- file: saleor/account/models.py
+  line: 226
+  text: ordering = ("email",)
+- file: saleor/account/models.py
+  line: 238
+  text: fields=["email", "first_name", "last_name"],
+- file: saleor/account/models.py
+  line: 276
+  text: fields=["email"],
+- file: saleor/account/models.py
+  line: 277
+  text: name="user_email_idx",
+- file: saleor/account/models.py
+  line: 345
+  text: return self.email
+- file: saleor/account/models.py
+  line: 348
+  text: return self.email
+- file: saleor/account/models.py
+  line: 372
+  text: or not site_settings.enable_account_confirmation_by_email
+- file: saleor/account/models.py
+  line: 416
+  text: 'class StaffNotificationRecipient(models.Model):'
+- file: saleor/account/models.py
+  line: 424
+  text: staff_email = models.EmailField(unique=True, blank=True, null=True)
+- file: saleor/account/models.py
+  line: 428
+  text: ordering = ("staff_email",)
+- file: saleor/account/models.py
+  line: 430
+  text: 'def get_email(self):'
+- file: saleor/account/models.py
+  line: 431
+  text: return self.user.email if self.user else self.staff_email
+- file: saleor/account/models.py
+  line: 458
+  text: members-only portion of your site, or sending them members-only email
+- file: saleor/account/notifications.py
+  line: 18
+  text: '"email": user.email,'
+- file: saleor/account/notifications.py
+  line: 36
+  text: '"recipient_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 49
+  text: 'params = urlencode({"email": user.email, "token": token})'
+- file: saleor/account/notifications.py
+  line: 54
+  text: '"recipient_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 80
+  text: 'params = urlencode({"email": user.email, "token": user_token})'
+- file: saleor/account/notifications.py
+  line: 84
+  text: '"recipient_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 100
+  text: def send_request_user_change_email_notification(
+- file: saleor/account/notifications.py
+  line: 101
+  text: redirect_url, user, new_email, token, manager, channel_slug
+- file: saleor/account/notifications.py
+  line: 103
+  text: '"""Trigger sending a notification change email for the given user."""'
+- file: saleor/account/notifications.py
+  line: 110
+  text: '"recipient_email": new_email,'
+- file: saleor/account/notifications.py
+  line: 111
+  text: '"old_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 112
+  text: '"new_email": new_email,'
+- file: saleor/account/notifications.py
+  line: 122
+  text: NotifyEventType.ACCOUNT_CHANGE_EMAIL_REQUEST,
+- file: saleor/account/notifications.py
+  line: 128
+  text: 'def send_user_change_email_notification(recipient_email, user, manager, channel_slug):'
+- file: saleor/account/notifications.py
+  line: 129
+  text: '"""Trigger sending an email change notification for the given user."""'
+- file: saleor/account/notifications.py
+  line: 134
+  text: '"recipient_email": recipient_email,'
+- file: saleor/account/notifications.py
+  line: 136
+  text: '"old_email": recipient_email,'
+- file: saleor/account/notifications.py
+  line: 137
+  text: '"new_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 144
+  text: NotifyEventType.ACCOUNT_CHANGE_EMAIL_CONFIRM,
+- file: saleor/account/notifications.py
+  line: 164
+  text: '"recipient_email": user.email,'
+- file: saleor/account/notifications.py
+  line: 187
+  text: 'params = urlencode({"email": user.email, "token": token})'
+- file: saleor/account/notifications.py
+  line: 192
+  text: '"recipient_email": user.email,'
+- file: saleor/account/search.py
+  line: 11
+  text: '"email",'
+- file: saleor/account/search.py
+  line: 56
+  text: search_vectors.extend(generate_email_vector(user.email))
+- file: saleor/account/search.py
+  line: 70
+  text: 'def generate_email_vector(email: str) -> list[NoValidationSearchVector]:'
+- file: saleor/account/search.py
+  line: 71
+  text: '"""Generate a search vector for email addresses.'
+- file: saleor/account/search.py
+  line: 73
+  text: Creates a PostgreSQL search vectors one that include the original email
+- file: saleor/account/search.py
+  line: 77
+  text: vectors = [NoValidationSearchVector(Value(email), config="simple", weight="A")]
+- file: saleor/account/search.py
+  line: 78
+  text: 'if email and "@" in email:'
+- file: saleor/account/search.py
+  line: 79
+  text: domain = email.split("@")[-1]
+- file: saleor/account/throttling.py
+  line: 12
+  text: from .utils import retrieve_user_by_email
+- file: saleor/account/throttling.py
+  line: 21
+  text: 'def authenticate_with_throttling(request, email, password) -> models.User | None:'
+- file: saleor/account/throttling.py
+  line: 48
+  text: user = retrieve_user_by_email(email)
+- file: saleor/account/utils.py
+  line: 150
+  text: 'def retrieve_user_by_email(email):'
+- file: saleor/account/utils.py
+  line: 151
+  text: '"""Retrieve user by email.'
+- file: saleor/account/utils.py
+  line: 153
+  text: Email lookup is case-insensitive, unless the query returns more than one user. In
+- file: saleor/account/utils.py
+  line: 156
+  text: users = list(User.objects.filter(email__iexact=email))
+- file: saleor/account/utils.py
+  line: 159
+  text: users_exact = [user for user in users if user.email == email]
+- file: saleor/account/utils.py
+  line: 160
+  text: users_iexact = [user for user in users if user.email == email.lower()]
+- file: saleor/checkout/checkout_cleaner.py
+  line: 105
+  text: 'def validate_checkout_email(checkout: models.Checkout):'
+- file: saleor/checkout/checkout_cleaner.py
+  line: 106
+  text: 'if not checkout.email:'
+- file: saleor/checkout/checkout_cleaner.py
+  line: 108
+  text: '"Checkout email must be set.",'
+- file: saleor/checkout/checkout_cleaner.py
+  line: 109
+  text: code=CheckoutErrorCode.EMAIL_NOT_SET.value,
+- file: saleor/checkout/checkout_cleaner.py
+  line: 135
+  text: checkouts=checkout.token, assigned_to_email__isnull=False
+- file: saleor/checkout/checkout_cleaner.py
+  line: 196
+  text: validate_checkout_email(checkout_info.checkout)
+- file: saleor/checkout/complete_checkout.py
+  line: 19
+  text: from ..account.utils import retrieve_user_by_email, store_user_address
+- file: saleor/checkout/complete_checkout.py
+  line: 34
+  text: get_customer_email_for_voucher_usage,
+- file: saleor/checkout/complete_checkout.py
+  line: 128
+  text: customer_email = cast(str, get_customer_email_for_voucher_usage(checkout_info))
+- file: saleor/checkout/complete_checkout.py
+  line: 130
+  text: _increase_checkout_voucher_usage(checkout, voucher_code, voucher, customer_email)
+- file: saleor/checkout/complete_checkout.py
+  line: 142
+  text: 'customer_email: str,'
+- file: saleor/checkout/complete_checkout.py
+  line: 150
+  text: increase_voucher_usage(voucher, voucher_code, customer_email)
+- file: saleor/checkout/complete_checkout.py
+  line: 160
+  text: 'user_email: str | None,'
+- file: saleor/checkout/complete_checkout.py
+  line: 176
+  text: user_email,
+- file: saleor/checkout/complete_checkout.py
+  line: 286
+  text: '"user_email": checkout_info.get_customer_email(),'
+- file: saleor/checkout/complete_checkout.py
+  line: 753
+  text: user_email = get_customer_email_for_voucher_usage(checkout_info)
+- file: saleor/checkout/complete_checkout.py
+  line: 758
+  text: user_email,
+- file: saleor/checkout/complete_checkout.py
+  line: 788
+  text: which language to use when sending email.
+- file: saleor/checkout/complete_checkout.py
+  line: 888
+  text: customer_email=order_data["user_email"],
+- file: saleor/checkout/complete_checkout.py
+  line: 905
+  text: '# Send the order confirmation email'
+- file: saleor/checkout/complete_checkout.py
+  line: 1163
+  text: user_email = get_customer_email_for_voucher_usage(checkout_info)
+- file: saleor/checkout/complete_checkout.py
+  line: 1168
+  text: user_email,
+- file: saleor/checkout/complete_checkout.py
+  line: 1229
+  text: customer_email = cast(str, get_customer_email_for_voucher_usage(checkout_info))
+- file: saleor/checkout/complete_checkout.py
+  line: 1232
+  text: _increase_checkout_voucher_usage(checkout, code, voucher, customer_email)
+- file: saleor/checkout/complete_checkout.py
+  line: 1353
+  text: customer_email=order.user_email,
+- file: saleor/checkout/complete_checkout.py
+  line: 1370
+  text: '# Send the order confirmation email'
+- file: saleor/checkout/complete_checkout.py
+  line: 1583
+  text: which language to use when sending email.
+- file: saleor/checkout/complete_checkout.py
+  line: 1691
+  text: '# Assign checkout user to an existing user if checkout email matches a valid'
+- file: saleor/checkout/complete_checkout.py
+  line: 1693
+  text: 'if user is None and not checkout_info.user and checkout_info.checkout.email:'
+- file: saleor/checkout/complete_checkout.py
+  line: 1694
+  text: existing_user = retrieve_user_by_email(checkout_info.checkout.email)
+- file: saleor/checkout/complete_checkout.py
+  line: 2024
+  text: get_customer_email_for_voucher_usage(checkout_info),
+- file: saleor/checkout/error_codes.py
+  line: 31
+  text: EMAIL_NOT_SET = "email_not_set"
+- file: saleor/checkout/error_codes.py
+  line: 53
+  text: EMAIL_NOT_SET = "email_not_set"
+- file: saleor/checkout/models.py
+  line: 132
+  text: email = models.EmailField(blank=True, null=True)
+- file: saleor/checkout/models.py
+  line: 368
+  text: 'def get_customer_email(self) -> str | None:'
+- file: saleor/checkout/models.py
+  line: 369
+  text: 'if self.email:'
+- file: saleor/checkout/models.py
+  line: 370
+  text: return self.email
+- file: saleor/checkout/models.py
+  line: 372
+  text: return self.user.email
+- file: saleor/giftcard/events.py
+  line: 60
+  text: 'previous_email: str | None,'
+- file: saleor/giftcard/events.py
+  line: 71
+  text: '"previous_assigned_to_email": previous_email,'
+- file: saleor/giftcard/events.py
+  line: 73
+  text: '"assigned_to_email": gift_card.assigned_to_email,'
+- file: saleor/giftcard/events.py
+  line: 81
+  text: 'previous_email: str | None,'
+- file: saleor/giftcard/events.py
+  line: 92
+  text: '"previous_assigned_to_email": previous_email,'
+- file: saleor/giftcard/events.py
+  line: 122
+  text: 'gift_card_id: int, user_id: int | None, app_id: int | None, email: str'
+- file: saleor/giftcard/events.py
+  line: 129
+  text: 'parameters={"email": email},'
+- file: saleor/giftcard/events.py
+  line: 134
+  text: 'gift_card_id: int, user_id: int | None, app_id: int | None, email: str'
+- file: saleor/giftcard/events.py
+  line: 141
+  text: 'parameters={"email": email},'
+- file: saleor/giftcard/models.py
+  line: 64
+  text: created_by_email = models.EmailField(null=True, blank=True)
+- file: saleor/giftcard/models.py
+  line: 65
+  text: used_by_email = models.EmailField(null=True, blank=True)
+- file: saleor/giftcard/models.py
+  line: 77
+  text: assigned_to_email = models.EmailField(null=True, blank=True)
+- file: saleor/giftcard/models.py
+  line: 158
+  text: '``assigned_to`` was nulled while ``assigned_to_email`` was kept) cannot'
+- file: saleor/giftcard/models.py
+  line: 160
+  text: guest whose email happens to match ``assigned_to_email``. Otherwise a
+- file: saleor/giftcard/models.py
+  line: 164
+  text: 'if self.assigned_to_email and not self.assigned_to_id:'
+- file: saleor/giftcard/utils.py
+  line: 44
+  text: 'checkout: Checkout, email: str | None, promo_code: str, currency: str'
+- file: saleor/giftcard/utils.py
+  line: 48
+  text: Raise ValidationError if email is not provided.
+- file: saleor/giftcard/utils.py
+  line: 144
+  text: locked.assigned_to_email = user.email
+- file: saleor/giftcard/utils.py
+  line: 145
+  text: locked.save(update_fields=["assigned_to", "assigned_to_email"])
+- file: saleor/giftcard/utils.py
+  line: 148
+  text: gift_card.assigned_to_email = user.email
+- file: saleor/giftcard/utils.py
+  line: 160
+  text: PROTECT would still block the delete), while ``assigned_to_email`` is kept
+- file: saleor/giftcard/utils.py
+  line: 290
+  text: user_email = order.user_email
+- file: saleor/giftcard/utils.py
+  line: 303
+  text: created_by_email=user_email,
+- file: saleor/giftcard/utils.py
+  line: 325
+  text: user_email,
+- file: saleor/giftcard/utils.py
+  line: 349
+  text: 'user_email: str,'
+- file: saleor/giftcard/utils.py
+  line: 361
+  text: user_email,
+- file: saleor/giftcard/utils.py
+  line: 389
+  text: GiftCard.objects.filter(used_by_email=user.email).update(used_by=user)
+- file: saleor/giftcard/utils.py
+  line: 390
+  text: GiftCard.objects.filter(created_by_email=user.email).update(created_by=user)
+- file: saleor/giftcard/utils.py
+  line: 403
+  text: Q(used_by_email=user.email)
+- file: saleor/giftcard/utils.py
+  line: 404
+  text: '| Q(created_by_email=user.email)'
+- file: saleor/order/actions.py
+  line: 361
+  text: 'send_confirmation_email: bool = False,'
+- file: saleor/order/actions.py
+  line: 366
+  text: Trigger event, plugin hooks and optionally confirmation email.
+- file: saleor/order/actions.py
+  line: 375
+  text: 'if send_confirmation_email:'
+- file: saleor/order/actions.py
+  line: 396
+  text: 'if order_info.customer_email:'
+- file: saleor/order/actions.py
+  line: 1008
+  text: email=order.user_email,
+- file: saleor/order/actions.py
+  line: 1258
+  text: 'notify_customer (bool): If `True` system send email about'
+- file: saleor/order/actions.py
+  line: 1601
+  text: replace_order.user_email = original_order.user_email
+- file: saleor/order/events.py
+  line: 10
+  text: from . import OrderEvents, OrderEventsEmails
+- file: saleor/order/events.py
+  line: 90
+  text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 94
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 96
+  text: '"email": customer_email,'
+- file: saleor/order/events.py
+  line: 97
+  text: '"email_type": OrderEventsEmails.ORDER_REFUND,'
+- file: saleor/order/events.py
+  line: 105
+  text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 109
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 111
+  text: '"email": customer_email,'
+- file: saleor/order/events.py
+  line: 112
+  text: '"email_type": OrderEventsEmails.CONFIRMED,'
+- file: saleor/order/events.py
+  line: 120
+  text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 124
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 126
+  text: '"email": customer_email,'
+- file: saleor/order/events.py
+  line: 127
+  text: '"email_type": OrderEventsEmails.ORDER_CANCEL,'
+- file: saleor/order/events.py
+  line: 135
+  text: 'order_id: "UUID", user_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 139
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 141
+  text: '"email": customer_email,'
+- file: saleor/order/events.py
+  line: 142
+  text: '"email_type": OrderEventsEmails.ORDER_CONFIRMATION,'
+- file: saleor/order/events.py
+  line: 149
+  text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 153
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 155
+  text: '"email": customer_email,'
+- file: saleor/order/events.py
+  line: 156
+  text: '"email_type": OrderEventsEmails.FULFILLMENT,'
+- file: saleor/order/events.py
+  line: 164
+  text: 'order_id: "UUID", user_id: int | None, customer_email: str'
+- file: saleor/order/events.py
+  line: 168
+  text: type=OrderEvents.EMAIL_SENT,
+- file: saleor/order/events.py
+  line: 169
+  text: 'parameters={"email": customer_email, "email_type": OrderEventsEmails.PAYMENT},'
+- file: saleor/order/events.py
+  line: 220
+  text: '*, order_id: "UUID", user_id: int | None, app_id: int | None, email: str'
+- file: saleor/order/events.py
+  line: 227
+  text: 'parameters={"email": email},'
+- file: saleor/order/events.py
+  line: 231
+  text: def email_resent_event(
+- file: saleor/order/events.py
+  line: 232
+  text: '*, order: Order, user: User | None, email_type: OrderEventsEmails'
+- file: saleor/order/models.py
+  line: 161
+  text: user_email = models.EmailField(blank=True, default="")
+- file: saleor/order/models.py
+  line: 392
+  text: name="order_email_search_gin",
+- file: saleor/order/models.py
+  line: 394
+  text: fields=["user_email"],
+- file: saleor/order/models.py
+  line: 400
+  text: fields=["user_email", "user_id"],
+- file: saleor/order/models.py
+  line: 401
+  text: name="order_user_email_user_id_idx",
+- file: saleor/order/models.py
+  line: 422
+  text: 'def get_customer_email(self):'
+- file: saleor/order/models.py
+  line: 423
+  text: 'if self.user_email:'
+- file: saleor/order/models.py
+  line: 424
+  text: return self.user_email
+- file: saleor/order/models.py
+  line: 426
+  text: return cast("User", self.user).email
+- file: saleor/order/notifications.py
+  line: 12
+  text: from ..account.models import StaffNotificationRecipient
+- file: saleor/order/notifications.py
+  line: 308
+  text: '"recipient_email": order.get_customer_email(),'
+- file: saleor/order/notifications.py
+  line: 348
+  text: '"email": order.get_customer_email(),'
+- file: saleor/order/notifications.py
+  line: 397
+  text: '"recipient_email": order.get_customer_email(),'
+- file: saleor/order/notifications.py
+  line: 414
+  text: '"recipient_email": order_info.customer_email,'
+- file: saleor/order/notifications.py
+  line: 427
+  text: staff_notifications = StaffNotificationRecipient.objects.filter(
+- file: saleor/order/notifications.py
+  line: 430
+  text: recipient_emails = [
+- file: saleor/order/notifications.py
+  line: 431
+  text: notification.get_email() for notification in staff_notifications
+- file: saleor/order/notifications.py
+  line: 433
+  text: 'if recipient_emails:'
+- file: saleor/order/notifications.py
+  line: 439
+  text: '"recipient_list": recipient_emails,'
+- file: saleor/order/notifications.py
+  line: 451
+  text: '"""Send email which tells customer that order has been confirmed."""'
+- file: saleor/order/notifications.py
+  line: 456
+  text: '"recipient_email": order.get_customer_email(),'
+- file: saleor/order/notifications.py
+  line: 503
+  text: '"recipient_email": order_info.customer_email,'
+- file: saleor/order/notifications.py
+  line: 538
+  text: '"recipient_email": order.get_customer_email(),'
+- file: saleor/order/notifications.py
+  line: 563
+  text: '"recipient_email": order.get_customer_email(),'
+- file: saleor/order/utils.py
+  line: 455
+  text: used_by_email = cast(str, checkout_info.get_customer_email())
+- file: saleor/order/utils.py
+  line: 464
+  text: set_gift_card_user(gift_card, used_by_user, used_by_email)
+- file: saleor/order/utils.py
+  line: 474
+  text: '"used_by_email",'
+- file: saleor/order/utils.py
+  line: 517
+  text: 'used_by_email: str,'
+- file: saleor/order/utils.py
+  line: 523
+  text: else User.objects.filter(email=used_by_email).first()
+- file: saleor/order/utils.py
+  line: 525
+  text: gift_card.used_by_email = used_by_email
+- file: saleor/order/utils.py
+  line: 714
+  text: Order.objects.confirmed().filter(user_email=user.email, user=None).update(user=user)
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 4
+  text: from ..email_common import get_email_subject, get_email_template_or_default
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 7
+  text: send_email_with_link_to_download_file_task,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 8
+  text: send_export_failed_email_task,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 9
+  text: send_set_staff_password_email_task,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 10
+  text: send_staff_order_confirmation_email_task,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 11
+  text: send_staff_password_reset_email_task,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 15
+  text: from .plugin import AdminEmailPlugin
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 18
+  text: def send_set_staff_password_email(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 19
+  text: 'payload_func: Callable[[], dict], config: dict, plugin: "AdminEmailPlugin"'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 21
+  text: template = get_email_template_or_default(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 25
+  text: constants.DEFAULT_EMAIL_TEMPLATES_PATH,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 31
+  text: recipient_email = payload["recipient_email"]
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 32
+  text: subject = get_email_subject(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 37
+  text: send_set_staff_password_email_task.delay(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 38
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 43
+  text: 'payload_func: Callable[[], dict], config: dict, plugin: "AdminEmailPlugin"'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 45
+  text: template = get_email_template_or_default(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 49
+  text: constants.DEFAULT_EMAIL_TEMPLATES_PATH,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 55
+  text: recipient_email = payload.get("recipient_email")
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 56
+  text: 'if not recipient_email:'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 58
+  text: subject = get_email_subject(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 63
+  text: send_email_with_link_to_download_file_task.delay(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 64
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 69
+  text: 'payload_func: Callable[[], dict], config: dict, plugin: "AdminEmailPlugin"'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 71
+  text: template = get_email_template_or_default(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 75
+  text: constants.DEFAULT_EMAIL_TEMPLATES_PATH,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 81
+  text: recipient_list = payload.get("recipient_list")
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 82
+  text: subject = get_email_subject(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 87
+  text: send_staff_order_confirmation_email_task.delay(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 88
+  text: recipient_list, payload, config, subject, template
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 93
+  text: 'payload_func: Callable[[], dict], config: dict, plugin: "AdminEmailPlugin"'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 95
+  text: template = get_email_template_or_default(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 99
+  text: constants.DEFAULT_EMAIL_TEMPLATES_PATH,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 105
+  text: recipient_email = payload.get("recipient_email")
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 106
+  text: 'if not recipient_email:'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 108
+  text: subject = get_email_subject(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 113
+  text: send_export_failed_email_task.delay(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 114
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 119
+  text: 'payload_func: Callable[[], dict], config: dict, plugin: "AdminEmailPlugin"'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 121
+  text: template = get_email_template_or_default(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 125
+  text: constants.DEFAULT_EMAIL_TEMPLATES_PATH,
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 131
+  text: recipient_email = payload.get("recipient_email")
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 132
+  text: 'if not recipient_email:'
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 134
+  text: subject = get_email_subject(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 139
+  text: send_staff_password_reset_email_task.delay(
+- file: saleor/plugins/admin_email/notify_events.py
+  line: 140
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/admin_email/plugin.py
+  line: 10
+  text: from ...graphql.plugins.dataloaders import EmailTemplatesByPluginConfigurationLoader
+- file: saleor/plugins/admin_email/plugin.py
+  line: 12
+  text: from ..email_common import (
+- file: saleor/plugins/admin_email/plugin.py
+  line: 13
+  text: DEFAULT_EMAIL_CONFIG_STRUCTURE,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 14
+  text: DEFAULT_EMAIL_CONFIGURATION,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 15
+  text: DEFAULT_EMAIL_VALUE,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 18
+  text: REQUIRED_EMAIL_CONFIG_FIELDS,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 19
+  text: EmailConfig,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 20
+  text: validate_default_email_configuration,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 23
+  text: from ..models import EmailTemplate, PluginConfiguration
+- file: saleor/plugins/admin_email/plugin.py
+  line: 28
+  text: send_set_staff_password_email,
+- file: saleor/plugins/admin_email/plugin.py
+  line: 39
+  text: 'AdminNotifyEvent.ACCOUNT_SET_STAFF_PASSWORD: send_set_staff_password_email,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 46
+  text: 'class AdminEmailPlugin(BasePlugin):'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 48
+  text: PLUGIN_NAME = "Admin emails"
+- file: saleor/plugins/admin_email/plugin.py
+  line: 49
+  text: PLUGIN_DESCRIPTION = "Plugin responsible for sending the staff emails."
+- file: saleor/plugins/admin_email/plugin.py
+  line: 60
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 68
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 76
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 84
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 92
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 94
+  text: '] + DEFAULT_EMAIL_CONFIGURATION'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 125
+  text: '"label": "Set password email template",'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 148
+  text: CONFIG_STRUCTURE.update(deepcopy(DEFAULT_EMAIL_CONFIG_STRUCTURE))
+- file: saleor/plugins/admin_email/plugin.py
+  line: 150
+  text: '" Leave it blank if you want to use system environment - EMAIL_HOST."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 153
+  text: '" Leave it blank if you want to use system environment - EMAIL_PORT."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 156
+  text: '" Leave it blank if you want to use system environment - EMAIL_HOST_USER."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 159
+  text: '" Leave it blank if you want to use system environment - EMAIL_HOST_PASSWORD."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 162
+  text: '" Leave it blank if you want to use system environment - EMAIL_USE_TLS."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 165
+  text: '" Leave it blank if you want to use system environment - EMAIL_USE_SSL."'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 171
+  text: configuration = self._parse_email_config_or_get_default(self.configuration)
+- file: saleor/plugins/admin_email/plugin.py
+  line: 172
+  text: self.config = EmailConfig(
+- file: saleor/plugins/admin_email/plugin.py
+  line: 177
+  text: sender_name=configuration["sender_name"],
+- file: saleor/plugins/admin_email/plugin.py
+  line: 178
+  text: sender_address=configuration["sender_address"],
+- file: saleor/plugins/admin_email/plugin.py
+  line: 184
+  text: def _parse_email_config_or_get_default(
+- file: saleor/plugins/admin_email/plugin.py
+  line: 193
+  text: configuration.get(field) for field in REQUIRED_EMAIL_CONFIG_FIELDS
+- file: saleor/plugins/admin_email/plugin.py
+  line: 195
+  text: 'if not set_any_required_field:  # Use default email config'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 196
+  text: configuration["host"] = settings.EMAIL_HOST
+- file: saleor/plugins/admin_email/plugin.py
+  line: 197
+  text: configuration["port"] = str(settings.EMAIL_PORT)
+- file: saleor/plugins/admin_email/plugin.py
+  line: 198
+  text: configuration["username"] = settings.EMAIL_HOST_USER
+- file: saleor/plugins/admin_email/plugin.py
+  line: 199
+  text: configuration["password"] = settings.EMAIL_HOST_PASSWORD
+- file: saleor/plugins/admin_email/plugin.py
+  line: 200
+  text: configuration["sender_address"] = settings.DEFAULT_FROM_EMAIL
+- file: saleor/plugins/admin_email/plugin.py
+  line: 201
+  text: configuration["use_tls"] = settings.EMAIL_USE_TLS
+- file: saleor/plugins/admin_email/plugin.py
+  line: 202
+  text: configuration["use_ssl"] = settings.EMAIL_USE_SSL
+- file: saleor/plugins/admin_email/plugin.py
+  line: 209
+  text: '# Get email templates from the database and merge them with self.configuration.'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 214
+  text: 'email_templates: list["EmailTemplate"],'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 216
+  text: email_template_by_name = {
+- file: saleor/plugins/admin_email/plugin.py
+  line: 217
+  text: 'email_template.name: email_template'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 218
+  text: for email_template in email_templates
+- file: saleor/plugins/admin_email/plugin.py
+  line: 221
+  text: '# Merge email templates with `self.configuration` items, preserving the'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 227
+  text: 'if key in email_template_by_name:'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 228
+  text: config_item["value"] = email_template_by_name[key].value
+- file: saleor/plugins/admin_email/plugin.py
+  line: 234
+  text: EmailTemplatesByPluginConfigurationLoader(request)
+- file: saleor/plugins/admin_email/plugin.py
+  line: 266
+  text: configuration = cls._parse_email_config_or_get_default(
+- file: saleor/plugins/admin_email/plugin.py
+  line: 269
+  text: validate_default_email_configuration(plugin_configuration, configuration)
+- file: saleor/plugins/admin_email/plugin.py
+  line: 271
+  text: email_templates_data = kwargs.get("email_templates_data", [])
+- file: saleor/plugins/admin_email/plugin.py
+  line: 273
+  text: plugin_configuration, email_templates_data
+- file: saleor/plugins/admin_email/plugin.py
+  line: 283
+  text: email_templates_data = []
+- file: saleor/plugins/admin_email/plugin.py
+  line: 287
+  text: email_templates_data.append(data)
+- file: saleor/plugins/admin_email/plugin.py
+  line: 298
+  text: plugin_configuration, email_templates_data=email_templates_data
+- file: saleor/plugins/admin_email/plugin.py
+  line: 304
+  text: 'for et_data in email_templates_data:'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 305
+  text: 'if et_data["value"] != DEFAULT_EMAIL_VALUE:'
+- file: saleor/plugins/admin_email/plugin.py
+  line: 306
+  text: EmailTemplate.objects.update_or_create(
+- file: saleor/plugins/admin_email/plugin.py
+  line: 312
+  text: EmailTemplate.objects.filter(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 5
+  text: from ..email_common import EmailConfig, send_email
+- file: saleor/plugins/admin_email/tasks.py
+  line: 9
+  text: def send_set_staff_password_email_task(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 10
+  text: 'recipient_email, payload, config: dict, subject, template'
+- file: saleor/plugins/admin_email/tasks.py
+  line: 12
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/admin_email/tasks.py
+  line: 13
+  text: send_email(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 14
+  text: config=email_config,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 15
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/admin_email/tasks.py
+  line: 23
+  text: def send_email_with_link_to_download_file_task(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 24
+  text: 'recipient_email: str, payload, config: dict, subject, template'
+- file: saleor/plugins/admin_email/tasks.py
+  line: 26
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/admin_email/tasks.py
+  line: 27
+  text: send_email(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 28
+  text: config=email_config,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 29
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/admin_email/tasks.py
+  line: 42
+  text: def send_export_failed_email_task(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 43
+  text: 'recipient_email: str, payload: dict, config: dict, subject, template'
+- file: saleor/plugins/admin_email/tasks.py
+  line: 45
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/admin_email/tasks.py
+  line: 46
+  text: send_email(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 47
+  text: config=email_config,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 48
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/admin_email/tasks.py
+  line: 61
+  text: def send_staff_order_confirmation_email_task(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 62
+  text: 'recipient_list: str, payload: dict, config: dict, subject, template'
+- file: saleor/plugins/admin_email/tasks.py
+  line: 64
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/admin_email/tasks.py
+  line: 65
+  text: send_email(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 66
+  text: config=email_config,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 67
+  text: recipient_list=recipient_list,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 75
+  text: def send_staff_password_reset_email_task(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 76
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/admin_email/tasks.py
+  line: 78
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/admin_email/tasks.py
+  line: 79
+  text: send_email(
+- file: saleor/plugins/admin_email/tasks.py
+  line: 80
+  text: config=email_config,
+- file: saleor/plugins/admin_email/tasks.py
+  line: 81
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 8
+  text: from ...plugins.sendgrid.tasks import send_email_with_dynamic_template_id
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 14
+  text: send_account_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 15
+  text: send_account_delete_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 16
+  text: send_fulfillment_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 17
+  text: send_fulfillment_update_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 18
+  text: send_gift_card_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 19
+  text: send_invoice_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 20
+  text: send_order_canceled_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 21
+  text: send_order_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 22
+  text: send_order_confirmed_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 23
+  text: send_order_refund_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 24
+  text: send_password_reset_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 25
+  text: send_payment_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 26
+  text: send_request_email_change_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 27
+  text: send_set_user_password_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 28
+  text: send_user_change_email_notification_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 36
+  text: send_account_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 40
+  text: send_set_user_password_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 44
+  text: send_account_delete_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 47
+  text: 'UserNotifyEvent.ACCOUNT_CHANGE_EMAIL_CONFIRM: ('
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 48
+  text: send_user_change_email_notification_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 49
+  text: '"account_change_email_confirm_template_id",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 51
+  text: 'UserNotifyEvent.ACCOUNT_CHANGE_EMAIL_REQUEST: ('
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 52
+  text: send_request_email_change_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 53
+  text: '"account_change_email_request_template_id",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 56
+  text: send_password_reset_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 60
+  text: send_invoice_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 64
+  text: send_order_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 68
+  text: send_order_confirmed_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 72
+  text: send_fulfillment_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 76
+  text: send_fulfillment_update_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 80
+  text: send_payment_confirmation_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 84
+  text: send_order_canceled_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 88
+  text: send_order_refund_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 92
+  text: send_gift_card_email_task,
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 100
+  text: 'class DeprecatedSendgridEmailPlugin(BasePlugin):'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 106
+  text: PLUGIN_ID = "mirumee.notifications.sendgrid_email"
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 112
+  text: '{"name": "sender_name", "value": ""},'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 113
+  text: '{"name": "sender_address", "value": ""},'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 117
+  text: '{"name": "account_change_email_confirm_template_id", "value": None},'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 118
+  text: '{"name": "account_change_email_request_template_id", "value": None},'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 132
+  text: '"sender_name": {'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 135
+  text: '"label": "Sender name",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 137
+  text: '"sender_address": {'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 139
+  text: '"help_text": "Sender email which will be visible as ''from'' email.",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 140
+  text: '"label": "Sender email",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 145
+  text: '"label": "Account confirmation email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 150
+  text: '"label": "Account set customer password email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 155
+  text: '"label": "Account delete email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 157
+  text: '"account_change_email_confirm_template_id": {'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 160
+  text: '"label": "Account change email confirm email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 162
+  text: '"account_change_email_request_template_id": {'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 165
+  text: '"label": "Account change email request email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 170
+  text: '"label": "Account password reset email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 175
+  text: '"label": "Invoice ready email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 180
+  text: '"label": "Order confirmation email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 185
+  text: '"label": "Order confirmed email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 190
+  text: '"label": "Order fulfillment confirmation email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 195
+  text: '"label": "Order fulfillment update email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 200
+  text: '"label": "Order payment confirmation email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 205
+  text: '"label": "Order canceled email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 210
+  text: '"label": "Order refund confirmation email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 215
+  text: '"label": "Send gift card email template",'
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 242
+  text: logger.info("Send email with event %s as dynamic template ID.", event)
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 244
+  text: send_email_with_dynamic_template_id.delay(
+- file: saleor/plugins/sendgrid/plugin.py
+  line: 258
+  text: '# the empty fields means that we should not send an email for this event.'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 22
+  text: 'def send_email(configuration: SendgridConfiguration, template_id, payload):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 23
+  text: recipient_email = payload["recipient_email"]
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 25
+  text: from_email = (configuration.sender_address, configuration.sender_name)
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 26
+  text: message = Mail(from_email=from_email, to_emails=recipient_email)
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 41
+  text: 'def send_account_confirmation_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 43
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 56
+  text: 'def send_password_reset_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 61
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 76
+  text: 'def send_request_email_change_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 79
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 81
+  text: template_id=configuration.account_change_email_request_template_id,
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 85
+  text: account_events.customer_email_change_request_event(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 88
+  text: '"old_email": payload.get("old_email"),'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 89
+  text: '"new_email": payload["recipient_email"],'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 100
+  text: 'def send_user_change_email_notification_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 103
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 105
+  text: template_id=configuration.account_change_email_confirm_template_id,
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 109
+  text: '"old_email": payload["old_email"],'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 110
+  text: '"new_email": payload["new_email"],'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 113
+  text: account_events.customer_email_changed_event(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 124
+  text: 'def send_account_delete_confirmation_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 126
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 139
+  text: 'def send_set_user_password_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 141
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 154
+  text: 'def send_invoice_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 157
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 167
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 173
+  text: email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 183
+  text: 'def send_order_confirmation_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 184
+  text: '"""Send order confirmation email."""'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 186
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 195
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 205
+  text: 'def send_fulfillment_confirmation_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 207
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 217
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 227
+  text: 'def send_fulfillment_update_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 229
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 242
+  text: 'def send_payment_confirmation_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 244
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 253
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 263
+  text: 'def send_order_canceled_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 265
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 275
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 285
+  text: 'def send_order_refund_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 287
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 297
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 307
+  text: 'def send_gift_card_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 309
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 314
+  text: email_data = {
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 318
+  text: '"email": payload["recipient_email"],'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 322
+  text: gift_card_events.gift_card_resent_event(**email_data)
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 324
+  text: gift_card_events.gift_card_sent_event(**email_data)
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 333
+  text: 'def send_order_confirmed_email_task(payload: dict, configuration: dict):'
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 335
+  text: send_email(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 345
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 355
+  text: def send_email_with_dynamic_template_id(
+- file: saleor/plugins/sendgrid/tasks.py
+  line: 359
+  text: send_email(
+- file: saleor/plugins/user_email/constants.py
+  line: 5
+  text: PLUGIN_ID = "mirumee.notifications.user_email"
+- file: saleor/plugins/user_email/constants.py
+  line: 8
+  text: DEFAULT_EMAIL_TEMPLATES_PATH = os.path.join(
+- file: saleor/plugins/user_email/constants.py
+  line: 9
+  text: settings.PROJECT_ROOT, "saleor/plugins/user_email/default_email_templates"
+- file: saleor/plugins/user_email/constants.py
+  line: 15
+  text: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD = "account_change_email_confirm"
+- file: saleor/plugins/user_email/constants.py
+  line: 16
+  text: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD = "account_change_email_request"
+- file: saleor/plugins/user_email/constants.py
+  line: 32
+  text: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD,
+- file: saleor/plugins/user_email/constants.py
+  line: 33
+  text: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD,
+- file: saleor/plugins/user_email/constants.py
+  line: 49
+  text: ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_TEMPLATE = "email_changed_notification.html"
+- file: saleor/plugins/user_email/constants.py
+  line: 50
+  text: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_TEMPLATE = "request_email_change.html"
+- file: saleor/plugins/user_email/constants.py
+  line: 66
+  text: ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD = "account_change_email_confirm_subject"
+- file: saleor/plugins/user_email/constants.py
+  line: 67
+  text: ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD = "account_change_email_request_subject"
+- file: saleor/plugins/user_email/constants.py
+  line: 80
+  text: ACCOUNT_CONFIRMATION_DEFAULT_SUBJECT = "Account confirmation e-mail"
+- file: saleor/plugins/user_email/constants.py
+  line: 83
+  text: ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_SUBJECT = "Email change e-mail"
+- file: saleor/plugins/user_email/constants.py
+  line: 84
+  text: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_SUBJECT = "Email change e-mail"
+- file: saleor/plugins/user_email/constants.py
+  line: 85
+  text: ACCOUNT_PASSWORD_RESET_DEFAULT_SUBJECT = "Password reset e-mail"
+- file: saleor/plugins/user_email/default_email_templates/request_email_change.html
+  line: 93
+  text: <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;">You're receiving this e-mail because you or someone else has requested an email change for your user account at {{site_name}}.<br>
+- file: saleor/plugins/user_email/default_email_templates/request_email_change.html
+  line: 94
+  text: It can be safely ignored if you did not request an email change. Click the link below to confirm new email address.</div>
+- file: saleor/plugins/user_email/default_email_templates/request_email_change.html
+  line: 142
+  text: <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;">This is an automatically generated e-mail, please do not reply.</div>
+- file: saleor/plugins/user_email/plugin.py
+  line: 10
+  text: from ...graphql.plugins.dataloaders import EmailTemplatesByPluginConfigurationLoader
+- file: saleor/plugins/user_email/plugin.py
+  line: 11
+  text: from ...plugins.models import EmailTemplate
+- file: saleor/plugins/user_email/plugin.py
+  line: 13
+  text: from ..email_common import (
+- file: saleor/plugins/user_email/plugin.py
+  line: 14
+  text: DEFAULT_EMAIL_CONFIG_STRUCTURE,
+- file: saleor/plugins/user_email/plugin.py
+  line: 15
+  text: DEFAULT_EMAIL_CONFIGURATION,
+- file: saleor/plugins/user_email/plugin.py
+  line: 16
+  text: DEFAULT_EMAIL_VALUE,
+- file: saleor/plugins/user_email/plugin.py
+  line: 19
+  text: EmailConfig,
+- file: saleor/plugins/user_email/plugin.py
+  line: 20
+  text: validate_default_email_configuration,
+- file: saleor/plugins/user_email/plugin.py
+  line: 26
+  text: send_account_change_email_confirm,
+- file: saleor/plugins/user_email/plugin.py
+  line: 27
+  text: send_account_change_email_request,
+- file: saleor/plugins/user_email/plugin.py
+  line: 57
+  text: 'UserNotifyEvent.ACCOUNT_CHANGE_EMAIL_CONFIRM: send_account_change_email_confirm,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 58
+  text: 'UserNotifyEvent.ACCOUNT_CHANGE_EMAIL_REQUEST: send_account_change_email_request,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 72
+  text: 'class UserEmailPlugin(BasePlugin):'
+- file: saleor/plugins/user_email/plugin.py
+  line: 74
+  text: PLUGIN_NAME = "User emails"
+- file: saleor/plugins/user_email/plugin.py
+  line: 84
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 92
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 98
+  text: '{"name": constants.ACCOUNT_DELETE_TEMPLATE_FIELD, "value": DEFAULT_EMAIL_VALUE},'
+- file: saleor/plugins/user_email/plugin.py
+  line: 100
+  text: '"name": constants.ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 101
+  text: '"value": constants.ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_SUBJECT,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 104
+  text: '"name": constants.ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 105
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 108
+  text: '"name": constants.ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 109
+  text: '"value": constants.ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_SUBJECT,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 112
+  text: '"name": constants.ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 113
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 121
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 127
+  text: '{"name": constants.INVOICE_READY_TEMPLATE_FIELD, "value": DEFAULT_EMAIL_VALUE},'
+- file: saleor/plugins/user_email/plugin.py
+  line: 134
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 142
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 150
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 158
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 166
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 172
+  text: '{"name": constants.ORDER_CANCELED_TEMPLATE_FIELD, "value": DEFAULT_EMAIL_VALUE},'
+- file: saleor/plugins/user_email/plugin.py
+  line: 179
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 187
+  text: '"value": DEFAULT_EMAIL_VALUE,'
+- file: saleor/plugins/user_email/plugin.py
+  line: 189
+  text: '] + DEFAULT_EMAIL_CONFIGURATION'
+- file: saleor/plugins/user_email/plugin.py
+  line: 222
+  text: 'constants.ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD: {'
+- file: saleor/plugins/user_email/plugin.py
+  line: 225
+  text: '"label": "Account change email confirm - subject",'
+- file: saleor/plugins/user_email/plugin.py
+  line: 227
+  text: 'constants.ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD: {'
+- file: saleor/plugins/user_email/plugin.py
+  line: 230
+  text: '"label": "Account change email confirm - template",'
+- file: saleor/plugins/user_email/plugin.py
+  line: 232
+  text: 'constants.ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD: {'
+- file: saleor/plugins/user_email/plugin.py
+  line: 235
+  text: '"label": "Account change email request - subject",'
+- file: saleor/plugins/user_email/plugin.py
+  line: 237
+  text: 'constants.ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD: {'
+- file: saleor/plugins/user_email/plugin.py
+  line: 240
+  text: '"label": "Account change email request - template",'
+- file: saleor/plugins/user_email/plugin.py
+  line: 343
+  text: CONFIG_STRUCTURE.update(DEFAULT_EMAIL_CONFIG_STRUCTURE)
+- file: saleor/plugins/user_email/plugin.py
+  line: 348
+  text: self.config = EmailConfig(
+- file: saleor/plugins/user_email/plugin.py
+  line: 353
+  text: sender_name=configuration["sender_name"],
+- file: saleor/plugins/user_email/plugin.py
+  line: 354
+  text: sender_address=configuration["sender_address"],
+- file: saleor/plugins/user_email/plugin.py
+  line: 362
+  text: '# Get email templates from the database and merge them with self.configuration.'
+- file: saleor/plugins/user_email/plugin.py
+  line: 367
+  text: 'email_templates: list["EmailTemplate"],'
+- file: saleor/plugins/user_email/plugin.py
+  line: 369
+  text: email_template_by_name = {
+- file: saleor/plugins/user_email/plugin.py
+  line: 370
+  text: 'email_template.name: email_template'
+- file: saleor/plugins/user_email/plugin.py
+  line: 371
+  text: for email_template in email_templates
+- file: saleor/plugins/user_email/plugin.py
+  line: 374
+  text: '# Merge email templates with `self.configuration` items, preserving the'
+- file: saleor/plugins/user_email/plugin.py
+  line: 380
+  text: 'if key in email_template_by_name:'
+- file: saleor/plugins/user_email/plugin.py
+  line: 381
+  text: config_item["value"] = email_template_by_name[key].value
+- file: saleor/plugins/user_email/plugin.py
+  line: 387
+  text: EmailTemplatesByPluginConfigurationLoader(request)
+- file: saleor/plugins/user_email/plugin.py
+  line: 424
+  text: validate_default_email_configuration(plugin_configuration, configuration)
+- file: saleor/plugins/user_email/plugin.py
+  line: 425
+  text: email_templates_data = kwargs.get("email_templates_data", [])
+- file: saleor/plugins/user_email/plugin.py
+  line: 427
+  text: plugin_configuration, email_templates_data
+- file: saleor/plugins/user_email/plugin.py
+  line: 437
+  text: email_templates_data = []
+- file: saleor/plugins/user_email/plugin.py
+  line: 441
+  text: email_templates_data.append(data)
+- file: saleor/plugins/user_email/plugin.py
+  line: 452
+  text: plugin_configuration, email_templates_data=email_templates_data
+- file: saleor/plugins/user_email/plugin.py
+  line: 458
+  text: 'for et_data in email_templates_data:'
+- file: saleor/plugins/user_email/plugin.py
+  line: 459
+  text: 'if et_data["value"] != DEFAULT_EMAIL_VALUE:'
+- file: saleor/plugins/user_email/plugin.py
+  line: 460
+  text: EmailTemplate.objects.update_or_create(
+- file: saleor/plugins/user_email/plugin.py
+  line: 473
+  text: configuration["host"] = configuration["host"] or settings.USER_EMAIL_HOST
+- file: saleor/plugins/user_email/plugin.py
+  line: 474
+  text: configuration["port"] = configuration["port"] or settings.USER_EMAIL_PORT
+- file: saleor/plugins/user_email/plugin.py
+  line: 476
+  text: configuration["username"] or settings.USER_EMAIL_HOST_USER or ""
+- file: saleor/plugins/user_email/plugin.py
+  line: 479
+  text: configuration["password"] or settings.USER_EMAIL_HOST_PASSWORD or ""
+- file: saleor/plugins/user_email/plugin.py
+  line: 483
+  text: configuration["use_tls"] or settings.USER_EMAIL_USE_TLS
+- file: saleor/plugins/user_email/plugin.py
+  line: 486
+  text: configuration["use_ssl"] or settings.USER_EMAIL_USE_SSL
+- file: saleor/plugins/user_email/tasks.py
+  line: 8
+  text: from ..email_common import EmailConfig, send_email
+- file: saleor/plugins/user_email/tasks.py
+  line: 12
+  text: def send_account_confirmation_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 13
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 15
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 17
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 18
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 19
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 27
+  text: 'def send_password_reset_email_task(recipient_email, payload, config, subject, template):'
+- file: saleor/plugins/user_email/tasks.py
+  line: 29
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 31
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 32
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 33
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 45
+  text: def send_request_email_change_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 46
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 49
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 51
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 52
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 53
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 59
+  text: account_events.customer_email_change_request_event(
+- file: saleor/plugins/user_email/tasks.py
+  line: 62
+  text: '"old_email": payload.get("old_email"),'
+- file: saleor/plugins/user_email/tasks.py
+  line: 63
+  text: '"new_email": recipient_email,'
+- file: saleor/plugins/user_email/tasks.py
+  line: 69
+  text: def send_user_change_email_notification_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 70
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 73
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 75
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 76
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 77
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 83
+  text: '"old_email": payload.get("old_email"),'
+- file: saleor/plugins/user_email/tasks.py
+  line: 84
+  text: '"new_email": payload.get("new_email"),'
+- file: saleor/plugins/user_email/tasks.py
+  line: 87
+  text: account_events.customer_email_changed_event(
+- file: saleor/plugins/user_email/tasks.py
+  line: 93
+  text: def send_account_delete_confirmation_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 94
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 96
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 97
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 98
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 99
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 107
+  text: def send_set_user_password_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 108
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 110
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 111
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 112
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 113
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 121
+  text: 'def send_gift_card_email_task(recipient_email, payload, config, subject, template):'
+- file: saleor/plugins/user_email/tasks.py
+  line: 122
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 123
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 124
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 125
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 130
+  text: email_data = {
+- file: saleor/plugins/user_email/tasks.py
+  line: 134
+  text: '"email": payload["recipient_email"],'
+- file: saleor/plugins/user_email/tasks.py
+  line: 138
+  text: gift_card_events.gift_card_resent_event(**email_data)
+- file: saleor/plugins/user_email/tasks.py
+  line: 140
+  text: gift_card_events.gift_card_sent_event(**email_data)
+- file: saleor/plugins/user_email/tasks.py
+  line: 144
+  text: 'def send_invoice_email_task(recipient_email, payload, config, subject, template):'
+- file: saleor/plugins/user_email/tasks.py
+  line: 146
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 147
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 148
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 149
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 159
+  text: customer_email=payload["recipient_email"],
+- file: saleor/plugins/user_email/tasks.py
+  line: 165
+  text: email=payload["recipient_email"],
+- file: saleor/plugins/user_email/tasks.py
+  line: 170
+  text: def send_order_confirmation_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 171
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 173
+  text: '"""Send order confirmation email."""'
+- file: saleor/plugins/user_email/tasks.py
+  line: 174
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 175
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 176
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 177
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 186
+  text: customer_email=recipient_email,
+- file: saleor/plugins/user_email/tasks.py
+  line: 191
+  text: def send_fulfillment_confirmation_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 192
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 194
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 195
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 196
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 197
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 207
+  text: customer_email=recipient_email,
+- file: saleor/plugins/user_email/tasks.py
+  line: 212
+  text: def send_fulfillment_update_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 213
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 215
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 216
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 217
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 218
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 226
+  text: def send_payment_confirmation_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 227
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 229
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 230
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 231
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 232
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 241
+  text: customer_email=recipient_email,
+- file: saleor/plugins/user_email/tasks.py
+  line: 246
+  text: 'def send_order_canceled_email_task(recipient_email, payload, config, subject, template):'
+- file: saleor/plugins/user_email/tasks.py
+  line: 247
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 248
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 249
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 250
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 260
+  text: customer_email=recipient_email,
+- file: saleor/plugins/user_email/tasks.py
+  line: 265
+  text: 'def send_order_refund_email_task(recipient_email, payload, config, subject, template):'
+- file: saleor/plugins/user_email/tasks.py
+  line: 266
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 267
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 268
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 269
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 279
+  text: customer_email=recipient_email,
+- file: saleor/plugins/user_email/tasks.py
+  line: 284
+  text: def send_order_confirmed_email_task(
+- file: saleor/plugins/user_email/tasks.py
+  line: 285
+  text: recipient_email, payload, config, subject, template
+- file: saleor/plugins/user_email/tasks.py
+  line: 287
+  text: email_config = EmailConfig(**config)
+- file: saleor/plugins/user_email/tasks.py
+  line: 288
+  text: send_email(
+- file: saleor/plugins/user_email/tasks.py
+  line: 289
+  text: config=email_config,
+- file: saleor/plugins/user_email/tasks.py
+  line: 290
+  text: recipient_list=[recipient_email],
+- file: saleor/plugins/user_email/tasks.py
+  line: 300
+  text: customer_email=recipient_email,
