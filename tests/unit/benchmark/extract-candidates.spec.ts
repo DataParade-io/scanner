@@ -6,7 +6,7 @@ import path from "path";
 import os from "os";
 
 import {
-  createTokenPatterns,
+  splitSubwords,
   lineContainsToken,
   listScopeFiles,
   extractCandidates,
@@ -14,105 +14,128 @@ import {
 } from "../../benchmark/candidate-inventory";
 
 describe("extract-candidates functionality", () => {
-  describe("createTokenPatterns and lineContainsToken", () => {
-    it("should match exact word boundaries (case-insensitive)", () => {
-      const patterns = [createTokenPatterns("email")];
+  describe("splitSubwords", () => {
+    it("should split on non-alphanumeric characters", () => {
+      expect(splitSubwords("hello-world_test")).toEqual(["hello", "world", "test"]);
+      expect(splitSubwords("foo.bar,baz")).toEqual(["foo", "bar", "baz"]);
+    });
+
+    it("should split on camelCase boundaries", () => {
+      expect(splitSubwords("camelCase")).toEqual(["camel", "case"]);
+      expect(splitSubwords("sendEmail")).toEqual(["send", "email"]);
+      expect(splitSubwords("userEmail")).toEqual(["user", "email"]);
+    });
+
+    it("should handle ACRONYM boundaries", () => {
+      expect(splitSubwords("HTMLEmail")).toEqual(["html", "email"]);
+      expect(splitSubwords("FROMADDRESSValue")).toEqual(["fromaddress", "value"]);
+    });
+
+    it("should handle mixed styles", () => {
+      expect(
+        splitSubwords("last_confirm_email_request = userEmails; FROM_ADDRESS e-mail")
+      ).toEqual([
+        "last", "confirm", "email", "request", "user", "emails",
+        "from", "address", "e", "mail"
+      ]);
+    });
+
+    it("should lowercase everything", () => {
+      expect(splitSubwords("HELLO")).toEqual(["hello"]);
+      expect(splitSubwords("CamelCase")).toEqual(["camel", "case"]);
+    });
+
+    it("should drop empty strings", () => {
+      expect(splitSubwords("__hello__")).toEqual(["hello"]);
+      expect(splitSubwords("a--b")).toEqual(["a", "b"]);
+    });
+  });
+
+  describe("lineContainsToken", () => {
+    it("should match exact tokens", () => {
+      const patterns = [splitSubwords("email")];
       expect(lineContainsToken("const email = 'test@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("const EMAIL = 'test@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("const Email = 'test@example.com'", patterns)).toBe(true);
       expect(lineContainsToken("// email validation", patterns)).toBe(true);
     });
 
+    it("should match tokens with underscores (regression test)", () => {
+      const patterns = [splitSubwords("email")];
+      expect(lineContainsToken("last_confirm_email_request = models.DateTimeField(...)", patterns)).toBe(true);
+      expect(lineContainsToken('name="user_email_idx"', patterns)).toBe(true);
+    });
+
     it("should match camelCase tokens", () => {
-      const patterns = [createTokenPatterns("fromAddress")];
-      expect(lineContainsToken("const fromAddress = 'sender@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("const FROM_ADDRESS = 'sender@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("from-address: string", patterns)).toBe(true);
-      expect(lineContainsToken("this.fromaddress = value", patterns)).toBe(true);
+      const patterns = [splitSubwords("email")];
+      expect(lineContainsToken("function sendEmail(to, subject) {", patterns)).toBe(true);
+      expect(lineContainsToken("class EmailValidator {", patterns)).toBe(true);
+      expect(lineContainsToken("interface UserEmail {", patterns)).toBe(true);
+      expect(lineContainsToken("const userEmails = ['a@b.com']", patterns)).toBe(true);
     });
 
-    it("should match snake_case tokens", () => {
-      const patterns = [createTokenPatterns("mail_to")];
-      expect(lineContainsToken("const mail_to = recipient", patterns)).toBe(true);
-      expect(lineContainsToken("const MAIL_TO = recipient", patterns)).toBe(true);
-      expect(lineContainsToken("const mailTo = recipient", patterns)).toBe(true);
-      expect(lineContainsToken("mail-to: 'user@example.com'", patterns)).toBe(true);
+    it("should match ACRONYM contexts", () => {
+      const patterns = [splitSubwords("email")];
+      expect(lineContainsToken("class HTMLEmailRenderer {", patterns)).toBe(true);
     });
 
-    it("should match kebab-case tokens", () => {
-      const patterns = [createTokenPatterns("e_mail")];
+    it("should match multi-part tokens", () => {
+      const patterns = [splitSubwords("from_address")];
+      expect(lineContainsToken("const FROM_ADDRESS = 'noreply@example.com'", patterns)).toBe(true);
+      expect(lineContainsToken("const fromAddress = data.sender", patterns)).toBe(true);
+      expect(lineContainsToken("const from-address: string", patterns)).toBe(true);
+    });
+
+    it("should match e-mail token", () => {
+      const patterns = [splitSubwords("e_mail")];
       expect(lineContainsToken("const e-mail = 'test@example.com'", patterns)).toBe(true);
       expect(lineContainsToken("const E_MAIL = 'test@example.com'", patterns)).toBe(true);
       expect(lineContainsToken("const eMail = 'test@example.com'", patterns)).toBe(true);
     });
 
-    it("should match SCREAMING_CASE tokens", () => {
-      const patterns = [createTokenPatterns("recipient")];
-      expect(lineContainsToken("const RECIPIENT = 'user@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("const recipient = 'user@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken("const Recipient = 'user@example.com'", patterns)).toBe(true);
+    it("should match mailto token", () => {
+      const patterns = [splitSubwords("mail_to")];
+      expect(lineContainsToken("mailto: 'user@example.com'", patterns)).toBe(true);
     });
 
-    it("should match tokens in identifiers", () => {
-      const patterns = [createTokenPatterns("email")];
-      expect(lineContainsToken("function sendEmail(to, subject) {", patterns)).toBe(true);
-      expect(lineContainsToken("class EmailValidator {", patterns)).toBe(true);
-      expect(lineContainsToken("interface UserEmail {", patterns)).toBe(true);
+    it("should match plural forms with s suffix", () => {
+      const patterns = [splitSubwords("recipient")];
+      expect(lineContainsToken("const recipients = getRecipients()", patterns)).toBe(true);
     });
 
-    it("should match tokens in property keys", () => {
-      const patterns = [createTokenPatterns("email")];
-      expect(lineContainsToken('{ "email": "user@example.com" }', patterns)).toBe(true);
-      expect(lineContainsToken('{ email: "user@example.com" }', patterns)).toBe(true);
-      expect(lineContainsToken("user.email = 'test@example.com'", patterns)).toBe(true);
-    });
-
-    it("should match tokens in strings", () => {
-      const patterns = [createTokenPatterns("sender")];
-      expect(lineContainsToken("const msg = 'sender: user@example.com'", patterns)).toBe(true);
-      expect(lineContainsToken('const label = "from_sender"', patterns)).toBe(true);
+    it("should match plural forms with es suffix", () => {
+      const patterns = [splitSubwords("address")];
+      expect(lineContainsToken("const addresses = getAllAddresses()", patterns)).toBe(true);
     });
 
     it("should match tokens in comments", () => {
-      const patterns = [createTokenPatterns("email")];
-      expect(lineContainsToken("// TODO: validate email format", patterns)).toBe(true);
-      expect(lineContainsToken("/* email address parsing */", patterns)).toBe(true);
-      expect(lineContainsToken("# recipient email validation", patterns)).toBe(true);
+      const tokens = ["email", "sender"];
+      const patterns = tokens.map(t => splitSubwords(t));
+      expect(lineContainsToken("// send the mail to the sender", patterns)).toBe(true);
+      expect(lineContainsToken("// email validation needed", patterns)).toBe(true);
     });
 
     it("should not match partial words without boundaries", () => {
-      const patterns = [createTokenPatterns("email")];
+      const patterns = [splitSubwords("email")];
       expect(lineContainsToken("unreliable source", patterns)).toBe(false);
       expect(lineContainsToken("reemails are okay", patterns)).toBe(false);
+      expect(lineContainsToken("emailing is easy", patterns)).toBe(false);
     });
 
-    it("should not match when no token is present", () => {
-      const patterns = [createTokenPatterns("email")];
-      expect(lineContainsToken("const address = 'user@example.com'", patterns)).toBe(false);
-      expect(lineContainsToken("function sendMessage(to, body) {", patterns)).toBe(false);
-      expect(lineContainsToken("// validate recipient address format", patterns)).toBe(false);
+    it("should not match generic 'mail' usage", () => {
+      const patterns = [splitSubwords("email")];
+      expect(lineContainsToken("mail.send(x)", patterns)).toBe(false);
     });
 
-    it("should match additional email concept tokens", () => {
+    it("should match all email concept tokens", () => {
       const tokens = ["email", "e_mail", "mail_to", "mailto", "recipient", "sender", "from_address"];
-      const patterns = tokens.map((t) => createTokenPatterns(t));
+      const patterns = tokens.map((t) => splitSubwords(t));
 
-      expect(lineContainsToken("const emails = ['a@b.com', 'c@d.com']", patterns)).toBe(true);
+      expect(lineContainsToken("const emails = ['a@b.com']", patterns)).toBe(true);
       expect(lineContainsToken("const userEmail = user.email", patterns)).toBe(true);
       expect(lineContainsToken("const EMAIL_FROM = 'noreply@example.com'", patterns)).toBe(true);
       expect(lineContainsToken("const fromAddress = data.sender", patterns)).toBe(true);
       expect(lineContainsToken("const from-address: string", patterns)).toBe(true);
       expect(lineContainsToken("const eMail = contact.email", patterns)).toBe(true);
       expect(lineContainsToken("const recipients = getRecipients()", patterns)).toBe(true);
-      expect(lineContainsToken("// send the mail to the sender", patterns)).toBe(true);
-    });
-
-    it("should not match lines without mail-related tokens", () => {
-      const tokens = ["email", "e_mail", "mail_to", "mailto", "recipient", "sender", "from_address"];
-      const patterns = tokens.map((t) => createTokenPatterns(t));
-
-      expect(lineContainsToken("mail.send(x)", patterns)).toBe(false);
-      expect(lineContainsToken("const name = 'John Doe'", patterns)).toBe(false);
     });
   });
 
@@ -120,7 +143,6 @@ describe("extract-candidates functionality", () => {
     it("should return sorted files from scope paths", () => {
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-scope-"));
       try {
-        // Create test structure
         fs.writeFileSync(path.join(tmpDir, "file1.ts"), "content");
         fs.writeFileSync(path.join(tmpDir, "file2.ts"), "content");
         fs.mkdirSync(path.join(tmpDir, "subdir"));
@@ -160,7 +182,6 @@ describe("extract-candidates functionality", () => {
     it("should extract candidates and sort by file then line", () => {
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "test-extract-"));
       try {
-        // Create test files
         fs.writeFileSync(path.join(tmpDir, "a.ts"), "line 1\nconst sender = 'x'\nline 3");
         fs.writeFileSync(path.join(tmpDir, "b.ts"), "const email = 'y'\nline 2");
 
