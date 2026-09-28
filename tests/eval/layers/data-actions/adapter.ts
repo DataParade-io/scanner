@@ -10,7 +10,6 @@ import type {
   DataActionAssignment,
   TopologyEvidence,
 } from "../../../../src/core/types/data-action";
-import { componentIdentity } from "../components/adapter";
 import {
   fixtureScanResultWithLedger,
   layerLedgerFromOutcomes,
@@ -25,6 +24,16 @@ function isTopologyEvidence(evidence: DataActionAssignment["evidence"]): evidenc
 
 function isAsserted(assignment: DataActionAssignment): boolean {
   return (assignment.status ?? "asserted") === "asserted";
+}
+
+/**
+ * Data-action subject identity: `${type}:${name.toLowerCase()}`, per the ground-truth
+ * schema ("same as component" legacy key) and aligned with data-flow endpoint keys.
+ * Gold data-action records are matched on this literal key (see resolveDataActionIdentity),
+ * so it must not use the subtype-based components-layer identity.
+ */
+export function componentIdentity(component: DetectedComponent): string {
+  return `${component.type}:${component.name.trim().toLowerCase()}`;
 }
 
 function readAssignments(component: DetectedComponent): DataActionAssignment[] {
