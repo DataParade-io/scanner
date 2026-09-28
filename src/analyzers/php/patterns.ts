@@ -14,14 +14,15 @@ function importsForEngine(model: PhpSourceFileModel): ImportLike[] {
     const importPath = entry.path;
     const segments = importPath.split(/[\\/]/).filter(Boolean);
     const names = Array.from(
-      new Set([
-        importPath,
-        ...segments,
-        ...(entry.alias ? [entry.alias] : []),
-      ]),
+      new Set([importPath, ...segments, ...(entry.alias ? [entry.alias] : [])]),
     ).filter(Boolean);
 
-    return { module: importPath, names };
+    return {
+      module: importPath,
+      names,
+      startLine: entry.location.startLine,
+      endLine: entry.location.endLine,
+    };
   });
 }
 

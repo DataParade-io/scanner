@@ -10,6 +10,8 @@ export function detectExternalApiCalls(
   const importsForEngine: ImportLike[] = model.imports.map((imp) => ({
     module: imp.moduleSpecifier,
     names: imp.importedNames,
+    startLine: imp.location.startLine,
+    endLine: imp.location.endLine,
   }));
 
   return matchPatterns({

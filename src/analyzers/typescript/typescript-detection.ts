@@ -14,10 +14,15 @@ function toImportLikes(model: ParserResult): ImportLike[] {
   return model.imports.map((imp) => ({
     module: imp.moduleSpecifier,
     names: imp.importedNames,
+    startLine: imp.location.startLine,
+    endLine: imp.location.endLine,
   }));
 }
 
-function buildPatternContext(file: FileInfo, model: ParserResult): PatternContext {
+function buildPatternContext(
+  file: FileInfo,
+  model: ParserResult,
+): PatternContext {
   return {
     language: model.language,
     file,

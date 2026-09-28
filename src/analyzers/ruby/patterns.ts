@@ -10,7 +10,12 @@ function importsForEngine(model: RubySourceFileModel): ImportLike[] {
       new Set([importPath, ...segments, pathBasename(importPath)]),
     ).filter(Boolean);
 
-    return { module: importPath, names };
+    return {
+      module: importPath,
+      names,
+      startLine: entry.location.startLine,
+      endLine: entry.location.endLine,
+    };
   });
 }
 
