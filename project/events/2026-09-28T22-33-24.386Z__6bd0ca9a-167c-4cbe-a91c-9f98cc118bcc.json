@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "6bd0ca9a-167c-4cbe-a91c-9f98cc118bcc",
+  "issue_id": "KDATAP-d1af5b21-13d7-48eb-baea-2ed76be68e41",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-28T22:33:24.386Z",
+  "actor_id": "home",
+  "payload": {
+    "title": "Tree-sitter analysis engine",
+    "description": "Add a tree-sitter analysis engine to the scanner that works the same way for every language. Decision 2 of the parent initiative.\n\n## Scope\n\n- `web-tree-sitter` (WASM) in the scanner, with a `.wasm` grammar per language. No native build step at install.\n- A shared capture vocabulary that every language's query file maps onto: `@scope`, `@definition.function`, `@definition.class`, `@definition.parameter`, `@definition.variable`, `@definition.field`, `@reference`, `@import.source`, `@import.name`, `@type.annotation`, `@comment`, `@string`, `@call.callee`, `@call.argument`.\n- A language-neutral engine over those captures: enclosing scopes, same-file declaration lookup, comment attachment, syntax kind of a position.\n- A per-language pack: grammar, `queries.scm`, and a config for doc-comment placement (Python docstring vs. comment above), import-path resolution rules, and test/fixture path patterns.\n- TypeScript/JavaScript and Python packs first. They differ enough in doc comments, imports, and type annotations to test whether the vocabulary holds.\n- Suggested layout: `src/analyze/engine/`, `src/analyze/languages/<lang>/`.\n\n## Out of scope\n\n- Changing the existing per-language detectors. That is the later migration epic.\n- Type inference, cross-file call resolution, package-import resolution.\n\n## Done when\n\n- The engine answers, for any file position in a TS or Python file: syntax kind, enclosing function and class with ranges, attached doc comment, and the same-file declaration of an identifier.\n- A file with a syntax error still yields scopes and declarations for the parts that parse.\n- Adding a third language requires no engine code change (demonstrated with a stub pack or a small third language).\n\n## Evaluation\n\nDeterministic specs in the scanner's feature and unit suites. Corpus evaluation starts in the epics that consume the engine.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+    "labels": []
+  }
+}

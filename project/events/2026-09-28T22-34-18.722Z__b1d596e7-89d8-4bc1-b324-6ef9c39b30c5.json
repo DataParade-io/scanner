@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "b1d596e7-89d8-4bc1-b324-6ef9c39b30c5",
+  "issue_id": "KDATAP-3ccc00b2-22de-4996-8d75-8d314dece0dc",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-28T22:34:18.722Z",
+  "actor_id": "home",
+  "payload": {
+    "title": "Write the mention-attribute labeling reference and worked example",
+    "description": "Write the labeling reference that small-model agents follow, and label one file as the worked example.\n\n## Deliverable\n\n`.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`, linked from `SKILL.md`. It must let a small model label without judgment it cannot make:\n\n- One section per field from the schema task, each with a definition, three or more positive and negative examples in JavaScript and Python, and the boundary cases.\n- Value vs. word for email specifically: a variable, parameter, property, column, or argument that holds an address is positive; `import ... 'mailer'`, a connection named `email`, a template key, a comment, and a config flag like `emailEnabled` are negative; a function named `sendEmail` is negative for the name, and its address parameter is positive.\n- How to find the declaration (walk outward through scopes, one hop through a relative import, else `unresolved`).\n- How to name the owner.\n- When to answer `ambiguous`, with a written rationale, instead of guessing.\n- Rules: never run the scanner or read its output; write only the packet file; run the validator before finishing.\n- The exact YAML of one record.\n\n## Worked example\n\nLabel every email candidate in one `ghost` file by hand (a stronger model drafts, a person accepts) and commit it as the example packet the reference points to.\n\n## Done when\n\nA person has read the reference and accepted the example packet.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+    "labels": [
+      "model:strong"
+    ]
+  }
+}

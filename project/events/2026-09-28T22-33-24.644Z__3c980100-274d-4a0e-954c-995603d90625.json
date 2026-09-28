@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "3c980100-274d-4a0e-954c-995603d90625",
+  "issue_id": "KDATAP-a565be0e-1bcb-4535-a6b6-e43208939809",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-28T22:33:24.644Z",
+  "actor_id": "home",
+  "payload": {
+    "title": "Declaration resolution and grouping of mentions",
+    "description": "Resolve each mention to its declaration and group data-item mentions by declaration. Decision 6 of the parent initiative.\n\n## Scope\n\n- Declaration resolution: local, parameter, class field, or function in the same file, or one hop through a relative import to the export. Reuse the scanner's relative-import resolution (`src/data-flow/import-graph.ts`). Package imports stay unresolved.\n- Type annotation: when the declaration has a written type, record the type name and follow it one hop to its definition when it is in the repo. No inference.\n- `payload.email` with `payload: SignupDto` resolves to the parameter and records `SignupDto`. It does not invent a declaration of `email`.\n- Scan output gains a level: data item → declarations → mentions. The data item identity does not change.\n- Import and assignment edges between declarations are recorded as a graph for later clustering.\n\n## Done when\n\n- In the labeled corpus scopes, email mentions collapse onto a declaration set, and each group's mentions share one declaration.\n- An identifier imported from a relative module resolves to the export in that module.\n\n## Evaluation\n\nNew grouping layer scored by pairwise precision and recall over mention pairs. Gold grouping follows the component consolidation rules in `tests/eval/canonical-representation.md`: group only on reviewed evidence; ambiguous grouping stays `needs_adjudication`.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+    "labels": []
+  }
+}
