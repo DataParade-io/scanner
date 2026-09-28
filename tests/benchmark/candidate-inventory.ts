@@ -19,86 +19,128 @@ export interface CandidatesOutput {
 }
 
 /**
- * Convert a token with separators (e.g., "from_address", "fromAddress")
- * to regex patterns that match case-insensitively across styles.
+ * Split a line into subwords.
  *
- * Matches the token when:
- * 1. Surrounded by word boundaries (standalone word)
- * 2. In camelCase (Email in EmailValidator, sendEmail, emails)
- * 3. With separators (email_address, EMAIL-FROM, e-mail)
+ * Splits on every non-alphanumeric character, then splits each piece at camelCase
+ * boundaries (lowercase→uppercase, uppercase→lowercase transition at acronym end like
+ * HTMLEmail → HTML, Email; digits also break). Lowercases everything and drops empty strings.
  *
- * Does NOT match partial words like "reemails" (email within a word).
+ * Example: `last_confirm_email_request = userEmails; FROM_ADDRESS e-mail`
+ *   → [last, confirm, email, request, user, emails, from, address, e, mail]
  */
-export function createTokenPatterns(token: string): RegExp[] {
-  // Split token into parts: split on non-alphanumeric and handle camelCase
-  const parts: string[] = [];
-  let current = "";
+export function splitSubwords(text: string): string[] {
+  if (!text) return [];
 
-  for (let i = 0; i < token.length; i++) {
-    const char = token[i];
-    const isUpper = /[A-Z]/.test(char);
-    const isAlpha = /[a-zA-Z]/.test(char);
-    const isDigit = /[0-9]/.test(char);
+  // First split on non-alphanumeric characters
+  const parts = text.split(/[^a-zA-Z0-9]+/);
 
-    if (!isAlpha && !isDigit) {
-      // Separator character
-      if (current) {
-        parts.push(current.toLowerCase());
-        current = "";
+  // Then split each part at camelCase boundaries
+  const result: string[] = [];
+  for (const part of parts) {
+    if (!part) continue;
+
+    const subparts: string[] = [];
+    let current = "";
+
+    for (let i = 0; i < part.length; i++) {
+      const char = part[i];
+      const nextChar = part[i + 1];
+      const isUpper = /[A-Z]/.test(char);
+      const isLower = /[a-z]/.test(char);
+      const isDigit = /[0-9]/.test(char);
+      const nextIsLower = nextChar && /[a-z]/.test(nextChar);
+      const nextIsUpper = nextChar && /[A-Z]/.test(nextChar);
+
+      if (isDigit) {
+        // Digit breaks the word
+        if (current) {
+          subparts.push(current);
+          current = "";
+        }
+      } else if (isUpper && current && (isLower || /[a-z]/.test(current[current.length - 1]))) {
+        // Uppercase after lowercase (camelCase boundary)
+        subparts.push(current);
+        current = char;
+      } else if (isLower && current && /[A-Z]/.test(current[current.length - 1]) && current.length > 1) {
+        // Lowercase after acronym (acronym→word boundary)
+        // "HTML" + "E" + "m" → "html" + "email"
+        const lastChar = current[current.length - 1];
+        subparts.push(current.slice(0, -1));
+        current = lastChar + char;
+      } else {
+        current += char;
       }
-    } else if (isUpper && current && /[a-z]/.test(current[current.length - 1])) {
-      // CamelCase boundary: lowercase to uppercase
-      parts.push(current.toLowerCase());
-      current = char.toLowerCase();
-    } else {
-      current += char;
+    }
+
+    if (current) {
+      subparts.push(current);
+    }
+
+    for (const subpart of subparts) {
+      if (subpart) {
+        result.push(subpart.toLowerCase());
+      }
     }
   }
 
-  if (current) {
-    parts.push(current.toLowerCase());
-  }
-
-  const patterns: RegExp[] = [];
-
-  if (parts.length === 1) {
-    const part = parts[0];
-    // Single token case: match in multiple contexts
-
-    // 1. Standalone word with word boundaries: \bemail\b
-    patterns.push(new RegExp(`\\b${part}\\b`, "i"));
-
-    // 2. Start of camelCase: \bemail[A-Z] (EmailValidator, emails)
-    patterns.push(new RegExp(`\\b${part}[A-Z]`, "i"));
-
-    // 3. End of camelCase: [a-z]email\b (sendEmail, userEmail)
-    patterns.push(new RegExp(`[a-z]${part}\\b`, "i"));
-
-    // 4. With separators: _email, email_, e-mail, EMAIL_ADDRESS
-    patterns.push(new RegExp(`[_\\-]${part}\\b`, "i"));
-    patterns.push(new RegExp(`\\b${part}[_\\-]`, "i"));
-  } else {
-    // Multiple parts case (e.g., "from_address")
-    const separators = "[_\\-]?";
-    const pattern = parts.join(separators);
-    patterns.push(new RegExp(`\\b${pattern}\\b`, "i"));
-    patterns.push(new RegExp(`\\b${pattern}[_\\-A-Z]`, "i"));
-  }
-
-  return patterns;
+  return result;
 }
 
 /**
- * Check if any token pattern matches the line.
+ * Check if line subwords contain token subwords as consecutive parts,
+ * with optional plural suffix (s or es) on the last token part.
+ * For multi-part tokens, also accept glued form (e.g., "mailto" for "mail_to").
  */
-export function lineContainsToken(line: string, patterns: RegExp[][]): boolean {
-  for (const patternSet of patterns) {
-    for (const pattern of patternSet) {
-      if (pattern.test(line)) {
+export function lineContainsToken(line: string, tokenParts: string[][]): boolean {
+  const lineWords = splitSubwords(line);
+
+  for (const parts of tokenParts) {
+    // Try to match token parts as consecutive subwords
+    for (let i = 0; i <= lineWords.length - parts.length; i++) {
+      let matches = true;
+
+      for (let j = 0; j < parts.length; j++) {
+        const linePart = lineWords[i + j];
+        const tokenPart = parts[j];
+        const isLastPart = j === parts.length - 1;
+
+        if (isLastPart) {
+          // Last part can have plural suffix (s or es)
+          if (!(linePart === tokenPart ||
+                linePart === tokenPart + "s" ||
+                linePart === tokenPart + "es")) {
+            matches = false;
+            break;
+          }
+        } else {
+          // Non-last parts must match exactly
+          if (linePart !== tokenPart) {
+            matches = false;
+            break;
+          }
+        }
+      }
+
+      if (matches) {
         return true;
       }
     }
+
+    // For multi-part tokens, also try glued form
+    if (parts.length > 1) {
+      const glued = parts.join("");
+      for (let i = 0; i < lineWords.length; i++) {
+        const linePart = lineWords[i];
+        // Check if glued form with optional plural suffix matches
+        if (linePart === glued ||
+            linePart === glued + "s" ||
+            linePart === glued + "es") {
+          return true;
+        }
+      }
+    }
   }
+
   return false;
 }
 
@@ -161,7 +203,8 @@ export function listScopeFiles(
 }
 
 /**
- * Extract candidate lines from files that match any token pattern.
+ * Extract candidate lines from files that match any token.
+ * Tokens are split into subwords and matched against line subwords.
  */
 export function extractCandidates(
   tokens: string[],
@@ -169,7 +212,8 @@ export function extractCandidates(
   files: string[],
 ): CandidateRecord[] {
   const candidates: CandidateRecord[] = [];
-  const patterns = tokens.map((token) => createTokenPatterns(token));
+  // Pre-split all tokens into subword parts
+  const tokenParts = tokens.map(token => splitSubwords(token));
 
   for (const file of files) {
     const fullPath = path.join(repoDir, file);
@@ -184,7 +228,7 @@ export function extractCandidates(
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        if (lineContainsToken(line, patterns)) {
+        if (lineContainsToken(line, tokenParts)) {
           candidates.push({
             file,
             line: i + 1, // 1-based line numbers
