@@ -44,12 +44,9 @@ export function splitSubwords(text: string): string[] {
 
     for (let i = 0; i < part.length; i++) {
       const char = part[i];
-      const nextChar = part[i + 1];
       const isUpper = /[A-Z]/.test(char);
       const isLower = /[a-z]/.test(char);
       const isDigit = /[0-9]/.test(char);
-      const nextIsLower = nextChar && /[a-z]/.test(nextChar);
-      const nextIsUpper = nextChar && /[A-Z]/.test(nextChar);
 
       if (isDigit) {
         // Digit breaks the word
