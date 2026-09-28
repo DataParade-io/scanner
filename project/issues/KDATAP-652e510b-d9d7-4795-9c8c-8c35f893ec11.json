@@ -1,0 +1,33 @@
+{
+  "id": "KDATAP-652e510b-d9d7-4795-9c8c-8c35f893ec11",
+  "title": "Cite every matching import line as third-party evidence",
+  "description": "",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f9cd292e-d820-4536-8046-9ff834f9df97",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "ff7cd49a-0073-4fea-a54b-1caccef1ccc0",
+      "author": "os",
+      "text": "Branch fix/import-evidence-line cited only the first import that matched a third-party service, so a local import like ./config exporting stripeMode could steal the citation from import Stripe from 'stripe'. Change: detectThirdPartyServicesFromImportsWithConfig now emits one external_api_call finding per distinct import span per service; classifyRawFindings already unions those into one component with all sourceLocations and serviceName/client evidence refs. Test added in tests/unit/patterns/import-evidence-line.spec.ts. Follow-up: pin @dataparade/cli to the new scanner commit and publish.",
+      "created_at": "2026-09-28T14:03:14.150428Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "dddbeb49-fd73-40ad-8bb1-7c253bdaad6e",
+      "author": "os",
+      "text": "Landed. Scanner: 94accc8 (fix) + 74cc677 (record) on fix/import-evidence-line, pushed. CLI: dataparade@0d293b1d pins @dataparade/scanner#74cc677, bumps to 0.0.16, and updates graph-mapping.spec for the self-loop edge filter from scanner 62123b6. Tag cli-v0.0.16 pushed; release workflow run 36434354268 succeeded and published @dataparade/cli@0.0.16 to npm. Note: fix/import-evidence-line is not yet merged to scanner main. Frontend gap: ThirdPartyPropertyPanel has no evidenceKey for serviceName/client, so these refs are stored but not rendered there.",
+      "created_at": "2026-09-28T14:17:45.566775Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-28T14:02:55.546858Z",
+  "updated_at": "2026-09-28T14:17:45.583482Z",
+  "closed_at": "2026-09-28T14:17:45.583482Z",
+  "custom": {}
+}
