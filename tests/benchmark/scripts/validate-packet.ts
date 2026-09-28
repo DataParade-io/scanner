@@ -58,7 +58,7 @@ function validateOne(packetArg: string): boolean {
       : undefined;
 
   const result = validatePacket(packetPath, candidates, {
-    sourceRoot: path.join(cacheRoot, repoKey),
+    sourceRoot: path.join(cacheRoot, `${repoKey}@${manifest.commit}`),
     pinnedCommit: manifest.commit,
     readHeadCommit,
   });
