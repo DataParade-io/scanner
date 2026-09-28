@@ -1,0 +1,29 @@
+{
+  "id": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "title": "Evaluation for mention attributes and declaration grouping",
+  "description": "Extend the four-layer evaluation (KDATAP-f61c81) for mention attributes and declaration grouping, and label the email mentions in pinned public corpus repos. Decision 7 of the parent initiative.\n\nLabeling is done by agents through `annotation` issues and accepted by a person, following the flywheel in KDATAP-405fcd and the `curate-scanner-evaluation-corpus` skill.\n\n## Scope\n\n- Ground-truth schema and validator gain: owner, touches, scope extent, syntax kind, declaration reference, and declaration group.\n- A labeling reference in the curation skill that a small model can follow without judgment calls it cannot make.\n- Exhaustive email scopes in `ghost` (JavaScript) and `saleor` (Python), both already pinned.\n- A candidate-line inventory built from source, not from scanner output.\n- Labeling batches as `annotation` issues, an independent second pass on a sample, grouping per repo, human adjudication.\n- Scorer: attribute metrics on the vendor pattern, pairwise grouping metrics, real negatives on mentions.\n- A recorded baseline before any analysis epic lands.\n\n## Done when\n\n- The scorecard reports mention precision with real negatives, the attribute metrics, and grouping pairwise precision and recall on `ghost` and `saleor`, each with its computability state.\n- A baseline from the current scanner is recorded.",
+  "type": "epic",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-405fcd32-59ce-4ec4-bd3b-4ec6a52f31a4",
+      "type": "relates-to"
+    },
+    {
+      "target": "KDATAP-f61c81dc-58e6-4b0f-9434-9db1d40720b0",
+      "type": "relates-to"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:33:24.707897Z",
+  "updated_at": "2026-09-28T22:34:29.734361Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

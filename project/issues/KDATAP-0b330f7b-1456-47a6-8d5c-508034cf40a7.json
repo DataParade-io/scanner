@@ -1,0 +1,31 @@
+{
+  "id": "KDATAP-0b330f7b-1456-47a6-8d5c-508034cf40a7",
+  "title": "File per-batch email labeling annotations for ghost and saleor",
+  "description": "After the scopes and batches are accepted, file one `annotation` issue per batch under this epic, using the template below. These are the issues small-model agents work.\n\n## Template\n\nTitle: `Label email mentions: <repo> batch <n>`\nType: `annotation`. Label: `model:small`.\nDescription:\n\n```\nLabel every email candidate line in these files of <repo> at its pinned commit.\n\nFiles:\n- <path>\n- ...\n\nRead first, in full:\n.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md\nand its worked example packet.\n\nInput: the entries for these files in\ntests/benchmark/repos/<repo>/annotations/packets/email-candidates.yaml\n\nWrite exactly one record per candidate line to\ntests/benchmark/repos/<repo>/annotations/packets/<this-issue-id>.yaml\nwith review_state: proposed.\n\nRules:\n- Do not run the scanner or read scanner output.\n- Uncertain: status ambiguous with a one-sentence rationale. Do not guess.\n- Do not edit any other file.\n\nFinish: run the packet validator on your file. When it passes, record the pass in\nannotations/<this-issue-id>/pass.md and move this issue to awaiting-review.\n```\n\n## Done when\n\nEvery accepted batch has an `annotation` issue.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:strong"
+  ],
+  "dependencies": [
+    {
+      "target": "KDATAP-3ccc00b2-22de-4996-8d75-8d314dece0dc",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-25ff9a23-d6d4-4506-a520-68eb9de4b3a5",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:34:18.957682Z",
+  "updated_at": "2026-09-28T22:34:29.851373Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

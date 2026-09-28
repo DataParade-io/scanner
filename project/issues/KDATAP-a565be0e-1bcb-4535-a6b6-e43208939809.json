@@ -1,0 +1,29 @@
+{
+  "id": "KDATAP-a565be0e-1bcb-4535-a6b6-e43208939809",
+  "title": "Declaration resolution and grouping of mentions",
+  "description": "Resolve each mention to its declaration and group data-item mentions by declaration. Decision 6 of the parent initiative.\n\n## Scope\n\n- Declaration resolution: local, parameter, class field, or function in the same file, or one hop through a relative import to the export. Reuse the scanner's relative-import resolution (`src/data-flow/import-graph.ts`). Package imports stay unresolved.\n- Type annotation: when the declaration has a written type, record the type name and follow it one hop to its definition when it is in the repo. No inference.\n- `payload.email` with `payload: SignupDto` resolves to the parameter and records `SignupDto`. It does not invent a declaration of `email`.\n- Scan output gains a level: data item → declarations → mentions. The data item identity does not change.\n- Import and assignment edges between declarations are recorded as a graph for later clustering.\n\n## Done when\n\n- In the labeled corpus scopes, email mentions collapse onto a declaration set, and each group's mentions share one declaration.\n- An identifier imported from a relative module resolves to the export in that module.\n\n## Evaluation\n\nNew grouping layer scored by pairwise precision and recall over mention pairs. Gold grouping follows the component consolidation rules in `tests/eval/canonical-representation.md`: group only on reviewed evidence; ambiguous grouping stays `needs_adjudication`.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-d1af5b21-13d7-48eb-baea-2ed76be68e41",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-960348c2-ad72-4419-af23-19e653ffe05b",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:33:24.644363Z",
+  "updated_at": "2026-09-28T22:34:29.659325Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

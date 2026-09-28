@@ -1,0 +1,25 @@
+{
+  "id": "KDATAP-959b9a14-5bff-48c7-bcac-9d28cef336ea",
+  "title": "Owning code unit and touched components per mention",
+  "description": "Split \"which component\" into one owning code unit and a list of touched datastores and third parties. Decision 4 of the parent initiative.\n\n## Problem\n\nIn an internal dogfood scan, most files carried two asset components, usually a code unit and a datastore (an app plus its ORM). One pair of components carried identical locations. One \"component\" field cannot say both who owns a line and what the line talks to.\n\n## Scope\n\n- Owner: one code unit per file (an API service, a frontend app, a lambda, a docs site), from the file path and the scanner's sections (`getSectionIdFromProperties`, `src/core/sectioning/`). Detect and resolve components that carry identical location sets.\n- Touches: a mention touches a datastore or third party when a `call` or `declaration` detection for it sits in the same scope, or when the call goes through a variable whose declaration came from that client (`const client = new Client(...)`).\n- File-level `import` detections become touch candidates, not answers. Later tools may resolve them.\n\n## Depends on\n\nScope spans and location kinds on detections.\n\n## Done when\n\n- Every mention record has exactly one owner or an explicit unknown.\n- An email mention inside `sendWelcome()` next to `axios.post(` touches that component; a mention in a file that only imports a mailer SDK lists it as a candidate.\n- No file in the corpus scans reports two owning code units.\n\n## Evaluation\n\nOwner and touches are asserted attributes on mention gold, scored only over gold that asserts them and only after the mention matches.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-00d43935-06f5-4988-8255-327c20323562",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:33:24.514334Z",
+  "updated_at": "2026-09-28T22:34:29.573710Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}
