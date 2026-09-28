@@ -3,6 +3,7 @@ import { detectThirdPartyServicesFromImports } from "../../../src/patterns/engin
 import { detectExternalApiCalls } from "../../../src/analyzers/typescript/third-party-detection";
 import { buildCodeModel } from "../../../src/analyzers/typescript/parser";
 import { detectPythonPatterns } from "../../../src/analyzers/python/detector";
+import { classifyRawFindings } from "../../../src/classifier/component-factory";
 
 describe("third-party import evidence line", () => {
   it("uses matching ImportLike startLine instead of hardcoding 1", () => {
@@ -37,6 +38,73 @@ describe("third-party import evidence line", () => {
     expect(stripe).toBeDefined();
     expect(stripe?.location.startLine).toBe(12);
     expect(stripe?.location.endLine).toBe(12);
+  });
+
+  it("keeps every matching import line and classifies them as one component", () => {
+    const file: FileInfo = {
+      path: "src/payments.ts",
+      name: "payments.ts",
+      language: "typescript",
+      size: 1,
+      content: "",
+    };
+
+    const findings = detectThirdPartyServicesFromImports({
+      language: "typescript",
+      file,
+      imports: [
+        {
+          module: "./config",
+          names: ["stripeMode"],
+          startLine: 2,
+          endLine: 2,
+        },
+        {
+          module: "stripe",
+          names: ["Stripe"],
+          startLine: 12,
+          endLine: 14,
+        },
+        {
+          module: "stripe",
+          names: ["Stripe"],
+          startLine: 12,
+          endLine: 14,
+        },
+      ],
+    });
+
+    const stripeFindings = findings.filter(
+      (f) => f.pattern === "external_api_call" && f.name === "stripe",
+    );
+    expect(stripeFindings.map((f) => [f.location.startLine, f.location.endLine])).toEqual([
+      [2, 2],
+      [12, 14],
+    ]);
+
+    const components = classifyRawFindings(stripeFindings);
+    expect(components).toHaveLength(1);
+    expect(
+      components[0]?.sourceLocations.map((loc) => [
+        loc.startLine,
+        loc.endLine,
+      ]),
+    ).toEqual([
+      [2, 2],
+      [12, 14],
+    ]);
+
+    const evidence = components[0]?.properties.propertyEvidence as
+      | Record<string, Array<{ startLine: number; endLine: number }>>
+      | undefined;
+    expect(evidence?.serviceName.map((ref) => [ref.startLine, ref.endLine])).toEqual([
+      [2, 2],
+      [12, 14],
+    ]);
+    expect(evidence?.client.map((ref) => [ref.startLine, ref.endLine])).toEqual([
+      [2, 2],
+      [12, 14],
+    ]);
   });
 
   it("falls back to line 1 when ImportLike has no startLine", () => {
