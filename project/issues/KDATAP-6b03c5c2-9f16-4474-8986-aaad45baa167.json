@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-6b03c5c2-9f16-4474-8986-aaad45baa167",
+  "title": "Second-pass agreement check on email labels",
+  "description": "Measure how reliable the small-model labels are before a person reviews them.\n\n## Steps\n\n- Pick a random 20% of candidate lines across all `ghost` and `saleor` batches.\n- Have a second, different small model label them independently from the same reference, into separate packet files.\n- Compare with the first labels field by field. Report agreement per field and list every disagreement.\n- Disagreements go to the person reviewing those batches, first.\n- If agreement on value vs. word is below 90%, stop and revise the labeling reference before more batches are worked.\n\n## Done when\n\nThe agreement report is attached and disagreements are adjudicated.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:small"
+  ],
+  "dependencies": [
+    {
+      "target": "KDATAP-0b330f7b-1456-47a6-8d5c-508034cf40a7",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:34:19.038603Z",
+  "updated_at": "2026-09-28T22:34:29.886642Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

@@ -1,0 +1,25 @@
+{
+  "id": "KDATAP-00d43935-06f5-4988-8255-327c20323562",
+  "title": "Scope spans and location kinds on detections",
+  "description": "Give every detection a real scope span and an explicit location kind. Decision 3 of the parent initiative.\n\n## Problem\n\nIn an internal dogfood scan, every component location was one line long. The pattern engine sets `endLine` to `startLine` (`src/patterns/engine.ts`, `src/patterns/detectors/helpers.ts`). Import-triggered detectors record line 1 with no code (about a third of locations). Tightest-span matching cannot work on these.\n\n## Scope\n\n- Keep the matched line as the detection anchor.\n- Add the enclosing function or class range from the analysis engine as the detection's scope span.\n- Add a location kind: `import`, `call`, `declaration`, `file_membership`. Replace the line-1-with-no-code convention.\n- Carry both through the canonical scan result, the OCSF projection, and `dataparade.json`.\n- Confirm component stable ids do not change (they key on file paths, `src/core/pipeline/stable-component-ids.ts`).\n\n## Done when\n\n- `axios.post(` inside `sendWelcome()` produces a detection with the anchor line, a scope span equal to `sendWelcome`, and kind `call`.\n- An SDK import produces kind `import` with no scope span and no line-1 placeholder.\n- Tightest-span lookup over components returns the enclosing scope for a declaration inside it.\n\n## Evaluation\n\n- Components layer: matching stays on the anchor line. Scope extent is scored as a separate asserted attribute (does the reported scope contain the labeled declaration), only over gold that asserts it.\n- Guard: a wider span must not raise component match rates on existing gold.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-d1af5b21-13d7-48eb-baea-2ed76be68e41",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:33:24.450085Z",
+  "updated_at": "2026-09-28T22:34:29.544277Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

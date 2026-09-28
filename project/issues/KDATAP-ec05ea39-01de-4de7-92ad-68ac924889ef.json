@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-ec05ea39-01de-4de7-92ad-68ac924889ef",
+  "title": "Scorer: attribute metrics, pairwise grouping, mention negatives",
+  "description": "Teach the scorer the new metrics so the labels produce numbers.\n\n## Scope\n\n- Mentions: negatives inside exhaustive scopes count against precision (existing rule), now that real negatives exist.\n- Attribute metrics on the vendor pattern: for owner, touches, syntax kind, and scope extent, accuracy over matched gold that asserts the attribute, with its own denominator and computability state.\n- Grouping layer: pairwise precision and recall over pairs of positive mentions (same group in gold vs. same declaration group in scanner output).\n- Scanner findings that lack an attribute count as wrong for that attribute, not as unscorable, once the scanner declares the capability.\n- Scorecard vector and `canonical-representation.md` updated. No cross-layer scalar.\n\n## Done when\n\nThe scorecard on the example packet shows each new metric with a correct hand-checked value.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:strong"
+  ],
+  "dependencies": [
+    {
+      "target": "KDATAP-8b2c8a98-78cd-464a-b62d-34ca1556793b",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:34:19.336713Z",
+  "updated_at": "2026-09-28T22:34:29.978141Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-25ff9a23-d6d4-4506-a520-68eb9de4b3a5",
+  "title": "Choose exhaustive email scopes and batches in ghost and saleor",
+  "description": "Choose the exhaustive files for the email labeling in `ghost` (JavaScript) and `saleor` (Python), and split them into batches.\n\n## Steps\n\n1. Materialize both repos at their pinned commits (`pnpm run benchmark:materialize ghost`, `... saleor`).\n2. Pick complete files, not handpicked lines, that together cover: several distinct emails (member or customer account, staff user, newsletter or sender address, order or notification recipient), mailer SDK use, and realistic non-value uses of the word. Aim for 20–40 files per repo.\n3. Propose the files as `mentions` exhaustive scope in each repo's `layer-scopes.yaml` with `review_state: proposed`.\n4. Split each repo's files into batches of about 50 candidate lines (5–15 files), using the inventory script's counts. Record the batch list in this issue's comments.\n\n## Done when\n\nA person has accepted both scopes and the batch lists.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:strong"
+  ],
+  "dependencies": [
+    {
+      "target": "KDATAP-1d6b44e6-a62b-47ed-95e3-2a019f828ef2",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-09-28T22:34:18.804412Z",
+  "updated_at": "2026-09-28T22:34:29.791667Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

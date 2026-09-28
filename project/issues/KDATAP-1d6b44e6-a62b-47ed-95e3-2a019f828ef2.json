@@ -1,0 +1,22 @@
+{
+  "id": "KDATAP-1d6b44e6-a62b-47ed-95e3-2a019f828ef2",
+  "title": "Candidate-line inventory from source for labeling",
+  "description": "Build the candidate-line inventory that labeling batches work from. It comes from the source, not from scanner output, so labels do not inherit scanner behavior.\n\n## Behavior\n\n- Input: repo key, concept (`email`), and the scope file list.\n- Output: `tests/benchmark/repos/<repo>/annotations/packets/<concept>-candidates.yaml`, one entry per line: file, line, the line text.\n- A line is a candidate when an identifier, property key, string, or comment on it contains `email`, `e_mail`, `mail_to`, `mailto`, `recipient`, `sender`, or `from_address` in any case or separator style. The token list lives in a config file so other concepts reuse the script.\n- Deterministic and rerunnable at the pinned commit.\n\n## Done when\n\nRunning it on `ghost` and `saleor` scopes produces candidate files, and a spot check of three files finds no email-related line missing.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:small"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-28T22:34:18.879663Z",
+  "updated_at": "2026-09-28T22:34:18.879692Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}
