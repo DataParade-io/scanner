@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "1d792ca7-e438-485f-88ab-978a7f8addf4",
+  "issue_id": "KDATAP-960348c2-ad72-4419-af23-19e653ffe05b",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-28T22:33:24.578Z",
+  "actor_id": "example-user",
+  "payload": {
+    "title": "Mention records with syntax kind and noise tagging",
+    "description": "Emit each personal-data mention as a first-class record with its syntax kind, context, and a noise tag. Decision 5 of the parent initiative.\n\n## Scope\n\n- One record per mention in scan output, with: usage line, syntax kind (identifier, property key, string literal, import specifier, comment, type name), noise tag, enclosing function, class or module, and the first paragraph of the attached doc comment.\n- Noise tag, not deletion: a match on an import specifier, a comment, or a string that is only a name (a passwordless connection name, a template name) is tagged non-value. Counts stay auditable.\n- Test, fixture, and mock paths are tagged.\n- Call-pattern tables where a call settles a data action outright: logger calls → `log`, ORM save/insert → `store`, `bcrypt` / hash / encrypt → protection. These are per library, like detector rules. Actions use the existing eleven data-action verbs.\n- Check how much comment noise the pattern helpers' comment-stripped source already removes before adding more.\n\n## Depends on\n\nTree-sitter analysis engine.\n\n## Done when\n\n- In the labeled `ghost` and `saleor` scopes, mailer SDK imports and prose about mail are tagged non-value under `data_item:email`.\n- `email: string` in `addSignup` on `SignupService` has kind `property`, function `addSignup`, the JSDoc's first paragraph, and class `SignupService`.\n- A top-of-file comment separated from the mention by code is not attached.\n\n## Evaluation\n\nMentions layer. Non-value lines are negative mention cases inside exhaustive file scopes, so mention precision measures noise directly.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-fe8a80f0-9556-4e79-a399-4c0a4d7506cd",
+    "labels": []
+  }
+}
