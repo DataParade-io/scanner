@@ -7,7 +7,6 @@
 
 import fs from "fs";
 import path from "path";
-import YAML from "yaml";
 
 export interface CandidateRecord {
   file: string;
@@ -193,7 +192,7 @@ export function extractCandidates(
           });
         }
       }
-    } catch (error) {
+    } catch {
       // Skip files that can't be read (binary, permission issues, etc)
     }
   }
