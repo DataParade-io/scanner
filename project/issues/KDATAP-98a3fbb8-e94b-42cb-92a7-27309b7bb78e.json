@@ -3,7 +3,7 @@
   "title": "Fix data-actions eval identity-key mismatch (red CI since 998fb12)",
   "description": "",
   "type": "bug",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -20,10 +20,17 @@
       "text": "Root cause: tests/eval/layers/data-actions/adapter.ts reused the components-layer componentIdentity(), which PR #68 (81ad021) switched to asset:<subtype>. Data-action gold keys are matched literally (resolveDataActionIdentity + sameEntityIdentity), and the documented schema is ${type}:${name}. So ts-pg-store, tf-rds-store, tf-s3-store, java-jdbc-store, dotnet-npgsql-store and java-jpa-store could never pair; the suite has been red since the two branches merged in 998fb12. Fix: data-actions adapter now keys findings by type:name (aligned with data-flow endpoints). Corpus correction: ruby-postgres-store subject.key asset:database -> asset:ruby basic (was written in scanner subtype form; subject.name already 'Ruby Basic').",
       "created_at": "2026-09-28T16:57:21.879207Z",
       "comment_type": "default"
+    },
+    {
+      "id": "5cc63b26-af47-4a04-8fdf-4ada1f5c741d",
+      "author": "os",
+      "text": "Landed on main via PR #86 (merge commit c6baf2c). CI test job green for the first time since 3cb99b5.",
+      "created_at": "2026-09-28T17:04:36.677885Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-28T16:56:57.173288Z",
-  "updated_at": "2026-09-28T16:57:50.862262Z",
-  "closed_at": null,
+  "updated_at": "2026-09-28T17:04:36.693898Z",
+  "closed_at": "2026-09-28T17:04:36.693898Z",
   "custom": {}
 }
