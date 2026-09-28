@@ -18,6 +18,12 @@ import {
   type FlowCandidateEndpoint,
   type FlowDispositionCandidate,
   type LayerScopeRecord,
+  MENTION_DECLARATION_KINDS,
+  MENTION_SYNTAX_KINDS,
+  type MentionAttributes,
+  type MentionDeclaration,
+  type MentionDeclarationKind,
+  type MentionSyntaxKind,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
   type ReviewState,
@@ -151,7 +157,7 @@ function validateManifest(raw: Record<string, unknown>, manifestPath: string): B
   };
 }
 
-function validateAnnotation(
+export function validateAnnotation(
   raw: Record<string, unknown>,
   filePath: string,
   index: number,
@@ -289,7 +295,91 @@ function validateAnnotation(
     );
   }
 
+  if (raw.mention_attributes !== undefined) {
+    if (normalizedLayer !== "mentions") {
+      throw new Error(`${prefix}:mention_attributes is only supported on mentions layer`);
+    }
+    record.mention_attributes = validateMentionAttributes(raw.mention_attributes, prefix);
+  }
+
   return record;
+}
+
+const MENTION_ATTRIBUTE_KEYS = [
+  "syntax_kind",
+  "declaration",
+  "type_annotation",
+  "owner",
+  "touches",
+  "group",
+] as const;
+
+function validateMentionAttributes(raw: unknown, prefix: string): MentionAttributes {
+  const field = `${prefix}:mention_attributes`;
+  const block = isRecord(raw, field);
+  for (const key of Object.keys(block)) {
+    if (!(MENTION_ATTRIBUTE_KEYS as readonly string[]).includes(key)) {
+      throw new Error(`Unknown field '${key}' in ${field}`);
+    }
+  }
+
+  const parsed: MentionAttributes = {};
+  if (block.syntax_kind !== undefined) {
+    const kind = isNonEmptyString(block.syntax_kind, `${field}.syntax_kind`);
+    if (!MENTION_SYNTAX_KINDS.includes(kind as MentionSyntaxKind)) {
+      throw new Error(`Unknown ${field}.syntax_kind '${kind}'`);
+    }
+    parsed.syntax_kind = kind as MentionSyntaxKind;
+  }
+  if (block.declaration !== undefined) {
+    parsed.declaration = validateMentionDeclaration(block.declaration, `${field}.declaration`);
+  }
+  if (block.type_annotation !== undefined) {
+    parsed.type_annotation = isNonEmptyString(
+      block.type_annotation,
+      `${field}.type_annotation`,
+    );
+  }
+  if (block.owner !== undefined) {
+    parsed.owner = isNonEmptyString(block.owner, `${field}.owner`);
+  }
+  if (block.touches !== undefined) {
+    parsed.touches = isStringArray(block.touches, `${field}.touches`).map((key) =>
+      isNonEmptyString(key, `${field}.touches[]`),
+    );
+  }
+  if (block.group !== undefined) {
+    parsed.group = isNonEmptyString(block.group, `${field}.group`);
+  }
+  return parsed;
+}
+
+function validateMentionDeclaration(raw: unknown, field: string): MentionDeclaration {
+  if (raw === "unresolved") {
+    return "unresolved";
+  }
+  if (typeof raw === "string") {
+    throw new Error(`${field} must be 'unresolved' or an object, got '${raw}'`);
+  }
+  const block = isRecord(raw, field);
+  for (const key of Object.keys(block)) {
+    if (!["file_path", "line", "kind"].includes(key)) {
+      throw new Error(`Unknown field '${key}' in ${field}`);
+    }
+  }
+  const line = block.line;
+  if (typeof line !== "number" || !Number.isInteger(line) || line < 1) {
+    throw new Error(`Expected positive integer ${field}.line`);
+  }
+  const kind = isNonEmptyString(block.kind, `${field}.kind`);
+  if (!MENTION_DECLARATION_KINDS.includes(kind as MentionDeclarationKind)) {
+    throw new Error(`Unknown ${field}.kind '${kind}'`);
+  }
+  return {
+    file_path: isNonEmptyString(block.file_path, `${field}.file_path`),
+    line,
+    kind: kind as MentionDeclarationKind,
+  };
 }
 
 const FLOW_DISPOSITION_CANDIDATES: readonly FlowDispositionCandidate[] = [
@@ -535,6 +625,11 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
     );
   }
 
+  return parseAnnotationRecords(filePath);
+}
+
+/** Parse and validate the `annotations` array of one annotation or packet YAML file. */
+export function parseAnnotationRecords(filePath: string): AnnotationRecord[] {
   const text = fs.readFileSync(filePath, "utf8");
   const parsed = YAML.parse(text);
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
