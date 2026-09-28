@@ -1,0 +1,161 @@
+concept: email
+layer: mentions
+purpose: Exhaustive email mention scope for KDATAP-46d893 labeling. Merged into layer-scopes.yaml only after the batch labels are accepted, so precision never counts unlabeled files.
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: '2026-09-28'
+  review_state: proposed
+files:
+- path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  theme: member address
+  candidates: 76
+- path: ghost/core/core/server/services/members/api.js
+  theme: member address
+  candidates: 35
+- path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  theme: member address
+  candidates: 23
+- path: ghost/core/core/server/models/member.js
+  theme: member address
+  candidates: 25
+- path: ghost/core/core/server/api/endpoints/members.js
+  theme: member address
+  candidates: 19
+- path: ghost/core/core/server/services/staff/staff-service-emails.js
+  theme: staff address
+  candidates: 86
+- path: ghost/core/core/server/services/staff/staff-service.js
+  theme: staff address
+  candidates: 11
+- path: ghost/core/core/server/models/user.js
+  theme: staff address
+  candidates: 25
+- path: ghost/core/core/server/services/auth/setup.js
+  theme: staff address
+  candidates: 9
+- path: ghost/core/core/server/services/auth/passwordreset.js
+  theme: staff address
+  candidates: 9
+- path: ghost/core/core/server/services/auth/session/session-service.js
+  theme: staff address
+  candidates: 10
+- path: ghost/core/core/server/services/auth/session/emails/signin.js
+  theme: staff address
+  candidates: 4
+- path: ghost/core/core/server/services/email-address/email-address-service.ts
+  theme: site sender address
+  candidates: 86
+- path: ghost/core/core/server/services/email-address/email-address-parser.ts
+  theme: site sender address
+  candidates: 18
+- path: ghost/core/core/server/services/newsletters/newsletters-service.js
+  theme: site sender address
+  candidates: 70
+- path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  theme: site sender address
+  candidates: 11
+- path: ghost/core/core/server/services/mail/ghost-mailer.js
+  theme: site sender address
+  candidates: 32
+- path: ghost/core/core/server/services/email-service/sending-service.js
+  theme: bulk recipients and provider
+  candidates: 64
+- path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  theme: bulk recipients and provider
+  candidates: 37
+- path: ghost/core/core/server/models/email-recipient.js
+  theme: bulk recipients and provider
+  candidates: 15
+- path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  theme: bulk recipients and provider
+  candidates: 32
+- path: ghost/core/core/server/models/email.js
+  theme: newsletter email as a post (negatives)
+  candidates: 22
+- path: ghost/core/core/server/services/posts/post-email-handler.js
+  theme: newsletter email as a post (negatives)
+  candidates: 45
+- path: ghost/core/core/server/api/endpoints/emails.js
+  theme: newsletter email as a post (negatives)
+  candidates: 19
+- path: ghost/core/core/server/services/comments/comments-service-emails.js
+  theme: comment notifications
+  candidates: 30
+- path: ghost/core/core/server/data/schema/schema.js
+  theme: schema
+  candidates: 98
+batches:
+- batch: 1
+  candidates: 76
+  files:
+  - ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+- batch: 2
+  candidates: 58
+  files:
+  - ghost/core/core/server/services/members/api.js
+  - ghost/core/core/server/services/members/import-export/import/completion-email.ts
+- batch: 3
+  candidates: 44
+  files:
+  - ghost/core/core/server/models/member.js
+  - ghost/core/core/server/api/endpoints/members.js
+- batch: 4
+  candidates: 86
+  files:
+  - ghost/core/core/server/services/staff/staff-service-emails.js
+- batch: 5
+  candidates: 54
+  files:
+  - ghost/core/core/server/services/staff/staff-service.js
+  - ghost/core/core/server/models/user.js
+  - ghost/core/core/server/services/auth/setup.js
+  - ghost/core/core/server/services/auth/passwordreset.js
+- batch: 6
+  candidates: 14
+  files:
+  - ghost/core/core/server/services/auth/session/session-service.js
+  - ghost/core/core/server/services/auth/session/emails/signin.js
+- batch: 7
+  candidates: 86
+  files:
+  - ghost/core/core/server/services/email-address/email-address-service.ts
+- batch: 8
+  candidates: 18
+  files:
+  - ghost/core/core/server/services/email-address/email-address-parser.ts
+- batch: 9
+  candidates: 70
+  files:
+  - ghost/core/core/server/services/newsletters/newsletters-service.js
+- batch: 10
+  candidates: 43
+  files:
+  - ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  - ghost/core/core/server/services/mail/ghost-mailer.js
+- batch: 11
+  candidates: 64
+  files:
+  - ghost/core/core/server/services/email-service/sending-service.js
+- batch: 12
+  candidates: 52
+  files:
+  - ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  - ghost/core/core/server/models/email-recipient.js
+- batch: 13
+  candidates: 54
+  files:
+  - ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  - ghost/core/core/server/models/email.js
+- batch: 14
+  candidates: 45
+  files:
+  - ghost/core/core/server/services/posts/post-email-handler.js
+- batch: 15
+  candidates: 49
+  files:
+  - ghost/core/core/server/api/endpoints/emails.js
+  - ghost/core/core/server/services/comments/comments-service-emails.js
+- batch: 16
+  candidates: 98
+  files:
+  - ghost/core/core/server/data/schema/schema.js

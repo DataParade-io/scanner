@@ -1,0 +1,2734 @@
+candidates:
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 4
+  text: const emailService = require('../../services/email-service');
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 5
+  text: const emailAnalytics = require('../../services/email-analytics');
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 8
+  text: 'emailNotFound: ''Email not found.'','
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 9
+  text: 'retryNotAllowed: ''Only failed emails can be retried'','
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 12
+  text: const allowedBatchIncludes = ['count.recipients'];
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 13
+  text: const allowedFailureIncludes = ['member', 'email_recipient'];
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 17
+  text: 'docName: ''emails'','
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 26
+  text: return await models.Email.findPage(frame.options);
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 43
+  text: const model = await models.Email.findOne(frame.data, frame.options);
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 46
+  text: 'message: tpl(messages.emailNotFound),'
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 61
+  text: return await emailService.controller.retryFailedEmail(frame);
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 83
+  text: '`email_id:''${frame.data.id}''` + (frame.options.filter ? `+(${frame.options.filter})` : '''');'
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 84
+  text: return await models.EmailBatch.findPage({ ...frame.options, filter });
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 106
+  text: '`email_id:''${frame.data.id}''` + (frame.options.filter ? `+(${frame.options.filter})` : '''');'
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 107
+  text: return await models.EmailRecipientFailure.findPage({ ...frame.options, filter });
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 119
+  text: return emailAnalytics.newsletters.service.getStatus();
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 134
+  text: const model = await models.Email.findOne(frame.data, findOptions);
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 146
+  text: return emailAnalytics.newsletters.service.schedule({ begin, end });
+- file: ghost/core/core/server/api/endpoints/emails.js
+  line: 158
+  text: return emailAnalytics.newsletters.service.cancelScheduled();
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 29
+  text: 'notSendingWelcomeEmail: ''Email verification required, welcome email is disabled'','
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 32
+  text: 'context: ''Attempting to {action} member with existing email address.'','
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 50
+  text: const allowedIncludes = ['email_recipients', 'products', 'tiers', 'custom_fields'];
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 81
+  text: 'data: [''id'', ''email''],'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 108
+  text: 'options: [''send_email'', ''email_type''],'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 111
+  text: 'email: { required: true },'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 114
+  text: 'email_type: {'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 122
+  text: logging.warn(tpl(messages.notSendingWelcomeEmail));
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 123
+  text: frame.options.send_email = false;
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 399
+  text: // the meta shape crosses into the domain. The recipient is the request user;
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 405
+  text: 'requestUserEmail: frame.user ? frame.user.get(''email'') : null,'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 483
+  text: 'deleteEmailSuppression: {'
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 500
+  text: const emailSuppressionList = require('../../services/email-suppression-list');
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 502
+  text: // Get the member first to retrieve their email
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 511
+  text: // Remove the email from the suppression list
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 512
+  text: const didRemoveSuppression = await emailSuppressionList.removeEmail(member.email);
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 516
+  text: 'message: ''Failed to remove email suppression.'','
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 520
+  text: // Update the member to re-enable email
+- file: ghost/core/core/server/api/endpoints/members.js
+  line: 522
+  text: '{ email_disabled: false },'
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 2
+  text: import type { EmailAddressService } from '../../../services/email-address/email-address-service';
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 5
+  text: const EMAIL_VALIDATIONS = [
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 7
+  text: 'field: ''sender_email'','
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 11
+  text: 'field: ''sender_reply_to'','
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 16
+  text: export function validateEmailSenderFields(
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 17
+  text: 'emailAddressService: Pick<EmailAddressService, ''validate''>,'
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 19
+  text: 'sender_email?: string;'
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 20
+  text: 'sender_reply_to?: string;'
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 23
+  text: for (const { field, addressType } of EMAIL_VALIDATIONS) {
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 29
+  text: const validated = emailAddressService.validate(value, addressType);
+- file: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  line: 36
+  text: if (validated.verificationEmailRequired) {
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 25
+  text: 'sender_name: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 26
+  text: 'sender_email: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 27
+  text: 'sender_reply_to: { type: ''string'', maxlength: 191, nullable: false, defaultTo: ''newsletter'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 172
+  text: 'email_recipient_filter: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 223
+  text: 'email_subject: { type: ''string'', maxlength: 300, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 232
+  text: 'email_only: { type: ''boolean'', nullable: false, defaultTo: false },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 274
+  text: 'email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 279
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 404
+  text: '''email'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 500
+  text: 'email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 505
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 649
+  text: 'email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 654
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 676
+  text: 'email_count: { type: ''integer'', unsigned: true, nullable: false, defaultTo: 0 },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 677
+  text: 'email_opened_count: { type: ''integer'', unsigned: true, nullable: false, defaultTo: 0 },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 678
+  text: 'email_open_rate: { type: ''integer'', unsigned: true, nullable: true, index: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 679
+  text: 'email_disabled: { type: ''boolean'', nullable: false, defaultTo: false },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 685
+  text: '''@@INDEXES@@'': [[''email_disabled''], [''created_at'', ''id'']],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 905
+  text: 'members_email_change_events: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 914
+  text: 'to_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 919
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 921
+  text: 'from_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 926
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1220
+  text: 'email: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1478
+  text: 'email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1483
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1573
+  text: 'emails: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1584
+  text: 'recipient_filter: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1591
+  text: 'email_count: { type: ''integer'', nullable: false, unsigned: true, defaultTo: 0 },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1592
+  text: 'csd_email_count: { type: ''integer'', nullable: true, unsigned: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1617
+  text: 'email_batches: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1619
+  text: 'email_id: { type: ''string'', maxlength: 24, nullable: false, references: ''emails.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1636
+  text: 'email_recipients: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1638
+  text: 'email_id: { type: ''string'', maxlength: 24, nullable: false, references: ''emails.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1640
+  text: 'batch_id: { type: ''string'', maxlength: 24, nullable: false, references: ''email_batches.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1646
+  text: 'member_email: { type: ''string'', maxlength: 191, nullable: false },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1649
+  text: '[''email_id'', ''member_email''],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1650
+  text: '[''email_id'', ''delivered_at''],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1651
+  text: '[''email_id'', ''opened_at''],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1652
+  text: '[''email_id'', ''failed_at''],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1655
+  text: 'email_recipient_failures: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1657
+  text: 'email_id: { type: ''string'', maxlength: 24, nullable: false, references: ''emails.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1659
+  text: 'email_recipient_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1663
+  text: 'references: ''email_recipients.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1871
+  text: 'email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1876
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1878
+  text: 'email_id: { type: ''string'', maxlength: 24, nullable: true, references: ''emails.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1889
+  text: 'email_spam_complaint_events: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1898
+  text: 'email_id: { type: ''string'', maxlength: 24, nullable: false, references: ''emails.id'' },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1899
+  text: 'email_address: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1904
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1907
+  text: '''@@UNIQUE_CONSTRAINTS@@'': [[''email_id'', ''member_id'']],'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 1933
+  text: 'email_sent_at: { type: ''dateTime'', nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2034
+  text: 'email_design_settings: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2103
+  text: 'sender_name: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2104
+  text: 'sender_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2108
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2110
+  text: 'sender_reply_to: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2114
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2149
+  text: 'validations: { isIn: [[''wait'', ''send_email'']] },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2163
+  text: 'email_subject: { type: ''string'', maxlength: 300, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2164
+  text: 'email_lexical: { type: ''text'', maxlength: 1000000000, fieldtype: ''long'', nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2165
+  text: 'email_design_setting_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2169
+  text: 'references: ''email_design_settings.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2172
+  text: 'email_sent_count: { type: ''integer'', nullable: true, unsigned: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2173
+  text: 'email_opened_count: { type: ''integer'', nullable: true, unsigned: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2174
+  text: 'email_clicked_count: { type: ''integer'', nullable: true, unsigned: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2255
+  text: 'member_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2259
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2307
+  text: 'welcome_email_automated_emails: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2309
+  text: 'welcome_email_automation_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2317
+  text: 'next_welcome_email_automated_email_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2321
+  text: 'references: ''welcome_email_automated_emails.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2322
+  text: 'constraintName: ''weae_next_email_id_foreign'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2328
+  text: 'sender_name: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2329
+  text: 'sender_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2333
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2335
+  text: 'sender_reply_to: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2339
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2341
+  text: 'email_design_setting_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2345
+  text: 'references: ''email_design_settings.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2350
+  text: 'welcome_email_automation_runs: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2352
+  text: 'welcome_email_automation_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2368
+  text: 'next_welcome_email_automated_email_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2372
+  text: 'references: ''welcome_email_automated_emails.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2373
+  text: 'constraintName: ''wear_next_email_id_foreign'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2386
+  text: '''email send failed'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2399
+  text: 'automated_email_recipients: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2401
+  text: 'automated_email_id: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2405
+  text: 'references: ''welcome_email_automated_emails.id'','
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2421
+  text: 'member_email: { type: ''string'', maxlength: 191, nullable: false },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2453
+  text: 'buyer_email: { type: ''string'', maxlength: 191, nullable: true, validations: { isEmail: true } },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2463
+  text: 'recipient_name: { type: ''string'', maxlength: 191, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2532
+  text: 'recipient_email: {'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2536
+  text: 'validations: { isEmail: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2549
+  text: 'email_sent_at: { type: ''dateTime'', nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2550
+  text: 'email_provider_message_id: { type: ''string'', maxlength: 1000, nullable: true },'
+- file: ghost/core/core/server/data/schema/schema.js
+  line: 2565
+  text: '{ columns: [''email_provider_message_id''], length: 31 },'
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 3
+  text: const EmailRecipient = ghostBookshelf.Model.extend({
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 4
+  text: 'tableName: ''email_recipients'','
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 9
+  text: 'email: {'
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 11
+  text: 'tableName: ''emails'','
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 12
+  text: 'tableNameAs: ''email'','
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 14
+  text: 'joinTable: ''email_recipients'','
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 16
+  text: 'joinTo: ''email_id'','
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 21
+  text: email() {
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 22
+  text: return this.belongsTo('Email', 'email_id');
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 24
+  text: emailBatch() {
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 25
+  text: return this.belongsTo('EmailBatch', 'batch_id');
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 32
+  text: const EmailRecipients = ghostBookshelf.Collection.extend({
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 33
+  text: 'model: EmailRecipient,'
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 37
+  text: 'EmailRecipient: ghostBookshelf.model(''EmailRecipient'', EmailRecipient),'
+- file: ghost/core/core/server/models/email-recipient.js
+  line: 38
+  text: 'EmailRecipients: ghostBookshelf.collection(''EmailRecipients'', EmailRecipients),'
+- file: ghost/core/core/server/models/email.js
+  line: 4
+  text: const Email = ghostBookshelf.Model.extend(
+- file: ghost/core/core/server/models/email.js
+  line: 6
+  text: 'tableName: ''emails'','
+- file: ghost/core/core/server/models/email.js
+  line: 12
+  text: 'recipient_filter: ''status:-free'','
+- file: ghost/core/core/server/models/email.js
+  line: 26
+  text: // update legacy recipient_filter values to proper NQL
+- file: ghost/core/core/server/models/email.js
+  line: 27
+  text: if (attrs.recipient_filter === 'free') {
+- file: ghost/core/core/server/models/email.js
+  line: 28
+  text: attrs.recipient_filter = 'status:free';
+- file: ghost/core/core/server/models/email.js
+  line: 30
+  text: if (attrs.recipient_filter === 'paid') {
+- file: ghost/core/core/server/models/email.js
+  line: 31
+  text: attrs.recipient_filter = 'status:-free';
+- file: ghost/core/core/server/models/email.js
+  line: 38
+  text: // update legacy recipient_filter values to proper NQL
+- file: ghost/core/core/server/models/email.js
+  line: 39
+  text: if (attrs.recipient_filter === 'free') {
+- file: ghost/core/core/server/models/email.js
+  line: 40
+  text: attrs.recipient_filter = 'status:free';
+- file: ghost/core/core/server/models/email.js
+  line: 42
+  text: if (attrs.recipient_filter === 'paid') {
+- file: ghost/core/core/server/models/email.js
+  line: 43
+  text: attrs.recipient_filter = 'status:-free';
+- file: ghost/core/core/server/models/email.js
+  line: 53
+  text: emailBatches() {
+- file: ghost/core/core/server/models/email.js
+  line: 54
+  text: return this.hasMany('EmailBatch', 'email_id');
+- file: ghost/core/core/server/models/email.js
+  line: 57
+  text: recipients() {
+- file: ghost/core/core/server/models/email.js
+  line: 58
+  text: return this.hasMany('EmailRecipient', 'email_id');
+- file: ghost/core/core/server/models/email.js
+  line: 66
+  text: const eventToTrigger = 'email' + '.' + event;
+- file: ghost/core/core/server/models/email.js
+  line: 97
+  text: const Emails = ghostBookshelf.Collection.extend({
+- file: ghost/core/core/server/models/email.js
+  line: 98
+  text: 'model: Email,'
+- file: ghost/core/core/server/models/email.js
+  line: 102
+  text: 'Email: ghostBookshelf.model(''Email'', Email),'
+- file: ghost/core/core/server/models/email.js
+  line: 103
+  text: 'Emails: ghostBookshelf.collection(''Emails'', Emails),'
+- file: ghost/core/core/server/models/member.js
+  line: 94
+  text: 'email_count: 0,'
+- file: ghost/core/core/server/models/member.js
+  line: 95
+  text: 'email_opened_count: 0,'
+- file: ghost/core/core/server/models/member.js
+  line: 177
+  text: 'key: ''opened_emails.post_id'','
+- file: ghost/core/core/server/models/member.js
+  line: 178
+  text: 'replacement: ''emails.post_id'','
+- file: ghost/core/core/server/models/member.js
+  line: 180
+  text: '// But the line below is essentially the same as: `email_recipients.opened_at:-null`'
+- file: ghost/core/core/server/models/member.js
+  line: 181
+  text: 'expansion: ''email_recipients.opened_at:>=0'','
+- file: ghost/core/core/server/models/member.js
+  line: 196
+  text: // count, email send all reach it via findPage or getFilteredCollectionQuery) — so a
+- file: ghost/core/core/server/models/member.js
+  line: 271
+  text: 'emails: {'
+- file: ghost/core/core/server/models/member.js
+  line: 272
+  text: 'tableName: ''emails'','
+- file: ghost/core/core/server/models/member.js
+  line: 273
+  text: 'tableNameAs: ''emails'','
+- file: ghost/core/core/server/models/member.js
+  line: 275
+  text: 'joinTable: ''email_recipients'','
+- file: ghost/core/core/server/models/member.js
+  line: 277
+  text: 'joinTo: ''email_id'','
+- file: ghost/core/core/server/models/member.js
+  line: 313
+  text: 'relationships: [''products'', ''labels'', ''stripeCustomers'', ''email_recipients'', ''newsletters''],'
+- file: ghost/core/core/server/models/member.js
+  line: 315
+  text: // do not delete email_recipients records when a member is destroyed. Recipient
+- file: ghost/core/core/server/models/member.js
+  line: 324
+  text: 'email_recipients: {'
+- file: ghost/core/core/server/models/member.js
+  line: 334
+  text: 'email_recipients: ''email_recipients'','
+- file: ghost/core/core/server/models/member.js
+  line: 426
+  text: email_recipients() {
+- file: ghost/core/core/server/models/member.js
+  line: 427
+  text: return this.hasMany('EmailRecipient', 'member_id', 'id');
+- file: ghost/core/core/server/models/member.js
+  line: 628
+  text: '''members.email'','
+- file: ghost/core/core/server/models/member.js
+  line: 636
+  text: if (field === 'email_open_rate') {
+- file: ghost/core/core/server/models/member.js
+  line: 638
+  text: 'orderByRaw: `members.email_open_rate IS NOT NULL DESC, members.email_open_rate ${direction}`,'
+- file: ghost/core/core/server/models/member.js
+  line: 647
+  text: // to serve a blank image if there is no gravatar for the member's email.
+- file: ghost/core/core/server/models/member.js
+  line: 650
+  text: if (attrs.email && !config.isPrivacyDisabled('useGravatar')) {
+- file: ghost/core/core/server/models/member.js
+  line: 652
+  text: 'attrs.avatar_image = gravatar.url(attrs.email, { size: 250, default: ''blank'' });'
+- file: ghost/core/core/server/models/member.js
+  line: 740
+  text: '''members.email_disabled'': false,'
+- file: ghost/core/core/server/models/user.js
+  line: 32
+  text: 'noUserWithEnteredEmailAddr: ''There is no user with that email address.'','
+- file: ghost/core/core/server/models/user.js
+  line: 40
+  text: 'emailIsAlreadyInUse: ''Email is already in use'','
+- file: ghost/core/core/server/models/user.js
+  line: 220
+  text: '* Lookup Gravatar if email changes to update image url'
+- file: ghost/core/core/server/models/user.js
+  line: 246
+  text: // If the user's email is set & has changed & we are not importing
+- file: ghost/core/core/server/models/user.js
+  line: 247
+  text: if (self.hasChanged('email') && self.get('email') && !options.importing) {
+- file: ghost/core/core/server/models/user.js
+  line: 254
+  text: 'email: self.get(''email''),'
+- file: ghost/core/core/server/models/user.js
+  line: 311
+  text: passwordValidation = validatePassword(this.get('password'), this.get('email'));
+- file: ghost/core/core/server/models/user.js
+  line: 549
+  text: getEmailAlertUsers(type, options) {
+- file: ghost/core/core/server/models/user.js
+  line: 598
+  text: if (data.email) {
+- file: ghost/core/core/server/models/user.js
+  line: 599
+  text: const existingUser = await self.getByEmail(data.email, options);
+- file: ghost/core/core/server/models/user.js
+  line: 602
+  text: 'message: tpl(messages.userUpdateError.emailIsAlreadyInUse),'
+- file: ghost/core/core/server/models/user.js
+  line: 777
+  text: passwordValidation = validatePassword(userData.password, userData.email, data.blogTitle);
+- file: ghost/core/core/server/models/user.js
+  line: 1077
+  text: // Finds the user by email, and checks the password
+- file: ghost/core/core/server/models/user.js
+  line: 1082
+  text: return this.getByEmail(object.email)
+- file: ghost/core/core/server/models/user.js
+  line: 1086
+  text: 'message: tpl(messages.noUserWithEnteredEmailAddr),'
+- file: ghost/core/core/server/models/user.js
+  line: 1116
+  text: 'message: tpl(messages.noUserWithEnteredEmailAddr),'
+- file: ghost/core/core/server/models/user.js
+  line: 1264
+  text: // Get the user by email address, enforces case insensitivity rejects if the user is not found
+- file: ghost/core/core/server/models/user.js
+  line: 1265
+  text: // When multi-user support is added, email addresses must be deduplicated with case insensitivity, so that
+- file: ghost/core/core/server/models/user.js
+  line: 1267
+  text: 'getByEmail: function getByEmail(email, unfilteredOptions) {'
+- file: ghost/core/core/server/models/user.js
+  line: 1268
+  text: const options = ghostBookshelf.Model.filterOptions(unfilteredOptions, 'getByEmail');
+- file: ghost/core/core/server/models/user.js
+  line: 1272
+  text: // This is somewhat mute, as validator.isEmail() also doesn't support unicode, but this is much easier / more
+- file: ghost/core/core/server/models/user.js
+  line: 1279
+  text: const userWithEmail = users.find(function findUser(user) {
+- file: ghost/core/core/server/models/user.js
+  line: 1280
+  text: return user.get('email').toLowerCase() === email.toLowerCase();
+- file: ghost/core/core/server/models/user.js
+  line: 1283
+  text: if (userWithEmail) {
+- file: ghost/core/core/server/models/user.js
+  line: 1284
+  text: return userWithEmail;
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 32
+  text: function generateToken(email, settingsAPI, transaction) {
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 42
+  text: return models.User.getByEmail(email, options);
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 51
+  text: 'email: email,'
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 57
+  text: 'email: email,'
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 98
+  text: const candidate = await models.User.getByEmail(tokenParts.email, txOptions);
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 156
+  text: const emailData = {
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 158
+  text: 'recipientEmail: data.email,'
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 162
+  text: 'data: emailData,'
+- file: ghost/core/core/server/services/auth/passwordreset.js
+  line: 170
+  text: 'to: data.email,'
+- file: ghost/core/core/server/services/auth/session/emails/signin.js
+  line: 4
+  text: email,
+- file: ghost/core/core/server/services/auth/session/emails/signin.js
+  line: 82
+  text: .recipient-link a {
+- file: ghost/core/core/server/services/auth/session/emails/signin.js
+  line: 150
+  text: '<p style="font-family: -apple-system, BlinkMacSystemFont, ''Segoe UI'', Roboto, Helvetica, Arial, sans-serif, ''Apple Color Emoji'', ''Segoe UI Emoji'', ''Segoe UI Symbol''; font-size: 16px; color: #3A464C; font-weight: normal; line-height: 24px;   margin: 0; margin-bottom: 11px; margin-top: 24px;">${t("If you didn''t try to sign in recently, you can safely ignore this email to deny access.")}</p>'
+- file: ghost/core/core/server/services/auth/session/emails/signin.js
+  line: 157
+  text: '<p class="small" style="font-family: -apple-system, BlinkMacSystemFont, ''Segoe UI'', Roboto, Helvetica, Arial, sans-serif, ''Apple Color Emoji'', ''Segoe UI Emoji'', ''Segoe UI Symbol''; line-height: 16px; font-size: 11px; color: #738A94; font-weight: normal; margin: 0;">This message was sent from <a class="small" href="${siteUrl}" style="text-decoration: underline; color: #738A94; font-size: 11px;">${siteDomain}</a> to <a class="small" href="mailto:${email}" style="text-decoration: underline; color: #738A94; font-size: 11px;">${email}</a></p>'
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 4
+  text: const emailTemplate = require('./emails/signin');
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 57
+  text: '* @param {((key: ''require_email_mfa'') => boolean) & ((key: ''admin_session_secret'' | ''title'') => string)} deps.getSettingsCache'
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 160
+  text: return getSettingsCache('require_email_mfa') === true;
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 434
+  text: const recipient = user.get('email');
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 442
+  text: const email = emailTemplate({
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 445
+  text: 'email: recipient,'
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 456
+  text: 'to: recipient,'
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 458
+  text: 'html: email,'
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 461
+  text: throw new errors.EmailError({
+- file: ghost/core/core/server/services/auth/session/session-service.js
+  line: 463
+  text: 'message: ''Failed to send email. Please check your site configuration and try again.'','
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 16
+  text: 'unableToSendWelcomeEmail: ''Unable to send welcome email, your site will continue to function.'','
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 22
+  text: '''{"version":"0.3.1","atoms":[],"cards":[],"markups":[["a",["href","#/portal/"]]],"sections":[[1,"p",[[0,[],0,"This is {{site.title}}, a brand new site by {{author.name}} that\''s just getting started. Things will be up and running here shortly, but you can "],[0,[0],1,"subscribe"],[0,[],0," in the meantime if you\''d like to stay up to date and receive emails when new content is published!"]]]],"ghostVersion":"4.0"}'','
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 24
+  text: '''{"version":"0.3.1","atoms":[],"cards":[["hr",{}]],"markups":[["a",["href","https://ghost.org"]]],"sections":[[1,"p",[[0,[],0,"{{site.title}} is an independent publication launched in {{date}} by {{author.name}}. If you subscribe today, you\''ll get full access to the website as well as email newsletters about new content when it\''s available. Your subscription makes this site possible, and allows {{site.title}} to continue to exist. Thank you!"]]],[1,"h3",[[0,[],0,"Access all areas"]]],[1,"p",[[0,[],0,"By signing up, you\''ll get access to the full archive of everything that\''s been published before and everything that\''s still to come. Your very own private library."]]],[1,"h3",[[0,[],0,"Fresh content, delivered"]]],[1,"p",[[0,[],0,"Stay up to date with new content sent straight to your inbox! No more worrying about whether you missed something because of a pesky algorithm or news feed."]]],[1,"h3",[[0,[],0,"Meet people like you"]]],[1,"p",[[0,[],0,"Join a community of other subscribers who share the same interests."]]],[10,0],[1,"h3",[[0,[],0,"Start your own thing"]]],[1,"p",[[0,[],0,"Enjoying the experience? Get started for free and set up your very own subscription business using "],[0,[0],1,"Ghost"],[0,[],0,", the same platform that powers this website."]]]],"ghostVersion":"4.0"}'','
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 183
+  text: function sendWelcomeEmail(email, mailAPI) {
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 184
+  text: if (config.get('sendWelcomeEmail')) {
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 186
+  text: 'ownerEmail: email,'
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 191
+  text: 'to: email,'
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 207
+  text: err.context = tpl(messages.unableToSendWelcomeEmail);
+- file: ghost/core/core/server/services/auth/setup.js
+  line: 256
+  text: 'sendWelcomeEmail: sendWelcomeEmail,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 3
+  text: const emailService = require('../email-service');
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 4
+  text: const CommentsServiceEmailRenderer = require('./comments-service-email-renderer');
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 8
+  text: class CommentsServiceEmails {
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 27
+  text: this.commentsServiceEmailRenderer = new CommentsServiceEmailRenderer({ t });
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 31
+  text: '* Build the post URL with comment fragment for email links'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 65
+  text: if (author.get('email') === member.get('email')) {
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 69
+  text: const to = author.get('email');
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 88
+  text: 'fromEmail: this.notificationFromAddress,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 89
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 93
+  text: '`/settings/staff/${author.get(''slug'')}/email-notifications`,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 97
+  text: const { html, text } = await this.commentsServiceEmailRenderer.renderEmailTemplate(
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 112
+  text: '* @returns {Promise<string|undefined>} The id of the member that was notified, or undefined if no email was sent'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 136
+  text: const parentMemberEmail = parentMember.get('email');
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 166
+  text: 'fromEmail: this.notificationFromAddress,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 167
+  text: 'toEmail: parentMemberEmail,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 168
+  text: 'profileUrl: emailService.renderer.createUnsubscribeUrl(parentMember.get(''uuid''), {'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 173
+  text: const { html, text } = await this.commentsServiceEmailRenderer.renderEmailTemplate(
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 179
+  text: 'to: parentMemberEmail,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 189
+  text: '* Send an email to notify the owner of the site that a comment has been reported by a member'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 202
+  text: const to = owner.get('email');
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 220
+  text: 'reporterEmail: reporter.email,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 221
+  text: 'reporter: reporter.name ? `${reporter.name} (${reporter.email})` : reporter.email,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 224
+  text: 'memberEmail: member.get(''email''),'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 228
+  text: 'fromEmail: this.notificationFromAddress,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 229
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 233
+  text: '`/settings/staff/${owner.get(''slug'')}/email-notifications`,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 242
+  text: const { html, text } = await this.commentsServiceEmailRenderer.renderEmailTemplate(
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 265
+  text: get notificationFromAddress() {
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 282
+  text: 'from: this.notificationFromAddress,'
+- file: ghost/core/core/server/services/comments/comments-service-emails.js
+  line: 292
+  text: module.exports = CommentsServiceEmails;
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 3
+  text: export type EmailAddress = {
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 4
+  text: /** The email address */
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 6
+  text: /** Optional name associated with the email */
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 11
+  text: '* Parse an email string into an EmailAddress object'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 12
+  text: '* @param email Email string to parse'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 13
+  text: '* @returns Parsed email or null if invalid'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 15
+  text: 'export const parse = (email: string): null | EmailAddress => {'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 16
+  text: if (!email || typeof email !== 'string' || !email.length) {
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 20
+  text: const parsed = addressparser(email);
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 40
+  text: '* Convert an EmailAddress object to a string representation'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 41
+  text: '* @param email Email object to stringify'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 42
+  text: '* @returns String representation of the email'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 44
+  text: 'export const stringify = (email: Readonly<EmailAddress>): string => {'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 45
+  text: if (!email.name) {
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 46
+  text: return email.address;
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 49
+  text: const escapedName = email.name.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 54
+  text: '* Gmail will reject emails that contain certain Unicode characters.'
+- file: ghost/core/core/server/services/email-address/email-address-parser.ts
+  line: 70
+  text: return `"${nameCleanedForGmail}" <${email.address}>`;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 2
+  text: import * as emailAddressParser from './email-address-parser';
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 4
+  text: type EmailAddress = emailAddressParser.EmailAddress;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 6
+  text: export type EmailAddresses = {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 7
+  text: 'from: EmailAddress;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 8
+  text: 'replyTo?: EmailAddress;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 11
+  text: export type EmailAddressesValidation = {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 13
+  text: 'verificationEmailRequired: boolean;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 17
+  text: export type EmailAddressType = 'from' | 'replyTo';
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 23
+  text: export class EmailAddressService {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 24
+  text: '#getManagedEmailEnabled: () => boolean;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 26
+  text: '#getDefaultEmail: () => EmailAddress;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 28
+  text: '#getFallbackEmail: () => EmailAddress | null;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 30
+  text: '#isValidEmailAddress: (email: string) => boolean;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 33
+  text: 'getManagedEmailEnabled: () => boolean;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 36
+  text: 'getDefaultEmail: () => EmailAddress;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 37
+  text: 'getFallbackEmail: () => string | null;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 39
+  text: 'isValidEmailAddress: (email: string) => boolean;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 41
+  text: this.#getManagedEmailEnabled = dependencies.getManagedEmailEnabled;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 44
+  text: this.#getDefaultEmail = dependencies.getDefaultEmail;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 46
+  text: this.#getFallbackEmail = () => {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 47
+  text: const fallbackAddress = dependencies.getFallbackEmail();
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 51
+  text: return emailAddressParser.parse(fallbackAddress);
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 53
+  text: this.#isValidEmailAddress = dependencies.isValidEmailAddress;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 64
+  text: 'get managedEmailEnabled(): boolean {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 65
+  text: return this.#getManagedEmailEnabled();
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 68
+  text: 'get defaultFromEmail(): EmailAddress {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 69
+  text: return this.#getDefaultEmail();
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 72
+  text: 'get fallbackEmail(): EmailAddress | null {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 73
+  text: return this.#getFallbackEmail();
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 77
+  text: '* Get the actual sender address for member emails after DMARC transformation.'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 83
+  text: return transformed.from.address;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 86
+  text: 'getAddressFromString(from: string, replyTo?: string): EmailAddresses {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 87
+  text: const parsedFrom = emailAddressParser.parse(from);
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 88
+  text: 'const parsedReplyTo = replyTo ? emailAddressParser.parse(replyTo) : undefined;'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 91
+  text: 'from: parsedFrom ?? this.defaultFromEmail,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 97
+  text: '* When sending an email, we should always ensure DMARC alignment.'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 98
+  text: '* Because of that, we restrict which email addresses we send from. All emails should be either'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 99
+  text: '* send from a configured domain (hostSettings.managedEmail.sendingDomains), or from the configured email address (mail.from).'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 101
+  text: '* If we send an email from an email address that doesn''t pass, we''ll just default to the default email address,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 102
+  text: '* and instead add a replyTo email address from the requested from address.'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 105
+  text: 'preferred: EmailAddresses,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 107
+  text: '): EmailAddresses {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 108
+  text: if (preferred.replyTo && !this.#isValidEmailAddress(preferred.replyTo.address)) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 109
+  text: // The default from-address itself is allowed to fail generic email validation
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 116
+  text: if (preferred.replyTo.address.toLowerCase() !== this.defaultFromEmail.address.toLowerCase()) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 117
+  text: 'logging.error(`[EmailAddresses] Invalid replyTo address: ${preferred.replyTo.address}`);'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 120
+  text: '`[EmailAddresses] replyTo address ${preferred.replyTo.address} matches the default from-address and failed generic validation; removing it`,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 127
+  text: // Validate the from address
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 128
+  text: if (!this.#isValidEmailAddress(preferred.from.address)) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 129
+  text: // Never allow an invalid email address
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 131
+  text: 'from: this.defaultFromEmail,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 136
+  text: if (!this.managedEmailEnabled) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 143
+  text: const fallbackEmail = this.fallbackEmail;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 144
+  text: if (fallbackEmail) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 145
+  text: if (!fallbackEmail.name) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 146
+  text: fallbackEmail.name = preferred.from.name || this.defaultFromEmail.name;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 150
+  text: 'from: fallbackEmail,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 151
+  text: 'replyTo: preferred.replyTo || preferred.from || this.defaultFromEmail,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 155
+  text: '''[EmailAddresses] Fallback email address is not configured, cannot use fallback address for sending email.'','
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 160
+  text: '// Case: always allow the default from address'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 161
+  text: if (preferred.from.address === this.defaultFromEmail.address) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 163
+  text: // Use the default sender name if it is missing
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 164
+  text: preferred.from.name = this.defaultFromEmail.name;
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 171
+  text: // Check if FROM address is from the sending domain
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 172
+  text: if (preferred.from.address.endsWith(`@${this.sendingDomain}`)) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 176
+  text: '// Not an error: this is the expected, handled fallback for any sender address that'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 177
+  text: // doesn't match the sending domain (staff/member/newsletter senders routinely don't) —
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 178
+  text: // we fall through to the default from-address below. Warn-level, not error-level.
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 180
+  text: '`[EmailAddresses] Cannot send emails from ${preferred.from.address} when sending domain is ${this.sendingDomain} — falling back to the default from-address`,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 184
+  text: // Only allow to send from the configured from address
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 186
+  text: 'from: this.defaultFromEmail,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 190
+  text: // Do allow to change the sender name if requested
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 195
+  text: if (address.replyTo.address === address.from.address) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 197
+  text: 'from: address.from,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 207
+  text: 'validate(email: string, type: EmailAddressType): EmailAddressesValidation {'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 208
+  text: if (!this.#isValidEmailAddress(email)) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 209
+  text: // Never allow an invalid email address
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 211
+  text: 'allowed: email === this.defaultFromEmail.address, // Localhost email noreply@127.0.0.1 is marked as invalid, but we should allow it'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 212
+  text: 'verificationEmailRequired: false,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 217
+  text: if (!this.managedEmailEnabled) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 221
+  text: 'verificationEmailRequired: false, // Self hosters don''t need to verify email addresses'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 227
+  text: if (email.endsWith(`@${this.sendingDomain}`)) {
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 230
+  text: 'verificationEmailRequired: false,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 241
+  text: 'verificationEmailRequired: email !== this.defaultFromEmail.address,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 247
+  text: 'allowed: email === this.defaultFromEmail.address,'
+- file: ghost/core/core/server/services/email-address/email-address-service.ts
+  line: 248
+  text: 'verificationEmailRequired: false,'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 3
+  text: const debug = require('@tryghost/debug')('email-service:mailgun-provider-service');
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 11
+  text: '* @typedef {object} Recipient'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 12
+  text: '* @prop {string} email'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 24
+  text: '* @typedef {object} EmailSendingOptions'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 31
+  text: '* @typedef {object} EmailProviderSuccessResponse'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 35
+  text: class MailgunEmailProvider {
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 41
+  text: '* @param {import(''../lib/mailgun-client'')} dependencies.mailgunClient - mailgun client to send emails'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 49
+  text: '#createRecipientData(replacements) {'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 50
+  text: let recipientData = {};
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 52
+  text: recipientData = replacements.reduce((acc, replacement) => {
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 58
+  text: return recipientData;
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 61
+  text: '#updateRecipientVariables(data, replacementDefinitions) {'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 63
+  text: data = data.replace(def.token, `%recipient.${def.id}%`);
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 82
+  text: '* Send an email using the Mailgun API'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 83
+  text: '* @param {import(''./sending-service'').EmailData} data'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 84
+  text: '* @param {EmailSendingOptions} options'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 85
+  text: '* @returns {Promise<EmailProviderSuccessResponse>}'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 95
+  text: emailId,
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 96
+  text: recipients,
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 100
+  text: logging.info(`Sending email to ${recipients.length} recipients`);
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 102
+  text: debug(`sending message to ${recipients.length} recipients`);
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 111
+  text: 'tags: [''bulk-email''],'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 113
+  text: 'id: emailId,'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 118
+  text: const mailgunTagFromConfig = this.#config.get('bulkEmail:mailgun:tag');
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 127
+  text: // create recipient data for Mailgun using replacement definitions
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 128
+  text: const recipientData = recipients.reduce((acc, recipient) => {
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 129
+  text: acc[recipient.email] = this.#createRecipientData(recipient.replacements);
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 136
+  text: messageData[key] = this.#updateRecipientVariables(
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 143
+  text: // send the email using Mailgun
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 145
+  text: const response = await this.#mailgunClient.send(messageData, recipientData, []);
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 160
+  text: ghostError = new errors.EmailError({
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 165
+  text: 'help: `https://docs.ghost.org/newsletters/#bulk-email-configuration`,'
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 166
+  text: 'code: ''BULK_EMAIL_SEND_FAILED'','
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 169
+  text: ghostError = new errors.EmailError({
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 174
+  text: 'code: ''BULK_EMAIL_SEND_FAILED'','
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 184
+  text: getMaximumRecipients() {
+- file: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  line: 198
+  text: module.exports = MailgunEmailProvider;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 5
+  text: '* @typedef {object} EmailData'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 10
+  text: '* @prop {string} emailId'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 13
+  text: '* @prop {Recipient[]} recipients'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 14
+  text: '* @prop {import("./email-renderer").ReplacementDefinition[]} replacementDefinitions'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 16
+  text: '* @typedef {object} IEmailProviderService'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 17
+  text: '* @prop {(emailData: EmailData, options: EmailSendingOptions) => Promise<EmailProviderSuccessResponse>} send'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 18
+  text: '* @prop {() => number} getMaximumRecipients'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 26
+  text: '* @typedef {import("./email-renderer")} EmailRenderer'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 27
+  text: '* @typedef {import("./email-renderer").EmailBody} EmailBody'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 31
+  text: '* @typedef {import("../email-address/email-address-service").EmailAddressService} EmailAddressService'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 35
+  text: '* @typedef {object} EmailSendingOptions'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 40
+  text: '* @prop {Map<string, EmailBody>} [emailBodyCache]'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 44
+  text: '* @typedef {import("./email-renderer").MemberLike} MemberLike'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 48
+  text: '* @typedef {object} Recipient'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 49
+  text: '* @prop {string} email'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 61
+  text: '* @typedef {object} EmailProviderSuccessResponse'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 66
+  text: '#emailProvider;'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 67
+  text: '#emailRenderer;'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 68
+  text: '#emailAddressService;'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 72
+  text: '* @param {IEmailProviderService} dependencies.emailProvider'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 73
+  text: '* @param {EmailRenderer} dependencies.emailRenderer'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 74
+  text: '* @param {EmailAddressService} dependencies.emailAddressService'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 76
+  text: constructor({ emailProvider, emailRenderer, emailAddressService }) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 77
+  text: this.#emailProvider = emailProvider;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 78
+  text: this.#emailRenderer = emailRenderer;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 79
+  text: this.#emailAddressService = emailAddressService;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 82
+  text: getMaximumRecipients() {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 83
+  text: return this.#emailProvider.getMaximumRecipients();
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 92
+  text: return this.#emailProvider.getTargetDeliveryWindow();
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 101
+  text: '* @param {string|null} data.emailId'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 103
+  text: '* @param {EmailSendingOptions} options'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 104
+  text: '* @returns {Promise<EmailProviderSuccessResponse>}'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 106
+  text: async send({ post, newsletter, segment, members, emailId }, options) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 107
+  text: const cacheId = emailId + '-' + (segment ?? 'null');
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 108
+  text: const isTestEmail = options.isTestEmail ?? false;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 111
+  text: '* @type {EmailBody | undefined}'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 113
+  text: let emailBody;
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 115
+  text: if (options.emailBodyCache) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 116
+  text: emailBody = options.emailBodyCache.get(cacheId);
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 119
+  text: if (!emailBody) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 120
+  text: emailBody = await this.#emailRenderer.renderBody(post, newsletter, segment, {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 123
+  text: if (options.emailBodyCache) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 124
+  text: options.emailBodyCache.set(cacheId, emailBody);
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 128
+  text: const recipients = this.buildRecipients(members, emailBody.replacements);
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 129
+  text: return await this.#emailProvider.send(
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 131
+  text: 'subject: this.#emailRenderer.getSubject(post, isTestEmail),'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 132
+  text: 'from: this.#emailRenderer.getFromAddress(post, newsletter, !!options.useFallbackAddress),'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 134
+  text: this.#emailRenderer.getReplyToAddress(post, newsletter, !!options.useFallbackAddress) ??
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 136
+  text: 'html: emailBody.html,'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 137
+  text: 'plaintext: emailBody.plaintext,'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 138
+  text: recipients,
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 139
+  text: 'emailId: emailId,'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 140
+  text: 'replacementDefinitions: emailBody.replacements,'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 142
+  text: '? this.#emailAddressService.fallbackDomain'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 157
+  text: '* @param {import("./email-renderer").ReplacementDefinition[]} replacementDefinitions'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 158
+  text: '* @returns {Recipient[]}'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 160
+  text: buildRecipients(members, replacementDefinitions) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 164
+  text: 'email: member.email?.trim(),'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 174
+  text: .filter((recipient) => {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 175
+  text: // Remove invalid recipient email addresses
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 176
+  text: 'const isValidRecipient = validator.isEmail(recipient.email, { legacy: false });'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 177
+  text: if (!isValidRecipient) {
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 179
+  text: '`Removed recipient ${recipient.email} from list because it is not a valid email address`,'
+- file: ghost/core/core/server/services/email-service/sending-service.js
+  line: 182
+  text: return isValidRecipient;
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 4
+  text: '* @typedef {object} EmailSuppressionInfo'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 10
+  text: '* @typedef {object} EmailSuppressedData'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 12
+  text: '* @prop {EmailSuppressionInfo} info'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 16
+  text: '* @typedef {object} EmailNotSuppressedData'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 22
+  text: '* @typedef {EmailSuppressedData | EmailNotSuppressedData} IEmailSuppressionData'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 26
+  text: '* @typedef {object} IEmailSuppressionList'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 27
+  text: '* @prop {(email: string) => Promise<EmailSuppressionData>} getSuppressionData'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 28
+  text: '* @prop {(emails: string[]) => Promise<EmailSuppressionData[]>} getBulkSuppressionData'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 29
+  text: '* @prop {(email: string) => Promise<boolean>} removeEmail'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 33
+  text: '* @implements {IEmailSuppressionData}'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 35
+  text: class EmailSuppressionData {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 38
+  text: /** @type {EmailSuppressionInfo | null} */
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 59
+  text: '* @implements {IEmailSuppressionList}'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 61
+  text: class AbstractEmailSuppressionList {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 63
+  text: '* @param {string} email'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 67
+  text: async removeEmail(email) {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 72
+  text: '* @param {string} email'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 73
+  text: '* @returns {Promise<EmailSuppressionData>}'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 76
+  text: async getSuppressionData(email) {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 81
+  text: '* @param {string[]} emails'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 82
+  text: '* @returns {Promise<EmailSuppressionData[]>}'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 84
+  text: async getBulkSuppressionData(emails) {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 85
+  text: return Promise.all(emails.map((email) => this.getSuppressionData(email)));
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 89
+  text: class EmailSuppressedEvent {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 92
+  text: '* @type {{emailId: string, emailAddress: string, reason: string}}'
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 105
+  text: constructor({ emailAddress, emailId, reason, timestamp }) {
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 107
+  text: emailAddress,
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 108
+  text: emailId,
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 115
+  text: return new EmailSuppressedEvent({
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 123
+  text: AbstractEmailSuppressionList,
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 124
+  text: EmailSuppressionData,
+- file: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  line: 125
+  text: EmailSuppressedEvent,
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 2
+  text: // Handles sending email for Ghost
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 11
+  text: const emailAddress = require('../email-address');
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 14
+  text: 'checkEmailConfigInstructions: ''Please see {url} for instructions on configuring email.'','
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 15
+  text: 'failedSendingEmailError: ''Failed to send email.'','
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 20
+  text: const emailAddressParser = require('../email-address/email-address-parser');
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 21
+  text: const DEFAULT_TAGS = ['ghost-email', 'transactional-email'];
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 32
+  text: '* @param {string} requestedFromAddress'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 36
+  text: function getFromAddress(requestedFromAddress, requestedReplyToAddress) {
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 37
+  text: if (!requestedFromAddress) {
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 39
+  text: requestedFromAddress = emailAddress.service.defaultFromEmail;
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 42
+  text: // Clean up email addresses (checks whether sending is allowed + email address is valid)
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 43
+  text: const addresses = emailAddress.service.getAddressFromString(
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 44
+  text: requestedFromAddress,
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 57
+  text: 'from: emailAddressParser.stringify(addresses.from),'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 58
+  text: 'replyTo: addresses.replyTo ? emailAddressParser.stringify(addresses.replyTo) : null,'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 64
+  text: '* For nodemailer 0.7.1 reference see - https://github.com/nodemailer/nodemailer/tree/da2f1d278f91b4262e940c0b37638e7027184b1d#e-mail-message-fields'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 67
+  text: '* @param {string} [message.from] - sender email address'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 80
+  text: const addresses = getFromAddress(message.from, message.replyTo);
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 88
+  text: 'Sender: addresses.from,'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 99
+  text: '* @return {errors.EmailError}'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 102
+  text: const helpMessage = tpl(messages.checkEmailConfigInstructions, {
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 105
+  text: const defaultErrorMessage = tpl(messages.failedSendingEmailError);
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 108
+  text: 'let statusCode = err && err.name === ''RecipientError'' ? 400 : 500;'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 109
+  text: return new errors.EmailError({
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 137
+  text: '* @param {string} message.subject - email subject'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 138
+  text: '* @param {string} message.html - email content'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 139
+  text: '* @param {string} message.to - email recipient address'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 141
+  text: '* @param {string} [message.from] - sender email address'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 146
+  text: '* @param {Record<string, string>} [message.headers] - optional additional email headers (merged with defaults)'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 149
+  text: '* (ref: https://github.com/nodemailer/nodemailer/tree/da2f1d278f91b4262e940c0b37638e7027184b1d#e-mail-message-fields)'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 169
+  text: ': settingsCache.get(''email_track_opens'');'
+- file: ghost/core/core/server/services/mail/ghost-mailer.js
+  line: 228
+  text: 'message: tpl(messages.reason, { reason: ''Email has been temporarily rejected'' }),'
+- file: ghost/core/core/server/services/members/api.js
+  line: 8
+  text: const signinEmail = require('./emails/signin');
+- file: ghost/core/core/server/services/members/api.js
+  line: 9
+  text: const signupEmail = require('./emails/signup');
+- file: ghost/core/core/server/services/members/api.js
+  line: 10
+  text: const signupPaidEmail = require('./emails/signup-paid');
+- file: ghost/core/core/server/services/members/api.js
+  line: 11
+  text: const subscribeEmail = require('./emails/subscribe');
+- file: ghost/core/core/server/services/members/api.js
+  line: 12
+  text: const updateEmail = require('./emails/update-email');
+- file: ghost/core/core/server/services/members/api.js
+  line: 21
+  text: const emailSuppressionList = require('../email-suppression-list');
+- file: ghost/core/core/server/services/members/api.js
+  line: 23
+  text: const emailAddressService = require('../email-address');
+- file: ghost/core/core/server/services/members/api.js
+  line: 81
+  text: 'from: config.getEmailSupportAddress(),'
+- file: ghost/core/core/server/services/members/api.js
+  line: 100
+  text: 'case ''updateEmail'':'
+- file: ghost/core/core/server/services/members/api.js
+  line: 101
+  text: 'return `📫 ${t(`Confirm your email update for {siteTitle}!`, { siteTitle, interpolation: { escapeValue: false } })}`;'
+- file: ghost/core/core/server/services/members/api.js
+  line: 111
+  text: getText(url, type, email, otc) {
+- file: ghost/core/core/server/services/members/api.js
+  line: 118
+  text: '${t("You''re one tap away from subscribing to {siteTitle} — please confirm your email address with this link:", { siteTitle, interpolation: { escapeValue: false } })}'
+- file: ghost/core/core/server/services/members/api.js
+  line: 128
+  text: ${t('Sent to {email}', { email })}
+- file: ghost/core/core/server/services/members/api.js
+  line: 145
+  text: ${t('Sent to {email}', { email })}
+- file: ghost/core/core/server/services/members/api.js
+  line: 162
+  text: ${t('Sent to {email}', { email })}
+- file: ghost/core/core/server/services/members/api.js
+  line: 165
+  text: 'case ''updateEmail'':'
+- file: ghost/core/core/server/services/members/api.js
+  line: 169
+  text: ${t('Please confirm your email address with this link:')}
+- file: ghost/core/core/server/services/members/api.js
+  line: 177
+  text: ${t('Sent to {email}', { email })}
+- file: ghost/core/core/server/services/members/api.js
+  line: 178
+  text: ${t('If you did not make this request, you can simply delete this message.')} ${t('This email address will not be used.')}
+- file: ghost/core/core/server/services/members/api.js
+  line: 199
+  text: ${t('Sent to {email}', { email })}
+- file: ghost/core/core/server/services/members/api.js
+  line: 200
+  text: ${t('If you did not make this request, you can safely ignore this email.')}
+- file: ghost/core/core/server/services/members/api.js
+  line: 204
+  text: getHTML(url, type, email, otc) {
+- file: ghost/core/core/server/services/members/api.js
+  line: 214
+  text: return subscribeEmail({ t, url, email, siteTitle, accentColor, siteDomain, siteUrl });
+- file: ghost/core/core/server/services/members/api.js
+  line: 216
+  text: return signupEmail({ t, url, email, siteTitle, accentColor, siteDomain, siteUrl });
+- file: ghost/core/core/server/services/members/api.js
+  line: 218
+  text: return signupPaidEmail({ t, url, email, siteTitle, accentColor, siteDomain, siteUrl });
+- file: ghost/core/core/server/services/members/api.js
+  line: 219
+  text: 'case ''updateEmail'':'
+- file: ghost/core/core/server/services/members/api.js
+  line: 220
+  text: return updateEmail({ t, url, email, siteTitle, accentColor, siteDomain, siteUrl });
+- file: ghost/core/core/server/services/members/api.js
+  line: 223
+  text: return signinEmail({ t, url, otc, email, siteTitle, accentColor, siteDomain, siteUrl });
+- file: ghost/core/core/server/services/members/api.js
+  line: 229
+  text: 'EmailRecipient: models.EmailRecipient,'
+- file: ghost/core/core/server/services/members/api.js
+  line: 238
+  text: 'MemberEmailChangeEvent: models.MemberEmailChangeEvent,'
+- file: ghost/core/core/server/services/members/api.js
+  line: 253
+  text: 'EmailSpamComplaintEvent: models.EmailSpamComplaintEvent,'
+- file: ghost/core/core/server/services/members/api.js
+  line: 255
+  text: 'WelcomeEmailAutomationRun: models.WelcomeEmailAutomationRun,'
+- file: ghost/core/core/server/services/members/api.js
+  line: 256
+  text: 'AutomatedEmailRecipient: models.AutomatedEmailRecipient,'
+- file: ghost/core/core/server/services/members/api.js
+  line: 264
+  text: emailSuppressionList,
+- file: ghost/core/core/server/services/members/api.js
+  line: 270
+  text: 'emailAddressService: emailAddressService.service,'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 2
+  text: import renderImportEmail, { headingFor, type ImportEmailSummary } from './email-template';
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 6
+  text: '// The finished import as the email reads it: how many imported and which rows'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 14
+  text: export interface EmailLinks {
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 21
+  text: interface ImportEmailInput {
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 23
+  text: 'recipient: string;'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 25
+  text: 'links: EmailLinks;'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 28
+  text: interface EmailPayload {
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 47
+  text: .replace('Value in [members.email] cannot be blank.', 'Missing email address')
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 54
+  text: '''Value in "Subscribed to emails" must be "true" or "false"'','
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 56
+  text: .replace('Validation (isEmail) failed for email', 'Invalid email address')
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 72
+  text: 'email: MemberImportRow[''email''];'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 75
+  text: 'subscribed_to_emails: MemberImportRow[''subscribed''];'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 102
+  text: 'email: row.email,'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 105
+  text: 'subscribed_to_emails: row.subscribed,'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 117
+  text: '// The error report attached to the completion email: the failed rows as CSV, called only'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 132
+  text: // The one email an import sends, whatever became of it. What the publisher is told and
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 136
+  text: export default function buildImportEmail({
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 138
+  text: recipient,
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 141
+  text: '}: ImportEmailInput): EmailPayload {'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 142
+  text: 'const summary: ImportEmailSummary = !result'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 149
+  text: 'to: recipient,'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 151
+  text: 'html: renderImportEmail({'
+- file: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+  line: 157
+  text: 'emailRecipient: recipient,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 22
+  text: const { MEMBER_WELCOME_EMAIL_SLUGS } = require('../../../member-welcome-emails/constants');
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 40
+  text: 'invalidEmail: ''Invalid Email'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 57
+  text: const WELCOME_EMAIL_SOURCES = ['member'];
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 72
+  text: '* @param {any} deps.MemberEmailChangeEvent'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 86
+  text: '* @param {any} deps.WelcomeEmailAutomationRun'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 93
+  text: MemberEmailChangeEvent,
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 107
+  text: WelcomeEmailAutomationRun,
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 113
+  text: this._MemberEmailChangeEvent = MemberEmailChangeEvent;
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 127
+  text: this._WelcomeEmailAutomationRun = WelcomeEmailAutomationRun;
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 196
+  text: '* @param {string} memberEmail'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 202
+  text: 'async #triggerMemberSignupAutomation(memberId, memberEmail, memberStatus, bookshelfOptions) {'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 207
+  text: memberEmail,
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 225
+  text: '* Looks up the active welcome email automation for the given slug and enqueues a'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 226
+  text: '* `WelcomeEmailAutomationRun` for the member. Dispatches `StartAutomationsPollEvent`'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 235
+  text: if (!this._Automation || !this._WelcomeEmailAutomationRun) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 244
+  text: '{ slug: MEMBER_WELCOME_EMAIL_SLUGS[memberStatus] },'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 245
+  text: '{ ...options, withRelated: [''welcomeEmailAutomatedEmail''] },'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 247
+  text: const email = automation?.related('welcomeEmailAutomatedEmail');
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 249
+  text: automation && email && email.get('lexical') && automation.get('status') === 'active',
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 256
+  text: await this._WelcomeEmailAutomationRun.add(
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 258
+  text: 'welcome_email_automation_id: automation.id,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 260
+  text: 'next_welcome_email_automated_email_id: email.id,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 279
+  text: '* @param {string} memberEmail'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 284
+  text: async triggerMemberSignupAutomation(memberId, memberEmail, memberStatus, bookshelfOptions) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 286
+  text: this.#triggerMemberSignupAutomation(memberId, memberEmail, memberStatus, bookshelfOptions),
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 386
+  text: 'email: data.sub,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 396
+  text: async cycleTransientId({ id, email }) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 401
+  text: '{ id, email },'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 408
+  text: '* @param {string} data.email'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 421
+  text: '* @param {boolean} [data.email_disabled]'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 446
+  text: '''email'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 454
+  text: '''email_disabled'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 461
+  text: // Throw error if email is invalid using latest validator
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 462
+  text: 'if (!validator.isEmail(memberData.email, { legacy: false })) {'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 464
+  text: 'message: tpl(messages.invalidEmail),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 465
+  text: 'property: ''email'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 469
+  text: memberData.email_disabled = !!memberData.email_disabled;
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 524
+  text: if (isFreeSignup && WELCOME_EMAIL_SOURCES.includes(source)) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 534
+  text: await this.triggerMemberSignupAutomation(newMember.id, newMember.get('email'), 'free', {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 616
+  text: 'email: stripeCustomer.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 682
+  text: '''email'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 695
+  text: '''email_disabled'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 732
+  text: // Throw error if email is invalid and it's been changed
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 734
+  text: initialMember?.get('email') &&
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 735
+  text: memberData.email &&
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 736
+  text: initialMember.get('email') !== memberData.email &&
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 737
+  text: '!validator.isEmail(memberData.email, { legacy: false })'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 740
+  text: 'message: tpl(messages.invalidEmail),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 741
+  text: 'property: ''email'','
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 960
+  text: if (member.attributes.email !== member._previousAttributes.email) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 961
+  text: await this._MemberEmailChangeEvent.add(
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 964
+  text: 'from_email: member._previousAttributes.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 965
+  text: 'to_email: member.get(''email''),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 983
+  text: if (this._stripeAPIService.configured && member._changed.email) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 987
+  text: await this._stripeAPIService.updateCustomerEmail(
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 989
+  text: member.get('email'),
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1160
+  text: 'email: data.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1182
+  text: 'email: customer.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1198
+  text: async getCustomerIdByEmail(email) {
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1199
+  text: return this._stripeAPIService.getCustomerIdByEmail(email);
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1917
+  text: // 3. The previous status wasn't 'gift', as gift members already received the paid welcome email on redemption
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1919
+  text: WELCOME_EMAIL_SOURCES.includes(source) &&
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 1925
+  text: memberModel.get('email'),
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2001
+  text: 'email: data.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2035
+  text: '} else if (data.email) {'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2036
+  text: 'findQuery = { email: data.email };'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2094
+  text: '} else if (data.email) {'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2095
+  text: 'findQuery = { email: data.email };'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2180
+  text: '* @param {string} [data.email] - Member email'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2207
+  text: '} else if (data.email) {'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2208
+  text: 'findQuery = { email: data.email };'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2220
+  text: 'message: tpl(messages.memberNotFound, { id: data.id || data.email }),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2385
+  text: 'email: member.get(''email''),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2392
+  text: 'email: stripeCustomer.email,'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2531
+  text: 'email: member.get(''email''),'
+- file: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+  line: 2538
+  text: 'email: stripeCustomer.email,'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 3
+  text: const verifyEmailTemplate = require('./emails/verify-email');
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 14
+  text: 'senderEmailNotAllowed: ''You cannot set the sender email address to {email}'','
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 15
+  text: 'replyToNotAllowed: ''You cannot set the reply-to email address to {email}'','
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 28
+  text: '* @param {Object} options.emailAddressService'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 39
+  text: emailAddressService,
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 49
+  text: this.emailAddressService = emailAddressService;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 51
+  text: /* email verification setup */
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 58
+  text: // noop - overridden in `sendEmailVerificationMagicLink`
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 62
+  text: // not used - overridden in `sendEmailVerificationMagicLink`
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 63
+  text: return `Verify email address`;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 65
+  text: getText(url, type, email) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 69
+  text: 'Please confirm your email address with this link:'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 77
+  text: Sent to ${email}
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 78
+  text: If you did not make this request, you can simply delete this message. This email address will not be used.
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 81
+  text: getHTML(url, type, email) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 82
+  text: return verifyEmailTemplate({ url, email });
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 87
+  text: signinURL.hash = `/settings/newsletters/?verifyEmail=${token}`;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 158
+  text: // remove any email properties that are not allowed to be set without verification
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 159
+  text: const { cleanedAttrs, emailsToVerify } = await this.prepAttrsForEmailVerification(attrs);
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 167
+  text: // add the model now because we need the ID for sending verification emails
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 209
+  text: // send any verification emails and respond with the appropriate meta added
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 210
+  text: return this.respondWithEmailVerification(newsletter, emailsToVerify);
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 224
+  text: // fetch newsletter first so we can compare changed emails
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 230
+  text: const { cleanedAttrs, emailsToVerify } = await this.prepAttrsForEmailVerification(
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 260
+  text: await this.respondWithEmailVerification(updatedNewsletter, emailsToVerify);
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 279
+  text: updatedNewsletter.meta.email_verified = property;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 284
+  text: /* Email verification Internals */
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 289
+  text: async prepAttrsForEmailVerification(attrs, newsletter) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 291
+  text: const emailsToVerify = [];
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 292
+  text: const emailProperties = [
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 294
+  text: 'property: ''sender_email'','
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 297
+  text: 'error: messages.senderEmailNotAllowed,'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 301
+  text: if (cleanedAttrs.sender_reply_to !== undefined) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 302
+  text: if (!['newsletter', 'support'].includes(cleanedAttrs.sender_reply_to)) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 303
+  text: emailProperties.push({
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 304
+  text: 'property: ''sender_reply_to'','
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 312
+  text: for (const { property, type, emptyable, error } of emailProperties) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 313
+  text: const email = cleanedAttrs[property];
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 314
+  text: const hasChanged = !newsletter || newsletter.get(property) !== email;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 316
+  text: if (hasChanged && email !== undefined) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 317
+  text: if (email === null || (email === '' && emptyable)) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 321
+  text: const validated = this.emailAddressService.service.validate(email, type);
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 325
+  text: 'message: tpl(error, { email }),'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 329
+  text: if (validated.verificationEmailRequired) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 330
+  text: if (type === 'replyTo' && email === newsletter.get('sender_email')) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 331
+  text: // This is some custom behaviour that allows swapping sender_email to sender_reply_to without requiring validation again
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 335
+  text: emailsToVerify.push({ email, property });
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 340
+  text: // If one of the properties was changed, we need to reset sender_email in case it was not changed but is invalid in the database
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 344
+  text: attrs.sender_reply_to !== undefined &&
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 345
+  text: newsletter.get('sender_reply_to') !== attrs.sender_reply_to;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 346
+  text: const didChangeSenderEmail =
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 348
+  text: attrs.sender_email !== undefined &&
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 349
+  text: newsletter.get('sender_email') !== attrs.sender_email;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 350
+  text: if (didChangeReplyTo && !didChangeSenderEmail && newsletter.get('sender_email')) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 351
+  text: const validated = this.emailAddressService.service.validate(
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 352
+  text: newsletter.get('sender_email'),
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 357
+  text: '`Resetting sender_email for newsletter ${newsletter.id} because it became invalid`,'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 359
+  text: cleanedAttrs.sender_email = null;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 363
+  text: return { cleanedAttrs, emailsToVerify };
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 369
+  text: async respondWithEmailVerification(newsletter, emailsToVerify) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 370
+  text: if (emailsToVerify.length > 0) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 371
+  text: for (const { email, property } of emailsToVerify) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 372
+  text: 'await this.sendEmailVerificationMagicLink({ id: newsletter.get(''id''), email, property });'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 376
+  text: newsletter.meta.sent_email_verification = emailsToVerify.map((v) => v.property);
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 385
+  text: async sendEmailVerificationMagicLink({ id, email, property = 'sender_from' }) {
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 386
+  text: const fromEmail = this.emailAddressService.service.defaultFromAddress;
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 396
+  text: 'from: fromEmail,'
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 397
+  text: 'subject: ''Verify email address'','
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 408
+  text: email,
+- file: ghost/core/core/server/services/newsletters/newsletters-service.js
+  line: 409
+  text: 'tokenData: { id, property, value: email },'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 5
+  text: 'invalidEmailSegment: "The email segment parameter doesn''t contain a valid filter",'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 8
+  text: const EMAIL_SENDING_STATUSES = ['published', 'sent'];
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 10
+  text: class PostEmailHandler {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 14
+  text: '* @param {Object} dependencies.emailService'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 16
+  text: constructor({ models, emailService }) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 18
+  text: this.emailService = emailService;
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 22
+  text: '* Validates email can be sent before saving the post (if an email will be sent)'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 25
+  text: '* @returns {Promise<{newsletter: Object, emailRecipientFilter: string, emailCount: number}|null>}'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 30
+  text: if (!EMAIL_SENDING_STATUSES.includes(newStatus)) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 36
+  text: '{ columns: [''id'', ''status'', ''newsletter_id'', ''email_recipient_filter''] },'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 41
+  text: const sendingEmail = hasNewsletter && this.shouldSendEmail(newStatus, previousStatus);
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 43
+  text: if (!sendingEmail) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 47
+  text: const emailRecipientFilter =
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 48
+  text: frame.options.email_segment || existingPost?.get('email_recipient_filter') || 'all';
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 50
+  text: await this.validateEmailRecipientFilter(emailRecipientFilter);
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 54
+  text: const { emailCount } = await this.emailService.checkCanSendEmail(
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 56
+  text: emailRecipientFilter,
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 59
+  text: return { newsletter, emailRecipientFilter, emailCount };
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 63
+  text: '* Validates the email recipient filter is valid'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 65
+  text: '* @param {string} emailRecipientFilter'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 68
+  text: async validateEmailRecipientFilter(emailRecipientFilter) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 69
+  text: if (!emailRecipientFilter || emailRecipientFilter === 'all') {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 74
+  text: 'await this.models.Member.findPage({ filter: emailRecipientFilter, limit: 1 });'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 77
+  text: 'message: tpl(messages.invalidEmailSegment),'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 103
+  text: '* Handles creating or retrying the newsletter email after post is saved'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 107
+  text: '* @param {Object} [options.preflight] - Validation result from validateBeforeSave, passed through to createEmail'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 109
+  text: '* @param {string} [options.preflight.emailRecipientFilter]'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 110
+  text: '* @param {number} [options.preflight.emailCount]'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 113
+  text: async createOrRetryEmail(model, { preflight } = {}) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 118
+  text: const sendEmail =
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 119
+  text: model.wasChanged() && this.shouldSendEmail(model.get('status'), model.previous('status'));
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 121
+  text: if (!sendEmail) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 125
+  text: const postEmail = model.relations.email;
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 126
+  text: let email;
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 128
+  text: if (!postEmail) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 129
+  text: email = await this.emailService.createEmail(model, { preflight });
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 130
+  text: '} else if (postEmail.get(''status'') === ''failed'') {'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 131
+  text: email = await this.emailService.retryEmail(postEmail);
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 134
+  text: if (email) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 135
+  text: model.set('email', email);
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 140
+  text: '* Calculates if the email should be tried to be sent out'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 146
+  text: shouldSendEmail(currentStatus, previousStatus) {
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 148
+  text: EMAIL_SENDING_STATUSES.includes(currentStatus) &&
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 149
+  text: '!EMAIL_SENDING_STATUSES.includes(previousStatus)'
+- file: ghost/core/core/server/services/posts/post-email-handler.js
+  line: 154
+  text: module.exports = PostEmailHandler;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 5
+  text: const emailAddressParser = require('../email-address/email-address-parser');
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 7
+  text: class StaffServiceEmails {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 33
+  text: const users = await this.models.User.getEmailAlertUsers('free-signup', options);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 36
+  text: const to = user.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 42
+  text: // In case of a homepage attribution, we want to show the title as "Homepage" on email
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 50
+  text: '`/settings/staff/${user.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 63
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 64
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 68
+  text: const { html, text } = await this.renderEmailTemplate('new-free-signup', templateData);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 83
+  text: const users = await this.models.User.getEmailAlertUsers('paid-started', options);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 86
+  text: const to = user.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 116
+  text: // In case of a homepage attribution, we want to show the title as "Homepage" on email
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 124
+  text: '`/settings/staff/${user.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 140
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 141
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 145
+  text: const { html, text } = await this.renderEmailTemplate('new-paid-started', templateData);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 160
+  text: const users = await this.models.User.getEmailAlertUsers('paid-canceled', options);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 163
+  text: const to = user.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 186
+  text: '`/settings/staff/${user.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 198
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 199
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 203
+  text: const { html, text } = await this.renderEmailTemplate('new-paid-cancellation', templateData);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 215
+  text: '* @param {object} recipient'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 216
+  text: '* @param {string} recipient.email'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 217
+  text: '* @param {string} recipient.slug'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 219
+  text: async getSharedData(recipient) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 223
+  text: '`/settings/staff/${recipient.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 232
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 233
+  text: 'toEmail: recipient.email,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 246
+  text: if (!milestone?.emailSentAt || milestone?.meta?.reason) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 247
+  text: // Do not send an email when no email was set to be sent or a reason
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 257
+  text: const milestoneEmailConfig = require('./milestone-email-config')(
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 262
+  text: const emailData = milestoneEmailConfig?.[milestone.type]?.[milestone.value];
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 264
+  text: if (!emailData || Object.keys(emailData).length === 0) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 265
+  text: // Do not attempt to send an email with invalid or missing data
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 266
+  text: this.logging.warn('No Milestone email sent. Invalid or missing data.');
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 270
+  text: const emailPromises = [];
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 271
+  text: const users = await this.models.User.getEmailAlertUsers('milestone-received');
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 274
+  text: const to = user.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 279
+  text: '`/settings/staff/${user.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 286
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 287
+  text: '...emailData,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 289
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 294
+  text: const { html, text } = await this.renderEmailTemplate('new-milestone-received', templateData);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 296
+  text: emailPromises.push(
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 299
+  text: 'subject: emailData.subject,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 306
+  text: const results = await Promise.allSettled(emailPromises);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 323
+  text: const users = await this.models.User.getEmailAlertUsers('donation');
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 329
+  text: 'const subject = `💰 One-time payment received: ${formattedAmount} from ${donationPaymentEvent.name ?? donationPaymentEvent.email}`;'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 334
+  text: 'email: donationPaymentEvent.email,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 345
+  text: 'name: donationPaymentEvent.name ?? donationPaymentEvent.email,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 346
+  text: 'email: donationPaymentEvent.email,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 357
+  text: '* @param {string} eventData.email'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 369
+  text: email,
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 377
+  text: const users = await this.models.User.getEmailAlertUsers('gift-subscriptions');
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 380
+  text: const displayName = name ?? email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 386
+  text: email,
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 409
+  text: '{ memberId, memberName, memberEmail, tierName, cadence, duration, buyerEmail },'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 412
+  text: const users = await this.models.User.getEmailAlertUsers('gift-subscriptions', options);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 416
+  text: 'email: memberEmail,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 431
+  text: 'giftedByEmail: buyerEmail,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 440
+  text: const emailPromises = [];
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 443
+  text: const to = user.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 448
+  text: '`/settings/staff/${user.slug}/email-notifications`,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 456
+  text: 'fromEmail: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 457
+  text: 'toEmail: to,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 465
+  text: const { html, text } = await this.renderEmailTemplate(template, data);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 467
+  text: emailPromises.push(
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 477
+  text: const results = await Promise.allSettled(emailPromises);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 488
+  text: let name = member?.name || member?.email;
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 491
+  text: 'email: member?.email,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 492
+  text: 'showEmail: !!member?.name,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 591
+  text: get defaultEmailDomain() {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 592
+  text: return this.settingsHelpers.getDefaultEmailDomain();
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 595
+  text: get fromEmailAddress() {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 596
+  text: return emailAddressParser.stringify(this.settingsHelpers.getDefaultEmail());
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 612
+  text: 'from: this.fromEmailAddress,'
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 622
+  text: const rootDirname = './email-templates/partials/';
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 655
+  text: path.join(__dirname, './email-templates/', `${templateName}.hbs`),
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 661
+  text: if (data.recipient) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 662
+  text: sharedData = await this.getSharedData(data.recipient);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 676
+  text: const { renderText } = require(`./email-templates/${templateName}.txt`);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 679
+  text: if (data.recipient) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 680
+  text: sharedData = await this.getSharedData(data.recipient);
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 689
+  text: async renderEmailTemplate(templateName, data) {
+- file: ghost/core/core/server/services/staff/staff-service-emails.js
+  line: 697
+  text: module.exports = StaffServiceEmails;
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 31
+  text: const Emails = require('./staff-service-emails');
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 33
+  text: this.emails = new Emails({
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 75
+  text: 'email: member.email,'
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 110
+  text: await this.emails.notifyMilestoneReceived(event.data);
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 137
+  text: await this.emails.notifyFreeMemberSignup({
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 154
+  text: await this.emails.notifyPaidSubscriptionStarted({
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 162
+  text: await this.emails.notifyPaidSubscriptionCanceled({
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 172
+  text: // Trigger email for free member signup
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 181
+  text: // Trigger email on paid subscription start
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 193
+  text: // Trigger email when a member cancels their subscription
+- file: ghost/core/core/server/services/staff/staff-service.js
+  line: 205
+  text: // Trigger email when a new milestone is reached
