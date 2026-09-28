@@ -3,7 +3,37 @@ commit: 030c1676145d63154687fa394d1a4abb224b1ac2
 license: BSD-3-Clause
 scope:
   include:
-    - saleor/account/models.py
+    - saleor/account/
+    - saleor/checkout/
+    - saleor/order/
+    - saleor/giftcard/
+    - saleor/plugins/admin_email/
+    - saleor/plugins/user_email/
+    - saleor/plugins/sendgrid/
+    - saleor/core/notification/
+  exclude:
+    - path: saleor/account/migrations/
+      reason: generated migrations
+    - path: saleor/checkout/migrations/
+      reason: generated migrations
+    - path: saleor/giftcard/migrations/
+      reason: generated migrations
+    - path: saleor/order/migrations/
+      reason: generated migrations
+    - path: saleor/account/tests/
+      reason: test code
+    - path: saleor/checkout/tests/
+      reason: test code
+    - path: saleor/giftcard/tests/
+      reason: test code
+    - path: saleor/order/tests/
+      reason: test code
+    - path: saleor/plugins/admin_email/tests/
+      reason: test code
+    - path: saleor/plugins/sendgrid/tests/
+      reason: test code
+    - path: saleor/plugins/user_email/tests/
+      reason: test code
 coverage:
   layers:
     - data_items
@@ -17,5 +47,5 @@ coverage:
     - commerce
     - identity
     - address
-selection_rationale: A complete, authored Django account model with names, full postal addresses, phones, account email, profile image, authentication key, free-text notes, and realistic operational metadata in one 481-line scope.
-annotation_version: 4
+selection_rationale: A complete, authored Django account model with names, full postal addresses, phones, account email, profile image, authentication key, free-text notes, and realistic operational metadata. Widened (KDATAP-25ff9a) from saleor/account/models.py alone to the account, checkout, order, and gift card apps, the admin and customer email plugins, SendGrid, and core notifications, so email labeling covers several distinct addresses (customer account, checkout and order recipient, staff, sender configuration) and realistic non-value uses of the word.
+annotation_version: 5
