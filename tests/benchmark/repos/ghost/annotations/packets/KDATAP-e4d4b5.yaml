@@ -165,7 +165,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: recipient
   evidence:
     file_path: ghost/core/core/server/services/auth/session/session-service.js
     start_line: 434
@@ -180,8 +180,12 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/session-service.js
+      line: 434
+      kind: local
 - id: ghost-session-service-L442
   layer: mentions
   subject:
@@ -232,7 +236,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: to
+    name: recipient
   evidence:
     file_path: ghost/core/core/server/services/auth/session/session-service.js
     start_line: 456
@@ -247,11 +251,11 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/auth/session/session-service.js
-      line: 456
-      kind: field
+      line: 434
+      kind: local
     owner: ghost/core
 - id: ghost-session-service-L458
   layer: mentions
