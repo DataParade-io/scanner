@@ -1,4 +1,5 @@
 import type { PiiSignalRule } from "./pii-signal-rules";
+import type { CommentContext } from "./comment-context";
 import { loadPiiSignalRules } from "./pii-signal-rules";
 import {
   extractLineIdentifierTokens,
@@ -17,6 +18,13 @@ export interface PiiSignalHit {
   category: PiiSignalRule["category"];
   labels: string[];
   evidence: PiiSignalEvidence;
+  /**
+   * Where the match sits: in code, or only in a comment or docstring. Comment
+   * matches are kept as context; mention and data-item layers use code matches.
+   */
+  location?: "code" | "comment";
+  /** Comments immediately around a code match (KDATAP-b512a8). */
+  commentContext?: CommentContext;
 }
 
 export interface MatchPiiSignalsFileInput {

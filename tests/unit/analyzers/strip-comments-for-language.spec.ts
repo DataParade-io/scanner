@@ -3,6 +3,7 @@ import {
   stripCommentsForLanguage,
 } from "../../../src/analyzers/shared/strip-comments-for-language";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
+import { projectPersonalDataFindings } from "../../../src/eval-layers/collect-personal-data-findings";
 import type { FileInfo } from "../../../src/core/types/file";
 
 function file(path: string, language: FileInfo["language"], content: string): FileInfo {
@@ -59,11 +60,71 @@ describe("stripCommentsForLanguage", () => {
   });
 });
 
-describe("personal-data inventory ignores comments", () => {
-  it("drops email hits on comment lines and keeps code hits on the same line numbers", () => {
+describe("personal-data inventory tags comment matches", () => {
+  function emailHits(path: string, language: FileInfo["language"], lines: string[]) {
+    const { hits } = buildPersonalDataInventoryFromIngest([file(path, language, lines.join("\n"))], []);
+    return hits.filter((hit) => hit.id === "email");
+  }
+
+  it("keeps comment matches tagged as comment and code matches tagged as code", () => {
+    const hits = emailHits("src/a.js", "javascript", ["// email the member", "const email = member.get('email');"]);
+    expect(hits.map((hit) => [hit.evidence.startLine, hit.location])).toEqual([
+      [1, "comment"],
+      [2, "code"],
+    ]);
+  });
+
+  it("mention and data-item projections use code matches only", () => {
     const content = ["// email the member", "const email = member.get('email');"].join("\n");
-    const { hits } = buildPersonalDataInventoryFromIngest([file("src/a.js", "javascript", content)], []);
-    const emailLines = hits.filter((hit) => hit.id === "email").map((hit) => hit.evidence.startLine);
-    expect(emailLines).toEqual([2]);
+    const inventory = buildPersonalDataInventoryFromIngest([file("src/a.js", "javascript", content)], []);
+    const mentions = projectPersonalDataFindings(inventory, "mentions").filter((f) => f.subjectKey.startsWith("mention:email"));
+    expect(mentions.map((f) => f.evidenceLocations[0]?.startLine)).toEqual([2]);
+    const raw = projectPersonalDataFindings(inventory, "raw-hits").filter((f) => f.subjectKey.includes("email"));
+    expect(raw).toHaveLength(2);
+  });
+
+  it("attaches a multi-line comment block above the match", () => {
+    const [hit] = emailHits("src/a.ts", "typescript", [
+      "const x = 1;",
+      "// The member's login address.",
+      "// Verified on signup.",
+      "const email = member.email;",
+    ]);
+    expect(hit.commentContext?.above).toEqual(["// The member's login address.", "// Verified on signup."]);
+  });
+
+  it("reaches over a decorator to a JSDoc block", () => {
+    const [hit] = emailHits("src/a.ts", "typescript", [
+      "/**",
+      " * Where receipts are sent.",
+      " */",
+      "@Column()",
+      "email: string;",
+    ]);
+    expect(hit.location).toBe("code");
+    expect(hit.commentContext?.above).toEqual(["/**", "* Where receipts are sent.", "*/"]);
+  });
+
+  it("collects the same-line comment and comment lines below", () => {
+    const [hit] = emailHits("src/a.js", "javascript", [
+      "const email = req.body.email; // customer supplied",
+      "// never logged",
+      "",
+      "// unrelated",
+    ]);
+    expect(hit.commentContext?.sameLine).toBe("// customer supplied");
+    expect(hit.commentContext?.below).toEqual(["// never logged"]);
+  });
+
+  it("stops at a blank line and handles Python hash comments", () => {
+    const hits = emailHits("app/models.py", "python", [
+      "# unrelated note",
+      "",
+      "# Staff contact address",
+      "email = models.EmailField()",
+    ]);
+    const code = hits.filter((hit) => hit.location === "code");
+    expect(code).toHaveLength(1);
+    expect(code[0].commentContext?.above).toEqual(["# Staff contact address"]);
   });
 });

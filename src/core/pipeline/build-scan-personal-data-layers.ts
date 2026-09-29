@@ -34,6 +34,8 @@ export function buildScanPersonalDataLayers(
       endLine: hit.evidence.endLine,
       labels: [...hit.labels],
       ...(code !== undefined ? { code } : {}),
+      ...(hit.location ? { location: hit.location } : {}),
+      ...(hit.commentContext ? { commentContext: hit.commentContext } : {}),
     };
   });
 
@@ -42,7 +44,8 @@ export function buildScanPersonalDataLayers(
     { labels: Set<string>; mentionIds: string[] }
   >();
 
-  for (const hit of inventory.hits) {
+  // Data items roll up code matches; comment matches stay on the mention list as context.
+  for (const hit of inventory.hits.filter((candidate) => candidate.location !== "comment")) {
     const id = dataItemIdentity(hit.id);
     const mentionId = mentionIdentity(
       hit.id,
