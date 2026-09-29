@@ -107,7 +107,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     fixture: "dotnet-manifests-basic",
     layer: "data-actions",
     subject: { key: "third_party:stripe", name: "Stripe" },
-    evidence: { file_path: "src/Api/Api.csproj", start_line: 1, end_line: 1 },
+    evidence: { file_path: "src/Api/Api.csproj", start_line: 9, end_line: 9 },
     expected: { status: "positive", labels: ["disclose"] },
     rationale: "Stripe.net package indicates outbound payment disclosure sink.",
   },
@@ -116,7 +116,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     fixture: "ruby-basic",
     layer: "data-actions",
     subject: { key: "third_party:stripe", name: "Stripe" },
-    evidence: { file_path: "Gemfile", start_line: 1, end_line: 1 },
+    evidence: { file_path: "Gemfile", start_line: 7, end_line: 7 },
     expected: { status: "positive", labels: ["disclose"] },
     rationale:
       "The runtime Stripe integration is an outbound disclosure target.",
@@ -457,7 +457,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     fixture: "dotnet-manifests-basic",
     layer: "data-actions",
     subject: { key: "asset:npgsql", name: "Npgsql" },
-    evidence: { file_path: "src/Api/Api.csproj", start_line: 1, end_line: 1 },
+    evidence: { file_path: "src/Api/Api.csproj", start_line: 12, end_line: 12 },
     expected: { status: "positive", labels: ["store"] },
     rationale: "Npgsql package is a PostgreSQL persistence client (store).",
   },
@@ -585,8 +585,8 @@ const dataActionEvalCaseList: EvalCase[] = [
     subject: { key: "asset:spring data jpa", name: "Spring data jpa" },
     evidence: {
       file_path: "src/main/java/com/acme/billing/data/CustomerRepository.java",
-      start_line: 1,
-      end_line: 1,
+      start_line: 8,
+      end_line: 8,
     },
     expected: { status: "positive", labels: ["store"] },
     rationale:
