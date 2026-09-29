@@ -55,4 +55,15 @@ describe("pii-signal-aliases", () => {
       isPlainPasswordFieldDeclaration("Plain     string", "core/field_password.go"),
     ).toBe(true);
   });
+
+  it.each([
+    ["recipient_email", ["email"]],
+    ["customerEmail", ["email"]],
+    ["to_emails", ["email"]],
+    ["billing_email_address", ["email"]],
+    ["email_count", []],
+    ["emailType", []],
+  ])("matches names ending in the email concept: %s", (token, expected) => {
+    expect(resolveAliasRuleIdsForToken(token, token, 0, "a.py")).toEqual(expected);
+  });
 });

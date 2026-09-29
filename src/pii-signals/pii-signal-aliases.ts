@@ -184,6 +184,21 @@ function suffixAliasRuleId(normalizedToken: string): string | undefined {
   return undefined;
 }
 
+/**
+ * Compound names that end in the email concept hold an address: `recipient_email`,
+ * `customerEmail`, `to_emails`, `billing_email_address`. The line regex misses them
+ * because `_` is a word character (KDATAP-c8a46a).
+ */
+function emailSuffixRuleId(token: string): string | undefined {
+  const parts = splitCamelCaseParts(token);
+  if (parts.length < 2) return undefined;
+  const last = parts[parts.length - 1];
+  const lastTwo = parts.slice(-2).join("_");
+  return last === "email" || last === "emails" || lastTwo === "email_address" || lastTwo === "email_addresses"
+    ? "email"
+    : undefined;
+}
+
 export function resolveAliasRuleIdsForToken(
   token: string,
   line: string,
@@ -191,6 +206,8 @@ export function resolveAliasRuleIdsForToken(
   filePath: string,
 ): string[] {
   const ruleIds = new Set<string>();
+  const suffixRule = emailSuffixRuleId(token);
+  if (suffixRule) ruleIds.add(suffixRule);
   for (const key of identifierLookupKeys(token)) {
     const ruleId = lookupAliasRuleId(key) ?? suffixAliasRuleId(key);
     if (!ruleId) {
