@@ -12,9 +12,17 @@
     "model:small"
   ],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "babb9d73-2474-4804-ba18-78262d75f314",
+      "author": "home",
+      "text": "Implemented by a Haiku agent on branch kdatap-1d6b44-candidate-inventory (e0a591e, 0cd82db, cac7c7e, d8b7a6a; based on origin/develop, not pushed). Module tests/benchmark/candidate-inventory.ts with subword matching (split on punctuation and camelCase/acronym boundaries; token parts as consecutive subwords, plural s/es, glued multi-part forms). CLI: pnpm run benchmark:candidates <repo> <concept>. Tokens in tests/benchmark/scripts/candidate-tokens.yaml. Review: two earlier rounds had copied-logic tests and a snake_case regression, both fixed. Independent check: saleor 16/16 grep lines; 25 sampled ghost production files 0 missed, 1 extra (a comment containing 'from address'); no whole files skipped. Ghost whole-scope: 18,605 lines in 901 files (12,948 test/snapshot, 5,657 non-test). Saleor manifest scope is one file (saleor/account/models.py, 16 lines), too narrow for KDATAP-25ff9a. Candidate files are not committed; scoped files get committed with accepted scopes.",
+      "created_at": "2026-09-28T23:16:16.537615Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:18.879663Z",
-  "updated_at": "2026-09-28T22:34:18.879692Z",
+  "updated_at": "2026-09-28T23:16:16.537637Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,

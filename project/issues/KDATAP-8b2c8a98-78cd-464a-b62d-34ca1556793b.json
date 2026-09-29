@@ -3,18 +3,26 @@
   "title": "Extend ground-truth schema and packet validator for mention attributes",
   "description": "Extend the ground-truth schema and its validator so mention gold can assert the new attributes, and so a labeling agent can check its own output with one command.\n\n## Fields on mention gold\n\n- `status`: `positive` when the line handles a value of the concept; `negative` when the match is only the word (import specifier, connection or template name, prose, config key); `ambiguous` otherwise. Existing semantics.\n- `syntax_kind`: identifier, property_key, string_literal, import_specifier, comment, type_name.\n- `declaration`: file path and line of the declaration the usage resolves to, its kind (local, parameter, field, function, export), or `unresolved`.\n- `type_annotation`: the written type name on that declaration, if any.\n- `owner`: the owning code unit, as a stable repo-local name.\n- `touches`: zero or more component identity keys.\n- `group`: a repo-local declaration-group id (grouping layer).\n\nAll new fields are optional; a record asserts only what it labels.\n\n## Also\n\n- Packet files at `tests/benchmark/repos/<repo>/annotations/packets/<issue-id>.yaml`, merged into `annotations/mentions.yaml` only after acceptance.\n- A validator command (for example `pnpm run eval:validate-packet <path>`) that checks shape, that every evidence line exists at the pinned commit, and that every candidate line in the packet's file list has exactly one record.\n- Bump `ground-truth/1` and update `tests/eval/ground-truth-schema.md` and the skill's copy of it.\n\n## Done when\n\nThe validator accepts a hand-written example packet and rejects one with a missing candidate line, a wrong line number, and an unknown field.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "home",
   "creator": null,
   "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
   "labels": [
     "model:strong"
   ],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "831dc5de-09d5-4eae-9e50-448dbf3c4259",
+      "author": "home",
+      "text": "Implemented on branch kdatap-8b2c8a-mention-attribute-schema (05835ac, based on origin/develop, not pushed). mention_attributes block (syntax_kind, declaration, type_annotation, owner, touches, group) validated on mentions only; packet validator at tests/benchmark/packet-validation.ts with CLI pnpm run benchmark:validate-packet <packet.yaml>. Strict unknown-field rejection, proposed+mentions only, evidence/declaration lines checked against the materialized pinned commit, exactly one record per candidate line (extra non-candidate lines kept with a warning). Schema bumped to ground-truth/2; docs in tests/eval/ground-truth-schema.md and the skill reference. Full jest suite passes (1128). Candidate file reader accepts a top-level list or a candidates: list with file|file_path and line, to match the KDATAP-1d6b44 inventory output.",
+      "created_at": "2026-09-28T22:55:22.152206Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:18.629246Z",
-  "updated_at": "2026-09-28T22:34:18.629283Z",
+  "updated_at": "2026-09-28T22:55:22.152225Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,

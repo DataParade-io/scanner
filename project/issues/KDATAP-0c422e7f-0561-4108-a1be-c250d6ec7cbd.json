@@ -1,0 +1,25 @@
+{
+  "id": "KDATAP-0c422e7f-0561-4108-a1be-c250d6ec7cbd",
+  "title": "Label email mentions: saleor batch 10",
+  "description": "Label every email candidate line in these files of `saleor` (pinned commit `030c1676145d63154687fa394d1a4abb224b1ac2`). 56 candidate lines.\n\nFiles:\n- `saleor/account/throttling.py`\n- `saleor/account/error_codes.py`\n- `saleor/order/events.py`\n- `saleor/order/notifications.py`\n- `saleor/order/models.py`\n\n## Setup\n\n```\ngit fetch origin\ngit checkout -b label/KDATAP-0c422e origin/kdatap-46d893-labeling-base\npnpm install\npnpm run benchmark:materialize saleor\n```\n\n## Read first, in full\n\n1. `.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`\n2. The worked example it points to: `tests/benchmark/repos/ghost/annotations/packets/example-ghost-batch-3.yaml`\n\n## Do\n\n- Input: the entries for the files above in `tests/benchmark/repos/saleor/annotations/packets/email-candidates.yaml`.\n- Read each file from `tests/benchmark/.cache/repos/saleor@030c1676145d63154687fa394d1a4abb224b1ac2/`, with the surrounding code for every candidate line.\n- Write exactly one record per candidate line to `tests/benchmark/repos/saleor/annotations/packets/KDATAP-0c422e.yaml`, with `packet.kanbus_issue: KDATAP-0c422e`, `packet.files` equal to the files above, and `review_state: proposed`.\n\n## Rules\n\n- Do not run the scanner or read scanner output, `annotations/mentions.yaml`, or other packets.\n- Uncertain: `status: ambiguous` with a one-sentence rationale. Do not guess.\n- Do not edit any file except your packet and `annotations/KDATAP-0c422e/pass.md`.\n- Do not assert `touches` or `group`.\n\n## Finish\n\n1. `pnpm run benchmark:validate-packet tests/benchmark/repos/saleor/annotations/packets/KDATAP-0c422e.yaml` prints `OK`.\n2. Record the pass in `annotations/KDATAP-0c422e/pass.md`: files, record count, positive / negative / ambiguous counts, and anything you were unsure about.\n3. Commit both files on `label/KDATAP-0c422e`. The coordinator reviews, then moves this issue to awaiting-review.",
+  "type": "annotation",
+  "status": "labeling",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:small"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-29T00:17:35.731659Z",
+  "updated_at": "2026-09-29T00:17:35.872923Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

@@ -3,9 +3,9 @@
   "title": "Choose exhaustive email scopes and batches in ghost and saleor",
   "description": "Choose the exhaustive files for the email labeling in `ghost` (JavaScript) and `saleor` (Python), and split them into batches.\n\n## Steps\n\n1. Materialize both repos at their pinned commits (`pnpm run benchmark:materialize ghost`, `... saleor`).\n2. Pick complete files, not handpicked lines, that together cover: several distinct emails (member or customer account, staff user, newsletter or sender address, order or notification recipient), mailer SDK use, and realistic non-value uses of the word. Aim for 20–40 files per repo.\n3. Propose the files as `mentions` exhaustive scope in each repo's `layer-scopes.yaml` with `review_state: proposed`.\n4. Split each repo's files into batches of about 50 candidate lines (5–15 files), using the inventory script's counts. Record the batch list in this issue's comments.\n\n## Done when\n\nA person has accepted both scopes and the batch lists.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "home",
   "creator": null,
   "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
   "labels": [
@@ -17,9 +17,31 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "e9e3b69a-22ec-4066-9bea-91c93a8c6042",
+      "author": "home",
+      "text": "Step 1 (corpus): widened saleor manifest scope from saleor/account/models.py to account, checkout, order, giftcard, plugins/admin_email, plugins/user_email, plugins/sendgrid, core/notification (migrations and tests excluded), same pinned commit. 66 non-test files, ~878 email-related lines. annotation_version 5, corpus digest pin updated. Branch kdatap-25ff9a-email-scopes, draft PR https://github.com/DataParade-io/scanner/pull/89. Remaining: choose exhaustive mentions scopes and batch lists for ghost and saleor.",
+      "created_at": "2026-09-28T23:28:48.982793Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "9d282c1f-1afc-45c0-9443-8a1eae35ae84",
+      "author": "home",
+      "text": "Proposed scopes and batches on branch kdatap-25ff9a-email-scopes (50bc17d), draft PR https://github.com/DataParade-io/scanner/pull/89. Awaiting human acceptance.\n\nDeviation from this task's step 3: the proposed scope is in annotations/packets/email-scope.yaml, not layer-scopes.yaml. layer-scopes.yaml has one provenance per layer, so adding proposed files there would either pull unlabeled files into precision (if accepted) or drop the existing accepted mentions scope (if proposed). The files move into layer-scopes.yaml when the batch labels are accepted.\n\nghost: 26 files, 911 candidate lines, 16 batches.\n  ghost batch 1 (76 lines): ghost/core/core/server/services/members/members-api/repositories/member-repository.js\n  ghost batch 2 (58 lines): ghost/core/core/server/services/members/api.js; ghost/core/core/server/services/members/import-export/import/completion-email.ts\n  ghost batch 3 (44 lines): ghost/core/core/server/models/member.js; ghost/core/core/server/api/endpoints/members.js\n  ghost batch 4 (86 lines): ghost/core/core/server/services/staff/staff-service-emails.js\n  ghost batch 5 (54 lines): ghost/core/core/server/services/staff/staff-service.js; ghost/core/core/server/models/user.js; ghost/core/core/server/services/auth/setup.js; ghost/core/core/server/services/auth/passwordreset.js\n  ghost batch 6 (14 lines): ghost/core/core/server/services/auth/session/session-service.js; ghost/core/core/server/services/auth/session/emails/signin.js\n  ghost batch 7 (86 lines): ghost/core/core/server/services/email-address/email-address-service.ts\n  ghost batch 8 (18 lines): ghost/core/core/server/services/email-address/email-address-parser.ts\n  ghost batch 9 (70 lines): ghost/core/core/server/services/newsletters/newsletters-service.js\n  ghost batch 10 (43 lines): ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts; ghost/core/core/server/services/mail/ghost-mailer.js\n  ghost batch 11 (64 lines): ghost/core/core/server/services/email-service/sending-service.js\n  ghost batch 12 (52 lines): ghost/core/core/server/services/email-service/mailgun-email-provider.js; ghost/core/core/server/models/email-recipient.js\n  ghost batch 13 (54 lines): ghost/core/core/server/services/email-suppression-list/email-suppression-list.js; ghost/core/core/server/models/email.js\n  ghost batch 14 (45 lines): ghost/core/core/server/services/posts/post-email-handler.js\n  ghost batch 15 (49 lines): ghost/core/core/server/api/endpoints/emails.js; ghost/core/core/server/services/comments/comments-service-emails.js\n  ghost batch 16 (98 lines): ghost/core/core/server/data/schema/schema.js\nsaleor: 28 files, 655 candidate lines, 12 batches.\n  saleor batch 1 (72 lines): saleor/plugins/user_email/plugin.py\n  saleor batch 2 (105 lines): saleor/plugins/user_email/tasks.py\n  saleor batch 3 (18 lines): saleor/plugins/user_email/constants.py; saleor/plugins/user_email/default_email_templates/request_email_change.html\n  saleor batch 4 (62 lines): saleor/plugins/admin_email/plugin.py\n  saleor batch 5 (46 lines): saleor/plugins/admin_email/notify_events.py\n  saleor batch 6 (31 lines): saleor/plugins/admin_email/tasks.py\n  saleor batch 7 (66 lines): saleor/plugins/sendgrid/plugin.py\n  saleor batch 8 (57 lines): saleor/plugins/sendgrid/tasks.py\n  saleor batch 9 (60 lines): saleor/account/models.py; saleor/account/notifications.py; saleor/account/events.py; saleor/account/search.py; saleor/account/utils.py\n  saleor batch 10 (56 lines): saleor/account/throttling.py; saleor/account/error_codes.py; saleor/order/events.py; saleor/order/notifications.py; saleor/order/models.py\n  saleor batch 11 (52 lines): saleor/order/actions.py; saleor/order/utils.py; saleor/checkout/complete_checkout.py; saleor/checkout/models.py; saleor/checkout/checkout_cleaner.py; saleor/checkout/error_codes.py\n  saleor batch 12 (30 lines): saleor/giftcard/utils.py; saleor/giftcard/events.py; saleor/giftcard/models.py",
+      "created_at": "2026-09-28T23:41:15.506401Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "2c692107-9f78-4ef0-be3f-5e5d7c7e8a0e",
+      "author": "home",
+      "text": "Scopes and batch lists accepted by agent@example.com on 2026-09-28 (commit on kdatap-25ff9a-email-scopes).",
+      "created_at": "2026-09-28T23:52:18.863927Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:18.804412Z",
-  "updated_at": "2026-09-28T22:34:29.791667Z",
+  "updated_at": "2026-09-28T23:52:18.863959Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,

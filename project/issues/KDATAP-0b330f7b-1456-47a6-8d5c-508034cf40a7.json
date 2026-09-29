@@ -3,7 +3,7 @@
   "title": "File per-batch email labeling annotations for ghost and saleor",
   "description": "After the scopes and batches are accepted, file one `annotation` issue per batch under this epic, using the template below. These are the issues small-model agents work.\n\n## Template\n\nTitle: `Label email mentions: <repo> batch <n>`\nType: `annotation`. Label: `model:small`.\nDescription:\n\n```\nLabel every email candidate line in these files of <repo> at its pinned commit.\n\nFiles:\n- <path>\n- ...\n\nRead first, in full:\n.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md\nand its worked example packet.\n\nInput: the entries for these files in\ntests/benchmark/repos/<repo>/annotations/packets/email-candidates.yaml\n\nWrite exactly one record per candidate line to\ntests/benchmark/repos/<repo>/annotations/packets/<this-issue-id>.yaml\nwith review_state: proposed.\n\nRules:\n- Do not run the scanner or read scanner output.\n- Uncertain: status ambiguous with a one-sentence rationale. Do not guess.\n- Do not edit any other file.\n\nFinish: run the packet validator on your file. When it passes, record the pass in\nannotations/<this-issue-id>/pass.md and move this issue to awaiting-review.\n```\n\n## Done when\n\nEvery accepted batch has an `annotation` issue.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -21,10 +21,18 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "59fffb07-9138-4051-9d39-0ce61db2d651",
+      "author": "home",
+      "text": "Filed 27 batch annotation issues under KDATAP-46d893 (ghost batches 1-2, 4-16; saleor batches 1-12). Ghost batch 3 is the accepted worked example from KDATAP-3ccc00. Agents start from origin/kdatap-46d893-labeling-base (scopes, candidates, reference, validator).",
+      "created_at": "2026-09-29T00:17:45.359717Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:18.957682Z",
-  "updated_at": "2026-09-28T22:34:29.851373Z",
-  "closed_at": null,
+  "updated_at": "2026-09-29T00:17:45.384564Z",
+  "closed_at": "2026-09-29T00:17:45.384519Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {}
