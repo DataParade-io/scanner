@@ -1,15 +1,38 @@
-# Annotation pass
+# Annotation Pass: KDATAP-654231
 
-## Repository / fixture
+## Files
+- `ghost/core/core/server/services/email-service/mailgun-email-provider.js`
+- `ghost/core/core/server/models/email-recipient.js`
 
-## Scope
+## Record Count
+Total: 52
 
-Which files were reviewed?
+## Status Breakdown
+- Positive: 1
+- Negative: 51
+- Ambiguous: 0
 
-## Findings in this pass
+## Positive Lines
+1. `ghost/core/core/server/services/email-service/mailgun-email-provider.js:129` - Reads the recipient's email address to use as a key.
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
+## Notes
+All candidates labeled according to the email address mention attribute labeling rules. The vast majority are negative because they refer to:
+- Model/table names (Email, EmailRecipient, email_recipients, emails)
+- Method and function names (email(), emailBatch(), createRecipientData(), etc.)
+- Type names and JSDoc comments
+- Property keys in relation definitions
+- String literals for table/column names and identifiers
+- Log/debug messages
+- Foreign keys and IDs (not addresses)
 
-## Human review
+The single positive line (L129) reads the `recipient.email` property where `recipient` is a parameter of the reduce callback function.
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+Validator output: OK
+
+## Branch
+
+`label/KDATAP-654231` (bd58cd2).
+
+## Coordinator review
+
+52 records: 1 positive (recipient.email key in the Mailgun provider), 51 negative (recipient model, relations, recipient objects, comments). Accepted as labeled. Validator OK.

@@ -1,15 +1,44 @@
-# Annotation pass
+# Pass: KDATAP-f3c903
 
-## Repository / fixture
+## Files
 
-## Scope
+- `ghost/core/core/server/services/posts/post-email-handler.js`
 
-Which files were reviewed?
+## Record count
 
-## Findings in this pass
+Total: 45 records
+- Positive: 0
+- Negative: 45
+- Ambiguous: 0
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
+## Positive lines
 
-## Human review
+None. All candidate lines in this file refer to email objects/records or email-related concepts (statuses, filters, flags, functions) rather than email address values.
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+## Ambiguous lines
+
+None.
+
+## Notes
+
+All 45 candidate lines were labeled as negative. This file handles email objects and email-related operations (sending statuses, recipient filtering, email record management) but does not directly read, write, or pass email address values. The concepts labeled include:
+
+- Email service objects and functions
+- Email recipient filters and segmentation
+- Email sending status flags and constants
+- Email record relationships and objects
+- JSDoc comments and function names related to email operations
+
+None of these represent email address mentions per the labeling rules.
+
+## Validator output
+
+OK
+
+## Branch
+
+`label/KDATAP-f3c903` (a4a3095).
+
+## Coordinator review
+
+45 records, all negative: the post email handler works with newsletter Email records, recipient filters, and counts, never addresses. Coordinator corrected one subject name (113). Validator OK.

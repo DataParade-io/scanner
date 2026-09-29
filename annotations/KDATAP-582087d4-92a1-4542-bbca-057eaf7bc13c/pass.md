@@ -1,15 +1,52 @@
-# Annotation pass
+# Packet KDATAP-582087 Pass Report
 
-## Repository / fixture
+## Files Labeled
 
-## Scope
+- `ghost/core/core/server/services/email-suppression-list/email-suppression-list.js`
+- `ghost/core/core/server/models/email.js`
 
-Which files were reviewed?
+## Record Count
 
-## Findings in this pass
+Total records: 54
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
+## Status Breakdown
 
-## Human review
+- Positive: 6 records
+- Negative: 48 records
+- Ambiguous: 0 records
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+## Positive Lines
+
+1. `email-suppression-list.js:67` - `removeEmail(email)` - Parameter holds email address
+2. `email-suppression-list.js:76` - `getSuppressionData(email)` - Parameter holds email address
+3. `email-suppression-list.js:84` - `getBulkSuppressionData(emails)` - Parameter holds array of addresses
+4. `email-suppression-list.js:85` - `email` in arrow function - Parameter receives each address from array
+5. `email-suppression-list.js:105` - `emailAddress` parameter - Constructor parameter holds email address
+6. `email-suppression-list.js:107` - `emailAddress` property key - Object key writing address value
+
+## Notes
+
+All email.js candidates were labeled negative because they relate to:
+- Model/class/collection names (Email, Emails, EmailBatch, EmailRecipient)
+- Filter properties and logic (recipient_filter)
+- Foreign key IDs (email_id)
+- Event naming (email + '.' + event)
+- Table and relationship names
+
+All email-suppression-list.js negative candidates were:
+- JSDoc comments and type annotations
+- Class and interface names
+- Method/function names that don't hold addresses
+- Type references
+
+The six positive cases are all where parameters or properties directly hold email address values that are being processed or stored.
+
+Validator output: OK
+
+## Branch
+
+`label/KDATAP-582087` (64dd18f).
+
+## Coordinator review
+
+54 records: 6 positive, 48 negative. Accepted as labeled. Validator OK.
