@@ -42,3 +42,16 @@ One was an error in the final labels and is fixed: `user.js:1280` now resolves `
 ## Recommendation
 
 Settle the open rules in the labeling reference, then apply them mechanically to all packets (a normalization pass) instead of relabeling. Status labels are reliable enough for headline mention precision and recall now; attribute metrics should wait for the normalization pass.
+
+## After settling the rules and normalizing (2026-09-28)
+
+The open rules were settled in the labeling reference: container openers and index names are negative; keyword-or-address settings are addresses; a key without the concept chooses the value; `validations: { isEmail: true }` and shorthand keys are `property_key` declared on their own line; getters declare kind `function`. The rules were applied to all 27 batch packets (25 mechanical changes plus 12 value relabels on concept-less keys, 9 batch branches updated) and, for measurement only, to a copy of the second-pass packets. The original second-pass packets are unchanged. Full output: `comparison-normalized.txt`.
+
+| Field | Before | After |
+| --- | --- | --- |
+| Status | 97.4% (kappa 0.941) | 98.0% (kappa 0.956) |
+| syntax_kind | 86.3% | 95.8% |
+| declaration | 76.8% | 90.6% |
+| type_annotation | 94.7% | 94.8% |
+
+The 6 remaining status differences are lines the second pass marked ambiguous; the settled rules resolve all 6 the way the final labels do. The 9 remaining declaration differences are per-line choices (which of two occurrences, a model `this.get('email')`, parameter vs local), not a pattern. Attribute labels are now ready for scoring.
