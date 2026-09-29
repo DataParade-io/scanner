@@ -39,8 +39,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Error message prose with email placeholder {email}; prose text template,
-    not address value.
+  rationale: Error message prose with email placeholder {email}; prose text template, not address value.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -61,8 +60,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Error message prose with email placeholder {email}; prose text template,
-    not address value.
+  rationale: Error message prose with email placeholder {email}; prose text template, not address value.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -104,8 +102,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Constructor parameter receiving the email address service object, not
-    an address value.
+  rationale: Constructor parameter receiving the email address service object, not an address value.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -126,8 +123,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Assigns the email address service to a field; the service itself, not
-    an address.
+  rationale: Assigns the email address service to a field; the service itself, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -475,8 +471,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Passes email records collection to respondWithEmailVerification; not
-    addresses.
+  rationale: Passes email records collection to respondWithEmailVerification; not addresses.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -518,8 +513,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Variable destructured from prepAttrsForEmailVerification result; email
-    records collection.
+  rationale: Variable destructured from prepAttrsForEmailVerification result; email records collection.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -821,8 +815,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Local variable assigned from cleanedAttrs[property] containing email
-    address value.
+  rationale: Local variable assigned from cleanedAttrs[property] containing email address value.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1210,16 +1203,16 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailAddressService
   evidence:
     file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
     start_line: 351
     end_line: 351
   expected:
-    status: ambiguous
+    status: negative
     labels:
     - email_address
-  rationale: Multi-line call to validate; email address argument is on line 352.
+  rationale: Opens a validate call on the email address service; the address argument is on the next line.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
