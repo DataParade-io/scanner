@@ -7,7 +7,7 @@ import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../ana
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { mentionGroup } from "../pii-signals/mention-group";
+import { assignDeclarationGroups, mentionGroup } from "../pii-signals/mention-group";
 import {
   matchPiiSignalsInFile,
   type PiiSignalHit,
@@ -102,7 +102,7 @@ export function buildPersonalDataInventoryFromIngest(
   files: FileInfo[],
   ingestOutcomes: PathEligibilityOutcome[],
 ): PersonalDataInventory {
-  const hits = files.flatMap((file) => annotatedHitsForFile(file));
+  const hits = assignDeclarationGroups(files.flatMap((file) => annotatedHitsForFile(file)));
 
   return {
     hits,
