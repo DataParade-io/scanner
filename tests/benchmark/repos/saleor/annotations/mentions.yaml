@@ -187,26 +187,6 @@ annotations:
       review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-  - id: saleor-user-email-pii-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
-      file_path: saleor/account/models.py
-      start_line: 172
-      end_line: 172
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Unique user email field
-    provenance:
-      proposed_by: pii-signal-backport
-      proposed_at: 2026-08-30
-      review_state: accepted
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
   - id: saleor-user-first-name-pii-signal
     layer: mentions
     subject:
@@ -268,25 +248,5 @@ annotations:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
       review_state: needs_adjudication
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
-  - id: saleor-staff-email-pii-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: staff_email
-    evidence:
-      file_path: saleor/account/models.py
-      start_line: 424
-      end_line: 424
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Explicit staff email address
-    provenance:
-      proposed_by: pii-signal-backport
-      proposed_at: 2026-08-30
-      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
