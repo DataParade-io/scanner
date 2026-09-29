@@ -126,7 +126,7 @@ declaration:
 
 ## Field 4: `mention_attributes.type_annotation`
 
-Whenever the declaration line has a written type for that name, write it as written: TypeScript `payload: SignupDto` → `SignupDto`, `validate(email: string, ...)` → `string`, `#getFallbackEmail: () => EmailAddress | null` → `() => EmailAddress | null`; Python `email: str` → `str`. Record it on every positive line that points to that declaration. Never infer a type. JavaScript usually has none; JSDoc `@param {string}` does not count.
+Whenever the declaration line has a written type for that name, write it as written: TypeScript `payload: SignupDto` → `SignupDto`, `validate(email: string, ...)` → `string`, `#getFallbackEmail: () => EmailAddress | null` → `() => EmailAddress | null`; Python `email: str` → `str`. Record it on every positive line that points to that declaration. Never infer a type: `const fallbackEmail = this.fallbackEmail;` and `const transformed = this.parse(x);` have no written type, so their uses get no type_annotation, even if you can tell what the type is. JavaScript usually has none; JSDoc `@param {string}` does not count.
 
 ## Field 5: `mention_attributes.owner`
 
