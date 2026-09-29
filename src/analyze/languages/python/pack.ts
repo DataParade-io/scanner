@@ -16,5 +16,6 @@ export const pythonPack: LanguagePack = {
       keyword_argument: ["value"],
     },
     hoistedDeclarationParents: [],
+    implicitFirstParameters: ["self", "cls"],
   },
 };

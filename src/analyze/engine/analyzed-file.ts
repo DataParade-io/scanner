@@ -1,7 +1,9 @@
 import type { Node, Query, Tree } from "web-tree-sitter";
 import type {
   DeclarationKind,
+  CallSite,
   EnclosingRange,
+  FunctionDefinition,
   LanguagePack,
   PackConfig,
   SameFileDeclaration,
@@ -93,6 +95,7 @@ export class AnalyzedFile {
   private readonly sitesByLine = new Map<number, Site[]>();
   private readonly memberByNode = new Map<number, { object: Node; property: Node }>();
   private readonly callByNode = new Map<number, Node>();
+  private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
 
   constructor(
@@ -187,6 +190,62 @@ export class AnalyzedFile {
     return this.sitesByLine.get(line - 1) ?? [];
   }
 
+  /**
+   * Arguments of calls that start on a 1-based line, with the callee's final name,
+   * the argument's position, and its keyword (KDATAP-c8a46a). `argument` is the node.
+   */
+  callSitesOnLine(line: number): ReadonlyArray<CallSite & { argument: Node }> {
+    return this.callSitesByRow.get(line - 1) ?? [];
+  }
+
+  /**
+   * Whether `node` is (part of) the value an argument passes: it may sit in member
+   * chains, subscripts, and the callee of a call (`order.get_email()`), but not in the
+   * arguments of a nested call, whose result is a different value.
+   */
+  isPassedBy(node: Node, argument: Node): boolean {
+    if (node.startIndex < argument.startIndex || node.endIndex > argument.endIndex) return false;
+    let current: Node = node;
+    while (current.id !== argument.id) {
+      const parent = current.parent;
+      if (!parent) return false;
+      const callee = this.callByNode.get(parent.id);
+      if (callee && callee.id !== current.id) return false;
+      current = parent;
+    }
+    return true;
+  }
+
+  /**
+   * Named functions and methods defined in the file, with their parameters. A
+   * parameter that destructures a pattern is left out, since it has no single name.
+   */
+  functionDefinitions(): FunctionDefinition[] {
+    const out: FunctionDefinition[] = [];
+    for (const scope of this.scopes.values()) {
+      if (scope.kind !== "function") continue;
+      const nameNode = scope.node.childForFieldName("name");
+      const parent = scope.node.parent;
+      const name = scope.name ?? (nameNode ? nameNode.text : parent?.childForFieldName("name")?.text);
+      const list = scope.node.childForFieldName("parameters") ?? scope.node.childForFieldName("parameter");
+      if (!name || !list) continue;
+      const params = list.type === "identifier" ? [list] : list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment");
+      const skipFirst = scope.parent?.kind === "class" ? this.config.implicitFirstParameters ?? [] : [];
+      const parameters: FunctionDefinition["parameters"] = [];
+      let position = 0;
+      params.forEach((param, index) => {
+        const names = this.bindings(param);
+        if (index === 0 && names.length === 1 && skipFirst.includes(names[0].text)) return;
+        if (names.length === 1) {
+          parameters.push({ name: names[0].text, position, line: names[0].startPosition.row + 1 });
+        }
+        position += 1;
+      });
+      out.push({ name, line: (nameNode ?? scope.node).startPosition.row + 1, parameters });
+    }
+    return out.sort((a, b) => a.line - b.line);
+  }
+
   // ---- indexing ------------------------------------------------------------------
 
   private newScope(node: Node, kind: ScopeKind): Scope {
@@ -261,7 +320,9 @@ export class AnalyzedFile {
       if (call && callee) {
         this.callByNode.set(call.id, callee);
         const argument = byName.get("call.argument")?.[0];
-        if (argument) callArguments.push({ callee, argument });
+        if (argument) {
+          callArguments.push({ callee, argument });
+        }
       }
     }
 
@@ -283,6 +344,7 @@ export class AnalyzedFile {
       this.memberByNode.set(m.node.id, { object: m.object, property: m.property });
     }
     for (const m of members) this.addMemberSite(m.property, m.object, m.property.text);
+    for (const { callee, argument } of callArguments) this.addCallSite(callee, argument);
     // `x.get("key")`: the string argument is the property of a call on `x.get`.
     for (const { callee, argument } of callArguments) {
       const calleeMember = this.memberByNode.get(callee.id);
@@ -302,6 +364,29 @@ export class AnalyzedFile {
         inCallee: this.isWithinCallee(node),
       });
     }
+  }
+
+  private addCallSite(callee: Node, argument: Node): void {
+    const member = this.memberByNode.get(callee.id);
+    const nameNode = member ? member.property : callee;
+    if (!member && callee.type !== "identifier") return;
+    const list = argument.parent;
+    if (!list) return;
+    const siblings = list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment");
+    const position = siblings.findIndex((c) => c.id === argument.id);
+    if (position < 0) return;
+    const keywordNode = argument.childForFieldName("name");
+    const keyword = keywordNode && argument.childForFieldName("value") ? keywordNode.text : undefined;
+    const row = argument.startPosition.row;
+    const sites = this.callSitesByRow.get(row) ?? [];
+    sites.push({
+      callee: unquote(nameNode.text),
+      position,
+      ...(keyword ? { keyword } : {}),
+      line: row + 1,
+      argument,
+    });
+    this.callSitesByRow.set(row, sites);
   }
 
   /** Bound names inside a pattern node: destructuring, tuple targets, parameter shapes. */
