@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "2ae9e2fc-cf64-4a16-b070-5503e5f95e64",
+  "issue_id": "KDATAP-5fb3969a-fa3d-4ad7-9b9a-92b7efe54980",
+  "event_type": "field_updated",
+  "occurred_at": "2026-09-29T00:17:32.132Z",
+  "actor_id": "example-user",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "pending",
+        "to": "Label every email candidate line in these files of `ghost` (pinned commit `73612b18663c0145dcca8611904b7f21b5f84552`). 86 candidate lines.\n\nFiles:\n- `ghost/core/core/server/services/staff/staff-service-emails.js`\n\n## Setup\n\n```\ngit fetch origin\ngit checkout -b label/KDATAP-5fb396 origin/kdatap-46d893-labeling-base\npnpm install\npnpm run benchmark:materialize ghost\n```\n\n## Read first, in full\n\n1. `.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`\n2. The worked example it points to: `tests/benchmark/repos/ghost/annotations/packets/example-ghost-batch-3.yaml`\n\n## Do\n\n- Input: the entries for the files above in `tests/benchmark/repos/ghost/annotations/packets/email-candidates.yaml`.\n- Read each file from `tests/benchmark/.cache/repos/ghost@73612b18663c0145dcca8611904b7f21b5f84552/`, with the surrounding code for every candidate line.\n- Write exactly one record per candidate line to `tests/benchmark/repos/ghost/annotations/packets/KDATAP-5fb396.yaml`, with `packet.kanbus_issue: KDATAP-5fb396`, `packet.files` equal to the files above, and `review_state: proposed`.\n\n## Rules\n\n- Do not run the scanner or read scanner output, `annotations/mentions.yaml`, or other packets.\n- Uncertain: `status: ambiguous` with a one-sentence rationale. Do not guess.\n- Do not edit any file except your packet and `annotations/KDATAP-5fb396/pass.md`.\n- Do not assert `touches` or `group`.\n\n## Finish\n\n1. `pnpm run benchmark:validate-packet tests/benchmark/repos/ghost/annotations/packets/KDATAP-5fb396.yaml` prints `OK`.\n2. Record the pass in `annotations/KDATAP-5fb396/pass.md`: files, record count, positive / negative / ambiguous counts, and anything you were unsure about.\n3. Commit both files on `label/KDATAP-5fb396`. The coordinator reviews, then moves this issue to awaiting-review."
+      }
+    }
+  }
+}

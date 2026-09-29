@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "event_id": "b0be15fe-5a0b-4e3d-8b6b-0a0be06a5f14",
+  "issue_id": "KDATAP-f510f110-f9e1-43b3-9d07-ea9566d9e78c",
+  "event_type": "field_updated",
+  "occurred_at": "2026-09-29T00:17:34.861Z",
+  "actor_id": "example-user",
+  "payload": {
+    "changes": {
+      "description": {
+        "from": "pending",
+        "to": "Label every email candidate line in these files of `saleor` (pinned commit `030c1676145d63154687fa394d1a4abb224b1ac2`). 62 candidate lines.\n\nFiles:\n- `saleor/plugins/admin_email/plugin.py`\n\n## Setup\n\n```\ngit fetch origin\ngit checkout -b label/KDATAP-f510f1 origin/kdatap-46d893-labeling-base\npnpm install\npnpm run benchmark:materialize saleor\n```\n\n## Read first, in full\n\n1. `.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`\n2. The worked example it points to: `tests/benchmark/repos/ghost/annotations/packets/example-ghost-batch-3.yaml`\n\n## Do\n\n- Input: the entries for the files above in `tests/benchmark/repos/saleor/annotations/packets/email-candidates.yaml`.\n- Read each file from `tests/benchmark/.cache/repos/saleor@030c1676145d63154687fa394d1a4abb224b1ac2/`, with the surrounding code for every candidate line.\n- Write exactly one record per candidate line to `tests/benchmark/repos/saleor/annotations/packets/KDATAP-f510f1.yaml`, with `packet.kanbus_issue: KDATAP-f510f1`, `packet.files` equal to the files above, and `review_state: proposed`.\n\n## Rules\n\n- Do not run the scanner or read scanner output, `annotations/mentions.yaml`, or other packets.\n- Uncertain: `status: ambiguous` with a one-sentence rationale. Do not guess.\n- Do not edit any file except your packet and `annotations/KDATAP-f510f1/pass.md`.\n- Do not assert `touches` or `group`.\n\n## Finish\n\n1. `pnpm run benchmark:validate-packet tests/benchmark/repos/saleor/annotations/packets/KDATAP-f510f1.yaml` prints `OK`.\n2. Record the pass in `annotations/KDATAP-f510f1/pass.md`: files, record count, positive / negative / ambiguous counts, and anything you were unsure about.\n3. Commit both files on `label/KDATAP-f510f1`. The coordinator reviews, then moves this issue to awaiting-review."
+      }
+    }
+  }
+}
