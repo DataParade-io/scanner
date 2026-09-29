@@ -1,0 +1,327 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-e4d4b5
+  files:
+  - ghost/core/core/server/services/auth/session/session-service.js
+  - ghost/core/core/server/services/auth/session/emails/signin.js
+annotations:
+- id: ghost-signin-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that receives an email address to include in the email template.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+      line: 4
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-signin-L82
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient-link
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: CSS class name in a style rule; not related to email address values.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-signin-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+    start_line: 150
+    end_line: 150
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose message to the user about ignoring email; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-signin-L157
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+    start_line: 157
+    end_line: 157
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Template interpolates the recipient's email address into both a mailto link and display text.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+      line: 4
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-session-service-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module import statement for the email template; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-session-service-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: require_email_mfa
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing a parameter type; no address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-session-service-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: require_email_mfa
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 160
+    end_line: 160
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks a feature flag for MFA requirement; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-session-service-L434
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 434
+    end_line: 434
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the user's email address from the user object to use as the email recipient.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/session-service.js
+      line: 434
+      kind: local
+    group: staff-user-email
+- id: ghost-session-service-L442
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 442
+    end_line: 442
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assigned the rendered email template output; holds HTML, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-session-service-L445
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 445
+    end_line: 445
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the email template under the email property.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/session-service.js
+      line: 445
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-session-service-L456
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 456
+    end_line: 456
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the mail service send function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/session-service.js
+      line: 434
+      kind: local
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-session-service-L458
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 458
+    end_line: 458
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the rendered email template HTML to the mailer; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-session-service-L461
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailError
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 461
+    end_line: 461
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error type for email sending failures; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-session-service-L463
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 463
+    end_line: 463
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about email sending; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
