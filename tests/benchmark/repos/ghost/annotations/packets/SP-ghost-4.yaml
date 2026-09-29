@@ -1,0 +1,907 @@
+packet:
+  repo: ghost
+  concept: email-sample
+  kanbus_issue: KDATAP-6b03c5
+  files:
+  - ghost/core/core/server/services/newsletters/newsletters-service.js
+  - ghost/core/core/server/services/posts/post-email-handler.js
+  - ghost/core/core/server/services/staff/staff-service-emails.js
+  - ghost/core/core/server/services/staff/staff-service.js
+annotations:
+- id: ghost-newsletters-service-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: senderEmailNotAllowed
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Message key and prose text about a disallowed sender address; the {email} is only a placeholder in prose.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-newsletters-service-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc param comment for the email address service dependency.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L62
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendEmailVerificationMagicLink
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 62
+    end_line: 62
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment naming the verification-email sending method.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 65
+    end_line: 65
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter of getText that holds the address the verification message is sent to.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 65
+      kind: parameter
+    owner: ghost/core
+- id: ghost-newsletters-service-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Writes the address into the verification message text via ${email}.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L87
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verifyEmail
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 87
+    end_line: 87
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Query-parameter name in the admin verification URL; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L209
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 209
+    end_line: 209
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending verification emails (messages).
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L302
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 302
+    end_line: 302
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: The setting holds either the keyword newsletter/support or a custom reply-to address; the line only tests which, so it is unclear whether an address is read.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L317
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 317
+    end_line: 317
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks the address value for null or empty before validating it.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    owner: ghost/core
+- id: ghost-newsletters-service-L330
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 330
+    end_line: 330
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares the candidate reply-to address with the newsletter sender_email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    owner: ghost/core
+- id: ghost-newsletters-service-L346
+  layer: mentions
+  subject:
+    key: mention:email
+    name: didChangeSenderEmail
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 346
+    end_line: 346
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag variable name for whether the sender address changed; holds no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L349
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 349
+    end_line: 349
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the newsletter sender_email address to compare with the new value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 289
+      kind: parameter
+    owner: ghost/core
+- id: ghost-newsletters-service-L359
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 359
+    end_line: 359
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Writes null into the cleaned attrs sender_email address field.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 290
+      kind: local
+    owner: ghost/core
+- id: ghost-newsletters-service-L376
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sent_email_verification
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 376
+    end_line: 376
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Meta flag listing properties that had verification emails sent; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L16
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailService
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor parameter naming the email-sending service.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L30
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENDING_STATUSES
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant of post statuses that trigger sending email; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L74
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailRecipientFilter
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 74
+    end_line: 74
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter expression selecting email recipients, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L118
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendEmail
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 118
+    end_line: 118
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag for whether to send the post email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L121
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendEmail
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 121
+    end_line: 121
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Tests the whether-to-send-email flag.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L126
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 126
+    end_line: 126
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local holding the created or retried Email record object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L140
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 140
+    end_line: 140
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Doc comment about whether an email should be sent.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-post-email-handler-L146
+  layer: mentions
+  subject:
+    key: mention:email
+    name: shouldSendEmail
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 146
+    end_line: 146
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name deciding whether to send the post email; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-post-email-handler-L154
+  layer: mentions
+  subject:
+    key: mention:email
+    name: PostEmailHandler
+  evidence:
+    file_path: ghost/core/core/server/services/posts/post-email-handler.js
+    start_line: 154
+    end_line: 154
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Exports the post email handler class; a class name, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L7
+  layer: mentions
+  subject:
+    key: mention:email
+    name: StaffServiceEmails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name for the staff notification emails service.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L33
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getEmailAlertUsers
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name that fetches users subscribed to email alerts; no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L163
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 163
+    end_line: 163
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the staff user email address as the recipient.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+      line: 162
+      kind: local
+    owner: ghost/core
+- id: ghost-staff-service-emails-L203
+  layer: mentions
+  subject:
+    key: mention:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 203
+    end_line: 203
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the template-rendering method named after email; the name is not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L217
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 217
+    end_line: 217
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc param comment for recipient.email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-staff-service-emails-L223
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email-notifications
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 223
+    end_line: 223
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Admin settings URL path segment for email notifications; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-staff-service-emails-L233
+  layer: mentions
+  subject:
+    key: mention:email
+    name: toEmail
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 233
+    end_line: 233
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the recipient address, set from recipient.email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+      line: 233
+      kind: field
+    owner: ghost/core
+- id: ghost-staff-service-emails-L279
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email-notifications
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 279
+    end_line: 279
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Admin settings URL path segment for email notifications; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-staff-service-emails-L289
+  layer: mentions
+  subject:
+    key: mention:email
+    name: toEmail
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 289
+    end_line: 289
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the recipient address taken from the to variable.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+      line: 289
+      kind: field
+    owner: ghost/core
+- id: ghost-staff-service-emails-L323
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getEmailAlertUsers
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 323
+    end_line: 323
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name that fetches users subscribed to email alerts; no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L329
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 329
+    end_line: 329
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Writes the donor email address into the notification subject text as fallback for the name.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-staff-service-emails-L465
+  layer: mentions
+  subject:
+    key: mention:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 465
+    end_line: 465
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the template-rendering method named after email; the name is not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L492
+  layer: mentions
+  subject:
+    key: mention:email
+    name: showEmail
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 492
+    end_line: 492
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag for whether to display the email in the template; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-staff-service-emails-L612
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fromEmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 612
+    end_line: 612
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the message from address using the default sender address getter.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+      line: 595
+      kind: field
+    owner: ghost/core
+- id: ghost-staff-service-emails-L661
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 661
+    end_line: 661
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: recipient is a recipient object passed to getSharedData; its address is not read on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L679
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 679
+    end_line: 679
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: recipient is a recipient object passed to getSharedData; its address is not read on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-emails-L697
+  layer: mentions
+  subject:
+    key: mention:email
+    name: StaffServiceEmails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 697
+    end_line: 697
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Exports the staff emails class; a class name, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L172
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 172
+    end_line: 172
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about triggering a signup notification email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
