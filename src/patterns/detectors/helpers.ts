@@ -1,6 +1,99 @@
 import type { FileInfo, SourceLocation } from "../../core/types/file";
-import type { PatternContext } from "../engine";
+import type { ImportLike, PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
+
+/** 1-based inclusive span for an import. Missing or invalid lines fall back to 1. */
+export function evidenceLineRange(imp: ImportLike): {
+  startLine: number;
+  endLine: number;
+} {
+  const startLine =
+    typeof imp.startLine === "number" &&
+    Number.isInteger(imp.startLine) &&
+    imp.startLine >= 1
+      ? imp.startLine
+      : 1;
+  const endLine =
+    typeof imp.endLine === "number" &&
+    Number.isInteger(imp.endLine) &&
+    imp.endLine >= startLine
+      ? imp.endLine
+      : startLine;
+  return { startLine, endLine };
+}
+
+/** Keep the first location for each start:end span. Identical spans collapse; different lines do not. */
+export function dedupeLocations(
+  locations: readonly SourceLocation[],
+): SourceLocation[] {
+  const seen = new Set<string>();
+  const deduped: SourceLocation[] = [];
+  for (const location of locations) {
+    const key = `${location.startLine}:${location.endLine}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(location);
+  }
+  return deduped;
+}
+
+export function locationsForMatchingImports(
+  file: FileInfo,
+  imports: readonly ImportLike[] | undefined,
+  predicate: (imp: ImportLike) => boolean,
+): SourceLocation[] {
+  const locations: SourceLocation[] = [];
+  for (const imp of imports ?? []) {
+    if (!predicate(imp)) continue;
+    const span = evidenceLineRange(imp);
+    locations.push({
+      filePath: file.path,
+      startLine: span.startLine,
+      endLine: span.endLine,
+    });
+  }
+  return dedupeLocations(locations);
+}
+
+export function locationsForContentRegexes(
+  file: FileInfo,
+  content: string,
+  regexes: readonly RegExp[],
+): SourceLocation[] {
+  const locations: SourceLocation[] = [];
+  for (const regex of regexes) {
+    for (const { line, match } of findLineMatches(content, regex)) {
+      locations.push(createLocationFromLine(file, line, match[0]));
+    }
+  }
+  return dedupeLocations(locations);
+}
+
+export function locationsForSubstrings(
+  file: FileInfo,
+  content: string,
+  needles: readonly string[],
+): SourceLocation[] {
+  const usable = needles.filter((needle) => needle.length > 0);
+  if (usable.length === 0) return [];
+  const pattern = usable
+    .map((needle) => needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+  return locationsForContentRegexes(file, content, [new RegExp(pattern)]);
+}
+
+/**
+ * Evidence spans when any were found. Line 1 is only the fallback for a
+ * signal that has no statement to cite.
+ */
+export function spansOrFileStart(
+  file: FileInfo,
+  locations: readonly SourceLocation[],
+): SourceLocation[] {
+  const deduped = dedupeLocations(locations);
+  if (deduped.length > 0) return deduped;
+  return [createLocationFromLine(file, 1)];
+}
 
 /** Prefer comment-stripped source when the analyzer supplies it. */
 export function sourceOf(ctx: PatternContext): string {

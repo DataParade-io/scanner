@@ -6,6 +6,12 @@
  * `find_package()` calls.
  */
 
+import {
+  lineNumberAt,
+  pushManifestSpan,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 function normalizePackageToken(raw: string): string | null {
   const token = raw.trim().toLowerCase();
   if (!token) return null;
@@ -18,8 +24,19 @@ function normalizePackageToken(raw: string): string | null {
 }
 
 /** vcpkg.json — `dependencies` may hold plain strings or `{ "name": ... }`. */
-export function extractPackagesFromVcpkgJson(content: string): string[] {
-  const packages = new Set<string>();
+function lineOfToken(content: string, token: string, fromLine: number): number {
+  const lines = content.split(/\r?\n/);
+  const needle = token.toLowerCase();
+  for (let i = Math.max(0, fromLine - 1); i < lines.length; i += 1) {
+    if ((lines[i] ?? "").toLowerCase().includes(needle)) return i + 1;
+  }
+  return fromLine;
+}
+
+export function extractPackagesFromVcpkgJson(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
 
   let parsed: unknown;
   try {
@@ -32,32 +49,36 @@ export function extractPackagesFromVcpkgJson(content: string): string[] {
   const dependencies = (parsed as { dependencies?: unknown }).dependencies;
   if (!Array.isArray(dependencies)) return [];
 
+  let cursor = 1;
   for (const dependency of dependencies) {
-    if (typeof dependency === "string") {
-      const token = normalizePackageToken(dependency);
-      if (token) packages.add(token);
-      continue;
-    }
-    if (dependency && typeof dependency === "object") {
-      const name = (dependency as { name?: unknown }).name;
-      if (typeof name === "string") {
-        const token = normalizePackageToken(name);
-        if (token) packages.add(token);
-      }
-    }
+    const rawName =
+      typeof dependency === "string"
+        ? dependency
+        : dependency && typeof dependency === "object"
+          ? (dependency as { name?: unknown }).name
+          : undefined;
+    if (typeof rawName !== "string") continue;
+    const token = normalizePackageToken(rawName);
+    if (!token) continue;
+    const startLine = lineOfToken(content, token, cursor);
+    cursor = startLine + 1;
+    pushManifestSpan(spans, token, startLine);
   }
 
-  return Array.from(packages);
+  return spans;
 }
 
 /** conanfile.txt `[requires]` section and conanfile.py `requires = (...)`. */
-export function extractPackagesFromConanfile(content: string): string[] {
-  const packages = new Set<string>();
+export function extractPackagesFromConanfile(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const lines = content.split(/\r?\n/);
 
   let inRequiresSection = false;
 
-  for (const rawLine of lines) {
+  for (let i = 0; i < lines.length; i += 1) {
+    const rawLine = lines[i] ?? "";
     const line = rawLine.split("#")[0]!.trim();
     if (!line) continue;
 
@@ -70,7 +91,7 @@ export function extractPackagesFromConanfile(content: string): string[] {
 
     if (inRequiresSection) {
       const token = normalizePackageToken(line);
-      if (token) packages.add(token);
+      if (token) pushManifestSpan(spans, token, i + 1);
       continue;
     }
 
@@ -82,25 +103,29 @@ export function extractPackagesFromConanfile(content: string): string[] {
       const literals = pyRequires[1]!.match(/["']([^"']+)["']/g) ?? [];
       for (const literal of literals) {
         const token = normalizePackageToken(literal.slice(1, -1));
-        if (token) packages.add(token);
+        if (token) pushManifestSpan(spans, token, i + 1);
       }
     }
   }
 
-  return Array.from(packages);
+  return spans;
 }
 
 /** CMakeLists.txt — `find_package(<name> ...)` and `FetchContent_Declare(<name> ...)`. */
-export function extractPackagesFromCMakeLists(content: string): string[] {
-  const packages = new Set<string>();
+export function extractPackagesFromCMakeLists(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const regex =
     /\b(?:find_package|FetchContent_Declare|CPMAddPackage)\s*\(\s*([A-Za-z0-9_.+-]+)/g;
 
   let match: RegExpExecArray | null;
   while ((match = regex.exec(content)) !== null) {
     const token = normalizePackageToken(match[1]);
-    if (token) packages.add(token);
+    if (!token) continue;
+    const startLine = lineNumberAt(content, match.index);
+    pushManifestSpan(spans, token, startLine);
   }
 
-  return Array.from(packages);
+  return spans;
 }

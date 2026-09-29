@@ -2,9 +2,16 @@ import type { PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
 import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
+  dedupeLocations,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
+  locationsForSubstrings,
+  sourceOf,
+  spansOrFileStart,
 } from "./helpers";
 
 /**
@@ -21,15 +28,21 @@ function includeMatchesHeader(includePath: string, want: string): boolean {
   return header === want || header.split("/").includes(want);
 }
 
+function headerLocations(
+  ctx: PatternContext,
+  headers: string[],
+): SourceLocation[] {
+  if (headers.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
+    headers.some((want) => includeMatchesHeader(imp.module, want)),
+  );
+}
+
 function hasAnyHeader(
   ctx: PatternContext,
   headers: string[],
 ): boolean {
-  if (headers.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
-    headers.some((want) => includeMatchesHeader(imp.module, want)),
-  );
+  return headerLocations(ctx, headers).length > 0;
 }
 
 /**
@@ -37,16 +50,18 @@ function hasAnyHeader(
  * are supplied as imports by the manifest scanner. Package names rarely equal
  * header paths, so this is a distinct signal from `includeHeaders`.
  */
-function hasAnyPackage(ctx: PatternContext, packageNames: string[]): boolean {
-  if (packageNames.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
+function packageLocations(
+  ctx: PatternContext,
+  packageNames: string[],
+): SourceLocation[] {
+  if (packageNames.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
     packageNames.includes(imp.module.toLowerCase()),
   );
 }
 
-function sourceOf(ctx: PatternContext): string {
-  return ctx.strippedContent ?? ctx.file.content ?? "";
+function hasAnyPackage(ctx: PatternContext, packageNames: string[]): boolean {
+  return packageLocations(ctx, packageNames).length > 0;
 }
 
 function callNameRegex(callNames: string[]): RegExp {
@@ -83,20 +98,44 @@ export function detectCppDatabaseConnectionsFromConfig(
 
     if (!hasInclude && !hasPackage && !hasCall && !matchesContent) continue;
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    const callLocations =
+      db.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(db.callNames),
+          ])
+        : [];
+    const prefixLocations = locationsForSubstrings(
+      ctx.file,
+      content,
+      db.callNamePrefixes,
+    );
+    const contentLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      db.contentRegexes,
+    );
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...headerLocations(ctx, db.includeHeaders),
+        ...packageLocations(ctx, db.packageNames),
+        ...callLocations,
+        ...prefixLocations,
+        ...contentLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location,
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   return findings;
@@ -122,19 +161,37 @@ export function detectCppAuthFromConfig(
 
     if (!hasInclude && !hasPackage && !hasCall && !matchesContent) continue;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    const callLocations =
+      lib.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(lib.callNames),
+          ])
+        : [];
+    const contentLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      lib.contentRegexes,
+    );
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...headerLocations(ctx, lib.includeHeaders),
+        ...packageLocations(ctx, lib.packageNames),
+        ...callLocations,
+        ...contentLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location,
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
   return findings;

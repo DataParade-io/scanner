@@ -2,12 +2,17 @@ import type { PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
 import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
   createLocationFromLine,
+  dedupeLocations,
   findLineMatches,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
   sourceOf,
+  spansOrFileStart,
 } from "./helpers";
 
 /**
@@ -22,27 +27,50 @@ function namespaceMatches(importPath: string, want: string): boolean {
   );
 }
 
-function hasAnyNamespace(ctx: PatternContext, namespaces: string[]): boolean {
-  if (namespaces.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
+function namespaceLocations(
+  ctx: PatternContext,
+  namespaces: string[],
+): SourceLocation[] {
+  if (namespaces.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
     namespaces.some((want) => namespaceMatches(imp.module, want)),
   );
+}
+
+function hasAnyNamespace(ctx: PatternContext, namespaces: string[]): boolean {
+  return namespaceLocations(ctx, namespaces).length > 0;
 }
 
 /**
  * Composer package names use `/` (`guzzlehttp/guzzle`). That keeps them
  * disjoint from PSR namespaces (`GuzzleHttp\Client`), which use `\`.
  */
-function hasAnyPackageName(ctx: PatternContext, packageNames: string[]): boolean {
-  if (packageNames.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) => {
+function packageLocations(
+  ctx: PatternContext,
+  packageNames: string[],
+): SourceLocation[] {
+  if (packageNames.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) => {
     if (!imp.module.includes("/")) return false;
     return packageNames.some(
       (want) => imp.module === want || imp.module.startsWith(`${want}/`),
     );
   });
+}
+
+function hasAnyPackageName(ctx: PatternContext, packageNames: string[]): boolean {
+  return packageLocations(ctx, packageNames).length > 0;
+}
+
+function presenceLocations(
+  ctx: PatternContext,
+  namespaces: string[],
+  packageNames: string[],
+): SourceLocation[] {
+  return dedupeLocations([
+    ...namespaceLocations(ctx, namespaces),
+    ...packageLocations(ctx, packageNames),
+  ]);
 }
 
 function escapeRegexLiteral(value: string): string {
@@ -187,16 +215,21 @@ export function detectPhpDatabaseConnectionsFromConfig(
     }
 
     if (!emitted) {
-      findings.push({
-        pattern: db.patternId,
-        name: db.id,
-        confidence: db.confidence,
-        location: createLocationFromLine(ctx.file, 1),
-        properties: {
-          client: db.id,
-          databaseType: db.databaseType,
-        },
-      });
+      for (const location of spansOrFileStart(
+        ctx.file,
+        presenceLocations(ctx, db.importNamespaces, db.packageNames),
+      )) {
+        findings.push({
+          pattern: db.patternId,
+          name: db.id,
+          confidence: db.confidence,
+          location,
+          properties: {
+            client: db.id,
+            databaseType: db.databaseType,
+          },
+        });
+      }
     }
   }
 
@@ -300,15 +333,20 @@ export function detectPhpAuthFromConfig(
     }
 
     if (!emitted) {
-      findings.push({
-        pattern: lib.patternId,
-        name: lib.id,
-        confidence: lib.confidence,
-        location: createLocationFromLine(ctx.file, 1),
-        properties: {
-          ...(lib.strategy ? { strategy: lib.strategy } : {}),
-        },
-      });
+      for (const location of spansOrFileStart(
+        ctx.file,
+        presenceLocations(ctx, lib.importNamespaces, lib.packageNames),
+      )) {
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location,
+          properties: {
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
     }
   }
 
@@ -358,17 +396,28 @@ export function detectPhpEnvAndConfigFromConfig(
 
       if (!hasImport && !hasPackage && !hasCall) continue;
 
-      findings.push({
-        pattern: envCfg.configLoaders.patternId,
-        name: loader.id,
-        confidence: envCfg.configLoaders.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {},
-      });
+      const callLocations =
+        loader.callNames.length > 0
+          ? locationsForContentRegexes(ctx.file, content, [
+              callNameRegex(loader.callNames),
+            ])
+          : [];
+
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([
+          ...presenceLocations(ctx, loader.importNamespaces, loader.packageNames),
+          ...callLocations,
+        ]),
+      )) {
+        findings.push({
+          pattern: envCfg.configLoaders.patternId,
+          name: loader.id,
+          confidence: envCfg.configLoaders.confidence,
+          location,
+          properties: {},
+        });
+      }
     }
   }
 
@@ -471,19 +520,20 @@ export function detectPhpServerlessHandlersFromConfig(
     const hasPackage = hasAnyPackageName(ctx, handler.packageNames);
     if (!hasImport && !hasPackage) continue;
 
-    findings.push({
-      pattern: handler.patternId,
-      name: handler.id,
-      confidence: handler.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        framework: handler.id,
-      },
-    });
+    for (const location of spansOrFileStart(
+      ctx.file,
+      presenceLocations(ctx, handler.importNamespaces, handler.packageNames),
+    )) {
+      findings.push({
+        pattern: handler.patternId,
+        name: handler.id,
+        confidence: handler.confidence,
+        location,
+        properties: {
+          framework: handler.id,
+        },
+      });
+    }
   }
 
   return findings;
@@ -579,51 +629,59 @@ export function detectPhpExternalApisFromConfig(
     // Fallback: import/package present and callNames appear in content
     // (covers curl_setopt where the URL is on a separate line).
     if (!emitted && client.callNames.length > 0) {
-      if (callNameRegex(client.callNames).test(content)) {
+      const callLocations = locationsForContentRegexes(ctx.file, content, [
+        callNameRegex(client.callNames),
+      ]);
+      if (callLocations.length > 0 || callNameRegex(client.callNames).test(content)) {
         const urlMatch = client.urlRegex.exec(content);
         const url = urlMatch?.[1];
         const serviceName =
           inferServiceNameFromUrl(url, urlHostPatterns) ??
           defaultServiceNameFromLiteralPublicUrl(url) ??
           client.clientName;
+        const urlLocations = locationsForContentRegexes(ctx.file, content, [
+          client.urlRegex,
+        ]);
 
-        findings.push({
-          pattern: client.patternId,
-          name: `${client.clientName}_call`,
-          confidence: client.confidence,
-          location: {
-            filePath: ctx.file.path,
-            startLine: 1,
-            endLine: 1,
-          },
-          properties: {
-            ...(url ? { url } : {}),
-            ...(serviceName ? { serviceName } : {}),
-          },
-        });
+        for (const location of spansOrFileStart(
+          ctx.file,
+          dedupeLocations([...callLocations, ...urlLocations]),
+        )) {
+          findings.push({
+            pattern: client.patternId,
+            name: `${client.clientName}_call`,
+            confidence: client.confidence,
+            location,
+            properties: {
+              ...(url ? { url } : {}),
+              ...(serviceName ? { serviceName } : {}),
+            },
+          });
+        }
         emitted = true;
       }
     }
 
     // SDK presence (e.g. aws_s3): gated import/package alone emits when opted in.
     if (!emitted && client.emitOnPresence && gated) {
-      const hasImport = hasAnyNamespace(ctx, client.importNamespaces);
-      const hasPackage = hasAnyPackageName(ctx, client.packageNames);
-      if (hasImport || hasPackage) {
-        findings.push({
-          pattern: client.patternId,
-          name: `${client.clientName}_client`,
-          confidence: client.confidence,
-          location: {
-            filePath: ctx.file.path,
-            startLine: 1,
-            endLine: 1,
-          },
-          properties: {
-            serviceName: client.clientName,
-            client: client.id,
-          },
-        });
+      const presence = presenceLocations(
+        ctx,
+        client.importNamespaces,
+        client.packageNames,
+      );
+      if (presence.length > 0) {
+        for (const location of presence) {
+          findings.push({
+            pattern: client.patternId,
+            name: `${client.clientName}_client`,
+            confidence: client.confidence,
+            location,
+            properties: {
+              serviceName: client.clientName,
+              client: client.id,
+            },
+          });
+        }
       }
     }
   }

@@ -1,3 +1,8 @@
+import {
+  pushManifestSpan,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 function normalizePackageNameToken(raw: string): string | null {
   const s = raw.trim();
   if (!s) return null;
@@ -31,16 +36,18 @@ function parseRequirementLineToPackageToken(line: string): string | null {
   return normalizePackageNameToken(trimmed);
 }
 
-export function extractPackagesFromRequirementsTxt(content: string): string[] {
-  const pkgs = new Set<string>();
+export function extractPackagesFromRequirementsTxt(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const lines = content.split(/\r?\n/);
 
-  for (const rawLine of lines) {
-    const token = parseRequirementLineToPackageToken(rawLine);
-    if (token) pkgs.add(token);
+  for (let i = 0; i < lines.length; i += 1) {
+    const token = parseRequirementLineToPackageToken(lines[i] ?? "");
+    if (token) pushManifestSpan(spans, token, i + 1);
   }
 
-  return Array.from(pkgs.values());
+  return spans;
 }
 
 function parseTomlArrayOfStrings(raw: string): string[] {
@@ -51,15 +58,17 @@ function parseTomlArrayOfStrings(raw: string): string[] {
     .map((m) => m.replace(/^["']/, "").replace(/["']$/, ""));
 }
 
-export function extractPackagesFromPyprojectToml(content: string): string[] {
-  const pkgs = new Set<string>();
+export function extractPackagesFromPyprojectToml(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const lines = content.split(/\r?\n/);
 
   let currentSection: string = "";
 
-  const pushTokenFromSpec = (spec: string) => {
+  const pushTokenFromSpec = (spec: string, lineNumber: number) => {
     const token = normalizePackageNameToken(spec);
-    if (token) pkgs.add(token);
+    if (token) pushManifestSpan(spans, token, lineNumber);
   };
 
   for (let i = 0; i < lines.length; i += 1) {
@@ -84,7 +93,16 @@ export function extractPackagesFromPyprojectToml(content: string): string[] {
       }
 
       const strings = parseTomlArrayOfStrings(arrayBody);
-      for (const spec of strings) pushTokenFromSpec(spec);
+      const arrayStart = i - (arrayBody.split(/\r?\n/).length - 1);
+      for (const spec of strings) {
+        const relative = arrayBody
+          .split(/\r?\n/)
+          .findIndex((part) => part.includes(spec));
+        pushTokenFromSpec(
+          spec,
+          relative === -1 ? i + 1 : arrayStart + relative + 1,
+        );
+      }
       continue;
     }
 
@@ -100,24 +118,27 @@ export function extractPackagesFromPyprojectToml(content: string): string[] {
       const kv = line.match(/^([A-Za-z0-9][A-Za-z0-9_.-]*)\s*=\s*(.+)$/);
       if (!kv) continue;
       const key = kv[1]!.trim();
-      pushTokenFromSpec(key);
+      pushTokenFromSpec(key, i + 1);
     }
   }
 
-  return Array.from(pkgs.values());
+  return spans;
 }
 
-export function extractPackagesFromPipfile(content: string): string[] {
-  const pkgs = new Set<string>();
+export function extractPackagesFromPipfile(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const lines = content.split(/\r?\n/);
 
   let currentSection: string | null = null;
-  const pushKey = (key: string) => {
+  const pushKey = (key: string, lineNumber: number) => {
     const token = normalizePackageNameToken(key);
-    if (token) pkgs.add(token);
+    if (token) pushManifestSpan(spans, token, lineNumber);
   };
 
-  for (const rawLine of lines) {
+  for (let i = 0; i < lines.length; i += 1) {
+    const rawLine = lines[i] ?? "";
     const line = rawLine.trim();
     if (!line || line.startsWith("#")) continue;
 
@@ -135,9 +156,9 @@ export function extractPackagesFromPipfile(content: string): string[] {
 
     const kv = line.match(/^([A-Za-z0-9][A-Za-z0-9_.-]*)\s*=/);
     if (!kv) continue;
-    pushKey(kv[1]!.trim());
+    pushKey(kv[1]!.trim(), i + 1);
   }
 
-  return Array.from(pkgs.values());
+  return spans;
 }
 

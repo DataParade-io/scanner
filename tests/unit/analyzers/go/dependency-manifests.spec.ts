@@ -8,6 +8,7 @@ import {
   parseGoMod,
   parseGoWork,
 } from "../../../../src/analyzers/go/manifest-parsers";
+import { manifestSpanNames } from "../../../../src/analyzers/shared/manifest-span";
 
 const FIXTURE_ROOT = path.join(
   __dirname,
@@ -37,7 +38,7 @@ describe("Go manifest parsers", () => {
     const parsed = parseGoMod(content);
 
     expect(parsed.modulePath).toBe("github.com/acme/gateway");
-    expect(parsed.requires.sort()).toEqual([
+    expect(manifestSpanNames(parsed.requires).sort()).toEqual([
       "github.com/getsentry/sentry-go",
       "github.com/gin-gonic/gin",
       "github.com/lib/pq",
@@ -60,7 +61,9 @@ describe("Go manifest parsers", () => {
       "",
     ].join("\n");
 
-    expect(parseGoMod(content).requires).toEqual(["github.com/real/dep"]);
+    expect(manifestSpanNames(parseGoMod(content).requires)).toEqual([
+      "github.com/real/dep",
+    ]);
   });
 
   it("parses go.work workspace members", () => {
@@ -95,7 +98,7 @@ describe("Go dependency manifest scanning", () => {
     expect(manifests.length).toBe(1);
     expect(manifests[0].manifestRelativePath).toBe("go.mod");
     expect(manifests[0].modulePath).toBe("github.com/acme/gateway");
-    expect(manifests[0].packages).toEqual(
+    expect(manifestSpanNames(manifests[0].packages)).toEqual(
       expect.arrayContaining([
         "github.com/getsentry/sentry-go",
         "github.com/stripe/stripe-go/v76",

@@ -1,12 +1,28 @@
-import type { PatternContext } from "../engine";
+import type { ImportLike, PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
 import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
+  dedupeLocations,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
+  locationsForSubstrings,
   sourceOf,
+  spansOrFileStart,
 } from "./helpers";
+
+function pythonImportLocations(
+  ctx: PatternContext,
+  modules: readonly string[],
+): SourceLocation[] {
+  if (modules.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp: ImportLike) =>
+    modules.some((mod) => imp.module.includes(mod)),
+  );
+}
 
 export function detectPythonDatabaseConnectionsFromImportsAndContent(
   ctx: PatternContext,
@@ -14,20 +30,20 @@ export function detectPythonDatabaseConnectionsFromImportsAndContent(
 ): RawFinding[] {
   if (ctx.language !== "python") return [];
 
-  const imports = ctx.imports ?? [];
   const content = sourceOf(ctx);
   const findings: RawFinding[] = [];
 
   for (const db of config.python.dbClients) {
-    const hasImport = db.importModules.some((mod) =>
-      imports.some((imp: { module: string | string[]; }) => imp.module.includes(mod)),
-    );
-
-    let hasCall = false;
-    if (db.callNames.length > 0) {
-      const pattern = new RegExp(`\\b(${db.callNames.join("|")})\\s*\\(`);
-      hasCall = pattern.test(content);
-    }
+    const importLocations = pythonImportLocations(ctx, db.importModules);
+    const callRegex =
+      db.callNames.length > 0
+        ? new RegExp(`\\b(${db.callNames.join("|")})\\s*\\(`)
+        : undefined;
+    const callLocations = callRegex
+      ? locationsForContentRegexes(ctx.file, content, [callRegex])
+      : [];
+    const hasImport = importLocations.length > 0;
+    const hasCall = callRegex ? callRegex.test(content) : false;
 
     if (db.importModules.length > 0) {
       // Driver declares import modules — require the import to be present.
@@ -44,20 +60,29 @@ export function detectPythonDatabaseConnectionsFromImportsAndContent(
       continue;
     }
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    const objectLocations = db.heuristics.usesObjectsAttribute
+      ? locationsForSubstrings(ctx.file, content, [".objects."])
+      : [];
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...importLocations,
+        ...callLocations,
+        ...objectLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location,
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   return findings;
@@ -69,36 +94,40 @@ export function detectPythonAuthFromConfig(
 ): RawFinding[] {
   if (ctx.language !== "python") return [];
 
-  const imports = ctx.imports ?? [];
   const content = sourceOf(ctx);
   const findings: RawFinding[] = [];
 
   const authConfig = config.python.auth;
 
   if (authConfig.jwt) {
-    const hasImport = authConfig.jwt.importModules.some((mod) =>
-      imports.some((imp: { module: string | string[]; }) => imp.module.includes(mod)),
+    const importLocations = pythonImportLocations(
+      ctx,
+      authConfig.jwt.importModules,
+    );
+    const contentLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      authConfig.jwt.contentRegexes,
+    );
+    const matchesContent = authConfig.jwt.contentRegexes.some((re) =>
+      re.test(content),
     );
 
-    const matchesContent =
-      authConfig.jwt.contentRegexes.length === 0
-        ? false
-        : authConfig.jwt.contentRegexes.some((re) => re.test(content));
-
-    if (hasImport || matchesContent) {
-      findings.push({
-        pattern: authConfig.jwt.patternId,
-        name: "jwt_auth",
-        confidence: authConfig.jwt.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {
-          strategy: authConfig.jwt.strategy ?? "jwt",
-        },
-      });
+    if (importLocations.length > 0 || matchesContent) {
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([...importLocations, ...contentLocations]),
+      )) {
+        findings.push({
+          pattern: authConfig.jwt.patternId,
+          name: "jwt_auth",
+          confidence: authConfig.jwt.confidence,
+          location,
+          properties: {
+            strategy: authConfig.jwt.strategy ?? "jwt",
+          },
+        });
+      }
     }
   }
 
@@ -107,43 +136,45 @@ export function detectPythonAuthFromConfig(
     const re = new RegExp(`\\b(${dec.callNames.join("|")})\\b`);
     if (!re.test(content)) continue;
 
-    findings.push({
-      pattern: dec.patternId,
-      name: "auth_decorator",
-      confidence: dec.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {},
-    });
+    for (const location of spansOrFileStart(
+      ctx.file,
+      locationsForContentRegexes(ctx.file, content, [re]),
+    )) {
+      findings.push({
+        pattern: dec.patternId,
+        name: "auth_decorator",
+        confidence: dec.confidence,
+        location,
+        properties: {},
+      });
+    }
   }
 
   for (const lib of authConfig.libraries) {
-    const hasImport =
-      lib.importModules.length > 0 &&
-      lib.importModules.some((mod) =>
-        imports.some((imp: { module: string }) => imp.module.includes(mod)),
-      );
-    const matchesContent =
-      lib.contentRegexes.length > 0 &&
-      lib.contentRegexes.some((re) => re.test(content));
+    const importLocations = pythonImportLocations(ctx, lib.importModules);
+    const contentLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      lib.contentRegexes,
+    );
+    const hasImport = importLocations.length > 0;
+    const matchesContent = lib.contentRegexes.some((re) => re.test(content));
     if (!hasImport && !matchesContent) continue;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([...importLocations, ...contentLocations]),
+    )) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location,
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
   return findings;
@@ -203,28 +234,33 @@ export function detectPythonEnvAndConfigFromConfig(
 
   if (envCfg.dotenvConfig) {
     const requiresOsImport = envCfg.dotenvConfig.requiresOsImport;
-    let hasOsImport = true;
-    if (requiresOsImport && ctx.imports) {
-      hasOsImport = ctx.imports.some(
-        (imp: { module: string; names: string | string[]; }) => imp.module === "os" || imp.names.includes("os"),
-      );
-    }
+    const osLocations = locationsForMatchingImports(
+      ctx.file,
+      ctx.imports,
+      (imp) => imp.module === "os" || imp.names.includes("os"),
+    );
+    const hasOsImport = requiresOsImport
+      ? ctx.imports
+        ? osLocations.length > 0
+        : true
+      : true;
+    const contentLocations = locationsForSubstrings(ctx.file, content, [
+      envCfg.dotenvConfig.contentSubstring,
+    ]);
 
-    if (
-      hasOsImport &&
-      content.includes(envCfg.dotenvConfig.contentSubstring)
-    ) {
-      findings.push({
-        pattern: envCfg.dotenvConfig.patternId,
-        name: envCfg.dotenvConfig.name,
-        confidence: envCfg.dotenvConfig.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {},
-      });
+    if (hasOsImport && content.includes(envCfg.dotenvConfig.contentSubstring)) {
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([...osLocations, ...contentLocations]),
+      )) {
+        findings.push({
+          pattern: envCfg.dotenvConfig.patternId,
+          name: envCfg.dotenvConfig.name,
+          confidence: envCfg.dotenvConfig.confidence,
+          location,
+          properties: {},
+        });
+      }
     }
   }
 

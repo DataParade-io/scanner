@@ -56,6 +56,7 @@ import {
   detectJvmRoutesFromConfig as detectJvmRoutesFromConfigAdapter,
   detectJvmServerlessHandlersFromConfig as detectJvmServerlessHandlersFromConfigAdapter,
 } from "./detectors/jvm";
+import { evidenceLineRange } from "./detectors/helpers";
 import {
   detectTypeScriptJavaScriptExternalApisFromHttpClients as detectTypeScriptJavaScriptExternalApisFromHttpClientsAdapter,
   detectTypeScriptRoutesFromConfig as detectTypeScriptRoutesFromConfigAdapter,
@@ -137,26 +138,6 @@ function importMatchesFragment(imp: ImportLike, fragment: string): boolean {
     imp.module.includes(fragment) ||
     imp.names.some((name) => name.includes(fragment))
   );
-}
-
-/** 1-based inclusive span for an import. Missing or invalid lines fall back to 1. */
-function evidenceLineRange(imp: ImportLike): {
-  startLine: number;
-  endLine: number;
-} {
-  const startLine =
-    typeof imp.startLine === "number" &&
-    Number.isInteger(imp.startLine) &&
-    imp.startLine >= 1
-      ? imp.startLine
-      : 1;
-  const endLine =
-    typeof imp.endLine === "number" &&
-    Number.isInteger(imp.endLine) &&
-    imp.endLine >= startLine
-      ? imp.endLine
-      : startLine;
-  return { startLine, endLine };
 }
 
 function detectThirdPartyServicesFromImportsWithConfig(
