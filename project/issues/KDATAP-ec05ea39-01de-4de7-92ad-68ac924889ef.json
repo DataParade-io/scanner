@@ -3,9 +3,9 @@
   "title": "Scorer: attribute metrics, pairwise grouping, mention negatives",
   "description": "Teach the scorer the new metrics so the labels produce numbers.\n\n## Scope\n\n- Mentions: negatives inside exhaustive scopes count against precision (existing rule), now that real negatives exist.\n- Attribute metrics on the vendor pattern: for owner, touches, syntax kind, and scope extent, accuracy over matched gold that asserts the attribute, with its own denominator and computability state.\n- Grouping layer: pairwise precision and recall over pairs of positive mentions (same group in gold vs. same declaration group in scanner output).\n- Scanner findings that lack an attribute count as wrong for that attribute, not as unscorable, once the scanner declares the capability.\n- Scorecard vector and `canonical-representation.md` updated. No cross-layer scalar.\n\n## Done when\n\nThe scorecard on the example packet shows each new metric with a correct hand-checked value.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "home",
   "creator": null,
   "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
   "labels": [
@@ -17,9 +17,17 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "bab14b3e-0343-43b9-904c-5ad6ca9e49d7",
+      "author": "home",
+      "text": "Implemented on kdatap-ec05ea-scorer (draft PR stacked on the labeling base). Attribute metrics and pairwise grouping for the mentions layer, with computable / not_asserted_by_gold / scanner_capability_not_declared states; headline metrics unchanged; scorecard merges and prints them. 9 new tests; full suite passes.",
+      "created_at": "2026-09-29T11:40:02.596831Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:19.336713Z",
-  "updated_at": "2026-09-28T22:34:29.978141Z",
+  "updated_at": "2026-09-29T11:40:02.596873Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,
