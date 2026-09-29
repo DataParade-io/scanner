@@ -72,7 +72,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: EmailAddress
   evidence:
     file_path: ghost/core/core/server/services/email-address/email-address-service.ts
     start_line: 7
@@ -87,17 +87,13 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: type_name
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 6
-      kind: field
 - id: ghost-email-address-service-L8
   layer: mentions
   subject:
     key: mention:email
-    name: replyTo
+    name: EmailAddress
   evidence:
     file_path: ghost/core/core/server/services/email-address/email-address-service.ts
     start_line: 8
@@ -112,12 +108,8 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: type_name
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 6
-      kind: field
 - id: ghost-email-address-service-L11
   layer: mentions
   subject:
@@ -233,7 +225,7 @@ annotations:
     start_line: 26
     end_line: 26
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Private method that provides the default email address
@@ -254,7 +246,7 @@ annotations:
     start_line: 28
     end_line: 28
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Private method that provides fallback email address
@@ -275,7 +267,7 @@ annotations:
     start_line: 30
     end_line: 30
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Private method that validates email addresses
@@ -359,7 +351,7 @@ annotations:
     start_line: 39
     end_line: 39
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Constructor dependency for email validation
@@ -401,7 +393,7 @@ annotations:
     start_line: 44
     end_line: 44
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Assignment storing the function that provides default email address
@@ -412,10 +404,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 44
-      kind: local
 - id: ghost-email-address-service-L46
   layer: mentions
   subject:
@@ -426,7 +414,7 @@ annotations:
     start_line: 46
     end_line: 46
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Assignment storing arrow function that provides fallback email address
@@ -437,10 +425,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 46
-      kind: local
 - id: ghost-email-address-service-L47
   layer: mentions
   subject:
@@ -501,7 +485,7 @@ annotations:
     start_line: 53
     end_line: 53
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
   rationale: Assignment storing the email validation function
@@ -512,10 +496,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 53
-      kind: local
 - id: ghost-email-address-service-L64
   layer: mentions
   subject:
@@ -583,6 +563,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 68
       kind: field
+    type_annotation: EmailAddress
 - id: ghost-email-address-service-L69
   layer: mentions
   subject:
@@ -606,8 +587,9 @@ annotations:
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 44
-      kind: local
+      line: 26
+      kind: field
+    type_annotation: () => EmailAddress
 - id: ghost-email-address-service-L72
   layer: mentions
   subject:
@@ -633,6 +615,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 72
       kind: field
+    type_annotation: EmailAddress | null
 - id: ghost-email-address-service-L73
   layer: mentions
   subject:
@@ -656,8 +639,9 @@ annotations:
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 46
-      kind: local
+      line: 28
+      kind: field
+    type_annotation: () => EmailAddress | null
 - id: ghost-email-address-service-L77
   layer: mentions
   subject:
@@ -700,6 +684,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 82
+      kind: local
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L86
   layer: mentions
   subject:
@@ -725,6 +714,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 86
       kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L87
   layer: mentions
   subject:
@@ -909,7 +899,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: preferred
+    name: EmailAddresses
   evidence:
     file_path: ghost/core/core/server/services/email-address/email-address-service.ts
     start_line: 105
@@ -924,12 +914,8 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: type_name
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 105
-      kind: field
 - id: ghost-email-address-service-L107
   layer: mentions
   subject:
@@ -972,6 +958,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L109
   layer: mentions
   subject:
@@ -1014,6 +1005,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L117
   layer: mentions
   subject:
@@ -1024,7 +1020,7 @@ annotations:
     start_line: 117
     end_line: 117
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
   rationale: Error message logging invalid reply-to address
@@ -1045,7 +1041,7 @@ annotations:
     start_line: 120
     end_line: 120
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
   rationale: Warning message about reply-to address validation
@@ -1098,6 +1094,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L129
   layer: mentions
   subject:
@@ -1190,6 +1191,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 143
       kind: local
+    type_annotation: EmailAddress | null
 - id: ghost-email-address-service-L144
   layer: mentions
   subject:
@@ -1215,6 +1217,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 143
       kind: local
+    type_annotation: EmailAddress | null
 - id: ghost-email-address-service-L145
   layer: mentions
   subject:
@@ -1236,6 +1239,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    type_annotation: EmailAddress | null
 - id: ghost-email-address-service-L146
   layer: mentions
   subject:
@@ -1257,6 +1265,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    type_annotation: EmailAddress | null
 - id: ghost-email-address-service-L150
   layer: mentions
   subject:
@@ -1370,6 +1383,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L163
   layer: mentions
   subject:
@@ -1412,6 +1430,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L171
   layer: mentions
   subject:
@@ -1431,7 +1454,7 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: ghost/core
 - id: ghost-email-address-service-L172
   layer: mentions
@@ -1454,6 +1477,11 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
 - id: ghost-email-address-service-L176
   layer: mentions
   subject:
@@ -1521,13 +1549,13 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: from
   evidence:
     file_path: ghost/core/core/server/services/email-address/email-address-service.ts
     start_line: 180
     end_line: 180
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
   rationale: Warning message about sending from different domain
@@ -1626,6 +1654,10 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 185
+      kind: local
 - id: ghost-email-address-service-L197
   layer: mentions
   subject:
@@ -1649,8 +1681,8 @@ annotations:
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
-      line: 197
-      kind: field
+      line: 185
+      kind: local
 - id: ghost-email-address-service-L207
   layer: mentions
   subject:
@@ -1676,6 +1708,7 @@ annotations:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
       kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L208
   layer: mentions
   subject:
@@ -1700,7 +1733,8 @@ annotations:
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
-      kind: local
+      kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L209
   layer: mentions
   subject:
@@ -1746,7 +1780,8 @@ annotations:
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
-      kind: local
+      kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L212
   layer: mentions
   subject:
@@ -1834,7 +1869,8 @@ annotations:
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
-      kind: local
+      kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L230
   layer: mentions
   subject:
@@ -1880,7 +1916,8 @@ annotations:
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
-      kind: local
+      kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L247
   layer: mentions
   subject:
@@ -1905,7 +1942,8 @@ annotations:
     declaration:
       file_path: ghost/core/core/server/services/email-address/email-address-service.ts
       line: 207
-      kind: local
+      kind: parameter
+    type_annotation: string
 - id: ghost-email-address-service-L248
   layer: mentions
   subject:
