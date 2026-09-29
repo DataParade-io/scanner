@@ -2,9 +2,15 @@ import type { PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
 import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
+  dedupeLocations,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
+  sourceOf,
+  spansOrFileStart,
 } from "./helpers";
 
 interface ParsedAttribute {
@@ -27,21 +33,23 @@ function attributesOf(decorators: string[] | undefined): ParsedAttribute[] {
 }
 
 /** A `using` matches when the declared namespace is at or below the configured one. */
-function hasUsingNamespace(
+function usingLocations(
   ctx: PatternContext,
   namespaces: string[],
-): boolean {
-  if (namespaces.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
+): SourceLocation[] {
+  if (namespaces.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
     namespaces.some(
       (want) => imp.module === want || imp.module.startsWith(`${want}.`),
     ),
   );
 }
 
-function sourceOf(ctx: PatternContext): string {
-  return ctx.strippedContent ?? ctx.file.content ?? "";
+function hasUsingNamespace(
+  ctx: PatternContext,
+  namespaces: string[],
+): boolean {
+  return usingLocations(ctx, namespaces).length > 0;
 }
 
 function callNameRegex(callNames: string[]): RegExp {
@@ -80,20 +88,39 @@ export function detectCSharpDatabaseConnectionsFromConfig(
 
     if (!hasUsing && !hasCall && !derivesFromDbType) continue;
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    const callLocations =
+      db.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(db.callNames),
+          ])
+        : [];
+    const typeLocations = types
+      .filter((type) =>
+        (type.baseTypes ?? []).some((base) =>
+          db.baseTypes.some((want) => base === want || base.startsWith(want)),
+        ),
+      )
+      .map((type) => type.location);
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...usingLocations(ctx, db.usingNamespaces),
+        ...callLocations,
+        ...typeLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location,
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   return findings;
@@ -115,46 +142,65 @@ export function detectCSharpAuthFromConfig(
 
     if (!hasUsing && !hasCall) continue;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    const callLocations =
+      lib.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(lib.callNames),
+          ])
+        : [];
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...usingLocations(ctx, lib.usingNamespaces),
+        ...callLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location,
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
-  const declaredAttributes = [
-    ...(ctx.types ?? []).flatMap((type) => attributesOf(type.decorators)),
-    ...(ctx.functions ?? []).flatMap((fn) => attributesOf(fn.decorators)),
+  const owners = [
+    ...(ctx.types ?? []).map((type) => ({
+      location: type.location,
+      decorators: type.decorators,
+    })),
+    ...(ctx.functions ?? []).map((fn) => ({
+      location: fn.location,
+      decorators: fn.decorators,
+    })),
   ];
 
   for (const attrRule of config.csharp.auth.attributes) {
-    const match = declaredAttributes.find((attr) =>
-      attrRule.attributeNames.includes(attr.name),
-    );
-    if (!match) continue;
+    const seenSpans = new Set<string>();
+    for (const owner of owners) {
+      const match = attributesOf(owner.decorators).find((attr) =>
+        attrRule.attributeNames.includes(attr.name),
+      );
+      if (!match) continue;
+      const spanKey = `${owner.location.startLine}:${owner.location.endLine}`;
+      if (seenSpans.has(spanKey)) continue;
+      seenSpans.add(spanKey);
 
-    findings.push({
-      pattern: attrRule.patternId,
-      name: attrRule.id,
-      confidence: attrRule.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(attrRule.strategy ? { strategy: attrRule.strategy } : {}),
-        ...(match.firstStringArg ? { policy: match.firstStringArg } : {}),
-      },
-    });
+      findings.push({
+        pattern: attrRule.patternId,
+        name: attrRule.id,
+        confidence: attrRule.confidence,
+        location: owner.location,
+        properties: {
+          ...(attrRule.strategy ? { strategy: attrRule.strategy } : {}),
+          ...(match.firstStringArg ? { policy: match.firstStringArg } : {}),
+        },
+      });
+    }
   }
 
   return findings;

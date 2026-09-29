@@ -9,6 +9,7 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
 import {
   extractPackagesFromPipfile,
   extractPackagesFromPyprojectToml,
@@ -21,7 +22,7 @@ function toPosixPath(p: string): string {
 
 export interface PythonManifestPackages {
   manifestRelativePath: string;
-  packages: string[];
+  packages: ManifestPackageSpan[];
 }
 
 function createManifestFileInfo(manifestRelativePath: string): FileInfo {
@@ -76,7 +77,7 @@ export async function parsePythonDependencyManifests(
     }
     bytesRead += raw.length;
 
-    let packages: string[] = [];
+    let packages: ManifestPackageSpan[] = [];
     if (lower.startsWith("requirements") && lower.endsWith(".txt")) {
       packages = extractPackagesFromRequirementsTxt(raw);
     } else if (lower === "pyproject.toml") {
@@ -90,7 +91,7 @@ export async function parsePythonDependencyManifests(
 
     byManifest.push({
       manifestRelativePath,
-      packages: Array.from(new Set(packages)),
+      packages,
     });
   }
 
@@ -108,9 +109,11 @@ export async function detectPythonPatternsFromDependencyManifests(
 
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
-    const imports = manifest.packages.map((p) => ({
-      module: p,
-      names: [p],
+    const imports = manifest.packages.map((pkg) => ({
+      module: pkg.name,
+      names: [pkg.name],
+      startLine: pkg.startLine,
+      endLine: pkg.endLine,
     }));
 
     findings.push(

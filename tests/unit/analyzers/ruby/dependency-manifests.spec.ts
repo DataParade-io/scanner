@@ -62,11 +62,11 @@ describe("Ruby dependency manifests", () => {
     expect(manifests[0].manifestRelativePath).toBe("Gemfile");
     expect(manifests[0].dependencies).toEqual(
       expect.arrayContaining([
-        { name: "stripe", version: "13.2.0" },
-        { name: "twilio-ruby", version: "7.8.0" },
-        { name: "aws-sdk-s3", version: "1.188.0" },
-        { name: "twitter", version: "8.0.0" },
-        { name: "googleauth", version: "1.15.0" },
+        expect.objectContaining({ name: "stripe", version: "13.2.0" }),
+        expect.objectContaining({ name: "twilio-ruby", version: "7.8.0" }),
+        expect.objectContaining({ name: "aws-sdk-s3", version: "1.188.0" }),
+        expect.objectContaining({ name: "twitter", version: "8.0.0" }),
+        expect.objectContaining({ name: "googleauth", version: "1.15.0" }),
       ]),
     );
     expect(

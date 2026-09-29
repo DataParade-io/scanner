@@ -9,6 +9,7 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
 import {
   extractPackagesFromCMakeLists,
   extractPackagesFromConanfile,
@@ -21,7 +22,7 @@ function toPosixPath(p: string): string {
 
 export interface CppManifestPackages {
   manifestRelativePath: string;
-  packages: string[];
+  packages: ManifestPackageSpan[];
 }
 
 function createManifestFileInfo(manifestRelativePath: string): FileInfo {
@@ -81,7 +82,7 @@ export async function parseCppDependencyManifests(
     }
     bytesRead += raw.length;
 
-    let packages: string[] = [];
+    let packages: ManifestPackageSpan[] = [];
     if (lower === "vcpkg.json") {
       packages = extractPackagesFromVcpkgJson(raw);
     } else if (lower === "conanfile.txt" || lower === "conanfile.py") {
@@ -94,7 +95,7 @@ export async function parseCppDependencyManifests(
 
     byManifest.push({
       manifestRelativePath,
-      packages: Array.from(new Set(packages)),
+      packages,
     });
   }
 
@@ -112,9 +113,11 @@ export async function detectCppPatternsFromDependencyManifests(
 
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
-    const imports = manifest.packages.map((p) => ({
-      module: p,
-      names: Array.from(new Set([p, p.toLowerCase()])),
+    const imports = manifest.packages.map((pkg) => ({
+      module: pkg.name,
+      names: Array.from(new Set([pkg.name, pkg.name.toLowerCase()])),
+      startLine: pkg.startLine,
+      endLine: pkg.endLine,
     }));
 
     findings.push(

@@ -17,6 +17,8 @@ import {
 export interface RubyManifestDependency {
   name: string;
   version?: string;
+  startLine: number;
+  endLine: number;
 }
 
 export interface RubyManifestPackages {
@@ -89,9 +91,11 @@ export async function parseRubyDependencyManifests(
       lockedVersions = parseGemfileLockVersions(lockRaw);
     }
 
-    const dependencies = parseGemfile(gemfileRaw).map(({ name }) => ({
-      name,
-      version: lockedVersions.get(name),
+    const dependencies = parseGemfile(gemfileRaw).map((gem) => ({
+      name: gem.name,
+      version: lockedVersions.get(gem.name),
+      startLine: gem.startLine,
+      endLine: gem.endLine,
     }));
     if (dependencies.length === 0) continue;
 
@@ -124,6 +128,8 @@ export async function detectRubyPatternsFromDependencyManifests(
           {
             module: dependency.name,
             names: [dependency.name],
+            startLine: dependency.startLine,
+            endLine: dependency.endLine,
           },
         ],
       });

@@ -5,6 +5,7 @@ import {
   parsePhpDependencyManifests,
 } from "../../../../src/analyzers/php/dependency-manifests";
 import { parseComposerJson } from "../../../../src/analyzers/php/manifest-parsers";
+import { manifestSpanNames } from "../../../../src/analyzers/shared/manifest-span";
 
 const FIXTURE_ROOT = path.join(
   __dirname,
@@ -33,7 +34,7 @@ describe("PHP manifest parsers", () => {
     const parsed = parseComposerJson(content);
 
     expect(parsed.name).toBe("acme/gateway");
-    expect(parsed.packages.sort()).toEqual([
+    expect(manifestSpanNames(parsed.packages).sort()).toEqual([
       "guzzlehttp/guzzle",
       "laravel/framework",
       "phpunit/phpunit",
@@ -50,7 +51,7 @@ describe("PHP dependency manifests", () => {
     const manifests = await parsePhpDependencyManifests(FIXTURE_ROOT);
     expect(manifests.length).toBe(1);
     expect(manifests[0].packageName).toBe("acme/billing-api");
-    expect(manifests[0].packages).toEqual(
+    expect(manifestSpanNames(manifests[0].packages)).toEqual(
       expect.arrayContaining([
         "guzzlehttp/guzzle",
         "laravel/framework",
