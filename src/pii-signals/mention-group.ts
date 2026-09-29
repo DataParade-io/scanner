@@ -45,15 +45,25 @@ function escapeRegExp(text: string): string {
  */
 export function mentionQualifier(line: string, signalId: string): string | undefined {
   const conceptWords = identifierWords(signalId);
+  // The first qualified identifier wins, unless a later one on the line is a more
+  // specific form of it: `customer_email = get_customer_email_for_voucher_usage(...)`
+  // -> `customer_for_voucher_usage`, since the value comes from that source.
+  let chosen: string[] | undefined;
   for (const identifier of line.match(IDENTIFIER) ?? []) {
     const words = identifierWords(identifier);
     if (!conceptWords.every((word) => words.includes(word)) || words.length === conceptWords.length) {
       continue;
     }
     const qualifiers = words.filter((word) => !GENERIC_WORDS.has(word) && !conceptWords.includes(word));
-    if (qualifiers.length > 0) {
-      return qualifiers.join("_");
+    if (qualifiers.length === 0) continue;
+    if (!chosen) {
+      chosen = qualifiers;
+    } else if (qualifiers.length > chosen.length && chosen.every((word) => qualifiers.includes(word))) {
+      chosen = qualifiers;
     }
+  }
+  if (chosen) {
+    return chosen.join("_");
   }
   const conceptPattern = conceptWords.map(escapeRegExp).join("[_]?");
   const receiver = new RegExp(
@@ -187,17 +197,20 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       ? `${hit.id}@${hit.evidence.filePath}:${hit.declaration.line}`
       : undefined;
 
-  // Joins run from most to least reliable: name, declaration, field, model file.
+  // Joins run from most to least reliable: declaration (a declaration never spans two
+  // data items in the labeled corpus), name, field, model file. A use of a variable
+  // therefore follows its declaration's name rather than its own line's qualifier.
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
     parent.set(node, node);
-    const name = effectiveName(hit);
-    if (name) union(node, groupNode(name));
+    const declaration = declarationNode(hit);
+    if (declaration) union(node, `decl:${declaration}`);
   });
   hits.forEach((hit, index) => {
-    const declaration = hit.location === "comment" ? undefined : declarationNode(hit);
-    if (declaration) union(`hit:${index}`, `decl:${declaration}`);
+    if (hit.location === "comment") return;
+    const name = effectiveName(hit);
+    if (name) union(`hit:${index}`, groupNode(name));
   });
 
   // An entity field read (`order.user_email`, `member.get('email')`) joins the

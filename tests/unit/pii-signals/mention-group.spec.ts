@@ -17,6 +17,8 @@ describe("mentionQualifier", () => {
     ["recipient_email = data['email']", undefined],
     ["const email = req.body.email;", undefined],
     ["newEmail = input.email", undefined],
+    ["customer_email = get_customer_email_for_voucher_usage(checkout)", "customer_for_voucher_usage"],
+    ["customer_email = order.user_email", "customer"],
   ])("%s -> %s", (line, expected) => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
@@ -155,12 +157,23 @@ describe("field links", () => {
 });
 
 describe("cannot-link", () => {
-  it("never merges two differently named groups through a shared declaration", () => {
+  it("keeps a shared declaration together under its first name", () => {
     const out = assignDeclarationGroups([
       { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, group: "email:member", declaration: { line: 3, kind: "parameter" } },
       { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, group: "email:customer", declaration: { line: 3, kind: "parameter" } },
       { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, declaration: { line: 3, kind: "parameter" } },
     ]);
-    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:customer", "email:member"]);
+    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:member", "email:member"]);
+  });
+
+  it("never merges two differently named groups through a field link", () => {
+    const out = assignDeclarationGroups([
+      { id: "email", location: "code" as const, evidence: { filePath: "m.py" }, fieldKeys: [{ key: "order.email", definition: true }] },
+      { id: "email", location: "code" as const, evidence: { filePath: "a.py" }, group: "email:customer", declaration: { line: 1, kind: "local" } },
+      { id: "email", location: "code" as const, evidence: { filePath: "a.py" }, declaration: { line: 1, kind: "local" }, fieldKeys: [{ key: "order.email", definition: false }] },
+    ]);
+    expect(out[0].group).toBe("email:order");
+    expect(out[1].group).toBe("email:customer");
+    expect(out[2].group).toBe("email:customer");
   });
 });
