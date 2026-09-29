@@ -46,4 +46,16 @@ needs_adjudication:
     reason: the value comes from a request body whose type does not say which
 ```
 
+Each group also has `subject_kind`, from a closed list, so reports can filter on whose address it is:
+
+| subject_kind | Meaning |
+| --- | --- |
+| `end_user` | A customer, member, or other user of the product |
+| `workforce` | Staff, admins, employees |
+| `other_person` | A person who is not necessarily a user (gift recipient, donor) |
+| `organization` | An address the organization configures for itself (sender, support, reply-to) |
+| `machine_identity` | A service account or integration identity |
+
+Every group keeps its mentions in the knowledge base whatever its `subject_kind`; hiding or routing a group (for example leaving `organization` addresses out of a privacy inventory) belongs to the report that uses it.
+
 Every input cluster appears exactly once across `groups[*].clusters` and `needs_adjudication`. Group ids are unique. A group may hold a single cluster.
