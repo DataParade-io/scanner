@@ -1,0 +1,1523 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-e746d2
+  files:
+  - saleor/plugins/user_email/plugin.py
+annotations:
+- id: saleor-user_email-plugin-L10
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplatesByPluginConfigurationLoader
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports dataloader for email templates; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplate
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports model for email templates; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L13
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_common
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports module with email configuration utilities; feature module.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIG_STRUCTURE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration structure constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIGURATION
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default email configuration; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L16
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default template value constant; configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L19
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailConfig
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports EmailConfig class for holding email configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L20
+  layer: mentions
+  subject:
+    key: mention:email
+    name: validate_default_email_configuration
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 20
+    end_line: 20
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function for validating email configuration; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_change_email_confirm
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports function for sending email notifications; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L27
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_change_email_request
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports function for sending email notifications; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-plugin-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum value; represents message type, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L58
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 58
+    end_line: 58
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum value; represents message type, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L72
+  layer: mentions
+  subject:
+    key: mention:email
+    name: UserEmailPlugin
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 72
+    end_line: 72
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name for plugin managing user email notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L74
+  layer: mentions
+  subject:
+    key: mention:email
+    name: User emails
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 74
+    end_line: 74
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose string - plugin display name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L84
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 84
+    end_line: 84
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L92
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 92
+    end_line: 92
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L98
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_DELETE_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L100
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 100
+    end_line: 100
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L101
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 101
+    end_line: 101
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default subject text constant; prose message, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L104
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 104
+    end_line: 104
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L108
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default subject text constant; prose message, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L112
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 112
+    end_line: 112
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L113
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L121
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 121
+    end_line: 121
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L127
+  layer: mentions
+  subject:
+    key: mention:email
+    name: INVOICE_READY_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L134
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L142
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 142
+    end_line: 142
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 150
+    end_line: 150
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L166
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 166
+    end_line: 166
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L172
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ORDER_CANCELED_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 172
+    end_line: 172
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template field name constant; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L179
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 179
+    end_line: 179
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L187
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 187
+    end_line: 187
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration template value; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L189
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIGURATION
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 189
+    end_line: 189
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default configuration list; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L222
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 222
+    end_line: 222
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary key for template field; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L225
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Account change email confirm - subject
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 225
+    end_line: 225
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose label string for UI.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L227
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 227
+    end_line: 227
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary key for template field; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L230
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Account change email confirm - template
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 230
+    end_line: 230
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose label string for UI.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L232
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 232
+    end_line: 232
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary key for template field; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L235
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Account change email request - subject
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 235
+    end_line: 235
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose label string for UI.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L237
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 237
+    end_line: 237
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary key for template field; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L240
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Account change email request - template
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 240
+    end_line: 240
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose label string for UI.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-user_email-plugin-L343
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIG_STRUCTURE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 343
+    end_line: 343
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Merges email configuration structure; feature configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L348
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailConfig
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 348
+    end_line: 348
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Instantiates EmailConfig class for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L353
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_name
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 353
+    end_line: 353
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for sender's name (not address).
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-user_email-plugin-L354
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_address
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 354
+    end_line: 354
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing sender's email address from configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/user_email/plugin.py
+      line: 354
+      kind: field
+- id: saleor-user_email-plugin-L362
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 362
+    end_line: 362
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment referring to email templates; comments are negative.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-user_email-plugin-L367
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplate
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 367
+    end_line: 367
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type annotation for template objects; feature model, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-user_email-plugin-L369
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template_by_name
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 369
+    end_line: 369
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary variable holding template objects; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L370
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 370
+    end_line: 370
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary key from template object; templates are feature, not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L371
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 371
+    end_line: 371
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Loop variable iterating templates; templates are feature, not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L374
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 374
+    end_line: 374
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment referring to email templates; comments are negative.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-user_email-plugin-L380
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template_by_name
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 380
+    end_line: 380
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary check for template objects; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L381
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template_by_name
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 381
+    end_line: 381
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dictionary lookup for template objects; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L387
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplatesByPluginConfigurationLoader
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 387
+    end_line: 387
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Instantiates dataloader for templates; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L424
+  layer: mentions
+  subject:
+    key: mention:email
+    name: validate_default_email_configuration
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 424
+    end_line: 424
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Validates email configuration; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L425
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 425
+    end_line: 425
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable holding template data; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L427
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 427
+    end_line: 427
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Argument passing template data; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L437
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 437
+    end_line: 437
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Initializes list for template data; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L441
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 441
+    end_line: 441
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Appends to template data list; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L452
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 452
+    end_line: 452
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing template data; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L458
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 458
+    end_line: 458
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Loop iterates template data; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L459
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 459
+    end_line: 459
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration value check; feature, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L460
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplate
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 460
+    end_line: 460
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model method to update/create templates; feature model, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L473
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_HOST
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 473
+    end_line: 473
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP host setting; server configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L474
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_PORT
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 474
+    end_line: 474
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP port setting; server configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L476
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_HOST_USER
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 476
+    end_line: 476
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP username setting; authentication credential, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L479
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_HOST_PASSWORD
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 479
+    end_line: 479
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP password setting; authentication credential, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L483
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_USE_TLS
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 483
+    end_line: 483
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP TLS flag setting; server configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-plugin-L486
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_USE_SSL
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 486
+    end_line: 486
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP SSL flag setting; server configuration, not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
