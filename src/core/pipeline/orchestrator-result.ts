@@ -22,12 +22,26 @@ export interface ScanMention {
   location?: "code" | "comment";
   /** Comments immediately around a code match. */
   commentContext?: CommentContext;
+  /** Data item group, e.g. `email:customer`, when the scanner can tell. */
+  group?: string;
+}
+
+export interface ScanDataItemGroup {
+  /** Group id, e.g. `email:customer`. */
+  id: string;
+  mentionIds: string[];
 }
 
 export interface ScanDataItem {
   id: string;
   mentionIds: string[];
   labels: string[];
+  /**
+   * The separate data items found under this concept, such as a member's email
+   * and a staff user's email (KDATAP-c8a46a). Mentions without a group are only
+   * listed in `mentionIds`.
+   */
+  groups?: ScanDataItemGroup[];
 }
 
 export interface OrchestratorScanResult {

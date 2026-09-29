@@ -22,6 +22,8 @@ export interface PersonalDataFinding {
   subjectKey: string;
   labels: string[];
   evidenceLocations: PersonalDataEvidence[];
+  /** Data item group of a mention finding (KDATAP-c8a46a). */
+  group?: string;
 }
 
 export interface PersonalDataFindingsPayload {
@@ -74,6 +76,7 @@ function hitToMentionFinding(hit: PiiSignalHit): PersonalDataFinding {
     ),
     labels: [...hit.labels],
     evidenceLocations: [hitToEvidence(hit)],
+    ...(hit.group ? { group: hit.group } : {}),
   };
 }
 

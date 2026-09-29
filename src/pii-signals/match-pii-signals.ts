@@ -25,6 +25,8 @@ export interface PiiSignalHit {
   location?: "code" | "comment";
   /** Comments immediately around a code match (KDATAP-b512a8). */
   commentContext?: CommentContext;
+  /** Data item group of a code match, e.g. `email:customer` (KDATAP-c8a46a). */
+  group?: string;
 }
 
 export interface MatchPiiSignalsFileInput {

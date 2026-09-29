@@ -53,6 +53,7 @@ export function personalDataFindingToLayerFinding(
     labels: [...finding.labels],
     sourceFilePaths: [...new Set(sourceLines.map((line) => line.file_path))].sort(),
     sourceLines,
+    ...(finding.group ? { mentionAttributes: { group: finding.group } } : {}),
   };
 }
 
