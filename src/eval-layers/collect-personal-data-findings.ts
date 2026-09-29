@@ -24,6 +24,8 @@ export interface PersonalDataFinding {
   evidenceLocations: PersonalDataEvidence[];
   /** Data item group of a mention finding (KDATAP-c8a46a). */
   group?: string;
+  /** Same-file declaration of a mention finding (KDATAP-8e47c2). */
+  declaration?: { line: number; kind: string } | "unresolved";
 }
 
 export interface PersonalDataFindingsPayload {
@@ -77,6 +79,7 @@ function hitToMentionFinding(hit: PiiSignalHit): PersonalDataFinding {
     labels: [...hit.labels],
     evidenceLocations: [hitToEvidence(hit)],
     ...(hit.group ? { group: hit.group } : {}),
+    ...(hit.declaration ? { declaration: hit.declaration } : {}),
   };
 }
 

@@ -1,6 +1,7 @@
 import type { PiiSignalRule } from "./pii-signal-rules";
 import type { CommentContext } from "./comment-context";
 import { loadPiiSignalRules } from "./pii-signal-rules";
+import type { MentionDeclaration } from "../analyze/mention-declaration";
 import {
   extractLineIdentifierTokens,
   resolveAliasRuleIdsForToken,
@@ -27,6 +28,11 @@ export interface PiiSignalHit {
   commentContext?: CommentContext;
   /** Data item group of a code match, e.g. `email:customer` (KDATAP-c8a46a). */
   group?: string;
+  /**
+   * Same-file declaration of the mentioned name, or `unresolved` (KDATAP-8e47c2).
+   * Absent when the line has no code occurrence to declare or the file is not analyzed.
+   */
+  declaration?: MentionDeclaration;
 }
 
 export interface MatchPiiSignalsFileInput {
