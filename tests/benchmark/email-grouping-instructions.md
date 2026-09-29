@@ -18,7 +18,7 @@ Link two clusters into one group only when the source shows they hold the same a
 - the value flows between them: passed as an argument, assigned, returned, put into a payload or dict key that is read elsewhere, or imported through a relative import
 - the same request, payload, or settings field read in several places
 
-Similar names alone are not evidence. Different subjects are different groups even when the field name is the same: a member's email, a staff user's email, a customer's order email, the site's configured sender address, and a gift card recipient's email are different data items unless the code copies one into the other (then say so in the rationale; if the code copies one into the other, they are still separate groups, and the copy is noted).
+Similar names alone are not evidence. Different subjects are different groups even when the field name is the same: a member's email, a staff user's email, a customer's order email, the site's configured sender address, and a gift card recipient's email are different data items. A stored copy is its own data item: an order's `user_email` copied from the user's account email is a separate group, and the rationale notes where it is copied from.
 
 When a cluster could belong to more than one group and the source does not settle it, put it in `needs_adjudication` with the candidate groups and the reason. Do not force it.
 
