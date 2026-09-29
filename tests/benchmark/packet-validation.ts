@@ -219,6 +219,12 @@ export function validatePacket(
     checkLine(file, start, where);
     checkLine(file, end, where);
 
+    const name = record.subject.name;
+    if (name === undefined || !/^[\w-]+$/.test(name)) {
+      errors.push(
+        `${where}: subject.name must be the single token of the chosen occurrence, got '${name ?? ""}'`,
+      );
+    }
     const declaration = record.mention_attributes?.declaration;
     const syntaxKind = record.mention_attributes?.syntax_kind;
     const positive = record.expected.status === "positive";

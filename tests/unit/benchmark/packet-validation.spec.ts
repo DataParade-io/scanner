@@ -187,6 +187,20 @@ describe("benchmark/packet-validation", () => {
     );
   });
 
+  it("rejects a subject.name that is not a single token", () => {
+    const packet = validPacket();
+    packet.annotations[2] = record("send-to", 4, {
+      subject: { key: "mention:email", name: "return mailer.send({ to: email });" },
+      mention_attributes: {
+        syntax_kind: "identifier",
+        declaration: { file_path: "src/signup.js", line: 2, kind: "parameter" },
+      },
+    });
+    expect(run(packet).errors).toContain(
+      "annotations[2]: subject.name must be the single token of the chosen occurrence, got 'return mailer.send({ to: email });'",
+    );
+  });
+
   it("rejects source that is not at the pinned commit", () => {
     const { errors } = run(validPacket(), "b".repeat(40));
     expect(errors[0]).toMatch(/expected pinned a{40}/);
