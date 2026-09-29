@@ -1,0 +1,536 @@
+repo: ghost
+concept: email
+provenance:
+  proposed_by: claude-sonnet-5
+  proposed_at: '2026-09-29'
+  review_state: proposed
+groups:
+- id: member-account-email
+  name: Member account email
+  subject: member
+  purpose: sign-in, newsletters, comment notifications and other member communication
+  rationale: members.email column (schema.js:649, validated schema.js:654) is the model field. Clusters
+    are reads and writes of it on Member instances (member.get('email'), memberModel.get('email'), findOne({email}),
+    attrs.email in models/member.js, 'members.email' selector, member-repository create/edit/get lookups
+    and pick lists), the member add/read request fields in api/endpoints/members.js, the member emails
+    handed to email-service recipient building (sending-service buildRecipients member.email -> recipient.email
+    -> mailgun-email-provider), the comment notification recipients and reporter (comments-service reportComment
+    uses reporter.id as member_id, so the reporter is a member), the member import row email, memberEmail
+    passed to triggerMemberSignupAutomation (from newMember.get('email') / memberModel.get('email')),
+    the gift redemption member email (gift-service passes member.get('email')), and staff-service getDataFromIds
+    member data (member.email of a Member model). Stored copies in other tables (stripe customers, recipients,
+    events, suppressions) are separate groups.
+  clusters:
+  - c001
+  - c003
+  - c004
+  - c038
+  - c039
+  - c044
+  - c045
+  - c065
+  - c067
+  - c068
+  - c070
+  - c071
+  - c100
+  - c101
+  - c102
+  - c103
+  - c128
+  - c132
+  - c135
+  - c136
+  - c137
+  - c138
+  - c139
+  - c140
+  - c141
+  - c142
+  - c143
+  - c144
+  - c145
+  - c147
+  - c149
+  - c150
+  - c151
+  - c152
+  - c153
+  - c154
+  - c155
+  - c157
+  - c158
+  - c159
+  - c160
+  - c193
+  - c205
+- id: staff-user-email
+  name: Staff user account email
+  subject: staff user
+  purpose: staff sign-in, password reset, session verification, owner welcome email and staff notification
+    recipient
+  rationale: 'users.email column (schema.js:274, validated schema.js:279) and reads of it on User instances:
+    models/user.js (getByEmail, check, edit, setup, onSaving), auth/passwordreset.js (email from the reset
+    request looked up through models.User.getByEmail, then carried in the token and reset mail), session-service
+    (user.get(''email'') for the 2FA sign-in mail and the signin.js template), auth/setup.js sendWelcomeEmail
+    (authentication.js:84 passes user.get(''email'')), staff notification recipients from User.getEmailAlertUsers
+    (user.email in staff-service-emails, getSharedData recipient which carries the user slug), the post
+    author and site owner User rows in comments-service-emails (author.get(''email''), owner.get(''email'')
+    from User.getOwnerUser), and the members import completion email, whose recipient is frame.user.get(''email'')
+    (members.js:405 -> importer requestUserEmail -> completion-email recipient, falling back to the site
+    owner).'
+  clusters:
+  - c002
+  - c033
+  - c034
+  - c046
+  - c047
+  - c048
+  - c049
+  - c050
+  - c051
+  - c052
+  - c053
+  - c054
+  - c055
+  - c056
+  - c057
+  - c058
+  - c059
+  - c060
+  - c061
+  - c062
+  - c063
+  - c064
+  - c069
+  - c073
+  - c076
+  - c078
+  - c129
+  - c130
+  - c131
+  - c178
+  - c179
+  - c181
+  - c183
+  - c184
+  - c186
+  - c190
+  - c195
+  - c197
+  - c203
+  - c204
+- id: staff-invite-email
+  name: Staff invite email
+  subject: invited staff user
+  purpose: address of a person invited to become a staff user
+  rationale: invites.email column (schema.js:500, validated schema.js:505). No other cluster reads or
+    writes it; it is a separate stored address from users.email until the invite is accepted.
+  clusters:
+  - c036
+  - c037
+- id: site-default-from-address
+  name: Site default from address
+  subject: site
+  purpose: default sender address for transactional and staff notification email
+  rationale: 'settingsHelpers.getDefaultEmail() is the source. email-address-service.ts takes it through
+    the getDefaultEmail dependency (wrapper: settingsHelpers.getDefaultEmail) and exposes it as defaultFromEmail;
+    staff-service-emails calls settingsHelpers.getDefaultEmail directly (fromEmailAddress getter, used
+    as fromEmail in every staff notification template); newsletters-service uses emailAddressService.service.defaultFromAddress
+    as the from of the verification mail (same service object).'
+  clusters:
+  - c089
+  - c092
+  - c172
+  - c173
+  - c177
+  - c180
+  - c182
+  - c185
+  - c196
+  - c200
+  - c201
+  - c202
+- id: members-support-address
+  name: Members support address
+  subject: site
+  purpose: sender/reply address for member-facing mail (comment notifications, member magic links)
+  rationale: settingsHelpers.getMembersSupportAddress() is the source. EmailAddressService.getMembersSupportAddress
+    returns it after DMARC transform; comments-service-emails notificationFromAddress returns settingsHelpers.getMembersSupportAddress()
+    and is used as fromEmail and mail from; members-config-provider getEmailSupportAddress delegates to
+    it and members/api.js uses it as the magic-link mail from.
+  clusters:
+  - c066
+  - c072
+  - c074
+  - c077
+  - c096
+  - c127
+- id: fallback-sender-address
+  name: Managed-email fallback sender address
+  subject: site
+  purpose: from address used while a custom sending domain warms up
+  rationale: config hostSettings:managedEmail:fallbackAddress read by the getFallbackEmail dependency,
+    parsed in EmailAddressService (#getFallbackEmail, fallbackEmail getter) and used as the from address
+    in getAddress.
+  clusters:
+  - c085
+  - c090
+  - c091
+  - c094
+- id: outbound-message-from-address
+  name: Outbound message from address
+  subject: outgoing email message
+  purpose: the sender address of a message passed through GhostMailer and the address resolution in EmailAddressService
+  rationale: ghost-mailer getFromAddress(requestedFromAddress) passes the message from to emailAddress.service.getAddressFromString(from),
+    which parses it and hands it to getAddress (preferred.from); the resolved addresses.from becomes the
+    Sender header. Callers supply different senders, so the group is defined by the message field, not
+    by a single site setting.
+  clusters:
+  - c086
+  - c093
+  - c097
+  - c098
+  - c113
+  - c114
+- id: outbound-message-reply-to-address
+  name: Outbound message reply-to address
+  subject: outgoing email message
+  purpose: the reply-to address of a message passed through GhostMailer and EmailAddressService
+  rationale: ghost-mailer getFromAddress(requestedReplyToAddress) -> getAddressFromString(from, replyTo)
+    -> getAddress preferred.replyTo, validated and possibly dropped.
+  clusters:
+  - c083
+  - c084
+  - c095
+  - c099
+- id: newsletter-sender-email
+  name: Newsletter sender email
+  subject: newsletter
+  purpose: from address of newsletter emails
+  rationale: newsletters.sender_email column (schema.js:26); newsletter.get('sender_email') and attrs.sender_email
+    in newsletters-service.
+  clusters:
+  - c031
+  - c167
+  - c168
+  - c169
+- id: newsletter-reply-to-address
+  name: Newsletter reply-to setting
+  subject: newsletter
+  purpose: reply-to of newsletter emails (an address or the keywords newsletter/support)
+  rationale: newsletters.sender_reply_to column (schema.js:27); newsletter.get('sender_reply_to') in newsletters-service.
+  clusters:
+  - c032
+  - c166
+- id: newsletter-address-verification
+  name: Newsletter sender address awaiting verification
+  subject: newsletter sender or reply-to address
+  purpose: address submitted for verification by a magic link before it can be used on a newsletter
+  rationale: prepAttrsForEmailVerification takes email = cleanedAttrs[property] (sender_email or sender_reply_to),
+    pushes it to emailsToVerify, respondWithEmailVerification passes {email, property} to sendEmailVerificationMagicLink,
+    whose email goes to magicLinkService.sendMagicLink; the MagicLink getText/getHTML callbacks (newsletters-service
+    getText, getHTML, verifyEmailTemplate) receive it as their email argument. Mixes the newsletter from
+    and reply-to addresses because the code path is shared.
+  clusters:
+  - c165
+  - c170
+  - c171
+  - c174
+  - c175
+  - c176
+- id: email-design-sender-email
+  name: Automated email design sender email
+  subject: automated email design settings
+  purpose: default from address on the shared automated email design
+  rationale: email_design_settings.sender_email column (schema.js:2104, validation 2108).
+  clusters:
+  - c017
+  - c018
+- id: email-design-reply-to
+  name: Automated email design reply-to
+  subject: automated email design settings
+  purpose: default reply-to on the shared automated email design
+  rationale: email_design_settings.sender_reply_to column (schema.js:2110, validation 2114).
+  clusters:
+  - c019
+  - c020
+- id: automated-email-sender-email
+  name: Welcome email sender email
+  subject: automated (welcome) email
+  purpose: from address of one automated welcome email
+  rationale: welcome_email_automated_emails.sender_email column (schema.js:2329, validation 2333).
+  clusters:
+  - c023
+  - c024
+- id: automated-email-reply-to
+  name: Welcome email reply-to
+  subject: automated (welcome) email
+  purpose: reply-to of one automated welcome email
+  rationale: welcome_email_automated_emails.sender_reply_to column (schema.js:2335, validation 2339).
+  clusters:
+  - c025
+  - c026
+- id: member-magic-link-recipient
+  name: Member magic-link recipient address
+  subject: member
+  purpose: address a member sign-in, signup, subscribe or email-update link is sent to
+  rationale: members/api.js getText(url, type, email, otc) and getHTML(url, type, email, otc) receive
+    the email from MembersApi magic link sending and pass it to subscribeEmail, signupEmail, signupPaidEmail,
+    updateEmail and signinEmail templates ("Sent to {email}"). Kept apart from the member account email
+    column because the address may be one that is not yet stored on the member (updateEmail).
+  clusters:
+  - c115
+  - c116
+  - c117
+  - c118
+  - c119
+  - c120
+  - c121
+  - c122
+  - c123
+  - c124
+  - c125
+  - c126
+- id: stripe-customer-email
+  name: Stripe customer email (stored copy)
+  subject: member (as Stripe customer)
+  purpose: email stored on the Stripe customer link of a member
+  rationale: 'members_stripe_customers.email column (schema.js:1220); written from data.email in upsertCustomer,
+    customer.email in linkStripeCustomer and stripeCustomer.email after createCustomer({email: member.get(''email'')})
+    in member-repository. Stored copy, separate from members.email.'
+  clusters:
+  - c009
+  - c133
+  - c134
+  - c146
+  - c148
+  - c156
+- id: donation-payer-email
+  name: Donation payer email (stored copy)
+  subject: donor
+  purpose: email of a one-time donation payment
+  rationale: donation_payment_events.email column (schema.js:1478, validation 1483); set in checkout-session-event-service
+    from member.get('email') ?? session.customer_details.email into DonationPaymentEvent, and read as
+    donationPaymentEvent.email in staff-service-emails notifyDonationReceived (subject, memberData, template
+    donation.email).
+  clusters:
+  - c010
+  - c011
+  - c187
+  - c188
+  - c189
+- id: email-recipient-member-email-copy
+  name: Email recipient member email (stored copy)
+  subject: member (newsletter send recipient)
+  purpose: member email recorded on an email_recipients row for a newsletter send
+  rationale: email_recipients.member_email column (schema.js:1646); written from memberRow.email in batch-sending-service.
+    Copy of the member email.
+  clusters:
+  - c012
+- id: automation-run-member-email-copy
+  name: Automation run member email (stored copy)
+  subject: member (automation run)
+  purpose: member email recorded on an automation run
+  rationale: automation_runs.member_email column (schema.js:2255, validation 2259); written from options.memberEmail
+    in database-automations-repository. Copy of the member email passed by triggerMemberSignupAutomation.
+  clusters:
+  - c021
+  - c022
+- id: automated-email-recipient-member-email-copy
+  name: Automated email recipient member email (stored copy)
+  subject: member (welcome email recipient)
+  purpose: member email recorded on an automated_email_recipients row
+  rationale: automated_email_recipients.member_email column (schema.js:2421).
+  clusters:
+  - c027
+- id: gift-buyer-email
+  name: Gift buyer email
+  subject: gift buyer
+  purpose: email of the person who bought a gift subscription
+  rationale: gifts.buyer_email column (schema.js:2453); gift-service redemption passes redeemed.buyerEmail
+    into notifyGiftSubscriptionStarted as buyerEmail, which staff-service-emails outputs as giftedByEmail.
+  clusters:
+  - c028
+  - c194
+- id: gift-recipient-email
+  name: Gift recipient email
+  subject: gift recipient
+  purpose: address a gift delivery is sent to
+  rationale: gift_deliveries.recipient_email column (schema.js:2532, validation 2536).
+  clusters:
+  - c029
+  - c030
+- id: member-email-change-from
+  name: 'Member email change: previous address (stored)'
+  subject: member
+  purpose: previous email of a member recorded in the email change event
+  rationale: members_email_change_events.from_email column (schema.js:921, validation 926); written from
+    member._previousAttributes.email in member-repository.js:964.
+  clusters:
+  - c042
+  - c043
+  - c161
+- id: member-email-change-to
+  name: 'Member email change: new address (stored)'
+  subject: member
+  purpose: new email of a member recorded in the email change event
+  rationale: members_email_change_events.to_email column (schema.js:914, validation 919); written from
+    member.get('email') in member-repository.js:965.
+  clusters:
+  - c040
+  - c041
+  - c162
+- id: suppressed-email-address
+  name: Suppressed email address
+  subject: suppressed recipient (member)
+  purpose: address on the email suppression list
+  rationale: suppressions.email column (schema.js:1871, validation 1876); EmailSuppressedEvent data.emailAddress;
+    AbstractEmailSuppressionList removeEmail/getSuppressionData/getBulkSuppressionData take the suppressed
+    address. The only caller (members.js:512) passes member.email; that read of the member email stays
+    in member-account-email because the list stores its own copy keyed by address.
+  clusters:
+  - c013
+  - c014
+  - c105
+  - c106
+  - c107
+  - c108
+  - c109
+  - c110
+- id: spam-complaint-email
+  name: Spam complaint email address (stored)
+  subject: member who complained
+  purpose: address recorded on a spam complaint event
+  rationale: email_spam_complaint_events.email_address column (schema.js:1899, validation 1904).
+  clusters:
+  - c015
+  - c016
+needs_adjudication:
+- cluster: c005
+  candidate_groups:
+  - email-design-sender-email
+  - email-design-reply-to
+  - automated-email-sender-email
+  - automated-email-reply-to
+  reason: validateEmailSenderFields is called from automated-email-design.js:77 (design settings) and
+    automated-emails.js:155,224 (welcome email), and the value is sender_email or sender_reply_to, so
+    subject and role are undetermined at this call
+- cluster: c006
+  candidate_groups:
+  - email-design-sender-email
+  - automated-email-sender-email
+  reason: sender_email field type of a helper shared by the design settings endpoint and the welcome email
+    endpoint
+- cluster: c007
+  candidate_groups:
+  - email-design-reply-to
+  - automated-email-reply-to
+  reason: sender_reply_to field type of a helper shared by the design settings endpoint and the welcome
+    email endpoint
+- cluster: c008
+  candidate_groups:
+  - email-design-sender-email
+  - automated-email-sender-email
+  reason: EMAIL_VALIDATIONS sender_email entry of a helper shared by the design settings endpoint and
+    the welcome email endpoint
+- cluster: c035
+  candidate_groups: []
+  reason: '''email'' here is a value in the settings.group enum list (a settings group name), not an address;
+    likely a false positive of the email concept'
+- cluster: c075
+  candidate_groups:
+  - staff-user-email
+  - member-account-email
+  reason: one comparison of author.get('email') (staff user, post author) with member.get('email'); the
+    cluster covers two subjects
+- cluster: c079
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  - fallback-sender-address
+  reason: generic parse(email) utility; the address is whatever string the caller passes (from, replyTo
+    or fallback)
+- cluster: c080
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  reason: generic stringify(EmailAddress) utility used for from and replyTo alike
+- cluster: c081
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  - site-default-from-address
+  reason: getAddress body reads preferred.replyTo, preferred.from and defaultFromEmail in one cluster
+- cluster: c082
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  reason: EmailAddresses parameter object holds both from and replyTo
+- cluster: c087
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  - site-default-from-address
+  reason: address object at email-address-service.ts:185 has from (default) and replyTo (preferred.replyTo
+    or preferred.from) in one cluster
+- cluster: c088
+  candidate_groups:
+  - newsletter-address-verification
+  - email-design-sender-email
+  - automated-email-sender-email
+  - outbound-message-from-address
+  reason: validate(email, type) parameter receives sender or reply-to addresses from newsletters-service
+    (c165) and from validateEmailSenderFields; subject differs per caller
+- cluster: c104
+  candidate_groups:
+  - newsletter-sender-email
+  - newsletter-reply-to-address
+  - site-default-from-address
+  reason: sending-service.js:132-134 builds the newsletter email from and replyTo with emailRenderer getFromAddress/getReplyToAddress
+    (not in this cluster set); both roles in one cluster and the renderer may return the site default
+- cluster: c111
+  candidate_groups:
+  - outbound-message-from-address
+  reason: mention is on the emailAddress module object (require of the email-address service), not on
+    an address value; declaration line 11 is an import
+- cluster: c112
+  candidate_groups:
+  - outbound-message-from-address
+  - outbound-message-reply-to-address
+  reason: stringify of addresses.from and addresses.replyTo in one cluster
+- cluster: c163
+  candidate_groups:
+  - newsletter-sender-email
+  - newsletter-reply-to-address
+  reason: cluster mixes attrs.sender_reply_to and attrs.sender_email
+- cluster: c164
+  candidate_groups:
+  - newsletter-sender-email
+  - newsletter-reply-to-address
+  reason: cluster mixes cleanedAttrs.sender_reply_to and cleanedAttrs.sender_email
+- cluster: c191
+  candidate_groups:
+  - member-account-email
+  - gift-buyer-email
+  reason: notifyGiftPurchased email is member?.get('email') ?? buyerEmail in gift-service.ts:797, so it
+    is the member email or the buyer email depending on the purchase
+- cluster: c192
+  candidate_groups:
+  - member-account-email
+  - gift-buyer-email
+  reason: destructures memberEmail (redeeming member) and buyerEmail (gift buyer) in one cluster
+- cluster: c198
+  candidate_groups:
+  - member-account-email
+  - donation-payer-email
+  - gift-buyer-email
+  reason: getMemberData(member) is fed a Member-derived object (staff-service.js:75), a donation event
+    email and gift purchase/redemption emails
+- cluster: c199
+  candidate_groups:
+  - member-account-email
+  - donation-payer-email
+  - gift-buyer-email
+  reason: getMemberData(member) is fed a Member-derived object (staff-service.js:75), a donation event
+    email and gift purchase/redemption emails
