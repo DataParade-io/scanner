@@ -6,6 +6,7 @@ import { CommentLines } from "../pii-signals/comment-context";
 import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../analyze/engine/engine";
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
+import { mentionFieldKeys } from "../analyze/mention-fields";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
 import { assignDeclarationGroups, mentionGroup } from "../pii-signals/mention-group";
 import {
@@ -35,15 +36,18 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[]): PiiSignalHit[] 
   const pack = packForFile(file.language, file.path);
   const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
   if (!analyzed) return hits;
+  const lines = file.content.split(/\r?\n/);
   try {
     return hits.map((hit) => {
       if (hit.location !== "code") return hit;
-      const declaration = resolveMentionDeclaration(
-        analyzed,
-        hit.evidence.endLine,
-        signalTokenMatcher(hit.id, file.path),
-      );
-      return declaration ? { ...hit, declaration } : hit;
+      const isConceptToken = signalTokenMatcher(hit.id, file.path);
+      const declaration = resolveMentionDeclaration(analyzed, hit.evidence.endLine, isConceptToken);
+      const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
+      return {
+        ...hit,
+        ...(declaration ? { declaration } : {}),
+        ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
+      };
     });
   } catch {
     return hits;

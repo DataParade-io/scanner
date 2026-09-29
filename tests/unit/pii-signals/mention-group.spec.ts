@@ -123,3 +123,43 @@ describe("model file anchoring", () => {
     expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:member", undefined]);
   });
 });
+
+describe("field links", () => {
+  const code = (filePath: string, fieldKeys: Array<{ key: string; definition: boolean }>, group?: string) => ({
+    id: "email",
+    location: "code" as const,
+    evidence: { filePath },
+    fieldKeys,
+    ...(group ? { group } : {}),
+  });
+
+  it("joins reads to a defined field, but not reads on a line that names another item", () => {
+    const out = assignDeclarationGroups([
+      code("models.py", [{ key: "checkout.email", definition: true }]),
+      code("a.py", [{ key: "checkout.email", definition: false }]),
+      code("b.py", [{ key: "checkout.email", definition: false }], "email:customer"),
+    ]);
+    expect(out[0].group).toBe(out[1].group);
+    expect(out[2].group).toBe("email:customer");
+    expect(out[0].group).not.toBe("email:customer");
+  });
+
+  it("ignores reads of a field nobody defines", () => {
+    const out = assignDeclarationGroups([
+      code("a.py", [{ key: "thing.email", definition: false }]),
+      code("b.py", [{ key: "thing.email", definition: false }]),
+    ]);
+    expect(out.map((hit) => hit.group)).toEqual([undefined, undefined]);
+  });
+});
+
+describe("cannot-link", () => {
+  it("never merges two differently named groups through a shared declaration", () => {
+    const out = assignDeclarationGroups([
+      { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, group: "email:member", declaration: { line: 3, kind: "parameter" } },
+      { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, group: "email:customer", declaration: { line: 3, kind: "parameter" } },
+      { id: "email", location: "code" as const, evidence: { filePath: "a.js" }, declaration: { line: 3, kind: "parameter" } },
+    ]);
+    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:customer", "email:member"]);
+  });
+});

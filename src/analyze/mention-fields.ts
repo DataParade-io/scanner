@@ -1,0 +1,54 @@
+import type { AnalyzedFile } from "./engine/analyzed-file";
+import { entityName } from "../pii-signals/mention-group";
+
+export interface MentionFieldKey {
+  /** `entity.field`, e.g. `order.user_email` or `member.email`. */
+  key: string;
+  /** The line declares the field rather than reading it. */
+  definition: boolean;
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Entity fields a line defines or reads, for joining a field's reads to its
+ * definition across files (KDATAP-c8a46a):
+ *
+ * - a field or key definition is owned by the enclosing object key or class
+ *   (`email:` under `members:` -> `member.email`; `user_email` in class Order ->
+ *   `order.user_email`)
+ * - a read directly off a named object (`order.user_email`, `member.get('email')`)
+ *   uses that name as the entity; `self.x` / `this.x` uses the enclosing class
+ */
+export function mentionFieldKeys(
+  file: AnalyzedFile,
+  line: number,
+  sourceLine: string,
+  isConceptToken: (token: string) => boolean,
+): MentionFieldKey[] {
+  const keys = new Map<string, boolean>();
+  const add = (owner: string | undefined, field: string, definition: boolean) => {
+    const entity = owner ? entityName(owner) : undefined;
+    if (!entity) return;
+    const key = `${entity}.${field}`;
+    keys.set(key, (keys.get(key) ?? false) || definition);
+  };
+  for (const site of file.sitesOnLine(line)) {
+    if (!isConceptToken(site.name)) continue;
+    if (site.role === "definition" && (site.kind === "field" || site.kind === "key")) {
+      add(file.definitionOwner(site.line, site.column), site.name, true);
+    } else if (site.role === "member" && !site.inCallee) {
+      if (site.root.type === "self" && site.root.firstMember === site.name) {
+        add(file.enclosingClass(site.line, site.column)?.name, site.name, false);
+      } else if (site.root.type === "identifier") {
+        const direct = new RegExp(
+          `\\b${escapeRegExp(site.root.name)}\\s*(?:\\??\\.(?:get\\(\\s*)?|\\[)\\s*['"]?${escapeRegExp(site.name)}\\b`,
+        );
+        if (direct.test(sourceLine)) add(site.root.name, site.name, false);
+      }
+    }
+  }
+  return [...keys.entries()].map(([key, definition]) => ({ key, definition }));
+}

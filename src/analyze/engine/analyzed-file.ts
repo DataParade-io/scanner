@@ -157,6 +157,32 @@ export class AnalyzedFile {
     return found ? toDeclaration(found) : undefined;
   }
 
+  /**
+   * The entity that owns a field or key defined at a 1-based line and 0-based column:
+   * the key of the object that contains it (`members: { email: ... }` -> `members`),
+   * else the enclosing class name (KDATAP-c8a46a). Stops at a function boundary: a key
+   * in an object built inside a function is data being passed, not a field. Uses the
+   * grammar's `key` child field and the scopes, so it needs no per-language code.
+   */
+  definitionOwner(line: number, column: number): string | undefined {
+    const node = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    let passedOwnKey = false;
+    for (let current = node?.parent ?? null; current; current = current.parent) {
+      const key = current.childForFieldName("key");
+      if (key) {
+        if (!passedOwnKey) {
+          passedOwnKey = true;
+          continue;
+        }
+        return unquote(key.text);
+      }
+      const scope = this.scopes.get(current.id);
+      if (scope?.kind === "class") return scope.name;
+      if (scope?.kind === "function") return undefined;
+    }
+    return undefined;
+  }
+
   sitesOnLine(line: number): readonly Site[] {
     return this.sitesByLine.get(line - 1) ?? [];
   }
