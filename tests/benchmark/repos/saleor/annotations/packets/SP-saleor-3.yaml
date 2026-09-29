@@ -1,0 +1,783 @@
+packet:
+  repo: saleor
+  concept: email-sample
+  kanbus_issue: KDATAP-6b03c5
+  files:
+  - saleor/plugins/user_email/plugin.py
+  - saleor/plugins/user_email/tasks.py
+annotations:
+- id: saleor-plugin-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIG_STRUCTURE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports a config-structure constant; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-plugin-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_CONFIGURATION
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports a default email configuration constant; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-plugin-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Maps a notify event type to a sender function; names an event, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default subject-line constant for an email template; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default email template value constant; a template, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L166
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 166
+    end_line: 166
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default email template value constant; a template, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L240
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 240
+    end_line: 240
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: UI label prose for the account change email request template.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-plugin-L354
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_address
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 354
+    end_line: 354
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the configured sender address into EmailConfig as a keyword argument.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/plugin.py
+      line: 354
+      kind: field
+    owner: saleor
+- id: saleor-plugin-L362
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 362
+    end_line: 362
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email templates.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-plugin-L427
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 427
+    end_line: 427
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the email template data list to validation; templates, not addresses.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L437
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 437
+    end_line: 437
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Initializes a list of email template entries; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L459
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 459
+    end_line: 459
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Compares a template value against the default email template constant; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L474
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_PORT
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 474
+    end_line: 474
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the SMTP port setting, an email server setting, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-plugin-L476
+  layer: mentions
+  subject:
+    key: mention:email
+    name: USER_EMAIL_HOST_USER
+  evidence:
+    file_path: saleor/plugins/user_email/plugin.py
+    start_line: 476
+    end_line: 476
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the SMTP host user setting, an email server setting per the settings rule.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L8
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_common
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports EmailConfig and send_email from the email_common module.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-tasks-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares a task function named after sending email; its parameters are on later lines.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email server configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L27
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Task declaration line whose parameter recipient_email holds the recipient address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 27
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email server configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L62
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 62
+    end_line: 62
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key old_email holds the previous email address read from the payload.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 62
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L73
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 73
+    end_line: 73
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email server configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L75
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 75
+    end_line: 75
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the send_email helper; the name is the function, address is passed on a later line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L98
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the email server configuration as config; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L125
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 125
+    end_line: 125
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list holds a list containing the recipient address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 125
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L130
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 130
+    end_line: 130
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: Assigns a dict of gift card event data that includes an email address under one key, but this line only names the dict, so unclear whether it counts as an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L165
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 165
+    end_line: 165
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument email passes the recipient address from the payload to the order event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 165
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L176
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 176
+    end_line: 176
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the email server configuration as config; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L197
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 197
+    end_line: 197
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list holds a list containing the recipient address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 197
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 207
+    end_line: 207
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient address to the fulfillment event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 207
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L215
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 215
+    end_line: 215
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email server configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L218
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 218
+    end_line: 218
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list holds a list containing the recipient address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 218
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L226
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_payment_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 226
+    end_line: 226
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares a task function named after sending email; its parameters are on later lines.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L247
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 247
+    end_line: 247
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email server configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L260
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 260
+    end_line: 260
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient address to the order event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 260
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L285
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 285
+    end_line: 285
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Task declaration line whose parameter recipient_email holds the recipient address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 285
+      kind: parameter
+    owner: saleor

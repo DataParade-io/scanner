@@ -1,0 +1,1010 @@
+packet:
+  repo: ghost
+  concept: email-sample
+  kanbus_issue: KDATAP-6b03c5
+  files:
+  - ghost/core/core/server/api/endpoints/emails.js
+  - ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+  - ghost/core/core/server/data/schema/schema.js
+  - ghost/core/core/server/models/email-recipient.js
+  - ghost/core/core/server/models/email.js
+  - ghost/core/core/server/models/user.js
+  - ghost/core/core/server/services/auth/passwordreset.js
+  - ghost/core/core/server/services/auth/session/emails/signin.js
+  - ghost/core/core/server/services/auth/session/session-service.js
+  - ghost/core/core/server/services/auth/setup.js
+annotations:
+- id: ghost-emails-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Include name for the email recipients count relation, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-emails-L146
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 146
+    end_line: 146
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the email analytics service to schedule analytics; a feature, no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-emails-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the email analytics service to cancel scheduled analytics; a feature, no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-validate-email-sender-fields-L5
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_VALIDATIONS
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant listing sender field names and address types to validate; holds no address value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-validate-email-sender-fields-L7
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Names the sender_email field that is validated as an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L25
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_name
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Column for the newsletter sender display name, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L27
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 27
+    end_line: 27
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: Reply-to column defaults to the word newsletter, so it is unclear whether the value is always an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L223
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_subject
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 223
+    end_line: 223
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Column for the email subject text, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L505
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 505
+    end_line: 505
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation marking this column as an email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 505
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L905
+  layer: mentions
+  subject:
+    key: mention:email
+    name: members_email_change_events
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 905
+    end_line: 905
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name for email change events, not an address value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1483
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1483
+    end_line: 1483
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation marking this column as an email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1483
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L1638
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1638
+    end_line: 1638
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key to the emails table (a sent email), not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1640
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_batches
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1640
+    end_line: 1640
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: References the email_batches table, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1655
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_recipient_failures
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1655
+    end_line: 1655
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name for email recipient failures, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1889
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_spam_complaint_events
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1889
+    end_line: 1889
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name for spam complaint events, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1933
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_sent_at
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1933
+    end_line: 1933
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Timestamp column for when an email was sent, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2163
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_subject
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2163
+    end_line: 2163
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Column for the email subject text, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2165
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_design_setting_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2165
+    end_line: 2165
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key to email design settings, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2259
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2259
+    end_line: 2259
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation marking the member_email column as an email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2259
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L2322
+  layer: mentions
+  subject:
+    key: mention:email
+    name: weae_next_email_id_foreign
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2322
+    end_line: 2322
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key constraint name for an automated welcome email link, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L2329
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2329
+    end_line: 2329
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema column holding the sender email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2329
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L2372
+  layer: mentions
+  subject:
+    key: mention:email
+    name: welcome_email_automated_emails
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2372
+    end_line: 2372
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: References the welcome email automated emails table, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L2532
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2532
+    end_line: 2532
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema column holding the gift delivery recipient email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2532
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L2536
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2536
+    end_line: 2536
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation marking the recipient_email column as an email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2536
+      kind: field
+    owner: ghost/core
+- id: ghost-schema-L2565
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_provider_message_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2565
+    end_line: 2565
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index column for the provider message id of an email, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name of the emails relation, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L22
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Names the Email model in a belongsTo relation, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L32
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRecipients
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Collection class for email recipient records, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Rewrites the legacy recipient filter (audience query) value; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L31
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Rewrites the legacy recipient filter (audience query) value; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relation method for an email recipients, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L98
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model class for the Emails collection, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-user-L40
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailIsAlreadyInUse
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Message key and prose saying the email is already in use; no address value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-user-L311
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 311
+    end_line: 311
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user email address into password validation.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: ghost/core
+- id: ghost-user-L598
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 598
+    end_line: 598
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks whether the edit data contains an email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 588
+      kind: parameter
+    owner: ghost/core
+- id: ghost-user-L1082
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1082
+    end_line: 1082
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the submitted email address to getByEmail to look up the user.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1079
+      kind: parameter
+    owner: ghost/core
+- id: ghost-user-L1268
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getByEmail
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1268
+    end_line: 1268
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name string passed to filterOptions, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L1280
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1280
+    end_line: 1280
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the user email address to compare it case-insensitively with the target email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1279
+      kind: parameter
+    owner: ghost/core
+- id: ghost-passwordreset-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientEmail
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 158
+    end_line: 158
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the reset recipient address taken from data.email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 158
+      kind: field
+    owner: ghost/core
+- id: ghost-signin-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructured parameter holding the recipient email address for the sign-in template.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/session/emails/signin.js
+      line: 4
+      kind: parameter
+    owner: ghost/core
+- id: ghost-session-service-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: require_email_mfa
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment naming the email MFA setting key.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-session-service-L458
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/session/session-service.js
+    start_line: 458
+    end_line: 458
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holds the rendered HTML email body, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-setup-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Fixture prose mentioning email newsletters, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-setup-L191
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 191
+    end_line: 191
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the message recipient to the email address parameter.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/setup.js
+      line: 183
+      kind: parameter
+    owner: ghost/core
+- id: ghost-setup-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: unableToSendWelcomeEmail
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 207
+    end_line: 207
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Message key for failed welcome email prose, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core

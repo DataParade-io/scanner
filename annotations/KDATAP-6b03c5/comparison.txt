@@ -1,0 +1,47 @@
+second-pass packets: ['SP-saleor-1.yaml', 'SP-ghost-3.yaml', 'SP-saleor-3.yaml', 'SP-ghost-2.yaml', 'SP-ghost-4.yaml', 'SP-saleor-2.yaml', 'SP-ghost-1.yaml']
+sampled lines: 304  labeled by second pass: 304
+
+== second pass (Sonnet) vs final gold
+  status           296/304 = 97.4%  kappa 0.941
+  syntax_kind      82/95 = 86.3%  (lines both call positive)
+  declaration      73/95 = 76.8%  (lines both call positive)
+  type_annotation  90/95 = 94.7%  (lines both call positive)
+  status confusion (first, second): {('negative', 'negative'): 201, ('positive', 'negative'): 1, ('ambiguous', 'positive'): 3, ('positive', 'positive'): 95, ('negative', 'positive'): 1, ('ambiguous', 'negative'): 3}
+== second pass (Sonnet) vs Haiku draft
+  status           293/304 = 96.4%  kappa 0.919
+  syntax_kind      78/93 = 83.9%  (lines both call positive)
+  declaration      68/93 = 73.1%  (lines both call positive)
+  type_annotation  86/93 = 92.5%  (lines both call positive)
+  status confusion (first, second): {('negative', 'negative'): 200, ('positive', 'negative'): 3, ('ambiguous', 'positive'): 3, ('positive', 'positive'): 93, ('negative', 'positive'): 2, ('ambiguous', 'negative'): 3}
+== Haiku draft vs final gold (effect of coordinator review, all sampled lines)
+  status           301/304 = 99.0%  kappa 0.977
+  syntax_kind      95/97 = 97.9%  (lines both call positive)
+  declaration      93/97 = 95.9%  (lines both call positive)
+  type_annotation  93/97 = 95.9%  (lines both call positive)
+  status confusion (first, second): {('negative', 'negative'): 204, ('positive', 'positive'): 97, ('negative', 'positive'): 2, ('positive', 'negative'): 1}
+
+== status disagreements: second pass vs final gold
+  validate-email-sender-fields.ts:7  sonnet=pos gold=neg haiku=neg  | field: 'sender_email',
+      sonnet: Names the sender_email field that is validated as an address.
+      gold:   Field name in a configuration object; identifies which field to validate, not an address value.
+  schema.js:27  sonnet=amb gold=pos haiku=pos  | sender_reply_to: { type: 'string', maxlength: 191, nullable: false, defaultTo: 'newsletter
+      sonnet: Reply-to column defaults to the word newsletter, so it is unclear whether the value is always an address.
+      gold:   Schema field definition for sender reply-to address.
+  email-address-service.ts:86  sonnet=amb gold=pos haiku=pos  | getAddressFromString(from: string, replyTo?: string): EmailAddresses {
+      sonnet: Function name is address-related and parameters from/replyTo hold address strings, but the only token containing the con
+      gold:   Method parameter holding from email address string
+  sending-service.js:138  sonnet=neg gold=pos haiku=pos  | recipients,
+      sonnet: Passes the recipient objects list; not an address itself.
+      gold:   Recipients array passed to provider; list of email addresses.
+  newsletters-service.js:302  sonnet=amb gold=pos haiku=pos  | if (!['newsletter', 'support'].includes(cleanedAttrs.sender_reply_to)) {
+      sonnet: The setting holds either the keyword newsletter/support or a custom reply-to address; the line only tests which, so it i
+      gold:   Checks if sender_reply_to email address is in allowed list.
+  models.py:401  sonnet=amb gold=neg haiku=neg  | name="order_user_email_user_id_idx",
+      sonnet: Database index name string containing user_email; it names an index built on the address column but holds no address and
+      gold:   Index name that includes the word email, not an address value.
+  tasks.py:314  sonnet=amb gold=neg haiku=neg  | email_data = {
+      sonnet: Local dict opening line that bundles ids with the recipient email (line 318) and is passed as kwargs; unclear whether a 
+      gold:   Variable assignment to dict; no address value on this line
+  tasks.py:130  sonnet=amb gold=neg haiku=neg  | email_data = {
+      sonnet: Assigns a dict of gift card event data that includes an email address under one key, but this line only names the dict, 
+      gold:   Variable assignment for email data dictionary, not directly an address.

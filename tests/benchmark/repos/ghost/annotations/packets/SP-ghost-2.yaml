@@ -1,0 +1,1078 @@
+packet:
+  repo: ghost
+  concept: email-sample
+  kanbus_issue: KDATAP-6b03c5
+  files:
+  - ghost/core/core/server/services/comments/comments-service-emails.js
+  - ghost/core/core/server/services/email-address/email-address-parser.ts
+  - ghost/core/core/server/services/email-address/email-address-service.ts
+  - ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  - ghost/core/core/server/services/email-service/sending-service.js
+annotations:
+- id: ghost-comments-service-emails-L93
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email-notifications
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: URL path segment for the staff email-notifications settings page; a feature name, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-comments-service-emails-L112
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 112
+    end_line: 112
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return description mentioning whether an email was sent.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-comments-service-emails-L173
+  layer: mentions
+  subject:
+    key: mention:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 173
+    end_line: 173
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the email template renderer; the name refers to a message template.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L189
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 189
+    end_line: 189
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing sending a notification email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-comments-service-emails-L265
+  layer: mentions
+  subject:
+    key: mention:email
+    name: notificationFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 265
+    end_line: 265
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getter that exposes the sender address of comment notification emails.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 265
+      kind: function
+    owner: ghost/core
+- id: ghost-comments-service-emails-L282
+  layer: mentions
+  subject:
+    key: mention:email
+    name: notificationFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 282
+    end_line: 282
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the from address of the outgoing message from the notification sender address getter.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 265
+      kind: field
+    owner: ghost/core
+- id: ghost-comments-service-emails-L292
+  layer: mentions
+  subject:
+    key: mention:email
+    name: CommentsServiceEmails
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 292
+    end_line: 292
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Exports the class named after the comment emails service; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-parser-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc on the address field of the EmailAddress type.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc describing the parse function.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the email string to be parsed.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 15
+      kind: parameter
+    type_annotation: string
+    owner: ghost/core
+- id: ghost-email-address-parser-L40
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc describing the stringify function.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class field typed as a function returning a managed-email feature flag; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class field typed as a function that returns an address; declares the function itself.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class field typed as a function that returns an address; declares the function itself.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L30
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isValidEmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class field holding a validator function; parameter list only types the function.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Returns the managed-email feature flag; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L86
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddresses
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 86
+    end_line: 86
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: Function name is address-related and parameters from/replyTo hold address strings, but the only token containing the concept is the return type name and no parameter name contains the concept.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L101
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 101
+    end_line: 101
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining the default-address fallback.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L128
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 128
+    end_line: 128
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the preferred from address to the validator.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+    owner: ghost/core
+- id: ghost-email-address-service-L131
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 131
+    end_line: 131
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the default from address as the from field.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: field
+    type_annotation: EmailAddress
+    owner: ghost/core
+- id: ghost-email-address-service-L143
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 143
+    end_line: 143
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the fallback sender address into a local variable.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 72
+      kind: field
+    type_annotation: EmailAddress | null
+    owner: ghost/core
+- id: ghost-email-address-service-L145
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 145
+    end_line: 145
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the fallback address object to check its display name.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    owner: ghost/core
+- id: ghost-email-address-service-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 150
+    end_line: 150
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Uses the fallback address as the from address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    owner: ghost/core
+- id: ghost-email-address-service-L151
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 151
+    end_line: 151
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Uses the default from address as the reply-to fallback.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: field
+    type_annotation: EmailAddress
+    owner: ghost/core
+- id: ghost-email-address-service-L161
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 161
+    end_line: 161
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares the preferred from address with the default from address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: field
+    type_annotation: EmailAddress
+    owner: ghost/core
+- id: ghost-email-address-service-L177
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 177
+    end_line: 177
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining a sender-domain mismatch.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L211
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 211
+    end_line: 211
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares the address being validated with the default from address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+    owner: ghost/core
+- id: ghost-email-address-service-L248
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 248
+    end_line: 248
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag saying whether a verification email is needed; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailSendingOptions
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef name for sending options.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L52
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 52
+    end_line: 52
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Map of per-recipient replacement values; holds template data, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L63
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Mailgun recipient-variable placeholder text; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L85
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 85
+    end_line: 85
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc description of the send function.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L96
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 96
+    end_line: 96
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Destructures the list of recipient objects; a relation, not an address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L118
+  layer: mentions
+  subject:
+    key: mention:email
+    name: bulkEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 118
+    end_line: 118
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Config key path for the bulk email tag setting.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L143
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 143
+    end_line: 143
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending via Mailgun.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-sending-service-L10
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailId
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef property for an email id.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-sending-service-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRenderer
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef of the email renderer import.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-sending-service-L40
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailBodyCache
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc property for the email body cache.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-sending-service-L66
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailProvider
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 66
+    end_line: 66
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private field for the email provider service; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-sending-service-L92
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailProvider
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 92
+    end_line: 92
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the email provider for its delivery window; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-sending-service-L104
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailProviderSuccessResponse
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 104
+    end_line: 104
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return type of the send call.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-sending-service-L108
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isTestEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag saying whether this is a test email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-sending-service-L115
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailBodyCache
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 115
+    end_line: 115
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks the email body cache option; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-sending-service-L132
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 132
+    end_line: 132
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the renderer-computed from address as the from field.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-service/sending-service.js
+      line: 67
+      kind: field
+    owner: ghost/core
+- id: ghost-sending-service-L138
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 138
+    end_line: 138
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the recipient objects list; not an address itself.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-sending-service-L139
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailId
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 139
+    end_line: 139
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Key passing the email record id; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-sending-service-L164
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 164
+    end_line: 164
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Defines the recipient email key from the trimmed member email address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/email-service/sending-service.js
+      line: 164
+      kind: field
+    owner: ghost/core
+- id: ghost-sending-service-L182
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isValidRecipient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/sending-service.js
+    start_line: 182
+    end_line: 182
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Returns the boolean result of recipient email validation.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
