@@ -8,33 +8,33 @@
 ## Record count
 
 - Total records: 58
-- Positive: 18
-- Negative: 40
+- Positive: 19
+- Negative: 39
 - Ambiguous: 0
 
 ## Positive lines
 
 All address-holding or address-passing mentions:
 
-1. L81 (api.js): `from` property key setting sender email from config
-2. L111 (api.js): `email` parameter holding recipient email
-3. L128 (api.js): Email address interpolated into "Sent to {email}" message
-4. L145 (api.js): Email address interpolated into signup "Sent to {email}" message
-5. L162 (api.js): Email address interpolated into paid signup "Sent to {email}" message
-6. L177 (api.js): Email address interpolated into updateEmail "Sent to {email}" message
-7. L199 (api.js): Email address interpolated into signin "Sent to {email}" message
-8. L204 (api.js): `email` parameter for HTML generation
-9. L214 (api.js): `email` property key passed to subscribe email template
-10. L216 (api.js): `email` property key passed to signup email template
-11. L218 (api.js): `email` property key passed to paid signup email template
-12. L220 (api.js): `email` property key passed to updateEmail template
-13. L223 (api.js): `email` property key passed to signin email template
-14. L23 (completion-email.ts): `recipient` field holding recipient email address
-15. L72 (completion-email.ts): `email` field selecting email address from MemberImportRow
-16. L102 (completion-email.ts): `email` object key mapping email address
-17. L138 (completion-email.ts): `recipient` parameter holding recipient email address
-18. L149 (completion-email.ts): `to` property key setting recipient email for email message
-19. L157 (completion-email.ts): `emailRecipient` property key passing recipient email to renderer
+1. api.js L81: `from` property key setting sender email from config
+2. api.js L111: `email` parameter holding recipient email
+3. api.js L128: Email address interpolated into "Sent to {email}" message
+4. api.js L145: Email address interpolated into signup "Sent to {email}" message
+5. api.js L162: Email address interpolated into paid signup "Sent to {email}" message
+6. api.js L177: Email address interpolated into updateEmail "Sent to {email}" message
+7. api.js L199: Email address interpolated into signin "Sent to {email}" message
+8. api.js L204: `email` parameter for HTML generation
+9. api.js L214: `email` property key passed to subscribe email template
+10. api.js L216: `email` property key passed to signup email template
+11. api.js L218: `email` property key passed to paid signup email template
+12. api.js L220: `email` property key passed to updateEmail template
+13. api.js L223: `email` property key passed to signin email template
+14. completion-email.ts L23: `recipient` field holding recipient email address
+15. completion-email.ts L72: `email` field selecting email address from MemberImportRow
+16. completion-email.ts L102: `email` object key mapping email address
+17. completion-email.ts L138: `recipient` parameter holding recipient email address
+18. completion-email.ts L149: `to` property key setting recipient email for email message
+19. completion-email.ts L157: `emailRecipient` property key passing recipient email to renderer
 
 ## Key notes
 
