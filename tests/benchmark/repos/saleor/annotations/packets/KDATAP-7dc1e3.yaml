@@ -3,787 +3,744 @@ packet:
   concept: email
   kanbus_issue: KDATAP-7dc1e3
   files:
-    - saleor/giftcard/utils.py
-    - saleor/giftcard/events.py
-    - saleor/giftcard/models.py
+  - saleor/giftcard/utils.py
+  - saleor/giftcard/events.py
+  - saleor/giftcard/models.py
 annotations:
-  - id: saleor-events-L60
-    layer: mentions
-    subject:
-      key: mention:email
-      name: previous_email
-    evidence:
+- id: saleor-events-L60
+  layer: mentions
+  subject:
+    key: mention:email
+    name: previous_email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 60
+    end_line: 60
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the previous assigned email address for the gift card event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 60
-      end_line: 60
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding the previous assigned email address for the gift card event.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 60
-        kind: parameter
-      owner: saleor
-  - id: saleor-events-L71
-    layer: mentions
-    subject:
-      key: mention:email
-      name: previous_assigned_to_email
-    evidence:
+      line: 60
+      kind: parameter
+    owner: saleor
+    type_annotation: str | None
+- id: saleor-events-L71
+  layer: mentions
+  subject:
+    key: mention:email
+    name: previous_assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 71
+    end_line: 71
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the previous email address in gift card event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 71
-      end_line: 71
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Object key storing the previous email address in gift card event parameters.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 71
-        kind: field
-      owner: saleor
-  - id: saleor-events-L73
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
+      line: 71
+      kind: field
+    owner: saleor
+- id: saleor-events-L73
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 73
+    end_line: 73
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the gift card assigned email address in event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 73
-      end_line: 73
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Object key storing the gift card assigned email address in event parameters.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 73
-        kind: field
-      owner: saleor
-  - id: saleor-events-L81
-    layer: mentions
-    subject:
-      key: mention:email
-      name: previous_email
-    evidence:
+      line: 73
+      kind: field
+    owner: saleor
+- id: saleor-events-L81
+  layer: mentions
+  subject:
+    key: mention:email
+    name: previous_email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding previous email address for gift card unassignment event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 81
-      end_line: 81
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding previous email address for gift card unassignment event.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 81
-        kind: parameter
-      owner: saleor
-  - id: saleor-events-L92
-    layer: mentions
-    subject:
-      key: mention:email
-      name: previous_assigned_to_email
-    evidence:
+      line: 81
+      kind: parameter
+    owner: saleor
+    type_annotation: str | None
+- id: saleor-events-L92
+  layer: mentions
+  subject:
+    key: mention:email
+    name: previous_assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 92
+    end_line: 92
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing previous email in gift card unassignment event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 92
-      end_line: 92
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Object key storing previous email in gift card unassignment event parameters.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 92
-        kind: field
-      owner: saleor
-  - id: saleor-events-L122
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 92
+      kind: field
+    owner: saleor
+- id: saleor-events-L122
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 122
+    end_line: 122
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the customer email address for gift card sent event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 122
-      end_line: 122
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding the customer email address for gift card sent event.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 122
-        kind: parameter
-      owner: saleor
-  - id: saleor-events-L129
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 122
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+- id: saleor-events-L129
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 129
+    end_line: 129
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing email address in gift card sent event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 129
-      end_line: 129
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Object key storing email address in gift card sent event parameters.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 122
-        kind: parameter
-      owner: saleor
-  - id: saleor-events-L134
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 129
+      kind: field
+    owner: saleor
+- id: saleor-events-L134
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding customer email for gift card resent event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 134
-      end_line: 134
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding customer email for gift card resent event.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 134
-        kind: parameter
-      owner: saleor
-  - id: saleor-events-L141
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 134
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+- id: saleor-events-L141
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/events.py
+    start_line: 141
+    end_line: 141
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing email address in gift card resent event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/events.py
-      start_line: 141
-      end_line: 141
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Object key storing email address in gift card resent event parameters.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/events.py
-        line: 134
-        kind: parameter
-      owner: saleor
-  - id: saleor-models-L64
-    layer: mentions
-    subject:
-      key: mention:email
-      name: created_by_email
-    evidence:
+      line: 141
+      kind: field
+    owner: saleor
+- id: saleor-models-L64
+  layer: mentions
+  subject:
+    key: mention:email
+    name: created_by_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 64
+    end_line: 64
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition storing the email address of who created the gift card.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/models.py
-      start_line: 64
-      end_line: 64
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Model field definition storing the email address of who created the gift card.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/models.py
-        line: 64
-        kind: field
-      owner: saleor
-  - id: saleor-models-L65
-    layer: mentions
-    subject:
-      key: mention:email
-      name: used_by_email
-    evidence:
+      line: 64
+      kind: field
+    owner: saleor
+- id: saleor-models-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 65
+    end_line: 65
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition storing the email address of who used the gift card.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/models.py
-      start_line: 65
-      end_line: 65
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Model field definition storing the email address of who used the gift card.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/models.py
-        line: 65
-        kind: field
-      owner: saleor
-  - id: saleor-models-L77
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
+      line: 65
+      kind: field
+    owner: saleor
+- id: saleor-models-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition storing the email address of the assigned customer.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/models.py
-      start_line: 77
-      end_line: 77
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Model field definition storing the email address of the assigned customer.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/models.py
-        line: 77
-        kind: field
-      owner: saleor
-  - id: saleor-models-L158
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
+      line: 77
+      kind: field
+    owner: saleor
+- id: saleor-models-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose explaining the gift card assignment behavior.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-models-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 160
+    end_line: 160
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose describing gift card usage restrictions.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-models-L164
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/models.py
+    start_line: 164
+    end_line: 164
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the assigned email to check if card is restricted to a deleted customer.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/models.py
-      start_line: 158
-      end_line: 158
-    expected:
-      status: negative
-      labels:
-        - email_address
-    rationale: Docstring prose explaining the gift card assignment behavior.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: comment
-      owner: saleor
-  - id: saleor-models-L160
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
-      file_path: saleor/giftcard/models.py
-      start_line: 160
-      end_line: 160
-    expected:
-      status: negative
-      labels:
-        - email_address
-    rationale: Docstring prose describing gift card usage restrictions.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: comment
-      owner: saleor
-  - id: saleor-models-L164
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
-      file_path: saleor/giftcard/models.py
-      start_line: 164
-      end_line: 164
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Reads the assigned email to check if card is restricted to a deleted customer.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/models.py
-        line: 77
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L44
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 77
+      kind: field
+    owner: saleor
+- id: saleor-utils-L44
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 44
+    end_line: 44
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the customer email address for checkout validation.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 44
-      end_line: 44
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding the customer email address for checkout validation.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 44
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L48
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 44
+      kind: parameter
+    owner: saleor
+    type_annotation: str | None
+- id: saleor-utils-L48
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 48
+    end_line: 48
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose describing validation requirements.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-utils-L144
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 144
+    end_line: 144
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user email address to assign it to the gift card.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 48
-      end_line: 48
-    expected:
-      status: negative
-      labels:
-        - email_address
-    rationale: Docstring prose describing validation requirements.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: comment
-      owner: saleor
-  - id: saleor-utils-L144
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 94
+      kind: parameter
+    owner: saleor
+- id: saleor-utils-L145
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 145
+    end_line: 145
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: String literal selecting the assigned_to_email field for update.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-utils-L148
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 148
+    end_line: 148
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user email to assign to the gift card object.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 144
-      end_line: 144
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Passes the user email address to assign it to the gift card.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 94
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L145
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
+      line: 94
+      kind: parameter
+    owner: saleor
+- id: saleor-utils-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 160
+    end_line: 160
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose explaining the gift card deactivation behavior.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-utils-L290
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 290
+    end_line: 290
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the order user email address for gift card creation.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 145
-      end_line: 145
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: String literal selecting the assigned_to_email field for update.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: string_literal
-      owner: saleor
-  - id: saleor-utils-L148
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
+      line: 281
+      kind: parameter
+    owner: saleor
+- id: saleor-utils-L303
+  layer: mentions
+  subject:
+    key: mention:email
+    name: created_by_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 303
+    end_line: 303
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing email to set who created the gift card.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 148
-      end_line: 148
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Passes user email to assign to the gift card object.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 94
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L160
-    layer: mentions
-    subject:
-      key: mention:email
-      name: assigned_to_email
-    evidence:
+      line: 303
+      kind: field
+    owner: saleor
+- id: saleor-utils-L325
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 325
+    end_line: 325
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address to send gift cards to customer.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 160
-      end_line: 160
-    expected:
-      status: negative
-      labels:
-        - email_address
-    rationale: Docstring prose explaining the gift card deactivation behavior.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: comment
-      owner: saleor
-  - id: saleor-utils-L290
-    layer: mentions
-    subject:
-      key: mention:email
-      name: user_email
-    evidence:
+      line: 290
+      kind: local
+    owner: saleor
+- id: saleor-utils-L349
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 349
+    end_line: 349
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the user email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 290
-      end_line: 290
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Reads the order user email address for gift card creation.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 281
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L303
-    layer: mentions
-    subject:
-      key: mention:email
-      name: created_by_email
-    evidence:
+      line: 349
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+- id: saleor-utils-L361
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 361
+    end_line: 361
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user email to gift card notification function.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 303
-      end_line: 303
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument passing email to set who created the gift card.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 303
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L325
-    layer: mentions
-    subject:
-      key: mention:email
-      name: user_email
-    evidence:
+      line: 349
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+- id: saleor-utils-L389
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 389
+    end_line: 389
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument filtering gift cards by user email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 325
-      end_line: 325
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Passes the email address to send gift cards to customer.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 290
-        kind: local
-      owner: saleor
-  - id: saleor-utils-L349
-    layer: mentions
-    subject:
-      key: mention:email
-      name: user_email
-    evidence:
+      line: 389
+      kind: field
+    owner: saleor
+- id: saleor-utils-L390
+  layer: mentions
+  subject:
+    key: mention:email
+    name: created_by_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 390
+    end_line: 390
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument filtering gift cards by creator email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 349
-      end_line: 349
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Function parameter holding the user email address.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 349
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L361
-    layer: mentions
-    subject:
-      key: mention:email
-      name: user_email
-    evidence:
+      line: 390
+      kind: field
+    owner: saleor
+- id: saleor-utils-L403
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 403
+    end_line: 403
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument filtering gift cards by used_by email in Q object.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 361
-      end_line: 361
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Passes the user email to gift card notification function.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: identifier
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 349
-        kind: parameter
-      owner: saleor
-  - id: saleor-utils-L389
-    layer: mentions
-    subject:
-      key: mention:email
-      name: used_by_email
-    evidence:
+      line: 403
+      kind: field
+    owner: saleor
+- id: saleor-utils-L404
+  layer: mentions
+  subject:
+    key: mention:email
+    name: created_by_email
+  evidence:
+    file_path: saleor/giftcard/utils.py
+    start_line: 404
+    end_line: 404
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument filtering gift cards by created_by email in Q object.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
       file_path: saleor/giftcard/utils.py
-      start_line: 389
-      end_line: 389
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards by user email address.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 389
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L390
-    layer: mentions
-    subject:
-      key: mention:email
-      name: created_by_email
-    evidence:
-      file_path: saleor/giftcard/utils.py
-      start_line: 390
-      end_line: 390
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards by creator email address.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 390
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L394
-    layer: mentions
-    subject:
-      key: mention:email
-      name: used_by_email
-    evidence:
-      file_path: saleor/giftcard/utils.py
-      start_line: 394
-      end_line: 394
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards in Q object for user email.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 394
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L397
-    layer: mentions
-    subject:
-      key: mention:email
-      name: created_by_email
-    evidence:
-      file_path: saleor/giftcard/utils.py
-      start_line: 397
-      end_line: 397
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards in Q object for creator email.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 397
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L403
-    layer: mentions
-    subject:
-      key: mention:email
-      name: used_by_email
-    evidence:
-      file_path: saleor/giftcard/utils.py
-      start_line: 403
-      end_line: 403
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards by used_by email in Q object.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 403
-        kind: field
-      owner: saleor
-  - id: saleor-utils-L404
-    layer: mentions
-    subject:
-      key: mention:email
-      name: created_by_email
-    evidence:
-      file_path: saleor/giftcard/utils.py
-      start_line: 404
-      end_line: 404
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: Keyword argument filtering gift cards by created_by email in Q object.
-    provenance:
-      proposed_by: claude-haiku-4-5
-      proposed_at: '2026-09-28'
-      review_state: proposed
-    mention_attributes:
-      syntax_kind: property_key
-      declaration:
-        file_path: saleor/giftcard/utils.py
-        line: 404
-        kind: field
-      owner: saleor
+      line: 404
+      kind: field
+    owner: saleor
