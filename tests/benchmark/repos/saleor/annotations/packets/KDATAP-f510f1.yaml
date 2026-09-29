@@ -645,10 +645,10 @@ annotations:
     start_line: 177
     end_line: 177
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Keyword argument name for sender name
+  rationale: sender_name is the sender's display name, not an email address.
   provenance:
     proposed_by: claude-haiku-4.5-20251001
     proposed_at: '2026-09-28'
@@ -656,10 +656,6 @@ annotations:
   mention_attributes:
     syntax_kind: property_key
     owner: saleor
-    declaration:
-      file_path: saleor/plugins/admin_email/plugin.py
-      line: 177
-      kind: field
 - id: saleor-plugin-L178
   layer: mentions
   subject:
