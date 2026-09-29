@@ -1,24 +1,4 @@
 annotations:
-  - id: ghost-member-email-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
-      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
-      start_line: 462
-      end_line: 462
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: memberRepository.create validates memberData.email with validator.isEmail before persisting the member.
-    provenance:
-      proposed_by: composer-2.5-swarm
-      proposed_at: 2026-08-30
-      review_state: accepted
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
   - id: ghost-identity-token-signal
     layer: mentions
     subject:
@@ -40,26 +20,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-  - id: ghost-staff-email-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: staff_email
-    evidence:
-      file_path: ghost/core/core/server/data/schema/schema.js
-      start_line: 274
-      end_line: 279
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: The users table schema defines a unique email column with isEmail validation for staff accounts.
-    provenance:
-      proposed_by: composer-2.5-swarm
-      proposed_at: 2026-08-30
-      review_state: accepted
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
   - id: ghost-no-member-phone-signal
     layer: mentions
     subject:
@@ -77,26 +37,6 @@ annotations:
       proposed_by: composer-2.5-swarm
       proposed_at: 2026-08-30
       review_state: needs_adjudication
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
-  - id: ghost-member-email-item-pii-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
-      file_path: ghost/core/core/server/data/schema/schema.js
-      start_line: 649
-      end_line: 655
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: members.email is a required unique column validated as an email address for site subscribers.
-    provenance:
-      proposed_by: pii-signal-backport
-      proposed_at: 2026-08-30
-      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-member-name-item-pii-signal
@@ -265,26 +205,6 @@ annotations:
       proposed_by: pii-signal-backport
       proposed_at: 2026-08-30
       review_state: needs_adjudication
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
-  - id: ghost-invite-email-pii-signal
-    layer: mentions
-    subject:
-      key: mention:email
-      name: email
-    evidence:
-      file_path: ghost/core/core/server/data/schema/schema.js
-      start_line: 500
-      end_line: 506
-    expected:
-      status: positive
-      labels:
-        - email_address
-    rationale: invites.email is the invited staff member's mailbox.
-    provenance:
-      proposed_by: pii-signal-backport
-      proposed_at: 2026-08-30
-      review_state: accepted
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
   - id: ghost-session-id-pii-signal
