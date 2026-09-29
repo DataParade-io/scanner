@@ -12,7 +12,7 @@ describe("mentionQualifier", () => {
     ["const senderEmail = settings.sender_email;", "sender"],
     ["order.customer_email = email", "customer"],
     ["const to = member.get('email');", "member"],
-    ["user = gift_card.used_by_email", "used"],
+    ["user = gift_card.used_by_email", "used_by"],
     ["stripeCustomer.email", "customer"],
     ["recipient_email = data['email']", undefined],
     ["const email = req.body.email;", undefined],
