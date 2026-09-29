@@ -163,6 +163,30 @@ describe("benchmark/packet-validation", () => {
     );
   });
 
+  it("requires a declaration on positive identifier and property_key lines", () => {
+    const packet = validPacket();
+    packet.annotations[1] = record("add-signup-param", 2, {
+      mention_attributes: { syntax_kind: "identifier", owner: "api" },
+    });
+    expect(run(packet).errors).toContain(
+      "annotations[1]: positive identifier needs mention_attributes.declaration (use 'unresolved' if it cannot be found)",
+    );
+  });
+
+  it("rejects a declaration on negative or string_literal lines", () => {
+    const packet = validPacket();
+    packet.annotations[0] = record("import-mailer", 1, {
+      expected: { status: "negative", labels: ["email"] },
+      mention_attributes: {
+        syntax_kind: "import_specifier",
+        declaration: { file_path: "src/signup.js", line: 1, kind: "local" },
+      },
+    });
+    expect(run(packet).errors).toContain(
+      "annotations[0]: declaration is only recorded on positive identifier, property_key, or type_name lines",
+    );
+  });
+
   it("rejects source that is not at the pinned commit", () => {
     const { errors } = run(validPacket(), "b".repeat(40));
     expect(errors[0]).toMatch(/expected pinned a{40}/);
