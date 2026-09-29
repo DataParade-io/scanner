@@ -151,12 +151,13 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     declaration:
       file_path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
       line: 19
-      kind: parameter
+      kind: field
     owner: ghost/core
+    type_annotation: string
 - id: ghost-validate-email-sender-fields-L20
   layer: mentions
   subject:
@@ -176,12 +177,13 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     declaration:
       file_path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
       line: 20
-      kind: parameter
+      kind: field
     owner: ghost/core
+    type_annotation: string
 - id: ghost-validate-email-sender-fields-L23
   layer: mentions
   subject:
@@ -207,7 +209,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: validate
+    name: emailAddressService
   evidence:
     file_path: ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
     start_line: 29
@@ -228,6 +230,7 @@ annotations:
       line: 17
       kind: parameter
     owner: ghost/core
+    type_annotation: Pick<EmailAddressService, 'validate'>
 - id: ghost-validate-email-sender-fields-L36
   layer: mentions
   subject:
@@ -496,7 +499,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: getAddressFromString
+    name: emailAddress
   evidence:
     file_path: ghost/core/core/server/services/mail/ghost-mailer.js
     start_line: 43
@@ -546,7 +549,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: emailAddressParser
   evidence:
     file_path: ghost/core/core/server/services/mail/ghost-mailer.js
     start_line: 57
@@ -561,17 +564,17 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/mail/ghost-mailer.js
-      line: 57
-      kind: field
+      line: 20
+      kind: local
     owner: ghost/core
 - id: ghost-ghost-mailer-L58
   layer: mentions
   subject:
     key: mention:email
-    name: replyTo
+    name: emailAddressParser
   evidence:
     file_path: ghost/core/core/server/services/mail/ghost-mailer.js
     start_line: 58
@@ -586,11 +589,11 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/mail/ghost-mailer.js
-      line: 58
-      kind: field
+      line: 20
+      kind: local
     owner: ghost/core
 - id: ghost-ghost-mailer-L64
   layer: mentions
@@ -638,7 +641,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: getFromAddress
   evidence:
     file_path: ghost/core/core/server/services/mail/ghost-mailer.js
     start_line: 80
@@ -653,17 +656,17 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/mail/ghost-mailer.js
-      line: 80
-      kind: field
+      line: 36
+      kind: function
     owner: ghost/core
 - id: ghost-ghost-mailer-L88
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: Sender
   evidence:
     file_path: ghost/core/core/server/services/mail/ghost-mailer.js
     start_line: 88
