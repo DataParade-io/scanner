@@ -1073,10 +1073,10 @@ annotations:
     start_line: 138
     end_line: 138
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Recipients array passed to provider; list of email addresses.
+  rationale: Passes the list of recipient objects; the line does not read an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1084,10 +1084,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-service/sending-service.js
-      line: 128
-      kind: local
 - id: ghost-sending-service-L139
   layer: mentions
   subject:
