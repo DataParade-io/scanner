@@ -10,6 +10,10 @@
  *   @member @member.object @member.property   property access and subscripts
  *   @call @call.callee @call.argument       calls and their arguments
  *
+ * Parameter positions come from the grammar's `parameters` (or `parameter`) child
+ * field of a function node; a keyword argument is an argument node with `name` and
+ * `value` child fields.
+ *
  * `@definition.key` is an object or dict key, keyword argument, or interface member:
  * it is declared by its own line and never enters a scope's lexical table.
  * `@definition.field` is a class member and is attached to the nearest class scope.
@@ -49,6 +53,38 @@ export interface PackConfig {
   nonBindingChildFields: Record<string, string[]>;
   /** Declaration parents whose variables hoist to the enclosing function scope (`var`). */
   hoistedDeclarationParents: string[];
+  /**
+   * Names of a method's first parameter that the caller does not pass (`self`, `cls`).
+   * Skipped when counting parameter positions of a function defined in a class body.
+   */
+  implicitFirstParameters?: string[];
+}
+
+/** One argument of a call, as written at the call site. */
+export interface CallSite {
+  /** Final name of the callee: `getByEmail` for `models.User.getByEmail(...)`. */
+  callee: string;
+  /** 0-based position among the call's arguments. */
+  position: number;
+  /** The keyword of a keyword argument (`recipient_email=` in Python). */
+  keyword?: string;
+  /** 1-based line the argument starts on. */
+  line: number;
+}
+
+export interface FunctionParameter {
+  name: string;
+  /** 0-based position, not counting an implicit `self` / `cls`. */
+  position: number;
+  /** 1-based line of the parameter. */
+  line: number;
+}
+
+export interface FunctionDefinition {
+  name: string;
+  /** 1-based line of the function's name. */
+  line: number;
+  parameters: FunctionParameter[];
 }
 
 export interface LanguagePack {
