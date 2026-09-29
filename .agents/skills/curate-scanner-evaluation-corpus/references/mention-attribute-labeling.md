@@ -80,13 +80,22 @@ The candidate list also matches related words: `recipient`, `sender`, `mailto`, 
 
 A `recipient` or `sender` that is a person or member object, not an address, is `negative` under rule 4 unless the line also reads its address.
 
+Settled boundary cases:
+
+- A line that only opens a container whose address key is on a later line (`email_data = {`) is `negative`; the key's own line is `positive`.
+- An index, constraint, or table name that contains the concept (`name="order_user_email_user_id_idx"`) is `negative`.
+- A field or setting that holds either an address or a keyword (`sender_reply_to`, which is `newsletter`, `support`, or an address) is treated as an address: `positive` wherever it is read, written, or defined.
+- A function whose address parameters lack the concept (`getAddressFromString(from: string, replyTo?: string): EmailAddresses`) is `positive`; the occurrence is the concept-bearing return type (`type_name`).
+
 ## Field 2: `mention_attributes.syntax_kind`
 
 First choose the occurrence. On a positive line, take the first of these that exists:
 
-1. a key, field, or parameter being defined that holds the address (`"recipient_email": user.email` → the key `recipient_email`; `def retrieve_user_by_email(email):` → the parameter `email`)
+1. a key, field, or parameter being defined that holds the address and whose name contains the concept (`"recipient_email": user.email` → the key `recipient_email`; `def retrieve_user_by_email(email):` → the parameter `email`; shorthand `{ url, email }` → the key `email`)
 2. the expression that reads or passes the address (`urlencode({"token": t, "to": user.email})` → `user.email`)
 3. a field name that selects the address (`'members.email'`)
+
+A key whose own name lacks the concept is skipped in step 1: `to: email` and `from: this.defaultFromEmail` choose the value (`email`, `defaultFromEmail`) under step 2, with the value's declaration. `validations: { isEmail: true }` chooses the key `isEmail` (`property_key`, declaration this line, kind `field`).
 
 On any other line, choose the first occurrence of the concept on the line. Then:
 
@@ -108,8 +117,8 @@ Prose strings (rule 3 of status) use `string_literal`. Template placeholders use
 Record it only in these cases. Otherwise leave the field out.
 
 1. **Identifier.** A bare name (`email`, `userEmail`): the line where that name is declared in this file (`const`, `let`, `var`, function parameter, Python assignment or parameter, class field). If it is imported from a relative module (`./` or `../`), the line of the matching export in that module. If it comes from a package import or cannot be found, write `unresolved`.
-2. **Member access.** `x.email`, `x.get('email')`, `x['email']`, `x.from.address`: the declaration of the base `x` under rule 1, with the base's kind. A parameter stays kind `parameter` at every use, including destructured parameters (`async cycleTransientId({ id, email })`). For `this.x`, `this.#x`, or `self.x`: the line in this file's class that declares the field `x` (a class field declaration, a TypeScript field type, or the first `this.x =` / `self.x =` in the constructor), kind `field`; `unresolved` if there is none.
-3. **Object or dict key, or keyword argument, that holds the address** (`requestUserEmail: frame.user.get('email')`, `"recipient_email": user.email`): this line itself, kind `field`.
+2. **Member access.** `x.email`, `x.get('email')`, `x['email']`, `x.from.address`: the declaration of the base `x` under rule 1, with the base's kind. A parameter stays kind `parameter` at every use, including destructured parameters (`async cycleTransientId({ id, email })`). For `this.x`, `this.#x`, or `self.x`: the line in this file's class that declares the field `x` (a class field declaration, a TypeScript field type, or the first `this.x =` / `self.x =` in the constructor), kind `field`; if `x` is a getter (`get x() {`), the getter line, kind `function`; `unresolved` if there is none. A getter's own line (`get fromEmailAddress() {`) is declared by itself, kind `function`.
+3. **Object or dict key, or keyword argument, that holds the address** (`requestUserEmail: frame.user.get('email')`, `"recipient_email": user.email`, shorthand `{ email }`): this line itself, kind `field`. Every positive `property_key` is declared by its own line.
    A function parameter that holds the address (`def retrieve_user_by_email(email):`): this line itself, kind `parameter`.
 4. **Field definition** (`email = models.EmailField()`, a schema column): this line itself, kind `field`.
 
