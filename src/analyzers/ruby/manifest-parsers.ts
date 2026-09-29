@@ -1,5 +1,7 @@
 export interface GemfileDependency {
   name: string;
+  startLine: number;
+  endLine: number;
 }
 
 const NON_RUNTIME_GROUPS = new Set(["development", "test"]);
@@ -42,10 +44,12 @@ function inlineGroupsFromGem(line: string): string[] {
  * explicit and exclusive. Mixed groups remain runtime dependencies.
  */
 export function parseGemfile(content: string): GemfileDependency[] {
-  const dependencies = new Map<string, GemfileDependency>();
+  const dependencies: GemfileDependency[] = [];
   const blockExclusions: boolean[] = [];
+  const lines = content.split(/\r?\n/);
 
-  for (const rawLine of content.split(/\r?\n/)) {
+  for (let i = 0; i < lines.length; i += 1) {
+    const rawLine = lines[i] ?? "";
     const line = stripComment(rawLine).trim();
     if (!line) continue;
 
@@ -82,10 +86,20 @@ export function parseGemfile(content: string): GemfileDependency[] {
     if (excludedByBlock || excludedInline) continue;
 
     const name = gemMatch[1].trim().toLowerCase();
-    if (name) dependencies.set(name, { name });
+    if (!name) continue;
+    const startLine = i + 1;
+    if (
+      dependencies.some(
+        (dependency) =>
+          dependency.name === name && dependency.startLine === startLine,
+      )
+    ) {
+      continue;
+    }
+    dependencies.push({ name, startLine, endLine: startLine });
   }
 
-  return Array.from(dependencies.values());
+  return dependencies;
 }
 
 /** Parse resolved gem versions from the `GEM` → `specs` lockfile section. */

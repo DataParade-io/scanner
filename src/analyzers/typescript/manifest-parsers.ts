@@ -1,3 +1,8 @@
+import {
+  jsonObjectKeySpans,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 function normalizePackageName(name: string): string | null {
   const s = name.trim();
   if (!s) return null;
@@ -6,24 +11,19 @@ function normalizePackageName(name: string): string | null {
   return token || null;
 }
 
-export function extractPackagesFromPackageJsonObject(parsed: unknown): string[] {
-  if (!parsed || typeof parsed !== "object") return [];
+export function extractPackageSpansFromPackageJson(
+  content: string,
+): ManifestPackageSpan[] {
+  try {
+    JSON.parse(content);
+  } catch {
+    return [];
+  }
 
-  const obj = parsed as Record<string, unknown>;
-  const collect = (value: unknown): string[] => {
-    if (!value || typeof value !== "object") return [];
-    const deps = value as Record<string, unknown>;
-    return Object.keys(deps)
-      .map((k) => normalizePackageName(k))
-      .filter((v): v is string => typeof v === "string" && v.length > 0);
-  };
-
-  const packages = [
-    ...collect(obj.dependencies),
-    ...collect(obj.devDependencies),
-    ...collect(obj.optionalDependencies),
-  ];
-
-  return Array.from(new Set(packages));
+  return jsonObjectKeySpans(
+    content,
+    ["dependencies", "devDependencies", "optionalDependencies"],
+    normalizePackageName,
+  );
 }
 

@@ -9,7 +9,8 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
-import { extractPackagesFromPackageJsonObject } from "./manifest-parsers";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
+import { extractPackageSpansFromPackageJson } from "./manifest-parsers";
 
 function normalizePosix(p: string): string {
   return p.split(path.sep).join("/");
@@ -17,7 +18,7 @@ function normalizePosix(p: string): string {
 
 export interface TypeScriptManifestPackages {
   manifestRelativePath: string;
-  packages: string[];
+  packages: ManifestPackageSpan[];
   packageName?: string;
 }
 
@@ -36,12 +37,19 @@ const FRONTEND_FRAMEWORKS_BY_PACKAGE: ReadonlyArray<{
   { packageName: "electron", framework: "electron" },
 ];
 
-function inferFrontendFrameworkFromPackages(packages: string[]): string | undefined {
-  const packageSet = new Set(packages.map((p) => p.toLowerCase()));
+function inferFrontendFrameworkFromPackages(
+  packages: readonly ManifestPackageSpan[],
+): { framework: string; spans: ManifestPackageSpan[] } | undefined {
   const matched = FRONTEND_FRAMEWORKS_BY_PACKAGE.find((entry) =>
-    packageSet.has(entry.packageName),
+    packages.some((pkg) => pkg.name.toLowerCase() === entry.packageName),
   );
-  return matched?.framework;
+  if (!matched) return undefined;
+  return {
+    framework: matched.framework,
+    spans: packages.filter(
+      (pkg) => pkg.name.toLowerCase() === matched.packageName,
+    ),
+  };
 }
 
 export async function parseTypeScriptDependencyManifests(
@@ -75,7 +83,7 @@ export async function parseTypeScriptDependencyManifests(
 
     try {
       const parsed = JSON.parse(raw) as unknown;
-      const packages = extractPackagesFromPackageJsonObject(parsed);
+      const packages = extractPackageSpansFromPackageJson(raw);
       if (packages.length === 0) continue;
       const packageName =
         typeof (parsed as { name?: unknown }).name === "string"
@@ -123,9 +131,11 @@ export async function detectTypeScriptPatternsFromDependencyManifests(
 
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
-    const imports = manifest.packages.map((p) => ({
-      module: p,
-      names: [p],
+    const imports = manifest.packages.map((pkg) => ({
+      module: pkg.name,
+      names: [pkg.name],
+      startLine: pkg.startLine,
+      endLine: pkg.endLine,
     }));
 
     const manifestFindings = matchPatterns({
@@ -145,25 +155,29 @@ export async function detectTypeScriptPatternsFromDependencyManifests(
       })),
     );
 
-    const frontendFramework = inferFrontendFrameworkFromPackages(manifest.packages);
+    const frontendFramework = inferFrontendFrameworkFromPackages(
+      manifest.packages,
+    );
     if (frontendFramework) {
-      findings.push({
-        pattern: "express_route",
-        name: "Frontend Application",
-        confidence: 0.75,
-        location: {
-          filePath: manifestFile.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {
-          framework: frontendFramework,
-          sourceContext: "dependency_manifest",
-          packageName: manifest.packageName,
-          httpMethods: [],
-          path: undefined,
-        },
-      });
+      for (const span of frontendFramework.spans) {
+        findings.push({
+          pattern: "express_route",
+          name: "Frontend Application",
+          confidence: 0.75,
+          location: {
+            filePath: manifestFile.path,
+            startLine: span.startLine,
+            endLine: span.endLine,
+          },
+          properties: {
+            framework: frontendFramework.framework,
+            sourceContext: "dependency_manifest",
+            packageName: manifest.packageName,
+            httpMethods: [],
+            path: undefined,
+          },
+        });
+      }
     }
   }
 

@@ -9,6 +9,7 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
 import { loadJvmPatternConfig } from "./jvm-detection-config";
 import {
   extractCoordinatesFromGradle,
@@ -25,7 +26,7 @@ function toPosixPath(p: string): string {
 export interface JvmManifestPackages {
   manifestRelativePath: string;
   /** Maven coordinates (`groupId:artifactId`), versions dropped. */
-  packages: string[];
+  packages: ManifestPackageSpan[];
 }
 
 function createManifestFileInfo(manifestRelativePath: string): FileInfo {
@@ -58,7 +59,10 @@ export function isSpringConfigName(name: string): boolean {
   );
 }
 
-function extractCoordinates(manifestName: string, raw: string): string[] {
+function extractCoordinates(
+  manifestName: string,
+  raw: string,
+): ManifestPackageSpan[] {
   const lower = manifestName.toLowerCase();
 
   if (lower === "pom.xml") return extractCoordinatesFromPom(raw);
@@ -110,7 +114,7 @@ export async function parseJvmDependencyManifests(
 
     byManifest.push({
       manifestRelativePath,
-      packages: Array.from(new Set(packages)),
+      packages,
     });
   }
 
@@ -132,13 +136,15 @@ export async function detectJvmPatternsFromDependencyManifests(
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
     const imports = manifest.packages.map((coordinate) => {
-      const [groupId, artifactId] = coordinate.split(":");
+      const [groupId, artifactId] = coordinate.name.split(":");
       const segments = groupId.split(".").filter(Boolean);
       return {
-        module: coordinate,
+        module: coordinate.name,
         names: Array.from(
-          new Set([coordinate, groupId, artifactId, ...segments]),
+          new Set([coordinate.name, groupId, artifactId, ...segments]),
         ).filter(Boolean),
+        startLine: coordinate.startLine,
+        endLine: coordinate.endLine,
       };
     });
 
@@ -212,7 +218,11 @@ async function detectSpringDatasourceConfig(
         pattern: "database_connection",
         name: `${jdbcUrl.name}:${ref.driver}`,
         confidence: 0.85,
-        location: { filePath: relativePath, startLine: 1, endLine: 1 },
+        location: {
+          filePath: relativePath,
+          startLine: ref.startLine,
+          endLine: ref.endLine,
+        },
         properties: {
           client: "spring_datasource",
           databaseType:

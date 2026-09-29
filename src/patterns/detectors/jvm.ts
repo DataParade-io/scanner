@@ -2,9 +2,15 @@ import type { PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
 import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
+  dedupeLocations,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
+  sourceOf,
+  spansOrFileStart,
 } from "./helpers";
 
 interface ParsedAnnotation {
@@ -78,14 +84,20 @@ function isJvm(ctx: PatternContext): boolean {
  * package, so `org.springframework.data` covers
  * `org.springframework.data.jpa.repository.JpaRepository`.
  */
-function hasImportPackage(ctx: PatternContext, packages: string[]): boolean {
-  if (packages.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
+function importPackageLocations(
+  ctx: PatternContext,
+  packages: string[],
+): SourceLocation[] {
+  if (packages.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
     packages.some(
       (want) => imp.module === want || imp.module.startsWith(`${want}.`),
     ),
   );
+}
+
+function hasImportPackage(ctx: PatternContext, packages: string[]): boolean {
+  return importPackageLocations(ctx, packages).length > 0;
 }
 
 /**
@@ -95,26 +107,30 @@ function hasImportPackage(ctx: PatternContext, packages: string[]): boolean {
  * must not also match the `com.mongodb...` import of a source file, or the
  * same client would be reported twice for one service.
  */
+function coordinateMatches(moduleName: string, coordinates: string[]): boolean {
+  if (!moduleName.includes(":")) return false;
+  const groupId = moduleName.slice(0, moduleName.indexOf(":"));
+  return coordinates.some((want) => {
+    if (want.includes(":")) return moduleName === want;
+    return groupId === want || groupId.startsWith(`${want}.`);
+  });
+}
+
+function packageCoordinateLocations(
+  ctx: PatternContext,
+  coordinates: string[],
+): SourceLocation[] {
+  if (coordinates.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
+    coordinateMatches(imp.module, coordinates),
+  );
+}
+
 function hasPackageCoordinate(
   ctx: PatternContext,
   coordinates: string[],
 ): boolean {
-  if (coordinates.length === 0) return false;
-  const imports = ctx.imports ?? [];
-
-  return imports.some((imp) => {
-    if (!imp.module.includes(":")) return false;
-    const groupId = imp.module.slice(0, imp.module.indexOf(":"));
-
-    return coordinates.some((want) => {
-      if (want.includes(":")) return imp.module === want;
-      return groupId === want || groupId.startsWith(`${want}.`);
-    });
-  });
-}
-
-function sourceOf(ctx: PatternContext): string {
-  return ctx.strippedContent ?? ctx.file.content ?? "";
+  return packageCoordinateLocations(ctx, coordinates).length > 0;
 }
 
 function callNameRegex(callNames: string[]): RegExp {
@@ -129,6 +145,32 @@ function declaredAnnotations(ctx: PatternContext): ParsedAnnotation[] {
     ...(ctx.types ?? []).flatMap((type) => annotationsOf(type.decorators)),
     ...(ctx.functions ?? []).flatMap((fn) => annotationsOf(fn.decorators)),
   ];
+}
+
+function annotationOwnerLocations(
+  ctx: PatternContext,
+  annotationNames: readonly string[],
+): SourceLocation[] {
+  if (annotationNames.length === 0) return [];
+  const owners = [
+    ...(ctx.types ?? []).map((type) => ({
+      location: type.location,
+      decorators: type.decorators,
+    })),
+    ...(ctx.functions ?? []).map((fn) => ({
+      location: fn.location,
+      decorators: fn.decorators,
+    })),
+  ];
+  return dedupeLocations(
+    owners
+      .filter((owner) =>
+        annotationsOf(owner.decorators).some((annotation) =>
+          annotationNames.includes(annotation.name),
+        ),
+      )
+      .map((owner) => owner.location),
+  );
 }
 
 export function detectJvmDatabaseConnectionsFromConfig(
@@ -154,20 +196,37 @@ export function detectJvmDatabaseConnectionsFromConfig(
 
     if (!hasImport && !hasCoordinate && !hasCall && !hasAnnotation) continue;
 
-    findings.push({
-      pattern: db.patternId,
-      name: db.id,
-      confidence: db.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: db.id,
-        databaseType: db.databaseType,
-      },
-    });
+    const callLocations =
+      db.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(db.callNames),
+          ])
+        : [];
+    const annotationLocations = annotationOwnerLocations(
+      ctx,
+      db.annotationNames,
+    );
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...importPackageLocations(ctx, db.importPackages),
+        ...packageCoordinateLocations(ctx, db.packageCoordinates),
+        ...callLocations,
+        ...annotationLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: db.patternId,
+        name: db.id,
+        confidence: db.confidence,
+        location,
+        properties: {
+          client: db.id,
+          databaseType: db.databaseType,
+        },
+      });
+    }
   }
 
   findings.push(...detectJdbcUrls(ctx, config, content));
@@ -242,43 +301,72 @@ export function detectJvmAuthFromConfig(
 
     if (!hasImport && !hasCoordinate && !hasCall && !matchesContent) continue;
 
-    findings.push({
-      pattern: lib.patternId,
-      name: lib.id,
-      confidence: lib.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(lib.strategy ? { strategy: lib.strategy } : {}),
-      },
-    });
+    const callLocations =
+      lib.callNames.length > 0
+        ? locationsForContentRegexes(ctx.file, content, [
+            callNameRegex(lib.callNames),
+          ])
+        : [];
+    const contentLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      lib.contentRegexes,
+    );
+
+    for (const location of spansOrFileStart(
+      ctx.file,
+      dedupeLocations([
+        ...importPackageLocations(ctx, lib.importPackages),
+        ...packageCoordinateLocations(ctx, lib.packageCoordinates),
+        ...callLocations,
+        ...contentLocations,
+      ]),
+    )) {
+      findings.push({
+        pattern: lib.patternId,
+        name: lib.id,
+        confidence: lib.confidence,
+        location,
+        properties: {
+          ...(lib.strategy ? { strategy: lib.strategy } : {}),
+        },
+      });
+    }
   }
 
-  const annotations = declaredAnnotations(ctx);
+  const owners = [
+    ...(ctx.types ?? []).map((type) => ({
+      location: type.location,
+      decorators: type.decorators,
+    })),
+    ...(ctx.functions ?? []).map((fn) => ({
+      location: fn.location,
+      decorators: fn.decorators,
+    })),
+  ];
 
   for (const rule of config.jvm.auth.annotations) {
-    const match = annotations.find((annotation) =>
-      rule.annotationNames.includes(annotation.name),
-    );
-    if (!match) continue;
+    const seenSpans = new Set<string>();
+    for (const owner of owners) {
+      const match = annotationsOf(owner.decorators).find((annotation) =>
+        rule.annotationNames.includes(annotation.name),
+      );
+      if (!match) continue;
+      const spanKey = `${owner.location.startLine}:${owner.location.endLine}`;
+      if (seenSpans.has(spanKey)) continue;
+      seenSpans.add(spanKey);
 
-    findings.push({
-      pattern: rule.patternId,
-      name: rule.id,
-      confidence: rule.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        ...(rule.strategy ? { strategy: rule.strategy } : {}),
-        ...(match.firstStringArg ? { policy: match.firstStringArg } : {}),
-      },
-    });
+      findings.push({
+        pattern: rule.patternId,
+        name: rule.id,
+        confidence: rule.confidence,
+        location: owner.location,
+        properties: {
+          ...(rule.strategy ? { strategy: rule.strategy } : {}),
+          ...(match.firstStringArg ? { policy: match.firstStringArg } : {}),
+        },
+      });
+    }
   }
 
   return findings;
@@ -355,17 +443,29 @@ export function detectJvmEnvAndConfigFromConfig(
 
       if (!hasImport && !hasCoordinate && !hasCall) continue;
 
-      findings.push({
-        pattern: envCfg.configLoaders.patternId,
-        name: loader.id,
-        confidence: envCfg.configLoaders.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {},
-      });
+      const callLocations =
+        loader.callNames.length > 0
+          ? locationsForContentRegexes(ctx.file, content, [
+              callNameRegex(loader.callNames),
+            ])
+          : [];
+
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([
+          ...importPackageLocations(ctx, loader.importPackages),
+          ...packageCoordinateLocations(ctx, loader.packageCoordinates),
+          ...callLocations,
+        ]),
+      )) {
+        findings.push({
+          pattern: envCfg.configLoaders.patternId,
+          name: loader.id,
+          confidence: envCfg.configLoaders.confidence,
+          location,
+          properties: {},
+        });
+      }
     }
   }
 
@@ -596,17 +696,25 @@ export function detectJvmServerlessHandlersFromConfig(
       handler.callNames.length > 0 &&
       callNameRegex(handler.callNames).test(content)
     ) {
-      findings.push({
-        pattern: handler.patternId,
-        name: handler.id,
-        confidence: handler.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: { framework: handler.id },
-      });
+      const callLocations = locationsForContentRegexes(ctx.file, content, [
+        callNameRegex(handler.callNames),
+      ]);
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([
+          ...importPackageLocations(ctx, handler.importPackages),
+          ...packageCoordinateLocations(ctx, handler.packageCoordinates),
+          ...callLocations,
+        ]),
+      )) {
+        findings.push({
+          pattern: handler.patternId,
+          name: handler.id,
+          confidence: handler.confidence,
+          location,
+          properties: { framework: handler.id },
+        });
+      }
     }
   }
 

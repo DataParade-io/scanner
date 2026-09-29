@@ -138,8 +138,12 @@ describe("C++ analyzer patterns", () => {
       (f) => f.pattern === "auth_middleware" && f.name === "jwt_cpp",
     );
 
-    expect(auth.length).toBe(1);
-    expect(auth[0].properties.strategy).toBe("jwt");
+    expect(auth.map((finding) => finding.location.startLine).sort()).toEqual([
+      1, 4,
+    ]);
+    expect(auth.every((finding) => finding.properties.strategy === "jwt")).toBe(
+      true,
+    );
   });
 
   it("ignores routes that only appear in comments", () => {

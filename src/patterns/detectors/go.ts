@@ -5,9 +5,13 @@ import type { RawFinding } from "../../core/types/detection";
 import {
   buildThirdPartyUrlHostPatterns,
   createLocationFromLine,
+  dedupeLocations,
   findLineMatches,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
   sourceOf,
+  spansOrFileStart,
 } from "./helpers";
 
 /**
@@ -22,9 +26,12 @@ function importMatchesPath(importPath: string, want: string): boolean {
 }
 
 function hasAnyImport(ctx: PatternContext, paths: string[]): boolean {
-  if (paths.length === 0) return false;
-  const imports = ctx.imports ?? [];
-  return imports.some((imp) =>
+  return importLocations(ctx, paths).length > 0;
+}
+
+function importLocations(ctx: PatternContext, paths: string[]) {
+  if (paths.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
     paths.some((want) => importMatchesPath(imp.module, want)),
   );
 }
@@ -74,16 +81,21 @@ export function detectGoDatabaseConnectionsFromConfig(
     }
 
     if (!emitted) {
-      findings.push({
-        pattern: db.patternId,
-        name: db.id,
-        confidence: db.confidence,
-        location: createLocationFromLine(ctx.file, 1),
-        properties: {
-          client: db.id,
-          databaseType: db.databaseType,
-        },
-      });
+      for (const location of spansOrFileStart(
+        ctx.file,
+        importLocations(ctx, db.importPaths),
+      )) {
+        findings.push({
+          pattern: db.patternId,
+          name: db.id,
+          confidence: db.confidence,
+          location,
+          properties: {
+            client: db.id,
+            databaseType: db.databaseType,
+          },
+        });
+      }
     }
   }
 
@@ -179,15 +191,20 @@ export function detectGoAuthFromConfig(
     }
 
     if (!emitted) {
-      findings.push({
-        pattern: lib.patternId,
-        name: lib.id,
-        confidence: lib.confidence,
-        location: createLocationFromLine(ctx.file, 1),
-        properties: {
-          ...(lib.strategy ? { strategy: lib.strategy } : {}),
-        },
-      });
+      for (const location of spansOrFileStart(
+        ctx.file,
+        importLocations(ctx, lib.importPaths),
+      )) {
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location,
+          properties: {
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
     }
   }
 
@@ -236,17 +253,28 @@ export function detectGoEnvAndConfigFromConfig(
 
       if (!hasImport && !hasCall) continue;
 
-      findings.push({
-        pattern: envCfg.configLoaders.patternId,
-        name: loader.id,
-        confidence: envCfg.configLoaders.confidence,
-        location: {
-          filePath: ctx.file.path,
-          startLine: 1,
-          endLine: 1,
-        },
-        properties: {},
-      });
+      const callLocations =
+        loader.callNames.length > 0
+          ? locationsForContentRegexes(ctx.file, content, [
+              callNameRegex(loader.callNames),
+            ])
+          : [];
+
+      for (const location of spansOrFileStart(
+        ctx.file,
+        dedupeLocations([
+          ...importLocations(ctx, loader.importPaths),
+          ...callLocations,
+        ]),
+      )) {
+        findings.push({
+          pattern: envCfg.configLoaders.patternId,
+          name: loader.id,
+          confidence: envCfg.configLoaders.confidence,
+          location,
+          properties: {},
+        });
+      }
     }
   }
 
