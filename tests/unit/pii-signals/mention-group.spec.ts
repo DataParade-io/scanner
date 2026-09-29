@@ -187,3 +187,37 @@ describe("model file anchoring to a defined field", () => {
     expect(out.map((hit) => (hit as { group?: string }).group)).toEqual(["email:user", "email:user"]);
   });
 });
+
+describe("call links", () => {
+  const hit = (filePath: string, extra: Record<string, unknown>) => ({
+    id: "email",
+    location: "code" as const,
+    evidence: { filePath },
+    ...extra,
+  });
+
+  it("joins an argument to the callee's parameter declaration", () => {
+    const out = assignDeclarationGroups([
+      hit("lib/mail.js", { declaration: { line: 1, kind: "parameter" } }),
+      hit("app/a.js", { group: "email:member", callLinks: ["email@lib/mail.js:1"] }),
+    ]);
+    expect(out.map((h) => (h as { group?: string }).group)).toEqual(["email:member", "email:member"]);
+  });
+
+  it("refuses a link between differently named sets", () => {
+    const out = assignDeclarationGroups([
+      hit("lib/mail.js", { group: "email:staff", declaration: { line: 1, kind: "parameter" } }),
+      hit("app/a.js", { group: "email:member", callLinks: ["email@lib/mail.js:1"] }),
+    ]);
+    expect(out.map((h) => (h as { group?: string }).group)).toEqual(["email:staff", "email:member"]);
+  });
+
+  it("joins two callers of the same parameter", () => {
+    const out = assignDeclarationGroups([
+      hit("lib/mail.js", { declaration: { line: 1, kind: "parameter" } }),
+      hit("app/a.js", { group: "email:member", callLinks: ["email@lib/mail.js:1"] }),
+      hit("app/b.js", { declaration: { line: 3, kind: "local" }, callLinks: ["email@lib/mail.js:1"] }),
+    ]);
+    expect(out.map((h) => (h as { group?: string }).group)).toEqual(["email:member", "email:member", "email:member"]);
+  });
+});

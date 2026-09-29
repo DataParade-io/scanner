@@ -152,6 +152,12 @@ interface GroupableHit {
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   passedDeclarations?: number[];
+  callLinks?: string[];
+}
+
+/** Id of a declaration node: signal, file, and 1-based line of the declaration. */
+export function declarationNodeId(signalId: string, filePath: string, line: number): string {
+  return `${signalId}@${filePath}:${line}`;
 }
 
 /**
@@ -196,7 +202,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   };
   const declarationNode = (hit: T): string | undefined =>
     hit.declaration && hit.declaration !== "unresolved"
-      ? `${hit.id}@${hit.evidence.filePath}:${hit.declaration.line}`
+      ? declarationNodeId(hit.id, hit.evidence.filePath, hit.declaration.line)
       : undefined;
 
   // Joins run from most to least reliable: declaration (a declaration never spans two
@@ -209,7 +215,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
     for (const line of hit.passedDeclarations ?? []) {
-      union(node, `decl:${hit.id}@${hit.evidence.filePath}:${line}`);
+      union(node, `decl:${declarationNodeId(hit.id, hit.evidence.filePath, line)}`);
     }
   });
   hits.forEach((hit, index) => {
@@ -232,6 +238,13 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       const node = `${hit.id}:${field.key}`;
       if (definedFields.has(node)) union(`hit:${index}`, `field:${node}`);
     }
+  });
+
+  // A value passed as a call argument keeps its data item in the callee's parameter,
+  // so the mention joins the declaration of the parameter it is passed to.
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment") return;
+    for (const link of hit.callLinks ?? []) union(`hit:${index}`, `decl:${link}`);
   });
 
   // A mention with no qualifier in a model or repository file joins the file's entity
