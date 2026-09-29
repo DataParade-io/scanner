@@ -3,9 +3,9 @@
   "title": "Second-pass agreement check on email labels",
   "description": "Measure how reliable the small-model labels are before a person reviews them.\n\n## Steps\n\n- Pick a random 20% of candidate lines across all `ghost` and `saleor` batches.\n- Have a second, different small model label them independently from the same reference, into separate packet files.\n- Compare with the first labels field by field. Report agreement per field and list every disagreement.\n- Disagreements go to the person reviewing those batches, first.\n- If agreement on value vs. word is below 90%, stop and revise the labeling reference before more batches are worked.\n\n## Done when\n\nThe agreement report is attached and disagreements are adjudicated.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "home",
   "creator": null,
   "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
   "labels": [
@@ -17,9 +17,24 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f095d87c-8fc3-4799-b189-d2245503046b",
+      "author": "home",
+      "text": "Done on branch kdatap-6b03c5-second-pass: blind Sonnet second pass on a 20% sample (304 lines). Status agreement with final labels 296/304 (97.4%, kappa 0.941); attributes on shared positives: syntax_kind 86.3%, declaration 76.8%, type_annotation 94.7%. 2 status errors and 1 declaration error in the final labels were found and fixed on their label branches; 6 status disagreements are unsettled reference rules. See annotations/KDATAP-6b03c5/report.md.",
+      "created_at": "2026-09-29T02:33:22.666841Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "333180a6-2e8d-4f73-8e64-9f6b0e6d191b",
+      "author": "home",
+      "text": "Rules settled in the labeling reference and applied to all 27 packets (9 batch branches updated). Re-measured against a normalized copy of the second pass: status 98.0% (kappa 0.956), syntax_kind 95.8%, declaration 90.6%, type_annotation 94.8%. Details in annotations/KDATAP-6b03c5/report.md on kdatap-6b03c5-second-pass.",
+      "created_at": "2026-09-29T02:38:44.339167Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:19.038603Z",
-  "updated_at": "2026-09-28T22:34:29.886642Z",
+  "updated_at": "2026-09-29T02:38:44.339193Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,
