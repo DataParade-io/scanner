@@ -18,8 +18,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Imports the send_email function from the email_common module; a module
-    import, not an address.
+  rationale: Imports the send_email function from the email_common module; a module import, not an address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
@@ -107,8 +106,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Function call to send_email; the function name itself doesn't hold an
-    address.
+  rationale: Function call to send_email; the function name itself doesn't hold an address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
@@ -172,16 +170,20 @@ annotations:
     start_line: 27
     end_line: 27
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for password reset email sending, not an address.
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 27
+      kind: parameter
     owner: saleor
 - id: saleor-tasks-L29
   layer: mentions
@@ -430,7 +432,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: old_email
   evidence:
     file_path: saleor/plugins/user_email/tasks.py
     start_line: 62
@@ -455,7 +457,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: recipient_email
+    name: new_email
   evidence:
     file_path: saleor/plugins/user_email/tasks.py
     start_line: 63
@@ -614,7 +616,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: old_email
   evidence:
     file_path: saleor/plugins/user_email/tasks.py
     start_line: 83
@@ -639,7 +641,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: new_email
   evidence:
     file_path: saleor/plugins/user_email/tasks.py
     start_line: 84
@@ -959,16 +961,20 @@ annotations:
     start_line: 121
     end_line: 121
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for gift card email task.
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 121
+      kind: parameter
     owner: saleor
 - id: saleor-tasks-L122
   layer: mentions
@@ -1083,7 +1089,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: recipient_email
+    name: email
   evidence:
     file_path: saleor/plugins/user_email/tasks.py
     start_line: 134
@@ -1156,16 +1162,20 @@ annotations:
     start_line: 144
     end_line: 144
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for invoice email task.
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 144
+      kind: parameter
     owner: saleor
 - id: saleor-tasks-L146
   layer: mentions
@@ -1947,16 +1957,20 @@ annotations:
     start_line: 246
     end_line: 246
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for order canceled email task.
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 246
+      kind: parameter
     owner: saleor
 - id: saleor-tasks-L247
   layer: mentions
@@ -2081,16 +2095,20 @@ annotations:
     start_line: 265
     end_line: 265
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for order refund email task.
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 265
+      kind: parameter
     owner: saleor
 - id: saleor-tasks-L266
   layer: mentions
