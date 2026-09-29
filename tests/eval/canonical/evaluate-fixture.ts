@@ -24,7 +24,14 @@ import {
 import { computeMetricComputability } from "../../../src/eval/canonical/computability";
 import { isAcceptedEvaluablePositive } from "../../../src/eval/canonical/types";
 import type { CanonicalGoldExpectation } from "../../../src/eval/canonical/types";
-import type { ScopeDenominators } from "../types";
+import type { LayerFinding, ScopeDenominators } from "../types";
+import {
+  computeMentionAttributeMetrics,
+  computePairwiseGrouping,
+  declaredMentionAttributes,
+  type GroupedMention,
+  type MatchedMentionPair,
+} from "../../../src/eval/canonical/mention-attribute-metrics";
 
 function scopeBucketKey(fixture: string, layer: EvalLayer): string {
   return `${fixture}::${layer}`;
@@ -231,6 +238,10 @@ export function evaluateCanonical(
   const bucketReports: LayerEvaluationReport[] = [];
   const outcomeByCaseId = new Map<string, LayerEvaluationReport["perExpectation"][number] & { fixture: string }>();
 
+  const mentionPairs: MatchedMentionPair[] = [];
+  const groupedMentions: GroupedMention[] = [];
+  const mentionFindings: LayerFinding[] = [];
+
   let positiveCaseCount = 0;
   let unreadPositiveCount = 0;
   let negativeCaseCount = 0;
@@ -296,6 +307,27 @@ export function evaluateCanonical(
     });
     bucketReports.push(report);
 
+    if (bucket.layer === "mentions") {
+      const layerFindings = (scan?.findings ?? []).filter(
+        (finding) => finding.layer === undefined || finding.layer === bucket.layer,
+      );
+      mentionFindings.push(...layerFindings);
+      const findingById = new Map(findings.map((finding, index) => [finding.id, layerFindings[index]]));
+      const caseById = new Map(bucket.cases.map((caseRecord) => [caseRecord.id, caseRecord]));
+      for (const pair of report.assignment.pairs) {
+        const caseRecord = caseById.get(pair.expectationId);
+        if (!caseRecord || caseRecord.expected.status !== "positive") {
+          continue;
+        }
+        const finding = findingById.get(pair.findingId);
+        mentionPairs.push({ gold: caseRecord.mentionAttributes, finding: finding?.mentionAttributes });
+        groupedMentions.push({
+          goldGroup: caseRecord.mentionAttributes?.group,
+          predictedGroup: finding?.mentionAttributes?.group,
+        });
+      }
+    }
+
     for (const outcome of report.perExpectation) {
       outcomeByCaseId.set(outcome.expectationId, { ...outcome, fixture: bucket.fixture });
     }
@@ -323,17 +355,27 @@ export function evaluateCanonical(
     };
   });
 
-  return {
-    scores: mergeBucketReports(
-      bucketReports,
-      layer,
-      scope,
-      locationlessFindingCount,
-      positiveCaseCount,
-      unreadPositiveCount,
-      negativeCaseCount,
-      unreadNegativeCount,
-    ),
-    caseResults,
-  };
+  const scores = mergeBucketReports(
+    bucketReports,
+    layer,
+    scope,
+    locationlessFindingCount,
+    positiveCaseCount,
+    unreadPositiveCount,
+    negativeCaseCount,
+    unreadNegativeCount,
+  );
+  if (layer === "mentions") {
+    const findingAttributes = mentionFindings.map((finding) => finding.mentionAttributes);
+    scores.mentionAttributes = computeMentionAttributeMetrics(
+      mentionPairs,
+      declaredMentionAttributes(findingAttributes),
+    );
+    scores.grouping = computePairwiseGrouping(
+      groupedMentions,
+      findingAttributes.some((attributes) => attributes?.group !== undefined),
+    );
+  }
+
+  return { scores, caseResults };
 }
