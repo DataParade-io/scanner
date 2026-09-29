@@ -1,0 +1,1268 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-7e5cf2
+  files:
+  - saleor/plugins/sendgrid/tasks.py
+annotations:
+- id: saleor-tasks-L22
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function named send_email; declaration line, not address value
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L23
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 23
+    end_line: 23
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts recipient email from payload dict
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 23
+      kind: local
+- id: saleor-tasks-L25
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_address
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 25
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_address from configuration object
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 22
+      kind: parameter
+- id: saleor-tasks-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email to Mail constructor
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 23
+      kind: local
+- id: saleor-tasks-L41
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L43
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function on its own line
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L56
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_password_reset_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 56
+    end_line: 56
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L61
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 61
+    end_line: 61
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function on its own line
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L76
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_request_email_change_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 76
+    end_line: 76
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L79
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 79
+    end_line: 79
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L81
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_request_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 81
+    end_line: 81
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template ID reference; configuration field, not address
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L85
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email_change_request_event
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 85
+    end_line: 85
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call; function name about email events, not address
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L88
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 88
+    end_line: 88
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts old email from payload dict
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 88
+      kind: field
+- id: saleor-tasks-L89
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 89
+    end_line: 89
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts recipient email as new_email value
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 89
+      kind: field
+- id: saleor-tasks-L100
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_user_change_email_notification_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 100
+    end_line: 100
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L103
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 103
+    end_line: 103
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_confirm_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template ID reference; config field, not address
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts old email from payload dict
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 109
+      kind: field
+- id: saleor-tasks-L110
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 110
+    end_line: 110
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts new email from payload dict
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 110
+      kind: field
+- id: saleor-tasks-L113
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email_changed_event
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call; event function name, not address value
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L124
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_delete_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 124
+    end_line: 124
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L126
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 126
+    end_line: 126
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L139
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_set_user_password_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 139
+    end_line: 139
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L141
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 141
+    end_line: 141
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L154
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_invoice_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 154
+    end_line: 154
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L157
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 157
+    end_line: 157
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L167
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 167
+    end_line: 167
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 167
+      kind: field
+- id: saleor-tasks-L173
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 173
+    end_line: 173
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 173
+      kind: field
+- id: saleor-tasks-L183
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_order_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 183
+    end_line: 183
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L184
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 184
+    end_line: 184
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring text mentioning email; comment text
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-tasks-L186
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 186
+    end_line: 186
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L195
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 195
+    end_line: 195
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 195
+      kind: field
+- id: saleor-tasks-L205
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_fulfillment_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 205
+    end_line: 205
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 207
+    end_line: 207
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L217
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 217
+    end_line: 217
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 217
+      kind: field
+- id: saleor-tasks-L227
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_fulfillment_update_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 227
+    end_line: 227
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L229
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 229
+    end_line: 229
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L242
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_payment_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 242
+    end_line: 242
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L244
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 244
+    end_line: 244
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L253
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 253
+    end_line: 253
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 253
+      kind: field
+- id: saleor-tasks-L263
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_order_canceled_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 263
+    end_line: 263
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L265
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 265
+    end_line: 265
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L275
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 275
+    end_line: 275
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 275
+      kind: field
+- id: saleor-tasks-L285
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_order_refund_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 285
+    end_line: 285
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L287
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 287
+    end_line: 287
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L297
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 297
+    end_line: 297
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 297
+      kind: field
+- id: saleor-tasks-L307
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_gift_card_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 307
+    end_line: 307
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L309
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 309
+    end_line: 309
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L314
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 314
+    end_line: 314
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assignment to dict; no address value on this line
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L318
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 318
+    end_line: 318
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Adds recipient email as email field in dict
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 314
+      kind: local
+- id: saleor-tasks-L322
+  layer: mentions
+  subject:
+    key: mention:email
+    name: gift_card_resent_event
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 322
+    end_line: 322
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call with **email_data; event function name, not address
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L324
+  layer: mentions
+  subject:
+    key: mention:email
+    name: gift_card_sent_event
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 324
+    end_line: 324
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call with **email_data; event function name, not address
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L333
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_order_confirmed_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 333
+    end_line: 333
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L335
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 335
+    end_line: 335
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L345
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 345
+    end_line: 345
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email as customer_email parameter
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 345
+      kind: field
+- id: saleor-tasks-L355
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email_with_dynamic_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 355
+    end_line: 355
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name mentions email; declaration line only
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L359
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 359
+    end_line: 359
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to send_email function
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
