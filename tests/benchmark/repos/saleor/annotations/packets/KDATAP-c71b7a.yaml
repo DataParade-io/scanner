@@ -1,0 +1,386 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-c71b7a
+  files:
+  - saleor/plugins/user_email/constants.py
+  - saleor/plugins/user_email/default_email_templates/request_email_change.html
+annotations:
+- id: saleor-constants-L5
+  layer: mentions
+  subject:
+    key: mention:email
+    name: PLUGIN_ID
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin identifier naming the email notification feature; does not hold or reference an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L8
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable holding the file path to email template directory; does not hold an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L9
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: String literal path to email template directory; refers to a feature/location, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-constants-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant naming an email template field; refers to template configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L16
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant naming an email template field; refers to template configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L32
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reference to template field constant in list; refers to template configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-constants-L33
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_TEMPLATE_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reference to template field constant in list; refers to template configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-constants-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_TEMPLATE
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable holding the filename of an email template file; does not hold an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L50
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_TEMPLATE
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 50
+    end_line: 50
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable holding the filename of an email template file; does not hold an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L66
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 66
+    end_line: 66
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant naming an email subject field; refers to configuration property, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L67
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 67
+    end_line: 67
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant naming an email subject field; refers to configuration property, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L80
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CONFIRMATION_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 80
+    end_line: 80
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line text (prose); message describing the email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L83
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 83
+    end_line: 83
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line text (prose); message describing the email change feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L84
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 84
+    end_line: 84
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line text (prose); message describing the email change feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-constants-L85
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_PASSWORD_RESET_DEFAULT_SUBJECT
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 85
+    end_line: 85
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line text (prose); message describing the password reset email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-request_email_change-L93
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/default_email_templates/request_email_change.html
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text in HTML email template describing the email change request; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-request_email_change-L94
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/default_email_templates/request_email_change.html
+    start_line: 94
+    end_line: 94
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text in HTML email template about email change; instruction text, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-request_email_change-L142
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/default_email_templates/request_email_change.html
+    start_line: 142
+    end_line: 142
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text in HTML email template informing user this is an automated message; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
