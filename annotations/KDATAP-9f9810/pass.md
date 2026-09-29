@@ -8,13 +8,13 @@
 **Total Records:** 31
 
 **Status Breakdown:**
-- **Positive:** 12 records
-- **Negative:** 19 records
+- **Positive:** 10 records
+- **Negative:** 21 records
 - **Ambiguous:** 0 records
 
 ## Positive Lines
 
-The following 12 lines hold or pass email addresses:
+The following 10 lines hold or pass email addresses:
 
 - `saleor/plugins/admin_email/tasks.py:10` - Function parameter `recipient_email`
 - `saleor/plugins/admin_email/tasks.py:15` - Passes `recipient_email` to send_email
@@ -29,7 +29,7 @@ The following 12 lines hold or pass email addresses:
 
 ## Negative Lines
 
-The following 19 lines do not hold email addresses:
+The following 21 lines do not hold email addresses:
 
 - `saleor/plugins/admin_email/tasks.py:5` - Import of send_email module
 - `saleor/plugins/admin_email/tasks.py:9` - Function name indicates email sending feature
@@ -55,7 +55,8 @@ The following 19 lines do not hold email addresses:
 
 ## Key Observations
 
-- All 5 task functions (`send_set_staff_password_email_task`, `send_email_with_link_to_download_file_task`, `send_export_failed_email_task`, `send_staff_order_confirmation_email_task`, `send_staff_password_reset_email_task`) follow the same pattern: they each declare a parameter holding email address(es), create an EmailConfig object, and pass that parameter to send_email.
+- All 5 task functions (`send_set_staff_password_email_task`, `send_email_with_link_to_download_file_task`, `send_export_failed_email_task`, `send_staff_order_confirmation_email_task`, `send_staff_password_reset_email_task`) follow the same pattern: they declare a parameter holding email address(es), create an EmailConfig object, and pass that parameter to send_email.
+- Each of the 5 functions contributes 2 positive lines: the parameter declaration line and a line passing that parameter to send_email (10 total positive).
 - Parameters named `recipient_email` or `recipient_list` are consistently labeled positive as they hold email addresses.
 - Function declarations with "email" in the name are labeled negative per the rule that function names indicating the feature (sending email) are not addresses.
 - EmailConfig assignments and configuration arguments are consistently negative as they hold configuration objects, not addresses.
