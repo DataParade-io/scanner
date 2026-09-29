@@ -669,7 +669,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: parentMemberEmail
   evidence:
     file_path: ghost/core/core/server/services/comments/comments-service-emails.js
     start_line: 136
@@ -684,8 +684,12 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 136
+      kind: local
 - id: ghost-comments-service-emails-L166
   layer: mentions
   subject:
@@ -782,7 +786,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: to
+    name: parentMemberEmail
   evidence:
     file_path: ghost/core/core/server/services/comments/comments-service-emails.js
     start_line: 179
@@ -797,11 +801,11 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/comments/comments-service-emails.js
-      line: 179
-      kind: field
+      line: 136
+      kind: local
     owner: ghost/core
 - id: ghost-comments-service-emails-L189
   layer: mentions
@@ -1022,22 +1026,26 @@ annotations:
     start_line: 265
     end_line: 265
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Getter definition for the sender address; a function declaration, not the address value.
+  rationale: Getter that exposes the site notification sender address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 265
+      kind: field
 - id: ghost-comments-service-emails-L282
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: notificationFromAddress
   evidence:
     file_path: ghost/core/core/server/services/comments/comments-service-emails.js
     start_line: 282
@@ -1052,10 +1060,10 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: ghost/core/core/server/services/comments/comments-service-emails.js
-      line: 282
+      line: 265
       kind: field
     owner: ghost/core
 - id: ghost-comments-service-emails-L292
