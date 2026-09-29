@@ -690,8 +690,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Async function name mentioning email data, not passing address on declaration
-    line.
+  rationale: Async function name mentioning email data, not passing address on declaration line.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -709,11 +708,10 @@ annotations:
     start_line: 107
     end_line: 107
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Uses emailId parameter to create cache key; emailId is a unique email
-    identifier.
+  rationale: emailId identifies a newsletter email record, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -721,10 +719,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-service/sending-service.js
-      line: 106
-      kind: parameter
 - id: ghost-sending-service-L108
   layer: mentions
   subject:
@@ -1255,10 +1249,10 @@ annotations:
     start_line: 174
     end_line: 174
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Filters recipient objects by email validity; recipients parameter.
+  rationale: recipient is a recipient object; this line does not read its address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1266,10 +1260,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/email-service/sending-service.js
-      line: 174
-      kind: parameter
 - id: ghost-sending-service-L175
   layer: mentions
   subject:
@@ -1295,7 +1285,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Recipient
+    name: recipient
   evidence:
     file_path: ghost/core/core/server/services/email-service/sending-service.js
     start_line: 176
@@ -1314,8 +1304,8 @@ annotations:
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/email-service/sending-service.js
-      line: 176
-      kind: local
+      line: 174
+      kind: parameter
 - id: ghost-sending-service-L177
   layer: mentions
   subject:
