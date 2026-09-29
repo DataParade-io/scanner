@@ -1,0 +1,701 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-9f9810
+  files:
+  - saleor/plugins/admin_email/tasks.py
+annotations:
+- id: saleor-tasks-L5
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for send_email function; module name indicates email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-tasks-L9
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration; "email" in function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L10
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 10
+    end_line: 10
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 10
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holding email configuration object, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L13
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to send_email function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 10
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L23
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration; "email" in function name indicates email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 24
+    end_line: 24
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 24
+      kind: parameter
+    type_annotation: str
+    owner: saleor
+- id: saleor-tasks-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holding email configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L27
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L29
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 29
+    end_line: 29
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to send_email function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 24
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L42
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 42
+    end_line: 42
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration; "email" in function name indicates email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L43
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 43
+    end_line: 43
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 43
+      kind: parameter
+    type_annotation: str
+    owner: saleor
+- id: saleor-tasks-L45
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 45
+    end_line: 45
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holding email configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L46
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L47
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 47
+    end_line: 47
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L48
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 48
+    end_line: 48
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to send_email function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 43
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L61
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 61
+    end_line: 61
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration; "email" in function name indicates email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L62
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 62
+    end_line: 62
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding recipient email addresses for staff notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 62
+      kind: parameter
+    type_annotation: str
+    owner: saleor
+- id: saleor-tasks-L64
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 64
+    end_line: 64
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holding email configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L66
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 66
+    end_line: 66
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L67
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 67
+    end_line: 67
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient list parameter holding staff email addresses to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 62
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L75
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 75
+    end_line: 75
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration; "email" in function name indicates email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L76
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 76
+    end_line: 76
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 76
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L78
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 78
+    end_line: 78
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Local variable holding email configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L79
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 79
+    end_line: 79
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; function name indicates sending feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L80
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 80
+    end_line: 80
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument passing configuration object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L81
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to send_email function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 76
+      kind: parameter
+    owner: saleor
