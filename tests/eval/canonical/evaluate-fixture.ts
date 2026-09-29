@@ -24,7 +24,7 @@ import {
 import { computeMetricComputability } from "../../../src/eval/canonical/computability";
 import { isAcceptedEvaluablePositive } from "../../../src/eval/canonical/types";
 import type { CanonicalGoldExpectation } from "../../../src/eval/canonical/types";
-import type { LayerFinding, ScopeDenominators } from "../types";
+import type { EvalConceptScope, LayerFinding, ScopeDenominators } from "../types";
 import {
   computeMentionAttributeMetrics,
   computePairwiseGrouping,
@@ -46,6 +46,39 @@ function isRecallEvaluable(caseRecord: EvalCase, canonical: CanonicalGoldExpecta
     caseRecord.expected.status === "positive" &&
     isAcceptedEvaluablePositive(canonical)
   );
+}
+
+/** Concept-scoped closed worlds per fixture and layer bucket (KDATAP-ec05ea). */
+function collectConceptScopes(cases: EvalCase[]): Map<string, EvalConceptScope[]> {
+  const scopes = new Map<string, Map<string, EvalConceptScope>>();
+  for (const caseRecord of cases) {
+    for (const scope of caseRecord.conceptScopes ?? []) {
+      const key = scopeBucketKey(caseRecord.fixture, caseRecord.layer);
+      const files = scope.files.filter(isEvalPathContractValid).map(normalizeEvalPath);
+      const identity = JSON.stringify([[...scope.subjectKeys].sort(), [...files].sort()]);
+      const bucket = scopes.get(key) ?? new Map<string, EvalConceptScope>();
+      bucket.set(identity, { subjectKeys: [...scope.subjectKeys], files });
+      scopes.set(key, bucket);
+    }
+  }
+  return new Map([...scopes].map(([key, bucket]) => [key, [...bucket.values()]]));
+}
+
+/** Layer-wide and concept-scoped files together, for scope counts and eligibility. */
+function unionScopeFiles(
+  exhaustiveScopes: Map<string, string[]>,
+  conceptScopes: Map<string, EvalConceptScope[]>,
+): Map<string, string[]> {
+  const union = new Map<string, string[]>();
+  for (const key of new Set([...exhaustiveScopes.keys(), ...conceptScopes.keys()])) {
+    union.set(key, [
+      ...new Set([
+        ...(exhaustiveScopes.get(key) ?? []),
+        ...(conceptScopes.get(key) ?? []).flatMap((scope) => scope.files),
+      ]),
+    ]);
+  }
+  return union;
 }
 
 function collectExhaustiveScopeFiles(cases: EvalCase[]): Map<string, string[]> {
@@ -233,6 +266,8 @@ export function evaluateCanonical(
   const byFixture = new Map(scanResults.map((result) => [result.fixture, result]));
   const buckets = buildBuckets(cases, scanResults);
   const exhaustiveScopes = collectExhaustiveScopeFiles(cases);
+  const conceptScopes = collectConceptScopes(cases);
+  const allScopeFiles = unionScopeFiles(exhaustiveScopes, conceptScopes);
   const layer = cases[0]?.layer ?? "components";
 
   const bucketReports: LayerEvaluationReport[] = [];
@@ -277,12 +312,14 @@ export function evaluateCanonical(
     });
 
     const scopeFiles = exhaustiveScopes.get(bucketKey) ?? [];
-    const reviewedScopeFiles = scopeFiles.map(normalizeEvalPath);
+    const bucketConceptScopes = conceptScopes.get(bucketKey) ?? [];
+    const eligibleScopeFiles = allScopeFiles.get(bucketKey) ?? [];
+    const reviewedScopeFiles = eligibleScopeFiles.map(normalizeEvalPath);
     const ledger = getLayerLedger(scan, bucket.layer);
     const processedScopeFiles = reviewedScopeFiles.filter((filePath) =>
       isPathSuccessfullyProcessed(ledger, filePath),
     );
-    const hasProcessedScope = countProcessedScopeFiles(scopeFiles, ledger) > 0;
+    const hasProcessedScope = countProcessedScopeFiles(eligibleScopeFiles, ledger) > 0;
     const findings = findingsForEvalLayer(scan?.findings ?? [], bucket.layer, bucketKey);
     let locationlessFindingCount = 0;
     if (hasProcessedScope) {
@@ -299,6 +336,7 @@ export function evaluateCanonical(
       findings,
       expectationMeta,
       exhaustiveScopeFiles: scopeFiles,
+      conceptScopes: bucketConceptScopes,
       eligibility: {
         reviewedScopeFiles,
         processedScopeFiles,
@@ -334,7 +372,7 @@ export function evaluateCanonical(
   }
 
   const { scope, locationlessFindingCount } = collectScopeMetrics(
-    exhaustiveScopes,
+    allScopeFiles,
     buckets,
     byFixture,
   );

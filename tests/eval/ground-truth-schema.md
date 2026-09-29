@@ -140,6 +140,20 @@ Benchmark manifests and annotation YAML use snake_case layer names (`mentions`, 
 
 Reviewed closed-world scope lives in `tests/benchmark/repos/<key>/layer-scopes.yaml`, keyed by canonical corpus layer. Only entries with `provenance.review_state: accepted` enter the precision denominator. `evaluateCanonical` (via `scoreEvalCases`) treats those files as a closed world per fixture×layer bucket: every scanner finding with source locations in them is a precision denominator item, and it is a true positive only if it is assigned to an accepted positive gold case on that layer. A repo that does not use a vendor needs no negative case; extra hits lower precision automatically. Locationless findings are excluded from the denominator. Eval conversion may attach scope onto cases in memory via `to-eval-cases.ts`; scope is never copied back onto annotation YAML.
 
+## Concept-scoped exhaustive scopes
+
+A layer-wide exhaustive scope is closed-world for every concept in its files. When gold has been labeled for one concept only, declare a concept scope instead, under `concept_scopes` in `layer-scopes.yaml` (KDATAP-ec05ea):
+
+```yaml
+concept_scopes:
+  mentions:
+    - subject_keys: [mention:email]
+      exhaustive_scope_files: [ghost/core/core/server/models/member.js]
+      provenance: {proposed_by: ..., proposed_at: ..., review_state: accepted}
+```
+
+A scanner finding enters the precision denominator when it has a location in a layer-wide scope file, or when its subject key is listed and it has a location in that concept scope's files. Findings for other concepts in a concept-scoped file are ignored. Concept scope files count toward reviewed and processed scope files. Layer-wide scopes use only `accepted` records; concept scopes follow the run's review states, so a provisional run that includes `proposed` gold also uses proposed concept scopes.
+
 ## Metric computability
 
 Precision and recall null rates carry an explicit per-metric **computability state**. States retain reviewed/processed file counts and prediction denominators even when the numeric rate is null.

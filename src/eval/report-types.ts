@@ -96,6 +96,8 @@ export interface LayerEvaluationInput {
   >;
   expectationMeta: ReadonlyArray<ExpectationEvaluationMeta>;
   exhaustiveScopeFiles?: readonly string[];
+  /** Concept-scoped closed worlds: in `files`, only findings whose identity key is listed count. */
+  conceptScopes?: ReadonlyArray<{ subjectKeys: readonly string[]; files: readonly string[] }>;
   eligibility?: ScopeEligibilityContext;
 }
 

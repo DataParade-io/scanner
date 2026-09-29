@@ -62,8 +62,20 @@ export interface LayerScopeRecord {
   provenance: AnnotationProvenance;
 }
 
+/**
+ * Closed-world scope for one concept (KDATAP-ec05ea): in these files, every scanner
+ * finding whose subject key is listed counts toward precision. Findings for other
+ * concepts in the same files are ignored unless a layer-wide scope also covers them.
+ */
+export interface ConceptScopeRecord {
+  subject_keys: string[];
+  exhaustive_scope_files: string[];
+  provenance: AnnotationProvenance;
+}
+
 export interface PacketLayerScopes {
   layer_scopes: Partial<Record<BenchmarkLayer, LayerScopeRecord>>;
+  concept_scopes?: Partial<Record<BenchmarkLayer, ConceptScopeRecord[]>>;
 }
 
 export interface AnnotationProvenance {

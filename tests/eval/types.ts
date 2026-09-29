@@ -61,6 +61,11 @@ export interface EvalCase {
    * recorded as a negative case.
    */
   exhaustiveScopeFiles?: string[];
+  /**
+   * Concept-scoped closed worlds for this fixture and layer: in `files`, findings
+   * whose subject key is in `subjectKeys` count toward precision (KDATAP-ec05ea).
+   */
+  conceptScopes?: EvalConceptScope[];
   /** Promoted flow identity for data-flows scoring (KDATAP-7e5b94). */
   flow_canonical?: FlowAnnotationCanonical;
   /** Non-scoring flow migration audit block when carried through eval cases. */
@@ -69,6 +74,11 @@ export interface EvalCase {
   dataItemCandidate?: DataItemAnnotationCandidate;
   /** Asserted mention attributes (mentions layer only, KDATAP-8b2c8a). */
   mentionAttributes?: MentionAttributeValues;
+}
+
+export interface EvalConceptScope {
+  subjectKeys: string[];
+  files: string[];
 }
 
 export interface LayerFinding {
