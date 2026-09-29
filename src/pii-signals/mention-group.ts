@@ -20,7 +20,7 @@ const GENERIC_WORDS = new Set([
   "has", "id", "ids", "info", "input", "instance", "is", "it", "item", "list", "lower", "m",
   "main", "model", "models", "new", "normalized", "obj", "of", "old", "options", "opts",
   "params", "parse", "parser", "payload", "props", "raw", "record", "recipient", "recipients",
-  "remove", "req", "result", "row", "self", "send", "service", "set", "str", "target", "task",
+  "remove", "req", "result", "row", "self", "send", "by", "service", "set", "str", "target", "task",
   "the", "this", "to", "trimmed", "u", "update", "user", "valid", "validate", "validated",
   "validation", "validations", "value", "verify", "with", "x",
 ]);
@@ -96,7 +96,8 @@ const FILE_ROLE_WORDS = new Set(["repository", "model", "models", "index"]);
 export function modelFileEntity(filePath: string): string | undefined {
   if (!MODEL_FILE.test(filePath)) return undefined;
   const base = filePath.split("/").pop()!.replace(/\.[A-Za-z]+$/, "");
-  const words = identifierWords(base).filter((word) => !GENERIC_WORDS.has(word) && !FILE_ROLE_WORDS.has(word));
+  // Generic words are allowed here: in a model file, `user` names the model.
+  const words = identifierWords(base).filter((word) => !FILE_ROLE_WORDS.has(word));
   const last = words[words.length - 1];
   if (!last) return undefined;
   return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
@@ -150,6 +151,7 @@ interface GroupableHit {
   group?: string;
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
+  passedDeclarations?: number[];
 }
 
 /**
@@ -206,6 +208,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     parent.set(node, node);
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
+    for (const line of hit.passedDeclarations ?? []) {
+      union(node, `decl:${hit.id}@${hit.evidence.filePath}:${line}`);
+    }
   });
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
@@ -231,7 +236,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
 
   // A mention with no qualifier in a model or repository file joins the file's entity
   // group (member-repository.js -> email:member), but only when that group exists.
-  const existingGroups = new Set(hits.map((hit) => hit.group).filter((group): group is string => !!group));
+  const existingGroups = new Set(
+    hits.map((hit) => effectiveName(hit)).filter((group): group is string => !!group),
+  );
   hits.forEach((hit, index) => {
     if (hit.location === "comment" || hit.group) return;
     const entity = modelFileEntity(hit.evidence.filePath);

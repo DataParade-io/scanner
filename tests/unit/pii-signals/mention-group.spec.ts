@@ -12,7 +12,7 @@ describe("mentionQualifier", () => {
     ["const senderEmail = settings.sender_email;", "sender"],
     ["order.customer_email = email", "customer"],
     ["const to = member.get('email');", "member"],
-    ["user = gift_card.used_by_email", "used_by"],
+    ["user = gift_card.used_by_email", "used"],
     ["stripeCustomer.email", "customer"],
     ["recipient_email = data['email']", undefined],
     ["const email = req.body.email;", undefined],
@@ -102,7 +102,7 @@ describe("model file anchoring", () => {
   it.each([
     ["services/members/members-api/repositories/member-repository.js", "member"],
     ["core/server/models/member.js", "member"],
-    ["core/server/models/user.js", undefined],
+    ["core/server/models/user.js", "user"],
     ["saleor/checkout/models.py", undefined],
     ["saleor/checkout/complete_checkout.py", undefined],
     ["src/customer_repository.py", "customer"],
@@ -175,5 +175,15 @@ describe("cannot-link", () => {
     expect(out[0].group).toBe("email:order");
     expect(out[1].group).toBe("email:customer");
     expect(out[2].group).toBe("email:customer");
+  });
+});
+
+describe("model file anchoring to a defined field", () => {
+  it("anchors a model file to a group named only by a field definition", () => {
+    const out = assignDeclarationGroups([
+      { id: "email", location: "code" as const, evidence: { filePath: "data/schema.js" }, fieldKeys: [{ key: "user.email", definition: true }] },
+      { id: "email", location: "code" as const, evidence: { filePath: "core/models/user.js" }, fieldKeys: [] },
+    ]);
+    expect(out.map((hit) => (hit as { group?: string }).group)).toEqual(["email:user", "email:user"]);
   });
 });

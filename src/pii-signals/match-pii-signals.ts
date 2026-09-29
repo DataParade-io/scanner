@@ -38,6 +38,8 @@ export interface PiiSignalHit {
    * `definition` is true where the line declares the field (KDATAP-c8a46a).
    */
   fieldKeys?: Array<{ key: string; definition: boolean }>;
+  /** Same-file declaration lines of variables passed into a key on this line. */
+  passedDeclarations?: number[];
 }
 
 export interface MatchPiiSignalsFileInput {
