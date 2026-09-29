@@ -92,12 +92,32 @@ export function modelFileEntity(filePath: string): string | undefined {
   return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
 }
 
+/** Words that describe which copy of an object, not what the object is. */
+const INSTANCE_WORDS = new Set(["original", "replace", "locked", "initial", "previous", "updated", "saved"]);
+
+function singular(word: string): string {
+  return word.length > 3 && word.endsWith("s") && !word.endsWith("ss") ? word.slice(0, -1) : word;
+}
+
+/**
+ * Normalized entity name of a class, table key, or variable: `Order` -> `order`,
+ * `members` -> `member`, `original_order` -> `order`, `donationPaymentEvents` ->
+ * `donation_payment_event`. Undefined when only generic words remain (`data`, `self`).
+ */
+export function entityName(name: string): string | undefined {
+  const words = identifierWords(name)
+    .filter((word) => !GENERIC_WORDS.has(word) && !INSTANCE_WORDS.has(word))
+    .map(singular);
+  return words.length > 0 ? words.join("_") : undefined;
+}
+
 interface GroupableHit {
   id: string;
   location?: "code" | "comment";
   evidence: { filePath: string };
   group?: string;
   declaration?: { line: number; kind: string } | "unresolved";
+  fieldKeys?: Array<{ key: string; definition: boolean }>;
 }
 
 /**
@@ -118,23 +138,59 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     parent.set(node, root);
     return root;
   };
+  // Each set carries at most one qualifier name. A join that would put two differently
+  // named sets together is refused (cannot-link), so one bridging line never merges
+  // `email:member` with `email:customer`.
+  const nameOf = new Map<string, string>();
   const union = (left: string, right: string): void => {
     const a = find(left);
     const b = find(right);
-    if (a !== b) parent.set(a, b);
+    if (a === b) return;
+    const nameA = nameOf.get(a);
+    const nameB = nameOf.get(b);
+    if (nameA && nameB && nameA !== nameB) return;
+    parent.set(a, b);
+    if (nameA && !nameB) nameOf.set(b, nameA);
+  };
+  const groupNode = (group: string): string => {
+    const node = `group:${group}`;
+    if (!parent.has(node)) {
+      parent.set(node, node);
+      nameOf.set(node, group);
+    }
+    return node;
   };
   const declarationNode = (hit: T): string | undefined =>
     hit.declaration && hit.declaration !== "unresolved"
       ? `${hit.id}@${hit.evidence.filePath}:${hit.declaration.line}`
       : undefined;
 
+  // Joins run from most to least reliable: qualifier, declaration, field, model file.
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
     parent.set(node, node);
-    const declaration = declarationNode(hit);
-    if (declaration) union(node, `decl:${declaration}`);
-    if (hit.group) union(node, `group:${hit.group}`);
+    if (hit.group) union(node, groupNode(hit.group));
+  });
+  hits.forEach((hit, index) => {
+    const declaration = hit.location === "comment" ? undefined : declarationNode(hit);
+    if (declaration) union(`hit:${index}`, `decl:${declaration}`);
+  });
+
+  // An entity field read (`order.user_email`, `member.get('email')`) joins the
+  // definition of that field (`user_email` in class Order, `email` under `members:`).
+  const definedFields = new Set(
+    hits.flatMap((hit) => (hit.fieldKeys ?? []).filter((field) => field.definition).map((field) => `${hit.id}:${field.key}`)),
+  );
+  // A read on a line that already names its data item (`customer_email=checkout.email`)
+  // is a copy into that item, so only definitions link there.
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment") return;
+    for (const field of hit.fieldKeys ?? []) {
+      if (hit.group && !field.definition) continue;
+      const node = `${hit.id}:${field.key}`;
+      if (definedFields.has(node)) union(`hit:${index}`, `field:${node}`);
+    }
   });
 
   // A mention with no qualifier in a model or repository file joins the file's entity
@@ -144,22 +200,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     if (hit.location === "comment" || hit.group) return;
     const entity = modelFileEntity(hit.evidence.filePath);
     const group = entity ? `${hit.id}:${entity}` : undefined;
-    if (group && existingGroups.has(group)) union(`hit:${index}`, `group:${group}`);
+    if (group && existingGroups.has(group)) union(`hit:${index}`, groupNode(group));
   });
 
-  const qualifierCounts = new Map<string, Map<string, number>>();
-  hits.forEach((hit, index) => {
-    if (hit.location === "comment" || !hit.group) return;
-    const root = find(`hit:${index}`);
-    const counts = qualifierCounts.get(root) ?? new Map<string, number>();
-    counts.set(hit.group, (counts.get(hit.group) ?? 0) + 1);
-    qualifierCounts.set(root, counts);
-  });
-  const nameByRoot = new Map<string, string>();
-  for (const [root, counts] of qualifierCounts) {
-    const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    nameByRoot.set(root, best[0]);
-  }
 
   // An unqualified set is named after its smallest declaration, so the id is stable.
   const declarationNameByRoot = new Map<string, string>();
@@ -176,7 +219,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   return hits.map((hit, index) => {
     if (hit.location === "comment") return hit;
     const root = find(`hit:${index}`);
-    const name = nameByRoot.get(root) ?? declarationNameByRoot.get(root);
+    const name = nameOf.get(root) ?? declarationNameByRoot.get(root);
     return name === undefined || name === hit.group ? hit : { ...hit, group: name };
   });
 }

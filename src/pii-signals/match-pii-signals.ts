@@ -33,6 +33,11 @@ export interface PiiSignalHit {
    * Absent when the line has no code occurrence to declare or the file is not analyzed.
    */
   declaration?: MentionDeclaration;
+  /**
+   * Entity fields the line defines or reads, as `entity.field` (`order.user_email`).
+   * `definition` is true where the line declares the field (KDATAP-c8a46a).
+   */
+  fieldKeys?: Array<{ key: string; definition: boolean }>;
 }
 
 export interface MatchPiiSignalsFileInput {
