@@ -149,6 +149,48 @@ export interface DataItemAnnotationCandidate {
 
 export type AnnotationCandidate = FlowAnnotationCandidate | DataItemAnnotationCandidate;
 
+export type MentionSyntaxKind =
+  | "identifier"
+  | "property_key"
+  | "string_literal"
+  | "import_specifier"
+  | "comment"
+  | "type_name";
+
+export type MentionDeclarationKind =
+  | "local"
+  | "parameter"
+  | "field"
+  | "function"
+  | "class"
+  | "export";
+
+export interface ResolvedMentionDeclaration {
+  file_path: string;
+  line: number;
+  kind: MentionDeclarationKind;
+}
+
+/** `unresolved` when the declaration is outside the repo or more than one import hop away. */
+export type MentionDeclaration = ResolvedMentionDeclaration | "unresolved";
+
+/**
+ * Optional asserted attributes on mention gold (KDATAP-8b2c8a). A record asserts only
+ * the attributes it labels; each is scored over the gold that asserts it.
+ */
+export interface MentionAttributes {
+  syntax_kind?: MentionSyntaxKind;
+  declaration?: MentionDeclaration;
+  /** Written type name on the declaration, when one is written. */
+  type_annotation?: string;
+  /** Repo-local name of the owning code unit. */
+  owner?: string;
+  /** Component identity keys the line touches. */
+  touches?: string[];
+  /** Repo-local declaration-group id for the grouping layer. */
+  group?: string;
+}
+
 export interface AnnotationRecord {
   id: string;
   layer: BenchmarkLayer;
@@ -160,6 +202,7 @@ export interface AnnotationRecord {
   canonical?: AnnotationCanonical;
   flow_canonical?: FlowAnnotationCanonical;
   candidate?: AnnotationCandidate;
+  mention_attributes?: MentionAttributes;
 }
 
 export interface AnnotationFile {
@@ -177,6 +220,24 @@ export const ANNOTATION_STATUSES: readonly AnnotationStatus[] = [
   "positive",
   "negative",
   "ambiguous",
+];
+
+export const MENTION_SYNTAX_KINDS: readonly MentionSyntaxKind[] = [
+  "identifier",
+  "property_key",
+  "string_literal",
+  "import_specifier",
+  "comment",
+  "type_name",
+];
+
+export const MENTION_DECLARATION_KINDS: readonly MentionDeclarationKind[] = [
+  "local",
+  "parameter",
+  "field",
+  "function",
+  "class",
+  "export",
 ];
 
 export const BENCHMARK_LAYERS: readonly BenchmarkLayer[] = [

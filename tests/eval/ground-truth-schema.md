@@ -1,6 +1,6 @@
 # Ground-truth schema for fixture and corpus evaluation
 
-Schema version: `ground-truth/1`.
+Schema version: `ground-truth/2`. Version 2 adds optional `mention_attributes` on mention gold and agent labeling packets (KDATAP-8b2c8a); version 1 records remain valid.
 
 Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
 
@@ -75,6 +75,46 @@ Positives may set `documentedGap: true` for known scanner misses. They remain in
 
 **Precision** is not computed from negatives. Mark files as `exhaustiveScopeFiles` on gold cases. Then every scanner finding in those files is a precision denominator item; it is a true positive only if it matches some accepted positive gold case. A repository that does not use Stripe is not recorded as a negative. If the scanner emits Stripe there anyway, that unmatched finding lowers precision.
 
+## Mention attributes
+
+Mention gold may assert structural attributes of the matched line in an optional `mention_attributes` block. The block is accepted only on the `mentions` layer, and unknown keys are rejected. A record asserts only the attributes it labels. Each attribute is scored as its own metric over matched gold that asserts it, following the vendor pattern; unasserted attributes never count against a finding.
+
+| Field | Value |
+| --- | --- |
+| `syntax_kind` | `identifier`, `property_key`, `string_literal`, `import_specifier`, `comment`, or `type_name` |
+| `declaration` | `{file_path, line, kind}` with kind `local`, `parameter`, `field`, `function`, `class`, or `export`; or the string `unresolved` when the declaration is outside the repo or more than one relative-import hop away |
+| `type_annotation` | Written type name on that declaration, when one is written. Never inferred. |
+| `owner` | Repo-local name of the code unit that owns the file |
+| `touches` | Component identity keys the line touches |
+| `group` | Repo-local declaration-group id for the grouping layer |
+
+`expected.status` keeps its meaning. For a concept such as email, `positive` means the line handles a value of the concept, and `negative` means the match is only the word (an import specifier, a connection or template name, prose, a config key).
+
+```yaml
+mention_attributes:
+  syntax_kind: identifier
+  declaration: {file_path: src/signup.js, line: 2, kind: parameter}
+  owner: api
+  touches: [third_party:mailer]
+  group: signup-email
+```
+
+## Labeling packets
+
+Agents write proposed mention gold to a packet, never directly to `annotations/mentions.yaml`. One packet covers one labeling batch at `repos/<repo>/annotations/packets/<kanbus-issue-id>.yaml`:
+
+```yaml
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-xxxxxx
+  files: [repo/relative/path.js]
+annotations:
+  - ... # mention records, review_state: proposed
+```
+
+`pnpm run benchmark:validate-packet <packet.yaml>` checks a packet and reports every problem at once. It requires the repo to be materialized at its pinned commit and `annotations/packets/<concept>-candidates.yaml` to exist. It rejects unknown fields, records that are not `mentions` or not `proposed`, duplicate ids, evidence or declaration lines that do not exist at the pinned commit, evidence outside `packet.files`, and any candidate line in `packet.files` without exactly one record. A record on a line the candidate inventory missed is kept with a warning. Accepted packets are merged into `annotations/mentions.yaml`.
+
 ## Corpus layout
 
 Benchmark manifests and annotation YAML use snake_case layer names (`mentions`, `data_items`, `components`, `data_flows`). Mention annotations live at `annotations/mentions.yaml` with `mention:<rule_id>` subject keys.
@@ -122,7 +162,7 @@ Path eligibility uses a locked set of eleven reasons (`eligibility-reasons/1`), 
 
 ## Baseline readiness
 
-Published baselines use `baseline-artifact/1`. The embedded `readiness` block reports `not_evaluated`, `pass`, or `fail` with blockers and `invariantVersions` (including `ground-truth/1` and `eligibility-reasons/1`). Numeric readiness floors are a separate epic.
+Published baselines use `baseline-artifact/1`. The embedded `readiness` block reports `not_evaluated`, `pass`, or `fail` with blockers and `invariantVersions` (including `ground-truth/2` and `eligibility-reasons/1`). Numeric readiness floors are a separate epic.
 
 ## Known limitations (deferred)
 
