@@ -1,0 +1,47 @@
+{
+  "id": "KDATAP-110df604-3096-4991-afb4-2fa444bd9d76",
+  "title": "Cite every evidence span in every language",
+  "description": "Detectors other than the catalog third-party import path still emit one finding at line 1 when a file imports a client, and manifest parsers drop the dependency line before matchPatterns runs. That collapses every evidence link for a component onto line 1.\n\nCite one finding per distinct source span (import, call, content line, declaring type or function, manifest dependency line). Dedupe only identical spans. Keep file-name matches and Terraform show JSON at line 1, because those have no statement to cite.\n\nThe classifier already unions those findings into one component and keeps every sourceLocation and propertyEvidence entry.\n\nOut of scope: terraform-flows.ts and terraform-show-json.ts.",
+  "type": "task",
+  "status": "closed",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-f9cd292e-d820-4536-8046-9ff834f9df97",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "fde638d1-7ce6-4481-87eb-ff672228539d",
+      "author": "os",
+      "text": "Starting implementation. Shared span helper first, then language detectors, then manifest line spans, then the multi-link classification tests.",
+      "created_at": "2026-09-28T17:53:28.837510Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "d9db3b29-bf4d-4fda-a338-0bcd366cd63f",
+      "author": "os",
+      "text": "Detectors now emit one finding per distinct source span, and manifest parsers keep the declaration line.\n\n- Shared `evidenceLineRange`, `locationsForMatchingImports`, and `spansOrFileStart` in `src/patterns/detectors/helpers.ts`. Identical spans still collapse; different lines do not.\n- TypeScript, Python, Go, PHP, C#, C++, and JVM detectors cite each matching import, call, content line, or declaring type/function. File-name matches (`settings.py`, `configFile` path regexes) stay on line 1. Terraform show JSON is unchanged.\n- Manifest parsers return `{ name, startLine, endLine }` and pass those lines through as `ImportLike`. A dependency declared twice (dependencies and devDependencies) stays two links.\n- Unit coverage: each language keeps two import spans on one classified component, and a package.json with stripe in both dependency sections keeps lines 3 and 6. `tests/unit` is green (1093 passed).",
+      "created_at": "2026-09-28T18:06:51.408903Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "eb65f59f-fd1e-4c79-8537-ed41c054b6ee",
+      "author": "os",
+      "text": "Reopened: closed before the change landed. Committed as dc948ca on fix/per-span-evidence-lines, PR DataParade-io/scanner#91. Will close once merged to main.",
+      "created_at": "2026-09-29T07:55:56.354105Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "96e6b67f-da1e-4da5-bd24-b8e08aecdfec",
+      "author": "os",
+      "text": "Landed on main as merge b53d9cd (PR DataParade-io/scanner#91: dc948ca scanner change + 446538f corpus correction). CI green.",
+      "created_at": "2026-09-29T08:33:39.310320Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-28T17:52:48.749764Z",
+  "updated_at": "2026-09-29T08:33:39.329213Z",
+  "closed_at": "2026-09-29T08:33:39.329213Z",
+  "custom": {}
+}
