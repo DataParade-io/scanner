@@ -416,8 +416,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: members_email_change_events is a table/relation name or reference, not
-    an address.
+  rationale: members_email_change_events is a table/relation name or reference, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1050,8 +1049,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: email_spam_complaint_events is a table/relation name or reference, not
-    an address.
+  rationale: email_spam_complaint_events is a table/relation name or reference, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1529,8 +1527,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: welcome_email_automated_emails is a table/relation name or reference,
-    not an address.
+  rationale: welcome_email_automated_emails is a table/relation name or reference, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1572,8 +1569,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email
-    address.
+  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1833,8 +1829,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email
-    address.
+  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1918,8 +1913,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: automated_email_recipients is a table/relation name or reference, not
-    an address.
+  rationale: automated_email_recipients is a table/relation name or reference, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1998,7 +1992,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: buyer_email
   evidence:
     file_path: ghost/core/core/server/data/schema/schema.js
     start_line: 2453
@@ -2013,8 +2007,12 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2453
+      kind: field
 - id: ghost-schema-L2463
   layer: mentions
   subject:
