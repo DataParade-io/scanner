@@ -133,7 +133,7 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: saleor
     declaration:
       file_path: saleor/account/events.py
@@ -186,6 +186,7 @@ annotations:
       file_path: saleor/account/events.py
       line: 93
       kind: parameter
+    type_annotation: str
 - id: saleor-models-L172
   layer: mentions
   subject:
@@ -419,10 +420,10 @@ annotations:
     start_line: 416
     end_line: 416
   expected:
-    status: ambiguous
+    status: negative
     labels:
     - email_address
-  rationale: Class name definition does not contain email mention on this line.
+  rationale: Class name for a model, not an address.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
@@ -557,14 +558,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key selecting email value in notification payload.
+  rationale: Dict key whose value holds email in notification payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 18
+      kind: field
 - id: saleor-notifications-L36
   layer: mentions
   subject:
@@ -578,14 +583,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 36
+      kind: field
 - id: saleor-notifications-L49
   layer: mentions
   subject:
@@ -599,14 +608,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key selecting email in URL parameters.
+  rationale: Dict key whose value holds email in URL parameters.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 49
+      kind: field
 - id: saleor-notifications-L54
   layer: mentions
   subject:
@@ -620,14 +633,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 54
+      kind: field
 - id: saleor-notifications-L80
   layer: mentions
   subject:
@@ -641,14 +658,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key selecting email in URL parameters.
+  rationale: Dict key whose value holds email in URL parameters.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 80
+      kind: field
 - id: saleor-notifications-L84
   layer: mentions
   subject:
@@ -662,14 +683,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 84
+      kind: field
 - id: saleor-notifications-L100
   layer: mentions
   subject:
@@ -710,7 +735,7 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: saleor
     declaration:
       file_path: saleor/account/notifications.py
@@ -750,14 +775,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 110
+      kind: field
 - id: saleor-notifications-L111
   layer: mentions
   subject:
@@ -771,14 +800,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key storing the old email address.
+  rationale: Dict key whose value holds the old email address.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 111
+      kind: field
 - id: saleor-notifications-L112
   layer: mentions
   subject:
@@ -792,14 +825,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key storing the new email address.
+  rationale: Dict key whose value holds the new email address.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 112
+      kind: field
 - id: saleor-notifications-L122
   layer: mentions
   subject:
@@ -876,14 +913,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 134
+      kind: field
 - id: saleor-notifications-L136
   layer: mentions
   subject:
@@ -897,14 +938,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key storing the old email address.
+  rationale: Dict key whose value holds the old email address.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 136
+      kind: field
 - id: saleor-notifications-L137
   layer: mentions
   subject:
@@ -918,14 +963,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key storing the new email address.
+  rationale: Dict key whose value holds the new email address.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 137
+      kind: field
 - id: saleor-notifications-L144
   layer: mentions
   subject:
@@ -960,14 +1009,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 164
+      kind: field
 - id: saleor-notifications-L187
   layer: mentions
   subject:
@@ -981,14 +1034,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key selecting email in URL parameters.
+  rationale: Dict key whose value holds email in URL parameters.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 187
+      kind: field
 - id: saleor-notifications-L192
   layer: mentions
   subject:
@@ -1002,14 +1059,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Dict key for recipient email in notification payload.
+  rationale: Dict key whose value holds recipient email in payload.
   provenance:
     proposed_by: claude-haiku-4.5
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
     owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 192
+      kind: field
 - id: saleor-search-L11
   layer: mentions
   subject:
@@ -1075,7 +1136,7 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: saleor
     declaration:
       file_path: saleor/account/search.py
@@ -1149,6 +1210,7 @@ annotations:
       file_path: saleor/account/search.py
       line: 70
       kind: parameter
+    type_annotation: str
 - id: saleor-search-L78
   layer: mentions
   subject:
@@ -1174,6 +1236,7 @@ annotations:
       file_path: saleor/account/search.py
       line: 70
       kind: parameter
+    type_annotation: str
 - id: saleor-search-L79
   layer: mentions
   subject:
@@ -1199,6 +1262,7 @@ annotations:
       file_path: saleor/account/search.py
       line: 70
       kind: parameter
+    type_annotation: str
 - id: saleor-utils-L150
   layer: mentions
   subject:
@@ -1218,7 +1282,7 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: saleor
     declaration:
       file_path: saleor/account/utils.py
