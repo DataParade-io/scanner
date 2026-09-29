@@ -116,6 +116,11 @@ const PERSONAL_DATA_LAYER_MAP: Record<PersonalDataEvalLayer, EvalLayerId> = {
   "data-items": "data-items",
 };
 
+/** Matches in code; comment and docstring matches are context, not mentions. */
+function codeHits(hits: PiiSignalHit[]): PiiSignalHit[] {
+  return hits.filter((hit) => hit.location !== "comment");
+}
+
 export function projectPersonalDataFindings(
   inventory: PersonalDataInventory,
   layer: PersonalDataEvalLayer,
@@ -124,9 +129,9 @@ export function projectPersonalDataFindings(
     case "raw-hits":
       return inventory.hits.map(hitToRawFinding);
     case "mentions":
-      return inventory.hits.map(hitToMentionFinding);
+      return codeHits(inventory.hits).map(hitToMentionFinding);
     case "data-items":
-      return hitsToDataItemFindings(inventory.hits);
+      return hitsToDataItemFindings(codeHits(inventory.hits));
   }
 }
 

@@ -23,7 +23,7 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
 
   it("matches personal-data signals once and projects all requested layers", async () => {
     const inventorySpy = jest.spyOn(personalDataInventory, "buildPersonalDataInventory");
-    const matchSpy = jest.spyOn(matchPiiSignals, "matchPiiSignalsInFiles");
+    const matchSpy = jest.spyOn(matchPiiSignals, "matchPiiSignalsInFile");
 
     const result = await scanRepoByManifestLayers("fixture", tempDir, [
       "mentions",
@@ -32,7 +32,8 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
     ]);
 
     expect(inventorySpy).toHaveBeenCalledTimes(1);
-    expect(matchSpy).toHaveBeenCalledTimes(1);
+    // Once per file, not once per layer; YAML has no comment-stripped second pass.
+    expect(matchSpy).toHaveBeenCalledTimes(2);
 
     const mentions = result.findings.filter((finding) => finding.layer === "mentions");
     const rawHits = result.findings.filter((finding) => finding.layer === "raw-hits");
