@@ -220,6 +220,29 @@ export function validatePacket(
     checkLine(file, end, where);
 
     const declaration = record.mention_attributes?.declaration;
+    const syntaxKind = record.mention_attributes?.syntax_kind;
+    const positive = record.expected.status === "positive";
+    if (
+      positive &&
+      (syntaxKind === "identifier" || syntaxKind === "property_key") &&
+      declaration === undefined
+    ) {
+      errors.push(
+        `${where}: positive ${syntaxKind} needs mention_attributes.declaration ` +
+          "(use 'unresolved' if it cannot be found)",
+      );
+    }
+    if (
+      declaration !== undefined &&
+      (!positive ||
+        syntaxKind === "comment" ||
+        syntaxKind === "import_specifier" ||
+        syntaxKind === "string_literal")
+    ) {
+      errors.push(
+        `${where}: declaration is only recorded on positive identifier, property_key, or type_name lines`,
+      );
+    }
     if (declaration && declaration !== "unresolved") {
       checkLine(declaration.file_path, declaration.line, `${where}.declaration`);
     }
