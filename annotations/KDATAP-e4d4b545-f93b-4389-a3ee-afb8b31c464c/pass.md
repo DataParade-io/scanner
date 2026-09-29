@@ -1,15 +1,31 @@
-# Annotation pass
+# KDATAP-e4d4b5 Pass
 
-## Repository / fixture
+Labeled email address mentions in ghost batch 6.
 
-## Scope
+## Files
+- ghost/core/core/server/services/auth/session/session-service.js
+- ghost/core/core/server/services/auth/session/emails/signin.js
 
-Which files were reviewed?
+## Record count
+Total: 14
+- Positive: 5
+- Negative: 9
+- Ambiguous: 0
 
-## Findings in this pass
+## Positive lines
+1. ghost-signin-L4: email parameter passed to template
+2. ghost-signin-L157: email interpolated into mailto link and display text
+3. ghost-session-service-L434: email address read from user object
+4. ghost-session-service-L445: email address passed to template
+5. ghost-session-service-L456: email address passed to mail service
 
-List finding issue IDs (KDATAP-…) that belong to this labeling pass.
+## Notes
+All lines analyzed and labeled according to the reference rules. No ambiguous cases encountered. The validator confirmed all 14 records are valid.
 
-## Human review
+## Branch
 
-This annotation stays in **awaiting-review** until a person moves it to **accepted**.
+`label/KDATAP-e4d4b5` (784f50b).
+
+## Coordinator review
+
+14 records: 5 positive, 9 negative. Statuses accepted; coordinator set the occurrence on 434 and 456 to the recipient local. Validator OK.
