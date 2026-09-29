@@ -1,4 +1,4 @@
-import { mentionGroup, mentionQualifier } from "../../../src/pii-signals/mention-group";
+import { assignDeclarationGroups, mentionGroup, mentionQualifier } from "../../../src/pii-signals/mention-group";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
 import { buildScanPersonalDataLayers } from "../../../src/core/pipeline/build-scan-personal-data-layers";
 import type { FileInfo } from "../../../src/core/types/file";
@@ -53,5 +53,45 @@ describe("data item groups in scan output", () => {
     const commentMention = mentions.find((mention) => mention.startLine === 5);
     expect(commentMention?.location).toBe("comment");
     expect(commentMention?.group).toBeUndefined();
+  });
+});
+
+describe("assignDeclarationGroups", () => {
+  const hit = (
+    filePath: string,
+    declarationLine: number | undefined,
+    group?: string,
+    location: "code" | "comment" = "code",
+  ) => ({
+    id: "email",
+    location,
+    evidence: { filePath },
+    ...(group ? { group } : {}),
+    ...(declarationLine ? { declaration: { line: declarationLine, kind: "parameter" } } : {}),
+  });
+
+  it("gives unqualified mentions the qualifier of their shared declaration", () => {
+    const out = assignDeclarationGroups([hit("a.js", 3, "email:member"), hit("a.js", 3), hit("a.js", 9)]);
+    expect(out.map((h) => h.group)).toEqual(["email:member", "email:member", "email@a.js:9"]);
+  });
+
+  it("joins declarations in different files through a shared qualifier", () => {
+    const out = assignDeclarationGroups([
+      hit("a.js", 3, "email:member"),
+      hit("a.js", 3),
+      hit("b.js", 7, "email:member"),
+      hit("b.js", 7),
+    ]);
+    expect(new Set(out.map((h) => h.group))).toEqual(new Set(["email:member"]));
+  });
+
+  it("names a declaration-only set after its smallest declaration and never groups comments", () => {
+    const out = assignDeclarationGroups([hit("b.js", 4), hit("b.js", 4), hit("b.js", 4, undefined, "comment"), hit("c.js", undefined)]);
+    expect(out.map((h) => h.group)).toEqual(["email@b.js:4", "email@b.js:4", undefined, undefined]);
+  });
+
+  it("does not join the same declaration line across different files", () => {
+    const out = assignDeclarationGroups([hit("a.js", 5), hit("b.js", 5)]);
+    expect(out[0].group).not.toBe(out[1].group);
   });
 });

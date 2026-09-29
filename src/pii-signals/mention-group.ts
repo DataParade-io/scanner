@@ -74,3 +74,82 @@ export function mentionGroup(signalId: string, line: string): string | undefined
   const qualifier = mentionQualifier(line, signalId);
   return qualifier ? `${signalId}:${qualifier}` : undefined;
 }
+
+interface GroupableHit {
+  id: string;
+  location?: "code" | "comment";
+  evidence: { filePath: string };
+  group?: string;
+  declaration?: { line: number; kind: string } | "unresolved";
+}
+
+/**
+ * Second pass: join code mentions that share a same-file declaration, then name each
+ * joined set (KDATAP-c8a46a). A declaration never spans two data items in the labeled
+ * corpus, so it is a safe join. Mentions joined through a declaration take the set's
+ * qualifier group; a set with no qualifier is named after its declaration, e.g.
+ * `email@src/a.js:12`. Sets that share a qualifier are joined too, so the qualifier
+ * links declarations across files.
+ */
+export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] {
+  const parent = new Map<string, string>();
+  const find = (node: string): string => {
+    let root = node;
+    while (parent.get(root) !== undefined && parent.get(root) !== root) {
+      root = parent.get(root)!;
+    }
+    parent.set(node, root);
+    return root;
+  };
+  const union = (left: string, right: string): void => {
+    const a = find(left);
+    const b = find(right);
+    if (a !== b) parent.set(a, b);
+  };
+  const declarationNode = (hit: T): string | undefined =>
+    hit.declaration && hit.declaration !== "unresolved"
+      ? `${hit.id}@${hit.evidence.filePath}:${hit.declaration.line}`
+      : undefined;
+
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment") return;
+    const node = `hit:${index}`;
+    parent.set(node, node);
+    const declaration = declarationNode(hit);
+    if (declaration) union(node, `decl:${declaration}`);
+    if (hit.group) union(node, `group:${hit.group}`);
+  });
+
+  const qualifierCounts = new Map<string, Map<string, number>>();
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment" || !hit.group) return;
+    const root = find(`hit:${index}`);
+    const counts = qualifierCounts.get(root) ?? new Map<string, number>();
+    counts.set(hit.group, (counts.get(hit.group) ?? 0) + 1);
+    qualifierCounts.set(root, counts);
+  });
+  const nameByRoot = new Map<string, string>();
+  for (const [root, counts] of qualifierCounts) {
+    const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    nameByRoot.set(root, best[0]);
+  }
+
+  // An unqualified set is named after its smallest declaration, so the id is stable.
+  const declarationNameByRoot = new Map<string, string>();
+  hits.forEach((hit, index) => {
+    const declaration = hit.location === "comment" ? undefined : declarationNode(hit);
+    if (!declaration) return;
+    const root = find(`hit:${index}`);
+    const current = declarationNameByRoot.get(root);
+    if (current === undefined || declaration.localeCompare(current) < 0) {
+      declarationNameByRoot.set(root, declaration);
+    }
+  });
+
+  return hits.map((hit, index) => {
+    if (hit.location === "comment") return hit;
+    const root = find(`hit:${index}`);
+    const name = nameByRoot.get(root) ?? declarationNameByRoot.get(root);
+    return name === undefined || name === hit.group ? hit : { ...hit, group: name };
+  });
+}
