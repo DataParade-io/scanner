@@ -52,10 +52,9 @@ const componentEvalCaseList: EvalCase[] = [
     expected: {
       status: "positive",
       labels: ["database"],
-      documentedGap: true,
     },
     rationale:
-      "psycopg2.connect with a postgres URL should surface a database asset; scanner currently infers other drivers only.",
+      "psycopg2.connect with a postgres URL surfaces a database asset at the connect call.",
   },
   {
     id: "ruby-postgres-database",

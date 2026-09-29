@@ -14,6 +14,12 @@
 
 import YAML from "yaml";
 
+import {
+  lineNumberAt,
+  pushManifestSpan,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 /**
  * Gradle configurations that put a dependency into the running application.
  *
@@ -65,16 +71,25 @@ function firstTagValue(block: string, tag: string): string | undefined {
  * projects it is `spring-boot-starter-parent`, which is often the clearest
  * statement of what the module is.
  */
-export function extractCoordinatesFromPom(content: string): string[] {
-  const coordinates = new Set<string>();
+export function extractCoordinatesFromPom(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
 
   const parentMatch = content.match(/<parent>([\s\S]*?)<\/parent>/);
-  if (parentMatch) {
+  if (parentMatch && parentMatch.index != null) {
     const coordinate = normalizeCoordinate(
       firstTagValue(parentMatch[1], "groupId"),
       firstTagValue(parentMatch[1], "artifactId"),
     );
-    if (coordinate) coordinates.add(coordinate);
+    if (coordinate) {
+      pushManifestSpan(
+        spans,
+        coordinate,
+        lineNumberAt(content, parentMatch.index),
+        lineNumberAt(content, parentMatch.index + parentMatch[0].length - 1),
+      );
+    }
   }
 
   const dependencyRegex = /<dependency>([\s\S]*?)<\/dependency>/g;
@@ -91,10 +106,17 @@ export function extractCoordinatesFromPom(content: string): string[] {
       firstTagValue(block, "groupId"),
       firstTagValue(block, "artifactId"),
     );
-    if (coordinate) coordinates.add(coordinate);
+    if (coordinate) {
+      pushManifestSpan(
+        spans,
+        coordinate,
+        lineNumberAt(content, match.index),
+        lineNumberAt(content, match.index + match[0].length - 1),
+      );
+    }
   }
 
-  return Array.from(coordinates);
+  return spans;
 }
 
 /**
@@ -107,8 +129,10 @@ export function extractCoordinatesFromPom(content: string): string[] {
  * Version-catalog references (`implementation(libs.spring.boot.web)`) carry no
  * coordinate here; they resolve from `gradle/libs.versions.toml` instead.
  */
-export function extractCoordinatesFromGradle(content: string): string[] {
-  const coordinates = new Set<string>();
+export function extractCoordinatesFromGradle(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
 
   const stringNotation = new RegExp(
     `\\b(?:${GRADLE_DEPENDENCY_CONFIGURATIONS})\\s*\\(?\\s*(?:(?:${GRADLE_COORDINATE_WRAPPERS})\\s*\\(\\s*)?["']([^"']+)["']`,
@@ -123,7 +147,9 @@ export function extractCoordinatesFromGradle(content: string): string[] {
 
   while ((match = mapNotation.exec(content)) !== null) {
     const coordinate = normalizeCoordinate(match[1], match[2]);
-    if (coordinate) coordinates.add(coordinate);
+    if (coordinate) {
+      pushManifestSpan(spans, coordinate, lineNumberAt(content, match.index));
+    }
   }
 
   while ((match = stringNotation.exec(content)) !== null) {
@@ -131,10 +157,12 @@ export function extractCoordinatesFromGradle(content: string): string[] {
     if (segments.length < 2) continue;
 
     const coordinate = normalizeCoordinate(segments[0], segments[1]);
-    if (coordinate) coordinates.add(coordinate);
+    if (coordinate) {
+      pushManifestSpan(spans, coordinate, lineNumberAt(content, match.index));
+    }
   }
 
-  return Array.from(coordinates);
+  return spans;
 }
 
 /**
@@ -145,11 +173,13 @@ export function extractCoordinatesFromGradle(content: string): string[] {
  */
 export function extractCoordinatesFromVersionCatalog(
   content: string,
-): string[] {
-  const coordinates = new Set<string>();
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   let inLibraries = false;
+  const lines = content.split(/\r?\n/);
 
-  for (const rawLine of content.split(/\r?\n/)) {
+  for (let i = 0; i < lines.length; i += 1) {
+    const rawLine = lines[i] ?? "";
     const line = rawLine.trim();
     if (!line || line.startsWith("#")) continue;
 
@@ -163,7 +193,7 @@ export function extractCoordinatesFromVersionCatalog(
     if (moduleMatch) {
       const segments = moduleMatch[1].split(":");
       const coordinate = normalizeCoordinate(segments[0], segments[1]);
-      if (coordinate) coordinates.add(coordinate);
+      if (coordinate) pushManifestSpan(spans, coordinate, i + 1);
       continue;
     }
 
@@ -171,16 +201,18 @@ export function extractCoordinatesFromVersionCatalog(
     const nameMatch = line.match(/\bname\s*=\s*"([^"]+)"/);
     if (groupMatch && nameMatch) {
       const coordinate = normalizeCoordinate(groupMatch[1], nameMatch[1]);
-      if (coordinate) coordinates.add(coordinate);
+      if (coordinate) pushManifestSpan(spans, coordinate, i + 1);
     }
   }
 
-  return Array.from(coordinates);
+  return spans;
 }
 
 export interface SpringDatasourceRef {
   /** Property key, e.g. `spring.datasource.url`. */
   key: string;
+  startLine: number;
+  endLine: number;
   /**
    * Engine token to resolve against the shared driver table: the JDBC/R2DBC
    * sub-protocol (`postgresql`) or a URI scheme (`mongodb`, `redis`).
@@ -220,7 +252,9 @@ export function extractDatasourceRefsFromProperties(
 ): SpringDatasourceRef[] {
   const refs: SpringDatasourceRef[] = [];
 
-  for (const rawLine of content.split(/\r?\n/)) {
+  const lines = content.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i += 1) {
+    const rawLine = lines[i] ?? "";
     const line = rawLine.trim();
     if (!line || line.startsWith("#") || line.startsWith("!")) continue;
 
@@ -232,7 +266,9 @@ export function extractDatasourceRefsFromProperties(
     if (!key || !value || !DATASOURCE_KEY_REGEX.test(key)) continue;
 
     const driver = driverTokenFromUri(value);
-    if (driver) refs.push({ key, driver });
+    if (driver) {
+      refs.push({ key, driver, startLine: i + 1, endLine: i + 1 });
+    }
   }
 
   return refs;
@@ -289,10 +325,23 @@ export function extractDatasourceRefsFromYaml(
     flattenYamlNode(document, "", flattened);
   }
 
+  const lines = content.split(/\r?\n/);
+  let cursor = 0;
   for (const entry of flattened) {
     if (!DATASOURCE_KEY_REGEX.test(entry.key)) continue;
     const driver = driverTokenFromUri(entry.value);
-    if (driver) refs.push({ key: entry.key, driver });
+    if (!driver) continue;
+    const leaf = entry.key.split(".").pop() ?? entry.key;
+    const leafPattern = new RegExp(`^\\s*${leaf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*:`);
+    let startLine = 1;
+    for (let i = cursor; i < lines.length; i += 1) {
+      if (leafPattern.test(lines[i] ?? "")) {
+        startLine = i + 1;
+        cursor = i + 1;
+        break;
+      }
+    }
+    refs.push({ key: entry.key, driver, startLine, endLine: startLine });
   }
 
   return refs;

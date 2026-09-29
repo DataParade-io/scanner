@@ -6,11 +6,16 @@
  * — detectors match them via `packageNames` vs `importNamespaces`.
  */
 
+import {
+  jsonObjectKeySpans,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 export interface ComposerManifest {
   /** `name` field, e.g. `acme/billing`. */
   name?: string;
-  /** Package names from `require` and `require-dev`, versions stripped. */
-  packages: string[];
+  /** Package names from `require` and `require-dev`, one span per declaration line. */
+  packages: ManifestPackageSpan[];
 }
 
 function isComposerPackageName(token: string): boolean {
@@ -37,17 +42,14 @@ export function parseComposerJson(content: string): ComposerManifest {
     "require-dev"?: unknown;
   };
 
-  const packages = new Set<string>();
-
-  for (const section of [obj.require, obj["require-dev"]]) {
-    if (!section || typeof section !== "object") continue;
-    for (const key of Object.keys(section as Record<string, unknown>)) {
-      if (isComposerPackageName(key)) packages.add(key);
-    }
-  }
+  const packages = jsonObjectKeySpans(
+    content,
+    ["require", "require-dev"],
+    (key) => (isComposerPackageName(key) ? key : null),
+  );
 
   const name =
     typeof obj.name === "string" && obj.name.trim() ? obj.name.trim() : undefined;
 
-  return { name, packages: Array.from(packages) };
+  return { name, packages };
 }

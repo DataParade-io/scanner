@@ -6,6 +6,13 @@
  * `packages.config`, and Paket dependency files.
  */
 
+import {
+  jsonObjectKeySpans,
+  lineNumberAt,
+  pushManifestSpan,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 function normalizePackageToken(raw: string): string | null {
   const token = raw.trim();
   if (!token) return null;
@@ -18,58 +25,67 @@ function normalizePackageToken(raw: string): string | null {
  * `<PackageReference Include="Stripe.net" Version="43.0.0" />` and the
  * central-package-management `<PackageVersion Include="..." />` form.
  */
-export function extractPackagesFromProjectFile(content: string): string[] {
-  const packages = new Set<string>();
+export function extractPackagesFromProjectFile(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const regex =
     /<(?:PackageReference|PackageVersion|GlobalPackageReference)\s[^>]*(?:Include|Update)\s*=\s*"([^"]+)"/g;
 
   let match: RegExpExecArray | null;
   while ((match = regex.exec(content)) !== null) {
     const token = normalizePackageToken(match[1]);
-    if (token) packages.add(token);
+    if (!token) continue;
+    pushManifestSpan(spans, token, lineNumberAt(content, match.index));
   }
 
-  return Array.from(packages);
+  return spans;
 }
 
 /** Legacy `packages.config`: `<package id="Newtonsoft.Json" version="13.0.1" />`. */
-export function extractPackagesFromPackagesConfig(content: string): string[] {
-  const packages = new Set<string>();
+export function extractPackagesFromPackagesConfig(
+  content: string,
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
   const regex = /<package\s[^>]*id\s*=\s*"([^"]+)"/g;
 
   let match: RegExpExecArray | null;
   while ((match = regex.exec(content)) !== null) {
     const token = normalizePackageToken(match[1]);
-    if (token) packages.add(token);
+    if (!token) continue;
+    pushManifestSpan(spans, token, lineNumberAt(content, match.index));
   }
 
-  return Array.from(packages);
+  return spans;
 }
 
 /** `paket.dependencies`: `nuget Stripe.net >= 43.0`. */
 export function extractPackagesFromPaketDependencies(
   content: string,
-): string[] {
-  const packages = new Set<string>();
+): ManifestPackageSpan[] {
+  const spans: ManifestPackageSpan[] = [];
+  const lines = content.split(/\r?\n/);
 
-  for (const rawLine of content.split(/\r?\n/)) {
-    const line = rawLine.trim();
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = (lines[i] ?? "").trim();
     if (!line || line.startsWith("#")) continue;
 
     const match = line.match(/^nuget\s+([A-Za-z0-9][A-Za-z0-9_.-]*)/i);
     if (!match) continue;
 
     const token = normalizePackageToken(match[1]);
-    if (token) packages.add(token);
+    if (token) pushManifestSpan(spans, token, i + 1);
   }
 
-  return Array.from(packages);
+  return spans;
 }
 
 export interface AppSettingsConnectionString {
   /** The key under `ConnectionStrings`, e.g. `DefaultConnection`. */
   name: string;
   databaseType: string;
+  startLine: number;
+  endLine: number;
 }
 
 /**
@@ -134,14 +150,23 @@ export function extractConnectionStringsFromAppSettings(
   const section = (parsed as { ConnectionStrings?: unknown }).ConnectionStrings;
   if (!section || typeof section !== "object") return [];
 
+  const keyLines = new Map(
+    jsonObjectKeySpans(content, ["ConnectionStrings"], (key) => key).map(
+      (span) => [span.name, span] as const,
+    ),
+  );
+
   const results: AppSettingsConnectionString[] = [];
   for (const [name, value] of Object.entries(
     section as Record<string, unknown>,
   )) {
     if (typeof value !== "string" || !value.trim()) continue;
+    const span = keyLines.get(name);
     results.push({
       name,
       databaseType: inferDatabaseTypeFromConnectionString(value),
+      startLine: span?.startLine ?? 1,
+      endLine: span?.endLine ?? 1,
     });
   }
 

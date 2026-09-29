@@ -7,11 +7,16 @@
  * catalog directly.
  */
 
+import {
+  pushManifestSpan,
+  type ManifestPackageSpan,
+} from "../shared/manifest-span";
+
 export interface GoModuleManifest {
   /** The `module` declaration, e.g. `github.com/acme/billing`. */
   modulePath?: string;
-  /** Required module paths, versions stripped. */
-  requires: string[];
+  /** Required module paths, versions stripped, one span per declaration line. */
+  requires: ManifestPackageSpan[];
 }
 
 const MODULE_REGEX = /^module\s+(\S+)/;
@@ -32,14 +37,16 @@ function isValidModulePath(token: string): boolean {
 }
 
 export function parseGoMod(content: string): GoModuleManifest {
-  const requires = new Set<string>();
+  const requires: ManifestPackageSpan[] = [];
   let modulePath: string | undefined;
 
   let inRequireBlock = false;
   let inIgnoredBlock = false;
 
-  for (const rawLine of content.split(/\r?\n/)) {
-    const line = stripLineComment(rawLine).trim();
+  const lines = content.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i += 1) {
+    const lineNumber = i + 1;
+    const line = stripLineComment(lines[i] ?? "").trim();
     if (!line) continue;
 
     if (inIgnoredBlock) {
@@ -53,7 +60,9 @@ export function parseGoMod(content: string): GoModuleManifest {
         continue;
       }
       const entry = line.match(REQUIRE_ENTRY_REGEX);
-      if (entry && isValidModulePath(entry[1])) requires.add(entry[1]);
+      if (entry && isValidModulePath(entry[1])) {
+        pushManifestSpan(requires, entry[1], lineNumber);
+      }
       continue;
     }
 
@@ -79,11 +88,11 @@ export function parseGoMod(content: string): GoModuleManifest {
 
     const single = line.match(REQUIRE_SINGLE_REGEX);
     if (single && isValidModulePath(single[1])) {
-      requires.add(single[1]);
+      pushManifestSpan(requires, single[1], lineNumber);
     }
   }
 
-  return { modulePath, requires: Array.from(requires) };
+  return { modulePath, requires };
 }
 
 /**
