@@ -101,3 +101,38 @@ layer_scopes:
       reviewed_by: source-adjudication
       reviewed_at: 2026-09-07T00:00:00Z
       review_state: accepted
+concept_scopes:
+  mentions:
+    - subject_keys:
+        - mention:email
+      exhaustive_scope_files:
+        - ghost/core/core/server/api/endpoints/emails.js
+        - ghost/core/core/server/api/endpoints/members.js
+        - ghost/core/core/server/api/endpoints/utils/validate-email-sender-fields.ts
+        - ghost/core/core/server/data/schema/schema.js
+        - ghost/core/core/server/models/email-recipient.js
+        - ghost/core/core/server/models/email.js
+        - ghost/core/core/server/models/member.js
+        - ghost/core/core/server/models/user.js
+        - ghost/core/core/server/services/auth/passwordreset.js
+        - ghost/core/core/server/services/auth/session/emails/signin.js
+        - ghost/core/core/server/services/auth/session/session-service.js
+        - ghost/core/core/server/services/auth/setup.js
+        - ghost/core/core/server/services/comments/comments-service-emails.js
+        - ghost/core/core/server/services/email-address/email-address-parser.ts
+        - ghost/core/core/server/services/email-address/email-address-service.ts
+        - ghost/core/core/server/services/email-service/mailgun-email-provider.js
+        - ghost/core/core/server/services/email-service/sending-service.js
+        - ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+        - ghost/core/core/server/services/mail/ghost-mailer.js
+        - ghost/core/core/server/services/members/api.js
+        - ghost/core/core/server/services/members/import-export/import/completion-email.ts
+        - ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+        - ghost/core/core/server/services/newsletters/newsletters-service.js
+        - ghost/core/core/server/services/posts/post-email-handler.js
+        - ghost/core/core/server/services/staff/staff-service-emails.js
+        - ghost/core/core/server/services/staff/staff-service.js
+      provenance:
+        proposed_by: claude-opus-5-5
+        proposed_at: '2026-09-29'
+        review_state: proposed

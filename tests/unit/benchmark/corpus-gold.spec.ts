@@ -91,7 +91,8 @@ describe("imported corpus gold", () => {
     // KDATAP-b702ea: 44 negative component decoys demoted accepted → rejected (LOADER_EXEMPTION fix).
     // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
     // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
-    expect(acceptedEvalCases).toBe(1016);
+    // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
+    expect(acceptedEvalCases).toBe(1010);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
@@ -271,7 +272,8 @@ describe("imported corpus gold", () => {
 
     expect(legacyFiles).toEqual([]);
     expect(piiKeyViolations).toEqual([]);
-    expect(acceptedMentions).toBe(79);
+    // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
+    expect(acceptedMentions).toBe(73);
     expect(adjudicationMentions).toBe(278);
   });
 
