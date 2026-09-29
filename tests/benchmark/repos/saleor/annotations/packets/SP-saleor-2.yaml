@@ -1,0 +1,1007 @@
+packet:
+  repo: saleor
+  concept: email-sample
+  kanbus_issue: KDATAP-6b03c5
+  files:
+  - saleor/plugins/admin_email/plugin.py
+  - saleor/plugins/admin_email/tasks.py
+  - saleor/plugins/sendgrid/plugin.py
+  - saleor/plugins/sendgrid/tasks.py
+  - saleor/plugins/user_email/constants.py
+  - saleor/plugins/user_email/default_email_templates/request_email_change.html
+annotations:
+- id: saleor-admin_email-plugin-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_common
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relative import of the email_common module.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_set_staff_password_email
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of a notify handler function named after sending email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L46
+  layer: mentions
+  subject:
+    key: mention:email
+    name: AdminEmailPlugin
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name of the plugin that sends staff emails; no address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L92
+  layer: mentions
+  subject:
+    key: mention:email
+    name: DEFAULT_EMAIL_VALUE
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 92
+    end_line: 92
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sentinel constant meaning the default email template is used, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L156
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_HOST_USER
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 156
+    end_line: 156
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Help-text prose naming the EMAIL_HOST_USER SMTP setting, not an address value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-admin_email-plugin-L184
+  layer: mentions
+  subject:
+    key: mention:email
+    name: _parse_email_config_or_get_default
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 184
+    end_line: 184
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares a method named after parsing email configuration; its parameter is on the next line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L193
+  layer: mentions
+  subject:
+    key: mention:email
+    name: REQUIRED_EMAIL_CONFIG_FIELDS
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 193
+    end_line: 193
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Tuple of required config field names (host, port, sender_address), not an address value.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L197
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_PORT
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 197
+    end_line: 197
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the SMTP port setting, which is not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L217
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_template
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 217
+    end_line: 217
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Loop variable for an EmailTemplate model row, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-plugin-L221
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 221
+    end_line: 221
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about merging email templates.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-admin_email-plugin-L298
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_templates_data
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 298
+    end_line: 298
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument carrying email template configuration data, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-admin_email-plugin-L306
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailTemplate
+  evidence:
+    file_path: saleor/plugins/admin_email/plugin.py
+    start_line: 306
+    end_line: 306
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model class for email templates, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-tasks-L9
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_set_staff_password_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares a task function named after sending email; its address parameter is on the next line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-tasks-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email (SMTP) configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-tasks-L62
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 62
+    end_line: 62
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the recipient address(es) for the staff order confirmation email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/admin_email/tasks.py
+      line: 62
+      kind: parameter
+    type_annotation: str
+    owner: saleor
+- id: saleor-admin_email-tasks-L64
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 64
+    end_line: 64
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Builds the email (SMTP) configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-tasks-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to the send_email function; the name is a function, no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-admin_email-tasks-L80
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/admin_email/tasks.py
+    start_line: 80
+    end_line: 80
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes the SMTP email configuration object, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L23
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_order_refund_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of a task function named after sending email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L44
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_account_delete_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 44
+    end_line: 44
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function reference in the event map, named after sending email; not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L47
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 47
+    end_line: 47
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event-map key naming an email-change confirmation event, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L48
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_user_change_email_notification_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 48
+    end_line: 48
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function reference named after sending an email notification.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L52
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_request_email_change_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 52
+    end_line: 52
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function reference named after sending an email-change request email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L72
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_fulfillment_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 72
+    end_line: 72
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function reference in the event map, named after sending email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L80
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_payment_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 80
+    end_line: 80
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function reference in the event map, named after sending email.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-plugin-L117
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_confirm_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 117
+    end_line: 117
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration item name for a Sendgrid email template id, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-sendgrid-plugin-L118
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_request_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 118
+    end_line: 118
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration item name for a Sendgrid email template id, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-sendgrid-plugin-L135
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Sender
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 135
+    end_line: 135
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: UI label prose for the sender display name, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-sendgrid-plugin-L155
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 155
+    end_line: 155
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: UI label prose for an email template, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-sendgrid-plugin-L162
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_request_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 162
+    end_line: 162
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Config structure key for an email template id, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-sendgrid-plugin-L215
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/sendgrid/plugin.py
+    start_line: 215
+    end_line: 215
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: UI label prose for the gift card email template, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-sendgrid-tasks-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: account_change_email_confirm_template_id
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the Sendgrid template id for the email-change confirmation, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-tasks-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key whose value is the customer previous email address from the payload.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 109
+      kind: field
+    owner: saleor
+- id: saleor-sendgrid-tasks-L167
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 167
+    end_line: 167
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing the recipient email address from the payload to the invoice event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 167
+      kind: field
+    owner: saleor
+- id: saleor-sendgrid-tasks-L186
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 186
+    end_line: 186
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to the send_email function; no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-tasks-L195
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 195
+    end_line: 195
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing the recipient email address from the payload to the order event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 195
+      kind: field
+    owner: saleor
+- id: saleor-sendgrid-tasks-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 207
+    end_line: 207
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to the send_email function; no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-tasks-L244
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 244
+    end_line: 244
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Call to the send_email function; no address on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-tasks-L253
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 253
+    end_line: 253
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing the recipient email address from the payload to the event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 253
+      kind: field
+    owner: saleor
+- id: saleor-sendgrid-tasks-L275
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 275
+    end_line: 275
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing the recipient email address from the payload to the event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 275
+      kind: field
+    owner: saleor
+- id: saleor-sendgrid-tasks-L314
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 314
+    end_line: 314
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: Local dict opening line that bundles ids with the recipient email (line 318) and is passed as kwargs; unclear whether a container variable counts as holding an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-sendgrid-tasks-L345
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/sendgrid/tasks.py
+    start_line: 345
+    end_line: 345
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument passing the recipient email address from the payload to the event.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/sendgrid/tasks.py
+      line: 345
+      kind: field
+    owner: saleor
+- id: saleor-constants-L9
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Path string to the user_email plugin template directory, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-constants-L67
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST_SUBJECT_FIELD
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 67
+    end_line: 67
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant naming the subject config field of the email-change request email, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-constants-L85
+  layer: mentions
+  subject:
+    key: mention:email
+    name: e-mail
+  evidence:
+    file_path: saleor/plugins/user_email/constants.py
+    start_line: 85
+    end_line: 85
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default subject prose for the password reset email, not an address.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-request_email_change-L93
+  layer: mentions
+  subject:
+    key: mention:email
+    name: e-mail
+  evidence:
+    file_path: saleor/plugins/user_email/default_email_templates/request_email_change.html
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template prose explaining an email change request; no address value is rendered on this line.
+  provenance:
+    proposed_by: claude-sonnet-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
