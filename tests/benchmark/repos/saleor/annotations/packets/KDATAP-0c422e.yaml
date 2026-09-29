@@ -147,6 +147,7 @@ annotations:
       line: 90
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L94
   layer: mentions
   subject:
@@ -239,52 +240,53 @@ annotations:
       line: 105
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L111
   layer: mentions
   subject:
     key: mention:email
     name: email
   evidence:
     file_path: saleor/order/events.py
-    start_line: 109
-    end_line: 109
+    start_line: 111
+    end_line: 111
   expected:
     status: positive
     labels:
     - email_address
-  rationale: Object key storing the customer email address in event parameters.
+  rationale: Event parameter key storing the customer email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: property_key
+    owner: saleor
     declaration:
       file_path: saleor/order/events.py
-      line: 109
+      line: 111
       kind: field
-    owner: saleor
-- id: saleor-events-L111
-  layer: mentions
-  subject:
-    key: mention:email
-    name: email_type
-  evidence:
-    file_path: saleor/order/events.py
-    start_line: 111
-    end_line: 111
-  expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Parameter specifying the type of email event (confirmed), not an address.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: property_key
-    owner: saleor
 - id: saleor-events-L112
   layer: mentions
   subject:
@@ -331,52 +333,53 @@ annotations:
       line: 120
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L124
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 124
+    end_line: 124
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L126
   layer: mentions
   subject:
     key: mention:email
     name: email
   evidence:
     file_path: saleor/order/events.py
-    start_line: 124
-    end_line: 124
+    start_line: 126
+    end_line: 126
   expected:
     status: positive
     labels:
     - email_address
-  rationale: Object key storing the customer email address in event parameters.
+  rationale: Event parameter key storing the customer email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: property_key
+    owner: saleor
     declaration:
       file_path: saleor/order/events.py
-      line: 124
+      line: 126
       kind: field
-    owner: saleor
-- id: saleor-events-L126
-  layer: mentions
-  subject:
-    key: mention:email
-    name: email_type
-  evidence:
-    file_path: saleor/order/events.py
-    start_line: 126
-    end_line: 126
-  expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Parameter specifying the type of email event (cancelled), not an address.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: property_key
-    owner: saleor
 - id: saleor-events-L127
   layer: mentions
   subject:
@@ -423,52 +426,53 @@ annotations:
       line: 135
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L139
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 139
+    end_line: 139
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L141
   layer: mentions
   subject:
     key: mention:email
     name: email
   evidence:
     file_path: saleor/order/events.py
-    start_line: 139
-    end_line: 139
+    start_line: 141
+    end_line: 141
   expected:
     status: positive
     labels:
     - email_address
-  rationale: Object key storing the customer email address in event parameters.
+  rationale: Event parameter key storing the customer email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: property_key
+    owner: saleor
     declaration:
       file_path: saleor/order/events.py
-      line: 139
+      line: 141
       kind: field
-    owner: saleor
-- id: saleor-events-L141
-  layer: mentions
-  subject:
-    key: mention:email
-    name: email_type
-  evidence:
-    file_path: saleor/order/events.py
-    start_line: 141
-    end_line: 141
-  expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Parameter specifying the type of email event (order confirmation), not an address.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: property_key
-    owner: saleor
 - id: saleor-events-L142
   layer: mentions
   subject:
@@ -515,52 +519,53 @@ annotations:
       line: 149
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L153
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 153
+    end_line: 153
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L155
   layer: mentions
   subject:
     key: mention:email
     name: email
   evidence:
     file_path: saleor/order/events.py
-    start_line: 153
-    end_line: 153
+    start_line: 155
+    end_line: 155
   expected:
     status: positive
     labels:
     - email_address
-  rationale: Object key storing the customer email address in event parameters.
+  rationale: Event parameter key storing the customer email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: property_key
+    owner: saleor
     declaration:
       file_path: saleor/order/events.py
-      line: 153
+      line: 155
       kind: field
-    owner: saleor
-- id: saleor-events-L155
-  layer: mentions
-  subject:
-    key: mention:email
-    name: email_type
-  evidence:
-    file_path: saleor/order/events.py
-    start_line: 155
-    end_line: 155
-  expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Parameter specifying the type of email event (fulfillment), not an address.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: property_key
-    owner: saleor
 - id: saleor-events-L156
   layer: mentions
   subject:
@@ -607,52 +612,53 @@ annotations:
       line: 164
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L168
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 168
+    end_line: 168
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L169
   layer: mentions
   subject:
     key: mention:email
     name: email
   evidence:
     file_path: saleor/order/events.py
-    start_line: 168
-    end_line: 168
+    start_line: 169
+    end_line: 169
   expected:
     status: positive
     labels:
     - email_address
-  rationale: Object key storing the customer email address in event parameters.
+  rationale: Event parameter key storing the customer email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
     syntax_kind: property_key
+    owner: saleor
     declaration:
       file_path: saleor/order/events.py
-      line: 168
+      line: 169
       kind: field
-    owner: saleor
-- id: saleor-events-L169
-  layer: mentions
-  subject:
-    key: mention:email
-    name: email_type
-  evidence:
-    file_path: saleor/order/events.py
-    start_line: 169
-    end_line: 169
-  expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Parameter specifying the type of email event (payment), not an address.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: property_key
-    owner: saleor
 - id: saleor-events-L220
   layer: mentions
   subject:
@@ -678,6 +684,7 @@ annotations:
       line: 220
       kind: parameter
     owner: saleor
+    type_annotation: str
 - id: saleor-events-L227
   layer: mentions
   subject:
