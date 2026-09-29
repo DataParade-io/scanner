@@ -1,6 +1,6 @@
 import { analyzeSource, initAnalysisEngine } from "../../../src/analyze/engine/engine";
 import { LANGUAGE_PACKS, packForFile } from "../../../src/analyze/languages";
-import { mentionFieldKeys } from "../../../src/analyze/mention-fields";
+import { mentionFieldKeys, passedValueDeclarations } from "../../../src/analyze/mention-fields";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
 import type { FileInfo, FileLanguage } from "../../../src/core/types/file";
 
@@ -72,6 +72,33 @@ describe("mentionFieldKeys", () => {
       { key: "member.email", definition: false },
     ]);
     expect(keysOf("javascript", "a.js", ["const to = data.email;"], 1)).toEqual([]);
+  });
+});
+
+describe("passedValueDeclarations", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  function passed(lines: string[], line: number) {
+    const pack = packForFile("python", "a.py");
+    const analyzed = pack ? analyzeSource(pack, lines.join("\n")) : undefined;
+    if (!analyzed) throw new Error("engine did not analyze the source");
+    try {
+      return passedValueDeclarations(analyzed, line, concept);
+    } finally {
+      analyzed.dispose();
+    }
+  }
+
+  it("links a keyword argument to the variable passed into it", () => {
+    const lines = ["def send(recipient_email, payload):", "    log(customer_email=recipient_email)"];
+    expect(passed(lines, 2)).toEqual([1]);
+  });
+
+  it("does not link variables that are only compared", () => {
+    const lines = ["def f(email, old_email):", "    return email != old_email"];
+    expect(passed(lines, 2)).toEqual([]);
   });
 });
 

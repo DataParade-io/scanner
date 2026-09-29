@@ -52,3 +52,31 @@ export function mentionFieldKeys(
   }
   return [...keys.entries()].map(([key, definition]) => ({ key, definition }));
 }
+
+/**
+ * Declarations of concept variables passed into a key on this line
+ * (`customer_email=recipient_email`, `"email": customer_email`). Passing a value
+ * into a key or keyword argument keeps the same data item, so the mention also joins
+ * the passed variable's declaration (KDATAP-c8a46a). Lines without such a key return
+ * nothing, so comparisons like `email !== oldEmail` never join two variables.
+ */
+export function passedValueDeclarations(
+  file: AnalyzedFile,
+  line: number,
+  isConceptToken: (token: string) => boolean,
+): number[] {
+  const sites = file.sitesOnLine(line);
+  const passesIntoKey = sites.some(
+    (site) => site.role === "definition" && site.kind === "key" && isConceptToken(site.name),
+  );
+  if (!passesIntoKey) return [];
+  const lines = new Set<number>();
+  for (const site of sites) {
+    if (site.role !== "reference" || site.inCallee || !isConceptToken(site.name)) continue;
+    const declaration = file.lookup(site.name, site.node);
+    if (declaration && (declaration.kind === "parameter" || declaration.kind === "local")) {
+      lines.add(declaration.line);
+    }
+  }
+  return [...lines];
+}
