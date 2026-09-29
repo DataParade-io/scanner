@@ -7,6 +7,12 @@ import type {
 } from "../benchmark/schema";
 import type { AssertedFlowEndpoints } from "../../src/eval/canonical/graph/types";
 import type { FlowAssertion } from "../../src/eval/canonical/types";
+import type {
+  AttributeMetricScore,
+  MentionAttributeValues,
+  PairwiseGroupingScores,
+  ScoredMentionAttribute,
+} from "../../src/eval/canonical/mention-attribute-metrics";
 
 export type EvalCaseStatus = "positive" | "negative" | "ambiguous";
 
@@ -61,6 +67,8 @@ export interface EvalCase {
   flowCandidate?: FlowAnnotationCandidate;
   /** Non-scoring data-item migration audit block when carried through eval cases. */
   dataItemCandidate?: DataItemAnnotationCandidate;
+  /** Asserted mention attributes (mentions layer only, KDATAP-8b2c8a). */
+  mentionAttributes?: MentionAttributeValues;
 }
 
 export interface LayerFinding {
@@ -80,6 +88,8 @@ export interface LayerFinding {
   layer?: EvalLayer;
   flowEndpoints?: AssertedFlowEndpoints;
   flowAssertion?: FlowAssertion;
+  /** Attributes the scanner reports on a mention finding, when it emits them. */
+  mentionAttributes?: MentionAttributeValues;
 }
 
 export interface FixtureScanResult {
@@ -149,6 +159,10 @@ export interface EvalScores {
   unreadCount: number;
   denominators: EvalScoreDenominators;
   metricComputability: MetricComputability;
+  /** Mentions layer only: per-attribute accuracy over matched pairs whose gold asserts it. */
+  mentionAttributes?: Record<ScoredMentionAttribute, AttributeMetricScore>;
+  /** Mentions layer only: pairwise declaration-grouping precision and recall. */
+  grouping?: PairwiseGroupingScores;
 }
 
 export interface EvalCaseResult {

@@ -102,6 +102,9 @@ export function annotationToEvalCase(
     ...(annotation.candidate?.kind === "data_item"
       ? { dataItemCandidate: annotation.candidate }
       : {}),
+    ...(annotation.mention_attributes !== undefined
+      ? { mentionAttributes: annotation.mention_attributes }
+      : {}),
   };
 }
 

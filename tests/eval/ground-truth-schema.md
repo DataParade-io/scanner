@@ -99,6 +99,23 @@ mention_attributes:
   group: signup-email
 ```
 
+## Attribute and grouping metrics
+
+The mentions layer reports two extra blocks next to its headline metrics (KDATAP-ec05ea). Neither changes a headline denominator, and there is no cross-metric scalar.
+
+- `mentionAttributes`: for each of `syntax_kind`, `declaration`, `type_annotation`, `owner`, and `touches`, accuracy over matched positive pairs whose gold asserts that attribute. `declaration` matches on file, line, and kind, or on `unresolved`; `touches` compares as a set.
+- `grouping`: pairwise precision and recall over matched positive mentions whose gold asserts `group`. Recall is the share of gold same-group pairs the scanner also puts together; precision is the share of scanner same-group pairs that gold also puts together. A mention without a predicted group is its own singleton.
+
+Each score carries a state:
+
+| State | Meaning |
+| --- | --- |
+| `computable` | The value is defined over the stated denominator |
+| `not_asserted_by_gold` | No matched gold asserts the attribute |
+| `scanner_capability_not_declared` | No scanner mention finding carries the attribute; the denominator counts the gold that would be scored |
+
+Packet scores merge by summing numerators and denominators of computable packets.
+
 ## Labeling packets
 
 Agents write proposed mention gold to a packet, never directly to `annotations/mentions.yaml`. One packet covers one labeling batch at `repos/<repo>/annotations/packets/<kanbus-issue-id>.yaml`:
