@@ -82,12 +82,24 @@ function findingInScope(
   );
 }
 
+function inConceptScope(
+  finding: CanonicalScannerFinding,
+  conceptScopes: ReadonlyArray<{ subjectKeys: readonly string[]; files: readonly string[] }>,
+): boolean {
+  return conceptScopes.some(
+    (scope) =>
+      scope.subjectKeys.includes(finding.identity.identityKey) &&
+      findingInScope(finding, scope.files),
+  );
+}
+
 function computePrecisionFromAssignment(
   findings: ReadonlyArray<CanonicalScannerFinding & { id: string }>,
   assignment: AssignmentResult,
   scopeFiles: readonly string[],
+  conceptScopes: ReadonlyArray<{ subjectKeys: readonly string[]; files: readonly string[] }> = [],
 ): { exhaustiveScopedFindings: number; exhaustiveScopedMatches: number } {
-  if (scopeFiles.length === 0) {
+  if (scopeFiles.length === 0 && conceptScopes.length === 0) {
     return { exhaustiveScopedFindings: 0, exhaustiveScopedMatches: 0 };
   }
 
@@ -96,7 +108,10 @@ function computePrecisionFromAssignment(
   let exhaustiveScopedMatches = 0;
 
   for (const finding of findings) {
-    if (!findingHasLocations(finding) || !findingInScope(finding, scopeFiles)) {
+    if (
+      !findingHasLocations(finding) ||
+      !(findingInScope(finding, scopeFiles) || inConceptScope(finding, conceptScopes))
+    ) {
       continue;
     }
     exhaustiveScopedFindings += 1;
@@ -115,6 +130,7 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
     findings,
     expectationMeta,
     exhaustiveScopeFiles = [],
+    conceptScopes = [],
     eligibility,
   } = input;
 
@@ -228,7 +244,16 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
   const normalizedScope = exhaustiveScopeFiles
     .filter(isEvalPathContractValid)
     .map(normalizeEvalPath);
-  const bucketPrecision = computePrecisionFromAssignment(findings, assignment, normalizedScope);
+  const normalizedConceptScopes = conceptScopes.map((scope) => ({
+    subjectKeys: scope.subjectKeys,
+    files: scope.files.filter(isEvalPathContractValid).map(normalizeEvalPath),
+  }));
+  const bucketPrecision = computePrecisionFromAssignment(
+    findings,
+    assignment,
+    normalizedScope,
+    normalizedConceptScopes,
+  );
   const precision =
     bucketPrecision.exhaustiveScopedFindings === 0
       ? null

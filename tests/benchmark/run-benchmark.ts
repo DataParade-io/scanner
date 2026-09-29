@@ -3,7 +3,7 @@ import path from "path";
 
 import type { EvalCase, EvalLayer, EvalScoreReport, FixtureScanResult } from "../eval/types";
 import { scoreEvalCasesByLayer } from "../eval/score";
-import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "./manifest";
+import { loadAnnotations, loadBenchmarkManifest, loadConceptScopes, loadLayerScopes } from "./manifest";
 import type { ReviewState } from "./schema";
 import { annotationsToEvalCases, type ToEvalCasesOptions } from "./to-eval-cases";
 import { eligibleProcessedPaths } from "../eval/eligibility/ledger-access";
@@ -135,12 +135,13 @@ function loadEvalCasesForRepo(
   const repoDir = path.join(getReposMetadataRoot(benchmarkRoot), repoKey);
   const manifest = loadBenchmarkManifest(repoDir);
   const layerScopes = loadLayerScopes(repoDir);
+  const conceptScopes = loadConceptScopes(repoDir);
   const evalCases: EvalCase[] = [];
 
   for (const layer of manifest.coverage.layers) {
     const annotations = loadAnnotations(repoDir, layer);
     evalCases.push(
-      ...annotationsToEvalCases(annotations, repoKey, { ...options, layerScopes }),
+      ...annotationsToEvalCases(annotations, repoKey, { ...options, layerScopes, conceptScopes }),
     );
   }
 

@@ -164,3 +164,27 @@ describe("mergeAttributeScores", () => {
     ).toBe("scanner_capability_not_declared");
   });
 });
+
+describe("concept-scoped precision", () => {
+  function phoneFinding(line: number): LayerFinding {
+    return { ...mentionFinding(line), key: "mention:phone_number", labels: ["phone_number"] };
+  }
+
+  it("counts only the listed concept's findings in a concept-scoped file", () => {
+    const cases = [
+      { ...mentionCase("m1", 2), conceptScopes: [{ subjectKeys: ["mention:email"], files: [FILE] }] },
+    ];
+    const report = evaluateCanonical(cases, [scan([mentionFinding(2), mentionFinding(7), phoneFinding(9)])]);
+    // email findings on 2 (matched) and 7 (unmatched) count; the phone finding is outside the email closed world
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(2);
+    expect(report.scores.denominators.exhaustiveScopedMatches).toBe(1);
+    expect(report.scores.precision).toBe(0.5);
+    expect(report.scores.metricComputability.scope.reviewedScopeFileCount).toBe(1);
+  });
+
+  it("still counts every concept in a layer-wide scope", () => {
+    const cases = [{ ...mentionCase("m1", 2), exhaustiveScopeFiles: [FILE] }];
+    const report = evaluateCanonical(cases, [scan([mentionFinding(2), phoneFinding(9)])]);
+    expect(report.scores.denominators.exhaustiveScopedFindings).toBe(2);
+  });
+});
