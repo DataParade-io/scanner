@@ -1,0 +1,462 @@
+import type { Node, Query, Tree } from "web-tree-sitter";
+import type {
+  DeclarationKind,
+  EnclosingRange,
+  LanguagePack,
+  PackConfig,
+  SameFileDeclaration,
+} from "./types";
+
+type ScopeKind = "module" | "function" | "class" | "block";
+type DefinitionKind = "function" | "class" | "parameter" | "local" | "field" | "key" | "import";
+
+/** Most specific wins when one node is captured as several kinds. */
+const KIND_PRIORITY: DefinitionKind[] = ["field", "parameter", "function", "class", "import", "key", "local"];
+
+interface Scope {
+  node: Node;
+  kind: ScopeKind;
+  parent?: Scope;
+  name?: string;
+  /** Lexically visible names; for a class scope, its body members. */
+  defs: Map<string, SiteDefinition[]>;
+  /** Class scopes only: fields first assigned in methods (`this.x = ...`). */
+  implicitFields: Map<string, SiteDefinition[]>;
+}
+
+interface SiteDefinition {
+  kind: DefinitionKind;
+  name: string;
+  node: Node;
+  line: number;
+  column: number;
+}
+
+/** A place where a name is defined, read, or reached through a member chain. */
+export type Site =
+  | {
+      role: "definition";
+      kind: DefinitionKind;
+      name: string;
+      node: Node;
+      line: number;
+      column: number;
+      /** A field first assigned in a method (`this.x = ...`), not declared in the class body. */
+      implicit?: boolean;
+    }
+  | {
+      role: "reference";
+      name: string;
+      node: Node;
+      line: number;
+      column: number;
+      /** The name is (part of) the callee of a call: `send_email(x)`, `this.emailService.send(x)`. */
+      inCallee: boolean;
+    }
+  | {
+      role: "member";
+      /** The property name, or the string key of a subscript or `.get("key")` call. */
+      name: string;
+      node: Node;
+      line: number;
+      column: number;
+      /** How the chain starts: a named binding, `this`/`self`, or something else. */
+      root: MemberRoot;
+      /** The access is (part of) the callee of a call. */
+      inCallee: boolean;
+    };
+
+export type MemberRoot =
+  | { type: "identifier"; name: string; node: Node }
+  | { type: "self"; firstMember?: string; node: Node }
+  | { type: "other" };
+
+export interface CompiledPack {
+  pack: LanguagePack;
+  query: Query;
+}
+
+function unquote(text: string): string {
+  const m = /^[A-Za-z]{0,2}("""|'''|"|'|`)([\s\S]*)\1$/.exec(text);
+  return m ? m[2] : text;
+}
+
+/**
+ * One parsed file and the indexes the engine builds from the pack's captures. Answers
+ * are synchronous. Call `dispose()` when done: the parse tree lives in WASM memory.
+ */
+export class AnalyzedFile {
+  readonly hasSyntaxError: boolean;
+  private readonly config: PackConfig;
+  private readonly scopes = new Map<number, Scope>();
+  private readonly rootScope: Scope;
+  private readonly sitesByLine = new Map<number, Site[]>();
+  private readonly memberByNode = new Map<number, { object: Node; property: Node }>();
+  private readonly callByNode = new Map<number, Node>();
+  private readonly nodeToScopeName = new Map<number, string>();
+
+  constructor(
+    private readonly tree: Tree,
+    compiled: CompiledPack,
+  ) {
+    this.config = compiled.pack.config;
+    const root = tree.rootNode;
+    this.hasSyntaxError = root.hasError;
+    this.rootScope = this.newScope(root, "module");
+    this.index(compiled.query);
+  }
+
+  dispose(): void {
+    this.tree.delete();
+  }
+
+  /** Node type of the smallest node at a 1-based line and 0-based column. */
+  syntaxKindAt(line: number, column: number): string | undefined {
+    return this.tree.rootNode.descendantForPosition({ row: line - 1, column })?.type;
+  }
+
+  enclosingFunction(line: number, column: number): EnclosingRange | undefined {
+    return this.enclosing(line, column, "function");
+  }
+
+  enclosingClass(line: number, column: number): EnclosingRange | undefined {
+    return this.enclosing(line, column, "class");
+  }
+
+  /**
+   * The same-file declaration of `name` visible at a 1-based line and 0-based column
+   * (innermost scope first), or undefined. Class scopes are skipped from inside their
+   * methods, as in both JavaScript and Python.
+   */
+  declarationOf(name: string, line: number, column = 0): SameFileDeclaration | undefined {
+    const node = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    return node ? this.lookup(name, node) : undefined;
+  }
+
+  /** Lexical lookup from a syntax node. */
+  lookup(name: string, anchor: Node): SameFileDeclaration | undefined {
+    let scope: Scope | undefined = this.scopeAround(anchor);
+    let first = true;
+    while (scope) {
+      if (scope.kind !== "class" || first) {
+        const found = pick(scope.defs.get(name));
+        if (found) return toDeclaration(found);
+      }
+      first = false;
+      scope = scope.parent;
+    }
+    return undefined;
+  }
+
+  /** The class-level declaration of a `this.x` / `self.x` member for code at `anchor`. */
+  lookupMember(name: string, anchor: Node): SameFileDeclaration | undefined {
+    let scope: Scope | undefined = this.scopeAround(anchor);
+    while (scope && scope.kind !== "class") scope = scope.parent;
+    if (!scope) return undefined;
+    const found = scope.defs.get(name)?.[0] ?? scope.implicitFields.get(name)?.[0];
+    return found ? toDeclaration(found) : undefined;
+  }
+
+  sitesOnLine(line: number): readonly Site[] {
+    return this.sitesByLine.get(line - 1) ?? [];
+  }
+
+  // ---- indexing ------------------------------------------------------------------
+
+  private newScope(node: Node, kind: ScopeKind): Scope {
+    const existing = this.scopes.get(node.id);
+    if (existing) {
+      // The same node may be captured as @scope and @scope.function; keep the specific kind.
+      if (kind !== "block") existing.kind = kind;
+      return existing;
+    }
+    const scope: Scope = { node, kind, defs: new Map(), implicitFields: new Map() };
+    this.scopes.set(node.id, scope);
+    return scope;
+  }
+
+  private scopeAround(node: Node): Scope {
+    let current: Node | null = node;
+    while (current) {
+      const scope = this.scopes.get(current.id);
+      if (scope) return scope;
+      current = current.parent;
+    }
+    return this.rootScope;
+  }
+
+  private enclosing(line: number, column: number, kind: ScopeKind): EnclosingRange | undefined {
+    const node = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    let scope: Scope | undefined = node ? this.scopeAround(node) : undefined;
+    while (scope && scope.kind !== kind) scope = scope.parent;
+    if (!scope) return undefined;
+    return {
+      ...(scope.name ? { name: scope.name } : {}),
+      startLine: scope.node.startPosition.row + 1,
+      endLine: scope.node.endPosition.row + 1,
+    };
+  }
+
+  private index(query: Query): void {
+    const matches = query.matches(this.tree.rootNode);
+    const scopeNodes: Array<{ node: Node; kind: ScopeKind }> = [];
+    const definitions = new Map<number, { kind: DefinitionKind; node: Node }>();
+    const references: Node[] = [];
+    const members: Array<{ node: Node; object: Node; property: Node }> = [];
+    const callArguments: Array<{ callee: Node; argument: Node }> = [];
+
+    for (const match of matches) {
+      const byName = new Map<string, Node[]>();
+      for (const capture of match.captures) {
+        const list = byName.get(capture.name) ?? [];
+        list.push(capture.node);
+        byName.set(capture.name, list);
+      }
+      for (const [captureName, nodes] of byName) {
+        if (captureName === "scope") for (const n of nodes) scopeNodes.push({ node: n, kind: "block" });
+        else if (captureName === "scope.function") for (const n of nodes) scopeNodes.push({ node: n, kind: "function" });
+        else if (captureName === "scope.class") for (const n of nodes) scopeNodes.push({ node: n, kind: "class" });
+        else if (captureName === "reference") references.push(...nodes);
+        else if (captureName === "import.name") for (const n of nodes) addDefinition(definitions, "import", n);
+        else if (captureName.startsWith("definition.")) {
+          const kind = captureName.slice("definition.".length) === "variable" ? "local" : (captureName.slice("definition.".length) as DefinitionKind);
+          for (const n of nodes) {
+            const targets = kind === "local" || kind === "parameter" ? this.bindings(n) : [n];
+            for (const target of targets) addDefinition(definitions, kind, target);
+          }
+        }
+      }
+      const member = byName.get("member")?.[0];
+      const object = byName.get("member.object")?.[0];
+      const property = byName.get("member.property")?.[0];
+      if (member && object && property) members.push({ node: member, object, property });
+      const call = byName.get("call")?.[0];
+      const callee = byName.get("call.callee")?.[0];
+      if (call && callee) {
+        this.callByNode.set(call.id, callee);
+        const argument = byName.get("call.argument")?.[0];
+        if (argument) callArguments.push({ callee, argument });
+      }
+    }
+
+    // Scopes: nearest enclosing scope node becomes the parent.
+    for (const { node, kind } of scopeNodes) this.newScope(node, kind);
+    for (const scope of this.scopes.values()) {
+      if (scope === this.rootScope) continue;
+      let ancestor = scope.node.parent;
+      while (ancestor && !this.scopes.has(ancestor.id)) ancestor = ancestor.parent;
+      scope.parent = ancestor ? this.scopes.get(ancestor.id) : this.rootScope;
+    }
+
+    const sorted = [...definitions.values()].sort(
+      (a, b) => a.node.startIndex - b.node.startIndex,
+    );
+    for (const { kind, node } of sorted) this.place(kind, node);
+
+    for (const m of members) {
+      this.memberByNode.set(m.node.id, { object: m.object, property: m.property });
+    }
+    for (const m of members) this.addMemberSite(m.property, m.object, m.property.text);
+    // `x.get("key")`: the string argument is the property of a call on `x.get`.
+    for (const { callee, argument } of callArguments) {
+      const calleeMember = this.memberByNode.get(callee.id);
+      if (!calleeMember || !/^[A-Za-z]{0,2}["'`]/.test(argument.text)) continue;
+      this.addMemberSite(argument, calleeMember.object, calleeMember.property.text);
+    }
+
+    const memberProperties = new Set(members.map((m) => m.property.id));
+    for (const node of references) {
+      if (definitions.has(node.id) || memberProperties.has(node.id)) continue;
+      this.addSite(node.startPosition.row, {
+        role: "reference",
+        name: node.text,
+        node,
+        line: node.startPosition.row + 1,
+        column: node.startPosition.column,
+        inCallee: this.isWithinCallee(node),
+      });
+    }
+  }
+
+  /** Bound names inside a pattern node: destructuring, tuple targets, parameter shapes. */
+  private bindings(node: Node): Node[] {
+    const out: Node[] = [];
+    const visit = (n: Node): void => {
+      if (this.config.nonBindingNodeTypes.includes(n.type)) return;
+      if (this.config.bindingLeafTypes.includes(n.type)) {
+        out.push(n);
+        return;
+      }
+      const skipFields = this.config.nonBindingChildFields[n.type] ?? [];
+      const children = n.children;
+      for (let i = 0; i < children.length; i += 1) {
+        const child = children[i];
+        if (!child || !child.isNamed) continue;
+        if (skipFields.length > 0 && skipFields.includes(n.fieldNameForChild(i) ?? "")) continue;
+        visit(child);
+      }
+    };
+    visit(node);
+    return out;
+  }
+
+  private place(kind: DefinitionKind, node: Node): void {
+    const name = kind === "key" ? unquote(node.text) : node.text;
+    const def: SiteDefinition = {
+      kind,
+      name,
+      node,
+      line: node.startPosition.row + 1,
+      column: node.startPosition.column,
+    };
+    if (kind === "key") {
+      this.addSite(node.startPosition.row, { role: "definition", ...def });
+      return;
+    }
+    if (kind === "field") {
+      const cls = this.nearestScope(node.parent, (s) => s.kind === "class");
+      const direct = cls !== undefined && this.scopeAround(node) === cls;
+      this.addSite(node.startPosition.row, { role: "definition", ...def, ...(direct ? {} : { implicit: true }) });
+      if (!cls) return;
+      push(direct ? cls.defs : cls.implicitFields, name, def);
+      return;
+    }
+
+    this.addSite(node.startPosition.row, { role: "definition", ...def });
+
+    let scope: Scope;
+    if (kind === "function" || kind === "class") {
+      // The name of a function or class belongs to the scope around it.
+      const own = node.parent ? this.scopes.get(node.parent.id) : undefined;
+      if (own) {
+        if (own.name === undefined) own.name = name;
+        scope = own.parent ?? this.rootScope;
+      } else {
+        scope = this.scopeAround(node);
+      }
+    } else if (kind === "local" && node.parent && this.hoistsToFunction(node)) {
+      scope = this.nearestScope(node.parent, (s) => s.kind === "function" || s.kind === "module") ?? this.rootScope;
+    } else {
+      scope = this.scopeAround(node);
+    }
+    push(scope.defs, name, def);
+  }
+
+  private hoistsToFunction(node: Node): boolean {
+    let current: Node | null = node.parent;
+    for (let depth = 0; current && depth < 6; depth += 1) {
+      if (this.config.hoistedDeclarationParents.includes(current.type)) return true;
+      if (this.scopes.has(current.id)) return false;
+      current = current.parent;
+    }
+    return false;
+  }
+
+  private nearestScope(from: Node | null, test: (scope: Scope) => boolean): Scope | undefined {
+    let scope: Scope | undefined = from ? this.scopeAround(from) : undefined;
+    while (scope && !test(scope)) scope = scope.parent;
+    return scope;
+  }
+
+  private addSite(row: number, site: Site): void {
+    const list = this.sitesByLine.get(row) ?? [];
+    list.push(site);
+    this.sitesByLine.set(row, list);
+  }
+
+  /**
+   * `selfFallback` is the member a bare `this`/`self` chain points at when the chain
+   * has no properties of its own: the accessed property, or the called method.
+   */
+  private addMemberSite(propertyNode: Node, objectNode: Node, selfFallback: string): void {
+    let root = this.rootOf(objectNode);
+    if (root.type === "self" && root.firstMember === undefined) {
+      root = { ...root, firstMember: selfFallback };
+    }
+    this.addSite(propertyNode.startPosition.row, {
+      role: "member",
+      name: unquote(propertyNode.text),
+      node: propertyNode,
+      line: propertyNode.startPosition.row + 1,
+      column: propertyNode.startPosition.column,
+      root,
+      inCallee: this.isWithinCallee(propertyNode),
+    });
+  }
+
+  private isWithinCallee(node: Node): boolean {
+    let current: Node = node;
+    for (let depth = 0; depth < 24; depth += 1) {
+      const parent = current.parent;
+      if (!parent) return false;
+      const callee = this.callByNode.get(parent.id);
+      if (callee) return callee.id === current.id;
+      current = parent;
+    }
+    return false;
+  }
+
+  /** Follow property access and calls down to where a chain starts. */
+  private rootOf(start: Node): MemberRoot {
+    const props: string[] = [];
+    let node: Node = start;
+    for (let guard = 0; guard < 64; guard += 1) {
+      const member = this.memberByNode.get(node.id);
+      if (member) {
+        props.push(unquote(member.property.text));
+        node = member.object;
+        continue;
+      }
+      const callee = this.callByNode.get(node.id);
+      if (callee) {
+        node = callee;
+        continue;
+      }
+      break;
+    }
+    if (this.config.selfNodeTypes.includes(node.type) || this.config.selfNames.includes(node.text)) {
+      return { type: "self", firstMember: props[props.length - 1], node };
+    }
+    if (node.type === "identifier" || this.config.bindingLeafTypes.includes(node.type)) {
+      return { type: "identifier", name: node.text, node };
+    }
+    return { type: "other" };
+  }
+}
+
+function addDefinition(
+  map: Map<number, { kind: DefinitionKind; node: Node }>,
+  kind: DefinitionKind,
+  node: Node,
+): void {
+  const existing = map.get(node.id);
+  if (!existing || KIND_PRIORITY.indexOf(kind) < KIND_PRIORITY.indexOf(existing.kind)) {
+    map.set(node.id, { kind, node });
+  }
+}
+
+function push(map: Map<string, SiteDefinition[]>, name: string, def: SiteDefinition): void {
+  const list = map.get(name) ?? [];
+  list.push(def);
+  list.sort((a, b) => a.line - b.line || a.column - b.column);
+  map.set(name, list);
+}
+
+/** The first declaration in the scope. */
+function pick(defs: SiteDefinition[] | undefined): SiteDefinition | undefined {
+  return defs?.[0];
+}
+
+const OUTPUT_KIND: Record<DefinitionKind, DeclarationKind> = {
+  function: "function",
+  class: "class",
+  parameter: "parameter",
+  local: "local",
+  field: "field",
+  key: "field",
+  import: "import",
+};
+
+function toDeclaration(def: SiteDefinition): SameFileDeclaration {
+  return { line: def.line, kind: OUTPUT_KIND[def.kind] };
+}
