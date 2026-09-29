@@ -1,0 +1,1344 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-3a9fb5
+  files:
+  - saleor/account/models.py
+  - saleor/account/notifications.py
+  - saleor/account/events.py
+  - saleor/account/search.py
+  - saleor/account/utils.py
+annotations:
+- id: saleor-events-L47
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email_change_request_event
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 47
+    end_line: 47
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email-change event, not holding an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L51
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_CHANGE_REQUEST
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 51
+    end_line: 51
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant, not an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L55
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email_changed_event
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 55
+    end_line: 55
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email-changed event, not holding an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L59
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_CHANGED
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 59
+    end_line: 59
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant, not an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L92
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_email_to_a_customer_event
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 92
+    end_line: 92
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name about email assignment operation, not holding an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L93
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 93
+    end_line: 93
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter for the new email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/events.py
+      line: 93
+      kind: parameter
+    type_annotation: str
+- id: saleor-events-L99
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_ASSIGNED
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 99
+    end_line: 99
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant, not an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L100
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/account/events.py
+    start_line: 100
+    end_line: 100
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the new email address as a parameter value.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/events.py
+      line: 93
+      kind: parameter
+- id: saleor-models-L172
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 172
+    end_line: 172
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition for storing the user email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 172
+      kind: field
+- id: saleor-models-L181
+  layer: mentions
+  subject:
+    key: mention:email
+    name: last_confirm_email_request
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 181
+    end_line: 181
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Timestamp field for email confirmation requests, not the email address
+    itself.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-models-L220
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 220
+    end_line: 220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Specifies the email field as the USERNAME_FIELD for authentication.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L226
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 226
+    end_line: 226
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Orders queryset by email address column.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L238
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 238
+    end_line: 238
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Includes email in the GinIndex for searching users.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L276
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 276
+    end_line: 276
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Creates a BTreeIndex on the email column.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L277
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email_idx
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 277
+    end_line: 277
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index name is prose, not the data itself.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L345
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 345
+    end_line: 345
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the user email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 172
+      kind: field
+- id: saleor-models-L348
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 348
+    end_line: 348
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the user email address as short name.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 172
+      kind: field
+- id: saleor-models-L372
+  layer: mentions
+  subject:
+    key: mention:email
+    name: enable_account_confirmation_by_email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 372
+    end_line: 372
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag setting for email confirmation feature, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L416
+  layer: mentions
+  subject:
+    key: mention:email
+    name: StaffNotificationRecipient
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 416
+    end_line: 416
+  expected:
+    status: ambiguous
+    labels:
+    - email_address
+  rationale: Class name definition does not contain email mention on this line.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L424
+  layer: mentions
+  subject:
+    key: mention:email
+    name: staff_email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 424
+    end_line: 424
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition for storing staff email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 424
+      kind: field
+- id: saleor-models-L428
+  layer: mentions
+  subject:
+    key: mention:email
+    name: staff_email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 428
+    end_line: 428
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Orders queryset by staff email address column.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L430
+  layer: mentions
+  subject:
+    key: mention:email
+    name: get_email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 430
+    end_line: 430
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name is about retrieving email, but definition line does not hold/access
+    address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L431
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 431
+    end_line: 431
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns either user email or staff email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 417
+      kind: field
+- id: saleor-models-L458
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/models.py
+    start_line: 458
+    end_line: 458
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text in a docstring mentioning email, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-notifications-L18
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 18
+    end_line: 18
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key selecting email value in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L36
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 36
+    end_line: 36
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 49
+    end_line: 49
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key selecting email in URL parameters.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L54
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 54
+    end_line: 54
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L80
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 80
+    end_line: 80
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key selecting email in URL parameters.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L84
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 84
+    end_line: 84
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L100
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_request_user_change_email_notification
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 100
+    end_line: 100
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email change request operation, not holding address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L101
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 101
+    end_line: 101
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter name for new email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/notifications.py
+      line: 101
+      kind: parameter
+- id: saleor-notifications-L103
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 103
+    end_line: 103
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring mentioning email notification, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-notifications-L110
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 110
+    end_line: 110
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L111
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key storing the old email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L112
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 112
+    end_line: 112
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key storing the new email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L122
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_REQUEST
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 122
+    end_line: 122
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant, not an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L128
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_user_change_email_notification
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 128
+    end_line: 128
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email change operation, not holding address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L129
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 129
+    end_line: 129
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring mentioning email change notification, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-notifications-L134
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L136
+  layer: mentions
+  subject:
+    key: mention:email
+    name: old_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 136
+    end_line: 136
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key storing the old email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L137
+  layer: mentions
+  subject:
+    key: mention:email
+    name: new_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 137
+    end_line: 137
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key storing the new email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L144
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ACCOUNT_CHANGE_EMAIL_CONFIRM
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 144
+    end_line: 144
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant, not an address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L164
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 164
+    end_line: 164
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L187
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 187
+    end_line: 187
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key selecting email in URL parameters.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L192
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/account/notifications.py
+    start_line: 192
+    end_line: 192
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Dict key for recipient email in notification payload.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-search-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 11
+    end_line: 11
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Field name in search fields list, selects email column.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-search-L56
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 56
+    end_line: 56
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user email to generate search vector.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/search.py
+      line: 39
+      kind: parameter
+- id: saleor-search-L70
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 70
+    end_line: 70
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter for email address.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/search.py
+      line: 70
+      kind: parameter
+    type_annotation: str
+- id: saleor-search-L71
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 71
+    end_line: 71
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring mentioning email addresses, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-search-L73
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 73
+    end_line: 73
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring mentioning email addresses in search, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-search-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Uses email parameter to create search vector.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/search.py
+      line: 70
+      kind: parameter
+- id: saleor-search-L78
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 78
+    end_line: 78
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email contains @ character.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/search.py
+      line: 70
+      kind: parameter
+- id: saleor-search-L79
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/search.py
+    start_line: 79
+    end_line: 79
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Splits email to extract domain.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/search.py
+      line: 70
+      kind: parameter
+- id: saleor-utils-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 150
+    end_line: 150
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter for email address lookup.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/account/utils.py
+      line: 150
+      kind: parameter
+- id: saleor-utils-L151
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 151
+    end_line: 151
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring mentioning user email lookup, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-utils-L153
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 153
+    end_line: 153
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring describing email lookup behavior, not data access.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-utils-L156
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 156
+    end_line: 156
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Queries users by email field using the parameter.
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/utils.py
+      line: 150
+      kind: parameter
+- id: saleor-utils-L159
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 159
+    end_line: 159
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares user email to parameter value (exact match).
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/utils.py
+      line: 159
+      kind: local
+- id: saleor-utils-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/utils.py
+    start_line: 160
+    end_line: 160
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares user email to lowercase parameter (case-insensitive match).
+  provenance:
+    proposed_by: claude-haiku-4.5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/utils.py
+      line: 160
+      kind: local
+
