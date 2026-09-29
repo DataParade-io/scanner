@@ -1,6 +1,7 @@
 import type { FileInfo } from "../core/types/file";
 import { ingestFileSystemWithOutcomes } from "../ingest/file-system";
 import type { PathEligibilityOutcome } from "../ingest/eligibility";
+import { stripCommentsForLanguage } from "../analyzers/shared/strip-comments-for-language";
 import {
   matchPiiSignalsInFiles,
   type PiiSignalHit,
@@ -20,8 +21,13 @@ export function buildPersonalDataInventoryFromIngest(
   files: FileInfo[],
   ingestOutcomes: PathEligibilityOutcome[],
 ): PersonalDataInventory {
+  // Comments and docstrings are prose, not data: match on layout-preserving
+  // stripped content so line numbers stay exact (KDATAP-b512a8).
   const hits = matchPiiSignalsInFiles(
-    files.map((file) => ({ filePath: file.path, content: file.content })),
+    files.map((file) => ({
+      filePath: file.path,
+      content: stripCommentsForLanguage(file.content, file.language),
+    })),
   );
 
   return {
