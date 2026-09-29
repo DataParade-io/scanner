@@ -91,7 +91,7 @@ Settled boundary cases:
 
 First choose the occurrence. On a positive line, take the first of these that exists:
 
-1. a key, field, or parameter being defined that holds the address and whose name contains the concept (`"recipient_email": user.email` → the key `recipient_email`; `def retrieve_user_by_email(email):` → the parameter `email`; shorthand `{ url, email }` → the key `email`)
+1. a key, field, parameter, or local variable being defined that holds the address and whose name contains the concept (`"recipient_email": user.email` → the key `recipient_email`; `def retrieve_user_by_email(email):` → the parameter `email`; `const recipient = user.get('email')` → the local `recipient`, declared on this line)
 2. the expression that reads or passes the address (`urlencode({"token": t, "to": user.email})` → `user.email`)
 3. a field name that selects the address (`'members.email'`)
 
@@ -118,13 +118,16 @@ Record it only in these cases. Otherwise leave the field out.
 
 1. **Identifier.** A bare name (`email`, `userEmail`): the line where that name is declared in this file (`const`, `let`, `var`, function parameter, Python assignment or parameter, class field). If it is imported from a relative module (`./` or `../`), the line of the matching export in that module. If it comes from a package import or cannot be found, write `unresolved`.
 2. **Member access.** `x.email`, `x.get('email')`, `x['email']`, `x.from.address`: the declaration of the base `x` under rule 1, with the base's kind. A parameter stays kind `parameter` at every use, including destructured parameters (`async cycleTransientId({ id, email })`). For `this.x`, `this.#x`, or `self.x`: the line in this file's class that declares the field `x` (a class field declaration, a TypeScript field type, or the first `this.x =` / `self.x =` in the constructor), kind `field`; if `x` is a getter (`get x() {`), the getter line, kind `function`; `unresolved` if there is none. A getter's own line (`get fromEmailAddress() {`) is declared by itself, kind `function`.
-3. **Object or dict key, or keyword argument, that holds the address** (`requestUserEmail: frame.user.get('email')`, `"recipient_email": user.email`, shorthand `{ email }`): this line itself, kind `field`. Every positive `property_key` is declared by its own line.
+3. **Object or dict key, or keyword argument, that holds the address** (`requestUserEmail: frame.user.get('email')`, `"recipient_email": user.email`, `filter(email__iexact=email)`): this line itself, kind `field`. Every positive `property_key` is declared by its own line.
+   Shorthand `{ email }` in an object literal is a read of the variable, not a key: `identifier`, with the variable's declaration. A destructured parameter (`async cycleTransientId({ id, email })`) is a parameter declared on that line.
    A function parameter that holds the address (`def retrieve_user_by_email(email):`): this line itself, kind `parameter`.
 4. **Field definition** (`email = models.EmailField()`, a schema column): this line itself, kind `field`.
 
 Every positive line whose syntax_kind is `identifier` or `property_key` must have a declaration, even if it is `unresolved`. Never record a declaration for comments, imports, string literals, or negative lines. The validator enforces both.
 
-`kind` is one of: `local` (`const`, `let`, `var`, or a Python local assignment), `parameter`, `field` (class field, model field, object key), `function`, `class`, `export`.
+`kind` is one of: `local` (`const`, `let`, `var`, including a `for (const x of ...)` loop variable, or a Python local assignment), `parameter`, `field` (class field, model field, object key), `function`, `class`, `export`.
+
+A key whose value is not an address (`verificationEmailRequired: email !== ...` holds a boolean) is skipped in step 1: the occurrence is the address expression (`email`), with its declaration.
 
 ```yaml
 declaration:
