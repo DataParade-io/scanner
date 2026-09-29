@@ -1361,7 +1361,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: giftedByEmail
   evidence:
     file_path: ghost/core/core/server/services/staff/staff-service-emails.js
     start_line: 431
@@ -1376,12 +1376,12 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/staff/staff-service-emails.js
-      line: 410
-      kind: parameter
+      line: 431
+      kind: field
 - id: ghost-staff-service-emails-L440
   layer: mentions
   subject:
@@ -1616,27 +1616,23 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: showEmail
   evidence:
     file_path: ghost/core/core/server/services/staff/staff-service-emails.js
     start_line: 492
     end_line: 492
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Checks if member has a name to control email display.
+  rationale: Display flag computed from whether the member has a name; not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: ghost/core
-    declaration:
-      file_path: ghost/core/core/server/services/staff/staff-service-emails.js
-      line: 487
-      kind: parameter
 - id: ghost-staff-service-emails-L591
   layer: mentions
   subject:
@@ -1689,31 +1685,10 @@ annotations:
     start_line: 595
     end_line: 595
   expected:
-    status: negative
-    labels:
-    - email_address
-  rationale: Getter method name containing email; negative when defined.
-  provenance:
-    proposed_by: claude-haiku-4-5-20251001
-    proposed_at: '2026-09-28'
-    review_state: proposed
-  mention_attributes:
-    syntax_kind: identifier
-    owner: ghost/core
-- id: ghost-staff-service-emails-L596
-  layer: mentions
-  subject:
-    key: mention:email
-    name: emailAddressParser
-  evidence:
-    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
-    start_line: 596
-    end_line: 596
-  expected:
     status: positive
     labels:
     - email_address
-  rationale: Returns stringified default email address via getter.
+  rationale: Getter that exposes the site's default sender address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-28'
@@ -1723,13 +1698,35 @@ annotations:
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/staff/staff-service-emails.js
-      line: 5
-      kind: local
+      line: 595
+      kind: field
+- id: ghost-staff-service-emails-L596
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service-emails.js
+    start_line: 596
+    end_line: 596
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the site's default sender address as a string.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration: unresolved
 - id: ghost-staff-service-emails-L612
   layer: mentions
   subject:
     key: mention:email
-    name: fromEmail
+    name: fromEmailAddress
   evidence:
     file_path: ghost/core/core/server/services/staff/staff-service-emails.js
     start_line: 612
@@ -1744,11 +1741,11 @@ annotations:
     proposed_at: '2026-09-28'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     owner: ghost/core
     declaration:
       file_path: ghost/core/core/server/services/staff/staff-service-emails.js
-      line: 612
+      line: 595
       kind: field
 - id: ghost-staff-service-emails-L622
   layer: mentions
