@@ -22,7 +22,7 @@ const GENERIC_WORDS = new Set([
   "params", "parse", "parser", "payload", "props", "raw", "record", "recipient", "recipients",
   "remove", "req", "result", "row", "self", "send", "service", "set", "str", "target", "task",
   "the", "this", "to", "trimmed", "u", "update", "user", "valid", "validate", "validated",
-  "value", "verify", "with", "x",
+  "validation", "validations", "value", "verify", "with", "x",
 ]);
 
 const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
@@ -90,6 +90,28 @@ export function modelFileEntity(filePath: string): string | undefined {
   const last = words[words.length - 1];
   if (!last) return undefined;
   return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
+}
+
+/**
+ * Group name of an entity field: the entity plus the field's own qualifier.
+ * `member.email` -> `email:member`, `newsletter.sender_email` -> `email:newsletter_sender`,
+ * `order.user_email` -> `email:order` (`user` is generic).
+ */
+function entityFieldName(signalId: string, fieldKey: string): string {
+  const [entity, field] = [fieldKey.slice(0, fieldKey.indexOf(".")), fieldKey.slice(fieldKey.indexOf(".") + 1)];
+  const fieldQualifier = mentionQualifier(field, signalId);
+  return `${signalId}:${fieldQualifier ? `${entity}_${fieldQualifier}` : entity}`;
+}
+
+/**
+ * The name a mention brings to grouping: the entity field it defines
+ * (`sender_email` under `newsletters:` -> `email:newsletter_sender`), else the line's
+ * qualifier. Reads keep the line's qualifier and reach the definition through field
+ * links, so `gift_card.assigned_to_email` and `assigned_to_email=` stay compatible.
+ */
+function effectiveName(hit: GroupableHit): string | undefined {
+  const defined = (hit.fieldKeys ?? []).find((field) => field.definition);
+  return defined ? entityFieldName(hit.id, defined.key) : hit.group;
 }
 
 /** Words that describe which copy of an object, not what the object is. */
@@ -165,12 +187,13 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       ? `${hit.id}@${hit.evidence.filePath}:${hit.declaration.line}`
       : undefined;
 
-  // Joins run from most to least reliable: qualifier, declaration, field, model file.
+  // Joins run from most to least reliable: name, declaration, field, model file.
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
     parent.set(node, node);
-    if (hit.group) union(node, groupNode(hit.group));
+    const name = effectiveName(hit);
+    if (name) union(node, groupNode(name));
   });
   hits.forEach((hit, index) => {
     const declaration = hit.location === "comment" ? undefined : declarationNode(hit);
