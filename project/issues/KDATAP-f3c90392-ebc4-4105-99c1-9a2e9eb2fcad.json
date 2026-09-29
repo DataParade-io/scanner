@@ -1,0 +1,25 @@
+{
+  "id": "KDATAP-f3c90392-ebc4-4105-99c1-9a2e9eb2fcad",
+  "title": "Label email mentions: ghost batch 14",
+  "description": "Label every email candidate line in these files of `ghost` (pinned commit `73612b18663c0145dcca8611904b7f21b5f84552`). 45 candidate lines.\n\nFiles:\n- `ghost/core/core/server/services/posts/post-email-handler.js`\n\n## Setup\n\n```\ngit fetch origin\ngit checkout -b label/KDATAP-f3c903 origin/kdatap-46d893-labeling-base\npnpm install\npnpm run benchmark:materialize ghost\n```\n\n## Read first, in full\n\n1. `.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`\n2. The worked example it points to: `tests/benchmark/repos/ghost/annotations/packets/example-ghost-batch-3.yaml`\n\n## Do\n\n- Input: the entries for the files above in `tests/benchmark/repos/ghost/annotations/packets/email-candidates.yaml`.\n- Read each file from `tests/benchmark/.cache/repos/ghost@73612b18663c0145dcca8611904b7f21b5f84552/`, with the surrounding code for every candidate line.\n- Write exactly one record per candidate line to `tests/benchmark/repos/ghost/annotations/packets/KDATAP-f3c903.yaml`, with `packet.kanbus_issue: KDATAP-f3c903`, `packet.files` equal to the files above, and `review_state: proposed`.\n\n## Rules\n\n- Do not run the scanner or read scanner output, `annotations/mentions.yaml`, or other packets.\n- Uncertain: `status: ambiguous` with a one-sentence rationale. Do not guess.\n- Do not edit any file except your packet and `annotations/KDATAP-f3c903/pass.md`.\n- Do not assert `touches` or `group`.\n\n## Finish\n\n1. `pnpm run benchmark:validate-packet tests/benchmark/repos/ghost/annotations/packets/KDATAP-f3c903.yaml` prints `OK`.\n2. Record the pass in `annotations/KDATAP-f3c903/pass.md`: files, record count, positive / negative / ambiguous counts, and anything you were unsure about.\n3. Commit both files on `label/KDATAP-f3c903`. The coordinator reviews, then moves this issue to awaiting-review.",
+  "type": "annotation",
+  "status": "labeling",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
+  "labels": [
+    "model:small"
+  ],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-09-29T00:17:33.705753Z",
+  "updated_at": "2026-09-29T00:17:33.848536Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {
+    "project_label": "KDATAP",
+    "source": "shared"
+  }
+}

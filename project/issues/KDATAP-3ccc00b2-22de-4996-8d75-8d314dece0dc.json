@@ -3,9 +3,9 @@
   "title": "Write the mention-attribute labeling reference and worked example",
   "description": "Write the labeling reference that small-model agents follow, and label one file as the worked example.\n\n## Deliverable\n\n`.agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md`, linked from `SKILL.md`. It must let a small model label without judgment it cannot make:\n\n- One section per field from the schema task, each with a definition, three or more positive and negative examples in JavaScript and Python, and the boundary cases.\n- Value vs. word for email specifically: a variable, parameter, property, column, or argument that holds an address is positive; `import ... 'mailer'`, a connection named `email`, a template key, a comment, and a config flag like `emailEnabled` are negative; a function named `sendEmail` is negative for the name, and its address parameter is positive.\n- How to find the declaration (walk outward through scopes, one hop through a relative import, else `unresolved`).\n- How to name the owner.\n- When to answer `ambiguous`, with a written rationale, instead of guessing.\n- Rules: never run the scanner or read its output; write only the packet file; run the validator before finishing.\n- The exact YAML of one record.\n\n## Worked example\n\nLabel every email candidate in one `ghost` file by hand (a stronger model drafts, a person accepts) and commit it as the example packet the reference points to.\n\n## Done when\n\nA person has read the reference and accepted the example packet.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "home",
   "creator": null,
   "parent": "KDATAP-46d893d2-acf3-423c-ac33-63d074f8ca21",
   "labels": [
@@ -17,9 +17,24 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "62192b99-10ab-44f1-9cd7-3969697c20fb",
+      "author": "home",
+      "text": "Reference and worked example on branch kdatap-3ccc00-labeling-reference (b69b4e6), draft PR stacked on #89. Worked example = ghost batch 3 (44 records, 7 positive), validator clean. Awaiting human acceptance. When batch issues are filed, ghost batch 3 is already labeled by this example.",
+      "created_at": "2026-09-28T23:55:30.826431Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "bd75a396-ca79-454b-8a7b-5892a57b56a0",
+      "author": "home",
+      "text": "Reference and worked example (ghost batch 3) accepted by rap@endymion.com on 2026-09-28.",
+      "created_at": "2026-09-29T00:15:30.786887Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-09-28T22:34:18.722720Z",
-  "updated_at": "2026-09-28T22:34:29.761918Z",
+  "updated_at": "2026-09-29T00:15:30.786909Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,
