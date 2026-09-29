@@ -7,6 +7,7 @@ import {
   buildPersonalDataInventory,
   buildPersonalDataInventoryFromIngest,
 } from "../../src/eval-layers/collect-personal-data-findings";
+import { ensureDeclarationEngine } from "../../src/eval-layers/personal-data-inventory";
 import type { OrchestratorLedgerContext } from "../../src/core/pipeline/orchestrator-result";
 import { buildOrchestratorEvalLedgers } from "../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../src/core/types/component";
@@ -202,6 +203,7 @@ export async function scanRepoByManifestLayers(
   }
 
   if (needsPersonalData) {
+    await ensureDeclarationEngine();
     const inventory = sharedIngest
       ? buildPersonalDataInventoryFromIngest(
           sharedIngest.allIngestedFiles,
