@@ -3,6 +3,7 @@ import { ingestFileSystemWithOutcomes } from "../ingest/file-system";
 import type { PathEligibilityOutcome } from "../ingest/eligibility";
 import { stripCommentsForLanguage } from "../analyzers/shared/strip-comments-for-language";
 import { CommentLines } from "../pii-signals/comment-context";
+import { mentionGroup } from "../pii-signals/mention-group";
 import {
   matchPiiSignalsInFile,
   type PiiSignalHit,
@@ -21,10 +22,15 @@ export interface PersonalDataInventory {
  * comments immediately around them. Line numbers are identical in both texts.
  */
 function annotatedHitsForFile(file: FileInfo): PiiSignalHit[] {
+  const lines = file.content.split(/\r?\n/);
+  const withGroup = (hit: PiiSignalHit): PiiSignalHit => {
+    const group = mentionGroup(hit.id, lines[hit.evidence.endLine - 1] ?? "");
+    return group ? { ...hit, group } : hit;
+  };
   const stripped = stripCommentsForLanguage(file.content, file.language);
   const rawHits = matchPiiSignalsInFile({ filePath: file.path, content: file.content });
   if (stripped === file.content) {
-    return rawHits.map((hit) => ({ ...hit, location: "code" as const }));
+    return rawHits.map((hit) => withGroup({ ...hit, location: "code" as const }));
   }
   const codeKeys = new Set(
     matchPiiSignalsInFile({ filePath: file.path, content: stripped }).map(
@@ -37,7 +43,7 @@ function annotatedHitsForFile(file: FileInfo): PiiSignalHit[] {
       return { ...hit, location: "comment" as const };
     }
     const commentContext = comments.context(hit.evidence.startLine, hit.evidence.endLine);
-    return { ...hit, location: "code" as const, ...(commentContext ? { commentContext } : {}) };
+    return withGroup({ ...hit, location: "code" as const, ...(commentContext ? { commentContext } : {}) });
   });
 }
 

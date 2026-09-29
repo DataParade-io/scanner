@@ -36,12 +36,13 @@ export function buildScanPersonalDataLayers(
       ...(code !== undefined ? { code } : {}),
       ...(hit.location ? { location: hit.location } : {}),
       ...(hit.commentContext ? { commentContext: hit.commentContext } : {}),
+      ...(hit.group ? { group: hit.group } : {}),
     };
   });
 
   const dataItemsById = new Map<
     string,
-    { labels: Set<string>; mentionIds: string[] }
+    { labels: Set<string>; mentionIds: string[]; groups: Map<string, string[]> }
   >();
 
   // Data items roll up code matches; comment matches stay on the mention list as context.
@@ -54,7 +55,7 @@ export function buildScanPersonalDataLayers(
     );
     let entry = dataItemsById.get(id);
     if (!entry) {
-      entry = { labels: new Set(hit.labels), mentionIds: [] };
+      entry = { labels: new Set(hit.labels), mentionIds: [], groups: new Map() };
       dataItemsById.set(id, entry);
     } else {
       for (const label of hit.labels) {
@@ -64,6 +65,13 @@ export function buildScanPersonalDataLayers(
     if (!entry.mentionIds.includes(mentionId)) {
       entry.mentionIds.push(mentionId);
     }
+    if (hit.group) {
+      const groupMentions = entry.groups.get(hit.group) ?? [];
+      if (!groupMentions.includes(mentionId)) {
+        groupMentions.push(mentionId);
+      }
+      entry.groups.set(hit.group, groupMentions);
+    }
   }
 
   const dataItems: ScanDataItem[] = [...dataItemsById.entries()]
@@ -71,6 +79,13 @@ export function buildScanPersonalDataLayers(
       id,
       mentionIds: [...entry.mentionIds],
       labels: [...entry.labels].sort((left, right) => left.localeCompare(right)),
+      ...(entry.groups.size > 0
+        ? {
+            groups: [...entry.groups.entries()]
+              .map(([groupId, mentionIds]) => ({ id: groupId, mentionIds }))
+              .sort((left, right) => left.id.localeCompare(right.id)),
+          }
+        : {}),
     }))
     .sort((left, right) => left.id.localeCompare(right.id));
 
