@@ -75,6 +75,23 @@ export function mentionGroup(signalId: string, line: string): string | undefined
   return qualifier ? `${signalId}:${qualifier}` : undefined;
 }
 
+const MODEL_FILE = /(^|\/)models?\/|[-_]repository\.[A-Za-z]+$|(^|\/)models?\.py$/;
+const FILE_ROLE_WORDS = new Set(["repository", "model", "models", "index"]);
+
+/**
+ * The entity a model or repository file is about: `models/member.js` -> `member`,
+ * `member-repository.js` -> `member`. Undefined for other files, and for files whose
+ * name is only generic words (`models.py`, `user.js` since `user` is generic).
+ */
+export function modelFileEntity(filePath: string): string | undefined {
+  if (!MODEL_FILE.test(filePath)) return undefined;
+  const base = filePath.split("/").pop()!.replace(/\.[A-Za-z]+$/, "");
+  const words = identifierWords(base).filter((word) => !GENERIC_WORDS.has(word) && !FILE_ROLE_WORDS.has(word));
+  const last = words[words.length - 1];
+  if (!last) return undefined;
+  return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
+}
+
 interface GroupableHit {
   id: string;
   location?: "code" | "comment";
@@ -118,6 +135,16 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
     if (hit.group) union(node, `group:${hit.group}`);
+  });
+
+  // A mention with no qualifier in a model or repository file joins the file's entity
+  // group (member-repository.js -> email:member), but only when that group exists.
+  const existingGroups = new Set(hits.map((hit) => hit.group).filter((group): group is string => !!group));
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment" || hit.group) return;
+    const entity = modelFileEntity(hit.evidence.filePath);
+    const group = entity ? `${hit.id}:${entity}` : undefined;
+    if (group && existingGroups.has(group)) union(`hit:${index}`, `group:${group}`);
   });
 
   const qualifierCounts = new Map<string, Map<string, number>>();
