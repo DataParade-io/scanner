@@ -144,12 +144,13 @@ describe("field links", () => {
     expect(out[0].group).not.toBe("email:customer");
   });
 
-  it("ignores reads of a field nobody defines", () => {
+  it("names only definitions by entity field; reads keep the line qualifier", () => {
     const out = assignDeclarationGroups([
       code("a.py", [{ key: "thing.email", definition: false }]),
-      code("b.py", [{ key: "thing.email", definition: false }]),
+      code("b.py", [{ key: "newsletter.sender_email", definition: false }], "email:sender"),
+      code("c.py", [{ key: "checkout.email", definition: false }], "email:customer"),
     ]);
-    expect(out.map((hit) => hit.group)).toEqual([undefined, undefined]);
+    expect(out.map((hit) => hit.group)).toEqual([undefined, "email:sender", "email:customer"]);
   });
 });
 
