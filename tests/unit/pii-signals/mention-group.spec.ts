@@ -1,4 +1,4 @@
-import { assignDeclarationGroups, mentionGroup, mentionQualifier } from "../../../src/pii-signals/mention-group";
+import { assignDeclarationGroups, mentionGroup, mentionQualifier, modelFileEntity } from "../../../src/pii-signals/mention-group";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
 import { buildScanPersonalDataLayers } from "../../../src/core/pipeline/build-scan-personal-data-layers";
 import type { FileInfo } from "../../../src/core/types/file";
@@ -93,5 +93,33 @@ describe("assignDeclarationGroups", () => {
   it("does not join the same declaration line across different files", () => {
     const out = assignDeclarationGroups([hit("a.js", 5), hit("b.js", 5)]);
     expect(out[0].group).not.toBe(out[1].group);
+  });
+});
+
+describe("model file anchoring", () => {
+  it.each([
+    ["services/members/members-api/repositories/member-repository.js", "member"],
+    ["core/server/models/member.js", "member"],
+    ["core/server/models/user.js", undefined],
+    ["saleor/checkout/models.py", undefined],
+    ["saleor/checkout/complete_checkout.py", undefined],
+    ["src/customer_repository.py", "customer"],
+  ])("%s -> %s", (filePath, entity) => {
+    expect(modelFileEntity(filePath)).toBe(entity);
+  });
+
+  it("joins unqualified mentions in a model file to the existing entity group only", () => {
+    const code = (filePath: string, group?: string) => ({
+      id: "email",
+      location: "code" as const,
+      evidence: { filePath },
+      ...(group ? { group } : {}),
+    });
+    const out = assignDeclarationGroups([
+      code("a/member-repository.js"),
+      code("b/service.js", "email:member"),
+      code("a/order-repository.js"),
+    ]);
+    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:member", undefined]);
   });
 });

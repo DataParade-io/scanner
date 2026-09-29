@@ -53,6 +53,25 @@ async function main(): Promise<void> {
         bump(negativesFlaggedByKind, kind, !r.negativeClean);
       }
     }
+    // Per positive mention: gold group and the scanner's group on the same line.
+    const findingGroupByLine = new Map<string, string | null>();
+    for (const finding of emailFindings) {
+      for (const line of finding.sourceLines ?? []) {
+        findingGroupByLine.set(`${line.file_path}:${line.start_line}`, finding.mentionAttributes?.group ?? null);
+      }
+    }
+    const groupingDetail = cases
+      .filter((c) => c.expected.status === "positive" && c.mentionAttributes?.group)
+      .map((c) => {
+        const location = `${c.evidence?.file_path}:${c.evidence?.start_line}`;
+        return {
+          id: c.id,
+          location,
+          goldGroup: c.mentionAttributes?.group,
+          matched: outcome.get(c.id)?.matched ?? false,
+          predictedGroup: findingGroupByLine.get(location) ?? null,
+        };
+      });
     summary[repoKey] = {
       cases: cases.length,
       emailFindings: emailFindings.length,
@@ -67,6 +86,7 @@ async function main(): Promise<void> {
       recallBySyntaxKind: byKind,
       negativesFlaggedBySyntaxKind: negativesFlaggedByKind,
       recallByGroup,
+      groupingDetail,
     };
     console.log(`${repoKey}: ${cases.length} email cases, ${emailFindings.length} email findings, recall ${report.scores.recall}, precision ${report.scores.precision}`);
   }
