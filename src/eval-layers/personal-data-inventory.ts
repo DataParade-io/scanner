@@ -7,8 +7,16 @@ import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../ana
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
 import { mentionFieldKeys, passedValueDeclarations } from "../analyze/mention-fields";
+import {
+  addConceptFunctions,
+  conceptCallArguments,
+  conceptFunctions,
+  resolveCallArgument,
+  type ConceptCallArgument,
+  type ConceptFunctionIndex,
+} from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { assignDeclarationGroups, mentionGroup } from "../pii-signals/mention-group";
+import { assignDeclarationGroups, declarationNodeId, mentionGroup } from "../pii-signals/mention-group";
 import {
   matchPiiSignalsInFile,
   type PiiSignalHit,
@@ -31,21 +39,30 @@ export interface PersonalDataInventory {
  * has code hits and a language pack; does nothing when the engine is not initialized or
  * the parse fails (KDATAP-8e47c2).
  */
-function withDeclarations(file: FileInfo, hits: PiiSignalHit[]): PiiSignalHit[] {
+/** A hit with the call arguments it appears in, before callees are resolved repo-wide. */
+type PendingHit = PiiSignalHit & { callArguments?: ConceptCallArgument[] };
+
+function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: ConceptFunctionIndex): PendingHit[] {
   if (!isAnalysisEngineReady() || !hits.some((hit) => hit.location === "code")) return hits;
   const pack = packForFile(file.language, file.path);
   const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
   if (!analyzed) return hits;
   const lines = file.content.split(/\r?\n/);
   try {
+    const definitions = analyzed.functionDefinitions();
+    for (const id of new Set(hits.filter((hit) => hit.location === "code").map((hit) => hit.id))) {
+      addConceptFunctions(functions, id, file.path, conceptFunctions(definitions, signalTokenMatcher(id, file.path)));
+    }
     return hits.map((hit) => {
       if (hit.location !== "code") return hit;
       const isConceptToken = signalTokenMatcher(hit.id, file.path);
       const declaration = resolveMentionDeclaration(analyzed, hit.evidence.endLine, isConceptToken);
       const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
+      const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
       return {
         ...hit,
+        ...(callArguments.length > 0 ? { callArguments } : {}),
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
         ...(passedDeclarations.length > 0 ? { passedDeclarations } : {}),
@@ -58,8 +75,33 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[]): PiiSignalHit[] 
   }
 }
 
-function annotatedHitsForFile(file: FileInfo): PiiSignalHit[] {
-  return withDeclarations(file, matchedHitsForFile(file));
+function annotatedHitsForFile(file: FileInfo, functions: ConceptFunctionIndex): PendingHit[] {
+  return withDeclarations(file, matchedHitsForFile(file), functions);
+}
+
+/**
+ * Resolve each hit's call arguments to callee parameter declarations across the
+ * repository (KDATAP-c8a46a). Returns the hits without the pending arguments.
+ */
+function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex): PiiSignalHit[] {
+  let created = 0;
+  let resolved = 0;
+  const out = hits.map(({ callArguments, ...hit }) => {
+    if (!callArguments) return hit;
+    const links = new Set<string>();
+    for (const argument of callArguments) {
+      created += 1;
+      const target = resolveCallArgument(functions, hit.id, argument);
+      if (!target) continue;
+      resolved += 1;
+      links.add(declarationNodeId(hit.id, target.filePath, target.line));
+    }
+    return links.size > 0 ? { ...hit, callLinks: [...links] } : hit;
+  });
+  if (process.env.DATAPARADE_CALL_LINK_STATS) {
+    process.stderr.write(`call-links created=${created} resolved=${resolved}\n`);
+  }
+  return out;
 }
 
 function matchedHitsForFile(file: FileInfo): PiiSignalHit[] {
@@ -108,7 +150,9 @@ export function buildPersonalDataInventoryFromIngest(
   files: FileInfo[],
   ingestOutcomes: PathEligibilityOutcome[],
 ): PersonalDataInventory {
-  const hits = assignDeclarationGroups(files.flatMap((file) => annotatedHitsForFile(file)));
+  const functions: ConceptFunctionIndex = new Map();
+  const pending = files.flatMap((file) => annotatedHitsForFile(file, functions));
+  const hits = assignDeclarationGroups(withCallLinks(pending, functions));
 
   return {
     hits,

@@ -40,6 +40,11 @@ export interface PiiSignalHit {
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   /** Same-file declaration lines of variables passed into a key on this line. */
   passedDeclarations?: number[];
+  /**
+   * Parameter declarations in other (or the same) files that a call argument on this
+   * line passes into, as `${signalId}@${filePath}:${line}` (KDATAP-c8a46a).
+   */
+  callLinks?: string[];
 }
 
 export interface MatchPiiSignalsFileInput {
