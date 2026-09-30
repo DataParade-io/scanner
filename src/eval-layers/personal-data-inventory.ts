@@ -8,7 +8,7 @@ import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../ana
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
 import { mentionReceiver, type ReceiverVia } from "../analyze/mention-receiver";
-import { mentionFieldKeys, passedValueDeclarations } from "../analyze/mention-fields";
+import { mentionFieldKeys, passedMentionLines, passedValueDeclarations } from "../analyze/mention-fields";
 import {
   addConceptFunctions,
   conceptCallArguments,
@@ -75,12 +75,25 @@ function withDeclarations(
     for (const id of new Set(hits.filter((hit) => hit.location === "code").map((hit) => hit.id))) {
       addConceptFunctions(functions, id, file.path, conceptFunctions(definitions, signalTokenMatcher(id, file.path)));
     }
+    const codeLinesById = new Map<string, Set<number>>();
+    for (const hit of hits) {
+      if (hit.location !== "code") continue;
+      const set = codeLinesById.get(hit.id) ?? new Set<number>();
+      set.add(hit.evidence.endLine);
+      codeLinesById.set(hit.id, set);
+    }
     return hits.map((hit) => {
       if (hit.location !== "code") return hit;
       const isConceptToken = signalTokenMatcher(hit.id, file.path);
       const declaration = resolveMentionDeclaration(analyzed, hit.evidence.endLine, isConceptToken);
       const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
+      const passedLines = passedMentionLines(
+        analyzed,
+        hit.evidence.endLine,
+        isConceptToken,
+        codeLinesById.get(hit.id) ?? new Set<number>(),
+      );
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
       const tableEntity = queriedTableEntity(analyzed, lines, hit.evidence.endLine);
       const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken);
@@ -97,6 +110,7 @@ function withDeclarations(
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
         ...(passedDeclarations.length > 0 ? { passedDeclarations } : {}),
+        ...(passedLines.length > 0 ? { passedMentionLines: passedLines } : {}),
         ...(tableEntity ? { tableEntity } : {}),
       };
     });
