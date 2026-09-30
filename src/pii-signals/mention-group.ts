@@ -25,6 +25,8 @@ const GENERIC_WORDS = new Set([
   "validation", "validations", "value", "verify", "with", "x",
 ]);
 
+const LOOKUP_WORDS = new Set(["by", "for", "from", "with", "to"]);
+
 const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
 
 function identifierWords(identifier: string): string[] {
@@ -49,8 +51,24 @@ export function mentionQualifier(line: string, signalId: string): string | undef
   // specific form of it: `customer_email = get_customer_email_for_voucher_usage(...)`
   // -> `customer_for_voucher_usage`, since the value comes from that source.
   let chosen: string[] | undefined;
-  for (const identifier of line.match(IDENTIFIER) ?? []) {
+  for (const match of line.matchAll(IDENTIFIER)) {
+    const identifier = match[0];
+    // A function name describes an action, not whose data it is (`getByEmail`,
+    // `sendWelcomeEmail`); call links join its parameters to callers instead.
+    // A callee on the right of an assignment still names the value's source.
+    const after = line.slice((match.index ?? 0) + identifier.length);
+    const before = line.slice(0, match.index ?? 0);
+    const isFunctionName =
+      /^\s*(\(|:\s*(async\s+)?function\b)/.test(after) && !/(^|[^=!<>])=(?!=)/.test(before);
     const words = identifierWords(identifier);
+    // A getter named for whose value it returns keeps its qualifier:
+    // `get_customer_email()` -> customer. Lookups (`getByEmail`) and actions
+    // (`sendWelcomeEmail`) do not.
+    const isGetter =
+      words[0] === "get" &&
+      conceptWords.every((word, index) => words[words.length - conceptWords.length + index] === word) &&
+      !words.some((word) => LOOKUP_WORDS.has(word));
+    if (isFunctionName && !isGetter) continue;
     if (!conceptWords.every((word) => words.includes(word)) || words.length === conceptWords.length) {
       continue;
     }

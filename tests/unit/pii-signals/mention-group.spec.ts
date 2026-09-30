@@ -19,6 +19,12 @@ describe("mentionQualifier", () => {
     ["newEmail = input.email", undefined],
     ["customer_email = get_customer_email_for_voucher_usage(checkout)", "customer_for_voucher_usage"],
     ["customer_email = order.user_email", "customer"],
+    ["getByEmail: function getByEmail(email, unfilteredOptions) {", undefined],
+    ["return models.User.getByEmail(email, options);", undefined],
+    ["function sendWelcomeEmail(email, mailAPI) {", undefined],
+    ['"recipient_email": order.get_customer_email(),', "customer"],
+    ["def get_customer_email(self):", "customer"],
+    ["customer_email = cast(str, get_customer_email_for_voucher_usage(checkout))", "customer_for_voucher_usage"],
   ])("%s -> %s", (line, expected) => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
