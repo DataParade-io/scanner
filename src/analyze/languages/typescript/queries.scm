@@ -49,6 +49,8 @@
 ; ---- references
 (identifier) @reference
 (shorthand_property_identifier) @reference
+; a destructuring assignment target reads and writes an existing binding: ({ email } = inquiry)
+(shorthand_property_identifier_pattern) @reference
 
 ; ---- member access and calls
 (member_expression
