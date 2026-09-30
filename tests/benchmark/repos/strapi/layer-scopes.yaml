@@ -61,3 +61,43 @@ layer_scopes:
       reviewed_by: agent@example.com
       reviewed_at: 2026-08-31T00:00:00Z
       review_state: accepted
+concept_scopes:
+  mentions:
+    - subject_keys:
+        - mention:email
+      exhaustive_scope_files:
+        - packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+        - packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+        - packages/core/admin/ee/server/src/controllers/user.ts
+        - packages/core/admin/ee/server/src/services/auth.ts
+        - packages/core/admin/server/src/content-types/User.ts
+        - packages/core/admin/server/src/controllers/authenticated-user.ts
+        - packages/core/admin/server/src/controllers/user.ts
+        - packages/core/admin/server/src/middlewares/rateLimit.ts
+        - packages/core/admin/server/src/services/auth.ts
+        - packages/core/admin/server/src/services/passport/local-strategy.ts
+        - packages/core/admin/server/src/services/user.ts
+        - packages/core/admin/server/src/utils/normalize-email.ts
+        - packages/core/admin/server/src/validation/user.ts
+        - packages/core/admin/shared/contracts/authentication.ts
+        - packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+        - packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+        - packages/core/email/server/src/bootstrap.ts
+        - packages/core/email/server/src/controllers/email.ts
+        - packages/core/email/server/src/middlewares/rateLimit.ts
+        - packages/core/email/server/src/routes/admin.ts
+        - packages/core/email/server/src/routes/content-api.ts
+        - packages/core/email/server/src/routes/validation/email.ts
+        - packages/core/email/server/src/services/email.ts
+        - packages/core/email/server/src/types.ts
+        - packages/core/email/shared/email-address-parser.ts
+        - packages/core/strapi/src/cli/commands/admin/active-user.ts
+        - packages/core/strapi/src/cli/commands/admin/block-user.ts
+        - packages/core/strapi/src/cli/commands/admin/create-user.ts
+        - packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        - packages/core/strapi/src/cli/commands/admin/list-users.ts
+        - packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      provenance:
+        proposed_by: claude-opus-5-5
+        proposed_at: '2026-09-30'
+        review_state: proposed
