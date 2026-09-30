@@ -58,8 +58,17 @@ export function mentionQualifier(line: string, signalId: string): string | undef
     // A callee on the right of an assignment still names the value's source.
     const after = line.slice((match.index ?? 0) + identifier.length);
     const before = line.slice(0, match.index ?? 0);
-    const isFunctionName =
-      /^\s*(\(|:\s*(async\s+)?function\b)/.test(after) && !/(^|[^=!<>])=(?!=)/.test(before);
+    // A callee still names the value's source when its result is assigned to a concept
+    // variable: `customer_email = get_customer_email_for_voucher_usage(...)`, but not
+    // `const user = await this.getUserByEmail(email)`.
+    const assignment = /^(.*?)(?:^|[^=!<>])=(?!=)/.exec(before);
+    const assignsConcept =
+      assignment !== null &&
+      (assignment[1].match(IDENTIFIER) ?? []).some((name) => {
+        const nameWords = identifierWords(name);
+        return conceptWords.every((word) => nameWords.includes(word));
+      });
+    const isFunctionName = /^\s*(\(|:\s*(async\s+)?function\b)/.test(after) && !assignsConcept;
     const words = identifierWords(identifier);
     // A getter named for whose value it returns keeps its qualifier:
     // `get_customer_email()` -> customer. Lookups (`getByEmail`) and actions
@@ -103,8 +112,14 @@ export function mentionGroup(signalId: string, line: string): string | undefined
   return qualifier ? `${signalId}:${qualifier}` : undefined;
 }
 
-const MODEL_FILE = /(^|\/)models?\/|[-_]repository\.[A-Za-z]+$|(^|\/)models?\.py$/;
-const FILE_ROLE_WORDS = new Set(["repository", "model", "models", "index"]);
+// A file whose folder names its role (models/, services/, controllers/, ...) or whose name
+// ends in -repository is about one entity: models/member.js, services/users.ts.
+const MODEL_FILE =
+  /(^|\/)(models?|services|controllers|repositories|resolvers|routes)\/[^/]+$|[-_]repository\.[A-Za-z]+$|(^|\/)models?\.py$/;
+const FILE_ROLE_WORDS = new Set([
+  "repository", "model", "models", "index", "service", "services", "controller", "controllers",
+  "resolver", "resolvers", "route", "routes",
+]);
 
 /**
  * The entity a model or repository file is about: `models/member.js` -> `member`,
@@ -265,17 +280,27 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     for (const link of hit.callLinks ?? []) union(`hit:${index}`, `decl:${link}`);
   });
 
-  // A mention with no qualifier in a model or repository file joins the file's entity
-  // group (member-repository.js -> email:member), but only when that group exists.
-  const existingGroups = new Set(
-    hits.map((hit) => effectiveName(hit)).filter((group): group is string => !!group),
-  );
+  // A mention with no qualifier in a model, service, controller or repository file
+  // votes for the file's entity group (member-repository.js -> email:member,
+  // services/users.ts -> email:user). Each unnamed set joins the group most of its
+  // members vote for, so a set spanning several files is not named by whichever
+  // file comes first. Subject to cannot-link.
+  const votes = new Map<string, Map<string, number>>();
   hits.forEach((hit, index) => {
     if (hit.location === "comment" || hit.group) return;
     const entity = modelFileEntity(hit.evidence.filePath);
-    const group = entity ? `${hit.id}:${entity}` : undefined;
-    if (group && existingGroups.has(group)) union(`hit:${index}`, groupNode(group));
+    if (!entity) return;
+    const root = find(`hit:${index}`);
+    if (nameOf.has(root)) return;
+    const group = `${hit.id}:${entity}`;
+    const counts = votes.get(root) ?? new Map<string, number>();
+    counts.set(group, (counts.get(group) ?? 0) + 1);
+    votes.set(root, counts);
   });
+  for (const [root, counts] of votes) {
+    const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    union(root, groupNode(best[0]));
+  }
 
 
   // An unqualified set is named after its smallest declaration, so the id is stable.
