@@ -26,16 +26,16 @@ annotations:
     start_line: 77
     end_line: 77
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Field name for the email prompt in the admin user setup; not an address.
+  rationale: Prompt input name string that selects the email address answer.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: api
 
 - id: directus-init-L78
@@ -64,7 +64,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailSchema
   evidence:
     file_path: api/src/cli/commands/init/index.ts
     start_line: 81
@@ -117,7 +117,7 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Error message prose about validation; not an address value.
+  rationale: Error message prose that mentions email, not an address value.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -398,7 +398,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: useFlowsEmailRateLimiter
   evidence:
     file_path: api/src/operations/mail/index.ts
     start_line: 6
@@ -420,7 +420,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: useFlowsEmailRateLimiter
   evidence:
     file_path: api/src/operations/mail/index.ts
     start_line: 29
@@ -710,7 +710,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: testEmail
   evidence:
     file_path: api/src/services/server.ts
     start_line: 252
@@ -732,7 +732,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: testEmail
   evidence:
     file_path: api/src/services/server.ts
     start_line: 445
@@ -977,17 +977,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Passing email address from GraphQL args to user creation.
+  rationale: Object key email whose value is the registrant address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/graphql/resolvers/system-global.ts
-      line: 410
-      kind: parameter
+      line: 450
+      kind: field
     owner: api
 
 - id: directus-graphql-system-L63

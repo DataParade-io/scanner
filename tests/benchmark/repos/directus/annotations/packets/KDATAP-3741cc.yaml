@@ -50,13 +50,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Selects user by email address in a case-insensitive database query.
+  rationale: Passes the lower-cased payload address into the user lookup.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/local.ts
+      line: 20
+      kind: parameter
     owner: api
 - id: directus-local-L57
   layer: mentions
@@ -325,7 +329,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: verify-email
   evidence:
     file_path: api/src/controllers/users.ts
     start_line: 483
@@ -430,7 +434,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: public_registration_verify_email
   evidence:
     file_path: api/src/database/migrations/20240422A-public-registration.ts
     start_line: 6
@@ -451,7 +455,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: public_registration_email_filter
   evidence:
     file_path: api/src/database/migrations/20240422A-public-registration.ts
     start_line: 9
@@ -472,7 +476,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: public_registration_verify_email
   evidence:
     file_path: api/src/database/migrations/20240422A-public-registration.ts
     start_line: 17
@@ -493,7 +497,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: public_registration_email_filter
   evidence:
     file_path: api/src/database/migrations/20240422A-public-registration.ts
     start_line: 19
@@ -573,17 +577,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Assigns admin email address from resolution to the payload.
+  rationale: Reads the admin address from the resolution to copy into the payload.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: api/src/license/entitlements/lib/sso-enabled.ts
-      line: 58
-      kind: field
+      line: 35
+      kind: parameter
     owner: api
 - id: directus-mailer-L18
   layer: mentions
@@ -1030,7 +1034,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: EMAIL_TRANSPORT
+    name: email
   evidence:
     file_path: api/src/mailer.ts
     start_line: 82
