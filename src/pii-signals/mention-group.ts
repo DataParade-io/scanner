@@ -107,6 +107,11 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
     "i",
   ).exec(line);
   if (receiver) {
+    // A read directly off a variable named exactly `user` (`user.email`, `user?.email`,
+    // `user['email']`) names the user entity, although `user` is generic elsewhere.
+    if (/^users?$/i.test(receiver[1])) {
+      return { qualifier: "user", fromReceiver: true };
+    }
     const words = identifierWords(receiver[1]).filter((word) => !GENERIC_WORDS.has(word));
     if (words.length > 0) {
       return { qualifier: words[words.length - 1], fromReceiver: true };
