@@ -51,22 +51,26 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: checkUniqueEmails
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 53
     end_line: 53
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function name for checking email uniqueness; function names are negative.
+  rationale: Declares the emails parameter, the list of addresses checked for uniqueness.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 53
+      kind: parameter
     owner: api
 - id: directus-users-L54
   layer: mentions
@@ -81,18 +85,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Parameter holding email values being converted to lowercase for comparison.
+  rationale: Arrow parameter email is defined here and lower-cased.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 53
+      line: 54
       kind: parameter
+    owner: api
 - id: directus-users-L56
   layer: mentions
   subject:
@@ -103,16 +107,20 @@ annotations:
     start_line: 56
     end_line: 56
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Filtering list of emails for duplicates; email list feature, not an address.
+  rationale: Reads the list of addresses to find duplicates.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 53
+      kind: parameter
     owner: api
 - id: directus-users-L61
   layer: mentions
@@ -127,18 +135,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Error field key identifying the email field with duplicate issue.
+  rationale: Field name string that selects the email address in the uniqueness error.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 61
-      kind: field
 - id: directus-users-L67
   layer: mentions
   subject:
@@ -164,7 +168,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 69
@@ -173,13 +177,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Query condition field selecting email column for lowercase comparison.
+  rationale: Passes the list of addresses into the case-insensitive uniqueness query.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 53
+      kind: parameter
     owner: api
 - id: directus-users-L80
   layer: mentions
@@ -194,18 +202,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Error field key identifying email field with duplicate constraint.
+  rationale: Field name string that selects the email address in the uniqueness error.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 80
-      kind: field
 - id: directus-users-L81
   layer: mentions
   subject:
@@ -216,10 +220,10 @@ annotations:
     start_line: 81
     end_line: 81
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: String value of email list for error message; plural emails list, not
+  rationale: Writes the list of addresses into the uniqueness error value.
     a single address.
   provenance:
     proposed_by: claude-haiku-4-5
@@ -227,32 +231,32 @@ annotations:
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 53
+      kind: parameter
     owner: api
 - id: directus-users-L139
   layer: mentions
   subject:
     key: mention:email
-    name: getUserByEmail
+    name: email
   evidence:
     file_path: api/src/services/users.ts
     start_line: 139
     end_line: 139
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Method name that returns user identified by email address parameter.
+  rationale: Doc comment describing lookup by email.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 141
-      kind: function
 - id: directus-users-L141
   layer: mentions
   subject:
@@ -263,10 +267,10 @@ annotations:
     start_line: 141
     end_line: 141
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Method definition that retrieves user by email address.
+  rationale: Method name line; the address parameter is declared on the next line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
@@ -274,10 +278,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 141
-      kind: function
 - id: directus-users-L142
   layer: mentions
   subject:
@@ -316,18 +316,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Return type indicates method returns object with email field.
+  rationale: Return type member email holding the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
       line: 144
       kind: field
+    owner: api
 - id: directus-users-L147
   layer: mentions
   subject:
@@ -362,19 +362,23 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Query condition field selecting email column for exact match.
+  rationale: Reads the address parameter to build the lower-cased lookup.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 142
+      kind: parameter
     owner: api
 - id: directus-users-L156
   layer: mentions
   subject:
     key: mention:email
-    name: inviteUrl
+    name: email
   evidence:
     file_path: api/src/services/users.ts
     start_line: 156
@@ -383,18 +387,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Method name with email parameter; passes email into invite URL.
+  rationale: Declares the email parameter that holds the invited address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
       line: 156
-      kind: function
+      kind: parameter
+    owner: api
 - id: directus-users-L157
   layer: mentions
   subject:
@@ -424,7 +428,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 170
@@ -472,16 +476,20 @@ annotations:
     start_line: 173
     end_line: 173
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Array of emails being validated; email list feature, not an address.
+  rationale: Defines a local list of addresses from the input.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/users.ts
+      line: 173
+      kind: local
     owner: api
 - id: directus-users-L175
   layer: mentions
@@ -518,18 +526,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Loop variable iterating over email values to validate each.
+  rationale: Loop variable email is defined here and holds each address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 173
+      line: 177
       kind: local
+    owner: api
 - id: directus-users-L178
   layer: mentions
   subject:
@@ -568,18 +576,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Error field name identifying email field.
+  rationale: Field name string that selects the email address in the validation error.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 182
-      kind: field
 - id: directus-users-L183
   layer: mentions
   subject:
@@ -680,7 +684,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 241
@@ -689,18 +693,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Extracts email values from payload objects into array.
+  rationale: Defines a local list of addresses collected from the payloads.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 240
-      kind: parameter
+      line: 241
+      kind: local
+    owner: api
 - id: directus-users-L247
   layer: mentions
   subject:
@@ -776,7 +780,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 271
@@ -852,18 +856,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Error field identifying email in unique constraint.
+  rationale: Field name string that selects the email address in the uniqueness error.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: api
-    declaration:
-      file_path: api/src/services/users.ts
-      line: 295
-      kind: field
 - id: directus-users-L296
   layer: mentions
   subject:
@@ -990,7 +990,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: inviteUser
+    name: email
   evidence:
     file_path: api/src/services/users.ts
     start_line: 408
@@ -999,23 +999,23 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Method that invites user by email; takes email parameter.
+  rationale: Declares the email parameter holding the address or addresses to invite.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
       line: 408
-      kind: function
+      kind: parameter
+    owner: api
 - id: directus-users-L419
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 419
@@ -1024,18 +1024,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Converts email to array for iteration.
+  rationale: Defines a local list of addresses from the email parameter.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 408
-      kind: parameter
+      line: 419
+      kind: local
+    owner: api
 - id: directus-users-L426
   layer: mentions
   subject:
@@ -1049,23 +1049,23 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Loop variable iterating over email addresses.
+  rationale: Loop variable email is defined here and holds each address.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 419
+      line: 426
       kind: local
+    owner: api
 - id: directus-users-L428
   layer: mentions
   subject:
     key: mention:email
-    name: getUserByEmail
+    name: email
   evidence:
     file_path: api/src/services/users.ts
     start_line: 428
@@ -1074,18 +1074,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Looks up user by email address.
+  rationale: Passes the address to the user lookup.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 141
-      kind: function
+      line: 426
+      kind: local
+    owner: api
 - id: directus-users-L432
   layer: mentions
   subject:
@@ -1106,11 +1106,11 @@ annotations:
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 408
-      kind: parameter
+      line: 426
+      kind: local
+    owner: api
 - id: directus-users-L445
   layer: mentions
   subject:
@@ -1124,18 +1124,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Passes email address to invite mail service.
+  rationale: 'Reads the existing user''s address as the recipient.'
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 426
+      line: 428
       kind: local
+    owner: api
 - id: directus-users-L450
   layer: mentions
   subject:
@@ -1149,18 +1149,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Includes email in invite mail data.
+  rationale: 'Passes the existing user''s address into the invite URL.'
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 426
+      line: 428
       kind: local
+    owner: api
 - id: directus-users-L451
   layer: mentions
   subject:
@@ -1174,18 +1174,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email value in invitation template data.
+  rationale: Template data key email whose value is the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 426
-      kind: local
+      line: 451
+      kind: field
+    owner: api
 - id: directus-users-L463
   layer: mentions
   subject:
@@ -1224,18 +1224,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Type annotation for email string from JWT.
+  rationale: Type member email holding the token address, defined on its own line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 463
-      kind: local
+      line: 464
+      kind: field
+    owner: api
 - id: directus-users-L470
   layer: mentions
   subject:
@@ -1358,18 +1358,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: User email address field.
+  rationale: Object key email whose value is the registrant address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 488
-      kind: parameter
+      line: 524
+      kind: field
+    owner: api
 - id: directus-users-L527
   layer: mentions
   subject:
@@ -1404,18 +1404,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email value in filter validation.
+  rationale: Payload key email whose value is the registrant address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 488
-      kind: parameter
+      line: 533
+      kind: field
+    owner: api
 - id: directus-users-L538
   layer: mentions
   subject:
@@ -1466,7 +1466,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emails
   evidence:
     file_path: api/src/services/users.ts
     start_line: 545
@@ -1529,7 +1529,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: verificationEmail
   evidence:
     file_path: api/src/services/users.ts
     start_line: 554
@@ -1538,18 +1538,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: User email for verification.
+  rationale: Defines a local that holds the address to verify.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
-      line: 544
+      line: 554
       kind: local
+    owner: api
 - id: directus-users-L556
   layer: mentions
   subject:
@@ -1563,18 +1563,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email in JWT payload for verification.
+  rationale: Token payload key email whose value is the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 554
-      kind: local
+      line: 556
+      kind: field
+    owner: api
 - id: directus-users-L559
   layer: mentions
   subject:
@@ -1621,7 +1621,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: verificationEmail
   evidence:
     file_path: api/src/services/users.ts
     start_line: 573
@@ -1630,18 +1630,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Recipient email for verification mail.
+  rationale: Passes the verification address as the recipient.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
       line: 554
       kind: local
+    owner: api
 - id: directus-users-L574
   layer: mentions
   subject:
@@ -1676,18 +1676,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email in verification template data.
+  rationale: Template data key email whose value is the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 554
-      kind: local
+      line: 579
+      kind: field
+    owner: api
 - id: directus-users-L586
   layer: mentions
   subject:
@@ -1747,18 +1747,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Type annotation for email string.
+  rationale: Type member email holding the token address, defined on its own line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 594
-      kind: local
+      line: 595
+      kind: field
+    owner: api
 - id: directus-users-L601
   layer: mentions
   subject:
@@ -1788,7 +1788,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: requestPasswordReset
+    name: email
   evidence:
     file_path: api/src/services/users.ts
     start_line: 612
@@ -1797,18 +1797,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Method that resets password for email; email parameter.
+  rationale: Declares the email parameter holding the address to reset.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    owner: api
     declaration:
       file_path: api/src/services/users.ts
       line: 612
-      kind: function
+      kind: parameter
+    owner: api
 - id: directus-users-L620
   layer: mentions
   subject:
@@ -1847,18 +1847,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: User email in password reset payload.
+  rationale: Token payload key email whose value is the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 620
-      kind: local
+      line: 638
+      kind: field
+    owner: api
 - id: directus-users-L649
   layer: mentions
   subject:
@@ -1897,18 +1897,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email in password reset template data.
+  rationale: Template data key email whose value is the address, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 620
-      kind: local
+      line: 655
+      kind: field
+    owner: api
 - id: directus-users-L667
   layer: mentions
   subject:
@@ -1947,18 +1947,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Type annotation for email string.
+  rationale: Type member email holding the token address, defined on its own line.
   provenance:
     proposed_by: claude-haiku-4-5
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
-    owner: api
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/users.ts
-      line: 667
-      kind: local
+      line: 668
+      kind: field
+    owner: api
 - id: directus-users-L683
   layer: mentions
   subject:

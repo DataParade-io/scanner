@@ -230,7 +230,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: identifier
+    name: email
   evidence:
     file_path: api/src/auth/drivers/oauth2.ts
     start_line: 191
@@ -239,7 +239,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Uses email as fallback identifier when reading user's OAuth identifier.
+  rationale: Falls back to the email address when no identifier key value exists.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -326,7 +326,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: identifierKey
+    name: requireVerifiedEmail
   evidence:
     file_path: api/src/auth/drivers/openid.ts
     start_line: 268
@@ -393,7 +393,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: identifier
+    name: email
   evidence:
     file_path: api/src/auth/drivers/openid.ts
     start_line: 272
@@ -402,7 +402,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Uses email address as fallback identifier when reading user identifier from OpenID data.
+  rationale: Falls back to the email address when no identifier key value exists.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -468,7 +468,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email_verified
+    name: isEmailVerified
   evidence:
     file_path: api/src/auth/drivers/openid.ts
     start_line: 334
@@ -483,7 +483,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: api
 - id: directus-openid-L337
   layer: mentions
@@ -585,7 +585,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: api/src/cli/commands/users/create.ts
     start_line: 20
@@ -640,17 +640,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Type definition for email parameter in password reset function.
+  rationale: Destructured parameter email holds the address for the password reset.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: identifier
     declaration:
       file_path: api/src/cli/commands/users/passwd.ts
       line: 7
-      kind: field
+      kind: parameter
     owner: api
 - id: directus-passwd-L11
   layer: mentions
@@ -681,7 +681,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: api/src/cli/commands/users/passwd.ts
     start_line: 12
@@ -711,13 +711,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Query clause selecting user by email in case-insensitive comparison.
+  rationale: Passes the lower-cased address into the user lookup.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/passwd.ts
+      line: 7
+      kind: parameter
     owner: api
 - id: directus-passwd-L31
   layer: mentions
@@ -795,13 +799,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Column alias mapping user email field in query.
+  rationale: Select alias key user_email for the address column, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/authentication.ts
+      line: 348
+      kind: field
     owner: api
 - id: directus-authentication-L409
   layer: mentions
@@ -934,7 +942,7 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/tfa.ts
-      line: 34
+      line: 33
       kind: local
     owner: api
 - id: directus-tfa-L45
@@ -1001,7 +1009,7 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/tfa.ts
-      line: 34
+      line: 33
       kind: local
     owner: api
 - id: directus-create-admin-L33
@@ -1033,7 +1041,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: adminEmail
   evidence:
     file_path: api/src/utils/create-admin.ts
     start_line: 42
@@ -1042,7 +1050,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Retrieves admin email from parameter or environment variable.
+  rationale: Defines a local that holds the admin address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -1108,7 +1116,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: txUserEmail
   evidence:
     file_path: api/src/services/mcp-oauth/index.ts
     start_line: 963
@@ -1117,7 +1125,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Destructured email field when retrieving active user for OAuth transaction.
+  rationale: Destructures the user address into the local txUserEmail.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'

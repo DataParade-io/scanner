@@ -120,7 +120,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: send
+    name: EmailOptions
   evidence:
     file_path: api/src/services/mail/index.ts
     start_line: 64
@@ -135,7 +135,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: type_name
     owner: directus
 - id: directus-index-L65
   layer: mentions
@@ -204,7 +204,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: emailOptions
   evidence:
     file_path: api/src/services/mail/index.ts
     start_line: 78
@@ -222,14 +222,14 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/mail/index.ts
-      line: 82
+      line: 71
       kind: local
     owner: directus
 - id: directus-index-L82
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: emailOptions
   evidence:
     file_path: api/src/services/mail/index.ts
     start_line: 82
@@ -247,14 +247,14 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/mail/index.ts
-      line: 82
+      line: 71
       kind: local
     owner: directus
 - id: directus-index-L83
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: emailOptions
   evidence:
     file_path: api/src/services/mail/index.ts
     start_line: 83
@@ -272,14 +272,14 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/mail/index.ts
-      line: 82
+      line: 71
       kind: local
     owner: directus
 - id: directus-index-L86
   layer: mentions
   subject:
     key: mention:email
-    name: from
+    name: emailOptions
   evidence:
     file_path: api/src/services/mail/index.ts
     start_line: 86
@@ -297,7 +297,7 @@ annotations:
     syntax_kind: identifier
     declaration:
       file_path: api/src/services/mail/index.ts
-      line: 82
+      line: 71
       kind: local
     owner: directus
 - id: directus-index-L101
@@ -435,7 +435,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: RATE_LIMITER_EMAIL
+    name: emailRateLimiterQueue
   evidence:
     file_path: api/src/services/mail/rate-limiter.ts
     start_line: 12
@@ -450,7 +450,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: directus
 - id: directus-rate-limiter-L13
   layer: mentions
@@ -688,7 +688,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: RATE_LIMITER_EMAIL_FLOWS
+    name: emailRateLimiter
   evidence:
     file_path: api/src/operations/mail/rate-limiter.ts
     start_line: 12
@@ -703,7 +703,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: directus
 - id: directus-mail-rate-limiter-L15
   layer: mentions
@@ -1118,7 +1118,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: mentioned
+    name: sender
   evidence:
     file_path: api/src/services/comments.ts
     start_line: 141
@@ -1127,13 +1127,13 @@ annotations:
     status: negative
     labels:
     - email_address
-  rationale: Prose text in email message template; narrative content, not an address.
+  rationale: Template placeholder rendering the sender as a name, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
     owner: directus
 - id: directus-comments-L149
   layer: mentions
@@ -1212,17 +1212,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Method receives array of email addresses to send share invitations to.
+  rationale: Inline type member emails holding the recipient addresses, defined on this line.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     declaration:
       file_path: api/src/services/shares.ts
       line: 182
-      kind: parameter
+      kind: field
     owner: directus
 - id: directus-shares-L195
   layer: mentions
