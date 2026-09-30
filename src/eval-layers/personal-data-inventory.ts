@@ -6,6 +6,7 @@ import { CommentLines } from "../pii-signals/comment-context";
 import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../analyze/engine/engine";
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
+import { mentionReceiverClass } from "../analyze/mention-receiver";
 import { mentionFieldKeys, passedValueDeclarations } from "../analyze/mention-fields";
 import {
   addConceptFunctions,
@@ -16,7 +17,7 @@ import {
   type ConceptFunctionIndex,
 } from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { assignDeclarationGroups, declarationNodeId, mentionGroup } from "../pii-signals/mention-group";
+import { assignDeclarationGroups, classEntity, declarationNodeId, mentionGroup } from "../pii-signals/mention-group";
 import {
   matchPiiSignalsInFile,
   type PiiSignalHit,
@@ -60,8 +61,11 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: Conce
       const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
+      const receiverClass = mentionReceiverClass(analyzed, hit.evidence.endLine, isConceptToken);
+      const receiverEntity = receiverClass ? classEntity(receiverClass) : undefined;
       return {
         ...hit,
+        ...(receiverEntity && receiverEntity !== hit.id ? { receiverEntity } : {}),
         ...(callArguments.length > 0 ? { callArguments } : {}),
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),

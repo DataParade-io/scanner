@@ -38,6 +38,8 @@ export interface PiiSignalHit {
    * `definition` is true where the line declares the field (KDATAP-c8a46a).
    */
   fieldKeys?: Array<{ key: string; definition: boolean }>;
+  /** Entity of the class the mention is reached through (`usersService.createOne({ email })` -> `user`). */
+  receiverEntity?: string;
   /** Same-file declaration lines of variables passed into a key on this line. */
   passedDeclarations?: number[];
   /**
