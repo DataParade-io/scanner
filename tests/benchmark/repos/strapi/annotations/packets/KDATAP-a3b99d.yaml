@@ -1,0 +1,587 @@
+packet:
+  repo: strapi
+  concept: email
+  kanbus_issue: KDATAP-a3b99d
+  files:
+  - packages/core/email/server/src/routes/admin.ts
+  - packages/core/email/server/src/routes/content-api.ts
+  - packages/core/email/server/src/middlewares/rateLimit.ts
+  - packages/core/email/server/src/routes/validation/email.ts
+  - packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+  - packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+annotations:
+- id: strapi-admin-L7
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Handler name for the email.send action; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Handler name for the email.test action; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L19
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin permission action name; refers to the email plugin, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Handler name for the email.getSettings action; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L30
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin permission action name; refers to the email plugin, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L37
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 37
+    end_line: 37
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Handler name for the email.verify action; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-admin-L41
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/admin.ts
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin permission action name; refers to the email plugin, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-content-api-L3
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: packages/core/email/server/src/routes/content-api.ts
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports the EmailRouteValidator class; the class name is about email validation, not address data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: packages/core
+- id: strapi-content-api-L6
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: packages/core/email/server/src/routes/content-api.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Instantiates the EmailRouteValidator class; the class is about email validation, not address data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: packages/core
+- id: strapi-content-api-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/routes/content-api.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Handler name for the email.send action; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-content-api-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendEmailInput
+  evidence:
+    file_path: packages/core/email/server/src/routes/content-api.ts
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property name for the validator's sendEmailInput method; names a validation schema, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-content-api-L16
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailResponse
+  evidence:
+    file_path: packages/core/email/server/src/routes/content-api.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property name for the validator's emailResponse method; names a validation schema, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-email-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: packages/core/email/server/src/routes/validation/email.ts
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name EmailRouteValidator; names a validation class, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: packages/core
+- id: strapi-email-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendEmailInput
+  evidence:
+    file_path: packages/core/email/server/src/routes/validation/email.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Getter method name that returns an email input validation schema; names a validator, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-email-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailResponse
+  evidence:
+    file_path: packages/core/email/server/src/routes/validation/email.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Getter method name that returns an email response validation schema; names a validator, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-rateLimit-L10
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin configuration key for the email plugin; refers to plugin settings, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-rateLimit-L21
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+    start_line: 21
+    end_line: 21
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the email field from the request body to extract the user's email address for rate limiting.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-rateLimit-L22
+  layer: mentions
+  subject:
+    key: mention:email
+    name: userEmail
+  evidence:
+    file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+    start_line: 22
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Local variable that holds the email address from the request, lowercased for rate-limit key generation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 22
+      kind: local
+    owner: packages/core
+- id: strapi-rateLimit-L27
+  layer: mentions
+  subject:
+    key: mention:email
+    name: userEmail
+  evidence:
+    file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Uses the email address variable in a template string to construct the rate-limit key prefix.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 22
+      kind: local
+    owner: packages/core
+- id: strapi-schema-L249
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    start_line: 249
+    end_line: 249
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Enum value in the list of allowed attribute types; names a type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-schema-L482
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailSchema
+  evidence:
+    file_path: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    start_line: 482
+    end_line: 482
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable name for the email attribute schema definition; names a schema type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-schema-L483
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    start_line: 483
+    end_line: 483
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Zod type literal specifying the attribute type name; describes a type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-schema-L487
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    start_line: 487
+    end_line: 487
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Zod .email() validator method; creates validation schema but does not hold or pass an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-schema-L620
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailSchema
+  evidence:
+    file_path: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    start_line: 620
+    end_line: 620
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Includes the email schema in a union of attribute schemas; references a schema type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
+- id: strapi-data-schema-L88
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    start_line: 88
+    end_line: 88
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Switch case for handling the email attribute type; names a type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/core
+- id: strapi-data-schema-L89
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    start_line: 89
+    end_line: 89
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type cast to Schema.Attribute.Email; names the type of attribute being processed, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: packages/core
+- id: strapi-data-schema-L90
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    start_line: 90
+    end_line: 90
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Zod .email() validator method; creates validation schema but does not hold or pass an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: packages/core
