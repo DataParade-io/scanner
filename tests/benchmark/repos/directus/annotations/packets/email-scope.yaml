@@ -1,0 +1,114 @@
+concept: email
+layer: mentions
+purpose: Held-out email mention scope for directus (KDATAP-c8a46a generalization check). Grouping rules were tuned on ghost and saleor only; directus is scored once, without tuning. Merged into layer-scopes.yaml
+  only after the batch labels are accepted.
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: '2026-09-30'
+  review_state: proposed
+files:
+- path: api/src/services/users.ts
+  theme: user account address
+  candidates: 84
+- path: api/src/services/mcp-oauth/index.ts
+  theme: user account address
+  candidates: 12
+- path: api/src/auth/drivers/openid.ts
+  theme: user account address
+  candidates: 9
+- path: api/src/auth/drivers/oauth2.ts
+  theme: user account address
+  candidates: 7
+- path: api/src/services/tfa.ts
+  theme: user account address
+  candidates: 6
+- path: api/src/services/authentication.ts
+  theme: user account address
+  candidates: 6
+- path: api/src/cli/commands/users/passwd.ts
+  theme: user account address
+  candidates: 5
+- path: api/src/cli/commands/users/create.ts
+  theme: user account address
+  candidates: 5
+- path: api/src/auth/drivers/ldap.ts
+  theme: user account address
+  candidates: 5
+- path: api/src/utils/create-admin.ts
+  theme: user account address
+  candidates: 4
+- path: api/src/database/migrations/20240422A-public-registration.ts
+  theme: user account address
+  candidates: 4
+- path: api/src/database/migrations/20210903A-add-auth-provider.ts
+  theme: user account address
+  candidates: 4
+- path: api/src/controllers/users.ts
+  theme: user account address
+  candidates: 4
+- path: api/src/controllers/auth.ts
+  theme: user account address
+  candidates: 4
+- path: api/src/license/entitlements/lib/sso-enabled.ts
+  theme: user account address
+  candidates: 3
+- path: api/src/auth/drivers/saml.ts
+  theme: user account address
+  candidates: 3
+- path: api/src/auth/drivers/local.ts
+  theme: user account address
+  candidates: 3
+- path: api/src/mailer.ts
+  theme: mail sender and recipient address
+  candidates: 22
+- path: api/src/services/mail/index.ts
+  theme: mail sender and recipient address
+  candidates: 16
+- path: api/src/services/mail/rate-limiter.ts
+  theme: mail sender and recipient address
+  candidates: 12
+- path: api/src/operations/mail/rate-limiter.ts
+  theme: mail sender and recipient address
+  candidates: 12
+- path: api/src/services/notifications.ts
+  theme: mail sender and recipient address
+  candidates: 7
+- path: api/src/services/comments.ts
+  theme: mail sender and recipient address
+  candidates: 7
+- path: api/src/services/shares.ts
+  theme: mail sender and recipient address
+  candidates: 5
+- path: api/src/operations/notification/index.ts
+  theme: mail sender and recipient address
+  candidates: 5
+- path: api/src/database/migrations/20211118A-add-notifications.ts
+  theme: mail sender and recipient address
+  candidates: 5
+- path: api/src/operations/mail/index.ts
+  theme: mail sender and recipient address
+  candidates: 4
+- path: api/src/websocket/collab/room.ts
+  theme: other address handling
+  candidates: 12
+- path: api/src/services/server.ts
+  theme: other address handling
+  candidates: 8
+- path: api/src/cli/commands/init/index.ts
+  theme: other address handling
+  candidates: 6
+- path: api/src/services/graphql/resolvers/system-global.ts
+  theme: other address handling
+  candidates: 5
+- path: api/src/services/export.ts
+  theme: other address handling
+  candidates: 5
+- path: api/src/license/manager.ts
+  theme: other address handling
+  candidates: 5
+- path: api/src/services/import/import.ts
+  theme: other address handling
+  candidates: 3
+- path: api/src/services/graphql/resolvers/system.ts
+  theme: other address handling
+  candidates: 3
