@@ -303,8 +303,8 @@ describe("classEntity", () => {
   it.each([
     ["UsersService", "user"],
     ["UserInfo", "user"],
-    ["RegisterUserInput", "register_user"],
-    ["StaffMemberTextData", "staff_member"],
+    ["RegisterUserInput", "user"],
+    ["StaffMemberTextData", "member"],
     ["Data", "data"],
   ])("%s -> %s", (className, entity) => {
     expect(classEntity(className)).toBe(entity);
@@ -334,6 +334,18 @@ describe("local copies keep the source identity", () => {
     ["gift_card.used_by_email = user.email", "used_by"],
     ["customer_email = order.user_email", "customer"],
     ["const senderEmail = settings.email;", "settings"],
+  ])("%s -> %s", (line, expected) => {
+    expect(mentionQualifier(line, "email")).toBe(expected);
+  });
+});
+
+describe("receiver chains and concept modifiers", () => {
+  it.each([
+    ["if (member.attributes.email !== member._previousAttributes.email) {", "member"],
+    ["if (this._stripeAPIService.configured && member._changed.email) {", "member"],
+    ["'members.email',", "member"],
+    ["const didRemoveSuppression = await emailSuppressionList.removeEmail(member.email);", "member"],
+    ["requestUserEmail: frame.user ? frame.user.get('email') : null,", "request"],
   ])("%s -> %s", (line, expected) => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });

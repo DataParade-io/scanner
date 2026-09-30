@@ -90,6 +90,9 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
     if (!conceptWords.every((word) => words.includes(word)) || words.length === conceptWords.length) {
       continue;
     }
+    // The concept as a leading modifier names a feature, not whose data it is:
+    // emailSuppressionList, email_service, emailTemplate.
+    if (conceptWords.every((word, index) => words[index] === word)) continue;
     const qualifiers = words.filter((word) => !GENERIC_WORDS.has(word) && !conceptWords.includes(word));
     if (qualifiers.length === 0) continue;
     if (!chosen) {
@@ -118,18 +121,20 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
   }
   const conceptPattern = conceptWords.map(escapeRegExp).join("[_]?");
   const receiver = new RegExp(
-    `([A-Za-z_][A-Za-z0-9_]*)\\s*(?:\\??\\.|\\[\\s*['"]|\\.get\\(\\s*['"])${conceptPattern}\\b`,
+    `((?:[A-Za-z_$][\\w$]*\\s*\\??\\.\\s*)*[A-Za-z_$][\\w$]*)\\s*(?:\\??\\.|\\[\\s*['"]|\\.get\\(\\s*['"])${conceptPattern}\\b`,
     "i",
   ).exec(line);
   if (receiver) {
-    // A read directly off a variable named exactly `user` (`user.email`, `user?.email`,
-    // `user['email']`) names the user entity, although `user` is generic elsewhere.
-    if (/^users?$/i.test(receiver[1])) {
-      return { qualifier: "user", fromReceiver: true };
-    }
-    const words = identifierWords(receiver[1]).filter((word) => !GENERIC_WORDS.has(word));
-    if (words.length > 0) {
-      return { qualifier: words[words.length - 1], fromReceiver: true };
+    // Walk the receiver chain from the right to the first segment that names an owner:
+    // member._changed.email and member._previousAttributes.email -> member. A segment
+    // named exactly `user` names the user entity, although `user` is generic elsewhere.
+    const segments = receiver[1].split(/\s*\??\.\s*/).reverse();
+    for (const segment of segments) {
+      if (/^users?$/i.test(segment)) return { qualifier: "user", fromReceiver: true };
+      const words = identifierWords(segment).filter(
+        (word) => !GENERIC_WORDS.has(word) && !INSTANCE_WORDS.has(word) && !STATE_WORDS.has(word),
+      );
+      if (words.length > 0) return { qualifier: singular(words[words.length - 1]), fromReceiver: true };
     }
   }
   return undefined;
@@ -187,6 +192,9 @@ function effectiveName(hit: GroupableHit): string | undefined {
   return defined ? entityFieldName(hit.id, defined.key) : hit.group;
 }
 
+/** Words that describe the state of an object in a receiver chain (`member._changed.email`). */
+const STATE_WORDS = new Set(["changed", "prev", "previous", "dirty", "pending", "cached"]);
+
 /** Words that describe which copy of an object, not what the object is. */
 const INSTANCE_WORDS = new Set(["original", "replace", "locked", "initial", "previous", "updated", "saved"]);
 
@@ -223,8 +231,15 @@ export function classEntity(className: string): string | undefined {
   const words = identifierWords(className)
     .filter((word) => !CLASS_ROLE_WORDS.has(word))
     .map(singular);
-  // UserInfo -> user, RegisterUserInput -> register_user; keep at least one word.
-  while (words.length > 1 && CONTAINER_WORDS.has(words[words.length - 1])) words.pop();
+  // UserInfo -> user; keep at least one word. Input and DTO types are named
+  // verb + entity + wrapper (RegisterUserInput, CreateUserDto), so once a wrapper word
+  // is stripped only the entity, the last remaining word, is kept.
+  let stripped = false;
+  while (words.length > 1 && CONTAINER_WORDS.has(words[words.length - 1])) {
+    words.pop();
+    stripped = true;
+  }
+  if (stripped) return words[words.length - 1];
   return words.length > 0 ? words.join("_") : undefined;
 }
 
