@@ -1,4 +1,4 @@
-import { assignDeclarationGroups, mentionGroup, mentionQualifier, modelFileEntity } from "../../../src/pii-signals/mention-group";
+import { assignDeclarationGroups, classEntity, mentionGroup, mentionQualifier, modelFileEntity } from "../../../src/pii-signals/mention-group";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
 import { buildScanPersonalDataLayers } from "../../../src/core/pipeline/build-scan-personal-data-layers";
 import type { FileInfo } from "../../../src/core/types/file";
@@ -246,6 +246,54 @@ describe("model file anchoring by majority", () => {
       { ...hit("api/src/controllers/auth.ts"), callLinks: ["email@api/src/services/users.ts:10"] },
       shared("api/src/services/users.ts"),
       shared("api/src/services/users.ts"),
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((h) => h.group)).toEqual(["email:user", "email:user", "email:user"]);
+  });
+});
+
+describe("classEntity", () => {
+  it.each([
+    ["UsersService", "user"],
+    ["MemberRepository", "member"],
+    ["User", "user"],
+    ["DonationPaymentEvents", "donation_payment_event"],
+    ["Service", undefined],
+  ])("%s -> %s", (name, expected) => {
+    expect(classEntity(name)).toBe(expected);
+  });
+});
+
+describe("receiver entity anchoring", () => {
+  const hit = (filePath: string, extra: Record<string, unknown> = {}) => ({
+    id: "email",
+    location: "code" as const,
+    evidence: { filePath },
+    ...extra,
+  });
+
+  it("names an unqualified hit by its receiver, ahead of the file's role", () => {
+    const out = assignDeclarationGroups([
+      hit("api/src/services/members.ts", { receiverEntity: "user" }),
+      hit("api/src/services/members.ts"),
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((h) => h.group)).toEqual(["email:user", "email:member"]);
+  });
+
+  it("never overrides a line qualifier, and keeps cannot-link", () => {
+    const out = assignDeclarationGroups([
+      hit("a.ts", { receiverEntity: "user", group: "email:customer" }),
+      hit("b.ts", { receiverEntity: "user", declaration: { line: 3, kind: "local" } }),
+      hit("b.ts", { group: "email:member", declaration: { line: 3, kind: "local" } }),
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((h) => h.group)).toEqual(["email:customer", "email:member", "email:member"]);
+  });
+
+  it("takes the majority receiver of a joined set", () => {
+    const shared = { declaration: { line: 9, kind: "parameter" } };
+    const out = assignDeclarationGroups([
+      hit("a.ts", { ...shared, receiverEntity: "member" }),
+      hit("a.ts", { ...shared, receiverEntity: "user" }),
+      hit("a.ts", { ...shared, receiverEntity: "user" }),
     ] as never[]) as Array<{ group?: string }>;
     expect(out.map((h) => h.group)).toEqual(["email:user", "email:user", "email:user"]);
   });

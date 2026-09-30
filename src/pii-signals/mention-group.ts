@@ -177,11 +177,26 @@ export function entityName(name: string): string | undefined {
   return words.length > 0 ? words.join("_") : undefined;
 }
 
+const CLASS_ROLE_WORDS = new Set(["service", "services", "repository", "model", "controller", "manager", "provider"]);
+
+/**
+ * The entity a class stands for: role words dropped and singularized, so `UsersService`
+ * -> `user`, `MemberRepository` -> `member`, `User` -> `user`. Unlike `entityName`, a
+ * generic word such as `user` is kept: a class named `User` is that entity.
+ */
+export function classEntity(className: string): string | undefined {
+  const words = identifierWords(className)
+    .filter((word) => !CLASS_ROLE_WORDS.has(word))
+    .map(singular);
+  return words.length > 0 ? words.join("_") : undefined;
+}
+
 interface GroupableHit {
   id: string;
   location?: "code" | "comment";
   evidence: { filePath: string };
   group?: string;
+  receiverEntity?: string;
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   passedDeclarations?: number[];
@@ -285,23 +300,31 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // services/users.ts -> email:user). Each unnamed set joins the group most of its
   // members vote for, so a set spanning several files is not named by whichever
   // file comes first. Subject to cannot-link.
-  const votes = new Map<string, Map<string, number>>();
-  hits.forEach((hit, index) => {
-    if (hit.location === "comment" || hit.group) return;
+  // A receiver's class is the stronger evidence: `usersService.createOne({ email })`
+  // is a user's email whichever file it sits in. Receiver votes decide a set before
+  // file-role votes are counted.
+  const votesFor = (vote: (hit: T) => string | undefined): void => {
+    const votes = new Map<string, Map<string, number>>();
+    hits.forEach((hit, index) => {
+      if (hit.location === "comment" || hit.group) return;
+      const group = vote(hit);
+      if (!group) return;
+      const root = find(`hit:${index}`);
+      if (nameOf.has(root)) return;
+      const counts = votes.get(root) ?? new Map<string, number>();
+      counts.set(group, (counts.get(group) ?? 0) + 1);
+      votes.set(root, counts);
+    });
+    for (const [root, counts] of votes) {
+      const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      union(root, groupNode(best[0]));
+    }
+  };
+  votesFor((hit) => (hit.receiverEntity ? `${hit.id}:${hit.receiverEntity}` : undefined));
+  votesFor((hit) => {
     const entity = modelFileEntity(hit.evidence.filePath);
-    if (!entity) return;
-    const root = find(`hit:${index}`);
-    if (nameOf.has(root)) return;
-    const group = `${hit.id}:${entity}`;
-    const counts = votes.get(root) ?? new Map<string, number>();
-    counts.set(group, (counts.get(group) ?? 0) + 1);
-    votes.set(root, counts);
+    return entity ? `${hit.id}:${entity}` : undefined;
   });
-  for (const [root, counts] of votes) {
-    const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    union(root, groupNode(best[0]));
-  }
-
 
   // An unqualified set is named after its smallest declaration, so the id is stable.
   const declarationNameByRoot = new Map<string, string>();
