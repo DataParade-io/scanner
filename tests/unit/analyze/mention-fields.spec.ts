@@ -172,3 +172,27 @@ describe("getters as fields", () => {
     expect(keysOf("javascript", "a.js", lines, 3)).toContainEqual({ key: "staff_email.fromEmailAddress", definition: false });
   });
 });
+
+describe("passed variables declared on mention lines", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("joins a key to the mention that declared the variable passed into it", () => {
+    const { hits } = buildPersonalDataInventoryFromIngest(
+      [
+        file("src/staff.js", "javascript", [
+          "async function notify(user) {", //       1
+          "  const to = user.email;", //            2
+          "  return send({ toEmail: to });", //     3
+          "}",
+        ]),
+      ],
+      [],
+    );
+    const email = hits.filter((hit) => hit.id === "email" && hit.location === "code");
+    const groupOf = (line: number) => email.find((hit) => hit.evidence.startLine === line)?.group;
+    expect(groupOf(3)).toBeDefined();
+    expect(groupOf(3)).toBe(groupOf(2));
+  });
+});

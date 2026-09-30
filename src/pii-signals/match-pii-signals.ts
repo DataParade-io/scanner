@@ -51,6 +51,8 @@ export interface PiiSignalHit {
   callLinks?: string[];
   /** Entity of the one table the enclosing function queries through a query builder. */
   tableEntity?: string;
+  /** Lines of other mentions whose variable is passed into a concept key on this line. */
+  passedMentionLines?: number[];
 }
 
 export interface MatchPiiSignalsFileInput {

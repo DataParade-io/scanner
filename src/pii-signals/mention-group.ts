@@ -216,13 +216,14 @@ export function classEntity(className: string): string | undefined {
 interface GroupableHit {
   id: string;
   location?: "code" | "comment";
-  evidence: { filePath: string };
+  evidence: { filePath: string; endLine?: number };
   group?: string;
   receiverEntity?: string;
   tableEntity?: string;
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   passedDeclarations?: number[];
+  passedMentionLines?: number[];
   callLinks?: string[];
 }
 
@@ -287,6 +288,13 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     if (declaration) union(node, `decl:${declaration}`);
     for (const line of hit.passedDeclarations ?? []) {
       union(node, `decl:${declarationNodeId(hit.id, hit.evidence.filePath, line)}`);
+    }
+    // Every code mention is also reachable by its own line, for passed-variable links.
+    if (hit.evidence.endLine !== undefined) {
+      union(node, `at:${hit.id}@${hit.evidence.filePath}:${hit.evidence.endLine}`);
+    }
+    for (const line of hit.passedMentionLines ?? []) {
+      union(node, `at:${hit.id}@${hit.evidence.filePath}:${line}`);
     }
   });
   hits.forEach((hit, index) => {

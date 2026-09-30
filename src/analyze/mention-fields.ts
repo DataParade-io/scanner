@@ -68,6 +68,34 @@ export function mentionFieldKeys(
  * the passed variable's declaration (KDATAP-c8a46a). Lines without such a key return
  * nothing, so comparisons like `email !== oldEmail` never join two variables.
  */
+/**
+ * Lines of other mentions whose variable is passed into a concept key on this line,
+ * when the variable's own name does not carry the concept: `const to = user.email;`
+ * then `toEmail: to`. The passed variable's declaration line is itself a mention, so
+ * the key joins that mention (KDATAP-c8a46a).
+ */
+export function passedMentionLines(
+  file: AnalyzedFile,
+  line: number,
+  isConceptToken: (token: string) => boolean,
+  mentionLines: ReadonlySet<number>,
+): number[] {
+  const sites = file.sitesOnLine(line);
+  const passesIntoKey = sites.some(
+    (site) => site.role === "definition" && site.kind === "key" && isConceptToken(site.name),
+  );
+  if (!passesIntoKey) return [];
+  const lines = new Set<number>();
+  for (const site of sites) {
+    if (site.role !== "reference" || site.inCallee || isConceptToken(site.name)) continue;
+    const declaration = file.lookup(site.name, site.node);
+    if (declaration && declaration.kind === "local" && declaration.line !== line && mentionLines.has(declaration.line)) {
+      lines.add(declaration.line);
+    }
+  }
+  return [...lines];
+}
+
 export function passedValueDeclarations(
   file: AnalyzedFile,
   line: number,
