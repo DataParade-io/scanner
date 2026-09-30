@@ -124,6 +124,8 @@ function withDeclarations(
 /** Query-builder calls that name a table: knex('t'), db('t'), .from('t'), .into('t'), .table('t'), joins. */
 const QUERIED_TABLE =
   /(?:\b(?:knex|database|db|trx)|\.(?:from|into|table|join|innerJoin|leftJoin))\s*\(\s*['"`]([A-Za-z_]\w*)['"`]/g;
+/** ORM query entry points that name a model: `.query('admin::user')`, `getRepository('User')`. */
+const QUERIED_MODEL = /\.(?:query|getRepository|model)\s*\(\s*['"`]([A-Za-z_][\w:.\-]*)['"`]/g;
 
 /**
  * The entity of the one table the function around a line queries through a query
@@ -134,9 +136,17 @@ function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: numbe
   const scope = analyzed.enclosingFunction(line, 0);
   if (!scope) return undefined;
   const text = lines.slice(scope.startLine - 1, scope.endLine).join("\n");
-  const tables = new Set([...text.matchAll(QUERIED_TABLE)].map((match) => match[1]));
+  // Query-builder table calls count across the function; ORM model entry points only in
+  // the mention's own statement (two lines either side), since a function may touch
+  // several models (`this.model('Role')` next to a user lookup).
+  const near = lines.slice(Math.max(scope.startLine, line - 2) - 1, Math.min(scope.endLine, line + 2)).join("\n");
+  const tables = new Set([
+    ...[...text.matchAll(QUERIED_TABLE)].map((match) => match[1]),
+    ...[...near.matchAll(QUERIED_MODEL)].map((match) => match[1]),
+  ]);
   if (tables.size !== 1) return undefined;
-  const words = identifierWords([...tables][0]);
+  // `admin::user`, `plugin::users-permissions.user`, `directus_users`: the last segment.
+  const words = identifierWords([...tables][0].split(/::|\./).pop() ?? "");
   const last = words[words.length - 1];
   if (!last) return undefined;
   return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
