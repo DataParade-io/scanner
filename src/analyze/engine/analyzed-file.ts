@@ -64,6 +64,8 @@ export type Site =
       column: number;
       /** How the chain starts: a named binding, `this`/`self`, or something else. */
       root: MemberRoot;
+      /** The expression the property is read from (`x` in `x.email`). */
+      object: Node;
       /** The access is (part of) the callee of a call. */
       inCallee: boolean;
     };
@@ -95,7 +97,7 @@ export class AnalyzedFile {
   private readonly sitesByLine = new Map<number, Site[]>();
   private readonly memberByNode = new Map<number, { object: Node; property: Node }>();
   private readonly callByNode = new Map<number, Node>();
-  private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node }>>();
+  private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
 
   constructor(
@@ -138,12 +140,17 @@ export class AnalyzedFile {
 
   /** Lexical lookup from a syntax node. */
   lookup(name: string, anchor: Node): SameFileDeclaration | undefined {
+    const found = pick(this.definitionsOf(name, anchor));
+    return found ? toDeclaration(found) : undefined;
+  }
+
+  private definitionsOf(name: string, anchor: Node): SiteDefinition[] | undefined {
     let scope: Scope | undefined = this.scopeAround(anchor);
     let first = true;
     while (scope) {
       if (scope.kind !== "class" || first) {
-        const found = pick(scope.defs.get(name));
-        if (found) return toDeclaration(found);
+        const found = scope.defs.get(name);
+        if (found?.length) return found;
       }
       first = false;
       scope = scope.parent;
@@ -158,6 +165,31 @@ export class AnalyzedFile {
     if (!scope) return undefined;
     const found = scope.defs.get(name)?.[0] ?? scope.implicitFields.get(name)?.[0];
     return found ? toDeclaration(found) : undefined;
+  }
+
+  /**
+   * The class a named binding holds at a 1-based line and 0-based column (KDATAP-c8a46a):
+   * `const x = new C()`, `x = C()`, a parameter or variable annotated `x: C`, or a field
+   * assigned or typed in the class (`this.x = new C()` read as `this.x`, pass `member`).
+   * Undefined when the class cannot be told.
+   */
+  classOfName(name: string, line: number, column = 0, member = false): string | undefined {
+    const node = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    if (!node) return undefined;
+    return member ? this.classOfField(name, node, 0) : this.classOfBinding(name, node, 0);
+  }
+
+  /**
+   * The class of an expression used as a receiver: a typed variable, `this.x` /
+   * `self.x`, or a class named directly (`User.objects`, `models.User`).
+   */
+  classOfReceiver(node: Node): string | undefined {
+    return this.receiverClass(node, 0);
+  }
+
+  /** The class reached by a member site's object (`x` in `x.email`). */
+  classOfSiteReceiver(site: Site): string | undefined {
+    return site.role === "member" ? this.receiverClass(site.object, 0) : undefined;
   }
 
   /**
@@ -194,7 +226,7 @@ export class AnalyzedFile {
    * Arguments of calls that start on a 1-based line, with the callee's final name,
    * the argument's position, and its keyword (KDATAP-c8a46a). `argument` is the node.
    */
-  callSitesOnLine(line: number): ReadonlyArray<CallSite & { argument: Node }> {
+  callSitesOnLine(line: number): ReadonlyArray<CallSite & { argument: Node; receiver?: Node }> {
     return this.callSitesByRow.get(line - 1) ?? [];
   }
 
@@ -244,6 +276,106 @@ export class AnalyzedFile {
       out.push({ name, line: (nameNode ?? scope.node).startPosition.row + 1, parameters });
     }
     return out.sort((a, b) => a.line - b.line);
+  }
+
+  // ---- class resolution ------------------------------------------------------------
+
+  private isSelfNode(node: Node): boolean {
+    return this.config.selfNodeTypes.includes(node.type) || this.config.selfNames.includes(node.text);
+  }
+
+  private receiverClass(node: Node, depth: number): string | undefined {
+    if (depth > 4) return undefined;
+    if (node.type === "identifier") {
+      return this.classOfBinding(node.text, node, depth) ?? this.staticClass(node);
+    }
+    const member = this.memberByNode.get(node.id);
+    if (member) {
+      if (this.isSelfNode(member.object)) return this.classOfField(unquote(member.property.text), node, depth);
+      return this.staticClass(node);
+    }
+    return undefined;
+  }
+
+  /** A class named in the expression itself: `User`, `User.objects`, `models.User`. */
+  private staticClass(node: Node): string | undefined {
+    if (node.type === "identifier") {
+      if (!isClassName(node.text)) return undefined;
+      const defs = this.definitionsOf(node.text, node);
+      const kind = defs?.[0]?.kind;
+      return defs === undefined || kind === "import" || kind === "class" ? node.text : undefined;
+    }
+    const member = this.memberByNode.get(node.id);
+    if (member) {
+      const property = unquote(member.property.text);
+      if (isClassName(property) && !this.isSelfNode(member.object)) return property;
+      return this.staticClass(member.object);
+    }
+    const callee = this.callByNode.get(node.id);
+    return callee ? this.staticClass(callee) : undefined;
+  }
+
+  private classOfBinding(name: string, anchor: Node, depth: number): string | undefined {
+    for (const def of this.definitionsOf(name, anchor) ?? []) {
+      const found = this.classOfDefinition(def, depth);
+      if (found) return found;
+    }
+    return undefined;
+  }
+
+  private classOfField(name: string, anchor: Node, depth: number): string | undefined {
+    let scope: Scope | undefined = this.scopeAround(anchor);
+    while (scope && scope.kind !== "class") scope = scope.parent;
+    if (!scope) return undefined;
+    for (const def of [...(scope.defs.get(name) ?? []), ...(scope.implicitFields.get(name) ?? [])]) {
+      const found = this.classOfDefinition(def, depth);
+      if (found) return found;
+    }
+    return undefined;
+  }
+
+  /**
+   * The class a definition holds: its type annotation (the grammar's `type` field), else
+   * the value assigned to it (`new C()`, a call of a class in Python, another binding).
+   */
+  private classOfDefinition(def: SiteDefinition, depth: number): string | undefined {
+    if (depth > 4) return undefined;
+    let target = def.node;
+    const outer = target.parent;
+    if (outer && this.memberByNode.has(outer.id)) target = outer;
+    const holder = target.parent;
+    if (!holder) return undefined;
+    const isTarget = (field: string): boolean => holder.childForFieldName(field)?.id === target.id;
+    const declaresTarget =
+      isTarget("name") || isTarget("left") || isTarget("pattern") || holder.type.includes("parameter");
+    if (!declaresTarget) return undefined;
+    const type = holder.childForFieldName("type");
+    if (type && type.id !== target.id) {
+      const annotated = classFromType(type.text);
+      if (annotated) return annotated;
+    }
+    const value = holder.childForFieldName("value") ?? holder.childForFieldName("right");
+    return value ? this.classOfValue(value, depth + 1) : undefined;
+  }
+
+  private classOfValue(node: Node, depth: number): string | undefined {
+    let value: Node = node;
+    while (["await_expression", "parenthesized_expression", "non_null_expression", "as_expression"].includes(value.type)) {
+      const inner: Node | null = value.namedChildren[0] ?? null;
+      if (!inner) return undefined;
+      value = inner;
+    }
+    const constructed = value.childForFieldName("constructor");
+    if (constructed) return lastSegment(constructed.text);
+    if (this.config.constructsByCall && value.type === "call") {
+      const callee = value.childForFieldName("function");
+      const name = callee ? lastSegment(callee.text) : undefined;
+      return name && isClassName(name) ? name : undefined;
+    }
+    if (value.type === "identifier" || this.memberByNode.has(value.id)) {
+      return this.receiverClass(value, depth);
+    }
+    return undefined;
   }
 
   // ---- indexing ------------------------------------------------------------------
@@ -385,6 +517,7 @@ export class AnalyzedFile {
       ...(keyword ? { keyword } : {}),
       line: row + 1,
       argument,
+      ...(member ? { receiver: member.object } : {}),
     });
     this.callSitesByRow.set(row, sites);
   }
@@ -491,6 +624,7 @@ export class AnalyzedFile {
       line: propertyNode.startPosition.row + 1,
       column: propertyNode.startPosition.column,
       root,
+      object: objectNode,
       inCallee: this.isWithinCallee(propertyNode),
     });
   }
@@ -570,4 +704,29 @@ const OUTPUT_KIND: Record<DefinitionKind, DeclarationKind> = {
 
 function toDeclaration(def: SiteDefinition): SameFileDeclaration {
   return { line: def.line, kind: OUTPUT_KIND[def.kind] };
+}
+
+const NOT_CLASSES = new Set([
+  "Object", "Array", "JSON", "Math", "Promise", "String", "Number", "Date", "Buffer", "Error",
+  "Set", "Map", "Symbol", "Reflect", "Boolean", "Response", "Request", "URL", "None", "True", "False",
+]);
+
+/** `UsersService`, `User`: starts uppercase and is not all capitals or a builtin. */
+function isClassName(name: string): boolean {
+  return /^[A-Z][A-Za-z0-9_]*[a-z][A-Za-z0-9_]*$/.test(name) && !NOT_CLASSES.has(name);
+}
+
+function lastSegment(text: string): string | undefined {
+  const name = text.split(".").pop()?.trim();
+  return name && isClassName(name) ? name : undefined;
+}
+
+/** The class named by a type annotation: `: User`, `"User"`, `models.User | None`. */
+function classFromType(text: string): string | undefined {
+  let type = text.trim().replace(/^:\s*/, "");
+  const optional = /^Optional\[(.+)\]$/.exec(type);
+  if (optional) type = optional[1];
+  type = type.replace(/\s*\|\s*(None|null|undefined)\b/g, "").replace(/\?$/, "").trim();
+  type = unquote(type);
+  return /^(?:[A-Za-z_]\w*\.)*[A-Z]\w*$/.test(type) ? lastSegment(type) : undefined;
 }
