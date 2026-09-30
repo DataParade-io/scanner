@@ -710,7 +710,13 @@ export class AnalyzedFile {
 
   private addCallSite(callee: Node, argument: Node): void {
     const member = this.memberByNode.get(callee.id);
-    const nameNode = member ? member.property : callee;
+    let nameNode = member ? member.property : callee;
+    // A deferred call (`send_email_task.delay(...)` in Celery) calls the function it is
+    // made on: the callee is `send_email_task`, not `delay`.
+    if (member && this.config.deferredCallMethods?.includes(unquote(member.property.text))) {
+      const target = this.memberByNode.get(member.object.id)?.property ?? member.object;
+      if (target.type === "identifier" || this.memberByNode.has(member.object.id)) nameNode = target;
+    }
     if (!member && callee.type !== "identifier") return;
     const list = argument.parent;
     if (!list) return;

@@ -62,6 +62,8 @@ export interface PackConfig {
   constructsByCall?: boolean;
   /** Attributes between a model class and its query methods (`User.objects.get(...)`). */
   managerAttributes?: string[];
+  /** Methods that call the function they are made on later (`task.delay(...)`). */
+  deferredCallMethods?: string[];
 }
 
 /** One argument of a call, as written at the call site. */
