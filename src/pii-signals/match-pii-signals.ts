@@ -28,6 +28,8 @@ export interface PiiSignalHit {
   commentContext?: CommentContext;
   /** Data item group of a code match, e.g. `email:customer` (KDATAP-c8a46a). */
   group?: string;
+  /** The group is only the receiver variable's name; a typed receiver's class may replace it. */
+  receiverNamesEntity?: boolean;
   /**
    * Same-file declaration of the mentioned name, or `unresolved` (KDATAP-8e47c2).
    * Absent when the line has no code occurrence to declare or the file is not analyzed.

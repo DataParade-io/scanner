@@ -1,3 +1,4 @@
+import { appendFileSync } from "node:fs";
 import type { FileInfo } from "../core/types/file";
 import { ingestFileSystemWithOutcomes } from "../ingest/file-system";
 import type { PathEligibilityOutcome } from "../ingest/eligibility";
@@ -17,7 +18,7 @@ import {
   type ConceptFunctionIndex,
 } from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, mentionGroup } from "../pii-signals/mention-group";
+import { assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, qualify } from "../pii-signals/mention-group";
 import type { AnalyzedFile } from "../analyze/engine/analyzed-file";
 import {
   matchPiiSignalsInFile,
@@ -56,12 +57,14 @@ function withDeclarations(
   hits: PiiSignalHit[],
   functions: ConceptFunctionIndex,
   classes: ClassIndex,
+  declared: Set<string>,
 ): PendingHit[] {
   if (!isAnalysisEngineReady() || !hits.some((hit) => hit.location === "code")) return hits;
   const pack = packForFile(file.language, file.path);
   const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
   if (!analyzed) return hits;
   const lines = file.content.split(/\r?\n/);
+  analyzed.setKnownClass((name) => declared.has(name));
   try {
     const definitions = analyzed.functionDefinitions();
     for (const name of analyzed.classNames()) {
@@ -127,8 +130,13 @@ function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: numbe
 
 const DATA_OWNER_CLASS = /(Service|Services|Repository|Model|Store|Dao|DAO|Entity)$/;
 
-function annotatedHitsForFile(file: FileInfo, functions: ConceptFunctionIndex, classes: ClassIndex): PendingHit[] {
-  return withDeclarations(file, matchedHitsForFile(file), functions, classes);
+function annotatedHitsForFile(
+  file: FileInfo,
+  functions: ConceptFunctionIndex,
+  classes: ClassIndex,
+  declared: Set<string>,
+): PendingHit[] {
+  return withDeclarations(file, matchedHitsForFile(file), functions, classes, declared);
 }
 
 /**
@@ -139,7 +147,7 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
   let created = 0;
   let resolved = 0;
   const stats: Record<string, number> = {};
-  const out = hits.map(({ callArguments, receiver, ...pending }) => {
+  const out = hits.map(({ callArguments, receiver, receiverNamesEntity, ...pending }) => {
     let hit: PiiSignalHit = pending;
     if (receiver) {
       let className = receiver.className;
@@ -158,6 +166,17 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
       const receiverEntity = className ? classEntity(className) : undefined;
       if (receiverEntity && receiverEntity !== hit.id) {
         hit = { ...hit, receiverEntity };
+        // A group that is only the receiver variable's name gives way to the class entity.
+        if (receiverNamesEntity && receiver.via === "direct" && process.env.DATAPARADE_RECEIVER_NAMES !== "off") {
+          const group = `${hit.id}:${receiverEntity}`;
+          if (process.env.DATAPARADE_RECEIVER_NAME_LOG && group !== hit.group) {
+            appendFileSync(
+              process.env.DATAPARADE_RECEIVER_NAME_LOG,
+              `${hit.evidence.filePath}:${hit.evidence.endLine}\t${hit.group}\t${group}\t${source}\n`,
+            );
+          }
+          hit = { ...hit, group };
+        }
         const key = `${receiver.via}:${source}`;
         stats[key] = (stats[key] ?? 0) + 1;
       }
@@ -185,8 +204,13 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
 function matchedHitsForFile(file: FileInfo): PiiSignalHit[] {
   const lines = file.content.split(/\r?\n/);
   const withGroup = (hit: PiiSignalHit): PiiSignalHit => {
-    const group = mentionGroup(hit.id, lines[hit.evidence.endLine - 1] ?? "");
-    return group ? { ...hit, group } : hit;
+    const found = qualify(lines[hit.evidence.endLine - 1] ?? "", hit.id);
+    if (!found) return hit;
+    return {
+      ...hit,
+      group: `${hit.id}:${found.qualifier}`,
+      ...(found.fromReceiver ? { receiverNamesEntity: true } : {}),
+    };
   };
   const stripped = stripCommentsForLanguage(file.content, file.language);
   const rawHits = matchPiiSignalsInFile({ filePath: file.path, content: file.content });
@@ -230,7 +254,13 @@ export function buildPersonalDataInventoryFromIngest(
 ): PersonalDataInventory {
   const functions: ConceptFunctionIndex = new Map();
   const classes: ClassIndex = new Map();
-  const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes));
+  // Every class or interface declared anywhere in the repository, found by keyword so the
+  // index is complete before the first file is analyzed.
+  const declared = new Set<string>();
+  for (const file of files) {
+    for (const match of file.content.matchAll(/\b(?:class|interface)\s+([A-Z][A-Za-z0-9_]*)/g)) declared.add(match[1]);
+  }
+  const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes, declared));
   const hits = assignDeclarationGroups(withCallLinks(pending, functions, classes));
 
   return {

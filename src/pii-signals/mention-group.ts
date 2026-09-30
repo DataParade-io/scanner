@@ -46,6 +46,15 @@ function escapeRegExp(text: string): string {
  * undefined when the line has none. `signalId` is the signal's snake_case id.
  */
 export function mentionQualifier(line: string, signalId: string): string | undefined {
+  return qualify(line, signalId)?.qualifier;
+}
+
+/**
+ * The qualifier plus where it came from: `fromReceiver` is true when it is only the
+ * name of the receiver variable (`owner.get('email')` -> `owner`), which a resolved
+ * receiver class may replace (`User`), unlike a compound identifier naming the concept.
+ */
+export function qualify(line: string, signalId: string): { qualifier: string; fromReceiver: boolean } | undefined {
   const conceptWords = identifierWords(signalId);
   // The first qualified identifier wins, unless a later one on the line is a more
   // specific form of it: `customer_email = get_customer_email_for_voucher_usage(...)`
@@ -90,7 +99,7 @@ export function mentionQualifier(line: string, signalId: string): string | undef
     }
   }
   if (chosen) {
-    return chosen.join("_");
+    return { qualifier: chosen.join("_"), fromReceiver: false };
   }
   const conceptPattern = conceptWords.map(escapeRegExp).join("[_]?");
   const receiver = new RegExp(
@@ -100,7 +109,7 @@ export function mentionQualifier(line: string, signalId: string): string | undef
   if (receiver) {
     const words = identifierWords(receiver[1]).filter((word) => !GENERIC_WORDS.has(word));
     if (words.length > 0) {
-      return words[words.length - 1];
+      return { qualifier: words[words.length - 1], fromReceiver: true };
     }
   }
   return undefined;
