@@ -101,6 +101,8 @@ function withDeclarations(
   }
 }
 
+const DATA_OWNER_CLASS = /(Service|Services|Repository|Model|Store|Dao|DAO|Entity)$/;
+
 function annotatedHitsForFile(file: FileInfo, functions: ConceptFunctionIndex, classes: ClassIndex): PendingHit[] {
   return withDeclarations(file, matchedHitsForFile(file), functions, classes);
 }
@@ -120,7 +122,10 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
       let source = className ? (receiver.legacy ? "typed" : "factory") : "";
       for (const name of className ? [] : receiver.names) {
         const found = classes.get(name.toLowerCase());
-        if (found?.size === 1) {
+        // A name match is only trusted for classes that own data (UsersService,
+        // MemberRepository), not for helpers an address is merely passed to
+        // (gravatar -> Gravatar, commentEmailRenderer, settingHelper).
+        if (found?.size === 1 && DATA_OWNER_CLASS.test([...found][0])) {
           className = [...found][0];
           source = "name";
           break;
