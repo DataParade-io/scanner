@@ -25,6 +25,7 @@ describe("mentionQualifier", () => {
     ['"recipient_email": order.get_customer_email(),', "customer"],
     ["def get_customer_email(self):", "customer"],
     ["customer_email = cast(str, get_customer_email_for_voucher_usage(checkout))", "customer_for_voucher_usage"],
+    ["const user = await this.getUserByEmail(email);", undefined],
   ])("%s -> %s", (line, expected) => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
@@ -112,11 +113,14 @@ describe("model file anchoring", () => {
     ["saleor/checkout/models.py", undefined],
     ["saleor/checkout/complete_checkout.py", undefined],
     ["src/customer_repository.py", "customer"],
+    ["api/src/services/users.ts", "user"],
+    ["api/src/controllers/users.ts", "user"],
+    ["ghost/core/core/server/services/staff/staff-service-emails.js", undefined],
   ])("%s -> %s", (filePath, entity) => {
     expect(modelFileEntity(filePath)).toBe(entity);
   });
 
-  it("joins unqualified mentions in a model file to the existing entity group only", () => {
+  it("joins unqualified mentions in a model file to its entity group", () => {
     const code = (filePath: string, group?: string) => ({
       id: "email",
       location: "code" as const,
@@ -128,7 +132,7 @@ describe("model file anchoring", () => {
       code("b/service.js", "email:member"),
       code("a/order-repository.js"),
     ]);
-    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:member", undefined]);
+    expect(out.map((hit) => hit.group)).toEqual(["email:member", "email:member", "email:order"]);
   });
 });
 
@@ -225,5 +229,24 @@ describe("call links", () => {
       hit("app/b.js", { declaration: { line: 3, kind: "local" }, callLinks: ["email@lib/mail.js:1"] }),
     ]);
     expect(out.map((h) => (h as { group?: string }).group)).toEqual(["email:member", "email:member", "email:member"]);
+  });
+});
+
+describe("model file anchoring by majority", () => {
+  it("names a set spanning several role files by the entity most of its members vote for", () => {
+    const hit = (filePath: string) => ({
+      id: "email",
+      location: "code" as const,
+      evidence: { filePath },
+      declaration: { line: 1, kind: "parameter" },
+      passedDeclarations: [] as number[],
+    });
+    const shared = (filePath: string) => ({ ...hit(filePath), declaration: { line: 10, kind: "parameter" } });
+    const out = assignDeclarationGroups([
+      { ...hit("api/src/controllers/auth.ts"), callLinks: ["email@api/src/services/users.ts:10"] },
+      shared("api/src/services/users.ts"),
+      shared("api/src/services/users.ts"),
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((h) => h.group)).toEqual(["email:user", "email:user", "email:user"]);
   });
 });
