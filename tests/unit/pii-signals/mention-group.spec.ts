@@ -314,3 +314,15 @@ describe("classEntity", () => {
     expect(mentionQualifier("const email = userInfo[emailKey];", "email")).toBeUndefined();
   });
 });
+
+describe("user receiver", () => {
+  it.each([
+    ["return user.email;", "user"],
+    ["if (user['email'] && flag) {", "user"],
+    ["const to = user?.email ?? input.email;", "user"],
+    ["const to = staffUser.email;", "staff"],
+    ["const u = newUser.email;", undefined],
+  ])("%s -> %s", (line, expected) => {
+    expect(mentionQualifier(line, "email")).toBe(expected);
+  });
+});
