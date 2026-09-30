@@ -298,3 +298,19 @@ describe("receiver entity anchoring", () => {
     expect(out.map((h) => h.group)).toEqual(["email:user", "email:user", "email:user"]);
   });
 });
+
+describe("classEntity", () => {
+  it.each([
+    ["UsersService", "user"],
+    ["UserInfo", "user"],
+    ["RegisterUserInput", "register_user"],
+    ["StaffMemberTextData", "staff_member"],
+    ["Data", "data"],
+  ])("%s -> %s", (className, entity) => {
+    expect(classEntity(className)).toBe(entity);
+  });
+
+  it("treats key as a container word in qualifiers", () => {
+    expect(mentionQualifier("const email = userInfo[emailKey];", "email")).toBeUndefined();
+  });
+});

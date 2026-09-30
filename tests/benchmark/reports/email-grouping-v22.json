@@ -1,0 +1,4316 @@
+{
+  "ghost": {
+    "cases": 911,
+    "emailFindings": 2355,
+    "scores": {
+      "recall": 0.9007352941176471,
+      "precision": 0.5555555555555556,
+      "negativeCasePassRate": 0.7574334898278561,
+      "denominators": {
+        "evaluablePositives": 272,
+        "matchedPositives": 245,
+        "matchedWithCorrectLabels": 245,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 639,
+        "negativeCasesPassed": 484,
+        "exhaustiveScopedFindings": 441,
+        "exhaustiveScopedMatches": 245
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 245
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.9140271493212669,
+          "numerator": 202,
+          "denominator": 221
+        },
+        "type_annotation": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 24
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 245
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 0.8623853211009175,
+          "numerator": 846,
+          "denominator": 981
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.30203498750446267,
+          "numerator": 846,
+          "denominator": 2801
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "property_key": {
+        "total": 91,
+        "hit": 84
+      },
+      "identifier": {
+        "total": 156,
+        "hit": 137
+      },
+      "string_literal": {
+        "total": 22,
+        "hit": 21
+      },
+      "type_name": {
+        "total": 3,
+        "hit": 3
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "property_key": {
+        "total": 108,
+        "hit": 18
+      },
+      "string_literal": {
+        "total": 104,
+        "hit": 56
+      },
+      "type_name": {
+        "total": 24,
+        "hit": 11
+      },
+      "comment": {
+        "total": 162,
+        "hit": 0
+      },
+      "identifier": {
+        "total": 223,
+        "hit": 54
+      },
+      "import_specifier": {
+        "total": 18,
+        "hit": 16
+      }
+    },
+    "recallByGroup": {
+      "newsletter-sender-email": {
+        "total": 4,
+        "hit": 4
+      },
+      "newsletter-reply-to-address": {
+        "total": 2,
+        "hit": 0
+      },
+      "staff-user-email": {
+        "total": 49,
+        "hit": 44
+      },
+      "staff-invite-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "member-account-email": {
+        "total": 53,
+        "hit": 53
+      },
+      "member-email-change-to": {
+        "total": 3,
+        "hit": 3
+      },
+      "member-email-change-from": {
+        "total": 3,
+        "hit": 3
+      },
+      "stripe-customer-email": {
+        "total": 6,
+        "hit": 6
+      },
+      "donation-payer-email": {
+        "total": 6,
+        "hit": 6
+      },
+      "email-recipient-member-email-copy": {
+        "total": 1,
+        "hit": 1
+      },
+      "suppressed-email-address": {
+        "total": 8,
+        "hit": 7
+      },
+      "spam-complaint-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "email-design-sender-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "email-design-reply-to": {
+        "total": 2,
+        "hit": 1
+      },
+      "automation-run-member-email-copy": {
+        "total": 2,
+        "hit": 2
+      },
+      "automated-email-sender-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "automated-email-reply-to": {
+        "total": 2,
+        "hit": 1
+      },
+      "automated-email-recipient-member-email-copy": {
+        "total": 1,
+        "hit": 1
+      },
+      "gift-buyer-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "gift-recipient-email": {
+        "total": 2,
+        "hit": 2
+      },
+      "(no group)": {
+        "total": 42,
+        "hit": 31
+      },
+      "outbound-message-from-address": {
+        "total": 10,
+        "hit": 8
+      },
+      "site-default-from-address": {
+        "total": 17,
+        "hit": 17
+      },
+      "outbound-message-reply-to-address": {
+        "total": 4,
+        "hit": 3
+      },
+      "fallback-sender-address": {
+        "total": 9,
+        "hit": 8
+      },
+      "members-support-address": {
+        "total": 7,
+        "hit": 5
+      },
+      "newsletter-address-verification": {
+        "total": 17,
+        "hit": 17
+      },
+      "member-magic-link-recipient": {
+        "total": 12,
+        "hit": 12
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "ghost-schema-L26",
+        "location": "ghost/core/core/server/data/schema/schema.js:26",
+        "goldGroup": "newsletter-sender-email",
+        "matched": true,
+        "predictedGroup": "email:newsletter_sender"
+      },
+      {
+        "id": "ghost-schema-L27",
+        "location": "ghost/core/core/server/data/schema/schema.js:27",
+        "goldGroup": "newsletter-reply-to-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-schema-L274",
+        "location": "ghost/core/core/server/data/schema/schema.js:274",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-schema-L279",
+        "location": "ghost/core/core/server/data/schema/schema.js:279",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:279"
+      },
+      {
+        "id": "ghost-schema-L500",
+        "location": "ghost/core/core/server/data/schema/schema.js:500",
+        "goldGroup": "staff-invite-email",
+        "matched": true,
+        "predictedGroup": "email:invite"
+      },
+      {
+        "id": "ghost-schema-L505",
+        "location": "ghost/core/core/server/data/schema/schema.js:505",
+        "goldGroup": "staff-invite-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:505"
+      },
+      {
+        "id": "ghost-schema-L649",
+        "location": "ghost/core/core/server/data/schema/schema.js:649",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-schema-L654",
+        "location": "ghost/core/core/server/data/schema/schema.js:654",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:654"
+      },
+      {
+        "id": "ghost-schema-L914",
+        "location": "ghost/core/core/server/data/schema/schema.js:914",
+        "goldGroup": "member-email-change-to",
+        "matched": true,
+        "predictedGroup": "email:member_email_change_event"
+      },
+      {
+        "id": "ghost-schema-L919",
+        "location": "ghost/core/core/server/data/schema/schema.js:919",
+        "goldGroup": "member-email-change-to",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:919"
+      },
+      {
+        "id": "ghost-schema-L921",
+        "location": "ghost/core/core/server/data/schema/schema.js:921",
+        "goldGroup": "member-email-change-from",
+        "matched": true,
+        "predictedGroup": "email:member_email_change_event"
+      },
+      {
+        "id": "ghost-schema-L926",
+        "location": "ghost/core/core/server/data/schema/schema.js:926",
+        "goldGroup": "member-email-change-from",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:926"
+      },
+      {
+        "id": "ghost-schema-L1220",
+        "location": "ghost/core/core/server/data/schema/schema.js:1220",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:member_stripe_customer"
+      },
+      {
+        "id": "ghost-schema-L1478",
+        "location": "ghost/core/core/server/data/schema/schema.js:1478",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email:donation_payment_event"
+      },
+      {
+        "id": "ghost-schema-L1483",
+        "location": "ghost/core/core/server/data/schema/schema.js:1483",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:1483"
+      },
+      {
+        "id": "ghost-schema-L1646",
+        "location": "ghost/core/core/server/data/schema/schema.js:1646",
+        "goldGroup": "email-recipient-member-email-copy",
+        "matched": true,
+        "predictedGroup": "email:email_member"
+      },
+      {
+        "id": "ghost-schema-L1871",
+        "location": "ghost/core/core/server/data/schema/schema.js:1871",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email:suppression"
+      },
+      {
+        "id": "ghost-schema-L1876",
+        "location": "ghost/core/core/server/data/schema/schema.js:1876",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:1876"
+      },
+      {
+        "id": "ghost-schema-L1899",
+        "location": "ghost/core/core/server/data/schema/schema.js:1899",
+        "goldGroup": "spam-complaint-email",
+        "matched": true,
+        "predictedGroup": "email:email_spam_complaint_event"
+      },
+      {
+        "id": "ghost-schema-L1904",
+        "location": "ghost/core/core/server/data/schema/schema.js:1904",
+        "goldGroup": "spam-complaint-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:1904"
+      },
+      {
+        "id": "ghost-schema-L2104",
+        "location": "ghost/core/core/server/data/schema/schema.js:2104",
+        "goldGroup": "email-design-sender-email",
+        "matched": true,
+        "predictedGroup": "email:email_design_setting_sender"
+      },
+      {
+        "id": "ghost-schema-L2108",
+        "location": "ghost/core/core/server/data/schema/schema.js:2108",
+        "goldGroup": "email-design-sender-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2108"
+      },
+      {
+        "id": "ghost-schema-L2110",
+        "location": "ghost/core/core/server/data/schema/schema.js:2110",
+        "goldGroup": "email-design-reply-to",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-schema-L2114",
+        "location": "ghost/core/core/server/data/schema/schema.js:2114",
+        "goldGroup": "email-design-reply-to",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2114"
+      },
+      {
+        "id": "ghost-schema-L2255",
+        "location": "ghost/core/core/server/data/schema/schema.js:2255",
+        "goldGroup": "automation-run-member-email-copy",
+        "matched": true,
+        "predictedGroup": "email:automation_run_member"
+      },
+      {
+        "id": "ghost-schema-L2259",
+        "location": "ghost/core/core/server/data/schema/schema.js:2259",
+        "goldGroup": "automation-run-member-email-copy",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2259"
+      },
+      {
+        "id": "ghost-schema-L2329",
+        "location": "ghost/core/core/server/data/schema/schema.js:2329",
+        "goldGroup": "automated-email-sender-email",
+        "matched": true,
+        "predictedGroup": "email:welcome_email_automated_email_sender"
+      },
+      {
+        "id": "ghost-schema-L2333",
+        "location": "ghost/core/core/server/data/schema/schema.js:2333",
+        "goldGroup": "automated-email-sender-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2333"
+      },
+      {
+        "id": "ghost-schema-L2335",
+        "location": "ghost/core/core/server/data/schema/schema.js:2335",
+        "goldGroup": "automated-email-reply-to",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-schema-L2339",
+        "location": "ghost/core/core/server/data/schema/schema.js:2339",
+        "goldGroup": "automated-email-reply-to",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2339"
+      },
+      {
+        "id": "ghost-schema-L2421",
+        "location": "ghost/core/core/server/data/schema/schema.js:2421",
+        "goldGroup": "automated-email-recipient-member-email-copy",
+        "matched": true,
+        "predictedGroup": "email:automated_email_member"
+      },
+      {
+        "id": "ghost-schema-L2453",
+        "location": "ghost/core/core/server/data/schema/schema.js:2453",
+        "goldGroup": "gift-buyer-email",
+        "matched": true,
+        "predictedGroup": "email:gift_buyer"
+      },
+      {
+        "id": "ghost-schema-L2532",
+        "location": "ghost/core/core/server/data/schema/schema.js:2532",
+        "goldGroup": "gift-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:gift_deliverie"
+      },
+      {
+        "id": "ghost-schema-L2536",
+        "location": "ghost/core/core/server/data/schema/schema.js:2536",
+        "goldGroup": "gift-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/data/schema/schema.js:2536"
+      },
+      {
+        "id": "ghost-ghost-mailer-L36",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:36",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/mail/ghost-mailer.js:36"
+      },
+      {
+        "id": "ghost-ghost-mailer-L37",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:37",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/mail/ghost-mailer.js:36"
+      },
+      {
+        "id": "ghost-ghost-mailer-L39",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:39",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/mail/ghost-mailer.js:36"
+      },
+      {
+        "id": "ghost-ghost-mailer-L44",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:44",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/mail/ghost-mailer.js:36"
+      },
+      {
+        "id": "ghost-ghost-mailer-L80",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:80",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/mail/ghost-mailer.js:36"
+      },
+      {
+        "id": "ghost-ghost-mailer-L88",
+        "location": "ghost/core/core/server/services/mail/ghost-mailer.js:88",
+        "goldGroup": "outbound-message-from-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-suppression-list-L67",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:67",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:67"
+      },
+      {
+        "id": "ghost-email-suppression-list-L76",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:76",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:76"
+      },
+      {
+        "id": "ghost-email-suppression-list-L84",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:84",
+        "goldGroup": "suppressed-email-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-suppression-list-L85",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:85",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:85"
+      },
+      {
+        "id": "ghost-email-suppression-list-L105",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:105",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:105"
+      },
+      {
+        "id": "ghost-email-suppression-list-L107",
+        "location": "ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:107",
+        "goldGroup": "suppressed-email-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-suppression-list/email-suppression-list.js:105"
+      },
+      {
+        "id": "ghost-user-L247",
+        "location": "ghost/core/core/server/models/user.js:247",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L254",
+        "location": "ghost/core/core/server/models/user.js:254",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L311",
+        "location": "ghost/core/core/server/models/user.js:311",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L598",
+        "location": "ghost/core/core/server/models/user.js:598",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L599",
+        "location": "ghost/core/core/server/models/user.js:599",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L777",
+        "location": "ghost/core/core/server/models/user.js:777",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L1082",
+        "location": "ghost/core/core/server/models/user.js:1082",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:object"
+      },
+      {
+        "id": "ghost-user-L1267",
+        "location": "ghost/core/core/server/models/user.js:1267",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L1279",
+        "location": "ghost/core/core/server/models/user.js:1279",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L1280",
+        "location": "ghost/core/core/server/models/user.js:1280",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L1283",
+        "location": "ghost/core/core/server/models/user.js:1283",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-user-L1284",
+        "location": "ghost/core/core/server/models/user.js:1284",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-passwordreset-L32",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:32",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-passwordreset-L42",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:42",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-passwordreset-L51",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:51",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-passwordreset-L57",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:57",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "ghost-passwordreset-L98",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:98",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:parts"
+      },
+      {
+        "id": "ghost-passwordreset-L158",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:158",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/auth/passwordreset.js:158"
+      },
+      {
+        "id": "ghost-passwordreset-L170",
+        "location": "ghost/core/core/server/services/auth/passwordreset.js:170",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/api/endpoints/authentication.js:1"
+      },
+      {
+        "id": "ghost-setup-L183",
+        "location": "ghost/core/core/server/services/auth/setup.js:183",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:owner"
+      },
+      {
+        "id": "ghost-setup-L186",
+        "location": "ghost/core/core/server/services/auth/setup.js:186",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:owner"
+      },
+      {
+        "id": "ghost-setup-L191",
+        "location": "ghost/core/core/server/services/auth/setup.js:191",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:owner"
+      },
+      {
+        "id": "ghost-staff-service-L75",
+        "location": "ghost/core/core/server/services/staff/staff-service.js:75",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-staff-service-emails-L36",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:36",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:35"
+      },
+      {
+        "id": "ghost-staff-service-emails-L63",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:63",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:63"
+      },
+      {
+        "id": "ghost-staff-service-emails-L64",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:64",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:64"
+      },
+      {
+        "id": "ghost-staff-service-emails-L86",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:86",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:85"
+      },
+      {
+        "id": "ghost-staff-service-emails-L140",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:140",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:140"
+      },
+      {
+        "id": "ghost-staff-service-emails-L141",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:141",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:141"
+      },
+      {
+        "id": "ghost-staff-service-emails-L163",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:163",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:162"
+      },
+      {
+        "id": "ghost-staff-service-emails-L198",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:198",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:198"
+      },
+      {
+        "id": "ghost-staff-service-emails-L199",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:199",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:199"
+      },
+      {
+        "id": "ghost-staff-service-emails-L232",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:232",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:232"
+      },
+      {
+        "id": "ghost-staff-service-emails-L233",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:233",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:233"
+      },
+      {
+        "id": "ghost-staff-service-emails-L274",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:274",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:273"
+      },
+      {
+        "id": "ghost-staff-service-emails-L286",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:286",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:286"
+      },
+      {
+        "id": "ghost-staff-service-emails-L289",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:289",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:289"
+      },
+      {
+        "id": "ghost-staff-service-emails-L329",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:329",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email:event"
+      },
+      {
+        "id": "ghost-staff-service-emails-L334",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:334",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email:event"
+      },
+      {
+        "id": "ghost-staff-service-emails-L345",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:345",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email:event"
+      },
+      {
+        "id": "ghost-staff-service-emails-L346",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:346",
+        "goldGroup": "donation-payer-email",
+        "matched": true,
+        "predictedGroup": "email:donation"
+      },
+      {
+        "id": "ghost-staff-service-emails-L416",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:416",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-staff-service-emails-L431",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:431",
+        "goldGroup": "gift-buyer-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-staff-service-emails-L443",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:443",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:442"
+      },
+      {
+        "id": "ghost-staff-service-emails-L456",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:456",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:456"
+      },
+      {
+        "id": "ghost-staff-service-emails-L457",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:457",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:457"
+      },
+      {
+        "id": "ghost-staff-service-emails-L595",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:595",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:595"
+      },
+      {
+        "id": "ghost-staff-service-emails-L596",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:596",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-parser.ts:44"
+      },
+      {
+        "id": "ghost-staff-service-emails-L612",
+        "location": "ghost/core/core/server/services/staff/staff-service-emails.js:612",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/staff/staff-service-emails.js:595"
+      },
+      {
+        "id": "ghost-mailgun-email-provider-L129",
+        "location": "ghost/core/core/server/services/email-service/mailgun-email-provider.js:129",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-service/mailgun-email-provider.js:128"
+      },
+      {
+        "id": "ghost-email-address-service-L7",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:7",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L8",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:8",
+        "goldGroup": "outbound-message-reply-to-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L47",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:47",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L51",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:51",
+        "goldGroup": "fallback-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L68",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:68",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:68"
+      },
+      {
+        "id": "ghost-email-address-service-L69",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:69",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email:email"
+      },
+      {
+        "id": "ghost-email-address-service-L72",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:72",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:72"
+      },
+      {
+        "id": "ghost-email-address-service-L73",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:73",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:email_fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L83",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:83",
+        "goldGroup": "members-support-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L86",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:86",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L87",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:87",
+        "goldGroup": "outbound-message-from-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L88",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:88",
+        "goldGroup": "outbound-message-reply-to-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L91",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:91",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:68"
+      },
+      {
+        "id": "ghost-email-address-service-L117",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:117",
+        "goldGroup": "outbound-message-reply-to-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L120",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:120",
+        "goldGroup": "outbound-message-reply-to-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L131",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:131",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:68"
+      },
+      {
+        "id": "ghost-email-address-service-L143",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:143",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L144",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:144",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L145",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:145",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L146",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:146",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L150",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:150",
+        "goldGroup": "fallback-sender-address",
+        "matched": true,
+        "predictedGroup": "email:fallback"
+      },
+      {
+        "id": "ghost-email-address-service-L151",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:151",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:68"
+      },
+      {
+        "id": "ghost-email-address-service-L180",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:180",
+        "goldGroup": "outbound-message-from-address",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-email-address-service-L186",
+        "location": "ghost/core/core/server/services/email-address/email-address-service.ts:186",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-address/email-address-service.ts:68"
+      },
+      {
+        "id": "ghost-sending-service-L164",
+        "location": "ghost/core/core/server/services/email-service/sending-service.js:164",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-sending-service-L176",
+        "location": "ghost/core/core/server/services/email-service/sending-service.js:176",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-service/sending-service.js:174"
+      },
+      {
+        "id": "ghost-sending-service-L179",
+        "location": "ghost/core/core/server/services/email-service/sending-service.js:179",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/email-service/sending-service.js:2"
+      },
+      {
+        "id": "ghost-member-repository-L202",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:202",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L207",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:207",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L284",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:284",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L286",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:286",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L386",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:386",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L396",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:396",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L401",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:401",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L446",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:446",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L462",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:462",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L534",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:534",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L616",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:616",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "ghost-member-repository-L682",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:682",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L734",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:734",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L735",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:735",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L736",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:736",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L737",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:737",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L960",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:960",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:attributes"
+      },
+      {
+        "id": "ghost-member-repository-L964",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:964",
+        "goldGroup": "member-email-change-from",
+        "matched": true,
+        "predictedGroup": "email:attributes"
+      },
+      {
+        "id": "ghost-member-repository-L965",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:965",
+        "goldGroup": "member-email-change-to",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L983",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:983",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:attributes"
+      },
+      {
+        "id": "ghost-member-repository-L989",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:989",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:attributes"
+      },
+      {
+        "id": "ghost-member-repository-L1160",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:1160",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L1182",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:1182",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "ghost-member-repository-L1198",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:1198",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L1199",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:1199",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L1925",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:1925",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2001",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2001",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2035",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2035",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2036",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2036",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2094",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2094",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2095",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2095",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2207",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2207",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2208",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2208",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2220",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2220",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2385",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2385",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2392",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2392",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "ghost-member-repository-L2531",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2531",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-repository-L2538",
+        "location": "ghost/core/core/server/services/members/members-api/repositories/member-repository.js:2538",
+        "goldGroup": "stripe-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "ghost-newsletters-service-L65",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:65",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:65"
+      },
+      {
+        "id": "ghost-newsletters-service-L77",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:77",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:65"
+      },
+      {
+        "id": "ghost-newsletters-service-L81",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:81",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:81"
+      },
+      {
+        "id": "ghost-newsletters-service-L82",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:82",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:81"
+      },
+      {
+        "id": "ghost-newsletters-service-L313",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:313",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L314",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:314",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L316",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:316",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L317",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:317",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L321",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:321",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L325",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:325",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L330",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:330",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L335",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:335",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L345",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:345",
+        "goldGroup": "newsletter-reply-to-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-newsletters-service-L349",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:349",
+        "goldGroup": "newsletter-sender-email",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L350",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:350",
+        "goldGroup": "newsletter-sender-email",
+        "matched": true,
+        "predictedGroup": "email:did_change_sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L352",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:352",
+        "goldGroup": "newsletter-sender-email",
+        "matched": true,
+        "predictedGroup": "email:sender"
+      },
+      {
+        "id": "ghost-newsletters-service-L371",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:371",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:371"
+      },
+      {
+        "id": "ghost-newsletters-service-L372",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:372",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:371"
+      },
+      {
+        "id": "ghost-newsletters-service-L385",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:385",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:385"
+      },
+      {
+        "id": "ghost-newsletters-service-L386",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:386",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:386"
+      },
+      {
+        "id": "ghost-newsletters-service-L396",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:396",
+        "goldGroup": "site-default-from-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:386"
+      },
+      {
+        "id": "ghost-newsletters-service-L408",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:408",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:385"
+      },
+      {
+        "id": "ghost-newsletters-service-L409",
+        "location": "ghost/core/core/server/services/newsletters/newsletters-service.js:409",
+        "goldGroup": "newsletter-address-verification",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/newsletters/newsletters-service.js:385"
+      },
+      {
+        "id": "ghost-comments-service-emails-L69",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:69",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:author"
+      },
+      {
+        "id": "ghost-comments-service-emails-L88",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:88",
+        "goldGroup": "members-support-address",
+        "matched": true,
+        "predictedGroup": "email:comment_email_renderer"
+      },
+      {
+        "id": "ghost-comments-service-emails-L89",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:89",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:comment_email_renderer"
+      },
+      {
+        "id": "ghost-comments-service-emails-L136",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:136",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:parent_member"
+      },
+      {
+        "id": "ghost-comments-service-emails-L166",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:166",
+        "goldGroup": "members-support-address",
+        "matched": true,
+        "predictedGroup": "email:comment_email_renderer"
+      },
+      {
+        "id": "ghost-comments-service-emails-L167",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:167",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:parent_member"
+      },
+      {
+        "id": "ghost-comments-service-emails-L179",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:179",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:parent_member"
+      },
+      {
+        "id": "ghost-comments-service-emails-L202",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:202",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:owner"
+      },
+      {
+        "id": "ghost-comments-service-emails-L220",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:220",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:reporter"
+      },
+      {
+        "id": "ghost-comments-service-emails-L221",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:221",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:reporter"
+      },
+      {
+        "id": "ghost-comments-service-emails-L224",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:224",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-comments-service-emails-L228",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:228",
+        "goldGroup": "members-support-address",
+        "matched": true,
+        "predictedGroup": "email:comment_email_renderer"
+      },
+      {
+        "id": "ghost-comments-service-emails-L229",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:229",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:comment_email_renderer"
+      },
+      {
+        "id": "ghost-comments-service-emails-L265",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:265",
+        "goldGroup": "members-support-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/comments/comments-service-emails.js:265"
+      },
+      {
+        "id": "ghost-comments-service-emails-L282",
+        "location": "ghost/core/core/server/services/comments/comments-service-emails.js:282",
+        "goldGroup": "members-support-address",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/comments/comments-service-emails.js:265"
+      },
+      {
+        "id": "ghost-api-L81",
+        "location": "ghost/core/core/server/services/members/api.js:81",
+        "goldGroup": "members-support-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-api-L111",
+        "location": "ghost/core/core/server/services/members/api.js:111",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L128",
+        "location": "ghost/core/core/server/services/members/api.js:128",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L145",
+        "location": "ghost/core/core/server/services/members/api.js:145",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L162",
+        "location": "ghost/core/core/server/services/members/api.js:162",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L177",
+        "location": "ghost/core/core/server/services/members/api.js:177",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L199",
+        "location": "ghost/core/core/server/services/members/api.js:199",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:111"
+      },
+      {
+        "id": "ghost-api-L204",
+        "location": "ghost/core/core/server/services/members/api.js:204",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-api-L214",
+        "location": "ghost/core/core/server/services/members/api.js:214",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-api-L216",
+        "location": "ghost/core/core/server/services/members/api.js:216",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-api-L218",
+        "location": "ghost/core/core/server/services/members/api.js:218",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-api-L220",
+        "location": "ghost/core/core/server/services/members/api.js:220",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-api-L223",
+        "location": "ghost/core/core/server/services/members/api.js:223",
+        "goldGroup": "member-magic-link-recipient",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/members/api.js:204"
+      },
+      {
+        "id": "ghost-completion-email-L23",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:23",
+        "goldGroup": "staff-user-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-completion-email-L72",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:72",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:import"
+      },
+      {
+        "id": "ghost-completion-email-L102",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:102",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:import_error_row"
+      },
+      {
+        "id": "ghost-completion-email-L138",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:138",
+        "goldGroup": "staff-user-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-completion-email-L149",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:149",
+        "goldGroup": "staff-user-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-completion-email-L157",
+        "location": "ghost/core/core/server/services/members/import-export/import/completion-email.ts:157",
+        "goldGroup": "staff-user-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-signin-L4",
+        "location": "ghost/core/core/server/services/auth/session/emails/signin.js:4",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/auth/session/emails/signin.js:4"
+      },
+      {
+        "id": "ghost-signin-L157",
+        "location": "ghost/core/core/server/services/auth/session/emails/signin.js:157",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/auth/session/emails/signin.js:4"
+      },
+      {
+        "id": "ghost-session-service-L434",
+        "location": "ghost/core/core/server/services/auth/session/session-service.js:434",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/auth/session/session-service.js:424"
+      },
+      {
+        "id": "ghost-session-service-L445",
+        "location": "ghost/core/core/server/services/auth/session/session-service.js:445",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/services/auth/session/session-service.js:445"
+      },
+      {
+        "id": "ghost-session-service-L456",
+        "location": "ghost/core/core/server/services/auth/session/session-service.js:456",
+        "goldGroup": "staff-user-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-members-L81",
+        "location": "ghost/core/core/server/api/endpoints/members.js:81",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "ghost-members-L111",
+        "location": "ghost/core/core/server/api/endpoints/members.js:111",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email@ghost/core/core/server/api/endpoints/members.js:111"
+      },
+      {
+        "id": "ghost-members-L405",
+        "location": "ghost/core/core/server/api/endpoints/members.js:405",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email:request"
+      },
+      {
+        "id": "ghost-members-L512",
+        "location": "ghost/core/core/server/api/endpoints/members.js:512",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:suppression"
+      },
+      {
+        "id": "ghost-member-L628",
+        "location": "ghost/core/core/server/models/member.js:628",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:members"
+      },
+      {
+        "id": "ghost-member-L650",
+        "location": "ghost/core/core/server/models/member.js:650",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      },
+      {
+        "id": "ghost-member-L652",
+        "location": "ghost/core/core/server/models/member.js:652",
+        "goldGroup": "member-account-email",
+        "matched": true,
+        "predictedGroup": "email:member"
+      }
+    ]
+  },
+  "saleor": {
+    "cases": 655,
+    "emailFindings": 451,
+    "scores": {
+      "recall": 0.9539170506912442,
+      "precision": 0.6877076411960132,
+      "negativeCasePassRate": 0.7862068965517242,
+      "denominators": {
+        "evaluablePositives": 217,
+        "matchedPositives": 207,
+        "matchedWithCorrectLabels": 207,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 435,
+        "negativeCasesPassed": 342,
+        "exhaustiveScopedFindings": 301,
+        "exhaustiveScopedMatches": 207
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 207
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.868020304568528,
+          "numerator": 171,
+          "denominator": 197
+        },
+        "type_annotation": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 29
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 207
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 0.9144111192392099,
+          "numerator": 1250,
+          "denominator": 1367
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.6142506142506142,
+          "numerator": 1250,
+          "denominator": 2035
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "identifier": {
+        "total": 106,
+        "hit": 101
+      },
+      "property_key": {
+        "total": 99,
+        "hit": 96
+      },
+      "string_literal": {
+        "total": 12,
+        "hit": 10
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "identifier": {
+        "total": 283,
+        "hit": 52
+      },
+      "import_specifier": {
+        "total": 33,
+        "hit": 6
+      },
+      "property_key": {
+        "total": 26,
+        "hit": 5
+      },
+      "string_literal": {
+        "total": 65,
+        "hit": 33
+      },
+      "comment": {
+        "total": 24,
+        "hit": 0
+      },
+      "type_name": {
+        "total": 7,
+        "hit": 0
+      }
+    },
+    "recallByGroup": {
+      "(no group)": {
+        "total": 54,
+        "hit": 54
+      },
+      "order-customer-email": {
+        "total": 57,
+        "hit": 57
+      },
+      "staff-notification-recipient-email": {
+        "total": 10,
+        "hit": 6
+      },
+      "account-change-email-new-address": {
+        "total": 7,
+        "hit": 7
+      },
+      "customer-account-email": {
+        "total": 19,
+        "hit": 19
+      },
+      "account-change-email-old-address": {
+        "total": 6,
+        "hit": 6
+      },
+      "gift-card-assigned-to-email": {
+        "total": 9,
+        "hit": 8
+      },
+      "gift-card-notification-recipient-email": {
+        "total": 10,
+        "hit": 10
+      },
+      "gift-card-created-by-email": {
+        "total": 4,
+        "hit": 4
+      },
+      "gift-card-used-by-email": {
+        "total": 7,
+        "hit": 7
+      },
+      "sendgrid-plugin-sender-address": {
+        "total": 3,
+        "hit": 1
+      },
+      "staff-user-email": {
+        "total": 9,
+        "hit": 9
+      },
+      "user-email-plugin-sender-address": {
+        "total": 1,
+        "hit": 0
+      },
+      "checkout-email": {
+        "total": 6,
+        "hit": 6
+      },
+      "voucher-usage-customer-email": {
+        "total": 13,
+        "hit": 12
+      },
+      "admin-email-plugin-sender-address": {
+        "total": 2,
+        "hit": 1
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "saleor-events-L90",
+        "location": "saleor/order/events.py:90",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L96",
+        "location": "saleor/order/events.py:96",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L105",
+        "location": "saleor/order/events.py:105",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L111",
+        "location": "saleor/order/events.py:111",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L120",
+        "location": "saleor/order/events.py:120",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L126",
+        "location": "saleor/order/events.py:126",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L135",
+        "location": "saleor/order/events.py:135",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-order-events-L141",
+        "location": "saleor/order/events.py:141",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L149",
+        "location": "saleor/order/events.py:149",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L155",
+        "location": "saleor/order/events.py:155",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L164",
+        "location": "saleor/order/events.py:164",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-events-L169",
+        "location": "saleor/order/events.py:169",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-models-L161",
+        "location": "saleor/order/models.py:161",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:order"
+      },
+      {
+        "id": "saleor-models-L394",
+        "location": "saleor/order/models.py:394",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-models-L400",
+        "location": "saleor/order/models.py:400",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-models-L423",
+        "location": "saleor/order/models.py:423",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:order"
+      },
+      {
+        "id": "saleor-order-models-L424",
+        "location": "saleor/order/models.py:424",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:order"
+      },
+      {
+        "id": "saleor-notifications-L308",
+        "location": "saleor/order/notifications.py:308",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L348",
+        "location": "saleor/order/notifications.py:348",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L397",
+        "location": "saleor/order/notifications.py:397",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L414",
+        "location": "saleor/order/notifications.py:414",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L430",
+        "location": "saleor/order/notifications.py:430",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/order/notifications.py:430"
+      },
+      {
+        "id": "saleor-notifications-L433",
+        "location": "saleor/order/notifications.py:433",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/order/notifications.py:430"
+      },
+      {
+        "id": "saleor-notifications-L439",
+        "location": "saleor/order/notifications.py:439",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/order/notifications.py:430"
+      },
+      {
+        "id": "saleor-notifications-L456",
+        "location": "saleor/order/notifications.py:456",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L503",
+        "location": "saleor/order/notifications.py:503",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L538",
+        "location": "saleor/order/notifications.py:538",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-notifications-L563",
+        "location": "saleor/order/notifications.py:563",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-account-models-L424",
+        "location": "saleor/account/models.py:424",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:staff_notification_staff"
+      },
+      {
+        "id": "saleor-models-L428",
+        "location": "saleor/account/models.py:428",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:staff"
+      },
+      {
+        "id": "saleor-models-L431",
+        "location": "saleor/account/models.py:431",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:staff"
+      },
+      {
+        "id": "saleor-notifications-L101",
+        "location": "saleor/account/notifications.py:101",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:101"
+      },
+      {
+        "id": "saleor-notifications-L110",
+        "location": "saleor/account/notifications.py:110",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:101"
+      },
+      {
+        "id": "saleor-notifications-L111",
+        "location": "saleor/account/notifications.py:111",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:111"
+      },
+      {
+        "id": "saleor-notifications-L112",
+        "location": "saleor/account/notifications.py:112",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:101"
+      },
+      {
+        "id": "saleor-notifications-L134",
+        "location": "saleor/account/notifications.py:134",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:128"
+      },
+      {
+        "id": "saleor-notifications-L136",
+        "location": "saleor/account/notifications.py:136",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:128"
+      },
+      {
+        "id": "saleor-notifications-L137",
+        "location": "saleor/account/notifications.py:137",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:137"
+      },
+      {
+        "id": "saleor-notifications-L164",
+        "location": "saleor/account/notifications.py:164",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/account/notifications.py:164"
+      },
+      {
+        "id": "saleor-events-L60",
+        "location": "saleor/giftcard/events.py:60",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:previous"
+      },
+      {
+        "id": "saleor-events-L71",
+        "location": "saleor/giftcard/events.py:71",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:previous"
+      },
+      {
+        "id": "saleor-events-L73",
+        "location": "saleor/giftcard/events.py:73",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:assigned"
+      },
+      {
+        "id": "saleor-events-L81",
+        "location": "saleor/giftcard/events.py:81",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:previous"
+      },
+      {
+        "id": "saleor-giftcard-events-L92",
+        "location": "saleor/giftcard/events.py:92",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:previous"
+      },
+      {
+        "id": "saleor-events-L122",
+        "location": "saleor/giftcard/events.py:122",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_event"
+      },
+      {
+        "id": "saleor-events-L129",
+        "location": "saleor/giftcard/events.py:129",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_event"
+      },
+      {
+        "id": "saleor-events-L134",
+        "location": "saleor/giftcard/events.py:134",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_event"
+      },
+      {
+        "id": "saleor-giftcard-events-L141",
+        "location": "saleor/giftcard/events.py:141",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_event"
+      },
+      {
+        "id": "saleor-models-L64",
+        "location": "saleor/giftcard/models.py:64",
+        "goldGroup": "gift-card-created-by-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_created_by"
+      },
+      {
+        "id": "saleor-models-L65",
+        "location": "saleor/giftcard/models.py:65",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_used_by"
+      },
+      {
+        "id": "saleor-models-L77",
+        "location": "saleor/giftcard/models.py:77",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_assigned"
+      },
+      {
+        "id": "saleor-models-L164",
+        "location": "saleor/giftcard/models.py:164",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:gift_card_assigned"
+      },
+      {
+        "id": "saleor-utils-L144",
+        "location": "saleor/giftcard/utils.py:144",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email:assigned"
+      },
+      {
+        "id": "saleor-utils-L145",
+        "location": "saleor/giftcard/utils.py:145",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": true,
+        "predictedGroup": "email:assigned"
+      },
+      {
+        "id": "saleor-utils-L148",
+        "location": "saleor/giftcard/utils.py:148",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email:assigned"
+      },
+      {
+        "id": "saleor-utils-L303",
+        "location": "saleor/giftcard/utils.py:303",
+        "goldGroup": "gift-card-created-by-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-utils-L349",
+        "location": "saleor/giftcard/utils.py:349",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-utils-L361",
+        "location": "saleor/giftcard/utils.py:361",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-utils-L389",
+        "location": "saleor/giftcard/utils.py:389",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L390",
+        "location": "saleor/giftcard/utils.py:390",
+        "goldGroup": "gift-card-created-by-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-utils-L403",
+        "location": "saleor/giftcard/utils.py:403",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L404",
+        "location": "saleor/giftcard/utils.py:404",
+        "goldGroup": "gift-card-created-by-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-tasks-L25",
+        "location": "saleor/plugins/sendgrid/tasks.py:25",
+        "goldGroup": "sendgrid-plugin-sender-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:23"
+      },
+      {
+        "id": "saleor-tasks-L88",
+        "location": "saleor/plugins/sendgrid/tasks.py:88",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:88"
+      },
+      {
+        "id": "saleor-tasks-L89",
+        "location": "saleor/plugins/sendgrid/tasks.py:89",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:89"
+      },
+      {
+        "id": "saleor-tasks-L109",
+        "location": "saleor/plugins/sendgrid/tasks.py:109",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:109"
+      },
+      {
+        "id": "saleor-sendgrid-tasks-L110",
+        "location": "saleor/plugins/sendgrid/tasks.py:110",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:110"
+      },
+      {
+        "id": "saleor-sendgrid-tasks-L195",
+        "location": "saleor/plugins/sendgrid/tasks.py:195",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-sendgrid-tasks-L217",
+        "location": "saleor/plugins/sendgrid/tasks.py:217",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L253",
+        "location": "saleor/plugins/sendgrid/tasks.py:253",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L275",
+        "location": "saleor/plugins/sendgrid/tasks.py:275",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L297",
+        "location": "saleor/plugins/sendgrid/tasks.py:297",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L318",
+        "location": "saleor/plugins/sendgrid/tasks.py:318",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/sendgrid/tasks.py:318"
+      },
+      {
+        "id": "saleor-tasks-L345",
+        "location": "saleor/plugins/sendgrid/tasks.py:345",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-plugin-L113",
+        "location": "saleor/plugins/sendgrid/plugin.py:113",
+        "goldGroup": "sendgrid-plugin-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-plugin-L137",
+        "location": "saleor/plugins/sendgrid/plugin.py:137",
+        "goldGroup": "sendgrid-plugin-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-notify_events-L31",
+        "location": "saleor/plugins/admin_email/notify_events.py:31",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/notify_events.py:31"
+      },
+      {
+        "id": "saleor-notify_events-L38",
+        "location": "saleor/plugins/admin_email/notify_events.py:38",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/notify_events.py:31"
+      },
+      {
+        "id": "saleor-notify_events-L81",
+        "location": "saleor/plugins/admin_email/notify_events.py:81",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-notify_events-L88",
+        "location": "saleor/plugins/admin_email/notify_events.py:88",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-notify_events-L131",
+        "location": "saleor/plugins/admin_email/notify_events.py:131",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/notify_events.py:131"
+      },
+      {
+        "id": "saleor-notify_events-L132",
+        "location": "saleor/plugins/admin_email/notify_events.py:132",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/notify_events.py:131"
+      },
+      {
+        "id": "saleor-notify_events-L140",
+        "location": "saleor/plugins/admin_email/notify_events.py:140",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/notify_events.py:131"
+      },
+      {
+        "id": "saleor-user_email-tasks-L13",
+        "location": "saleor/plugins/user_email/tasks.py:13",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:13"
+      },
+      {
+        "id": "saleor-tasks-L19",
+        "location": "saleor/plugins/user_email/tasks.py:19",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:13"
+      },
+      {
+        "id": "saleor-user_email-tasks-L27",
+        "location": "saleor/plugins/user_email/tasks.py:27",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:27"
+      },
+      {
+        "id": "saleor-tasks-L33",
+        "location": "saleor/plugins/user_email/tasks.py:33",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:27"
+      },
+      {
+        "id": "saleor-user_email-tasks-L46",
+        "location": "saleor/plugins/user_email/tasks.py:46",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:46"
+      },
+      {
+        "id": "saleor-tasks-L53",
+        "location": "saleor/plugins/user_email/tasks.py:53",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:46"
+      },
+      {
+        "id": "saleor-user_email-tasks-L62",
+        "location": "saleor/plugins/user_email/tasks.py:62",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:62"
+      },
+      {
+        "id": "saleor-tasks-L63",
+        "location": "saleor/plugins/user_email/tasks.py:63",
+        "goldGroup": "account-change-email-new-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:46"
+      },
+      {
+        "id": "saleor-tasks-L70",
+        "location": "saleor/plugins/user_email/tasks.py:70",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:70"
+      },
+      {
+        "id": "saleor-tasks-L77",
+        "location": "saleor/plugins/user_email/tasks.py:77",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:70"
+      },
+      {
+        "id": "saleor-tasks-L83",
+        "location": "saleor/plugins/user_email/tasks.py:83",
+        "goldGroup": "account-change-email-old-address",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:83"
+      },
+      {
+        "id": "saleor-tasks-L84",
+        "location": "saleor/plugins/user_email/tasks.py:84",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:84"
+      },
+      {
+        "id": "saleor-tasks-L94",
+        "location": "saleor/plugins/user_email/tasks.py:94",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:94"
+      },
+      {
+        "id": "saleor-tasks-L99",
+        "location": "saleor/plugins/user_email/tasks.py:99",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:94"
+      },
+      {
+        "id": "saleor-tasks-L108",
+        "location": "saleor/plugins/user_email/tasks.py:108",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:108"
+      },
+      {
+        "id": "saleor-user_email-tasks-L113",
+        "location": "saleor/plugins/user_email/tasks.py:113",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:108"
+      },
+      {
+        "id": "saleor-tasks-L121",
+        "location": "saleor/plugins/user_email/tasks.py:121",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:121"
+      },
+      {
+        "id": "saleor-tasks-L125",
+        "location": "saleor/plugins/user_email/tasks.py:125",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:121"
+      },
+      {
+        "id": "saleor-tasks-L134",
+        "location": "saleor/plugins/user_email/tasks.py:134",
+        "goldGroup": "gift-card-notification-recipient-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:134"
+      },
+      {
+        "id": "saleor-tasks-L171",
+        "location": "saleor/plugins/user_email/tasks.py:171",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L177",
+        "location": "saleor/plugins/user_email/tasks.py:177",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-user_email-tasks-L186",
+        "location": "saleor/plugins/user_email/tasks.py:186",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L192",
+        "location": "saleor/plugins/user_email/tasks.py:192",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L197",
+        "location": "saleor/plugins/user_email/tasks.py:197",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-user_email-tasks-L207",
+        "location": "saleor/plugins/user_email/tasks.py:207",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L213",
+        "location": "saleor/plugins/user_email/tasks.py:213",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:213"
+      },
+      {
+        "id": "saleor-tasks-L218",
+        "location": "saleor/plugins/user_email/tasks.py:218",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/user_email/tasks.py:213"
+      },
+      {
+        "id": "saleor-user_email-tasks-L227",
+        "location": "saleor/plugins/user_email/tasks.py:227",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L232",
+        "location": "saleor/plugins/user_email/tasks.py:232",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L241",
+        "location": "saleor/plugins/user_email/tasks.py:241",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L246",
+        "location": "saleor/plugins/user_email/tasks.py:246",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L250",
+        "location": "saleor/plugins/user_email/tasks.py:250",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L260",
+        "location": "saleor/plugins/user_email/tasks.py:260",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-user_email-tasks-L265",
+        "location": "saleor/plugins/user_email/tasks.py:265",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L269",
+        "location": "saleor/plugins/user_email/tasks.py:269",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L279",
+        "location": "saleor/plugins/user_email/tasks.py:279",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-user_email-tasks-L285",
+        "location": "saleor/plugins/user_email/tasks.py:285",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L290",
+        "location": "saleor/plugins/user_email/tasks.py:290",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L300",
+        "location": "saleor/plugins/user_email/tasks.py:300",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-tasks-L10",
+        "location": "saleor/plugins/admin_email/tasks.py:10",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/tasks.py:10"
+      },
+      {
+        "id": "saleor-admin_email-tasks-L15",
+        "location": "saleor/plugins/admin_email/tasks.py:15",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/tasks.py:10"
+      },
+      {
+        "id": "saleor-admin_email-tasks-L62",
+        "location": "saleor/plugins/admin_email/tasks.py:62",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-tasks-L67",
+        "location": "saleor/plugins/admin_email/tasks.py:67",
+        "goldGroup": "staff-notification-recipient-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-admin_email-tasks-L76",
+        "location": "saleor/plugins/admin_email/tasks.py:76",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/tasks.py:76"
+      },
+      {
+        "id": "saleor-admin_email-tasks-L81",
+        "location": "saleor/plugins/admin_email/tasks.py:81",
+        "goldGroup": "staff-user-email",
+        "matched": true,
+        "predictedGroup": "email@saleor/plugins/admin_email/tasks.py:76"
+      },
+      {
+        "id": "saleor-user_email-plugin-L354",
+        "location": "saleor/plugins/user_email/plugin.py:354",
+        "goldGroup": "user-email-plugin-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-checkout_cleaner-L106",
+        "location": "saleor/checkout/checkout_cleaner.py:106",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-checkout_cleaner-L135",
+        "location": "saleor/checkout/checkout_cleaner.py:135",
+        "goldGroup": "gift-card-assigned-to-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-complete_checkout-L128",
+        "location": "saleor/checkout/complete_checkout.py:128",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L130",
+        "location": "saleor/checkout/complete_checkout.py:130",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L142",
+        "location": "saleor/checkout/complete_checkout.py:142",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-complete_checkout-L150",
+        "location": "saleor/checkout/complete_checkout.py:150",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-complete_checkout-L160",
+        "location": "saleor/checkout/complete_checkout.py:160",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L176",
+        "location": "saleor/checkout/complete_checkout.py:176",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L286",
+        "location": "saleor/checkout/complete_checkout.py:286",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-complete_checkout-L753",
+        "location": "saleor/checkout/complete_checkout.py:753",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L758",
+        "location": "saleor/checkout/complete_checkout.py:758",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L888",
+        "location": "saleor/checkout/complete_checkout.py:888",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-complete_checkout-L1163",
+        "location": "saleor/checkout/complete_checkout.py:1163",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L1168",
+        "location": "saleor/checkout/complete_checkout.py:1168",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L1229",
+        "location": "saleor/checkout/complete_checkout.py:1229",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L1232",
+        "location": "saleor/checkout/complete_checkout.py:1232",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer_for_voucher_usage"
+      },
+      {
+        "id": "saleor-complete_checkout-L1353",
+        "location": "saleor/checkout/complete_checkout.py:1353",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-complete_checkout-L1693",
+        "location": "saleor/checkout/complete_checkout.py:1693",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-complete_checkout-L1694",
+        "location": "saleor/checkout/complete_checkout.py:1694",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-complete_checkout-L2024",
+        "location": "saleor/checkout/complete_checkout.py:2024",
+        "goldGroup": "voucher-usage-customer-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-models-L132",
+        "location": "saleor/checkout/models.py:132",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-models-L369",
+        "location": "saleor/checkout/models.py:369",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-models-L370",
+        "location": "saleor/checkout/models.py:370",
+        "goldGroup": "checkout-email",
+        "matched": true,
+        "predictedGroup": "email:checkout"
+      },
+      {
+        "id": "saleor-checkout-models-L372",
+        "location": "saleor/checkout/models.py:372",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email:foreign_key"
+      },
+      {
+        "id": "saleor-actions-L396",
+        "location": "saleor/order/actions.py:396",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:customer"
+      },
+      {
+        "id": "saleor-actions-L1601",
+        "location": "saleor/order/actions.py:1601",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:created_by"
+      },
+      {
+        "id": "saleor-utils-L455",
+        "location": "saleor/order/utils.py:455",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L464",
+        "location": "saleor/order/utils.py:464",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L517",
+        "location": "saleor/order/utils.py:517",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L523",
+        "location": "saleor/order/utils.py:523",
+        "goldGroup": "customer-account-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L525",
+        "location": "saleor/order/utils.py:525",
+        "goldGroup": "gift-card-used-by-email",
+        "matched": true,
+        "predictedGroup": "email:used_by"
+      },
+      {
+        "id": "saleor-utils-L714",
+        "location": "saleor/order/utils.py:714",
+        "goldGroup": "order-customer-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "saleor-plugin-L178",
+        "location": "saleor/plugins/admin_email/plugin.py:178",
+        "goldGroup": "admin-email-plugin-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "saleor-admin_email-plugin-L200",
+        "location": "saleor/plugins/admin_email/plugin.py:200",
+        "goldGroup": "admin-email-plugin-sender-address",
+        "matched": true,
+        "predictedGroup": null
+      }
+    ]
+  },
+  "directus": {
+    "cases": 311,
+    "emailFindings": 242,
+    "scores": {
+      "recall": 0.9530201342281879,
+      "precision": 0.6527777777777778,
+      "negativeCasePassRate": 0.7222222222222222,
+      "denominators": {
+        "evaluablePositives": 149,
+        "matchedPositives": 142,
+        "matchedWithCorrectLabels": 142,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 162,
+        "negativeCasesPassed": 117,
+        "exhaustiveScopedFindings": 216,
+        "exhaustiveScopedMatches": 141
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 141
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.9224137931034483,
+          "numerator": 107,
+          "denominator": 116
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 141
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 0.9992331288343558,
+          "numerator": 2606,
+          "denominator": 2608
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.27967374973170206,
+          "numerator": 2606,
+          "denominator": 9318
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "unknown": {
+        "total": 1,
+        "hit": 1
+      },
+      "identifier": {
+        "total": 85,
+        "hit": 79
+      },
+      "property_key": {
+        "total": 38,
+        "hit": 37
+      },
+      "string_literal": {
+        "total": 25,
+        "hit": 25
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "identifier": {
+        "total": 74,
+        "hit": 13
+      },
+      "string_literal": {
+        "total": 48,
+        "hit": 28
+      },
+      "import_specifier": {
+        "total": 5,
+        "hit": 1
+      },
+      "type_name": {
+        "total": 3,
+        "hit": 2
+      },
+      "comment": {
+        "total": 18,
+        "hit": 0
+      },
+      "property_key": {
+        "total": 14,
+        "hit": 1
+      }
+    },
+    "recallByGroup": {
+      "(no group)": {
+        "total": 1,
+        "hit": 1
+      },
+      "user-account-email": {
+        "total": 140,
+        "hit": 137
+      },
+      "mail-sender-address": {
+        "total": 5,
+        "hit": 2
+      },
+      "share-invite-recipient-email": {
+        "total": 3,
+        "hit": 2
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "directus-local-L21",
+        "location": "api/src/auth/drivers/local.ts:21",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/auth/drivers/local.ts:20"
+      },
+      {
+        "id": "directus-local-L28",
+        "location": "api/src/auth/drivers/local.ts:28",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/auth/drivers/local.ts:20"
+      },
+      {
+        "id": "directus-local-L57",
+        "location": "api/src/auth/drivers/local.ts:57",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/auth/drivers/local.ts:57"
+      },
+      {
+        "id": "directus-saml-L59",
+        "location": "api/src/auth/drivers/saml.ts:59",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-saml-L83",
+        "location": "api/src/auth/drivers/saml.ts:83",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-auth-L199",
+        "location": "api/src/controllers/auth.ts:199",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-auth-L214",
+        "location": "api/src/controllers/auth.ts:214",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L286",
+        "location": "api/src/controllers/users.ts:286",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:joi"
+      },
+      {
+        "id": "directus-users-L303",
+        "location": "api/src/controllers/users.ts:303",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L458",
+        "location": "api/src/controllers/users.ts:458",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-add-auth-provider-L8",
+        "location": "api/src/database/migrations/20210903A-add-auth-provider.ts:8",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-add-auth-provider-L16",
+        "location": "api/src/database/migrations/20210903A-add-auth-provider.ts:16",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/database/migrations/20210903A-add-auth-provider.ts:5"
+      },
+      {
+        "id": "directus-add-auth-provider-L22",
+        "location": "api/src/database/migrations/20210903A-add-auth-provider.ts:22",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-add-auth-provider-L38",
+        "location": "api/src/database/migrations/20210903A-add-auth-provider.ts:38",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/database/migrations/20210903A-add-auth-provider.ts:31"
+      },
+      {
+        "id": "directus-sso-enabled-L53",
+        "location": "api/src/license/entitlements/lib/sso-enabled.ts:53",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/license/entitlements/lib/sso-enabled.ts:53"
+      },
+      {
+        "id": "directus-sso-enabled-L57",
+        "location": "api/src/license/entitlements/lib/sso-enabled.ts:57",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:admin"
+      },
+      {
+        "id": "directus-sso-enabled-L58",
+        "location": "api/src/license/entitlements/lib/sso-enabled.ts:58",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/license/entitlements/lib/sso-enabled.ts:53"
+      },
+      {
+        "id": "directus-index-L78",
+        "location": "api/src/services/mail/index.ts:78",
+        "goldGroup": "mail-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-index-L82",
+        "location": "api/src/services/mail/index.ts:82",
+        "goldGroup": "mail-sender-address",
+        "matched": true,
+        "predictedGroup": "email:transporter"
+      },
+      {
+        "id": "directus-index-L83",
+        "location": "api/src/services/mail/index.ts:83",
+        "goldGroup": "mail-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-index-L86",
+        "location": "api/src/services/mail/index.ts:86",
+        "goldGroup": "mail-sender-address",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-index-L108",
+        "location": "api/src/services/mail/index.ts:108",
+        "goldGroup": "mail-sender-address",
+        "matched": true,
+        "predictedGroup": "email:transporter"
+      },
+      {
+        "id": "directus-notifications-L33",
+        "location": "api/src/services/notifications.ts:33",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:notifications"
+      },
+      {
+        "id": "directus-notifications-L36",
+        "location": "api/src/services/notifications.ts:36",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:notifications"
+      },
+      {
+        "id": "directus-notifications-L66",
+        "location": "api/src/services/notifications.ts:66",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:notifications"
+      },
+      {
+        "id": "directus-comments-L70",
+        "location": "api/src/services/comments.ts:70",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:comment"
+      },
+      {
+        "id": "directus-comments-L77",
+        "location": "api/src/services/comments.ts:77",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:comment"
+      },
+      {
+        "id": "directus-comments-L111",
+        "location": "api/src/services/comments.ts:111",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:comment"
+      },
+      {
+        "id": "directus-shares-L182",
+        "location": "api/src/services/shares.ts:182",
+        "goldGroup": "share-invite-recipient-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-shares-L195",
+        "location": "api/src/services/shares.ts:195",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:share"
+      },
+      {
+        "id": "directus-shares-L206",
+        "location": "api/src/services/shares.ts:206",
+        "goldGroup": "share-invite-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:share"
+      },
+      {
+        "id": "directus-shares-L215",
+        "location": "api/src/services/shares.ts:215",
+        "goldGroup": "share-invite-recipient-email",
+        "matched": true,
+        "predictedGroup": "email:share"
+      },
+      {
+        "id": "directus-init-L77",
+        "location": "api/src/cli/commands/init/index.ts:77",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-init-L111",
+        "location": "api/src/cli/commands/init/index.ts:111",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:first"
+      },
+      {
+        "id": "directus-export-L183",
+        "location": "api/src/services/export.ts:183",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:export"
+      },
+      {
+        "id": "directus-manager-L651",
+        "location": "api/src/license/manager.ts:651",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-manager-L656",
+        "location": "api/src/license/manager.ts:656",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:admin"
+      },
+      {
+        "id": "directus-graphql-system-global-L60",
+        "location": "api/src/services/graphql/resolvers/system-global.ts:60",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:global"
+      },
+      {
+        "id": "directus-graphql-system-global-L234",
+        "location": "api/src/services/graphql/resolvers/system-global.ts:234",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:global"
+      },
+      {
+        "id": "directus-graphql-system-global-L250",
+        "location": "api/src/services/graphql/resolvers/system-global.ts:250",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-graphql-system-global-L434",
+        "location": "api/src/services/graphql/resolvers/system-global.ts:434",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:global"
+      },
+      {
+        "id": "directus-graphql-system-global-L450",
+        "location": "api/src/services/graphql/resolvers/system-global.ts:450",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:global"
+      },
+      {
+        "id": "directus-graphql-system-L559",
+        "location": "api/src/services/graphql/resolvers/system.ts:559",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:system"
+      },
+      {
+        "id": "directus-graphql-system-L569",
+        "location": "api/src/services/graphql/resolvers/system.ts:569",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-import-L197",
+        "location": "api/src/services/import/import.ts:197",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-users-L53",
+        "location": "api/src/services/users.ts:53",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L54",
+        "location": "api/src/services/users.ts:54",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L56",
+        "location": "api/src/services/users.ts:56",
+        "goldGroup": "user-account-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-users-L61",
+        "location": "api/src/services/users.ts:61",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L67",
+        "location": "api/src/services/users.ts:67",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L69",
+        "location": "api/src/services/users.ts:69",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L80",
+        "location": "api/src/services/users.ts:80",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L81",
+        "location": "api/src/services/users.ts:81",
+        "goldGroup": "user-account-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-users-L142",
+        "location": "api/src/services/users.ts:142",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L144",
+        "location": "api/src/services/users.ts:144",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L147",
+        "location": "api/src/services/users.ts:147",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L149",
+        "location": "api/src/services/users.ts:149",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L156",
+        "location": "api/src/services/users.ts:156",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L157",
+        "location": "api/src/services/users.ts:157",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L173",
+        "location": "api/src/services/users.ts:173",
+        "goldGroup": "user-account-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "directus-users-L177",
+        "location": "api/src/services/users.ts:177",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L178",
+        "location": "api/src/services/users.ts:178",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L182",
+        "location": "api/src/services/users.ts:182",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L210",
+        "location": "api/src/services/users.ts:210",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L211",
+        "location": "api/src/services/users.ts:211",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L212",
+        "location": "api/src/services/users.ts:212",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L241",
+        "location": "api/src/services/users.ts:241",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L248",
+        "location": "api/src/services/users.ts:248",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L249",
+        "location": "api/src/services/users.ts:249",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L291",
+        "location": "api/src/services/users.ts:291",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L295",
+        "location": "api/src/services/users.ts:295",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L296",
+        "location": "api/src/services/users.ts:296",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L300",
+        "location": "api/src/services/users.ts:300",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L301",
+        "location": "api/src/services/users.ts:301",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L356",
+        "location": "api/src/services/users.ts:356",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L408",
+        "location": "api/src/services/users.ts:408",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L419",
+        "location": "api/src/services/users.ts:419",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L426",
+        "location": "api/src/services/users.ts:426",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L428",
+        "location": "api/src/services/users.ts:428",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L432",
+        "location": "api/src/services/users.ts:432",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L445",
+        "location": "api/src/services/users.ts:445",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L450",
+        "location": "api/src/services/users.ts:450",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L451",
+        "location": "api/src/services/users.ts:451",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L463",
+        "location": "api/src/services/users.ts:463",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L464",
+        "location": "api/src/services/users.ts:464",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L470",
+        "location": "api/src/services/users.ts:470",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L524",
+        "location": "api/src/services/users.ts:524",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:register_user"
+      },
+      {
+        "id": "directus-users-L533",
+        "location": "api/src/services/users.ts:533",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:filter"
+      },
+      {
+        "id": "directus-users-L538",
+        "location": "api/src/services/users.ts:538",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L554",
+        "location": "api/src/services/users.ts:554",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:verification"
+      },
+      {
+        "id": "directus-users-L556",
+        "location": "api/src/services/users.ts:556",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:verification"
+      },
+      {
+        "id": "directus-users-L573",
+        "location": "api/src/services/users.ts:573",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:verification"
+      },
+      {
+        "id": "directus-users-L579",
+        "location": "api/src/services/users.ts:579",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:verification"
+      },
+      {
+        "id": "directus-users-L594",
+        "location": "api/src/services/users.ts:594",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L595",
+        "location": "api/src/services/users.ts:595",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L601",
+        "location": "api/src/services/users.ts:601",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L612",
+        "location": "api/src/services/users.ts:612",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L620",
+        "location": "api/src/services/users.ts:620",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L638",
+        "location": "api/src/services/users.ts:638",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:mail"
+      },
+      {
+        "id": "directus-users-L649",
+        "location": "api/src/services/users.ts:649",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L655",
+        "location": "api/src/services/users.ts:655",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L667",
+        "location": "api/src/services/users.ts:667",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L668",
+        "location": "api/src/services/users.ts:668",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-users-L683",
+        "location": "api/src/services/users.ts:683",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-ldap-L41",
+        "location": "api/src/auth/drivers/ldap.ts:41",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/auth/drivers/ldap.ts:41"
+      },
+      {
+        "id": "directus-ldap-L148",
+        "location": "api/src/auth/drivers/ldap.ts:148",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-ldap-L149",
+        "location": "api/src/auth/drivers/ldap.ts:149",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-ldap-L264",
+        "location": "api/src/auth/drivers/ldap.ts:264",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-ldap-L292",
+        "location": "api/src/auth/drivers/ldap.ts:292",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-oauth2-L189",
+        "location": "api/src/auth/drivers/oauth2.ts:189",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-oauth2-L191",
+        "location": "api/src/auth/drivers/oauth2.ts:191",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-oauth2-L202",
+        "location": "api/src/auth/drivers/oauth2.ts:202",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-oauth2-L227",
+        "location": "api/src/auth/drivers/oauth2.ts:227",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-openid-L270",
+        "location": "api/src/auth/drivers/openid.ts:270",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-openid-L272",
+        "location": "api/src/auth/drivers/openid.ts:272",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-openid-L283",
+        "location": "api/src/auth/drivers/openid.ts:283",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-openid-L308",
+        "location": "api/src/auth/drivers/openid.ts:308",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-create-L8",
+        "location": "api/src/cli/commands/users/create.ts:8",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-create-L12",
+        "location": "api/src/cli/commands/users/create.ts:12",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/cli/commands/users/create.ts:12"
+      },
+      {
+        "id": "directus-create-L19",
+        "location": "api/src/cli/commands/users/create.ts:19",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-create-L31",
+        "location": "api/src/cli/commands/users/create.ts:31",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:user"
+      },
+      {
+        "id": "directus-passwd-L7",
+        "location": "api/src/cli/commands/users/passwd.ts:7",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/cli/commands/users/passwd.ts:7"
+      },
+      {
+        "id": "directus-passwd-L11",
+        "location": "api/src/cli/commands/users/passwd.ts:11",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/cli/commands/users/passwd.ts:7"
+      },
+      {
+        "id": "directus-passwd-L24",
+        "location": "api/src/cli/commands/users/passwd.ts:24",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/cli/commands/users/passwd.ts:7"
+      },
+      {
+        "id": "directus-authentication-L109",
+        "location": "api/src/services/authentication.ts:109",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:authentication"
+      },
+      {
+        "id": "directus-authentication-L348",
+        "location": "api/src/services/authentication.ts:348",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:authentication"
+      },
+      {
+        "id": "directus-authentication-L409",
+        "location": "api/src/services/authentication.ts:409",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:authentication"
+      },
+      {
+        "id": "directus-authentication-L562",
+        "location": "api/src/services/authentication.ts:562",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:authentication"
+      },
+      {
+        "id": "directus-authentication-L597",
+        "location": "api/src/services/authentication.ts:597",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:authentication"
+      },
+      {
+        "id": "directus-tfa-L34",
+        "location": "api/src/services/tfa.ts:34",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:knex"
+      },
+      {
+        "id": "directus-tfa-L44",
+        "location": "api/src/services/tfa.ts:44",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:tfa"
+      },
+      {
+        "id": "directus-tfa-L56",
+        "location": "api/src/services/tfa.ts:56",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:tfa"
+      },
+      {
+        "id": "directus-create-admin-L33",
+        "location": "api/src/utils/create-admin.ts:33",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/utils/create-admin.ts:33"
+      },
+      {
+        "id": "directus-create-admin-L42",
+        "location": "api/src/utils/create-admin.ts:42",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:admin"
+      },
+      {
+        "id": "directus-create-admin-L46",
+        "location": "api/src/utils/create-admin.ts:46",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:admin"
+      },
+      {
+        "id": "directus-create-admin-L68",
+        "location": "api/src/utils/create-admin.ts:68",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:admin"
+      },
+      {
+        "id": "directus-mcp-oauth-L963",
+        "location": "api/src/services/mcp-oauth/index.ts:963",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:tx"
+      },
+      {
+        "id": "directus-mcp-oauth-L1009",
+        "location": "api/src/services/mcp-oauth/index.ts:1009",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email:tx"
+      },
+      {
+        "id": "directus-mcp-oauth-L1021",
+        "location": "api/src/services/mcp-oauth/index.ts:1021",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1021"
+      },
+      {
+        "id": "directus-mcp-oauth-L1038",
+        "location": "api/src/services/mcp-oauth/index.ts:1038",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1021"
+      },
+      {
+        "id": "directus-mcp-oauth-L1160",
+        "location": "api/src/services/mcp-oauth/index.ts:1160",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1160"
+      },
+      {
+        "id": "directus-mcp-oauth-L1262",
+        "location": "api/src/services/mcp-oauth/index.ts:1262",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1160"
+      },
+      {
+        "id": "directus-mcp-oauth-L1343",
+        "location": "api/src/services/mcp-oauth/index.ts:1343",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:202"
+      },
+      {
+        "id": "directus-mcp-oauth-L1344",
+        "location": "api/src/services/mcp-oauth/index.ts:1344",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1344"
+      },
+      {
+        "id": "directus-mcp-oauth-L1350",
+        "location": "api/src/services/mcp-oauth/index.ts:1350",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1344"
+      },
+      {
+        "id": "directus-mcp-oauth-L1962",
+        "location": "api/src/services/mcp-oauth/index.ts:1962",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1962"
+      },
+      {
+        "id": "directus-mcp-oauth-L1963",
+        "location": "api/src/services/mcp-oauth/index.ts:1963",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1961"
+      },
+      {
+        "id": "directus-mcp-oauth-L1969",
+        "location": "api/src/services/mcp-oauth/index.ts:1969",
+        "goldGroup": "user-account-email",
+        "matched": true,
+        "predictedGroup": "email@api/src/services/mcp-oauth/index.ts:1969"
+      }
+    ]
+  }
+}
