@@ -1,0 +1,1365 @@
+repo: strapi
+concept: email
+positive_mentions: 152
+clusters:
+  c001:
+    declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:14
+    mentions:
+    - id: strapi-services-audit-logs-l15
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+      line: 15
+      name: email
+      syntax_kind: identifier
+      text: let displayName = user.email;
+  c002:
+    declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:25 (no shared declaration)
+    mentions:
+    - id: strapi-services-audit-logs-l25
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+      line: 25
+      name: email
+      syntax_kind: property_key
+      text: 'email: user.email,'
+  c003:
+    declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:102 (no shared declaration)
+    mentions:
+    - id: strapi-services-audit-logs-l102
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+      line: 102
+      name: email
+      syntax_kind: string_literal
+      text: 'select: [''id'', ''email'', ''username'', ''firstname'', ''lastname''],'
+  c004:
+    declaration: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts:25
+    mentions:
+    - id: strapi-authentication-utils-middlewares-l26
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 26
+      name: email
+      syntax_kind: identifier
+      text: if (error || !profile || !profile.email) {
+    - id: strapi-authentication-utils-middlewares-l39
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 39
+      name: email
+      syntax_kind: identifier
+      text: const user = await getService('user').findOneByEmail(profile.email);
+  c005:
+    declaration: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts:64
+    mentions:
+    - id: strapi-authentication-utils-middlewares-l64
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 64
+      name: email
+      syntax_kind: identifier
+      text: const { email, firstname, lastname, username } = profile;
+    - id: strapi-authentication-utils-middlewares-l87
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 87
+      name: email
+      syntax_kind: identifier
+      text: email,
+  c006:
+    declaration: packages/core/admin/ee/server/src/controllers/user.ts:14 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-l14
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/user.ts
+      line: 14
+      name: email
+      syntax_kind: string_literal
+      text: const pickUserCreationAttributes = pick(['firstname', 'lastname', 'email', 'roles']);
+  c007:
+    declaration: packages/core/admin/ee/server/src/controllers/user.ts:40 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-l40
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/user.ts
+      line: 40
+      name: email
+      syntax_kind: property_key
+      text: 'const cleanData = { ...body, email: _.get(body, `email`, ``).toLowerCase() };'
+  c008:
+    declaration: packages/core/admin/ee/server/src/controllers/user.ts:47 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-l47
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/user.ts
+      line: 47
+      name: email
+      syntax_kind: property_key
+      text: 'const userAlreadyExists = await getService(''user'').exists({ email: attributes.email });'
+  c009:
+    declaration: packages/core/admin/ee/server/src/controllers/user.ts:73 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-l73
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/user.ts
+      line: 73
+      name: email
+      syntax_kind: string_literal
+      text: if (_.has(data, 'email')) {
+  c010:
+    declaration: packages/core/admin/ee/server/src/controllers/user.ts:76 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-l76
+      batch: KDATAP-6089a6
+      file: packages/core/admin/ee/server/src/controllers/user.ts
+      line: 76
+      name: email
+      syntax_kind: property_key
+      text: 'email: data.email,'
+  c011:
+    declaration: packages/core/admin/ee/server/src/services/auth.ts:18
+    mentions:
+    - id: strapi-auth-ee-L18
+      batch: KDATAP-fc825a
+      file: packages/core/admin/ee/server/src/services/auth.ts
+      line: 18
+      name: email
+      syntax_kind: identifier
+      text: 'const forgotPassword = async ({ email }: any = {}) => {'
+    - id: strapi-auth-ee-L19
+      batch: KDATAP-fc825a
+      file: packages/core/admin/ee/server/src/services/auth.ts
+      line: 19
+      name: email
+      syntax_kind: identifier
+      text: 'const user = await strapi.db.query(''admin::user'').findOne({ where: { email, isActive: true } });'
+  c012:
+    declaration: packages/core/admin/ee/server/src/services/auth.ts:19
+    mentions:
+    - id: strapi-auth-ee-L36
+      batch: KDATAP-fc825a
+      file: packages/core/admin/ee/server/src/services/auth.ts
+      line: 36
+      name: email
+      syntax_kind: identifier
+      text: 'to: user.email,'
+  c013:
+    declaration: packages/core/admin/ee/server/src/services/auth.ts:43 (no shared declaration)
+    mentions:
+    - id: strapi-auth-ee-L43
+      batch: KDATAP-fc825a
+      file: packages/core/admin/ee/server/src/services/auth.ts
+      line: 43
+      name: email
+      syntax_kind: string_literal
+      text: 'user: _.pick(user, [''email'', ''firstname'', ''lastname'', ''username'']),'
+  c014:
+    declaration: packages/core/admin/server/src/content-types/User.ts:39 (no shared declaration)
+    mentions:
+    - id: strapi-content-types-user-l39
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/content-types/User.ts
+      line: 39
+      name: email
+      syntax_kind: property_key
+      text: 'email: {'
+  c015:
+    declaration: packages/core/admin/server/src/content-types/User.ts:40 (no shared declaration)
+    mentions:
+    - id: strapi-content-types-user-l40
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/content-types/User.ts
+      line: 40
+      name: email
+      syntax_kind: string_literal
+      text: 'type: ''email'','
+  c016:
+    declaration: packages/core/admin/server/src/controllers/authenticated-user.ts:27
+    mentions:
+    - id: strapi-controllers-authenticated-user-l41
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/controllers/authenticated-user.ts
+      line: 41
+      name: email
+      syntax_kind: identifier
+      text: if (userInfo.email !== undefined) {
+  c017:
+    declaration: packages/core/admin/server/src/controllers/authenticated-user.ts:44 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-authenticated-user-l44
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/controllers/authenticated-user.ts
+      line: 44
+      name: email
+      syntax_kind: property_key
+      text: 'email: userInfo.email,'
+  c018:
+    declaration: packages/core/admin/server/src/controllers/user.ts:27 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-L27
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/controllers/user.ts
+      line: 27
+      name: email
+      syntax_kind: property_key
+      text: 'const cleanData = { ...body, email: _.get(body, `email`, ``).toLowerCase() };'
+  c019:
+    declaration: packages/core/admin/server/src/controllers/user.ts:34 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-L34
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/controllers/user.ts
+      line: 34
+      name: email
+      syntax_kind: string_literal
+      text: '''email'','
+  c020:
+    declaration: packages/core/admin/server/src/controllers/user.ts:40 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-L40
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/controllers/user.ts
+      line: 40
+      name: email
+      syntax_kind: property_key
+      text: 'email: attributes.email,'
+  c021:
+    declaration: packages/core/admin/server/src/controllers/user.ts:101 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-L101
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/controllers/user.ts
+      line: 101
+      name: email
+      syntax_kind: string_literal
+      text: if (_.has(data, 'email')) {
+  c022:
+    declaration: packages/core/admin/server/src/controllers/user.ts:104 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-user-L104
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/controllers/user.ts
+      line: 104
+      name: email
+      syntax_kind: property_key
+      text: 'email: data.email,'
+  c023:
+    declaration: packages/core/admin/server/src/middlewares/rateLimit.ts:28
+    mentions:
+    - id: strapi-middlewares-ratelimit-l28
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/middlewares/rateLimit.ts
+      line: 28
+      name: requestEmail
+      syntax_kind: identifier
+      text: const requestEmail = get('request.body.email')(ctx);
+  c024:
+    declaration: packages/core/admin/server/src/middlewares/rateLimit.ts:29
+    mentions:
+    - id: strapi-middlewares-ratelimit-l29
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/middlewares/rateLimit.ts
+      line: 29
+      name: userEmail
+      syntax_kind: identifier
+      text: 'const userEmail = isString(requestEmail) ? requestEmail.toLowerCase() : ''unknownEmail'';'
+    - id: strapi-middlewares-ratelimit-l38
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/middlewares/rateLimit.ts
+      line: 38
+      name: userEmail
+      syntax_kind: identifier
+      text: 'prefixKey: `${userEmail}:${requestPath}:${ctx.request.ip}`,'
+  c025:
+    declaration: packages/core/admin/server/src/services/auth.ts:87
+    mentions:
+    - id: strapi-auth-L87
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 87
+      name: email
+      syntax_kind: identifier
+      text: 'const checkCredentials = async ({ email, password }: { email: string; password: string }) => {'
+    - id: strapi-auth-L88
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 88
+      name: email
+      syntax_kind: identifier
+      text: 'const user: AdminUser = await strapi.db.query(''admin::user'').findOne({ where: { email } });'
+  c026:
+    declaration: packages/core/admin/server/src/services/auth.ts:111
+    mentions:
+    - id: strapi-auth-L111
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 111
+      name: email
+      syntax_kind: identifier
+      text: 'const forgotPassword = async ({ email } = {} as { email: string }) => {'
+    - id: strapi-auth-L114
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 114
+      name: email
+      syntax_kind: identifier
+      text: '.findOne({ where: { email, isActive: true } });'
+  c027:
+    declaration: packages/core/admin/server/src/services/auth.ts:112
+    mentions:
+    - id: strapi-auth-L131
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 131
+      name: email
+      syntax_kind: identifier
+      text: 'to: user.email,'
+  c028:
+    declaration: packages/core/admin/server/src/services/auth.ts:138 (no shared declaration)
+    mentions:
+    - id: strapi-auth-L138
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/auth.ts
+      line: 138
+      name: email
+      syntax_kind: string_literal
+      text: 'user: _.pick(user, [''email'', ''firstname'', ''lastname'', ''username'']),'
+  c029:
+    declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:9 (no shared declaration)
+    mentions:
+    - id: strapi-passport-local-strategy-l9
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/services/passport/local-strategy.ts
+      line: 9
+      name: email
+      syntax_kind: string_literal
+      text: 'usernameField: ''email'','
+  c030:
+    declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:13
+    mentions:
+    - id: strapi-passport-local-strategy-l13
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/services/passport/local-strategy.ts
+      line: 13
+      name: email
+      syntax_kind: identifier
+      text: '(email: string, password: string, done: any) => {'
+  c031:
+    declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:15 (no shared declaration)
+    mentions:
+    - id: strapi-passport-local-strategy-l15
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/services/passport/local-strategy.ts
+      line: 15
+      name: email
+      syntax_kind: property_key
+      text: '.checkCredentials({ email: toLower(email), password })'
+  c032:
+    declaration: packages/core/admin/server/src/services/user.ts:195
+    mentions:
+    - id: strapi-user-L195
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 195
+      name: email
+      syntax_kind: identifier
+      text: 'const resetPasswordByEmail = async (email: string, password: string) => {'
+    - id: strapi-user-L198
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 198
+      name: email
+      syntax_kind: identifier
+      text: '.findOne({ where: { email }, populate: [''roles''] });'
+    - id: strapi-user-L201
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 201
+      name: email
+      syntax_kind: identifier
+      text: 'throw new Error(`User not found for email: ${email}`);'
+  c033:
+    declaration: packages/core/admin/server/src/services/user.ts:268 (no shared declaration)
+    mentions:
+    - id: strapi-user-L268
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 268
+      name: email
+      syntax_kind: string_literal
+      text: '): Promise<Pick<AdminUser, ''email'' | ''firstname'' | ''lastname''> | undefined> => {'
+  c034:
+    declaration: packages/core/admin/server/src/services/user.ts:275 (no shared declaration)
+    mentions:
+    - id: strapi-user-L275
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 275
+      name: email
+      syntax_kind: string_literal
+      text: return _.pick(user, ['email', 'firstname', 'lastname']);
+  c035:
+    declaration: packages/core/admin/server/src/services/user.ts:321
+    mentions:
+    - id: strapi-user-L321
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 321
+      name: email
+      syntax_kind: identifier
+      text: 'const findOneByEmail = async (email: string, populate = []) => {'
+  c036:
+    declaration: packages/core/admin/server/src/services/user.ts:323 (no shared declaration)
+    mentions:
+    - id: strapi-user-L323
+      batch: KDATAP-fc825a
+      file: packages/core/admin/server/src/services/user.ts
+      line: 323
+      name: email
+      syntax_kind: property_key
+      text: 'where: { email: { $eqi: email } },'
+  c037:
+    declaration: packages/core/admin/server/src/utils/normalize-email.ts:12
+    mentions:
+    - id: strapi-utils-normalize-email-l12
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/utils/normalize-email.ts
+      line: 12
+      name: email
+      syntax_kind: identifier
+      text: 'const { email } = payload as { email?: unknown };'
+    - id: strapi-utils-normalize-email-l14
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/utils/normalize-email.ts
+      line: 14
+      name: email
+      syntax_kind: identifier
+      text: if (typeof email === 'string') {
+  c038:
+    declaration: packages/core/admin/server/src/utils/normalize-email.ts:15 (no shared declaration)
+    mentions:
+    - id: strapi-utils-normalize-email-l15
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/utils/normalize-email.ts
+      line: 15
+      name: email
+      syntax_kind: property_key
+      text: 'return { ...payload, email: email.toLowerCase() };'
+  c039:
+    declaration: packages/core/admin/server/src/validation/user.ts:8 (no shared declaration)
+    mentions:
+    - id: strapi-validation-user-l8
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/validation/user.ts
+      line: 8
+      name: email
+      syntax_kind: property_key
+      text: 'email: validators.email.required(),'
+  c040:
+    declaration: packages/core/admin/server/src/validation/user.ts:19 (no shared declaration)
+    mentions:
+    - id: strapi-validation-user-l19
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/validation/user.ts
+      line: 19
+      name: email
+      syntax_kind: property_key
+      text: 'email: validators.email.notNull(),'
+  c041:
+    declaration: packages/core/admin/server/src/validation/user.ts:37 (no shared declaration)
+    mentions:
+    - id: strapi-validation-user-l37
+      batch: KDATAP-6089a6
+      file: packages/core/admin/server/src/validation/user.ts
+      line: 37
+      name: email
+      syntax_kind: property_key
+      text: 'email: validators.email.notNull(),'
+  c042:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:10 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l10
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 10
+      name: email
+      syntax_kind: string_literal
+      text: 'user: Pick<AdminUser, ''email'' | ''password''>;'
+  c043:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:12 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l12
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 12
+      name: email
+      syntax_kind: string_literal
+      text: 'body: Pick<AdminUser, ''email'' | ''password''> & {'
+  c044:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:57 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l57
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 57
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c045:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:72 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l72
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 72
+      name: email
+      syntax_kind: string_literal
+      text: 'userInfo: Pick<AdminUser, ''firstname'' | ''lastname'' | ''email'' | ''password''>;'
+  c046:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:93 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l93
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 93
+      name: email
+      syntax_kind: string_literal
+      text: 'body: Pick<AdminUser, ''email'' | ''firstname'' | ''lastname'' | ''password''> & {'
+  c047:
+    declaration: packages/core/admin/shared/contracts/authentication.ts:115 (no shared declaration)
+    mentions:
+    - id: strapi-contracts-authentication-l115
+      batch: KDATAP-6089a6
+      file: packages/core/admin/shared/contracts/authentication.ts
+      line: 115
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c048:
+    declaration: packages/core/email/server/src/controllers/email.ts:44 (no shared declaration)
+    mentions:
+    - id: strapi-controllers-email-L44
+      batch: KDATAP-e5e3e0
+      file: packages/core/email/server/src/controllers/email.ts
+      line: 44
+      name: email
+      syntax_kind: string_literal
+      text: 'subject: `Strapi test mail to: ${to}`,'
+  c049:
+    declaration: packages/core/email/server/src/middlewares/rateLimit.ts:21
+    mentions:
+    - id: strapi-rateLimit-L21
+      batch: KDATAP-a3b99d
+      file: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 21
+      name: requestEmail
+      syntax_kind: identifier
+      text: const requestEmail = get('request.body.email')(ctx);
+  c050:
+    declaration: packages/core/email/server/src/middlewares/rateLimit.ts:22
+    mentions:
+    - id: strapi-rateLimit-L22
+      batch: KDATAP-a3b99d
+      file: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 22
+      name: userEmail
+      syntax_kind: identifier
+      text: 'const userEmail = isString(requestEmail) ? requestEmail.toLowerCase() : ''unknownEmail'';'
+    - id: strapi-rateLimit-L27
+      batch: KDATAP-a3b99d
+      file: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 27
+      name: userEmail
+      syntax_kind: identifier
+      text: 'prefixKey: `${userEmail}`,'
+  c051:
+    declaration: packages/core/email/server/src/types.ts:20 (no shared declaration)
+    mentions:
+    - id: strapi-types-L20
+      batch: KDATAP-e5e3e0
+      file: packages/core/email/server/src/types.ts
+      line: 20
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c052:
+    declaration: packages/core/email/shared/email-address-parser.ts:16 (no shared declaration)
+    mentions:
+    - id: strapi-email-address-parser-L16
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 16
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c053:
+    declaration: packages/core/email/shared/email-address-parser.ts:217
+    mentions:
+    - id: strapi-email-address-parser-L217
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 217
+      name: emailString
+      syntax_kind: identifier
+      text: 'export const parseEmailAddress = (emailString: string | undefined | null): ParsedEmailAddress => {'
+    - id: strapi-email-address-parser-L218
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 218
+      name: emailString
+      syntax_kind: identifier
+      text: if (!emailString || typeof emailString !== 'string') {
+    - id: strapi-email-address-parser-L222
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 222
+      name: emailString
+      syntax_kind: identifier
+      text: const original = emailString;
+    - id: strapi-email-address-parser-L225
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 225
+      name: emailString
+      syntax_kind: identifier
+      text: let decoded = decodeRfc2047(emailString);
+  c054:
+    declaration: packages/core/email/shared/email-address-parser.ts:219 (no shared declaration)
+    mentions:
+    - id: strapi-email-address-parser-L219
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 219
+      name: email
+      syntax_kind: property_key
+      text: 'return { name: null, email: '''', original: emailString || '''' };'
+  c055:
+    declaration: packages/core/email/shared/email-address-parser.ts:237
+    mentions:
+    - id: strapi-email-address-parser-L237
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 237
+      name: email
+      syntax_kind: identifier
+      text: const email = angleMatch[2].trim();
+    - id: strapi-email-address-parser-L253
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 253
+      name: email
+      syntax_kind: identifier
+      text: email,
+  c056:
+    declaration: packages/core/email/shared/email-address-parser.ts:266 (no shared declaration)
+    mentions:
+    - id: strapi-email-address-parser-L266
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 266
+      name: email
+      syntax_kind: property_key
+      text: 'email: trimmedDecoded,'
+  c057:
+    declaration: packages/core/email/shared/email-address-parser.ts:274 (no shared declaration)
+    mentions:
+    - id: strapi-email-address-parser-L274
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 274
+      name: email
+      syntax_kind: property_key
+      text: 'email: trimmedDecoded,'
+  c058:
+    declaration: packages/core/email/shared/email-address-parser.ts:294
+    mentions:
+    - id: strapi-email-address-parser-L294
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 294
+      name: email
+      syntax_kind: identifier
+      text: 'export const formatEmailAddress = (name: string | null, email: string): string => {'
+    - id: strapi-email-address-parser-L296
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 296
+      name: email
+      syntax_kind: identifier
+      text: return email;
+    - id: strapi-email-address-parser-L306
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 306
+      name: email
+      syntax_kind: identifier
+      text: return `"${escaped}" <${email}>`;
+    - id: strapi-email-address-parser-L309
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 309
+      name: email
+      syntax_kind: identifier
+      text: return `${name} <${email}>`;
+  c059:
+    declaration: packages/core/email/shared/email-address-parser.ts:319
+    mentions:
+    - id: strapi-email-address-parser-L319
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 319
+      name: email
+      syntax_kind: identifier
+      text: 'export const isValidEmail = (email: string): boolean => {'
+    - id: strapi-email-address-parser-L320
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 320
+      name: email
+      syntax_kind: identifier
+      text: if (!email || typeof email !== 'string') {
+    - id: strapi-email-address-parser-L329
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 329
+      name: email
+      syntax_kind: identifier
+      text: return emailPattern.test(email);
+  c060:
+    declaration: packages/core/email/shared/email-address-parser.ts:344
+    mentions:
+    - id: strapi-email-address-parser-L344
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 344
+      name: emailsString
+      syntax_kind: identifier
+      text: 'emailsString: string | undefined | null'
+    - id: strapi-email-address-parser-L346
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 346
+      name: emailsString
+      syntax_kind: identifier
+      text: if (!emailsString || typeof emailsString !== 'string') {
+    - id: strapi-email-address-parser-L356
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 356
+      name: emailsString
+      syntax_kind: identifier
+      text: for (const char of emailsString) {
+  c061:
+    declaration: packages/core/email/shared/email-address-parser.ts:345 (no shared declaration)
+    mentions:
+    - id: strapi-email-address-parser-L345
+      batch: KDATAP-00c6c6
+      file: packages/core/email/shared/email-address-parser.ts
+      line: 345
+      name: ParsedEmailAddress
+      syntax_kind: type_name
+      text: '): ParsedEmailAddress[] => {'
+  c062:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:11 (no shared declaration)
+    mentions:
+    - id: strapi-active-user-L11
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 11
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c063:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:16 (no shared declaration)
+    mentions:
+    - id: strapi-active-user-L16
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 16
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c064:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:21 (no shared declaration)
+    mentions:
+    - id: strapi-active-user-L21
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 21
+      name: email
+      syntax_kind: string_literal
+      text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
+  c065:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:25
+    mentions:
+    - id: strapi-active-user-L25
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 25
+      name: email
+      syntax_kind: identifier
+      text: 'async function setActive({ email, active }: CmdOptions) {'
+  c066:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:29
+    mentions:
+    - id: strapi-active-user-L29
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 29
+      name: cleanEmail
+      syntax_kind: identifier
+      text: const cleanEmail = email?.trim().toLowerCase();
+    - id: strapi-active-user-L39
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 39
+      name: cleanEmail
+      syntax_kind: identifier
+      text: const user = await app.admin.services.user.findOneByEmail(cleanEmail);
+    - id: strapi-active-user-L42
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 42
+      name: cleanEmail
+      syntax_kind: identifier
+      text: console.error(`User with email "${cleanEmail}" does not exist`);
+    - id: strapi-active-user-L55
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 55
+      name: cleanEmail
+      syntax_kind: identifier
+      text: console.log(`Successfully set ${cleanEmail} active status to ${cleanActive}`);
+  c067:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:63
+    mentions:
+    - id: strapi-active-user-L63
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 63
+      name: email
+      syntax_kind: identifier
+      text: const { email, active } = cmdOptions;
+    - id: strapi-active-user-L65
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 65
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) && _.isEmpty(active) && process.stdin.isTTY) {
+    - id: strapi-active-user-L72
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 72
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) || _.isEmpty(active)) {
+    - id: strapi-active-user-L77
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 77
+      name: email
+      syntax_kind: identifier
+      text: return setActive({ email, active });
+  c068:
+    declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:87 (no shared declaration)
+    mentions:
+    - id: strapi-active-user-L87
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      line: 87
+      name: email
+      syntax_kind: string_literal
+      text: .option('-e, --email <email>', 'The user email')
+  c069:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:11 (no shared declaration)
+    mentions:
+    - id: strapi-block-user-L11
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 11
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c070:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:16 (no shared declaration)
+    mentions:
+    - id: strapi-block-user-L16
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 16
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c071:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:21 (no shared declaration)
+    mentions:
+    - id: strapi-block-user-L21
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 21
+      name: email
+      syntax_kind: string_literal
+      text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
+  c072:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:25
+    mentions:
+    - id: strapi-block-user-L25
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 25
+      name: email
+      syntax_kind: identifier
+      text: 'async function setBlock({ email, block }: CmdOptions) {'
+  c073:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:29
+    mentions:
+    - id: strapi-block-user-L29
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 29
+      name: cleanEmail
+      syntax_kind: identifier
+      text: const cleanEmail = email?.trim().toLowerCase();
+    - id: strapi-block-user-L39
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 39
+      name: cleanEmail
+      syntax_kind: identifier
+      text: const user = await app.admin.services.user.findOneByEmail(cleanEmail);
+    - id: strapi-block-user-L42
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 42
+      name: cleanEmail
+      syntax_kind: identifier
+      text: console.error(`User with email "${cleanEmail}" does not exist`);
+    - id: strapi-block-user-L53
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 53
+      name: cleanEmail
+      syntax_kind: identifier
+      text: console.log(`Successfully set ${cleanEmail} block status to ${cleanBlock}`);
+  c074:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:61
+    mentions:
+    - id: strapi-block-user-L61
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 61
+      name: email
+      syntax_kind: identifier
+      text: const { email, block } = cmdOptions;
+    - id: strapi-block-user-L63
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 63
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) && _.isEmpty(block) && process.stdin.isTTY) {
+    - id: strapi-block-user-L70
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 70
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) || _.isEmpty(block)) {
+    - id: strapi-block-user-L75
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 75
+      name: email
+      syntax_kind: identifier
+      text: return setBlock({ email, block });
+  c075:
+    declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:85 (no shared declaration)
+    mentions:
+    - id: strapi-block-user-L85
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      line: 85
+      name: email
+      syntax_kind: string_literal
+      text: .option('-e, --email <email>', 'The user email')
+  c076:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:12 (no shared declaration)
+    mentions:
+    - id: strapi-create-user-L12
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 12
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c077:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:37 (no shared declaration)
+    mentions:
+    - id: strapi-create-user-L37
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 37
+      name: email
+      syntax_kind: property_key
+      text: 'email: emailValidator,'
+  c078:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:44 (no shared declaration)
+    mentions:
+    - id: strapi-create-user-L44
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 44
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c079:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:59 (no shared declaration)
+    mentions:
+    - id: strapi-create-user-L59
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 59
+      name: email
+      syntax_kind: string_literal
+      text: 'name: ''email'','
+  c080:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:62
+    mentions:
+    - id: strapi-create-user-L62
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 62
+      name: validEmail
+      syntax_kind: identifier
+      text: const validEmail = await emailValidator.validate(value);
+    - id: strapi-create-user-L63
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 63
+      name: validEmail
+      syntax_kind: identifier
+      text: return validEmail === value || validEmail;
+  c081:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:84
+    mentions:
+    - id: strapi-create-user-L84
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 84
+      name: email
+      syntax_kind: identifier
+      text: 'async function createAdmin({ email, password, firstname, lastname }: CmdOptions) {'
+    - id: strapi-create-user-L88
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 88
+      name: email
+      syntax_kind: identifier
+      text: const user = await app.admin!.services.user.exists({ email });
+    - id: strapi-create-user-L91
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 91
+      name: email
+      syntax_kind: identifier
+      text: console.error(`User with email "${email}" already exists`);
+    - id: strapi-create-user-L98
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 98
+      name: email
+      syntax_kind: identifier
+      text: email,
+  c082:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:114
+    mentions:
+    - id: strapi-create-user-L114
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 114
+      name: email
+      syntax_kind: identifier
+      text: let { email, password, firstname, lastname } = cmdOptions;
+    - id: strapi-create-user-L117
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 117
+      name: email
+      syntax_kind: identifier
+      text: _.isEmpty(email) &&
+    - id: strapi-create-user-L130
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 130
+      name: email
+      syntax_kind: identifier
+      text: ({ email, password, firstname, lastname } = inquiry);
+    - id: strapi-create-user-L134
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 134
+      name: email
+      syntax_kind: identifier
+      text: await adminCreateSchema.validate({ email, password, firstname, lastname });
+    - id: strapi-create-user-L143
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 143
+      name: email
+      syntax_kind: identifier
+      text: return createAdmin({ email, password, firstname, lastname });
+  c083:
+    declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:153 (no shared declaration)
+    mentions:
+    - id: strapi-create-user-L153
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      line: 153
+      name: email
+      syntax_kind: string_literal
+      text: .option('-e, --email <email>', 'Email of the new admin')
+  c084:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:12 (no shared declaration)
+    mentions:
+    - id: strapi-delete-user-L12
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 12
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c085:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:18 (no shared declaration)
+    mentions:
+    - id: strapi-delete-user-L18
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 18
+      name: email
+      syntax_kind: property_key
+      text: 'email: emailValidator,'
+  c086:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:22 (no shared declaration)
+    mentions:
+    - id: strapi-delete-user-L22
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 22
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c087:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:33 (no shared declaration)
+    mentions:
+    - id: strapi-delete-user-L33
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 33
+      name: email
+      syntax_kind: string_literal
+      text: 'name: ''email'','
+  c088:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:36
+    mentions:
+    - id: strapi-delete-user-L36
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 36
+      name: validEmail
+      syntax_kind: identifier
+      text: const validEmail = await emailValidator.validate(value);
+    - id: strapi-delete-user-L37
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 37
+      name: validEmail
+      syntax_kind: identifier
+      text: return validEmail === value || validEmail;
+  c089:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:47
+    mentions:
+    - id: strapi-delete-user-L47
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 47
+      name: email
+      syntax_kind: identifier
+      text: 'async function deleteAdmin({ email }: CmdOptions) {'
+    - id: strapi-delete-user-L51
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 51
+      name: email
+      syntax_kind: identifier
+      text: const user = await app.admin.services.user.findOneByEmail(email);
+    - id: strapi-delete-user-L54
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 54
+      name: email
+      syntax_kind: identifier
+      text: console.error(`User with email "${email}" does not exist`);
+  c090:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:73
+    mentions:
+    - id: strapi-delete-user-L73
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 73
+      name: email
+      syntax_kind: identifier
+      text: let { email } = cmdOptions;
+    - id: strapi-delete-user-L75
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 75
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) && process.stdin.isTTY) {
+    - id: strapi-delete-user-L83
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 83
+      name: email
+      syntax_kind: identifier
+      text: ({ email } = inquiry);
+    - id: strapi-delete-user-L86
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 86
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email)) {
+    - id: strapi-delete-user-L92
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 92
+      name: email
+      syntax_kind: identifier
+      text: await adminDeleteSchema.validate({ email });
+    - id: strapi-delete-user-L101
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 101
+      name: email
+      syntax_kind: identifier
+      text: return deleteAdmin({ email });
+  c091:
+    declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:111 (no shared declaration)
+    mentions:
+    - id: strapi-delete-user-L111
+      batch: KDATAP-faabdc
+      file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      line: 111
+      name: email
+      syntax_kind: string_literal
+      text: .option('-e, --email <email>', 'Email of the current admin')
+  c092:
+    declaration: packages/core/strapi/src/cli/commands/admin/list-users.ts:17 (no shared declaration)
+    mentions:
+    - id: strapi-admin-list-users-l17
+      batch: KDATAP-6089a6
+      file: packages/core/strapi/src/cli/commands/admin/list-users.ts
+      line: 17
+      name: email
+      syntax_kind: string_literal
+      text: 'select: [''id'', ''firstname'', ''lastname'', ''email'', ''isActive'', ''blocked''],'
+  c093:
+    declaration: packages/core/strapi/src/cli/commands/admin/list-users.ts:34
+    mentions:
+    - id: strapi-admin-list-users-l38
+      batch: KDATAP-6089a6
+      file: packages/core/strapi/src/cli/commands/admin/list-users.ts
+      line: 38
+      name: email
+      syntax_kind: identifier
+      text: user.email,
+  c094:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:11 (no shared declaration)
+    mentions:
+    - id: strapi-reset-user-password-L11
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 11
+      name: email
+      syntax_kind: property_key
+      text: 'email?: string;'
+  c095:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:16 (no shared declaration)
+    mentions:
+    - id: strapi-reset-user-password-L16
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 16
+      name: email
+      syntax_kind: property_key
+      text: 'email: string;'
+  c096:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:22 (no shared declaration)
+    mentions:
+    - id: strapi-reset-user-password-L22
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 22
+      name: email
+      syntax_kind: string_literal
+      text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
+  c097:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:31
+    mentions:
+    - id: strapi-reset-user-password-L31
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 31
+      name: email
+      syntax_kind: identifier
+      text: 'async function changePassword({ email, password }: CmdOptions) {'
+    - id: strapi-reset-user-password-L35
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 35
+      name: email
+      syntax_kind: identifier
+      text: await app.admin!.services.user.resetPasswordByEmail(email, password);
+  c098:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:45
+    mentions:
+    - id: strapi-reset-user-password-L45
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 45
+      name: email
+      syntax_kind: identifier
+      text: const { email, password } = cmdOptions;
+    - id: strapi-reset-user-password-L47
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 47
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) && _.isEmpty(password) && process.stdin.isTTY) {
+    - id: strapi-reset-user-password-L58
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 58
+      name: email
+      syntax_kind: identifier
+      text: if (_.isEmpty(email) || _.isEmpty(password)) {
+    - id: strapi-reset-user-password-L63
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 63
+      name: email
+      syntax_kind: identifier
+      text: return changePassword({ email, password });
+  c099:
+    declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:73 (no shared declaration)
+    mentions:
+    - id: strapi-reset-user-password-L73
+      batch: KDATAP-fc825a
+      file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 73
+      name: email
+      syntax_kind: string_literal
+      text: .option('-e, --email <email>', 'The user email')
