@@ -21,7 +21,7 @@ const GENERIC_WORDS = new Set([
   "main", "model", "models", "new", "normalized", "obj", "of", "old", "options", "opts",
   "params", "parse", "parser", "payload", "props", "raw", "record", "recipient", "recipients",
   "remove", "req", "result", "row", "self", "send", "service", "set", "str", "target", "task",
-  "the", "this", "to", "trimmed", "u", "update", "user", "valid", "validate", "validated",
+  "key", "the", "this", "to", "trimmed", "u", "update", "user", "valid", "validate", "validated",
   "validation", "validations", "value", "verify", "with", "x",
 ]);
 
@@ -184,10 +184,18 @@ const CLASS_ROLE_WORDS = new Set(["service", "services", "repository", "model", 
  * -> `user`, `MemberRepository` -> `member`, `User` -> `user`. Unlike `entityName`, a
  * generic word such as `user` is kept: a class named `User` is that entity.
  */
+/** Trailing words that name a wrapper around an entity rather than the entity. */
+const CONTAINER_WORDS = new Set([
+  "info", "data", "input", "payload", "dto", "record", "result", "details", "params",
+  "options", "args", "attributes", "props", "text",
+]);
+
 export function classEntity(className: string): string | undefined {
   const words = identifierWords(className)
     .filter((word) => !CLASS_ROLE_WORDS.has(word))
     .map(singular);
+  // UserInfo -> user, RegisterUserInput -> register_user; keep at least one word.
+  while (words.length > 1 && CONTAINER_WORDS.has(words[words.length - 1])) words.pop();
   return words.length > 0 ? words.join("_") : undefined;
 }
 
