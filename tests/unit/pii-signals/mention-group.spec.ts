@@ -350,3 +350,24 @@ describe("receiver chains and concept modifiers", () => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
 });
+
+describe("assigned function definitions", () => {
+  it.each([
+    ["const findOneByEmail = async (email: string, populate = []) => {", undefined],
+    ["  sendResetEmail: async (to) => {", undefined],
+    ["const customerEmail = order.customer.email;", "customer"],
+  ])("%s -> %s", (line, expected) => {
+    expect(mentionQualifier(line, "email")).toBe(expected);
+  });
+});
+
+describe("lookup names", () => {
+  it.each([
+    ["  findOneByEmail,", undefined],
+    ["  resetPasswordByEmail,", undefined],
+    ["const emailForUser = x;", undefined],
+    ["const senderEmail = x;", "sender"],
+  ])("%s -> %s", (line, expected) => {
+    expect(mentionQualifier(line, "email")).toBe(expected);
+  });
+});

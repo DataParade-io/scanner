@@ -77,7 +77,12 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
         const nameWords = identifierWords(name);
         return conceptWords.every((word) => nameWords.includes(word));
       });
-    const isFunctionName = /^\s*(\(|:\s*(async\s+)?function\b)/.test(after) && !assignsConcept;
+    // Also a function defined by assignment: `findOneByEmail = async (email) => ...`,
+    // `sendEmail: async (to) => ...`, `x = function (...)`.
+    const isFunctionName =
+      (/^\s*(\(|:\s*(async\s+)?function\b)/.test(after) ||
+        /^\s*[:=]\s*(async\s+)?(function\b|\([^)]*\)\s*(:\s*[^=]+)?=>|[A-Za-z_$][\w$]*\s*=>)/.test(after)) &&
+      !assignsConcept;
     const words = identifierWords(identifier);
     // A getter named for whose value it returns keeps its qualifier:
     // `get_customer_email()` -> customer. Lookups (`getByEmail`) and actions
@@ -93,6 +98,12 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
     // The concept as a leading modifier names a feature, not whose data it is:
     // emailSuppressionList, email_service, emailTemplate.
     if (conceptWords.every((word, index) => words[index] === word)) continue;
+    // "... by email" names a lookup, never an owner: findOneByEmail, resetPasswordByEmail
+    // (also as a shorthand export entry, where no call follows the name).
+    const conceptAt = words.indexOf(conceptWords[0]);
+    // A role (used_by_email, created_by_email, assigned_to_email) starts with a past
+    // participle and keeps its qualifier.
+    if (conceptAt > 0 && LOOKUP_WORDS.has(words[conceptAt - 1]) && !words[0].endsWith("ed")) continue;
     const qualifiers = words.filter((word) => !GENERIC_WORDS.has(word) && !conceptWords.includes(word));
     if (qualifiers.length === 0) continue;
     if (!chosen) {

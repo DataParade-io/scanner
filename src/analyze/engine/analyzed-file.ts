@@ -209,6 +209,11 @@ export class AnalyzedFile {
    */
   definitionOwner(line: number, column: number): string | undefined {
     const node = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    // A key in an object built inside a function is data being passed (`findOne({ where:
+    // { email } })`), not a field, whichever key or boundary is met first.
+    for (let current = node?.parent ?? null; current; current = current.parent) {
+      if (this.scopes.get(current.id)?.kind === "function") return undefined;
+    }
     let passedOwnKey = false;
     for (let current = node?.parent ?? null; current; current = current.parent) {
       const key = current.childForFieldName("key");
