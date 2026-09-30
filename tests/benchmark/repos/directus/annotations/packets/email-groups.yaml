@@ -1,0 +1,51 @@
+repo: directus
+concept: email
+provenance:
+  proposed_by: claude-sonnet-5-5
+  proposed_at: '2026-09-30'
+  review_state: proposed
+groups:
+  - id: user-account-email
+    name: Directus user account email
+    subject: directus user (directus_users row)
+    subject_kind: end_user
+    purpose: login identifier, invitations, registration verification, password reset, notifications, TFA account name, and admin bootstrap for Directus users
+    rationale: >-
+      Every cluster here is the directus_users.email column or a value that flows into or out of it.
+      Column reads and writes: migrations (20210903A-add-auth-provider.ts:8,16,22,38), knex selects and joins of 'email' / 'u.email'
+      (authentication.ts:109,348,562,597; tfa.ts:34; mcp-oauth/index.ts:1343,1963; users.ts:67,147), and UsersService.readOne field lists
+      (comments.ts:70,77,111; export.ts:183; import.ts:197; shares.ts:195; notifications.ts:33; license/manager.ts:651).
+      Login and lookup: request field email is checked in local.ts:21,28 and by the login Joi schema (local.ts:57), the GraphQL auth_login
+      args (system-global.ts:60) are passed straight to AuthenticationService.login, and getUserByEmail (users.ts:142-149) matches LOWER(directus_users.email).
+      Request payloads feed UsersService and hit that column: /password/request (controllers/auth.ts:199,214 and graphql system-global.ts:234,250) into
+      requestPasswordReset (users.ts:612,620); invite (controllers/users.ts:286,303, graphql system.ts:559,569) into inviteUser (users.ts:408-451), which calls
+      createOne({ email }) at users.ts:432; register (controllers/users.ts:458, graphql system-global.ts:434,450) into registerUser (users.ts:524-579) and createOne.
+      JWT payload keys email (users.ts:157,464,556,595,638,668) are signed from user.email or the input email and read back at users.ts:463,594,667 into getUserByEmail.
+      Uniqueness and validation helpers (users.ts:53-81,173-182,210-301) operate on the same payload email that createOne/updateMany store.
+      Identity providers write it into the user: ldap.ts:41,148,149,264,292, oauth2.ts:189,202,227, openid.ts:270,283,308 and saml.ts:59,83 build userPayload.email
+      that is passed to usersService.createOne/updateOne. CLI and bootstrap: cli/commands/init/index.ts:77,111 (inserted into directus_users), users/create.ts:8,12,19,31
+      (service.createOne), users/passwd.ts:7,11,24 (lookup in directus_users), utils/create-admin.ts:33,42,68 (createOne of first admin; ADMIN_EMAIL only seeds it),
+      license sso-enabled.ts:53,57,58 (updateOne of the admin user). mcp-oauth/index.ts:963,1009,1021,1160,1344,1962,1969 carry the email selected from directus_users
+      through requireActiveUser into activity log text; the copies are in-memory reads of the same column. Directus users are the product's admin-app users, so end_user is used
+      as the closest kind; adjudicate if a workforce classification is wanted.
+    clusters: [c001, c002, c003, c004, c005, c006, c007, c008, c009, c010, c011, c012, c013, c014, c015, c016, c017, c018, c019, c020, c021, c022, c023, c024, c025, c026, c027, c028, c029, c030, c031, c032, c033, c034, c035, c036, c037, c038, c039, c040, c041, c042, c043, c044, c045, c046, c047, c048, c050, c051, c052, c053, c054, c055, c056, c057, c058, c059, c060, c062, c064, c065, c066, c067, c068, c069, c070, c071, c072, c073, c074, c075, c076, c077, c078, c079, c080, c081, c082, c083, c084, c085, c086, c087, c088, c089, c090, c091, c092, c093, c094, c095, c096, c097, c098, c099, c100, c101, c102, c103, c104, c105]
+  - id: share-invite-recipient-email
+    name: Share invite recipient email
+    subject: recipient of a shared-item link
+    subject_kind: other_person
+    purpose: address to which a share link email is sent
+    rationale: >-
+      ShareService.invite(payload: { emails: string[]; share }) (shares.ts:182) iterates payload.emails (shares.ts:206) and passes each as the mail 'to' (shares.ts:215).
+      The recipients come from the request body (controllers/shares.ts:71,88) and are never looked up in or written to directus_users in this code, so they are not the user account email;
+      the sender's email at shares.ts:195 is a different item (user-account-email).
+    clusters: [c061, c063]
+  - id: mail-sender-address
+    name: Configured mail sender address
+    subject: the Directus instance (EMAIL_FROM)
+    subject_kind: organization
+    purpose: from address on outgoing system emails
+    rationale: >-
+      MailService.send reads emailOptions.from (mail/index.ts:78,82,83), falling back to env EMAIL_FROM (mail/index.ts:86), and passes it to sendMail (mail/index.ts:108).
+      It is the site-configured sender, not a user address.
+    clusters: [c049]
+needs_adjudication: []
