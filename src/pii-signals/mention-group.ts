@@ -99,6 +99,21 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
     }
   }
   if (chosen) {
+    // A local copy of a bare concept read keeps the source's identity:
+    // `const parentMemberEmail = parentMember.get('email')` -> member,
+    // `const verificationEmail = user?.email ?? input.email` -> user. Only true locals;
+    // `gift_card.used_by_email = user.email` stores a copy in another entity and keeps
+    // its own name.
+    const localCopy = new RegExp(
+      `^\\s*(?:(?:const|let|var)\\s+)?([A-Za-z_]\\w*)\\s*(?::\\s*[\\w<>\\[\\]| ]+)?\\s*=\\s*(?:await\\s+)?(?:[\\w.]+\\s*\\?\\?\\s*)?([A-Za-z_]\\w*)\\s*(?:\\?\\.|\\.|\\[\\s*['"]|\\.get\\(\\s*['"])${conceptWords.map(escapeRegExp).join("_?")}\\b`,
+      "i",
+    ).exec(line);
+    if (localCopy && conceptWords.every((word) => identifierWords(localCopy[1]).includes(word))) {
+      const source = /^users?$/i.test(localCopy[2])
+        ? "user"
+        : identifierWords(localCopy[2]).filter((word) => !GENERIC_WORDS.has(word)).pop();
+      if (source) return { qualifier: source, fromReceiver: true };
+    }
     return { qualifier: chosen.join("_"), fromReceiver: false };
   }
   const conceptPattern = conceptWords.map(escapeRegExp).join("[_]?");

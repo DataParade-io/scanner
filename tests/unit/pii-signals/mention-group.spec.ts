@@ -326,3 +326,15 @@ describe("user receiver", () => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
 });
+
+describe("local copies keep the source identity", () => {
+  it.each([
+    ["const parentMemberEmail = parentMember.get('email');", "member"],
+    ["const verificationEmail = user?.email ?? input.email;", "user"],
+    ["gift_card.used_by_email = user.email", "used_by"],
+    ["customer_email = order.user_email", "customer"],
+    ["const senderEmail = settings.email;", "settings"],
+  ])("%s -> %s", (line, expected) => {
+    expect(mentionQualifier(line, "email")).toBe(expected);
+  });
+});
