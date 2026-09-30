@@ -58,6 +58,8 @@ export interface PackConfig {
    * Skipped when counting parameter positions of a function defined in a class body.
    */
   implicitFirstParameters?: string[];
+  /** A class is instantiated by calling it (`User(...)` in Python), not by `new`. */
+  constructsByCall?: boolean;
 }
 
 /** One argument of a call, as written at the call site. */
