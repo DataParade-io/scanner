@@ -39,6 +39,14 @@ export function mentionFieldKeys(
     if (!isConceptToken(site.name)) continue;
     if (site.role === "definition" && (site.kind === "field" || site.kind === "key")) {
       add(file.definitionOwner(site.line, site.column), site.name, true);
+    } else if (
+      site.role === "definition" &&
+      site.kind === "function" &&
+      new RegExp(`^\\s*(?:static\\s+)?get\\s+${escapeRegExp(site.name)}\\s*\\(`).test(sourceLine)
+    ) {
+      // A getter is a field of its class: `get fromEmailAddress() {` is read as
+      // `this.fromEmailAddress` elsewhere in the class.
+      add(file.enclosingClass(site.line, site.column)?.name, site.name, true);
     } else if (site.role === "member" && !site.inCallee) {
       if (site.root.type === "self" && site.root.firstMember === site.name) {
         add(file.enclosingClass(site.line, site.column)?.name, site.name, false);

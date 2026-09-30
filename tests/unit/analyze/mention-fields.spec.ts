@@ -151,3 +151,24 @@ describe("queried table entities", () => {
     expect([...groups]).toEqual(["email:user"]);
   });
 });
+
+describe("getters as fields", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("links this.x reads to a getter named x in the same class", () => {
+    const lines = [
+      "class StaffEmails {", //                          1
+      "  send() {", //                                    2
+      "    return { fromEmail: this.fromEmailAddress };", // 3
+      "  }", //                                           4
+      "  get fromEmailAddress() {", //                     5
+      "    return 'x';", //                                6
+      "  }", //                                           7
+      "}",
+    ];
+    expect(keysOf("javascript", "a.js", lines, 5)).toEqual([{ key: "staff_email.fromEmailAddress", definition: true }]);
+    expect(keysOf("javascript", "a.js", lines, 3)).toContainEqual({ key: "staff_email.fromEmailAddress", definition: false });
+  });
+});

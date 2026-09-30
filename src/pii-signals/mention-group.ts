@@ -15,11 +15,11 @@
  */
 
 const GENERIC_WORDS = new Set([
-  "a", "addr", "address", "addresses", "args", "attrs", "body", "check", "clean", "cleaned",
+  "a", "addr", "address", "addresses", "args", "attributes", "attrs", "body", "check", "clean", "cleaned",
   "ctx", "current", "data", "default", "e", "existing", "field", "format", "from", "get",
   "has", "id", "ids", "info", "input", "instance", "is", "it", "item", "list", "lower", "m",
-  "main", "model", "models", "new", "normalized", "obj", "of", "old", "options", "opts",
-  "params", "parse", "parser", "payload", "props", "raw", "record", "recipient", "recipients",
+  "main", "model", "models", "new", "normalized", "obj", "object", "of", "old", "options", "opts",
+  "params", "parse", "parts", "parser", "payload", "props", "raw", "record", "recipient", "recipients",
   "remove", "req", "result", "row", "self", "send", "service", "set", "str", "target", "task",
   "key", "the", "this", "to", "trimmed", "u", "update", "user", "valid", "validate", "validated",
   "validation", "validations", "value", "verify", "with", "x",
