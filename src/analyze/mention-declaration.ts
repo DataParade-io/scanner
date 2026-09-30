@@ -46,7 +46,9 @@ export function resolveMentionDeclaration(
 ): MentionDeclaration | undefined {
   const sites = file
     .sitesOnLine(line)
-    .filter((site) => isConceptToken(site.name))
+    // A member site's name can be string text (`console.error(`...email...`)` read like
+    // `.get("key")`); only identifier-like names are occurrences to declare.
+    .filter((site) => /^[A-Za-z_$][\w$]*$/.test(site.name) && isConceptToken(site.name))
     .sort((a, b) => a.column - b.column);
 
   const definitions = sites.filter((site): site is Extract<Site, { role: "definition" }> => site.role === "definition");
