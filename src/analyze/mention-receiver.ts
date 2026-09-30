@@ -1,22 +1,34 @@
-import type { AnalyzedFile } from "./engine/analyzed-file";
+import type { AnalyzedFile, ReceiverInfo } from "./engine/analyzed-file";
+
+/** How a mention reaches its receiver. */
+export type ReceiverVia = "direct" | "payload";
+
+export interface MentionReceiver extends ReceiverInfo {
+  via?: ReceiverVia;
+}
 
 /**
- * The class of the receiver a concept mention on this line is reached through
- * (KDATAP-c8a46a): a member read off a typed receiver (`usersService.email`), a concept
- * key or value passed to a method of one (`usersService.createOne({ email })`,
- * `this.users.getUserByEmail(email)`, `User.objects.filter(email=...)`). Undefined when
- * no such receiver has a known class.
+ * The receiver a concept mention on this line is reached through (KDATAP-c8a46a): a
+ * member read off a typed receiver (`usersService.email`), a concept key or value passed
+ * to a method of one (`usersService.createOne({ email })`,
+ * `this.users.getUserByEmail(email)`, `User.objects.filter(email=...)`), or a concept key
+ * in a payload object later passed to one. `className` is set when the receiver's class
+ * is known; `names` are the binding names of receivers whose class is not, which the
+ * caller may match against the repository's classes.
  */
-export function mentionReceiverClass(
+export function mentionReceiver(
   file: AnalyzedFile,
   line: number,
   isConceptToken: (token: string) => boolean,
-): string | undefined {
+): MentionReceiver {
+  const names: string[] = [];
   const sites = file.sitesOnLine(line).filter((site) => isConceptToken(site.name));
   for (const site of sites) {
     if (site.role !== "member") continue;
     const found = file.classOfSiteReceiver(site);
-    if (found) return found;
+    if (found) return { className: found, names, via: "direct" };
+    const name = file.receiverBindingName(site.object);
+    if (name) names.push(name);
   }
   for (const call of file.callSitesOnLine(line)) {
     if (!call.receiver) continue;
@@ -25,7 +37,22 @@ export function mentionReceiverClass(
       sites.some((site) => file.isPassedBy(site.node, call.argument));
     if (!carries) continue;
     const found = file.classOfReceiver(call.receiver);
-    if (found) return found;
+    if (found) return { className: found, names, via: "direct" };
+    const name = file.receiverBindingName(call.receiver);
+    if (name) names.push(name);
   }
-  return undefined;
+  const payload = file.payloadReceivers(line, isConceptToken);
+  if (payload.className) return { ...payload, via: "payload" };
+  const all = [...names, ...payload.names];
+  if (all.length === 0) return { names };
+  return { names: all, via: names.length > 0 ? "direct" : "payload" };
+}
+
+/** The class of the receiver a concept mention on this line is reached through. */
+export function mentionReceiverClass(
+  file: AnalyzedFile,
+  line: number,
+  isConceptToken: (token: string) => boolean,
+): string | undefined {
+  return mentionReceiver(file, line, isConceptToken).className;
 }

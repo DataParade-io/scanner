@@ -34,6 +34,12 @@ interface SiteDefinition {
   column: number;
 }
 
+/** Receivers found for a mention: a resolved class, or binding names to look up by name. */
+export interface ReceiverInfo {
+  className?: string;
+  names: string[];
+}
+
 /** A place where a name is defined, read, or reached through a member chain. */
 export type Site =
   | {
@@ -99,6 +105,7 @@ export class AnalyzedFile {
   private readonly callByNode = new Map<number, Node>();
   private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
+  private factoryReturnTypes = true;
 
   constructor(
     private readonly tree: Tree,
@@ -370,12 +377,173 @@ export class AnalyzedFile {
     if (this.config.constructsByCall && value.type === "call") {
       const callee = value.childForFieldName("function");
       const name = callee ? lastSegment(callee.text) : undefined;
-      return name && isClassName(name) ? name : undefined;
+      if (name && isClassName(name)) return name;
     }
     if (value.type === "identifier" || this.memberByNode.has(value.id)) {
       return this.receiverClass(value, depth);
     }
+    if (this.factoryReturnTypes && (value.type === "call_expression" || value.type === "call")) {
+      return this.returnClassOfCall(value);
+    }
     return undefined;
+  }
+
+  /**
+   * The class a call returns when the called function or method is defined in this file
+   * (or this file's class) with a declared return type: `this.getUsersService(schema)`
+   * where `getUsersService(schema): UsersService` (KDATAP-c8a46a).
+   */
+  private returnClassOfCall(call: Node): string | undefined {
+    // Not `callByNode`: a call without arguments has no entry there.
+    const callee = call.childForFieldName("function");
+    if (!callee) return undefined;
+    let defs: SiteDefinition[] | undefined;
+    const member = this.memberByNode.get(callee.id);
+    if (member) {
+      if (!this.isSelfNode(member.object)) return undefined;
+      let scope: Scope | undefined = this.scopeAround(call);
+      while (scope && scope.kind !== "class") scope = scope.parent;
+      defs = scope?.defs.get(unquote(member.property.text));
+    } else if (callee.type === "identifier") {
+      defs = this.definitionsOf(callee.text, callee);
+    }
+    for (const def of defs ?? []) {
+      if (def.kind !== "function") continue;
+      const type = def.node.parent?.childForFieldName("return_type");
+      const found = type ? classFromType(type.text) : undefined;
+      if (found) return found;
+    }
+    return undefined;
+  }
+
+  /** Turn the factory return-type resolution off, to measure it (KDATAP-c8a46a). */
+  setFactoryReturnTypes(enabled: boolean): void {
+    this.factoryReturnTypes = enabled;
+  }
+
+  /** Names of the classes and interfaces defined in this file. */
+  classNames(): string[] {
+    const out = new Set<string>();
+    for (const scope of this.scopes.values()) {
+      for (const defs of scope.defs.values()) {
+        for (const def of defs) if (def.kind === "class" && isClassName(def.name)) out.add(def.name);
+      }
+    }
+    return [...out];
+  }
+
+  /**
+   * How a receiver is named when its class is not known: `usersService` for
+   * `usersService.x()` and `this.usersService.x()`. Undefined for other shapes.
+   */
+  receiverBindingName(node: Node): string | undefined {
+    if (node.type === "identifier") return isClassName(node.text) ? undefined : node.text;
+    const member = this.memberByNode.get(node.id);
+    if (member && this.isSelfNode(member.object)) return unquote(member.property.text);
+    return undefined;
+  }
+
+  /**
+   * Receivers of the typed methods a payload object reaches (KDATAP-c8a46a). A concept
+   * key or value inside an object literal assigned to a variable belongs to the receiver
+   * when that variable, or one derived from it on a later line of the same function
+   * (at most two hops), is passed to a method of a typed receiver.
+   */
+  payloadReceivers(line: number, concept: (name: string) => boolean): ReceiverInfo {
+    const found: ReceiverInfo = { names: [] };
+    for (const site of this.sitesOnLine(line)) {
+      if (!concept(site.name) || site.role === "member") continue;
+      const holder = this.payloadHolder(site.node);
+      if (!holder) continue;
+      this.traceVariable(holder.name, holder.node, 0, found, new Set());
+      if (found.className) return found;
+    }
+    return found;
+  }
+
+  private isBoundary(node: Node): boolean {
+    return this.scopes.get(node.id)?.kind === "function" || /(^|_)statement$|^block$|^statement_block$|_declaration$|^program$|^module$/.test(node.type);
+  }
+
+  /** The variable an object literal enclosing this node is assigned to. */
+  private payloadHolder(start: Node): { name: string; node: Node } | undefined {
+    let current: Node = start;
+    let sawObject = false;
+    for (let depth = 0; depth < 24; depth += 1) {
+      const parent = current.parent;
+      if (!parent || this.isBoundary(parent)) return undefined;
+      const callee = this.callByNode.get(parent.id);
+      if (callee && callee.id !== current.id) return undefined;
+      if (["object", "dictionary"].includes(parent.type)) sawObject = true;
+      const target = this.declaredTarget(parent, current);
+      if (target) return sawObject ? { name: target.text, node: target } : undefined;
+      current = parent;
+    }
+    return undefined;
+  }
+
+  /** The identifier a declaration or assignment binds when `child` is its value. */
+  private declaredTarget(holder: Node, child: Node): Node | undefined {
+    const value = holder.childForFieldName("value") ?? holder.childForFieldName("right");
+    if (!value || value.id !== child.id) return undefined;
+    const target = holder.childForFieldName("name") ?? holder.childForFieldName("left");
+    return target && target.type === "identifier" ? target : undefined;
+  }
+
+  private traceVariable(name: string, declared: Node, hops: number, out: ReceiverInfo, seen: Set<string>): void {
+    if (seen.has(name)) return;
+    seen.add(name);
+    let scope: Scope | undefined = this.scopeAround(declared);
+    while (scope && scope.kind !== "function" && scope.kind !== "module") scope = scope.parent;
+    const end = (scope ?? this.rootScope).node.endPosition.row;
+    for (let row = declared.endPosition.row; row <= end; row += 1) {
+      for (const site of this.sitesByLine.get(row) ?? []) {
+        if (site.role !== "reference" || site.name !== name || site.node.startIndex <= declared.endIndex) continue;
+        this.followUse(site.node, hops, out, seen);
+        if (out.className) return;
+      }
+    }
+  }
+
+  private followUse(use: Node, hops: number, out: ReceiverInfo, seen: Set<string>): void {
+    let current: Node = use;
+    for (let depth = 0; depth < 24; depth += 1) {
+      const parent = current.parent;
+      if (!parent || this.isBoundary(parent)) return;
+      const callee = this.callByNode.get(parent.id);
+      if (callee && callee.id !== current.id) {
+        const member = this.memberByNode.get(callee.id);
+        const className = member ? this.receiverClass(member.object, 0) : undefined;
+        if (className) {
+          out.className = className;
+          return;
+        }
+        const bindingName = member ? this.receiverBindingName(member.object) : undefined;
+        if (bindingName && !this.derivesVariable(parent)) {
+          out.names.push(bindingName);
+          return;
+        }
+      }
+      const target = this.declaredTarget(parent, current);
+      if (target) {
+        if (hops < 2) this.traceVariable(target.text, target, hops + 1, out, seen);
+        return;
+      }
+      current = parent;
+    }
+  }
+
+  /** Whether the expression's value is stored in a variable (through `await`, parentheses). */
+  private derivesVariable(expression: Node): boolean {
+    let current: Node = expression;
+    for (let depth = 0; depth < 6; depth += 1) {
+      const parent = current.parent;
+      if (!parent) return false;
+      if (this.declaredTarget(parent, current)) return true;
+      if (!["await_expression", "parenthesized_expression", "as_expression", "non_null_expression"].includes(parent.type)) return false;
+      current = parent;
+    }
+    return false;
   }
 
   // ---- indexing ------------------------------------------------------------------
@@ -727,6 +895,8 @@ function classFromType(text: string): string | undefined {
   const optional = /^Optional\[(.+)\]$/.exec(type);
   if (optional) type = optional[1];
   type = type.replace(/\s*\|\s*(None|null|undefined)\b/g, "").replace(/\?$/, "").trim();
+  const promised = /^Promise<(.+)>$/.exec(type);
+  if (promised) type = promised[1].trim();
   type = unquote(type);
   return /^(?:[A-Za-z_]\w*\.)*[A-Z]\w*$/.test(type) ? lastSegment(type) : undefined;
 }
