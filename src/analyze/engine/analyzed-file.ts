@@ -378,6 +378,18 @@ export class AnalyzedFile {
     if (this.config.constructsByCall && value.type === "call") {
       const callee = value.childForFieldName("function");
       const name = callee ? lastSegment(callee.text) : undefined;
+      // A reference field (`models.ForeignKey(User, ...)`, `OneToOneField("account.User")`)
+      // holds its target model; other ORM field classes (`models.EmailField()`) are not
+      // entities.
+      if (name && this.config.referenceFieldClasses?.includes(name)) {
+        const args = value.childForFieldName("arguments");
+        const first = args?.namedChildren.find((child): child is Node => !!child && child.type !== "comment");
+        if (!first) return undefined;
+        const target = unquote(first.text).split(".").pop()?.trim() ?? "";
+        if (target === "self") return this.enclosing(first.startPosition.row + 1, first.startPosition.column, "class")?.name;
+        return isClassName(target) ? target : undefined;
+      }
+      if (name && /Field$/.test(name) && this.config.referenceFieldClasses) return undefined;
       if (name && isClassName(name)) return name;
     }
     if (value.type === "identifier" || this.memberByNode.has(value.id)) {

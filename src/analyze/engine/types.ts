@@ -64,6 +64,8 @@ export interface PackConfig {
   managerAttributes?: string[];
   /** Methods that call the function they are made on later (`task.delay(...)`). */
   deferredCallMethods?: string[];
+  /** ORM reference-field classes whose first argument names the target model. */
+  referenceFieldClasses?: string[];
 }
 
 /** One argument of a call, as written at the call site. */
