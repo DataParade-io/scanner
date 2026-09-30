@@ -161,7 +161,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: EmailRouteValidator
   evidence:
     file_path: packages/core/email/server/src/routes/content-api.ts
     start_line: 3
@@ -176,13 +176,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: import_specifier
     owner: packages/core
 - id: strapi-content-api-L6
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: EmailRouteValidator
   evidence:
     file_path: packages/core/email/server/src/routes/content-api.ts
     start_line: 6
@@ -266,7 +266,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: Email
+    name: EmailRouteValidator
   evidence:
     file_path: packages/core/email/server/src/routes/validation/email.ts
     start_line: 4
@@ -350,7 +350,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: requestEmail
   evidence:
     file_path: packages/core/email/server/src/middlewares/rateLimit.ts
     start_line: 21
@@ -365,7 +365,11 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/server/src/middlewares/rateLimit.ts
+      line: 21
+      kind: local
     owner: packages/core
 - id: strapi-rateLimit-L22
   layer: mentions

@@ -90,13 +90,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Field selection in a database query to find user by email address.
+  rationale: Shorthand property in the query reads the email parameter that holds the address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 195
+      kind: parameter
     owner: packages/core/admin
 - id: strapi-user-L201
   layer: mentions
@@ -111,13 +115,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Error message that includes the user email address in the text.
+  rationale: Interpolates the email parameter, an address, into the error message.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 195
+      kind: parameter
     owner: packages/core/admin
 - id: strapi-user-L264
   layer: mentions
@@ -159,7 +167,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: string_literal
     owner: packages/core/admin
 - id: strapi-user-L275
   layer: mentions
@@ -262,13 +270,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Query field selection using case-insensitive comparison for email addresses.
+  rationale: Query key selecting the email column, filtered by the email parameter.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 323
+      kind: field
     owner: packages/core/admin
 - id: strapi-user-L484
   layer: mentions
@@ -280,10 +292,10 @@ annotations:
     start_line: 484
     end_line: 484
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Export of function that finds a user by their email address.
+  rationale: 'Lists findOneByEmail in the exported service object; a function name, not an address value.'
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -291,10 +303,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/services/user.ts
-      line: 321
-      kind: function
 - id: strapi-user-L492
   layer: mentions
   subject:
@@ -305,10 +313,10 @@ annotations:
     start_line: 492
     end_line: 492
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Export of function that resets user password using email address lookup.
+  rationale: 'Lists resetPasswordByEmail in the exported service object; a function name, not an address value.'
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -316,10 +324,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/services/user.ts
-      line: 195
-      kind: function
 # packages/core/admin/server/src/services/auth.ts (14 lines)
 - id: strapi-auth-L84
   layer: mentions
@@ -381,13 +385,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Query field selection to find user by email address.
+  rationale: Shorthand property in the query reads the email parameter that holds the address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 87
+      kind: parameter
     owner: packages/core/admin
 - id: strapi-auth-L108
   layer: mentions
@@ -522,7 +530,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core/admin
 - id: strapi-auth-L128
   layer: mentions
@@ -549,7 +557,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: sendTemplatedEmail
   evidence:
     file_path: packages/core/admin/server/src/services/auth.ts
     start_line: 129
@@ -589,13 +597,13 @@ annotations:
     owner: packages/core/admin
     declaration:
       file_path: packages/core/admin/server/src/services/auth.ts
-      line: 111
-      kind: parameter
+      line: 112
+      kind: local
 - id: strapi-auth-L135
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailTemplate
   evidence:
     file_path: packages/core/admin/server/src/services/auth.ts
     start_line: 135
@@ -644,21 +652,17 @@ annotations:
     start_line: 11
     end_line: 11
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Import of utility function that processes email addresses; the function works with addresses.
+  rationale: 'Imports normalizeEmail; an import is never a mention.'
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: import_specifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/utils/normalize-email.ts
-      line: 11
-      kind: export
 - id: strapi-controllers-user-L27
   layer: mentions
   subject:
@@ -672,13 +676,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Email field is extracted from request body, lowercased, and prepared for validation.
+  rationale: Object key email whose value is the lowercased address from the request body.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: property_key
+    declaration:
+      file_path: packages/core/admin/server/src/controllers/user.ts
+      line: 27
+      kind: field
     owner: packages/core/admin
 - id: strapi-controllers-user-L34
   layer: mentions
@@ -730,7 +738,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: packages/core/admin/server/src/controllers/user.ts
     start_line: 44
@@ -757,10 +765,10 @@ annotations:
     start_line: 97
     end_line: 97
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Function call to normalize email addresses in user update payload.
+  rationale: 'Calls the normalizeEmail function on the request body; a function name and a payload object, not an address value.'
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -768,10 +776,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/utils/normalize-email.ts
-      line: 11
-      kind: export
 - id: strapi-controllers-user-L101
   layer: mentions
   subject:
@@ -803,10 +807,10 @@ annotations:
     start_line: 102
     end_line: 102
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Local variable declared to hold result of email uniqueness check query.
+  rationale: Declares uniqueEmailCheck, the name of a uniqueness check result, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -814,10 +818,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/controllers/user.ts
-      line: 102
-      kind: local
 - id: strapi-controllers-user-L104
   layer: mentions
   subject:
@@ -853,10 +853,10 @@ annotations:
     start_line: 107
     end_line: 107
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Variable holding email uniqueness check result is tested to throw error if duplicate found.
+  rationale: Reads the uniqueEmailCheck result, a boolean check name, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -864,10 +864,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core/admin
-    declaration:
-      file_path: packages/core/admin/server/src/controllers/user.ts
-      line: 102
-      kind: local
 - id: strapi-controllers-user-L108
   layer: mentions
   subject:
@@ -1286,7 +1282,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core/admin
 - id: strapi-auth-ee-L33
   layer: mentions
@@ -1313,7 +1309,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: sendTemplatedEmail
   evidence:
     file_path: packages/core/admin/ee/server/src/services/auth.ts
     start_line: 34
@@ -1353,13 +1349,13 @@ annotations:
     owner: packages/core/admin
     declaration:
       file_path: packages/core/admin/ee/server/src/services/auth.ts
-      line: 18
-      kind: parameter
+      line: 19
+      kind: local
 - id: strapi-auth-ee-L40
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailTemplate
   evidence:
     file_path: packages/core/admin/ee/server/src/services/auth.ts
     start_line: 40

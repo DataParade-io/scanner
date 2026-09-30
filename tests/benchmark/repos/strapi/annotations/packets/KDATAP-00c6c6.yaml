@@ -87,7 +87,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: type_name
     owner: packages/core/email
 - id: strapi-email-address-parser-L15
   layer: mentions
@@ -391,7 +391,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: parseEmailAddress
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 206
@@ -433,7 +433,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: parseEmailAddress
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 210
@@ -475,7 +475,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: parseEmailAddress
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 214
@@ -889,7 +889,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: formatEmailAddress
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 287
@@ -910,7 +910,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: formatEmailAddress
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 291
@@ -990,13 +990,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Template string embeds the email address in formatted output.
+  rationale: Interpolates the email parameter into the formatted address string.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/shared/email-address-parser.ts
+      line: 294
+      kind: parameter
     owner: packages/core/email
 - id: strapi-email-address-parser-L309
   layer: mentions
@@ -1011,13 +1015,17 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Template string embeds the email address with display name.
+  rationale: Interpolates the email parameter into the formatted address string.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: string_literal
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/shared/email-address-parser.ts
+      line: 294
+      kind: parameter
     owner: packages/core/email
 - id: strapi-email-address-parser-L313
   layer: mentions
@@ -1203,7 +1211,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailsString
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 336
@@ -1245,7 +1253,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: parseMultipleEmailAddresses
   evidence:
     file_path: packages/core/email/shared/email-address-parser.ts
     start_line: 340
@@ -1314,16 +1322,20 @@ annotations:
     start_line: 344
     end_line: 344
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Parameter holds multiple comma-separated email addresses, not a single address.
+  rationale: Declares the emailsString parameter that holds the address list.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: packages/core/email/shared/email-address-parser.ts
+      line: 344
+      kind: parameter
     owner: packages/core/email
 - id: strapi-email-address-parser-L345
   layer: mentions
@@ -1406,18 +1418,14 @@ annotations:
     start_line: 392
     end_line: 392
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Maps the parseEmailAddress function across addresses to parse each one.
+  rationale: 'Passes the parseEmailAddress function as a callback; a function name, not an address value.'
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
-    declaration:
-      file_path: packages/core/email/shared/email-address-parser.ts
-      line: 217
-      kind: function
     owner: packages/core/email
