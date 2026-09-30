@@ -19,5 +19,6 @@ export const pythonPack: LanguagePack = {
     implicitFirstParameters: ["self", "cls"],
     constructsByCall: true,
     managerAttributes: ["objects"],
+    deferredCallMethods: ["delay"],
   },
 };

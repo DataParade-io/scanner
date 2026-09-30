@@ -196,3 +196,33 @@ describe("passed variables declared on mention lines", () => {
     expect(groupOf(3)).toBe(groupOf(2));
   });
 });
+
+describe("deferred calls", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("links task.delay(...) arguments to the task's parameters", () => {
+    const { hits } = buildPersonalDataInventoryFromIngest(
+      [
+        file("app/tasks.py", "python", [
+          "def send_reset_email_task(recipient_email, payload):", // 1
+          "    send_mail(recipient_list=[recipient_email])", //      2
+        ]),
+        file("app/notify.py", "python", [
+          "def notify(user, payload):", //                           1
+          "    send_reset_email_task.delay(", //                     2
+          "        user.email,", //                                  3
+          "        payload,", //                                     4
+          "    )", //                                                5
+        ]),
+      ],
+      [],
+    );
+    const email = hits.filter((hit) => hit.id === "email" && hit.location === "code");
+    const groupOf = (path: string, line: number) =>
+      email.find((hit) => hit.evidence.filePath === path && hit.evidence.startLine === line)?.group;
+    expect(groupOf("app/notify.py", 3)).toBeDefined();
+    expect(groupOf("app/tasks.py", 1)).toBe(groupOf("app/notify.py", 3));
+  });
+});
