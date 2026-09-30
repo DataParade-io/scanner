@@ -20,5 +20,6 @@ export const pythonPack: LanguagePack = {
     constructsByCall: true,
     managerAttributes: ["objects"],
     deferredCallMethods: ["delay"],
+    referenceFieldClasses: ["ForeignKey", "OneToOneField"],
   },
 };

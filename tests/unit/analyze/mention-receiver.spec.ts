@@ -307,3 +307,31 @@ describe("ORM static factory typing", () => {
     expect(classOf("python", "a.py", lines, "plain", 5, ["User"])).toBeUndefined();
   });
 });
+
+describe("reference fields", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("types a ForeignKey field by its target model", () => {
+    const pack = packForFile("python", "models.py")!;
+    const lines = [
+      "class Checkout(models.Model):", //                                 1
+      "    user = models.ForeignKey(User, on_delete=models.CASCADE)", //   2
+      '    owner = models.ForeignKey("account.User", null=True)', //       3
+      "    email = models.EmailField()", //                                4
+      "    def get_email(self):", //                                       5
+      "        return self.user.email", //                                 6
+      "    def owner_email(self):", //                                     7
+      "        return self.owner.email", //                                8
+    ];
+    const analyzed = analyzeSource(pack, lines.join("\n"))!;
+    try {
+      const at = (line: number) => mentionReceiverClass(analyzed, line, (t) => /email/i.test(t));
+      expect(at(6)).toBe("User");
+      expect(at(8)).toBe("User");
+    } finally {
+      analyzed.dispose();
+    }
+  });
+});
