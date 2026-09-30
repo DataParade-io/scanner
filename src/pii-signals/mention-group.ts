@@ -29,7 +29,7 @@ const LOOKUP_WORDS = new Set(["by", "for", "from", "with", "to"]);
 
 const IDENTIFIER = /[A-Za-z_][A-Za-z0-9_]*/g;
 
-function identifierWords(identifier: string): string[] {
+export function identifierWords(identifier: string): string[] {
   return identifier
     .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
     .split(/[_\-\s.]+/)
@@ -205,6 +205,7 @@ interface GroupableHit {
   evidence: { filePath: string };
   group?: string;
   receiverEntity?: string;
+  tableEntity?: string;
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   passedDeclarations?: number[];
@@ -329,6 +330,8 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     }
   };
   votesFor((hit) => (hit.receiverEntity ? `${hit.id}:${hit.receiverEntity}` : undefined));
+  // The one table the enclosing function queries (`.from('directus_users')` -> user).
+  votesFor((hit) => (hit.tableEntity ? `${hit.id}:${hit.tableEntity}` : undefined));
   votesFor((hit) => {
     const entity = modelFileEntity(hit.evidence.filePath);
     return entity ? `${hit.id}:${entity}` : undefined;

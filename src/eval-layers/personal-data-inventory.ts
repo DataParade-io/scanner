@@ -17,7 +17,8 @@ import {
   type ConceptFunctionIndex,
 } from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { assignDeclarationGroups, classEntity, declarationNodeId, mentionGroup } from "../pii-signals/mention-group";
+import { assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, mentionGroup } from "../pii-signals/mention-group";
+import type { AnalyzedFile } from "../analyze/engine/analyzed-file";
 import {
   matchPiiSignalsInFile,
   type PiiSignalHit,
@@ -78,6 +79,7 @@ function withDeclarations(
       const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
+      const tableEntity = queriedTableEntity(analyzed, lines, hit.evidence.endLine);
       const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken);
       let legacy = false;
       if (process.env.DATAPARADE_RECEIVER_STATS && found.className) {
@@ -92,6 +94,7 @@ function withDeclarations(
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
         ...(passedDeclarations.length > 0 ? { passedDeclarations } : {}),
+        ...(tableEntity ? { tableEntity } : {}),
       };
     });
   } catch {
@@ -99,6 +102,27 @@ function withDeclarations(
   } finally {
     analyzed.dispose();
   }
+}
+
+/** Query-builder calls that name a table: knex('t'), db('t'), .from('t'), .into('t'), .table('t'), joins. */
+const QUERIED_TABLE =
+  /(?:\b(?:knex|database|db|trx)|\.(?:from|into|table|join|innerJoin|leftJoin))\s*\(\s*['"`]([A-Za-z_]\w*)['"`]/g;
+
+/**
+ * The entity of the one table the function around a line queries through a query
+ * builder: `.from('directus_users')` -> `user` (the table name's last word, singular).
+ * Undefined when the function queries no table or several.
+ */
+function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: number): string | undefined {
+  const scope = analyzed.enclosingFunction(line, 0);
+  if (!scope) return undefined;
+  const text = lines.slice(scope.startLine - 1, scope.endLine).join("\n");
+  const tables = new Set([...text.matchAll(QUERIED_TABLE)].map((match) => match[1]));
+  if (tables.size !== 1) return undefined;
+  const words = identifierWords([...tables][0]);
+  const last = words[words.length - 1];
+  if (!last) return undefined;
+  return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
 }
 
 const DATA_OWNER_CLASS = /(Service|Services|Repository|Model|Store|Dao|DAO|Entity)$/;
