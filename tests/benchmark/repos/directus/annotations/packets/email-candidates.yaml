@@ -1,0 +1,1001 @@
+candidates:
+  - file: api/src/auth/drivers/ldap.ts
+    line: 41
+    text: "email?: string;"
+  - file: api/src/auth/drivers/ldap.ts
+    line: 148
+    text: const email = getEntryValue(entry[mailAttribute]);
+  - file: api/src/auth/drivers/ldap.ts
+    line: 149
+    text: if (email) user.email = email;
+  - file: api/src/auth/drivers/ldap.ts
+    line: 264
+    text: "email: userInfo.email,"
+  - file: api/src/auth/drivers/ldap.ts
+    line: 292
+    text: "email: userInfo.email,"
+  - file: api/src/auth/drivers/local.ts
+    line: 21
+    text: if (!payload['email']) {
+  - file: api/src/auth/drivers/local.ts
+    line: 28
+    text: .whereRaw('LOWER(??) = ?', ['email', payload['email'].toLowerCase()])
+  - file: api/src/auth/drivers/local.ts
+    line: 57
+    text: "email: Joi.string().email().required(),"
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 114
+    text: "scope: this.config['scope'] ?? 'email',"
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 187
+    text: const { provider, emailKey, identifierKey, allowPublicRegistration,
+      syncUserInfo } = this.config;
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 189
+    text: "const email = userInfo[emailKey ?? 'email'] ? String(userInfo[emailKey ??
+      'email']) : undefined;"
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 190
+    text: // Fallback to email if explicit identifier not found
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 191
+    text: "const identifier = userInfo[identifierKey] ?
+      String(userInfo[identifierKey]) : email;"
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 202
+    text: "email: email,"
+  - file: api/src/auth/drivers/oauth2.ts
+    line: 227
+    text: "email: userPayload.email,"
+  - file: api/src/auth/drivers/openid.ts
+    line: 185
+    text: "scope: this.config['scope'] ?? 'openid profile email',"
+  - file: api/src/auth/drivers/openid.ts
+    line: 268
+    text: const { provider, identifierKey, allowPublicRegistration,
+      requireVerifiedEmail, syncUserInfo } = this.config;
+  - file: api/src/auth/drivers/openid.ts
+    line: 270
+    text: "const email = userInfo['email'] ? String(userInfo['email']) : undefined;"
+  - file: api/src/auth/drivers/openid.ts
+    line: 271
+    text: // Fallback to email if explicit identifier not found
+  - file: api/src/auth/drivers/openid.ts
+    line: 272
+    text: "const identifier = userInfo[identifierKey ?? 'sub'] ?
+      String(userInfo[identifierKey ?? 'sub']) : email;"
+  - file: api/src/auth/drivers/openid.ts
+    line: 283
+    text: "email: email,"
+  - file: api/src/auth/drivers/openid.ts
+    line: 308
+    text: "email: userPayload.email,"
+  - file: api/src/auth/drivers/openid.ts
+    line: 334
+    text: const isEmailVerified = !requireVerifiedEmail ||
+      userInfo['email_verified'];
+  - file: api/src/auth/drivers/openid.ts
+    line: 337
+    text: if (!allowPublicRegistration || !isEmailVerified) {
+  - file: api/src/auth/drivers/saml.ts
+    line: 57
+    text: const { provider, emailKey, identifierKey, givenNameKey, familyNameKey,
+      allowPublicRegistration } = this.config;
+  - file: api/src/auth/drivers/saml.ts
+    line: 59
+    text: const email = payload[emailKey ??
+      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
+  - file: api/src/auth/drivers/saml.ts
+    line: 83
+    text: "email: email,"
+  - file: api/src/cli/commands/init/index.ts
+    line: 77
+    text: "name: 'email',"
+  - file: api/src/cli/commands/init/index.ts
+    line: 78
+    text: "message: 'Email',"
+  - file: api/src/cli/commands/init/index.ts
+    line: 81
+    text: const emailSchema = Joi.string().email().required();
+  - file: api/src/cli/commands/init/index.ts
+    line: 82
+    text: const { error } = emailSchema.validate(input.trim());
+  - file: api/src/cli/commands/init/index.ts
+    line: 83
+    text: if (error) throw new Error('The email entered is not a valid email
+      address!');
+  - file: api/src/cli/commands/init/index.ts
+    line: 111
+    text: "email: firstUser.email.trim(),"
+  - file: api/src/cli/commands/users/create.ts
+    line: 8
+    text: email,
+  - file: api/src/cli/commands/users/create.ts
+    line: 12
+    text: "email?: string;"
+  - file: api/src/cli/commands/users/create.ts
+    line: 19
+    text: if (!email || !password || !role) {
+  - file: api/src/cli/commands/users/create.ts
+    line: 20
+    text: logger.error('Email, password, role are required');
+  - file: api/src/cli/commands/users/create.ts
+    line: 31
+    text: "const id = await service.createOne({ email, password, role, status:
+      'active' });"
+  - file: api/src/cli/commands/users/passwd.ts
+    line: 7
+    text: "export default async function usersPasswd({ email, password }: { email?:
+      string; password?: string }): Promise<void> {"
+  - file: api/src/cli/commands/users/passwd.ts
+    line: 11
+    text: if (!email || !password) {
+  - file: api/src/cli/commands/users/passwd.ts
+    line: 12
+    text: logger.error('Email and password are required');
+  - file: api/src/cli/commands/users/passwd.ts
+    line: 24
+    text: .whereRaw('LOWER(??) = ?', ['email', email.toLowerCase()])
+  - file: api/src/cli/commands/users/passwd.ts
+    line: 31
+    text: logger.error('No such user by this email');
+  - file: api/src/controllers/auth.ts
+    line: 199
+    text: if (typeof req.body.email !== 'string') {
+  - file: api/src/controllers/auth.ts
+    line: 200
+    text: 'throw new InvalidPayloadError({ reason: `"email" field is required` });'
+  - file: api/src/controllers/auth.ts
+    line: 214
+    text: await service.requestPasswordReset(req.body.email, req.body.reset_url ||
+      null);
+  - file: api/src/controllers/auth.ts
+    line: 220
+    text: logger.warn(err, `[email] ${err}`);
+  - file: api/src/controllers/users.ts
+    line: 286
+    text: "email: Joi.alternatives(Joi.string().email(),
+      Joi.array().items(Joi.string().email())).required(),"
+  - file: api/src/controllers/users.ts
+    line: 303
+    text: await service.inviteUser(req.body.email, req.body.role,
+      req.body.invite_url || null);
+  - file: api/src/controllers/users.ts
+    line: 458
+    text: "email: Joi.string().email().required(),"
+  - file: api/src/controllers/users.ts
+    line: 483
+    text: "'/register/verify-email',"
+  - file: api/src/database/migrations/20210903A-add-auth-provider.ts
+    line: 8
+    text: table.dropUnique(['email']);
+  - file: api/src/database/migrations/20210903A-add-auth-provider.ts
+    line: 16
+    text: await helper.changeToType('directus_users', 'email', 'string', {
+  - file: api/src/database/migrations/20210903A-add-auth-provider.ts
+    line: 22
+    text: table.unique(['email']);
+  - file: api/src/database/migrations/20210903A-add-auth-provider.ts
+    line: 38
+    text: await helper.changeToType('directus_users', 'email', 'string', {
+  - file: api/src/database/migrations/20211118A-add-notifications.ts
+    line: 11
+    text: table.uuid('recipient').notNullable().references('id').inTable('directus_users').onDelete('CASCADE');
+  - file: api/src/database/migrations/20211118A-add-notifications.ts
+    line: 12
+    text: table.uuid('sender').notNullable().references('id').inTable('directus_users');
+  - file: api/src/database/migrations/20211118A-add-notifications.ts
+    line: 20
+    text: table.boolean('email_notifications').defaultTo(true);
+  - file: api/src/database/migrations/20211118A-add-notifications.ts
+    line: 23
+    text: "await knex('directus_users').update({ email_notifications: true });"
+  - file: api/src/database/migrations/20211118A-add-notifications.ts
+    line: 30
+    text: table.dropColumn('email_notifications');
+  - file: api/src/database/migrations/20240422A-public-registration.ts
+    line: 6
+    text: table.boolean('public_registration_verify_email').notNullable().defaultTo(true);
+  - file: api/src/database/migrations/20240422A-public-registration.ts
+    line: 9
+    text: table.json('public_registration_email_filter').nullable();
+  - file: api/src/database/migrations/20240422A-public-registration.ts
+    line: 17
+    text: "'public_registration_verify_email',"
+  - file: api/src/database/migrations/20240422A-public-registration.ts
+    line: 19
+    text: "'public_registration_email_filter',"
+  - file: api/src/license/entitlements/lib/sso-enabled.ts
+    line: 53
+    text: "const payload: { email?: string | undefined; password?: string; provider:
+      string } = {"
+  - file: api/src/license/entitlements/lib/sso-enabled.ts
+    line: 57
+    text: if (resolution.admin.email?.length) {
+  - file: api/src/license/entitlements/lib/sso-enabled.ts
+    line: 58
+    text: payload['email'] = resolution.admin.email;
+  - file: api/src/license/manager.ts
+    line: 651
+    text: "const adminUser = await usersService.readOne(options.adminId, { fields:
+      ['email', 'password'] });"
+  - file: api/src/license/manager.ts
+    line: 654
+    text: "const blockers: ('ADMIN_MISSING_EMAIL' | 'ADMIN_MISSING_PASSWORD')[] =
+      [];"
+  - file: api/src/license/manager.ts
+    line: 656
+    text: if (adminUser['email'] === null) {
+  - file: api/src/license/manager.ts
+    line: 657
+    text: blockers.push('ADMIN_MISSING_EMAIL');
+  - file: api/src/license/manager.ts
+    line: 717
+    text: "* Set all sso users to disabled and optional set the current admin email
+      and password"
+  - file: api/src/mailer.ts
+    line: 18
+    text: const transportName = (env['EMAIL_TRANSPORT'] as string).toLowerCase();
+  - file: api/src/mailer.ts
+    line: 23
+    text: "newline: (env['EMAIL_SENDMAIL_NEW_LINE'] as string) || 'unix',"
+  - file: api/src/mailer.ts
+    line: 24
+    text: "path: (env['EMAIL_SENDMAIL_PATH'] as string) || '/usr/sbin/sendmail',"
+  - file: api/src/mailer.ts
+    line: 27
+    text: const { SESv2Client, SendEmailCommand } = require('@aws-sdk/client-sesv2');
+  - file: api/src/mailer.ts
+    line: 29
+    text: "const sesOptions: Record<string, unknown> =
+      getConfigFromEnv('EMAIL_SES_');"
+  - file: api/src/mailer.ts
+    line: 34
+    text: "SES: { sesClient, SendEmailCommand },"
+  - file: api/src/mailer.ts
+    line: 39
+    text: if (env['EMAIL_SMTP_USER'] || env['EMAIL_SMTP_PASSWORD']) {
+  - file: api/src/mailer.ts
+    line: 41
+    text: "user: env['EMAIL_SMTP_USER'] as string,"
+  - file: api/src/mailer.ts
+    line: 42
+    text: "pass: env['EMAIL_SMTP_PASSWORD'] as string,"
+  - file: api/src/mailer.ts
+    line: 46
+    text: "const tls: Record<string, unknown> = getConfigFromEnv('EMAIL_SMTP_TLS_');"
+  - file: api/src/mailer.ts
+    line: 49
+    text: "name: env['EMAIL_SMTP_NAME'],"
+  - file: api/src/mailer.ts
+    line: 50
+    text: "pool: env['EMAIL_SMTP_POOL'],"
+  - file: api/src/mailer.ts
+    line: 51
+    text: "host: env['EMAIL_SMTP_HOST'],"
+  - file: api/src/mailer.ts
+    line: 52
+    text: "port: env['EMAIL_SMTP_PORT'],"
+  - file: api/src/mailer.ts
+    line: 53
+    text: "secure: env['EMAIL_SMTP_SECURE'],"
+  - file: api/src/mailer.ts
+    line: 54
+    text: "ignoreTLS: env['EMAIL_SMTP_IGNORE_TLS'],"
+  - file: api/src/mailer.ts
+    line: 64
+    text: "api_key: env['EMAIL_MAILGUN_API_KEY'],"
+  - file: api/src/mailer.ts
+    line: 65
+    text: "domain: env['EMAIL_MAILGUN_DOMAIN'],"
+  - file: api/src/mailer.ts
+    line: 67
+    text: "host: env['EMAIL_MAILGUN_HOST'] || 'api.mailgun.net',"
+  - file: api/src/mailer.ts
+    line: 73
+    text: "const mailtrapOptions: Record<string, unknown> =
+      getConfigFromEnv('EMAIL_MAILTRAP_');"
+  - file: api/src/mailer.ts
+    line: 77
+    text: throw new Error('The EMAIL_MAILTRAP_TOKEN env var is required for the
+      mailtrap transport');
+  - file: api/src/mailer.ts
+    line: 82
+    text: logger.warn('Illegal transport given for email. Check the EMAIL_TRANSPORT
+      env var.');
+  - file: api/src/operations/mail/index.ts
+    line: 3
+    text: import type { EmailOptions } from '../../services/mail/index.js';
+  - file: api/src/operations/mail/index.ts
+    line: 6
+    text: import { useFlowsEmailRateLimiter } from './rate-limiter.js';
+  - file: api/src/operations/mail/index.ts
+    line: 29
+    text: await useFlowsEmailRateLimiter(flow!.id);
+  - file: api/src/operations/mail/index.ts
+    line: 32
+    text: "const mailObject: EmailOptions = { to, subject, cc, bcc, replyTo };"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 2
+    text: import { EmailLimitExceededError } from '@directus/errors';
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 7
+    text: "let emailRateLimiter: RateLimiterRedis | RateLimiterMemory | undefined;"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 11
+    text: if (toBoolean(env['RATE_LIMITER_EMAIL_FLOWS_ENABLED']) === true) {
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 12
+    text: emailRateLimiter = createRateLimiter('RATE_LIMITER_EMAIL_FLOWS');
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 15
+    text: "export async function useFlowsEmailRateLimiter(flow_id: string) {"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 16
+    text: if (!emailRateLimiter) return;
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 19
+    text: await emailRateLimiter.consume(flow_id, 1);
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 22
+    text: throw new EmailLimitExceededError({
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 23
+    text: "points: 'RATE_LIMITER_EMAIL_FLOWS_POINTS' in env ?
+      Number(env['RATE_LIMITER_EMAIL_FLOWS_POINTS']) : undefined,"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 25
+    text: "'RATE_LIMITER_EMAIL_FLOWS_DURATION' in env ?
+      Number(env['RATE_LIMITER_EMAIL_FLOWS_DURATION']) : undefined,"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 27
+    text: "'RATE_LIMITER_EMAIL_FLOWS_ERROR_MESSAGE' in env"
+  - file: api/src/operations/mail/rate-limiter.ts
+    line: 28
+    text: "? String(env['RATE_LIMITER_EMAIL_FLOWS_ERROR_MESSAGE'])"
+  - file: api/src/operations/notification/index.ts
+    line: 8
+    text: "recipient: string;"
+  - file: api/src/operations/notification/index.ts
+    line: 20
+    text: "{ recipient, subject, message, permissions, collection, item },"
+  - file: api/src/operations/notification/index.ts
+    line: 46
+    text: const payload = toArray(recipient).map((userId) => {
+  - file: api/src/operations/notification/index.ts
+    line: 48
+    text: "recipient: userId,"
+  - file: api/src/operations/notification/index.ts
+    line: 49
+    text: "sender: customAccountability?.user ?? null,"
+  - file: api/src/services/authentication.ts
+    line: 53
+    text: "* Retrieve the tokens for a given user email."
+  - file: api/src/services/authentication.ts
+    line: 109
+    text: ">('id', 'first_name', 'last_name', 'email', 'password', 'status', 'role',
+      'tfa_secret', 'provider', 'external_identifier', 'auth_data')"
+  - file: api/src/services/authentication.ts
+    line: 348
+    text: "user_email: 'u.email',"
+  - file: api/src/services/authentication.ts
+    line: 409
+    text: "email: record.user_email,"
+  - file: api/src/services/authentication.ts
+    line: 562
+    text: ">('u.id', 'u.first_name', 'u.last_name', 'u.email', 'u.password',
+      'u.status', 'u.role', 'u.provider', 'u.external_identifier',
+      'u.auth_data')"
+  - file: api/src/services/authentication.ts
+    line: 597
+    text: "'email',"
+  - file: api/src/services/comments.ts
+    line: 69
+    text: const sender = await this.usersService.readOne(this.accountability.user, {
+  - file: api/src/services/comments.ts
+    line: 70
+    text: "fields: ['id', 'first_name', 'last_name', 'email'],"
+  - file: api/src/services/comments.ts
+    line: 77
+    text: "fields: ['id', 'first_name', 'last_name', 'email', 'role.id'],"
+  - file: api/src/services/comments.ts
+    line: 111
+    text: "fields: ['id', 'first_name', 'last_name', 'email'],"
+  - file: api/src/services/comments.ts
+    line: 141
+    text: "${userName(sender)} has mentioned you in a comment:"
+  - file: api/src/services/comments.ts
+    line: 149
+    text: "recipient: userID,"
+  - file: api/src/services/comments.ts
+    line: 150
+    text: "sender: sender['id'],"
+  - file: api/src/services/export.ts
+    line: 183
+    text: "fields: ['first_name', 'last_name', 'email'],"
+  - file: api/src/services/export.ts
+    line: 195
+    text: "recipient: this.accountability.user,"
+  - file: api/src/services/export.ts
+    line: 196
+    text: "sender: this.accountability.user,"
+  - file: api/src/services/export.ts
+    line: 212
+    text: "recipient: this.accountability.user,"
+  - file: api/src/services/export.ts
+    line: 213
+    text: "sender: this.accountability.user,"
+  - file: api/src/services/graphql/resolvers/system-global.ts
+    line: 60
+    text: "email: new GraphQLNonNull(GraphQLString),"
+  - file: api/src/services/graphql/resolvers/system-global.ts
+    line: 234
+    text: "email: new GraphQLNonNull(GraphQLString),"
+  - file: api/src/services/graphql/resolvers/system-global.ts
+    line: 250
+    text: await service.requestPasswordReset(args['email'], args['reset_url'] ||
+      null);
+  - file: api/src/services/graphql/resolvers/system-global.ts
+    line: 434
+    text: "email: new GraphQLNonNull(GraphQLString),"
+  - file: api/src/services/graphql/resolvers/system-global.ts
+    line: 450
+    text: "email: args.email,"
+  - file: api/src/services/graphql/resolvers/system.ts
+    line: 63
+    text: "public_registration_verify_email: { type: GraphQLBoolean },"
+  - file: api/src/services/graphql/resolvers/system.ts
+    line: 559
+    text: "email: new GraphQLNonNull(GraphQLString),"
+  - file: api/src/services/graphql/resolvers/system.ts
+    line: 569
+    text: await service.inviteUser(args['email'], args['role'], args['invite_url']
+      || null);
+  - file: api/src/services/import/import.ts
+    line: 197
+    text: "fields: ['first_name', 'last_name', 'email'],"
+  - file: api/src/services/import/import.ts
+    line: 201
+    text: "recipient: this.accountability.user,"
+  - file: api/src/services/import/import.ts
+    line: 202
+    text: "sender: this.accountability.user,"
+  - file: api/src/services/mail/index.ts
+    line: 16
+    text: import { useEmailRateLimiterQueue } from './rate-limiter.js';
+  - file: api/src/services/mail/index.ts
+    line: 24
+    text: "root: [path.resolve(env['EMAIL_TEMPLATES_PATH'] as string),
+      path.resolve(__dirname, 'templates')],"
+  - file: api/src/services/mail/index.ts
+    line: 28
+    text: export type EmailOptions = SendMailOptions & {
+  - file: api/src/services/mail/index.ts
+    line: 54
+    text: if (env['EMAIL_VERIFY_SETUP']) {
+  - file: api/src/services/mail/index.ts
+    line: 57
+    text: logger.warn(`Email connection failed:`);
+  - file: api/src/services/mail/index.ts
+    line: 64
+    text: "async send<T>(data: EmailOptions, options?: { defaultTemplateData:
+      DefaultTemplateData }): Promise<T | null> {"
+  - file: api/src/services/mail/index.ts
+    line: 65
+    text: await useEmailRateLimiterQueue();
+  - file: api/src/services/mail/index.ts
+    line: 67
+    text: const payload = await emitter.emitFilter(`email.send`, data, {});
+  - file: api/src/services/mail/index.ts
+    line: 71
+    text: const { template, ...emailOptions } = payload;
+  - file: api/src/services/mail/index.ts
+    line: 78
+    text: if (isObject(emailOptions.from) && (!emailOptions.from.name ||
+      !emailOptions.from.address)) {
+  - file: api/src/services/mail/index.ts
+    line: 82
+    text: "const from: SendMailOptions['from'] = isObject(emailOptions.from)"
+  - file: api/src/services/mail/index.ts
+    line: 83
+    text: "? emailOptions.from"
+  - file: api/src/services/mail/index.ts
+    line: 86
+    text: "address: (emailOptions.from as string) || (env['EMAIL_FROM'] as string),"
+  - file: api/src/services/mail/index.ts
+    line: 101
+    text: "// Some email clients start acting funky when line length exceeds 75
+      characters. See #6074"
+  - file: api/src/services/mail/index.ts
+    line: 108
+    text: const info = await this.mailer.sendMail({ ...emailOptions, from, html });
+  - file: api/src/services/mail/index.ts
+    line: 113
+    text: const customTemplatesDir = path.resolve(env['EMAIL_TEMPLATES_PATH'] as
+      string);
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 2
+    text: import { EmailLimitExceededError } from '@directus/errors';
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 7
+    text: "let emailRateLimiterQueue: RateLimiterQueue | undefined;"
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 11
+    text: if (toBoolean(env['RATE_LIMITER_EMAIL_ENABLED']) === true) {
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 12
+    text: emailRateLimiterQueue = new
+      RateLimiterQueue(createRateLimiter('RATE_LIMITER_EMAIL'), {
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 13
+    text: "maxQueueSize: Number(env['RATE_LIMITER_EMAIL_QUEUE_SIZE']),"
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 17
+    text: export async function useEmailRateLimiterQueue() {
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 18
+    text: if (!emailRateLimiterQueue) return;
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 21
+    text: await emailRateLimiterQueue.removeTokens(1);
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 24
+    text: throw new EmailLimitExceededError({
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 25
+    text: "points: 'RATE_LIMITER_EMAIL_POINTS' in env ?
+      Number(env['RATE_LIMITER_EMAIL_POINTS']) : undefined,"
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 26
+    text: "duration: 'RATE_LIMITER_EMAIL_DURATION' in env ?
+      Number(env['RATE_LIMITER_EMAIL_DURATION']) : undefined,"
+  - file: api/src/services/mail/rate-limiter.ts
+    line: 28
+    text: "'RATE_LIMITER_EMAIL_ERROR_MESSAGE' in env ?
+      String(env['RATE_LIMITER_EMAIL_ERROR_MESSAGE']) : undefined,"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 963
+    text: "const { email: txUserEmail, role: txUserRole } = await
+      this.requireActiveUser(txUserId, trx);"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1009
+    text: "userEmail: txUserEmail,"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1021
+    text: const { clientGrantTypes, clientName, userEmail, userRole, userId, scope,
+      resource } = exchangeResult;
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1038
+    text: "comment: `OAuth grant issued for client ${clientName} (${scope}) to
+      ${userEmail}`,"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1160
+    text: const { email, role } = await this.requireActiveUser(userId, this.knex);
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1262
+    text: "comment: `OAuth token refreshed for client ${clientName} (${scope}) by
+      ${email}`,"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1343
+    text: const userRecord = await this.knex('directus_users').where('id',
+      userId).select('email').first();
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1344
+    text: const userEmail = userRecord?.email ?? 'unknown';
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1350
+    text: "comment: `OAuth token revoked for client ${clientName} by ${userEmail}`,"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1962
+    text: "): Promise<{ email: string; role: string | null }> {"
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1963
+    text: const userRecord = await knex('directus_users').where('id',
+      userId).select('email', 'status', 'role').first();
+  - file: api/src/services/mcp-oauth/index.ts
+    line: 1969
+    text: "return { email: userRecord.email ?? 'unknown', role: userRecord.role ??
+      null };"
+  - file: api/src/services/notifications.ts
+    line: 23
+    text: await this.sendEmail(data);
+  - file: api/src/services/notifications.ts
+    line: 28
+    text: "async sendEmail(data: Partial<Notification>) {"
+  - file: api/src/services/notifications.ts
+    line: 29
+    text: if (data.recipient) {
+  - file: api/src/services/notifications.ts
+    line: 32
+    text: const user = await usersService.readOne(data.recipient, {
+  - file: api/src/services/notifications.ts
+    line: 33
+    text: "fields: ['id', 'email', 'email_notifications', 'role'],"
+  - file: api/src/services/notifications.ts
+    line: 36
+    text: if (user['email'] && user['email_notifications'] === true) {
+  - file: api/src/services/notifications.ts
+    line: 66
+    text: "to: user['email'],"
+  - file: api/src/services/server.ts
+    line: 82
+    text: "'public_registration_verify_email',"
+  - file: api/src/services/server.ts
+    line: 252
+    text: "checks: merge(...(await Promise.all([testDatabase(), testRedis(),
+      testStorage(), testEmail()]))),"
+  - file: api/src/services/server.ts
+    line: 445
+    text: "async function testEmail(): Promise<Record<string, ServerHealthCheck[]>>
+      {"
+  - file: api/src/services/server.ts
+    line: 446
+    text: if (enabledServices.includes('email') === false ||
+      toBoolean(env['EMAIL_VERIFY_SETUP']) === false) {
+  - file: api/src/services/server.ts
+    line: 451
+    text: "'email:connection': ["
+  - file: api/src/services/server.ts
+    line: 454
+    text: "componentType: 'email',"
+  - file: api/src/services/server.ts
+    line: 463
+    text: checks['email:connection']![0]!.status = 'error';
+  - file: api/src/services/server.ts
+    line: 464
+    text: checks['email:connection']![0]!.output = err;
+  - file: api/src/services/shares.ts
+    line: 179
+    text: "* Send a link to the given share ID to the given email(s). Note: you can
+      only send a link to a share"
+  - file: api/src/services/shares.ts
+    line: 182
+    text: "async invite(payload: { emails: string[]; share: PrimaryKey }) {"
+  - file: api/src/services/shares.ts
+    line: 195
+    text: "fields: ['first_name', 'last_name', 'email', 'id'],"
+  - file: api/src/services/shares.ts
+    line: 206
+    text: for (const email of payload.emails) {
+  - file: api/src/services/shares.ts
+    line: 215
+    text: "to: email,"
+  - file: api/src/services/tfa.ts
+    line: 34
+    text: .select('email', 'tfa_secret', 'provider', 'external_identifier')
+  - file: api/src/services/tfa.ts
+    line: 43
+    text: // Only require email for non-OAuth users
+  - file: api/src/services/tfa.ts
+    line: 44
+    text: if (user?.provider === DEFAULT_AUTH_PROVIDER && !user?.email) {
+  - file: api/src/services/tfa.ts
+    line: 45
+    text: "throw new InvalidPayloadError({ reason: 'User must have a valid email to
+      enable TFA' });"
+  - file: api/src/services/tfa.ts
+    line: 55
+    text: // For OAuth users without email, use external_identifier as fallback
+  - file: api/src/services/tfa.ts
+    line: 56
+    text: const accountName = user.email || user.external_identifier ||
+      `user_${key}`;
+  - file: api/src/services/users.ts
+    line: 50
+    text: "* User email has to be unique case-insensitive. This is an additional
+      check to make sure that"
+  - file: api/src/services/users.ts
+    line: 51
+    text: "* the email is unique regardless of casing"
+  - file: api/src/services/users.ts
+    line: 53
+    text: "private async checkUniqueEmails(emails: string[], excludeKey?:
+      PrimaryKey): Promise<void> {"
+  - file: api/src/services/users.ts
+    line: 54
+    text: emails = emails.map((email) => email.toLowerCase());
+  - file: api/src/services/users.ts
+    line: 56
+    text: const duplicates = emails.filter((value, index, array) =>
+      array.indexOf(value) !== index);
+  - file: api/src/services/users.ts
+    line: 61
+    text: "field: 'email',"
+  - file: api/src/services/users.ts
+    line: 67
+    text: .select('email')
+  - file: api/src/services/users.ts
+    line: 69
+    text: .whereRaw(`LOWER(??) IN (${emails.map(() => '?')})`, ['email', ...emails]);
+  - file: api/src/services/users.ts
+    line: 80
+    text: "field: 'email',"
+  - file: api/src/services/users.ts
+    line: 81
+    text: "value: '[' + String(emails) + ']',"
+  - file: api/src/services/users.ts
+    line: 139
+    text: "* Get basic information of user identified by email"
+  - file: api/src/services/users.ts
+    line: 141
+    text: private async getUserByEmail(
+  - file: api/src/services/users.ts
+    line: 142
+    text: "email: string,"
+  - file: api/src/services/users.ts
+    line: 144
+    text: "{ id: string; role: string; status: string; password: string; email:
+      string; provider: string } | undefined"
+  - file: api/src/services/users.ts
+    line: 147
+    text: .select('id', 'role', 'status', 'password', 'email', 'provider')
+  - file: api/src/services/users.ts
+    line: 149
+    text: .whereRaw(`LOWER(??) = ?`, ['email', email.toLowerCase()])
+  - file: api/src/services/users.ts
+    line: 156
+    text: "private inviteUrl(email: string, url: string | null): string {"
+  - file: api/src/services/users.ts
+    line: 157
+    text: "const payload = { email, scope: 'invite' };"
+  - file: api/src/services/users.ts
+    line: 170
+    text: "* Validate array of emails. Intended to be used with create/update users"
+  - file: api/src/services/users.ts
+    line: 172
+    text: "private validateEmail(input: string | string[]) {"
+  - file: api/src/services/users.ts
+    line: 173
+    text: "const emails = Array.isArray(input) ? input : [input];"
+  - file: api/src/services/users.ts
+    line: 175
+    text: const schema = Joi.string().email().required();
+  - file: api/src/services/users.ts
+    line: 177
+    text: for (const email of emails) {
+  - file: api/src/services/users.ts
+    line: 178
+    text: const { error } = schema.validate(email);
+  - file: api/src/services/users.ts
+    line: 182
+    text: "field: 'email',"
+  - file: api/src/services/users.ts
+    line: 183
+    text: "type: 'email',"
+  - file: api/src/services/users.ts
+    line: 210
+    text: if ('email' in data && data['email'] !== undefined) {
+  - file: api/src/services/users.ts
+    line: 211
+    text: this.validateEmail(data['email']);
+  - file: api/src/services/users.ts
+    line: 212
+    text: await this.checkUniqueEmails([data['email']]);
+  - file: api/src/services/users.ts
+    line: 241
+    text: const emails = data.map((payload) => payload['email']).filter((email) =>
+      email);
+  - file: api/src/services/users.ts
+    line: 247
+    text: if (emails.length) {
+  - file: api/src/services/users.ts
+    line: 248
+    text: this.validateEmail(emails);
+  - file: api/src/services/users.ts
+    line: 249
+    text: await this.checkUniqueEmails(emails);
+  - file: api/src/services/users.ts
+    line: 271
+    text: // Use generic ItemsService to avoid calling `UserService.createOne` to
+      avoid additional work of validating emails,
+  - file: api/src/services/users.ts
+    line: 272
+    text: // as this requires one query per email if done in `createOne`
+  - file: api/src/services/users.ts
+    line: 291
+    text: if (data['email']) {
+  - file: api/src/services/users.ts
+    line: 295
+    text: "field: 'email',"
+  - file: api/src/services/users.ts
+    line: 296
+    text: "value: data['email'],"
+  - file: api/src/services/users.ts
+    line: 300
+    text: this.validateEmail(data['email']);
+  - file: api/src/services/users.ts
+    line: 301
+    text: await this.checkUniqueEmails([data['email']], keys[0]);
+  - file: api/src/services/users.ts
+    line: 356
+    text: "} else if (data['password'] !== undefined || data['email'] !== undefined)
+      {"
+  - file: api/src/services/users.ts
+    line: 396
+    text: "await this.knex('directus_notifications').update({ sender: null
+      }).whereIn('sender', keys);"
+  - file: api/src/services/users.ts
+    line: 408
+    text: "async inviteUser(email: string | string[], role: string, url: string |
+      null, subject?: string | null): Promise<void> {"
+  - file: api/src/services/users.ts
+    line: 419
+    text: const emails = toArray(email);
+  - file: api/src/services/users.ts
+    line: 426
+    text: for (const email of emails) {
+  - file: api/src/services/users.ts
+    line: 428
+    text: const user = await this.getUserByEmail(email);
+  - file: api/src/services/users.ts
+    line: 432
+    text: "await this.createOne({ email, role, status: 'invited' }, opts);"
+  - file: api/src/services/users.ts
+    line: 445
+    text: "to: user?.email ?? email,"
+  - file: api/src/services/users.ts
+    line: 450
+    text: "url: this.inviteUrl(user?.email ?? email, url),"
+  - file: api/src/services/users.ts
+    line: 451
+    text: "email: user?.email ?? email,"
+  - file: api/src/services/users.ts
+    line: 463
+    text: const { email, scope } = verifyJWT(token, getSecret()) as {
+  - file: api/src/services/users.ts
+    line: 464
+    text: "email: string;"
+  - file: api/src/services/users.ts
+    line: 470
+    text: const user = await this.getUserByEmail(email);
+  - file: api/src/services/users.ts
+    line: 506
+    text: "'public_registration_verify_email',"
+  - file: api/src/services/users.ts
+    line: 508
+    text: "'public_registration_email_filter',"
+  - file: api/src/services/users.ts
+    line: 517
+    text: const hasEmailVerification =
+      settings?.['public_registration_verify_email'];
+  - file: api/src/services/users.ts
+    line: 518
+    text: const emailFilter = settings?.['public_registration_email_filter'];
+  - file: api/src/services/users.ts
+    line: 524
+    text: "email: input.email,"
+  - file: api/src/services/users.ts
+    line: 527
+    text: "status: hasEmailVerification ? 'unverified' : 'active',"
+  - file: api/src/services/users.ts
+    line: 533
+    text: "if (emailFilter && validatePayload(emailFilter, { email: input.email
+      }).length !== 0) {"
+  - file: api/src/services/users.ts
+    line: 538
+    text: const user = await this.getUserByEmail(input.email);
+  - file: api/src/services/users.ts
+    line: 543
+    text: // We want to be able to re-send the verification email
+  - file: api/src/services/users.ts
+    line: 545
+    text: // To avoid giving attackers infos about registered emails we dont fail
+      for violated unique constraints
+  - file: api/src/services/users.ts
+    line: 550
+    text: if (hasEmailVerification) {
+  - file: api/src/services/users.ts
+    line: 553
+    text: // Prefer stored email on existing, it can differ from the provided one
+      depending on the database collation
+  - file: api/src/services/users.ts
+    line: 554
+    text: const verificationEmail = user?.email ?? input.email;
+  - file: api/src/services/users.ts
+    line: 556
+    text: "const payload = { email: verificationEmail, scope: 'pending-registration'
+      };"
+  - file: api/src/services/users.ts
+    line: 559
+    text: "expiresIn: env['EMAIL_VERIFICATION_TOKEN_TTL'] as StringValue | number,"
+  - file: api/src/services/users.ts
+    line: 566
+    text: ": new Url(env['PUBLIC_URL'] as string).addPath('users', 'register',
+      'verify-email')"
+  - file: api/src/services/users.ts
+    line: 573
+    text: "to: verificationEmail,"
+  - file: api/src/services/users.ts
+    line: 574
+    text: "subject: 'Verify your email address', // TODO: translate after theres
+      support for internationalized emails"
+  - file: api/src/services/users.ts
+    line: 579
+    text: "email: verificationEmail,"
+  - file: api/src/services/users.ts
+    line: 586
+    text: logger.error(error, 'Could not send email verification mail');
+  - file: api/src/services/users.ts
+    line: 594
+    text: const { email, scope } = verifyJWT(token, getSecret()) as {
+  - file: api/src/services/users.ts
+    line: 595
+    text: "email: string;"
+  - file: api/src/services/users.ts
+    line: 601
+    text: const user = await this.getUserByEmail(email);
+  - file: api/src/services/users.ts
+    line: 612
+    text: "async requestPasswordReset(email: string, url: string | null, subject?:
+      string | null): Promise<void> {"
+  - file: api/src/services/users.ts
+    line: 620
+    text: const user = await this.getUserByEmail(email);
+  - file: api/src/services/users.ts
+    line: 638
+    text: "const payload = { email: user.email, scope: 'password-reset', hash:
+      getSimpleHash('' + user.password) };"
+  - file: api/src/services/users.ts
+    line: 649
+    text: "to: user.email,"
+  - file: api/src/services/users.ts
+    line: 655
+    text: "email: user.email,"
+  - file: api/src/services/users.ts
+    line: 667
+    text: const { email, scope, hash } = verifyJWT(token, getSecret()) as {
+  - file: api/src/services/users.ts
+    line: 668
+    text: "email: string;"
+  - file: api/src/services/users.ts
+    line: 683
+    text: const user = await this.getUserByEmail(email);
+  - file: api/src/utils/create-admin.ts
+    line: 33
+    text: "email?: string | undefined;"
+  - file: api/src/utils/create-admin.ts
+    line: 42
+    text: const adminEmail = admin?.email ?? env['ADMIN_EMAIL'];
+  - file: api/src/utils/create-admin.ts
+    line: 46
+    text: if (!adminEmail || !adminPassword) return;
+  - file: api/src/utils/create-admin.ts
+    line: 68
+    text: "email: adminEmail,"
+  - file: api/src/websocket/collab/room.ts
+    line: 479
+    text: "async update(sender: WebSocketClient, changes: Record<string, unknown>) {"
+  - file: api/src/websocket/collab/room.ts
+    line: 494
+    text: if (client.uid === sender.uid) continue;
+  - file: api/src/websocket/collab/room.ts
+    line: 519
+    text: "async unset(sender: PermissionClient, field: string) {"
+  - file: api/src/websocket/collab/room.ts
+    line: 532
+    text: if (client.uid === sender.uid) continue;
+  - file: api/src/websocket/collab/room.ts
+    line: 581
+    text: // Send "*" when discarding all fields and recipient has full permissions
+  - file: api/src/websocket/collab/room.ts
+    line: 604
+    text: "async focus(sender: PermissionClient, field: string | null):
+      Promise<boolean> {"
+  - file: api/src/websocket/collab/room.ts
+    line: 610
+    text: const focusedField = focuses[sender.uid];
+  - file: api/src/websocket/collab/room.ts
+    line: 611
+    text: delete focuses[sender.uid];
+  - file: api/src/websocket/collab/room.ts
+    line: 618
+    text: if (currentFocuser && currentFocuser !== sender.uid) {
+  - file: api/src/websocket/collab/room.ts
+    line: 622
+    text: focuses[sender.uid] = field;
+  - file: api/src/websocket/collab/room.ts
+    line: 633
+    text: if (client.uid === sender.uid) continue;
+  - file: api/src/websocket/collab/room.ts
+    line: 645
+    text: "connection: sender.uid,"
