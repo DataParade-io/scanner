@@ -125,3 +125,29 @@ describe("field links in grouping", () => {
     expect(groupOf("saleor/checkout/complete.py", 2)).toBe("email:customer");
   });
 });
+
+describe("queried table entities", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("groups mentions in functions that query the same one table", () => {
+    const { hits } = buildPersonalDataInventoryFromIngest(
+      [
+        file("src/auth/local.ts", "typescript", [
+          "export async function findByEmail(knex: any, email: string) {",
+          "  return knex.select('id').from('directus_users').where({ email }).first();",
+          "}",
+        ]),
+        file("src/cli/passwd.ts", "typescript", [
+          "export async function reset(database: any, email: string) {",
+          "  await database('directus_users').update({ password: 'x' }).where('email', email);",
+          "}",
+        ]),
+      ],
+      [],
+    );
+    const groups = new Set(hits.filter((hit) => hit.id === "email" && hit.location === "code").map((hit) => hit.group));
+    expect([...groups]).toEqual(["email:user"]);
+  });
+});

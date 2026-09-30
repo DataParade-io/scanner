@@ -47,6 +47,8 @@ export interface PiiSignalHit {
    * line passes into, as `${signalId}@${filePath}:${line}` (KDATAP-c8a46a).
    */
   callLinks?: string[];
+  /** Entity of the one table the enclosing function queries through a query builder. */
+  tableEntity?: string;
 }
 
 export interface MatchPiiSignalsFileInput {
