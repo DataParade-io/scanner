@@ -43,20 +43,16 @@ annotations:
       start_line: 15
       end_line: 15
     expected:
-      status: positive
+      status: negative
       labels:
         - email_address
-    rationale: Yup validator schema for email addresses that validates format.
+    rationale: Declares the emailValidator schema, a validator name rather than an address value.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
       syntax_kind: identifier
-      declaration:
-        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 15
-        kind: local
       owner: packages/core
   - id: strapi-delete-user-L18
     layer: mentions
@@ -229,7 +225,7 @@ annotations:
     layer: mentions
     subject:
       key: mention:email
-      name: findOneByEmail
+      name: email
     evidence:
       file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
       start_line: 51
@@ -238,7 +234,7 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Service method that finds a user by their email address.
+    rationale: Passes the email parameter, an address, into findOneByEmail.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
@@ -247,8 +243,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 51
-        kind: function
+        line: 47
+        kind: parameter
       owner: packages/core
   - id: strapi-delete-user-L54
     layer: mentions
@@ -297,8 +293,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 11
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L75
     layer: mentions
@@ -322,8 +318,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 11
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L83
     layer: mentions
@@ -347,8 +343,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 22
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L86
     layer: mentions
@@ -372,8 +368,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 11
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L87
     layer: mentions
@@ -409,17 +405,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Validates the email address value against the schema before using it.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 92
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L101
     layer: mentions
@@ -434,17 +430,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Passes the email address to the function that deletes the admin user.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
-        line: 101
-        kind: field
+        line: 73
+        kind: local
       owner: packages/core
   - id: strapi-delete-user-L111
     layer: mentions
@@ -502,20 +498,16 @@ annotations:
       start_line: 18
       end_line: 18
     expected:
-      status: positive
+      status: negative
       labels:
         - email_address
-    rationale: Yup validator schema that validates email address format and lowercase.
+    rationale: Declares the emailValidator schema, a validator name rather than an address value.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
       syntax_kind: identifier
-      declaration:
-        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 18
-        kind: local
       owner: packages/core
   - id: strapi-create-user-L37
     layer: mentions
@@ -697,17 +689,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Service method that checks if user with the email address already exists.
+    rationale: Shorthand object property reads the email parameter that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 88
-        kind: field
+        line: 84
+        kind: parameter
       owner: packages/core
   - id: strapi-create-user-L91
     layer: mentions
@@ -781,8 +773,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 11
-        kind: field
+        line: 114
+        kind: local
       owner: packages/core
   - id: strapi-create-user-L117
     layer: mentions
@@ -806,8 +798,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 11
-        kind: field
+        line: 114
+        kind: local
       owner: packages/core
   - id: strapi-create-user-L130
     layer: mentions
@@ -831,8 +823,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 44
-        kind: field
+        line: 114
+        kind: local
       owner: packages/core
   - id: strapi-create-user-L134
     layer: mentions
@@ -847,17 +839,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Validates the email address value against the schema before using it.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 134
-        kind: field
+        line: 114
+        kind: local
       owner: packages/core
   - id: strapi-create-user-L143
     layer: mentions
@@ -872,17 +864,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Passes the email address to the function that creates the admin user.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
-        line: 143
-        kind: field
+        line: 114
+        kind: local
       owner: packages/core
   - id: strapi-create-user-L153
     layer: mentions
@@ -1030,7 +1022,7 @@ annotations:
     layer: mentions
     subject:
       key: mention:email
-      name: findOneByEmail
+      name: cleanEmail
     evidence:
       file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
       start_line: 39
@@ -1039,7 +1031,7 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Service method that finds a user by their email address.
+    rationale: Passes the cleaned email address into findOneByEmail.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
@@ -1048,8 +1040,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
-        line: 39
-        kind: function
+        line: 29
+        kind: local
       owner: packages/core
   - id: strapi-block-user-L42
     layer: mentions
@@ -1123,8 +1115,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
-        line: 11
-        kind: field
+        line: 61
+        kind: local
       owner: packages/core
   - id: strapi-block-user-L63
     layer: mentions
@@ -1148,8 +1140,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
-        line: 11
-        kind: field
+        line: 61
+        kind: local
       owner: packages/core
   - id: strapi-block-user-L70
     layer: mentions
@@ -1173,8 +1165,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
-        line: 11
-        kind: field
+        line: 61
+        kind: local
       owner: packages/core
   - id: strapi-block-user-L71
     layer: mentions
@@ -1210,17 +1202,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Passes the email address to the function that sets block status.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
-        line: 75
-        kind: field
+        line: 61
+        kind: local
       owner: packages/core
   - id: strapi-block-user-L85
     layer: mentions
@@ -1368,7 +1360,7 @@ annotations:
     layer: mentions
     subject:
       key: mention:email
-      name: findOneByEmail
+      name: cleanEmail
     evidence:
       file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
       start_line: 39
@@ -1377,7 +1369,7 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Service method that finds a user by their email address.
+    rationale: Passes the cleaned email address into findOneByEmail.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
@@ -1386,8 +1378,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
-        line: 39
-        kind: function
+        line: 29
+        kind: local
       owner: packages/core
   - id: strapi-active-user-L42
     layer: mentions
@@ -1461,8 +1453,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
-        line: 11
-        kind: field
+        line: 63
+        kind: local
       owner: packages/core
   - id: strapi-active-user-L65
     layer: mentions
@@ -1486,8 +1478,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
-        line: 11
-        kind: field
+        line: 63
+        kind: local
       owner: packages/core
   - id: strapi-active-user-L72
     layer: mentions
@@ -1511,8 +1503,8 @@ annotations:
       syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
-        line: 11
-        kind: field
+        line: 63
+        kind: local
       owner: packages/core
   - id: strapi-active-user-L73
     layer: mentions
@@ -1548,17 +1540,17 @@ annotations:
       status: positive
       labels:
         - email_address
-    rationale: Passes the email address to the function that sets active status.
+    rationale: Shorthand object property reads the email variable that holds the address.
     provenance:
       proposed_by: claude-haiku-4-5-20251001
       proposed_at: '2026-09-30'
       review_state: proposed
     mention_attributes:
-      syntax_kind: property_key
+      syntax_kind: identifier
       declaration:
         file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
-        line: 77
-        kind: field
+        line: 63
+        kind: local
       owner: packages/core
   - id: strapi-active-user-L87
     layer: mentions

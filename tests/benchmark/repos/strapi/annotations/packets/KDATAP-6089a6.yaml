@@ -28,7 +28,7 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Reads the user email address to use as the default display name.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -38,8 +38,8 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
-      line: 15
-      kind: local
+      line: 14
+      kind: parameter
 - id: strapi-services-audit-logs-l25
   layer: mentions
   subject:
@@ -53,18 +53,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the user email address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
       line: 25
-      kind: local
+      kind: field
 - id: strapi-services-audit-logs-l102
   layer: mentions
   subject:
@@ -78,18 +78,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Field name email in the select list that selects the address column.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
-      line: 102
-      kind: local
 - id: strapi-authentication-utils-middlewares-l26
   layer: mentions
   subject:
@@ -100,16 +96,20 @@ annotations:
     start_line: 26
     end_line: 26
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Error/log message or prose; no address value held.
+  rationale: Reads the email address of the profile returned by the provider.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 25
+      kind: parameter
     owner: packages/core
 - id: strapi-authentication-utils-middlewares-l39
   layer: mentions
@@ -121,16 +121,20 @@ annotations:
     start_line: 39
     end_line: 39
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Function/feature name or relation; not an address value.
+  rationale: Reads the email address of the profile returned by the provider.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
     syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+      line: 25
+      kind: parameter
     owner: packages/core
 - id: strapi-authentication-utils-middlewares-l64
   layer: mentions
@@ -180,13 +184,13 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
-      line: 87
+      line: 64
       kind: local
 - id: strapi-controllers-user-l8
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: normalizeEmail
   evidence:
     file_path: packages/core/admin/ee/server/src/controllers/user.ts
     start_line: 8
@@ -201,7 +205,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: import_specifier
     owner: packages/core
 - id: strapi-controllers-user-l14
   layer: mentions
@@ -222,12 +226,8 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/ee/server/src/controllers/user.ts
-      line: 14
-      kind: local
 - id: strapi-controllers-user-l40
   layer: mentions
   subject:
@@ -241,18 +241,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the lowercased address from the request body.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/controllers/user.ts
       line: 40
-      kind: local
+      kind: field
 - id: strapi-controllers-user-l47
   layer: mentions
   subject:
@@ -266,23 +266,23 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the address from the attributes.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/controllers/user.ts
       line: 47
-      kind: local
+      kind: field
 - id: strapi-controllers-user-l50
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: packages/core/admin/ee/server/src/controllers/user.ts
     start_line: 50
@@ -297,13 +297,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-user-l69
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: normalizeEmail
   evidence:
     file_path: packages/core/admin/ee/server/src/controllers/user.ts
     start_line: 69
@@ -339,26 +339,22 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/ee/server/src/controllers/user.ts
-      line: 73
-      kind: local
 - id: strapi-controllers-user-l74
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: uniqueEmailCheck
   evidence:
     file_path: packages/core/admin/ee/server/src/controllers/user.ts
     start_line: 74
     end_line: 74
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Declares uniqueEmailCheck, the name of a uniqueness check result, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -366,10 +362,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/ee/server/src/controllers/user.ts
-      line: 74
-      kind: local
 - id: strapi-controllers-user-l76
   layer: mentions
   subject:
@@ -383,32 +375,32 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the address from the update payload.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/ee/server/src/controllers/user.ts
       line: 76
-      kind: local
+      kind: field
 - id: strapi-controllers-user-l79
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: uniqueEmailCheck
   evidence:
     file_path: packages/core/admin/ee/server/src/controllers/user.ts
     start_line: 79
     end_line: 79
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Reads the uniqueEmailCheck result, a boolean check name, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -416,10 +408,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/ee/server/src/controllers/user.ts
-      line: 79
-      kind: local
 - id: strapi-controllers-user-l80
   layer: mentions
   subject:
@@ -439,7 +427,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-content-types-user-l39
   layer: mentions
@@ -454,18 +442,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Schema field definition for the email attribute.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/content-types/User.ts
       line: 39
-      kind: local
+      kind: field
 - id: strapi-content-types-user-l40
   layer: mentions
   subject:
@@ -479,23 +467,19 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Attribute type literal email in the email field definition.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/server/src/content-types/User.ts
-      line: 40
-      kind: local
 - id: strapi-controllers-authenticated-user-l5
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: normalizeEmail
   evidence:
     file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
     start_line: 5
@@ -510,13 +494,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: import_specifier
     owner: packages/core
 - id: strapi-controllers-authenticated-user-l20
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: normalizeEmail
   evidence:
     file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
     start_line: 20
@@ -556,22 +540,22 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
-      line: 41
+      line: 27
       kind: local
 - id: strapi-controllers-authenticated-user-l42
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailAlreadyTaken
   evidence:
     file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
     start_line: 42
     end_line: 42
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Declares emailAlreadyTaken, the name of a uniqueness check result, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -579,10 +563,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
-      line: 42
-      kind: local
 - id: strapi-controllers-authenticated-user-l44
   layer: mentions
   subject:
@@ -596,32 +576,32 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the address from the user info.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
       line: 44
-      kind: local
+      kind: field
 - id: strapi-controllers-authenticated-user-l47
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailAlreadyTaken
   evidence:
     file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
     start_line: 47
     end_line: 47
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Reads the emailAlreadyTaken result, a boolean check name, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -629,10 +609,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
-      line: 47
-      kind: local
 - id: strapi-controllers-authenticated-user-l49
   layer: mentions
   subject:
@@ -643,21 +619,17 @@ annotations:
     start_line: 49
     end_line: 49
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Key whose value is only the prose message Email already taken, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/server/src/controllers/authenticated-user.ts
-      line: 49
-      kind: local
 - id: strapi-controllers-authenticated-user-l55
   layer: mentions
   subject:
@@ -677,13 +649,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-middlewares-ratelimit-l28
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: requestEmail
   evidence:
     file_path: packages/core/admin/server/src/middlewares/rateLimit.ts
     start_line: 28
@@ -708,7 +680,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: userEmail
   evidence:
     file_path: packages/core/admin/server/src/middlewares/rateLimit.ts
     start_line: 29
@@ -733,7 +705,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: userEmail
   evidence:
     file_path: packages/core/admin/server/src/middlewares/rateLimit.ts
     start_line: 38
@@ -752,7 +724,7 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/middlewares/rateLimit.ts
-      line: 38
+      line: 29
       kind: local
 - id: strapi-passport-local-strategy-l9
   layer: mentions
@@ -767,18 +739,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Field name email in usernameField that selects the address input.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/server/src/services/passport/local-strategy.ts
-      line: 9
-      kind: local
 - id: strapi-passport-local-strategy-l13
   layer: mentions
   subject:
@@ -803,7 +771,7 @@ annotations:
     declaration:
       file_path: packages/core/admin/server/src/services/passport/local-strategy.ts
       line: 13
-      kind: local
+      kind: parameter
 - id: strapi-passport-local-strategy-l15
   layer: mentions
   subject:
@@ -817,18 +785,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the lowercased address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/services/passport/local-strategy.ts
       line: 15
-      kind: local
+      kind: field
 - id: strapi-utils-normalize-email-l2
   layer: mentions
   subject:
@@ -848,7 +816,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-utils-normalize-email-l4
   layer: mentions
@@ -869,7 +837,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-utils-normalize-email-l6
   layer: mentions
@@ -890,7 +858,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-utils-normalize-email-l7
   layer: mentions
@@ -911,7 +879,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-utils-normalize-email-l8
   layer: mentions
@@ -932,13 +900,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-utils-normalize-email-l11
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: normalizeEmail
   evidence:
     file_path: packages/core/admin/server/src/utils/normalize-email.ts
     start_line: 11
@@ -1003,7 +971,7 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/utils/normalize-email.ts
-      line: 14
+      line: 12
       kind: local
 - id: strapi-utils-normalize-email-l15
   layer: mentions
@@ -1018,18 +986,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Object key email whose value is the lowercased address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/utils/normalize-email.ts
       line: 15
-      kind: local
+      kind: field
 - id: strapi-validation-user-l8
   layer: mentions
   subject:
@@ -1040,16 +1008,20 @@ annotations:
     start_line: 8
     end_line: 8
   expected:
-    status: negative
+    status: positive
     labels:
     - email_address
-  rationale: Import statement; not an address value.
+  rationale: Schema field key email in the user validation shape.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
+    declaration:
+      file_path: packages/core/admin/server/src/validation/user.ts
+      line: 8
+      kind: field
     owner: packages/core
 - id: strapi-validation-user-l19
   layer: mentions
@@ -1064,18 +1036,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Schema field key email in the user validation shape.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/validation/user.ts
       line: 19
-      kind: local
+      kind: field
 - id: strapi-validation-user-l37
   layer: mentions
   subject:
@@ -1089,18 +1061,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Schema field key email in the user validation shape.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/server/src/validation/user.ts
       line: 37
-      kind: local
+      kind: field
 - id: strapi-contracts-authentication-l10
   layer: mentions
   subject:
@@ -1114,18 +1086,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: String literal type naming the email field picked from AdminUser.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/shared/contracts/authentication.ts
-      line: 10
-      kind: local
 - id: strapi-contracts-authentication-l12
   layer: mentions
   subject:
@@ -1139,18 +1107,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: String literal type naming the email field picked from AdminUser.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/shared/contracts/authentication.ts
-      line: 12
-      kind: local
 - id: strapi-contracts-authentication-l57
   layer: mentions
   subject:
@@ -1164,18 +1128,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Interface field email holding the address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/shared/contracts/authentication.ts
       line: 57
-      kind: local
+      kind: field
 - id: strapi-contracts-authentication-l72
   layer: mentions
   subject:
@@ -1189,18 +1153,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: String literal type naming the email field picked from AdminUser.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/shared/contracts/authentication.ts
-      line: 72
-      kind: local
 - id: strapi-contracts-authentication-l93
   layer: mentions
   subject:
@@ -1214,18 +1174,14 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: String literal type naming the email field picked from AdminUser.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/admin/shared/contracts/authentication.ts
-      line: 93
-      kind: local
 - id: strapi-contracts-authentication-l110
   layer: mentions
   subject:
@@ -1245,7 +1201,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: comment
     owner: packages/core
 - id: strapi-contracts-authentication-l115
   layer: mentions
@@ -1260,18 +1216,18 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Reads, writes, or passes the email address value.
+  rationale: Interface field email holding the address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: property_key
     owner: packages/core
     declaration:
       file_path: packages/core/admin/shared/contracts/authentication.ts
       line: 115
-      kind: local
+      kind: field
 - id: strapi-admin-list-users-l17
   layer: mentions
   subject:
@@ -1285,43 +1241,35 @@ annotations:
     status: positive
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Field name email in the select list that selects the address column.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/strapi/src/cli/commands/admin/list-users.ts
-      line: 17
-      kind: local
 - id: strapi-admin-list-users-l25
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: packages/core/strapi/src/cli/commands/admin/list-users.ts
     start_line: 25
     end_line: 25
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Mentions email address in value context.
+  rationale: Table header label text, not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
-    declaration:
-      file_path: packages/core/strapi/src/cli/commands/admin/list-users.ts
-      line: 25
-      kind: local
 - id: strapi-admin-list-users-l38
   layer: mentions
   subject:
@@ -1345,5 +1293,5 @@ annotations:
     owner: packages/core
     declaration:
       file_path: packages/core/strapi/src/cli/commands/admin/list-users.ts
-      line: 38
-      kind: local
+      line: 34
+      kind: parameter

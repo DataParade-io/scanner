@@ -138,7 +138,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: createProvider
+    name: emailConfig
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 22
@@ -159,7 +159,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: providerName
+    name: emailConfig
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 23
@@ -201,7 +201,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: provider
+    name: email
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 28
@@ -243,7 +243,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: provider
+    name: emailConfig
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 52
@@ -285,7 +285,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: providerName
+    name: emailConfig
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 58
@@ -327,7 +327,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: provider
+    name: email
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 66
@@ -342,7 +342,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-bootstrap-L72
   layer: mentions
@@ -363,13 +363,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-bootstrap-L73
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: packages/core/email/server/src/bootstrap.ts
     start_line: 73
@@ -405,7 +405,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: property_key
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-email-L6
   layer: mentions
@@ -432,7 +432,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: Email
   evidence:
     file_path: packages/core/email/server/src/controllers/email.ts
     start_line: 11
@@ -510,7 +510,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-email-L26
   layer: mentions
@@ -537,7 +537,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: recipient
   evidence:
     file_path: packages/core/email/server/src/controllers/email.ts
     start_line: 39
@@ -564,10 +564,10 @@ annotations:
     start_line: 42
     end_line: 42
   expected:
-    status: positive
+    status: negative
     labels:
     - email_address
-  rationale: Variable holds SendOptions with address data
+  rationale: Local email holds the test email message object (to, subject, text), not an address.
   provenance:
     proposed_by: claude-haiku-4-5-20251001
     proposed_at: '2026-09-30'
@@ -575,10 +575,6 @@ annotations:
   mention_attributes:
     syntax_kind: identifier
     owner: packages/core
-    declaration:
-      file_path: packages/core/email/server/src/controllers/email.ts
-      line: 42
-      kind: local
 - id: strapi-controllers-email-L44
   layer: mentions
   subject:
@@ -682,7 +678,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-email-L57
   layer: mentions
@@ -709,7 +705,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: EmailConfig
   evidence:
     file_path: packages/core/email/server/src/controllers/email.ts
     start_line: 67
@@ -724,7 +720,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: type_name
     owner: packages/core
 - id: strapi-controllers-email-L68
   layer: mentions
@@ -745,7 +741,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-email-L92
   layer: mentions
@@ -766,7 +762,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-controllers-email-L95
   layer: mentions
@@ -919,7 +915,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: SendOptions
+    name: email
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 16
@@ -934,13 +930,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-services-email-L20
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailOptions
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 20
@@ -961,7 +957,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailTemplate
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 21
@@ -982,7 +978,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: EmailOptions
+    name: sendTemplatedEmail
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 25
@@ -997,13 +993,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: identifier
     owner: packages/core
 - id: strapi-services-email-L26
   layer: mentions
   subject:
     key: mention:email
-    name: EmailOptions
+    name: emailOptions
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 26
@@ -1018,13 +1014,13 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: identifier
     owner: packages/core
 - id: strapi-services-email-L27
   layer: mentions
   subject:
     key: mention:email
-    name: EmailTemplate
+    name: emailTemplate
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 27
@@ -1039,7 +1035,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: type_name
+    syntax_kind: identifier
     owner: packages/core
 - id: strapi-services-email-L28
   layer: mentions
@@ -1066,7 +1062,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: email
+    name: emailTemplate
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 31
@@ -1150,7 +1146,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: emailOptions
+    name: email
   evidence:
     file_path: packages/core/email/server/src/services/email.ts
     start_line: 54
@@ -1165,7 +1161,7 @@ annotations:
     proposed_at: '2026-09-30'
     review_state: proposed
   mention_attributes:
-    syntax_kind: identifier
+    syntax_kind: string_literal
     owner: packages/core
 - id: strapi-services-email-L57
   layer: mentions
@@ -1364,7 +1360,7 @@ annotations:
   layer: mentions
   subject:
     key: mention:email
-    name: SendOptions
+    name: EmailOptions
   evidence:
     file_path: packages/core/email/server/src/types.ts
     start_line: 43
