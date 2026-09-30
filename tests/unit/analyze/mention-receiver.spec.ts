@@ -247,3 +247,63 @@ describe("receiver entity in the inventory", () => {
     expect(entity(4)).toBe("user");
   });
 });
+
+describe("ORM static factory typing", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  const classOf = (language: FileLanguage, path: string, lines: string[], name: string, line: number, known: string[] = []) =>
+    analyze(language, path, lines, (file) => {
+      file.setKnownClass((className) => known.includes(className));
+      return file.classOfName(name, line, 20);
+    });
+
+  it("types a binding assigned from a models chain (TypeScript)", () => {
+    const lines = [
+      "class A {",
+      "  async f(id) {",
+      "    const owner = await this.models.User.getOwnerUser();",
+      "    const user = await models.User.findOne({ id });",
+      "    const reporter = await this.models.Member.findOne({ id });",
+      "    return owner.get('email');",
+      "  }",
+      "}",
+    ];
+    expect(classOf("typescript", "a.ts", lines, "owner", 6)).toBe("User");
+    expect(classOf("typescript", "a.ts", lines, "user", 6)).toBe("User");
+    expect(classOf("typescript", "a.ts", lines, "reporter", 6)).toBe("Member");
+    expect(receiver("typescript", "a.ts", lines, 6)).toBe("User");
+  });
+
+  it("types a class known to the repository, but not an unknown one or an arbitrary callee", () => {
+    const lines = [
+      "async function f(id) {",
+      "  const members = await Member.findAll({ id });",
+      "  const other = await Thing.findAll({ id });",
+      "  const made = await helpers.build(id);",
+      "  const local = await Local.find(id);",
+      "  return [members, other, made, local];",
+      "}",
+      "class Local {}",
+    ];
+    expect(classOf("typescript", "a.ts", lines, "members", 6)).toBeUndefined();
+    expect(classOf("typescript", "a.ts", lines, "members", 6, ["Member"])).toBe("Member");
+    expect(classOf("typescript", "a.ts", lines, "other", 6, ["Member"])).toBeUndefined();
+    expect(classOf("typescript", "a.ts", lines, "made", 6, ["Member"])).toBeUndefined();
+    expect(classOf("typescript", "a.ts", lines, "local", 6)).toBe("Local");
+  });
+
+  it("types a binding from the objects manager (Python)", () => {
+    const lines = [
+      "def f(pk):",
+      "    user = User.objects.get(pk=pk)",
+      "    other = Thing.objects.get(pk=pk)",
+      "    plain = helpers.load(pk)",
+      "    return user.email, other, plain",
+    ];
+    expect(classOf("python", "a.py", lines, "user", 5, ["User"])).toBe("User");
+    expect(classOf("python", "a.py", lines, "other", 5, ["User"])).toBeUndefined();
+    expect(classOf("python", "a.py", lines, "plain", 5, ["User"])).toBeUndefined();
+  });
+});

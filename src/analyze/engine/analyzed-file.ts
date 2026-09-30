@@ -106,6 +106,7 @@ export class AnalyzedFile {
   private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
   private factoryReturnTypes = true;
+  private knownClass: ((name: string) => boolean) | undefined;
 
   constructor(
     private readonly tree: Tree,
@@ -383,9 +384,50 @@ export class AnalyzedFile {
       return this.receiverClass(value, depth);
     }
     if (this.factoryReturnTypes && (value.type === "call_expression" || value.type === "call")) {
-      return this.returnClassOfCall(value);
+      return this.returnClassOfCall(value) ?? this.staticFactoryClass(value);
     }
     return undefined;
+  }
+
+  /** Classes known repo-wide, for typing ORM static factories (`User.findOne`). */
+  setKnownClass(known: ((name: string) => boolean) | undefined): void {
+    this.knownClass = known;
+  }
+
+  /**
+   * The model class a static factory call returns an instance of (KDATAP-c8a46a):
+   * `this.models.User.getOwnerUser()`, `User.objects.get(pk=pk)`, `Member.findAll()`.
+   * The receiver chain must start at a class, optionally through the pack's manager
+   * attributes. The class must be reached through a `models.` chain, defined in this
+   * file, or known to the repository; other callees are not typed.
+   */
+  private staticFactoryClass(call: Node): string | undefined {
+    const callee = call.childForFieldName("function");
+    const member = callee ? this.memberByNode.get(callee.id) : undefined;
+    if (!member || this.isSelfNode(member.object)) return undefined;
+    let node = member.object;
+    const managers = this.config.managerAttributes ?? [];
+    for (;;) {
+      const inner = this.memberByNode.get(node.id);
+      if (inner && managers.includes(unquote(inner.property.text))) node = inner.object;
+      else break;
+    }
+    let name: string | undefined;
+    let viaModels = false;
+    if (node.type === "identifier") {
+      if (!isClassName(node.text)) return undefined;
+      name = node.text;
+      const kind = this.definitionsOf(name, node)?.[0]?.kind;
+      if (kind === "class") return name;
+    } else {
+      const inner = this.memberByNode.get(node.id);
+      if (!inner) return undefined;
+      const property = unquote(inner.property.text);
+      if (!isClassName(property)) return undefined;
+      name = property;
+      viaModels = /(^|\.)models$/.test(inner.object.text.trim());
+    }
+    return viaModels || this.knownClass?.(name) ? name : undefined;
   }
 
   /**

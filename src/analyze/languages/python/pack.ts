@@ -18,5 +18,6 @@ export const pythonPack: LanguagePack = {
     hoistedDeclarationParents: [],
     implicitFirstParameters: ["self", "cls"],
     constructsByCall: true,
+    managerAttributes: ["objects"],
   },
 };

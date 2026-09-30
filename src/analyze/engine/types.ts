@@ -60,6 +60,8 @@ export interface PackConfig {
   implicitFirstParameters?: string[];
   /** A class is instantiated by calling it (`User(...)` in Python), not by `new`. */
   constructsByCall?: boolean;
+  /** Attributes between a model class and its query methods (`User.objects.get(...)`). */
+  managerAttributes?: string[];
 }
 
 /** One argument of a call, as written at the call site. */
