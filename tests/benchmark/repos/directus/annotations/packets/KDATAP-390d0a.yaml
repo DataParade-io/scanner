@@ -1,0 +1,1395 @@
+packet:
+  repo: directus
+  concept: email
+  kanbus_issue: KDATAP-390d0a
+  files:
+  - api/src/operations/notification/index.ts
+  - api/src/database/migrations/20211118A-add-notifications.ts
+  - api/src/operations/mail/index.ts
+  - api/src/websocket/collab/room.ts
+  - api/src/services/server.ts
+  - api/src/cli/commands/init/index.ts
+  - api/src/services/graphql/resolvers/system-global.ts
+  - api/src/services/export.ts
+  - api/src/license/manager.ts
+  - api/src/services/import/import.ts
+  - api/src/services/graphql/resolvers/system.ts
+
+annotations:
+- id: directus-init-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 77
+    end_line: 77
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field name for the email prompt in the admin user setup; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-init-L78
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 78
+    end_line: 78
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prompt message text displayed to the user; prose, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-init-L81
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 81
+    end_line: 81
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Joi validation schema method for email; validation configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-init-L82
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailSchema
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable name for validation schema, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-init-L83
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 83
+    end_line: 83
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about validation; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-init-L111
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/init/index.ts
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading the admin user email address from input and passing to user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/cli/commands/init/index.ts
+      line: 111
+      kind: field
+    owner: api
+
+- id: directus-notification-L8
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/operations/notification/index.ts
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type field for recipient user ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-notification-L20
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/operations/notification/index.ts
+    start_line: 20
+    end_line: 20
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter destructuring for recipient user ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-notification-L46
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/operations/notification/index.ts
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Converting recipient parameter (user ID) to array; not handling an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-notification-L48
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/operations/notification/index.ts
+    start_line: 48
+    end_line: 48
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning recipient user ID to notification record field; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-notification-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/operations/notification/index.ts
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning sender user ID to notification record field; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-add-notifications-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/database/migrations/20211118A-add-notifications.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Database column definition for recipient user ID foreign key; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-add-notifications-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/database/migrations/20211118A-add-notifications.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Database column definition for sender user ID foreign key; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-add-notifications-L20
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_notifications
+  evidence:
+    file_path: api/src/database/migrations/20211118A-add-notifications.ts
+    start_line: 20
+    end_line: 20
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag for email notification settings; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-add-notifications-L23
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_notifications
+  evidence:
+    file_path: api/src/database/migrations/20211118A-add-notifications.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Updating the email notifications boolean flag during migration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-add-notifications-L30
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_notifications
+  evidence:
+    file_path: api/src/database/migrations/20211118A-add-notifications.ts
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dropping the email notifications column in downgrade migration; column name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-mail-L3
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailOptions
+  evidence:
+    file_path: api/src/operations/mail/index.ts
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type import for email options; import statement, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: api
+
+- id: directus-mail-L6
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: api/src/operations/mail/index.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of email rate limiter module; import statement, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: api
+
+- id: directus-mail-L29
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: api/src/operations/mail/index.ts
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calling email rate limiter function; feature/operation control, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-mail-L32
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailOptions
+  evidence:
+    file_path: api/src/operations/mail/index.ts
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type annotation for email options object; type name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: api
+
+- id: directus-export-L183
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/export.ts
+    start_line: 183
+    end_line: 183
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading the user email address field for export completion notification.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-export-L195
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/export.ts
+    start_line: 195
+    end_line: 195
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Recipient field set to user ID for notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-export-L196
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/services/export.ts
+    start_line: 196
+    end_line: 196
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender field set to user ID for notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-export-L212
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/export.ts
+    start_line: 212
+    end_line: 212
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Recipient field set to user ID in error notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-export-L213
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/services/export.ts
+    start_line: 213
+    end_line: 213
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender field set to user ID in error notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-manager-L651
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/license/manager.ts
+    start_line: 651
+    end_line: 651
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading admin user email field to check license requirements.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-manager-L654
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ADMIN_MISSING_EMAIL
+  evidence:
+    file_path: api/src/license/manager.ts
+    start_line: 654
+    end_line: 654
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error code string for missing admin email; status indicator, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-manager-L656
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/license/manager.ts
+    start_line: 656
+    end_line: 656
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checking if admin user email field is null for license validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/license/manager.ts
+      line: 651
+      kind: local
+    owner: api
+
+- id: directus-manager-L657
+  layer: mentions
+  subject:
+    key: mention:email
+    name: ADMIN_MISSING_EMAIL
+  evidence:
+    file_path: api/src/license/manager.ts
+    start_line: 657
+    end_line: 657
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Pushing error code for missing admin email; status indicator, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-manager-L717
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/license/manager.ts
+    start_line: 717
+    end_line: 717
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing setting admin email and password; documentation prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: api
+
+- id: directus-server-L82
+  layer: mentions
+  subject:
+    key: mention:email
+    name: public_registration_verify_email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Setting name for public registration email verification flag; configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-server-L252
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 252
+    end_line: 252
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calling testEmail health check function; feature testing, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-server-L445
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 445
+    end_line: 445
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function declaration for email health check; feature function, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-server-L446
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 446
+    end_line: 446
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checking if email service is enabled; feature flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-server-L451
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 451
+    end_line: 451
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Health check key for email connection; service identifier, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-server-L454
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 454
+    end_line: 454
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Component type identifier for email health check; service type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-server-L463
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 463
+    end_line: 463
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Setting health check status for email service; service status, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-server-L464
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/server.ts
+    start_line: 464
+    end_line: 464
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Setting error output for email health check; service output, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-graphql-system-global-L60
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system-global.ts
+    start_line: 60
+    end_line: 60
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: GraphQL schema definition for email field in password reset mutation argument.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system-global.ts
+      line: 60
+      kind: field
+    owner: api
+
+- id: directus-graphql-system-global-L234
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system-global.ts
+    start_line: 234
+    end_line: 234
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: GraphQL schema definition for email field in invite user mutation argument.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system-global.ts
+      line: 234
+      kind: field
+    owner: api
+
+- id: directus-graphql-system-global-L250
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system-global.ts
+    start_line: 250
+    end_line: 250
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passing email address from GraphQL args to password reset service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system-global.ts
+      line: 237
+      kind: parameter
+    owner: api
+
+- id: directus-graphql-system-global-L434
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system-global.ts
+    start_line: 434
+    end_line: 434
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: GraphQL schema definition for email field in user create mutation argument.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system-global.ts
+      line: 434
+      kind: field
+    owner: api
+
+- id: directus-graphql-system-global-L450
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system-global.ts
+    start_line: 450
+    end_line: 450
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passing email address from GraphQL args to user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system-global.ts
+      line: 410
+      kind: parameter
+    owner: api
+
+- id: directus-graphql-system-L63
+  layer: mentions
+  subject:
+    key: mention:email
+    name: public_registration_verify_email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system.ts
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: GraphQL field for public registration email verification setting; configuration flag.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-graphql-system-L559
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system.ts
+    start_line: 559
+    end_line: 559
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: GraphQL schema definition for email field in user invite mutation argument.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system.ts
+      line: 559
+      kind: field
+    owner: api
+
+- id: directus-graphql-system-L569
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/graphql/resolvers/system.ts
+    start_line: 569
+    end_line: 569
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passing email address from GraphQL args to user invite service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/graphql/resolvers/system.ts
+      line: 563
+      kind: parameter
+    owner: api
+
+- id: directus-import-L197
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: api/src/services/import/import.ts
+    start_line: 197
+    end_line: 197
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading user email field for import completion notification.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: api
+
+- id: directus-import-L201
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/import/import.ts
+    start_line: 201
+    end_line: 201
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Recipient field set to user ID for import notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-import-L202
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/services/import/import.ts
+    start_line: 202
+    end_line: 202
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender field set to user ID for import notification; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: api
+
+- id: directus-room-L479
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 479
+    end_line: 479
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter for WebSocket client that sends collaboration updates; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L494
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 494
+    end_line: 494
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comparing WebSocket client UID with sender; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L519
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 519
+    end_line: 519
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter for WebSocket client that unsets collaborative fields; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L532
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 532
+    end_line: 532
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comparing WebSocket client UID with sender; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L581
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 581
+    end_line: 581
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about field recipients in collaboration; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: api
+
+- id: directus-room-L604
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 604
+    end_line: 604
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter for WebSocket client that manages field focus; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L610
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 610
+    end_line: 610
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reading focused field by sender UID; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L611
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 611
+    end_line: 611
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Deleting focused field by sender UID; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L618
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 618
+    end_line: 618
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comparing current field focuser with sender UID; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L622
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 622
+    end_line: 622
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Setting focused field by sender UID; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L633
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 633
+    end_line: 633
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comparing WebSocket client UID with sender; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
+
+- id: directus-room-L645
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: api/src/websocket/collab/room.ts
+    start_line: 645
+    end_line: 645
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sending sender UID in collaboration event; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: api
