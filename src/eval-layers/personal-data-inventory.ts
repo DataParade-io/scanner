@@ -6,7 +6,7 @@ import { CommentLines } from "../pii-signals/comment-context";
 import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../analyze/engine/engine";
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
-import { mentionReceiverClass } from "../analyze/mention-receiver";
+import { mentionReceiver, type ReceiverVia } from "../analyze/mention-receiver";
 import { mentionFieldKeys, passedValueDeclarations } from "../analyze/mention-fields";
 import {
   addConceptFunctions,
@@ -41,9 +41,21 @@ export interface PersonalDataInventory {
  * the parse fails (KDATAP-8e47c2).
  */
 /** A hit with the call arguments it appears in, before callees are resolved repo-wide. */
-type PendingHit = PiiSignalHit & { callArguments?: ConceptCallArgument[] };
+type PendingHit = PiiSignalHit & {
+  callArguments?: ConceptCallArgument[];
+  /** Receiver class or binding names, resolved against the repository's classes later. */
+  receiver?: { className?: string; names: string[]; via?: ReceiverVia; legacy: boolean };
+};
 
-function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: ConceptFunctionIndex): PendingHit[] {
+/** Class names of the analyzed files by lower-cased name: `usersservice` -> `UsersService`. */
+type ClassIndex = Map<string, Set<string>>;
+
+function withDeclarations(
+  file: FileInfo,
+  hits: PiiSignalHit[],
+  functions: ConceptFunctionIndex,
+  classes: ClassIndex,
+): PendingHit[] {
   if (!isAnalysisEngineReady() || !hits.some((hit) => hit.location === "code")) return hits;
   const pack = packForFile(file.language, file.path);
   const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
@@ -51,6 +63,11 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: Conce
   const lines = file.content.split(/\r?\n/);
   try {
     const definitions = analyzed.functionDefinitions();
+    for (const name of analyzed.classNames()) {
+      const set = classes.get(name.toLowerCase()) ?? new Set<string>();
+      set.add(name);
+      classes.set(name.toLowerCase(), set);
+    }
     for (const id of new Set(hits.filter((hit) => hit.location === "code").map((hit) => hit.id))) {
       addConceptFunctions(functions, id, file.path, conceptFunctions(definitions, signalTokenMatcher(id, file.path)));
     }
@@ -61,11 +78,16 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: Conce
       const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
-      const receiverClass = mentionReceiverClass(analyzed, hit.evidence.endLine, isConceptToken);
-      const receiverEntity = receiverClass ? classEntity(receiverClass) : undefined;
+      const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken);
+      let legacy = false;
+      if (process.env.DATAPARADE_RECEIVER_STATS && found.className) {
+        analyzed.setFactoryReturnTypes(false);
+        legacy = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken).className === found.className;
+        analyzed.setFactoryReturnTypes(true);
+      }
       return {
         ...hit,
-        ...(receiverEntity && receiverEntity !== hit.id ? { receiverEntity } : {}),
+        ...(found.className || found.names.length > 0 ? { receiver: { ...found, legacy } } : {}),
         ...(callArguments.length > 0 ? { callArguments } : {}),
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
@@ -79,18 +101,38 @@ function withDeclarations(file: FileInfo, hits: PiiSignalHit[], functions: Conce
   }
 }
 
-function annotatedHitsForFile(file: FileInfo, functions: ConceptFunctionIndex): PendingHit[] {
-  return withDeclarations(file, matchedHitsForFile(file), functions);
+function annotatedHitsForFile(file: FileInfo, functions: ConceptFunctionIndex, classes: ClassIndex): PendingHit[] {
+  return withDeclarations(file, matchedHitsForFile(file), functions, classes);
 }
 
 /**
  * Resolve each hit's call arguments to callee parameter declarations across the
  * repository (KDATAP-c8a46a). Returns the hits without the pending arguments.
  */
-function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex): PiiSignalHit[] {
+function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, classes: ClassIndex): PiiSignalHit[] {
   let created = 0;
   let resolved = 0;
-  const out = hits.map(({ callArguments, ...hit }) => {
+  const stats: Record<string, number> = {};
+  const out = hits.map(({ callArguments, receiver, ...pending }) => {
+    let hit: PiiSignalHit = pending;
+    if (receiver) {
+      let className = receiver.className;
+      let source = className ? (receiver.legacy ? "typed" : "factory") : "";
+      for (const name of className ? [] : receiver.names) {
+        const found = classes.get(name.toLowerCase());
+        if (found?.size === 1) {
+          className = [...found][0];
+          source = "name";
+          break;
+        }
+      }
+      const receiverEntity = className ? classEntity(className) : undefined;
+      if (receiverEntity && receiverEntity !== hit.id) {
+        hit = { ...hit, receiverEntity };
+        const key = `${receiver.via}:${source}`;
+        stats[key] = (stats[key] ?? 0) + 1;
+      }
+    }
     if (!callArguments) return hit;
     const links = new Set<string>();
     for (const argument of callArguments) {
@@ -104,6 +146,9 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex): Pii
   });
   if (process.env.DATAPARADE_CALL_LINK_STATS) {
     process.stderr.write(`call-links created=${created} resolved=${resolved}\n`);
+  }
+  if (process.env.DATAPARADE_RECEIVER_STATS) {
+    process.stderr.write(`receiver-entities ${JSON.stringify(stats)}\n`);
   }
   return out;
 }
@@ -155,8 +200,9 @@ export function buildPersonalDataInventoryFromIngest(
   ingestOutcomes: PathEligibilityOutcome[],
 ): PersonalDataInventory {
   const functions: ConceptFunctionIndex = new Map();
-  const pending = files.flatMap((file) => annotatedHitsForFile(file, functions));
-  const hits = assignDeclarationGroups(withCallLinks(pending, functions));
+  const classes: ClassIndex = new Map();
+  const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes));
+  const hits = assignDeclarationGroups(withCallLinks(pending, functions, classes));
 
   return {
     hits,
