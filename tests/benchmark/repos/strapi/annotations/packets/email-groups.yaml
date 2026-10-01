@@ -20,21 +20,24 @@ groups:
       forgot-password body (contracts authentication.ts:57, read by authentication controller into forgotPassword), user create/update and registration bodies
       (controllers/user.ts:27,34,40,101,104; ee controllers/user.ts:14,40,47,73,76; authenticated-user.ts:41,44; contracts authentication.ts:72,93,115; validation/user.ts:8,19,37;
       normalize-email.ts:12-15 lowercases the same payload email before validation and persistence), SSO profile email (ee middlewares.ts:26,39,64,87 passed to user.create / findOneByEmail),
-      and the rate-limit key read from request.body.email on the admin auth routes (admin rateLimit.ts:28,29,38; same field as the login/forgot-password body).
+      and the rate-limit key read from request.body.email on the admin auth routes (admin rateLimit.ts:28,29,38 on /login and /register-admin; email plugin rateLimit.ts:21,22,27,
+      whose only use is the admin /forgot-password route, admin routes/authentication.ts:46 'plugin::email.rateLimit'; same field as the login/forgot-password body; c049/c050 moved
+      here from needs_adjudication in KDATAP-8fb0fd).
       CLI commands (cli/commands/admin/*.ts) take --email / prompt 'email' (option, inquirer question, CmdOptions field, yup email validator), then call findOneByEmail,
       user.exists, user.create or resetPasswordByEmail (active-user.ts:25-77, block-user.ts:25-75, create-user.ts:84-143 with create at :98, delete-user.ts:47-101, reset-user-password.ts:31-63),
       so they are the same admin::user address. Admin users are staff of the Strapi project, hence workforce.
-    clusters: [c001, c002, c003, c004, c005, c006, c007, c008, c009, c010, c011, c012, c013, c014, c015, c016, c017, c018, c019, c020, c021, c022, c023, c024, c025, c026, c027, c028, c029, c030, c031, c032, c033, c034, c035, c036, c037, c038, c039, c040, c041, c042, c043, c044, c045, c046, c047, c051, c062, c063, c064, c065, c066, c067, c068, c069, c070, c071, c072, c073, c074, c075, c076, c077, c078, c079, c080, c081, c082, c083, c084, c085, c086, c087, c088, c089, c090, c091, c092, c093, c094, c095, c096, c097, c098, c099]
+    clusters: [c001, c002, c003, c004, c005, c006, c007, c008, c009, c010, c011, c012, c013, c014, c015, c016, c017, c018, c019, c020, c021, c022, c023, c024, c025, c026, c027, c028, c029, c030, c031, c032, c033, c034, c035, c036, c037, c038, c039, c040, c041, c042, c043, c044, c045, c046, c047, c049, c050, c051, c062, c063, c064, c065, c066, c067, c068, c069, c070, c071, c072, c073, c074, c075, c076, c077, c078, c079, c080, c081, c082, c083, c084, c085, c086, c087, c088, c089, c090, c091, c092, c093, c094, c095, c096, c097, c098, c099]
   - id: email-address-parser-values
     name: Email plugin default sender/reply-to address parsing
     subject: sender and reply-to address configured in email plugin settings
     subject_kind: organization
     purpose: parsing, formatting and validating RFC 5322 'Name <address>' strings for the email plugin's default from / reply-to settings
     rationale: >-
-      email/shared/email-address-parser.ts is a self-contained utility: parseEmailAddress (217-274) returns ParsedEmailAddress.email (16, 219, 237-253, 266, 274), which formatEmailAddress (294),
-      isValidEmail (319) and parseMultipleEmailAddresses (344-345) handle with the same string. Its only consumer found is email/admin/src/pages/Settings.tsx:415-416, which parses
-      settings.defaultFrom and settings.defaultReplyTo, i.e. the site's configured sender/reply-to addresses, not a user's.
-    clusters: [c052, c053, c054, c055, c056, c057, c058, c059, c060, c061]
+      email/shared/email-address-parser.ts: parseEmailAddress (217-274) takes emailString and returns it as ParsedEmailAddress.email (16, 219, 237-253, 266, 274);
+      parseMultipleEmailAddresses (344-345, 392) splits its input and maps it through parseEmailAddress. Its only consumer found is email/admin/src/pages/Settings.tsx:415-416,
+      which parses settings.defaultFrom and settings.defaultReplyTo, i.e. the site's configured sender/reply-to addresses, not a user's. formatEmailAddress (294) and
+      isValidEmail (319) share no value with these functions and have no caller in scope, so they are in needs_adjudication (KDATAP-8fb0fd).
+    clusters: [c052, c053, c054, c055, c056, c057, c060, c061]
   - id: email-test-recipient
     name: Email plugin test mail recipient
     subject: recipient of the Strapi test email
@@ -45,9 +48,9 @@ groups:
       to admin::user, so it is not linked to admin-user-email.
     clusters: [c048]
 needs_adjudication:
-  - cluster: c049
-    candidate_groups: [admin-user-email, email-test-recipient]
-    reason: email plugin rateLimit.ts:21 reads request.body.email, but the plugin routes take `to`, not `email`, so it is unclear whose address this is (mirrors admin rateLimit.ts:28 which is admin-user-email)
-  - cluster: c050
-    candidate_groups: [admin-user-email, email-test-recipient]
-    reason: userEmail derived from the c049 value (rateLimit.ts:22,27), same uncertainty
+  - cluster: c058
+    candidate_groups: [email-address-parser-values]
+    reason: formatEmailAddress(name, email) parameter (email-address-parser.ts:294-309) has no caller in scope and shares no value with parseEmailAddress; only the file and the name link it to the parser group, so whose address it formats is not visible (KDATAP-8fb0fd)
+  - cluster: c059
+    candidate_groups: [email-address-parser-values]
+    reason: isValidEmail(email) parameter (email-address-parser.ts:319-329) has no caller in scope and shares no value with parseEmailAddress; only the file and the name link it to the parser group (KDATAP-8fb0fd)
