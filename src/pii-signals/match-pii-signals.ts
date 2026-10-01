@@ -30,9 +30,12 @@ export interface PiiSignalHit {
   group?: string;
   /**
    * The evidence that named the group: `declaration`, `name` (a qualifier or defined
-   * field), `receiver-vote`, `table-vote`, `weak-name`, `file-vote`, or `location`.
+   * field), `column` (a declared catalog column), `record-key` (a JSON record column key),
+   * `receiver-vote`, `table-vote`, `weak-name`, `file-vote`, or `location`.
    */
   groupBasis?: string;
+  /** The declared or record column whose evidence holds the group together. */
+  groupColumn?: string;
   /** The group is only the receiver variable's name; a typed receiver's class may replace it. */
   receiverNamesEntity?: boolean;
   /**

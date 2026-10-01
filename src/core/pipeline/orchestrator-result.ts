@@ -26,6 +26,8 @@ export interface ScanOccurrence {
   group?: string;
   /** The evidence that named the group (see `PiiSignalHit.groupBasis`). */
   groupBasis?: string;
+  /** The declared or record column holding the group together, when there is one. */
+  groupColumn?: string;
   /** Same-file declaration of the mentioned name: its line and kind, or `unresolved`. */
   declaration?: { line: number; kind: string } | "unresolved";
 }
