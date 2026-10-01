@@ -114,6 +114,10 @@ describe("model file anchoring", () => {
     ["saleor/checkout/complete_checkout.py", undefined],
     ["src/customer_repository.py", "customer"],
     ["api/src/services/users.ts", "user"],
+    ["packages/core/strapi/src/cli/commands/admin/reset-user-password.ts", "user"],
+    ["packages/core/strapi/src/cli/commands/admin/list-users.ts", "user"],
+    ["app/management/commands/create_user.py", "user"],
+    ["app/management/commands/migrate.py", undefined],
     ["api/src/controllers/users.ts", "user"],
     ["ghost/core/core/server/services/staff/staff-service-emails.js", undefined],
   ])("%s -> %s", (filePath, entity) => {

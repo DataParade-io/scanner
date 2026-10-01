@@ -178,7 +178,23 @@ const FILE_ROLE_WORDS = new Set([
  * `member-repository.js` -> `member`. Undefined for other files, and for files whose
  * name is only generic words (`models.py`, `user.js` since `user` is generic).
  */
+/** Leading action words of command file names: create-user, block-user, reset-user-password. */
+const COMMAND_ACTIONS = new Set([
+  "create", "delete", "remove", "add", "update", "set", "reset", "block", "unblock", "active",
+  "activate", "deactivate", "list", "get", "show", "import", "export", "sync", "send", "change",
+]);
+
 export function modelFileEntity(filePath: string): string | undefined {
+  // A command file (cli/commands/admin/create-user.ts, management/commands/create_user.py)
+  // is an action on one entity: the first word after a leading action word.
+  if (/(^|\/)commands\/(?:[^/]+\/)?[^/]+$/.test(filePath)) {
+    const commandWords = identifierWords(filePath.split("/").pop()!.replace(/\.[A-Za-z]+$/, ""));
+    if (commandWords.length >= 2 && COMMAND_ACTIONS.has(commandWords[0])) {
+      const entity = commandWords[1];
+      return entity.length > 3 && entity.endsWith("s") && !entity.endsWith("ss") ? entity.slice(0, -1) : entity;
+    }
+    return undefined;
+  }
   if (!MODEL_FILE.test(filePath)) return undefined;
   const base = filePath.split("/").pop()!.replace(/\.[A-Za-z]+$/, "");
   // Generic words are allowed here: in a model file, `user` names the model.
