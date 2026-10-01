@@ -4,6 +4,20 @@ license: MIT
 scope:
   include:
     - packages/medusa/src/modules/
+    - packages/medusa/src/
+    - packages/modules/customer/
+    - packages/modules/cart/
+    - packages/modules/order/
+    - packages/modules/fulfillment/
+    - packages/modules/stock-location/
+    - packages/modules/settings/
+    - packages/modules/payment/
+    - packages/modules/notification/
+    - packages/core/core-flows/
+    - packages/core/types/
+  exclude:
+    - path: packages/admin/dashboard/
+      reason: admin UI strings, forms and translations; not materialized (phone gold KDATAP-939370)
 coverage:
   layers:
     - data_items

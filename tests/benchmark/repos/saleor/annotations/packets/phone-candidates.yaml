@@ -1,0 +1,129 @@
+candidates:
+  - file: saleor/account/forms.py
+    line: 1
+    text: from phonenumbers.phonenumberutil import country_code_for_region
+  - file: saleor/account/forms.py
+    line: 16
+    text: initial["phone"] = f"+{country_code_for_region(country_code)}"
+  - file: saleor/account/i18n.py
+    line: 46
+    text: "class PossiblePhoneNumberFormField(forms.CharField):"
+  - file: saleor/account/i18n.py
+    line: 47
+    text: '"""A phone input field."""'
+  - file: saleor/account/i18n.py
+    line: 51
+    text: self.widget.input_type = "tel"
+  - file: saleor/account/i18n.py
+    line: 84
+    text: ("phone", "tel"),
+  - file: saleor/account/i18n.py
+    line: 102
+    text: '"phone": "Phone number",'
+  - file: saleor/account/i18n.py
+    line: 109
+    text: phone = PossiblePhoneNumberFormField(required=False)
+  - file: saleor/account/i18n.py
+    line: 138
+    text: phone = data.get("phone")
+  - file: saleor/account/i18n.py
+    line: 140
+    text: "if phone:"
+  - file: saleor/account/i18n.py
+    line: 142
+    text: data["phone"] = validate_possible_number(phone, country)
+  - file: saleor/account/i18n.py
+    line: 144
+    text: self.add_error("phone", error)
+  - file: saleor/account/models.py
+    line: 16
+    text: from phonenumber_field.modelfields import PhoneNumber, PhoneNumberField
+  - file: saleor/account/models.py
+    line: 34
+    text: "class PossiblePhoneNumberField(PhoneNumberField):"
+  - file: saleor/account/models.py
+    line: 35
+    text: '"""Less strict field for phone numbers written to database."""'
+  - file: saleor/account/models.py
+    line: 74
+    text: phone = PossiblePhoneNumberField(blank=True, default="", db_index=True)
+  - file: saleor/account/models.py
+    line: 98
+    text: '"phone",'
+  - file: saleor/account/models.py
+    line: 123
+    text: 'if isinstance(data["phone"], PhoneNumber) and not
+      data["validation_skipped"]:'
+  - file: saleor/account/models.py
+    line: 124
+    text: data["phone"] = data["phone"].as_e164
+  - file: saleor/account/search.py
+    line: 137
+    text: "if address.phone:"
+  - file: saleor/account/search.py
+    line: 140
+    text: Value(address.phone.as_e164), config="simple", weight=weight
+  - file: saleor/account/validators.py
+    line: 2
+    text: from phonenumber_field.phonenumber import to_python
+  - file: saleor/account/validators.py
+    line: 3
+    text: from phonenumbers.phonenumberutil import is_possible_number
+  - file: saleor/account/validators.py
+    line: 8
+    text: "def validate_possible_number(phone, country=None):"
+  - file: saleor/account/validators.py
+    line: 9
+    text: phone_number = to_python(phone, country)
+  - file: saleor/account/validators.py
+    line: 11
+    text: phone_number
+  - file: saleor/account/validators.py
+    line: 12
+    text: and not is_possible_number(phone_number)
+  - file: saleor/account/validators.py
+    line: 13
+    text: or not phone_number.is_valid()
+  - file: saleor/account/validators.py
+    line: 16
+    text: '"The phone number entered is not valid.",'
+  - file: saleor/account/validators.py
+    line: 19
+    text: return phone_number
+  - file: saleor/checkout/webhooks/calculate_taxes.py
+    line: 40
+    text: '"phone",'
+  - file: saleor/core/anonymize.py
+    line: 9
+    text: "def obfuscate_string(value, phone=False):"
+  - file: saleor/core/anonymize.py
+    line: 15
+    text: cutoff = 3 if phone else 1
+  - file: saleor/core/anonymize.py
+    line: 27
+    text: address.phone = obfuscate_string(address.phone, phone=True)
+  - file: saleor/order/notifications.py
+    line: 243
+    text: '"phone",'
+  - file: saleor/order/notifications.py
+    line: 252
+    text: address["phone"] = str(address["phone"])
+  - file: saleor/order/webhooks/order_calculate_taxes.py
+    line: 119
+    text: '"phone",'
+  - file: saleor/plugins/email_common.py
+    line: 127
+    text: "def format_address(this, address, include_phone=True, inline=False,
+      latin=False):"
+  - file: saleor/plugins/email_common.py
+    line: 134
+    text: phone = address.get("phone")
+  - file: saleor/plugins/email_common.py
+    line: 135
+    text: "if include_phone and phone:"
+  - file: saleor/plugins/email_common.py
+    line: 136
+    text: address_lines.append(str(phone))
+  - file: saleor/settings.py
+    line: 338
+    text: '"phonenumber_field",'

@@ -1,0 +1,613 @@
+{
+  "medusa": {
+    "cases": 143,
+    "emailFindings": 99,
+    "scores": {
+      "recall": 1,
+      "precision": 0.948051948051948,
+      "negativeCasePassRate": 0.9428571428571428,
+      "denominators": {
+        "evaluablePositives": 73,
+        "matchedPositives": 73,
+        "matchedWithCorrectLabels": 73,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 70,
+        "negativeCasesPassed": 66,
+        "exhaustiveScopedFindings": 77,
+        "exhaustiveScopedMatches": 73
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 73
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.9193548387096774,
+          "numerator": 57,
+          "denominator": 62
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 73
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 0.20689655172413793,
+          "numerator": 6,
+          "denominator": 29
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.013015184381778741,
+          "numerator": 6,
+          "denominator": 461
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "string_literal": {
+        "total": 11,
+        "hit": 11
+      },
+      "property_key": {
+        "total": 62,
+        "hit": 62
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "unknown": {
+        "total": 1,
+        "hit": 0
+      },
+      "comment": {
+        "total": 65,
+        "hit": 0
+      },
+      "string_literal": {
+        "total": 4,
+        "hit": 4
+      }
+    },
+    "recallByGroup": {
+      "customer-phone": {
+        "total": 23,
+        "hit": 23
+      },
+      "customer-address-phone": {
+        "total": 13,
+        "hit": 13
+      },
+      "stock-location-address-phone": {
+        "total": 10,
+        "hit": 10
+      },
+      "cart-address-phone": {
+        "total": 9,
+        "hit": 9
+      },
+      "(no group)": {
+        "total": 3,
+        "hit": 3
+      },
+      "fulfillment-address-phone": {
+        "total": 8,
+        "hit": 8
+      },
+      "order-address-phone": {
+        "total": 7,
+        "hit": 7
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "medusa-query-config-L12",
+        "location": "packages/medusa/src/api/admin/customers/query-config.ts:12",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/admin/customers/query-config.ts:12"
+      },
+      {
+        "id": "medusa-query-config-L27",
+        "location": "packages/medusa/src/api/admin/customers/query-config.ts:27",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/admin/customers/query-config.ts:27"
+      },
+      {
+        "id": "medusa-query-config-L64",
+        "location": "packages/medusa/src/api/admin/customers/query-config.ts:64",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/admin/customers/query-config.ts:64"
+      },
+      {
+        "id": "medusa-validators-L58",
+        "location": "packages/medusa/src/api/admin/customers/validators.ts:58",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/admin/customers/validators.ts:58#phone"
+      },
+      {
+        "id": "medusa-validators-L68",
+        "location": "packages/medusa/src/api/admin/customers/validators.ts:68",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/admin/customers/validators.ts:68#phone"
+      },
+      {
+        "id": "medusa-validators-L86",
+        "location": "packages/medusa/src/api/admin/customers/validators.ts:86",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/admin/customers/validators.ts:86#phone"
+      },
+      {
+        "id": "medusa-query-config-L16",
+        "location": "packages/medusa/src/api/admin/stock-locations/query-config.ts:16",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/admin/stock-locations/query-config.ts:16"
+      },
+      {
+        "id": "medusa-validators-L48",
+        "location": "packages/medusa/src/api/admin/stock-locations/validators.ts:48",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/admin/stock-locations/validators.ts:48#phone"
+      },
+      {
+        "id": "medusa-query-config-L118",
+        "location": "packages/medusa/src/api/store/carts/query-config.ts:118",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/store/carts/query-config.ts:118"
+      },
+      {
+        "id": "medusa-query-config-L131",
+        "location": "packages/medusa/src/api/store/carts/query-config.ts:131",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/store/carts/query-config.ts:131"
+      },
+      {
+        "id": "medusa-query-config-L7",
+        "location": "packages/medusa/src/api/store/customers/query-config.ts:7",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/store/customers/query-config.ts:7"
+      },
+      {
+        "id": "medusa-query-config-L38",
+        "location": "packages/medusa/src/api/store/customers/query-config.ts:38",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/medusa/src/api/store/customers/query-config.ts:38"
+      },
+      {
+        "id": "medusa-validators-L12",
+        "location": "packages/medusa/src/api/store/customers/validators.ts:12",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/store/customers/validators.ts:12#phone"
+      },
+      {
+        "id": "medusa-validators-L20",
+        "location": "packages/medusa/src/api/store/customers/validators.ts:20",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/medusa/src/api/store/customers/validators.ts:20#phone"
+      },
+      {
+        "id": "medusa-update-customers-L71",
+        "location": "packages/core/core-flows/src/customer/steps/update-customers.ts:71",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/core-flows/src/customer/steps/update-customers.ts:71#phone"
+      },
+      {
+        "id": "medusa-create-fulfillment-L82",
+        "location": "packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts:82",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts:82"
+      },
+      {
+        "id": "medusa-create-return-fulfillment-L83",
+        "location": "packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts:83",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts:83"
+      },
+      {
+        "id": "medusa-create-payment-session-L101",
+        "location": "packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts:101",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts:101"
+      },
+      {
+        "id": "medusa-common-L250",
+        "location": "packages/core/types/src/cart/common.ts:250",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/cart/common.ts:250#phone"
+      },
+      {
+        "id": "medusa-mutations-L63",
+        "location": "packages/core/types/src/cart/mutations.ts:63",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/cart/mutations.ts:63#phone"
+      },
+      {
+        "id": "medusa-workflows-L170",
+        "location": "packages/core/types/src/cart/workflows.ts:170",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/cart/workflows.ts:170#phone"
+      },
+      {
+        "id": "medusa-common-L82",
+        "location": "packages/core/types/src/customer/common.ts:82",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/common.ts:82#phone"
+      },
+      {
+        "id": "medusa-common-L188",
+        "location": "packages/core/types/src/customer/common.ts:188",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/common.ts:188#phone"
+      },
+      {
+        "id": "medusa-common-L505",
+        "location": "packages/core/types/src/customer/common.ts:505",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/common.ts:505#phone"
+      },
+      {
+        "id": "medusa-common-L613",
+        "location": "packages/core/types/src/customer/common.ts:613",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/common.ts:613#phone"
+      },
+      {
+        "id": "medusa-mutations-L75",
+        "location": "packages/core/types/src/customer/mutations.ts:75",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/mutations.ts:75#phone"
+      },
+      {
+        "id": "medusa-mutations-L160",
+        "location": "packages/core/types/src/customer/mutations.ts:160",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/mutations.ts:160#phone"
+      },
+      {
+        "id": "medusa-mutations-L195",
+        "location": "packages/core/types/src/customer/mutations.ts:195",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/mutations.ts:195#phone"
+      },
+      {
+        "id": "medusa-mutations-L250",
+        "location": "packages/core/types/src/customer/mutations.ts:250",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/customer/mutations.ts:250#phone"
+      },
+      {
+        "id": "medusa-mutations-L285",
+        "location": "packages/core/types/src/customer/mutations.ts:285",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:customer_updatable_field"
+      },
+      {
+        "id": "medusa-address-L63",
+        "location": "packages/core/types/src/fulfillment/common/address.ts:63",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/fulfillment/common/address.ts:63#phone"
+      },
+      {
+        "id": "medusa-order-L413",
+        "location": "packages/core/types/src/fulfillment/common/order.ts:413",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/fulfillment/common/order.ts:413#phone"
+      },
+      {
+        "id": "medusa-fulfillment-address-L58",
+        "location": "packages/core/types/src/fulfillment/mutations/fulfillment-address.ts:58",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/fulfillment/mutations/fulfillment-address.ts:58#phone"
+      },
+      {
+        "id": "medusa-common-L233",
+        "location": "packages/core/types/src/http/cart/common.ts:233",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_cart"
+      },
+      {
+        "id": "medusa-payloads-L180",
+        "location": "packages/core/types/src/http/cart/store/payloads.ts:180",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:store_add"
+      },
+      {
+        "id": "medusa-common-L76",
+        "location": "packages/core/types/src/http/customer/common.ts:76",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_customer"
+      },
+      {
+        "id": "medusa-common-L127",
+        "location": "packages/core/types/src/http/customer/common.ts:127",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_customer"
+      },
+      {
+        "id": "medusa-common-L266",
+        "location": "packages/core/types/src/http/customer/common.ts:266",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_create_customer"
+      },
+      {
+        "id": "medusa-common-L293",
+        "location": "packages/core/types/src/http/customer/common.ts:293",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_customer"
+      },
+      {
+        "id": "medusa-common-L312",
+        "location": "packages/core/types/src/http/customer/common.ts:312",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_create_customer"
+      },
+      {
+        "id": "medusa-common-L374",
+        "location": "packages/core/types/src/http/customer/common.ts:374",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_customer"
+      },
+      {
+        "id": "medusa-entitites-L112",
+        "location": "packages/core/types/src/http/fulfillment/admin/entitites.ts:112",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:admin_fulfillment"
+      },
+      {
+        "id": "medusa-payloads-L55",
+        "location": "packages/core/types/src/http/fulfillment/admin/payloads.ts:55",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:admin_fulfillment_delivery"
+      },
+      {
+        "id": "medusa-index-L179",
+        "location": "packages/core/types/src/http/fulfillment/store/index.ts:179",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:store_fulfillment"
+      },
+      {
+        "id": "medusa-payloads-L184",
+        "location": "packages/core/types/src/http/order/admin/payloads.ts:184",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:order"
+      },
+      {
+        "id": "medusa-common-L175",
+        "location": "packages/core/types/src/http/order/common.ts:175",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_order"
+      },
+      {
+        "id": "medusa-entities-L36",
+        "location": "packages/core/types/src/http/stock-locations/admin/entities.ts:36",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:admin_stock_location"
+      },
+      {
+        "id": "medusa-payloads-L80",
+        "location": "packages/core/types/src/http/stock-locations/admin/payloads.ts:80",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:admin_upsert_stock_location"
+      },
+      {
+        "id": "medusa-common-L339",
+        "location": "packages/core/types/src/order/common.ts:339",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/order/common.ts:339#phone"
+      },
+      {
+        "id": "medusa-mutations-L82",
+        "location": "packages/core/types/src/order/mutations.ts:82",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/order/mutations.ts:82#phone"
+      },
+      {
+        "id": "medusa-provider-L38",
+        "location": "packages/core/types/src/payment/provider.ts:38",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/payment/provider.ts:38#phone"
+      },
+      {
+        "id": "medusa-common-L103",
+        "location": "packages/core/types/src/stock-location/common.ts:103",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/stock-location/common.ts:103#phone"
+      },
+      {
+        "id": "medusa-common-L335",
+        "location": "packages/core/types/src/stock-location/common.ts:335",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/stock-location/common.ts:335#phone"
+      },
+      {
+        "id": "medusa-create-fulfillment-L53",
+        "location": "packages/core/types/src/workflow/fulfillment/create-fulfillment.ts:53",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/types/src/workflow/fulfillment/create-fulfillment.ts:53#phone"
+      },
+      {
+        "id": "medusa-address-L17",
+        "location": "packages/modules/cart/src/models/address.ts:17",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-address-L12",
+        "location": "packages/modules/cart/src/types/address.ts:12",
+        "goldGroup": "cart-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/modules/cart/src/types/address.ts:12#phone"
+      },
+      {
+        "id": "medusa-address-L19",
+        "location": "packages/modules/customer/src/models/address.ts:19",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-customer-L13",
+        "location": "packages/modules/customer/src/models/customer.ts:13",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:customer"
+      },
+      {
+        "id": "medusa-services-address-L12",
+        "location": "packages/modules/customer/src/types/services/address.ts:12",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-address-L26",
+        "location": "packages/modules/customer/src/types/services/address.ts:26",
+        "goldGroup": "customer-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-address-L14",
+        "location": "packages/modules/fulfillment/src/models/address.ts:14",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-index-L25",
+        "location": "packages/modules/fulfillment/src/schema/index.ts:25",
+        "goldGroup": "fulfillment-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/modules/fulfillment/src/schema/index.ts:25"
+      },
+      {
+        "id": "medusa-address-L16",
+        "location": "packages/modules/order/src/models/address.ts:16",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-index-L122",
+        "location": "packages/modules/order/src/schema/index.ts:122",
+        "goldGroup": "order-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/modules/order/src/schema/index.ts:122"
+      },
+      {
+        "id": "medusa-medusa-payments-L487",
+        "location": "packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts:487",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:payment"
+      },
+      {
+        "id": "medusa-medusa-payments-L544",
+        "location": "packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts:544",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:payment"
+      },
+      {
+        "id": "medusa-computed-columns-L121",
+        "location": "packages/modules/settings/src/utils/computed-columns.ts:121",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/modules/settings/src/utils/computed-columns.ts:121"
+      },
+      {
+        "id": "medusa-computed-columns-L127",
+        "location": "packages/modules/settings/src/utils/computed-columns.ts:127",
+        "goldGroup": "customer-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/modules/settings/src/utils/computed-columns.ts:127"
+      },
+      {
+        "id": "medusa-stock-location-address-L12",
+        "location": "packages/modules/stock-location/src/models/stock-location-address.ts:12",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:address"
+      },
+      {
+        "id": "medusa-index-L9",
+        "location": "packages/modules/stock-location/src/schema/index.ts:9",
+        "goldGroup": "stock-location-address-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/modules/stock-location/src/schema/index.ts:9"
+      }
+    ]
+  }
+}
