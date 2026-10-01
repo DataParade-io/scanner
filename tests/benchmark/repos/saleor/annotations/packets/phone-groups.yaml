@@ -1,0 +1,41 @@
+repo: saleor
+concept: phone
+provenance:
+  proposed_by: claude-sonnet-5-5
+  proposed_at: '2026-10-01'
+  review_state: proposed
+groups:
+- id: address-phone-number
+  name: Address phone number
+  subject: address holder (customer address book entry)
+  subject_kind: end_user
+  purpose: contact number stored with a postal address
+  rationale: 'The Address.phone column (account/models.py:74, PossiblePhoneNumberField) decides the item. Its reads and writes by instance (account/search.py:137/140 address.phone, core/anonymize.py:27), the by-name references to it (models.py:98 search index fields, models.py:123/124 as_data keys), the address form field that is saved into it (AddressForm phone field i18n.py:109, the local read from its cleaned data at i18n.py:138-142, add_error("phone") at i18n.py:144, the prefilled initial["phone"] in forms.py:16) and the validator that is both the model field default validator and called from AddressForm.clean (validators.py:8-19) all belong to it. Different from the order and checkout copies of the address, which get_copy (models.py:127) writes into new rows.'
+  clusters:
+  - c001
+  - c002
+  - c003
+  - c004
+  - c005
+  - c006
+  - c007
+  - c008
+  - c009
+  - c010
+- id: order-checkout-address-phone
+  name: Order and checkout address phone number
+  subject: recipient or billing contact on a checkout or order
+  subject_kind: end_user
+  purpose: contact number carried on the shipping and billing addresses of a checkout or order, sent to tax apps and notifications
+  rationale: 'Checkout and order addresses are copies of the customer address stored in new Address rows (checkout/complete_checkout.py:209/212/282/1661/1664 call Address.get_copy, which creates a new row). The payload builders select the phone of these copies by name: checkout tax webhook ADDRESS_FIELDS (checkout/webhooks/calculate_taxes.py:40), order tax webhook address_fields (order/webhooks/order_calculate_taxes.py:119), and the order notification address payload built from order.billing_address and order.shipping_address (order/notifications.py:243, 252, called at 353-354).'
+  clusters:
+  - c011
+  - c012
+  - c013
+  - c014
+needs_adjudication:
+- cluster: c015
+  candidate_groups:
+  - order-checkout-address-phone
+  - address-phone-number
+  reason: format_address (plugins/email_common.py:127) is a template helper that reads phone from whatever address dict the template passes; the order notification payload builds such dicts for order addresses, but the templates that call it are outside the sparse checkout, so whether the dict comes from an order copy or another address is not visible
