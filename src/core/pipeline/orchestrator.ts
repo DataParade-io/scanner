@@ -2,6 +2,7 @@ import type { ScanConfiguration, ScanProgress } from "../types";
 import { DEFAULT_EXCLUDED_FILE_GLOBS } from "../../patterns/scan-exclusions";
 import { runDeterministicScan } from "./deterministic-scan";
 import type { OrchestratorScanResult } from "./orchestrator-result";
+import { runGraphify, type StructureGraphOutcome } from "../../structure/graphify";
 
 export type { OrchestratorScanResult } from "./orchestrator-result";
 
@@ -76,5 +77,14 @@ export async function scan(
   config: ScanConfiguration,
   onProgress?: (progress: ScanProgress) => void,
 ): Promise<OrchestratorScanResult> {
-  return runDeterministicScan(rootPath, config, onProgress);
+  const [result, structure] = await Promise.all([
+    runDeterministicScan(rootPath, config, onProgress),
+    config.structureGraph
+      ? runGraphify(rootPath, config.structureGraph)
+      : Promise.resolve<StructureGraphOutcome>({ warnings: [] }),
+  ]);
+  if (structure.warnings.length > 0) {
+    result.scanResult.warnings = [...(result.scanResult.warnings ?? []), ...structure.warnings];
+  }
+  return structure.info ? { ...result, structureGraph: structure.info } : result;
 }

@@ -21,6 +21,15 @@ export type {
 } from "./core/pipeline/deterministic-scan";
 
 export { buildDiagramGraphFromScanResult, selectPrimaryDataAction } from "./core/pipeline/graph-mapping";
+export {
+  runGraphify,
+  loadGraphifyGraph,
+  type GraphifyGraph,
+  type GraphifyNode,
+  type GraphifyLink,
+  type StructureGraphConfig,
+  type StructureGraphInfo,
+} from "./structure/graphify";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
 export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
