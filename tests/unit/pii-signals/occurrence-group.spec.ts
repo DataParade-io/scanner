@@ -412,3 +412,24 @@ describe("applyGroupLabels", () => {
     ]);
   });
 });
+
+describe("group basis for column evidence", () => {
+  const hit = (filePath: string, extra: Record<string, unknown>) => ({
+    id: "email",
+    location: "code" as const,
+    evidence: { filePath, endLine: 1 },
+    ...extra,
+  });
+
+  it("reports column for sets held by a declared catalog column, and record-key for record keys", () => {
+    const out = assignDeclarationGroups([
+      hit("models.py", { group: "email:user", column: "users.email", columnDeclared: true }),
+      hit("events.py", { column: "order_events.parameters", columnRecord: true }),
+      hit("a.js", { group: "email:sender" }),
+    ] as never[]) as Array<{ group?: string; groupBasis?: string; groupColumn?: string }>;
+    expect(out[0]).toMatchObject({ group: "email:user", groupBasis: "column", groupColumn: "users.email" });
+    expect(out[1]).toMatchObject({ groupBasis: "record-key", groupColumn: "order_events.parameters" });
+    expect(out[2]).toMatchObject({ group: "email:sender", groupBasis: "name" });
+    expect(out[2].groupColumn).toBeUndefined();
+  });
+});

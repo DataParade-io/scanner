@@ -284,6 +284,7 @@ interface GroupableHit {
   evidence: { filePath: string; endLine?: number };
   group?: string;
   groupBasis?: string;
+  groupColumn?: string;
   receiverEntity?: string;
   tableEntity?: string;
   weakGroup?: boolean;
@@ -583,19 +584,24 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
   return hits.map((hit, index) => {
     if (hit.location === "comment") return hit;
     if (hit.columnRecord && hit.column) {
-      const record = `${hit.id}@${hit.column}`;
-      return record === hit.group ? hit : { ...hit, group: record };
+      // A key written into a JSON record column: the record column is the evidence.
+      return { ...hit, group: `${hit.id}@${hit.column}`, groupBasis: "record-key", groupColumn: hit.column };
     }
     const root = find(`hit:${index}`);
     const named = nameOf.get(root);
     const name = named ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
     if (name === undefined) return hit;
-    const groupBasis = named
-      ? (basisOf.get(root) ?? "name")
-      : declarationNameByRoot.has(root)
-        ? "declaration"
-        : "location";
-    return { ...hit, group: name, groupBasis };
+    // A set held together by a declared catalog column (cannot-link, KDATAP-7a094c) is
+    // evidenced by that column, whichever phase gave it its name.
+    const declaredColumn = declaredSets.has(root) ? columnOf.get(root) : undefined;
+    const groupBasis = declaredColumn
+      ? "column"
+      : named
+        ? (basisOf.get(root) ?? "name")
+        : declarationNameByRoot.has(root)
+          ? "declaration"
+          : "location";
+    return { ...hit, group: name, groupBasis, ...(declaredColumn ? { groupColumn: declaredColumn } : {}) };
   });
 }
 

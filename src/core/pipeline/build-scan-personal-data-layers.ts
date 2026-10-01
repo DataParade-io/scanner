@@ -38,6 +38,7 @@ export function buildScanPersonalDataLayers(
       ...(hit.commentContext ? { commentContext: hit.commentContext } : {}),
       ...(hit.group ? { group: hit.group } : {}),
       ...(hit.groupBasis ? { groupBasis: hit.groupBasis } : {}),
+      ...(hit.groupColumn ? { groupColumn: hit.groupColumn } : {}),
       ...(hit.declaration
         ? {
             declaration:

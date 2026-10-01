@@ -65,6 +65,8 @@ export interface DataParadeGraph {
 
 /** Confidence of the edge from an occurrence to its group, by the evidence that named it. */
 const GROUP_BASIS_CONFIDENCE: Record<string, [Confidence, number]> = {
+  column: ["EXTRACTED", 1],
+  "record-key": ["EXTRACTED", 1],
   declaration: ["EXTRACTED", 1],
   location: ["EXTRACTED", 1],
   name: ["INFERRED", 0.85],
@@ -210,6 +212,7 @@ export async function buildDataParadeGraph(
       location: occurrence.location ?? "code",
       ...(occurrence.code !== undefined ? { code: occurrence.code } : {}),
       ...(occurrence.group ? { group: occurrence.group, group_basis: occurrence.groupBasis ?? null } : {}),
+      ...(occurrence.groupColumn ? { group_column: occurrence.groupColumn } : {}),
       ...(occurrence.declaration ? { declaration: occurrence.declaration } : {}),
     });
 
@@ -224,6 +227,7 @@ export async function buildDataParadeGraph(
         confidence,
         confidence_score: score,
         basis: occurrence.groupBasis ?? null,
+        ...(occurrence.groupColumn ? { column: occurrence.groupColumn } : {}),
         ...evidence,
       });
     } else if (nodes.has(itemId)) {
