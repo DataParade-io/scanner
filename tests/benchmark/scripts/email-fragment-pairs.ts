@@ -9,6 +9,8 @@
  * fragment whose mentions disagree is flagged `mixed`. Every pair of fragments in a repo
  * is labeled `same` when their gold labels match. The report also gives the oracle-merge
  * ceiling: pairwise precision and recall if fragments were merged exactly by gold label.
+ * Each fragment also carries `context`: a numbered code window (4 lines either side)
+ * around its first lines, enough for a labeler with no file access.
  * Repos must be materialized.
  */
 import fs from "fs";
@@ -33,7 +35,11 @@ interface Fragment {
   mentions: number;
   files: string[];
   lines: Array<{ location: string; code: string }>;
+  context: Array<{ location: string; window: string }>;
 }
+
+const CONTEXT_LINES = 4;
+const CONTEXT_WINDOWS = 4;
 
 function pairwise(items: Array<[string, string | null]>): { tp: number; predicted: number; gold: number } {
   let tp = 0;
@@ -66,13 +72,26 @@ function main(): void {
     const checkout = fs.readdirSync(cacheRoot).find((entry) => entry.startsWith(`${repo}@`));
     if (!checkout) throw new Error(`Repo ${repo} is not materialized under ${cacheRoot}`);
     const sources = new Map<string, string[]>();
-    const codeAt = (location: string): string => {
+    const sourceAt = (location: string): { lines: string[]; line: number } => {
       const at = location.lastIndexOf(":");
       const file = location.slice(0, at);
       if (!sources.has(file)) {
         sources.set(file, fs.readFileSync(path.join(cacheRoot, checkout, file), "utf8").split(/\r?\n/));
       }
-      return (sources.get(file)![Number(location.slice(at + 1)) - 1] ?? "").trim();
+      return { lines: sources.get(file)!, line: Number(location.slice(at + 1)) };
+    };
+    const codeAt = (location: string): string => {
+      const { lines, line } = sourceAt(location);
+      return (lines[line - 1] ?? "").trim();
+    };
+    const windowAt = (location: string): string => {
+      const { lines, line } = sourceAt(location);
+      const start = Math.max(1, line - CONTEXT_LINES);
+      const end = Math.min(lines.length, line + CONTEXT_LINES);
+      return lines
+        .slice(start - 1, end)
+        .map((text, offset) => `${start + offset}: ${text}`)
+        .join("\n");
     };
 
     const rows = report[repo].groupingDetail.filter((row) => row.matched);
@@ -96,6 +115,9 @@ function main(): void {
         mentions: members.length,
         files: files.sort(),
         lines: members.slice(0, 8).map((member) => ({ location: member.location, code: codeAt(member.location) })),
+        context: members
+          .slice(0, CONTEXT_WINDOWS)
+          .map((member) => ({ location: member.location, window: windowAt(member.location) })),
       };
     });
 
