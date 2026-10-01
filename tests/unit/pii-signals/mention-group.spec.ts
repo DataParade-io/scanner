@@ -1,4 +1,4 @@
-import { assignDeclarationGroups, classEntity, mentionGroup, mentionQualifier, modelFileEntity } from "../../../src/pii-signals/mention-group";
+import { applyGroupLabels, assignDeclarationGroups, classEntity, mentionGroup, mentionQualifier, modelFileEntity } from "../../../src/pii-signals/mention-group";
 import { buildPersonalDataInventoryFromIngest } from "../../../src/eval-layers/personal-data-inventory";
 import { buildScanPersonalDataLayers } from "../../../src/core/pipeline/build-scan-personal-data-layers";
 import type { FileInfo } from "../../../src/core/types/file";
@@ -390,5 +390,25 @@ describe("weak receiver names", () => {
       { id: "email", location: "code" as const, evidence: { filePath: "a.ts" }, group: "email:member", weakGroup: true },
     ] as never[]) as Array<{ group?: string }>;
     expect(out.map((hit) => hit.group)).toEqual(["email:member"]);
+  });
+});
+
+describe("applyGroupLabels", () => {
+  it("merges groups that share an external data-item label and leaves others alone", () => {
+    const out = applyGroupLabels(
+      [
+        { id: "email", group: "email:member" },
+        { id: "email", group: "email@a.js:12#email" },
+        { id: "email", group: "email:sender" },
+        { id: "email" },
+      ],
+      { "email:member": "ghost:members.email", "email@a.js:12#email": "ghost:members.email" },
+    );
+    expect(out.map((hit) => hit.group)).toEqual([
+      "email:ghost:members.email",
+      "email:ghost:members.email",
+      "email:sender",
+      undefined,
+    ]);
   });
 });
