@@ -371,3 +371,20 @@ describe("lookup names", () => {
     expect(mentionQualifier(line, "email")).toBe(expected);
   });
 });
+
+describe("weak receiver names", () => {
+  it("let table evidence name a set before a receiver variable's name", () => {
+    const out = assignDeclarationGroups([
+      { id: "email", location: "code" as const, evidence: { filePath: "sso.ts" }, group: "email:profile", weakGroup: true, declaration: { line: 1, kind: "parameter" } },
+      { id: "email", location: "code" as const, evidence: { filePath: "sso.ts" }, tableEntity: "user", declaration: { line: 1, kind: "parameter" } },
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((hit) => hit.group)).toEqual(["email:user", "email:user"]);
+  });
+
+  it("still name a set that has no stronger evidence", () => {
+    const out = assignDeclarationGroups([
+      { id: "email", location: "code" as const, evidence: { filePath: "a.ts" }, group: "email:member", weakGroup: true },
+    ] as never[]) as Array<{ group?: string }>;
+    expect(out.map((hit) => hit.group)).toEqual(["email:member"]);
+  });
+});

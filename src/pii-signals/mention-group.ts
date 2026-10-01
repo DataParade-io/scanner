@@ -54,7 +54,14 @@ export function mentionQualifier(line: string, signalId: string): string | undef
  * name of the receiver variable (`owner.get('email')` -> `owner`), which a resolved
  * receiver class may replace (`User`), unlike a compound identifier naming the concept.
  */
-export function qualify(line: string, signalId: string): { qualifier: string; fromReceiver: boolean } | undefined {
+/**
+ * `fromReceiver`: a typed receiver may replace the qualifier. `weak`: the qualifier is only
+ * a receiver variable's name (`profile.email`), applied after stronger evidence.
+ */
+export function qualify(
+  line: string,
+  signalId: string,
+): { qualifier: string; fromReceiver: boolean; weak?: boolean } | undefined {
   const conceptWords = identifierWords(signalId);
   // The first qualified identifier wins, unless a later one on the line is a more
   // specific form of it: `customer_email = get_customer_email_for_voucher_usage(...)`
@@ -141,11 +148,11 @@ export function qualify(line: string, signalId: string): { qualifier: string; fr
     // named exactly `user` names the user entity, although `user` is generic elsewhere.
     const segments = receiver[1].split(/\s*\??\.\s*/).reverse();
     for (const segment of segments) {
-      if (/^users?$/i.test(segment)) return { qualifier: "user", fromReceiver: true };
+      if (/^users?$/i.test(segment)) return { qualifier: "user", fromReceiver: true, weak: true };
       const words = identifierWords(segment).filter(
         (word) => !GENERIC_WORDS.has(word) && !INSTANCE_WORDS.has(word) && !STATE_WORDS.has(word),
       );
-      if (words.length > 0) return { qualifier: singular(words[words.length - 1]), fromReceiver: true };
+      if (words.length > 0) return { qualifier: singular(words[words.length - 1]), fromReceiver: true, weak: true };
     }
   }
   return undefined;
@@ -261,6 +268,7 @@ interface GroupableHit {
   group?: string;
   receiverEntity?: string;
   tableEntity?: string;
+  weakGroup?: boolean;
   declaration?: { line: number; kind: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
   passedDeclarations?: number[];
@@ -338,8 +346,12 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       union(node, `at:${hit.id}@${hit.evidence.filePath}:${line}`);
     }
   });
+  // A name from a receiver variable alone is weak: it waits until typed-receiver and
+  // table evidence have named the set (see the weak-name phase below).
+  const isWeak = (hit: T): boolean =>
+    hit.weakGroup === true && !(hit.fieldKeys ?? []).some((field) => field.definition);
   hits.forEach((hit, index) => {
-    if (hit.location === "comment") return;
+    if (hit.location === "comment" || isWeak(hit)) return;
     const name = effectiveName(hit);
     if (name) union(`hit:${index}`, groupNode(name));
   });
@@ -378,7 +390,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   const votesFor = (vote: (hit: T) => string | undefined): void => {
     const votes = new Map<string, Map<string, number>>();
     hits.forEach((hit, index) => {
-      if (hit.location === "comment" || hit.group) return;
+      if (hit.location === "comment" || (hit.group && !isWeak(hit))) return;
       const group = vote(hit);
       if (!group) return;
       const root = find(`hit:${index}`);
@@ -395,6 +407,11 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   votesFor((hit) => (hit.receiverEntity ? `${hit.id}:${hit.receiverEntity}` : undefined));
   // The one table the enclosing function queries (`.from('directus_users')` -> user).
   votesFor((hit) => (hit.tableEntity ? `${hit.id}:${hit.tableEntity}` : undefined));
+  // Weak names apply now, subject to cannot-link.
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment" || !isWeak(hit) || !hit.group) return;
+    union(`hit:${index}`, groupNode(hit.group));
+  });
   votesFor((hit) => {
     const entity = modelFileEntity(hit.evidence.filePath);
     return entity ? `${hit.id}:${entity}` : undefined;

@@ -173,6 +173,8 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
   const stats: Record<string, number> = {};
   const out = hits.map(({ callArguments, receiver, receiverNamesEntity, ...pending }) => {
     let hit: PiiSignalHit = pending;
+    // A group that is only a receiver variable's name is weak until a class replaces it.
+    let weak = pending.weakName === true && pending.group !== undefined;
     if (receiver) {
       let className = receiver.className;
       let source = className ? (receiver.legacy ? "typed" : "factory") : "";
@@ -200,11 +202,14 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
             );
           }
           hit = { ...hit, group };
+          weak = false;
         }
         const key = `${receiver.via}:${source}`;
         stats[key] = (stats[key] ?? 0) + 1;
       }
     }
+    if (weak) hit = { ...hit, weakGroup: true };
+    delete hit.weakName;
     if (!callArguments) return hit;
     const links = new Set<string>();
     for (const argument of callArguments) {
@@ -234,6 +239,7 @@ function matchedHitsForFile(file: FileInfo): PiiSignalHit[] {
       ...hit,
       group: `${hit.id}:${found.qualifier}`,
       ...(found.fromReceiver ? { receiverNamesEntity: true } : {}),
+      ...(found.weak ? { weakName: true } : {}),
     };
   };
   const stripped = stripCommentsForLanguage(file.content, file.language);
