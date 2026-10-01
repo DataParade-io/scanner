@@ -1,3 +1,4 @@
+import { appendFileSync } from "fs";
 /**
  * First-pass grouping of code mentions into data items (KDATAP-c8a46a).
  *
@@ -306,6 +307,7 @@ export function declarationNodeId(signalId: string, filePath: string, line: numb
  * links declarations across files.
  */
 export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] {
+  const refusedLog = process.env.DATAPARADE_REFUSED_LOG;
   const parent = new Map<string, string>();
   const find = (node: string): string => {
     let root = node;
@@ -325,7 +327,19 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     if (a === b) return;
     const nameA = nameOf.get(a);
     const nameB = nameOf.get(b);
-    if (nameA && nameB && nameA !== nameB) return;
+    if (nameA && nameB && nameA !== nameB) {
+      // Cannot-link refusal: two differently named sets that this phase's evidence would
+      // have joined. Logged for merge evaluation when DATAPARADE_REFUSED_LOG is set.
+      if (refusedLog) {
+        const index = left.startsWith("hit:") ? Number(left.slice(4)) : -1;
+        const hit = index >= 0 ? hits[index] : undefined;
+        appendFileSync(
+          refusedLog,
+          `${JSON.stringify({ phase, a: nameA, b: nameB, at: hit ? `${hit.evidence.filePath}:${hit.evidence.endLine ?? ""}` : left })}\n`,
+        );
+      }
+      return;
+    }
     parent.set(a, b);
     if (nameA && !nameB) nameOf.set(b, nameA);
   };
@@ -345,6 +359,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // Joins run from most to least reliable: declaration (a declaration never spans two
   // data items in the labeled corpus), name, field, model file. A use of a variable
   // therefore follows its declaration's name rather than its own line's qualifier.
+  let phase = "declaration";
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
@@ -366,6 +381,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // table evidence have named the set (see the weak-name phase below).
   const isWeak = (hit: T): boolean =>
     hit.weakGroup === true && !(hit.fieldKeys ?? []).some((field) => field.definition);
+  phase = "name";
   hits.forEach((hit, index) => {
     if (hit.location === "comment" || isWeak(hit)) return;
     const name = effectiveName(hit);
@@ -379,6 +395,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   );
   // A read on a line that already names its data item (`customer_email=checkout.email`)
   // is a copy into that item, so only definitions link there.
+  phase = "field";
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     for (const field of hit.fieldKeys ?? []) {
@@ -390,6 +407,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
 
   // A value passed as a call argument keeps its data item in the callee's parameter,
   // so the mention joins the declaration of the parameter it is passed to.
+  phase = "call";
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     for (const link of hit.callLinks ?? []) union(`hit:${index}`, `decl:${link}`);
@@ -420,14 +438,18 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       union(root, groupNode(best[0]));
     }
   };
+  phase = "receiver-vote";
   votesFor((hit) => (hit.receiverEntity ? `${hit.id}:${hit.receiverEntity}` : undefined));
   // The one table the enclosing function queries (`.from('directus_users')` -> user).
+  phase = "table-vote";
   votesFor((hit) => (hit.tableEntity ? `${hit.id}:${hit.tableEntity}` : undefined));
   // Weak names apply now, subject to cannot-link.
+  phase = "weak-name";
   hits.forEach((hit, index) => {
     if (hit.location === "comment" || !isWeak(hit) || !hit.group) return;
     union(`hit:${index}`, groupNode(hit.group));
   });
+  phase = "file-vote";
   votesFor((hit) => {
     const entity = modelFileEntity(hit.evidence.filePath);
     return entity ? `${hit.id}:${entity}` : undefined;
