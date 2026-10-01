@@ -1,5 +1,5 @@
 import type { ColumnEntry } from "./column-catalog";
-import { classEntity, entityName, modelFileEntity } from "../pii-signals/mention-group";
+import { classEntity, entityName } from "../pii-signals/mention-group";
 
 /**
  * Which catalogued stored column a mention names (KDATAP-7a094c). Two mentions that name
@@ -26,6 +26,8 @@ interface ColumnRef {
 export interface ColumnIndex {
   byLocation: Map<string, string>;
   byName: Map<string, ColumnRef[]>;
+  /** Record columns of keys written into JSON fields, by `file:line` then key (KDATAP-fb8019). */
+  recordKeys: Map<string, Record<string, string>>;
 }
 
 /** The column identity of a catalog entry: its table, else its model. */
@@ -42,7 +44,7 @@ function entitiesOf(entry: ColumnEntry): Set<string> {
   return out;
 }
 
-export function columnIndex(entries: readonly ColumnEntry[]): ColumnIndex {
+export function columnIndex(entries: readonly ColumnEntry[], recordKeys: Map<string, Record<string, string>> = new Map()): ColumnIndex {
   const byLocation = new Map<string, string>();
   const byName = new Map<string, ColumnRef[]>();
   const refs = new Map<string, ColumnRef>();
@@ -60,7 +62,7 @@ export function columnIndex(entries: readonly ColumnEntry[]): ColumnIndex {
       if (!byLocation.has(`${location.file}:${location.line}`)) byLocation.set(`${location.file}:${location.line}`, key);
     }
   }
-  return { byLocation, byName };
+  return { byLocation, byName, recordKeys };
 }
 
 /** What a mention knows that can narrow a column name shared by several tables. */
@@ -83,13 +85,20 @@ function resolve(candidates: readonly ColumnRef[] | undefined, entities: Readonl
 
 /** The column a mention names, or undefined (most mentions name none). */
 export function mentionColumn(index: ColumnIndex, mention: ColumnEvidence): string | undefined {
+  // Only what the line itself says about its model narrows a column name shared by several
+  // tables: the class of its receiver and the table its function queries. A group
+  // qualifier or a file name is too weak (`address` is the qualifier of five tables' phones).
   const entities = new Set<string>();
-  const qualifier = mention.group?.slice(mention.group.indexOf(":") + 1);
-  for (const name of [mention.receiverEntity, mention.tableEntity, qualifier, modelFileEntity(mention.filePath)]) {
+  for (const name of [mention.receiverEntity, mention.tableEntity]) {
     if (!name) continue;
     entities.add(name);
     const normalized = entityName(name);
     if (normalized) entities.add(normalized);
+  }
+  // A key written into a JSON record column is that record column (`Model.field.key`).
+  const record = mention.line !== undefined ? index.recordKeys.get(`${mention.filePath}:${mention.line}`) : undefined;
+  if (record) {
+    for (const key of mention.columnHints?.keys ?? []) if (record[key]) return record[key];
   }
   // A catalog declaration location is the column itself, whatever else the line says.
   if (mention.line !== undefined) {
@@ -110,4 +119,15 @@ export function mentionColumn(index: ColumnIndex, mention: ColumnEvidence): stri
     if (found) return found;
   }
   return undefined;
+}
+
+/** Whether the mention's column is the catalog declaration its own line is, the strongest evidence. */
+export function isDeclaredColumn(index: ColumnIndex, mention: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
+  return mention.line !== undefined && index.byLocation.get(`${mention.filePath}:${mention.line}`) === column;
+}
+
+/** Whether the column is a key written into a JSON record column rather than a catalog column. */
+export function isRecordColumn(index: ColumnIndex, mention: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
+  const record = mention.line !== undefined ? index.recordKeys.get(`${mention.filePath}:${mention.line}`) : undefined;
+  return record !== undefined && Object.values(record).includes(column);
 }

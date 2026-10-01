@@ -7,6 +7,8 @@ import type {
   DecoratorInfo,
   FieldDeclaration,
   KeyDeclaration,
+  KeyFlow,
+  ParameterSink,
   EnclosingRange,
   FunctionDefinition,
   Invocation,
@@ -688,6 +690,7 @@ export class AnalyzedFile {
             ...(kind === "call" ? this.callRoot(value) : {}),
           },
           ...this.keyContainer(pair),
+          ...this.keyFlow(pair),
         });
       }
     }
@@ -709,6 +712,58 @@ export class AnalyzedFile {
       return { callRoot: { receiver: member.object.text.slice(0, 60), method: unquote(member.property.text) } };
     }
     return {};
+  }
+
+  /**
+   * Where a key's object literal goes: an argument or keyword argument of a call, or a
+   * local variable it is assigned to that is later passed to one (KDATAP-fb8019).
+   */
+  private keyFlow(pair: Node): { flow?: KeyFlow } {
+    let object: Node | null = pair.parent;
+    if (!object) return {};
+    while (object.parent && /^(parenthesized_expression|as_expression|satisfies_expression)$/.test(object.parent.type)) object = object.parent;
+    const holder = object.parent;
+    if (!holder) return {};
+    // A keyword argument holds the object as its value.
+    const argument = holder.type === "keyword_argument" && holder.childForFieldName("value")?.id === object.id ? holder : object;
+    const found = this.callSiteByArgument.get(argument.id);
+    if (found) return { flow: { ...this.useCall(found), hops: 1 } as KeyFlow };
+    // A variable: `parameters = {...}` then `create(parameters=parameters)`.
+    const target = holder.childForFieldName("name") ?? holder.childForFieldName("left");
+    const value = holder.childForFieldName("value") ?? holder.childForFieldName("right");
+    if (target?.type === "identifier" && value?.id === object.id) {
+      const used = this.bindingUses(target.text, target.startPosition.row + 1)?.uses.find((use) => use.call);
+      if (used?.call) return { flow: { ...used.call, hops: 2 } as KeyFlow };
+    }
+    return {};
+  }
+
+  /**
+   * For each parameter of each named function, the calls inside it that the parameter is
+   * passed to as a keyword or positional argument (KDATAP-fb8019): `def event(parameters):
+   * Model.objects.create(parameters=parameters)`.
+   */
+  parameterSinks(): ParameterSink[] {
+    const out: ParameterSink[] = [];
+    for (const definition of this.functionDefinitions()) {
+      for (const parameter of definition.parameters) {
+        const uses = this.bindingUses(parameter.name, parameter.line)?.uses ?? [];
+        for (const use of uses) {
+          if (!use.call) continue;
+          out.push({
+            function: definition.name,
+            ...(definition.owner ? { owner: definition.owner } : {}),
+            param: parameter.name,
+            position: parameter.position,
+            callee: use.call.callee,
+            ...(use.call.receiverClass ? { receiverClass: use.call.receiverClass } : {}),
+            position0: use.call.position,
+            ...(use.call.keyword ? { keyword: use.call.keyword } : {}),
+          });
+        }
+      }
+    }
+    return out;
   }
 
   /** The call a key's object literal is an argument of. */
