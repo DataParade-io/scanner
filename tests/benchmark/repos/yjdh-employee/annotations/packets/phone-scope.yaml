@@ -1,0 +1,52 @@
+concept: phone
+layer: mentions
+purpose: Phone number mention scope for KDATAP-79b7d8 labeling over the widened yjdh benefit backend checkout (held-out repo). Merged into layer-scopes.yaml with the labels.
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+materialized_scope:
+  - backend/benefit/
+left_out:
+  - path: backend/benefit/*/tests/, */migrations/, */fixtures/
+    reason: test code, generated migrations and fixture data, as excluded in the manifest
+  - path: backend/benefit/applications/services/csv_export_base.py, applications/templates/style.html, applications/resources/hkilisa-paatosteksti.xsd
+    reason: "match only the token cell (CSV cell helpers, CSS display: table-cell, XSD table documentation); no phone data"
+  - path: backend/benefit/requirements.in, requirements.txt, CHANGELOG.md
+    reason: dependency pins and changelog, not handling code
+  - path: backend/benefit/terms/static/
+    reason: minified third-party editor bundle and stylesheet
+added_beyond_token_candidates:
+  lines:
+    - backend/benefit/common/utils.py:210
+    - backend/benefit/common/utils.py:211
+    - backend/benefit/common/utils.py:213
+  reason: PhoneNumberField.to_representation formats the contact person phone value; its lines carry no phone token
+files:
+  - path: backend/benefit/applications/api/v1/serializers/application.py
+    theme: API serializers
+    candidates: 7
+  - path: backend/benefit/applications/models.py
+    theme: application, batch and employee models
+    candidates: 5
+  - path: backend/benefit/applications/services/application_alteration_csv_report.py
+    theme: CSV reports and exports
+    candidates: 3
+  - path: backend/benefit/applications/services/applications_csv_report.py
+    theme: CSV reports and exports
+    candidates: 4
+  - path: backend/benefit/applications/services/clone_application.py
+    theme: application cloning
+    candidates: 1
+  - path: backend/benefit/applications/templates/application.html
+    theme: application PDF templates
+    candidates: 2
+  - path: backend/benefit/applications/templates/application_handler.html
+    theme: application PDF templates
+    candidates: 2
+  - path: backend/benefit/common/utils.py
+    theme: phone serializer field
+    candidates: 6
+  - path: backend/benefit/helsinkibenefit/settings.py
+    theme: settings
+    candidates: 3
