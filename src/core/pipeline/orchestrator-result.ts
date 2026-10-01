@@ -51,4 +51,6 @@ export interface OrchestratorScanResult {
   occurrences: ScanOccurrence[];
   dataItems: ScanDataItem[];
   ledgerContext?: OrchestratorLedgerContext;
+  /** graphify's code-structure graph for this scan, when it ran (KDATAP-49ff82). */
+  structureGraph?: import("../../structure/graphify").StructureGraphInfo;
 }

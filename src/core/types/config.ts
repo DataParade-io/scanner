@@ -19,6 +19,12 @@ export interface ScanConfiguration {
   monorepoPackageSectionPathDepth?: number;
   /** When true (default), infer workspace package depth from `package.json` layout. */
   autoInferMonorepoPackageSectionPathDepth?: boolean;
+  /**
+   * Code-structure graph from graphify, run as a subprocess during the scan
+   * (KDATAP-49ff82). Off unless set: pass `{}` to run it when graphify is found, or
+   * `{ enabled: true }` to warn when it is missing.
+   */
+  structureGraph?: import("../../structure/graphify").StructureGraphConfig;
   enableAiInference?: boolean;
   aiProvider?: AiProviderId;
   aiModel?: string;
