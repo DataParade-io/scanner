@@ -20,6 +20,7 @@ export function mentionReceiver(
   file: AnalyzedFile,
   line: number,
   isConceptToken: (token: string) => boolean,
+  sourceLine?: string,
 ): MentionReceiver {
   const names: string[] = [];
   const sites = file.sitesOnLine(line).filter((site) => isConceptToken(site.name));
@@ -40,6 +41,15 @@ export function mentionReceiver(
     if (found) return { className: found, names, via: "direct" };
     const name = file.receiverBindingName(call.receiver);
     if (name) names.push(name);
+  }
+  // A quoted field selector inside a call's arguments (`fields: ['id', 'email']`,
+  // `.select('email', ...)`) belongs to that call's receiver.
+  for (const match of (sourceLine ?? "").matchAll(/(['"`])([A-Za-z_][\w.]*)\1/g)) {
+    const token = match[2].split(".").pop() ?? "";
+    if (!isConceptToken(token)) continue;
+    const found = file.enclosingCallReceiver(line, (match.index ?? 0) + 1);
+    if (found?.className) return { className: found.className, names, via: "direct" };
+    if (found?.name) names.push(found.name);
   }
   const payload = file.payloadReceivers(line, isConceptToken);
   if (payload.className) return { ...payload, via: "payload" };

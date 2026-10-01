@@ -335,3 +335,30 @@ describe("reference fields", () => {
     }
   });
 });
+
+describe("field selectors in call arguments", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("types a quoted field selector by the enclosing call's receiver", () => {
+    const pack = packForFile("typescript", "a.ts")!;
+    const lines = [
+      "class UsersService {}", //                                  1
+      "export class CommentsService {", //                         2
+      "  async notify(id: string) {", //                           3
+      "    const usersService = new UsersService();", //           4
+      "    const user = await usersService.readOne(id, {", //      5
+      "      fields: ['id', 'first_name', 'email'],", //           6
+      "    });", //                                                7
+      "  }", //                                                    8
+      "}",
+    ];
+    const analyzed = analyzeSource(pack, lines.join("\n"))!;
+    try {
+      expect(mentionReceiver(analyzed, 6, (t) => /email/i.test(t), lines[5]).className).toBe("UsersService");
+    } finally {
+      analyzed.dispose();
+    }
+  });
+});

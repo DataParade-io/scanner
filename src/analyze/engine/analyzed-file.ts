@@ -196,6 +196,26 @@ export class AnalyzedFile {
   }
 
   /** The class reached by a member site's object (`x` in `x.email`). */
+  /**
+   * The receiver of the nearest call enclosing a position, within the same function:
+   * `usersService.readOne(id, { fields: ['email'] })` for the `'email'` string. Returns its
+   * class when known and its binding name (KDATAP-c8a46a).
+   */
+  enclosingCallReceiver(line: number, column: number): { className?: string; name?: string } | undefined {
+    const start = this.tree.rootNode.descendantForPosition({ row: line - 1, column });
+    for (let current: Node | null = start ?? null; current; current = current.parent) {
+      if (this.scopes.get(current.id)?.kind === "function") return undefined;
+      if (current.type !== "call_expression" && current.type !== "call") continue;
+      const callee = current.childForFieldName("function");
+      const member = callee ? this.memberByNode.get(callee.id) : undefined;
+      if (!member) continue;
+      const className = this.classOfReceiver(member.object);
+      const name = this.receiverBindingName(member.object);
+      return { ...(className ? { className } : {}), ...(name ? { name } : {}) };
+    }
+    return undefined;
+  }
+
   classOfSiteReceiver(site: Site): string | undefined {
     return site.role === "member" ? this.receiverClass(site.object, 0) : undefined;
   }
