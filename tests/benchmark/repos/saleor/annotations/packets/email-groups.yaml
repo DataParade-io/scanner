@@ -27,7 +27,6 @@ groups:
   - c016
   - c017
   - c045
-  - c068
   - c101
   - c118
   - c131
@@ -182,6 +181,7 @@ groups:
   purpose: restricting a gift card to one customer
   rationale: GiftCard.assigned_to_email column (giftcard/models.py:77) with its update_fields save, isnull filter in checkout_cleaner, and the assigned event payload (assigned_to_email, previous_assigned_to_email built from gift_card.assigned_to_email or the previous value).
   clusters:
+  - c068
   - c033
   - c050
   - c051
