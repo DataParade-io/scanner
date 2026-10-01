@@ -1,0 +1,451 @@
+candidates:
+  - file: backend/benefit/applications/admin.py
+    line: 115
+    text: '"company_contact_person_email",'
+  - file: backend/benefit/applications/admin.py
+    line: 132
+    text: '"company_contact_person_email",'
+  - file: backend/benefit/applications/api/v1/application_batch_views.py
+    line: 83
+    text: '"applications__company_contact_person_email",'
+  - file: backend/benefit/applications/api/v1/application_views.py
+    line: 234
+    text: search_fields = ["company_name", "company_contact_person_email"]
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 204
+    text: '"company_contact_person_email",'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 355
+    text: '"company_contact_person_email": {'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 356
+    text: '"help_text": "Email address of the contact person",'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 945
+    text: '"company_contact_person_email",'
+  - file: backend/benefit/applications/api/v1/serializers/batch.py
+    line: 59
+    text: '"expert_inspector_email",'
+  - file: backend/benefit/applications/api/v1/serializers/batch.py
+    line: 62
+    text: '"p2p_inspector_email",'
+  - file: backend/benefit/applications/api/v1/serializers/batch.py
+    line: 89
+    text: '"expert_inspector_email": {'
+  - file: backend/benefit/applications/api/v1/serializers/batch.py
+    line: 91
+    text: '"The email of application handler at the city of Helsinki (for"'
+  - file: backend/benefit/applications/api/v1/serializers/employee.py
+    line: 22
+    text: '"email",'
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 10
+    text: get_email_template_context,
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 11
+    text: render_email_template,
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 12
+    text: send_email_to_applicant,
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 65
+    text: "def get_benefit_notice_email_notification_subject():"
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 70
+    text: '"""Send a notification mail to the applicant about the upcoming end of
+      the benefit period"""  # noqa: E501'
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 72
+    text: context = get_email_template_context(application)
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 78
+    text: subject = get_benefit_notice_email_notification_subject()
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 79
+    text: message = render_email_template(context, "benefit-period-end-notice",
+      "txt")
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 80
+    text: html_message = render_email_template(context, "benefit-period-end-notice",
+      "html")
+  - file: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    line: 82
+    text: return send_email_to_applicant(application, subject, message, html_message)
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 10
+    text: get_email_template_context,
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 11
+    text: render_email_template,
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 12
+    text: send_email_to_applicant,
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 74
+    text: "def get_draft_notice_email_notification_subject():"
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 79
+    text: '"""Send a notification mail to the applicant about the upcoming
+      application deletion"""  # noqa: E501'
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 83
+    text: context = get_email_template_context(application)
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 86
+    text: subject = get_draft_notice_email_notification_subject()
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 87
+    text: message = render_email_template(context, "draft-notice", "txt")
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 88
+    text: html_message = render_email_template(context, "draft-notice", "html")
+  - file: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    line: 90
+    text: return send_email_to_applicant(application, subject, message, html_message)
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 12
+    text: get_email_template_context,
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 13
+    text: render_email_template,
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 14
+    text: send_email_to_applicant,
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 80
+    text: "def get_benefit_notice_email_notification_subject():"
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 87
+    text: '"""Send a notification mail to the applicant about the upcoming
+      checkpoint"""'
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 89
+    text: context = get_email_template_context(application)
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 90
+    text: subject = get_benefit_notice_email_notification_subject()
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 91
+    text: message = render_email_template(context, "payslip-required", "txt")
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 92
+    text: html_message = render_email_template(context, "payslip-required", "html")
+  - file: backend/benefit/applications/management/commands/request_payslip.py
+    line: 94
+    text: return send_email_to_applicant(application, subject, message, html_message)
+  - file: backend/benefit/applications/models.py
+    line: 449
+    text: company_contact_person_email = models.EmailField(
+  - file: backend/benefit/applications/models.py
+    line: 450
+    text: blank=True, verbose_name=_("company contact person's email")
+  - file: backend/benefit/applications/models.py
+    line: 860
+    text: p2p_inspector_email = models.EmailField(
+  - file: backend/benefit/applications/models.py
+    line: 861
+    text: blank=True, null=True, verbose_name=_("P2P inspector's email address")
+  - file: backend/benefit/applications/models.py
+    line: 870
+    text: expert_inspector_email = models.EmailField(
+  - file: backend/benefit/applications/models.py
+    line: 871
+    text: blank=True, null=True, verbose_name=_("Expert inspector's email address")
+  - file: backend/benefit/applications/models.py
+    line: 936
+    text: self.p2p_inspector_email,
+  - file: backend/benefit/applications/models.py
+    line: 979
+    text: self.p2p_inspector_email = p2p_settings.data["inspector_email"]
+  - file: backend/benefit/applications/models.py
+    line: 1106
+    text: email = models.EmailField(blank=True, verbose_name=_("email"))
+  - file: backend/benefit/applications/models.py
+    line: 1177
+    text: return f"{self.first_name} {self.last_name} ({self.email})"
+  - file: backend/benefit/applications/services/ahjo_payload.py
+    line: 263
+    text: '"Role": "sender_initiator",'
+  - file: backend/benefit/applications/services/ahjo_payload.py
+    line: 269
+    text: '"Email": application.company_contact_person_email,'
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 53
+    text: email = settings.DEFAULT_SYSTEM_EMAIL
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 55
+    text: return f"{self.current_user.get_full_name()}, {email}"
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 65
+    text: f" {application.company_contact_person_email}"
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 234
+    text: '"company_contact_person_email",'
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 266
+    text: CsvColumn("Työntekijän sähköposti", "employee.email"),
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 333
+    text: '"Tarkastajan sähköposti, P2P", "batch.p2p_inspector_email"'
+  - file: backend/benefit/applications/services/clone_application.py
+    line: 66
+    text: company_contact_person_email=application_base.company_contact_person_email,
+  - file: backend/benefit/applications/services/talpa_csv_service.py
+    line: 73
+    text: '"Tarkastajan sähköposti, P2P", "batch.p2p_inspector_email"'
+  - file: backend/benefit/applications/templates/application_handler.html
+    line: 94
+    text: <div class="label">{{ _("Email address") }}</div>
+  - file: backend/benefit/applications/templates/application_handler.html
+    line: 95
+    text: <div class="value">{{ application.company_contact_person_email }}</div>
+  - file: backend/benefit/applications/templates/application_handler.html
+    line: 377
+    text: <div class="value">{{ batch.p2p_inspector_email }}</div>
+  - file: backend/benefit/applications/templates/application.html
+    line: 90
+    text: <div class="label">{{ _("Email address") }}</div>
+  - file: backend/benefit/applications/templates/application.html
+    line: 91
+    text: <div class="value">{{ application.company_contact_person_email }}</div>
+  - file: backend/benefit/calculator/admin.py
+    line: 72
+    text: '"application__company_contact_person_email",'
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 135
+    text: EMAIL_USE_TLS=(bool, False),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 136
+    text: EMAIL_HOST=(str, "relay.hel.fi"),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 137
+    text: EMAIL_HOST_USER=(str, ""),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 138
+    text: EMAIL_HOST_PASSWORD=(str, ""),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 139
+    text: EMAIL_PORT=(int, 25),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 140
+    text: EMAIL_TIMEOUT=(int, 15),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 141
+    text: DEFAULT_FROM_EMAIL=(str, "Helsinki-lisä <noreply-helsinkilisa@hel.fi>"),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 142
+    text: DEFAULT_SYSTEM_EMAIL=(str, "helsinkilisa@hel.fi"),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 353
+    text: MJML_COMPILED_EMAIL_TEMPLATE_PATHS = [
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 354
+    text: os.path.join(BASE_DIR,
+      "helsinkibenefit/templates/emails/mjml-generated/html"),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 355
+    text: os.path.join(BASE_DIR,
+      "helsinkibenefit/templates/emails/mjml-generated/txt"),
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 361
+    text: '"DIRS": [] + MJML_COMPILED_EMAIL_TEMPLATE_PATHS,'
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 374
+    text: EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 375
+    text: EMAIL_HOST = env.str("EMAIL_HOST")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 376
+    text: EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 377
+    text: EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 378
+    text: EMAIL_PORT = env.int("EMAIL_PORT")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 379
+    text: EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 380
+    text: DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 501
+    text: EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 536
+    text: OIDC_RP_SCOPES = "openid profile email"
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 582
+    text: '"CLAIM_MAPPING": {"email": "mail"},'
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 649
+    text: "# like database and email that differ between development and production."
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 679
+    text: DEFAULT_SYSTEM_EMAIL = env.str("DEFAULT_SYSTEM_EMAIL")
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 25
+    text: "def get_default_email_notification_subject():"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 34
+    text: "def get_additional_information_email_notification_subject():"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 38
+    text: "def _message_notification_email_body(application):"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 61
+    text: "def get_email_template_context(application: Application):"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 81
+    text: def render_email_template(
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 82
+    text: 'email_context: dict, template_name: str, template_type: str = "txt"'
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 84
+    text: lang = email_context["language"] or "fi"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 85
+    text: return render_to_string(f"{template_name}_{lang}.{template_type}",
+      email_context)
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 88
+    text: def send_email_to_applicant(
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 96
+    text: ":param subject: The subject of the email"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 97
+    text: ":param message: The body of the email"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 99
+    text: "if not application.company_contact_person_email:"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 100
+    text: "# company_contact_person_email is a required field for submitted
+      applications"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 102
+    text: f"Application {application} does not have company_contact_person_email -"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 111
+    text: subject if subject else get_default_email_notification_subject()
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 116
+    text: else _message_notification_email_body(application)
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 119
+    text: from_email=settings.DEFAULT_FROM_EMAIL,
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 120
+    text: recipient_list=[application.company_contact_person_email],
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 124
+    text: email_domain = "n/a"
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 125
+    text: 'if "@" in application.company_contact_person_email:'
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 126
+    text: email_domain = application.company_contact_person_email.split("@")[1]
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 128
+    text: f"SMTPException while sending email to xxx@{email_domain}, "
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 148
+    text: sender=user,
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 157
+    text: context = get_email_template_context(application)
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 161
+    text: message = render_email_template(
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 164
+    text: html_message = render_email_template(
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 167
+    text: send_email_to_applicant(
+  - file: backend/benefit/messages/automatic_messages.py
+    line: 169
+    text: get_additional_information_email_notification_subject(),
+  - file: backend/benefit/messages/models.py
+    line: 23
+    text: sender = models.ForeignKey(
+  - file: backend/benefit/messages/models.py
+    line: 24
+    text: '"users.User", verbose_name=_("sender"), on_delete=models.CASCADE'
+  - file: backend/benefit/messages/serializers.py
+    line: 75
+    text: "# Only set sender and application when creating message"
+  - file: backend/benefit/messages/serializers.py
+    line: 77
+    text: data["sender"] = user
+  - file: backend/benefit/messages/serializers.py
+    line: 83
+    text: sender = serializers.SerializerMethodField(
+  - file: backend/benefit/messages/serializers.py
+    line: 84
+    text: '"get_sender_name", help_text="Full name of person who create the note"'
+  - file: backend/benefit/messages/serializers.py
+    line: 87
+    text: "def get_sender_name(self, obj):"
+  - file: backend/benefit/messages/serializers.py
+    line: 88
+    text: return " ".join([obj.sender.first_name, obj.sender.last_name])
+  - file: backend/benefit/messages/serializers.py
+    line: 91
+    text: fields = MessageSerializer.Meta.fields + ["sender"]
+  - file: backend/benefit/messages/views.py
+    line: 14
+    text: get_default_email_notification_subject,
+  - file: backend/benefit/messages/views.py
+    line: 15
+    text: get_email_template_context,
+  - file: backend/benefit/messages/views.py
+    line: 16
+    text: render_email_template,
+  - file: backend/benefit/messages/views.py
+    line: 17
+    text: send_email_to_applicant,
+  - file: backend/benefit/messages/views.py
+    line: 61
+    text: "# Never send email if it's a handler's note!"
+  - file: backend/benefit/messages/views.py
+    line: 67
+    text: subject = get_default_email_notification_subject()
+  - file: backend/benefit/messages/views.py
+    line: 68
+    text: context = get_email_template_context(application)
+  - file: backend/benefit/messages/views.py
+    line: 69
+    text: text_message = render_email_template(context, "received-message", "txt")
+  - file: backend/benefit/messages/views.py
+    line: 70
+    text: html_message = render_email_template(
+  - file: backend/benefit/messages/views.py
+    line: 74
+    text: send_email_to_applicant(
+  - file: backend/benefit/terms/admin.py
+    line: 55
+    text: '"approved_by__email",'
+  - file: backend/benefit/terms/admin.py
+    line: 62
+    text: '"approved_by__email",'
+  - file: backend/benefit/terms/admin.py
+    line: 79
+    text: '"approved_by__email",'
+  - file: backend/benefit/terms/admin.py
+    line: 86
+    text: '"approved_by__email",'
+  - file: backend/benefit/terms/models.py
+    line: 250
+    text: f"{self.approved_by.email} approved terms {self.terms} at"
+  - file: backend/benefit/terms/models.py
+    line: 293
+    text: f"{self.approved_by.email} approved terms {self.terms} on "
+  - file: backend/benefit/users/models.py
+    line: 26
+    text: '{"name": "email"},'
