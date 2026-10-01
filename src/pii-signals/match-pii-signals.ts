@@ -31,6 +31,13 @@ export interface PiiSignalHit {
   /** The group is only the receiver variable's name; a typed receiver's class may replace it. */
   receiverNamesEntity?: boolean;
   /**
+   * The group comes only from a receiver variable's name (`profile.email` -> profile).
+   * Grouping applies it after typed-receiver and table evidence (KDATAP-c8a46a).
+   */
+  weakGroup?: boolean;
+  /** Set during matching: the qualifier is only a receiver variable's name. */
+  weakName?: boolean;
+  /**
    * Same-file declaration of the mentioned name, or `unresolved` (KDATAP-8e47c2).
    * Absent when the line has no code occurrence to declare or the file is not analyzed.
    */
