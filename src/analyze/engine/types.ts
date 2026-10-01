@@ -141,6 +141,17 @@ export interface Invocation {
   options?: Record<string, string>;
 }
 
+/**
+ * A named object type (KDATAP-e3ff3c): a TypeScript `interface` or a type alias of an
+ * object type literal, with its property signatures. Record types a client or service
+ * declares for the rows it reads and writes (`interface User { id; email; created_at }`).
+ */
+export interface RecordType {
+  name: string;
+  line: number;
+  members: Array<{ name: string; line: number; optional: boolean; type?: string }>;
+}
+
 /** A class or interface defined in a file. Lines are 1-based and inclusive. */
 export interface ClassDefinition {
   name: string;

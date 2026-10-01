@@ -17,6 +17,7 @@ import type {
   ModuleVariable,
   LanguagePack,
   PackConfig,
+  RecordType,
   SameFileDeclaration,
 } from "./types";
 
@@ -805,6 +806,35 @@ export class AnalyzedFile {
       if (scope.kind === "class" && scope.name) {
         out.push({ name: scope.name, line: scope.node.startPosition.row + 1, endLine: scope.node.endPosition.row + 1 });
       }
+    }
+    return out.sort((a, b) => a.line - b.line);
+  }
+
+  /**
+   * Named object types (KDATAP-e3ff3c): `interface X { ... }` and `type X = { ... }` with
+   * their property signatures. Grammars without these nodes yield none.
+   */
+  recordTypes(): RecordType[] {
+    const out: RecordType[] = [];
+    for (const node of this.tree.rootNode.descendantsOfType(["interface_declaration", "type_alias_declaration"])) {
+      if (!node) continue;
+      const name = node.childForFieldName("name")?.text;
+      const body = node.type === "interface_declaration" ? node.childForFieldName("body") : node.childForFieldName("value");
+      if (!name || !body || (body.type !== "interface_body" && body.type !== "object_type")) continue;
+      const members: RecordType["members"] = [];
+      for (const member of body.namedChildren) {
+        if (!member || member.type !== "property_signature") continue;
+        const key = member.childForFieldName("name");
+        if (!key) continue;
+        const type = member.childForFieldName("type")?.text.replace(/^:\s*/, "");
+        members.push({
+          name: key.text.replace(/^['"]|['"]$/g, ""),
+          line: key.startPosition.row + 1,
+          optional: member.children.some((c) => c?.type === "?"),
+          ...(type ? { type } : {}),
+        });
+      }
+      out.push({ name, line: node.startPosition.row + 1, members });
     }
     return out.sort((a, b) => a.line - b.line);
   }
