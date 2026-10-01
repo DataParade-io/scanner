@@ -1,6 +1,8 @@
 import path from "path";
 import type { FileInfo } from "../core/types/file";
+import { loadPiiSignalRules } from "../pii-signals/pii-signal-rules";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
+import { conceptProfile, normalizeTypeName } from "./concept-profile";
 import type { AnalyzedFile } from "./engine/analyzed-file";
 import { analyzeSource } from "./engine/engine";
 import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
@@ -64,7 +66,7 @@ export type ColumnCandidate = Omit<ColumnEntry, "locations">;
 
 /** Column types that cannot hold an address; such columns are not catalogued. */
 const NON_TEXT_TYPE =
-  /^(?:int|integer|bigint|biginteger|smallint|tinyint|mediumint|serial|float|double|real|decimal|numeric|number|boolean|bool|bit|date|datetime|datetime2|timestamp|timestamptz|time|increments|bigincrements|uuid|binary|blob|enum|boolean(?:field)?|(?:positive|small|big)?(?:integer|auto)field|decimalfield|floatfield|datefield|datetimefield|timefield|durationfield|uuidfield|foreignkey|onetoonefield|manytomanyfield|relation|media|component|dynamiczone|password|uid)$/i;
+  /^(?:int|integer|bigint|biginteger|smallint|tinyint|mediumint|serial|float|double|real|decimal|numeric|number|boolean|bool|bit|date|datetime|datetime2|timestamp|timestamptz|time|increments|bigincrements|uuid|binary|blob|enum|bignumber|hasone|hasmany|belongsto|manytomany|id|boolean(?:field)?|(?:positive|small|big)?(?:integer|auto)field|decimalfield|floatfield|datefield|datetimefield|timefield|durationfield|uuidfield|foreignkey|onetoonefield|manytomanyfield|relation|media|component|dynamiczone|password|uid)$/i;
 
 /** Knex column builder methods; the first argument is the column name. */
 const KNEX_COLUMN_METHODS = new Set([
@@ -124,34 +126,44 @@ function configuredTable(name: string | undefined): ConfiguredTable | undefined 
 /** Functions that read a setting by a literal key: `getSetting('k')`, `os.getenv('X')`. */
 const SETTING_READER = /^(?:get_?(?:setting|config|conf|env|environment)s?|getenv)$/i;
 
-/** Words that make a configured key an address even when it does not name the concept. */
-const ADDRESS_ROLE_WORDS = new Set(["from", "sender", "support", "noreply"]);
-const ADDRESS_ROLE_RUNS = /replyto|mailfrom|defaultfrom|noreply/;
-/** A role word followed by one of these is not an address (`sender_name`, `support_url`). */
-const NOT_AN_ADDRESS_SUFFIX = new Set([
-  "name", "names", "count", "id", "ids", "url", "uri", "domain", "enabled", "subject", "body", "template", "label", "title", "type", "at", "time", "date", "flag",
-]);
-
-/** Last words that make a key about an address when the concept comes earlier: `email_from`. */
-const ADDRESS_TAIL_WORDS = new Set(["from", "to", "reply", "address", "addresses", "sender", "recipient", "recipients", "cc", "bcc"]);
+/**
+ * Whether a source token (a column name, a settings key) is an occurrence of the concept.
+ * It uses the scanner's own signal rules for the concept id (`phone_number`: phone,
+ * telephone, tel, mobile, cell, msisdn): the signal's token rule, and the rule's patterns
+ * against the token's words, so `billing_phone` and `shippingPhone` match as well as `phone`.
+ */
+export function conceptNameMatcher(concept: string, filePath: string): (token: string) => boolean {
+  const signal = signalTokenMatcher(concept, filePath);
+  const patterns = loadPiiSignalRules().find((rule) => rule.id === concept)?.patterns ?? [];
+  return (token) => {
+    if (signal(token)) return true;
+    const spaced = wordsOf(token).join(" ");
+    return patterns.some((pattern) => pattern.test(spaced));
+  };
+}
 
 /**
- * Whether a configured key is an address key (KDATAP-6661dd). It names the concept as its
- * last word (`ADMIN_EMAIL`, `sender_email`), or names it earlier and ends in an address
- * word (`EMAIL_FROM`, `fallbackEmailAddress`); or it carries an address-role word (from,
- * sender, reply_to, support, noreply, mail_from, default_from). A key whose last word is
- * not an address word (`email_track_clicks`, `sender_name`, `EMAIL_SMTP_HOST`) is not one.
- * Words are split at case changes and at `:`, `.`, `_`, `-`.
+ * Whether a configured key is a value of the concept (KDATAP-6661dd, KDATAP-0df343). The
+ * concept's profile (patterns/concept-profiles.yaml) supplies the rest. A key counts when
+ * it names the concept as its last word (`ADMIN_EMAIL`, `SUPPORT_PHONE`), or names it
+ * earlier and ends in a tail word (`EMAIL_FROM`, `PHONE_NUMBER`); or, when the profile
+ * says role words suffice (email), it carries a role word (from, sender, reply_to,
+ * support, noreply) on its own; otherwise a role word must come with the concept
+ * (`SMS_PHONE`). A key ending in a negative word (`email_track_enabled`, `sender_name`)
+ * is not one. Words are split at case changes and at `:`, `.`, `_`, `-`.
  */
 export function isConfiguredAddressKey(key: string, concept: string, filePath: string): boolean {
   const words = wordsOf(key);
   if (words.length === 0) return false;
   const last = words[words.length - 1];
-  const isConcept = signalTokenMatcher(concept, filePath);
+  const profile = conceptProfile(concept);
+  const isConcept = conceptNameMatcher(concept, filePath);
   if (isConcept(last)) return true;
-  if (words.slice(0, -1).some((word) => isConcept(word)) && ADDRESS_TAIL_WORDS.has(last)) return true;
-  if (NOT_AN_ADDRESS_SUFFIX.has(last)) return false;
-  return words.some((word) => ADDRESS_ROLE_WORDS.has(word)) || ADDRESS_ROLE_RUNS.test(words.join(""));
+  const namesConcept = words.slice(0, -1).some((word) => isConcept(word));
+  if (namesConcept && profile.tailWords.has(last)) return true;
+  if (profile.negativeWords.has(last)) return false;
+  const hasRole = words.some((word) => profile.roleWords.has(word)) || profile.roleRuns.some((run) => words.join("").includes(run));
+  return hasRole && (profile.roleWordsSuffice || namesConcept);
 }
 
 /** A settings module (`settings.py`, `settings/base.py`) whose module variables are settings. */
@@ -217,7 +229,10 @@ function ormFieldCandidates(field: FieldDeclaration, filePath: string): ColumnCa
   const where = { file: filePath, line: field.line, evidence: "orm-field" as const };
   const init = field.initializer;
   if (init && /Field$/.test(init.callee) && !DJANGO_RELATION.test(init.callee)) {
-    const isModel = init.calleeText.startsWith("models.") || field.ownerBases.some((base) => /Model$/.test(base));
+    // A model's field is `models.X`, or a bare imported field class (`PhoneNumberField`) on a
+    // class with a base; `forms.X` and `serializers.X` are not columns.
+    const qualified = init.calleeText.includes(".");
+    const isModel = init.calleeText.startsWith("models.") || field.ownerBases.some((base) => /Model$/.test(base)) || (!qualified && field.ownerBases.some((base) => !/(?:Form|Serializer|Filter|Schema|Input|ObjectType|Mutation)$/.test(base)));
     if (!isModel || isNonText(init.callee)) return [];
     return [{ ...(field.owner ? { table: field.owner, model: field.owner } : {}), column: field.name, type: init.callee, ...where }];
   }
@@ -247,6 +262,15 @@ function keyCandidates(key: KeyDeclaration, filePath: string): ColumnCandidate[]
     if (typeText === undefined || isNonText(typeText)) return [];
     const model = key.ownerSiblings["info.name"] ?? key.ownerSiblings["info.displayName"] ?? key.ownerSiblings["info.singularName"];
     return [{ table: key.ownerSiblings["collectionName"], ...(model ? { model } : {}), type: typeText, evidence: "content-type", ...base }];
+  }
+  // Medusa DML: `model.define('customer', { phone: model.text().nullable() })`; the chain's
+  // first call names the type, the define name is the table.
+  if (container && key.path.length === 0 && container.callee === "define" && key.value.callRoot?.receiver === "model") {
+    const type = key.value.callRoot.method;
+    if (isNonText(type)) return [];
+    const table = container.strings[0] ?? container.options["tableName"] ?? container.options["name"];
+    const model = container.assignedTo ?? table;
+    return [{ ...(table ? { table } : {}), ...(model ? { model } : {}), type, evidence: "orm-field", ...base }];
   }
   if (container && key.path.length === 0) {
     const sequelizeDefine = container.callee === "define" && container.position === 1 && container.strings.length > 0;
@@ -339,15 +363,15 @@ export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undef
 }
 
 /**
- * Whether a column is an occurrence of the concept: its name matches the concept's tokens
- * as the scanner's signal does (`email`, `sender_email`, `customerEmail`), or its declared
- * type names the concept (`EmailField`, strapi `type: 'email'`).
+ * Whether a column is an occurrence of the concept: its name matches the concept's signal
+ * rules (`email`, `sender_email`, `customerEmail`; `phone`, `billing_phone`), or its declared
+ * type settles the concept in the concept's profile (`EmailField`, strapi `type: 'email'`,
+ * `PossiblePhoneNumberField`).
  */
 export function matchesConcept(candidate: ColumnCandidate, concept: string): boolean {
   if (CONFIGURED_EVIDENCE.has(candidate.evidence)) return isConfiguredAddressKey(candidate.column, concept, candidate.file);
-  if (signalTokenMatcher(concept, candidate.file)(candidate.column)) return true;
-  const type = (candidate.type ?? "").replace(/^.*\./, "").toLowerCase();
-  return type === concept.toLowerCase() || type === `${concept.toLowerCase()}field`;
+  if (conceptNameMatcher(concept, candidate.file)(candidate.column)) return true;
+  return candidate.type !== undefined && conceptProfile(concept).typeHints.has(normalizeTypeName(candidate.type));
 }
 
 /** `include: "configured"` adds the configured address keys to the declared columns. */
