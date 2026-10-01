@@ -83,3 +83,78 @@ layer_scopes:
       reviewed_by: rap@endymion.com
       reviewed_at: 2026-08-31T00:00:00Z
       review_state: accepted
+concept_scopes:
+  mentions:
+    - subject_keys:
+        - mention:phone_number
+      exhaustive_scope_files:
+        - packages/core/core-flows/src/cart/workflows/update-cart.ts
+        - packages/core/core-flows/src/customer/steps/maybe-unset-default-billing-addresses.ts
+        - packages/core/core-flows/src/customer/steps/maybe-unset-default-shipping-addresses.ts
+        - packages/core/core-flows/src/customer/steps/update-customers.ts
+        - packages/core/core-flows/src/fulfillment/steps/create-fulfillment.ts
+        - packages/core/core-flows/src/fulfillment/steps/create-return-fulfillment.ts
+        - packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts
+        - packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts
+        - packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts
+        - packages/core/types/src/address/common.ts
+        - packages/core/types/src/auth/common/verification.ts
+        - packages/core/types/src/auth/service.ts
+        - packages/core/types/src/cart/common.ts
+        - packages/core/types/src/cart/mutations.ts
+        - packages/core/types/src/cart/workflows.ts
+        - packages/core/types/src/common/config-module.ts
+        - packages/core/types/src/customer/common.ts
+        - packages/core/types/src/customer/mutations.ts
+        - packages/core/types/src/fulfillment/common/address.ts
+        - packages/core/types/src/fulfillment/common/order.ts
+        - packages/core/types/src/fulfillment/mutations/fulfillment-address.ts
+        - packages/core/types/src/http/address/entities.ts
+        - packages/core/types/src/http/cart/common.ts
+        - packages/core/types/src/http/cart/store/payloads.ts
+        - packages/core/types/src/http/customer/common.ts
+        - packages/core/types/src/http/fulfillment/admin/entitites.ts
+        - packages/core/types/src/http/fulfillment/admin/payloads.ts
+        - packages/core/types/src/http/fulfillment/store/index.ts
+        - packages/core/types/src/http/notification/admin/entities.ts
+        - packages/core/types/src/http/order/admin/payloads.ts
+        - packages/core/types/src/http/order/common.ts
+        - packages/core/types/src/http/stock-locations/admin/entities.ts
+        - packages/core/types/src/http/stock-locations/admin/payloads.ts
+        - packages/core/types/src/http/view-configuration/admin/columns.ts
+        - packages/core/types/src/http/view-configuration/admin/property-descriptor.ts
+        - packages/core/types/src/notification/common.ts
+        - packages/core/types/src/notification/mutations.ts
+        - packages/core/types/src/notification/provider.ts
+        - packages/core/types/src/order/common.ts
+        - packages/core/types/src/order/mutations.ts
+        - packages/core/types/src/payment/provider.ts
+        - packages/core/types/src/stock-location/common.ts
+        - packages/core/types/src/workflow/fulfillment/create-fulfillment.ts
+        - packages/medusa/src/api/admin/customers/query-config.ts
+        - packages/medusa/src/api/admin/customers/validators.ts
+        - packages/medusa/src/api/admin/stock-locations/query-config.ts
+        - packages/medusa/src/api/admin/stock-locations/validators.ts
+        - packages/medusa/src/api/store/carts/query-config.ts
+        - packages/medusa/src/api/store/customers/query-config.ts
+        - packages/medusa/src/api/store/customers/validators.ts
+        - packages/medusa/src/api/utils/common-validators/common.ts
+        - packages/modules/cart/src/models/address.ts
+        - packages/modules/cart/src/types/address.ts
+        - packages/modules/customer/src/models/address.ts
+        - packages/modules/customer/src/models/customer.ts
+        - packages/modules/customer/src/types/services/address.ts
+        - packages/modules/fulfillment/src/models/address.ts
+        - packages/modules/fulfillment/src/schema/index.ts
+        - packages/modules/notification/src/models/notification.ts
+        - packages/modules/order/src/models/address.ts
+        - packages/modules/order/src/schema/index.ts
+        - packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+        - packages/modules/settings/src/utils/computed-columns.ts
+        - packages/modules/settings/src/utils/render-mode-mapper.ts
+        - packages/modules/stock-location/src/models/stock-location-address.ts
+        - packages/modules/stock-location/src/schema/index.ts
+      provenance:
+        proposed_by: claude-sonnet-5-5
+        proposed_at: 2026-10-01
+        review_state: proposed

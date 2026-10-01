@@ -100,6 +100,7 @@ function main(): void {
       provenance: scope.provenance,
     },
   ];
+  if (!/^concept_scopes:/m.test(scopes)) scopes += "concept_scopes:\n  mentions:\n";
   scopes += indent(YAML.stringify(entry, { lineWidth: 0 }), 4);
   fs.writeFileSync(scopesPath, scopes, "utf8");
 
