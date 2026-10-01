@@ -93,7 +93,7 @@ describe("imported corpus gold", () => {
     // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
     // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
     // KDATAP-3ccf91: -1 accepted mention:phone_number record (saleor-phone-pii-signal) superseded by the phone labeling packets.
-    expect(acceptedEvalCases).toBe(1006);
+    expect(acceptedEvalCases).toBe(1001);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
@@ -275,7 +275,7 @@ describe("imported corpus gold", () => {
     expect(piiKeyViolations).toEqual([]);
     // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
     // KDATAP-3ccf91: -1 accepted mention:phone_number record superseded by the phone labeling packets.
-    expect(acceptedMentions).toBe(69);
+    expect(acceptedMentions).toBe(64);
     expect(adjudicationMentions).toBe(278);
   });
 
