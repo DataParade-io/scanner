@@ -24,7 +24,7 @@ export interface CanonicalFixtureScanResult {
 
 const PERSONAL_DATA_EVAL_LAYER: Record<PersonalDataEvalLayer, EvalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
@@ -55,7 +55,7 @@ export function personalDataFindingToLayerFinding(
     sourceLines,
     ...(finding.group || finding.declaration
       ? {
-          mentionAttributes: {
+          occurrenceAttributes: {
             ...(finding.group ? { group: finding.group } : {}),
             ...(finding.declaration
               ? {

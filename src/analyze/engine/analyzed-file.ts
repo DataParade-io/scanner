@@ -34,7 +34,7 @@ interface SiteDefinition {
   column: number;
 }
 
-/** Receivers found for a mention: a resolved class, or binding names to look up by name. */
+/** Receivers found for a occurrence: a resolved class, or binding names to look up by name. */
 export interface ReceiverInfo {
   className?: string;
   names: string[];

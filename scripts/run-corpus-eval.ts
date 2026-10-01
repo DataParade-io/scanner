@@ -339,7 +339,7 @@ async function computeCorpusRecallProgrammatic(
       });
     }
 
-    for (const layer of ["raw-hits", "mentions", "data-items"] as const) {
+    for (const layer of ["raw-hits", "occurrences", "data-items"] as const) {
       const p = await collectPersonalDataFindings(sourceRoot, layer);
       for (const f of p.findings) {
         findings.push({

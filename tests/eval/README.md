@@ -8,7 +8,7 @@ Four **headline layers** form the evaluation vector. `raw-hits` and `data-action
 
 | Layer | Script | Identity prefix | Match semantics |
 | --- | --- | --- | --- |
-| Mentions | `pnpm run eval:mentions` | `mention:` | key + span + labels |
+| Occurrences | `pnpm run eval:occurrences` | `occurrence:` | key + span + labels |
 | Data items | `pnpm run eval:data-items` | `data_item:` | identity only |
 | Components | `pnpm run eval:components` | `${type}:${name}` | key + span + labels |
 | Data flows | `pnpm run eval:data-flows` | `flow:…` | key + span + labels |
@@ -18,7 +18,7 @@ Four **headline layers** form the evaluation vector. `raw-hits` and `data-action
 | Layer | Script | Identity prefix | Match semantics |
 | --- | --- | --- | --- |
 | Raw hits | `pnpm run eval:raw-hits` | `raw_hit:` | key + span + labels (diagnostic; not a headline gate) |
-| Data actions | `pnpm run eval:data-actions` | `${type}:${name}` | key + span + asserted verb labels (diagnostic; not a `scorecard-vector/2` headline gate) |
+| Data actions | `pnpm run eval:data-actions` | `${type}:${name}` | key + span + asserted verb labels (diagnostic; not a `scorecard-vector/3` headline gate) |
 
 Personal-data layers share heuristic rules but differ in roll-up. Graph layers and `data-actions` use the deterministic `scan()` pipeline. Do not add empty layer stubs under `layers/data-actions/` until gold cases land.
 
@@ -37,7 +37,7 @@ tests/eval/
       adapter.ts
       cases.ts
       eval.test.ts
-    mentions/
+    occurrences/
       adapter.ts
       cases.ts
       eval.test.ts
@@ -81,7 +81,7 @@ pnpm test tests/eval/
 pnpm run eval:components
 pnpm run eval:raw-hits
 pnpm run eval:data-actions
-pnpm run eval:mentions
+pnpm run eval:occurrences
 pnpm run eval:data-items
 pnpm run eval:data-flows
 ```

@@ -34,17 +34,19 @@ const BENCHMARK_TO_EVAL_LAYER: Record<string, EvalLayer> = {
   components: "components",
   data_flows: "data-flows",
   raw_hits: "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   data_items: "data-items",
   data_actions: "data-actions",
-  pii_signals: "mentions",
+  pii_signals: "occurrences",
+  mentions: "occurrences",
 };
 
 const PERSONAL_DATA_BENCHMARK_LAYERS = new Set([
-  "mentions",
+  "occurrences",
   "raw_hits",
   "data_items",
   "pii_signals",
+  "mentions",
 ]);
 
 function collectFlowSourceLocations(flow: DetectedDataFlow): SourceLocation[] {
@@ -124,11 +126,12 @@ function tagPersonalDataFinding(
 
 function benchmarkLayerToPersonalDataLayer(
   layer: BenchmarkLayer,
-): "mentions" | "raw-hits" | "data-items" {
+): "occurrences" | "raw-hits" | "data-items" {
   switch (layer) {
-    case "mentions":
+    case "occurrences":
     case "pii_signals":
-      return "mentions";
+    case "mentions":
+      return "occurrences";
     case "raw_hits":
       return "raw-hits";
     case "data_items":
@@ -148,7 +151,7 @@ export async function scanRepoByManifestLayers(
   layers: BenchmarkLayer[],
 ): Promise<FixtureScanResult> {
   const wanted = new Set(
-    layers.map((layer) => (layer === "pii_signals" ? "mentions" : layer)),
+    layers.map((layer) => (layer === "pii_signals" || layer === "mentions" ? "occurrences" : layer)),
   );
   const findings: LayerFinding[] = [];
   const eligibilityLedgers: Partial<

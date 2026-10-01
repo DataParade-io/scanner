@@ -34,8 +34,8 @@ Feature: Canonical evaluation representation
     And ancestor-category correctness is reported separately
 
   # Source: KDATAP-95cfe1
-  Scenario: Mention legacy name is preserved as an observed token candidate
-    Given a mention expectation with a legacy subject name
+  Scenario: Occurrence legacy name is preserved as an observed token candidate
+    Given a occurrence expectation with a legacy subject name
     When the gold adapter normalizes the expectation
     Then the legacy name is an evidence-linked observed token candidate on that occurrence
     And the legacy name is not promoted to authoritative source identity

@@ -38,10 +38,11 @@ const LAYER_MAP: Record<AnnotationRecord["layer"], EvalLayer> = {
   components: "components",
   data_flows: "data-flows",
   raw_hits: "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   data_items: "data-items",
   data_actions: "data-actions",
-  pii_signals: "mentions",
+  pii_signals: "occurrences",
+  mentions: "occurrences",
 };
 
 function toEvalLayer(layer: AnnotationRecord["layer"]): EvalLayer {
@@ -125,8 +126,8 @@ export function annotationToEvalCase(
     ...(annotation.candidate?.kind === "data_item"
       ? { dataItemCandidate: annotation.candidate }
       : {}),
-    ...(annotation.mention_attributes !== undefined
-      ? { mentionAttributes: annotation.mention_attributes }
+    ...(annotation.occurrence_attributes !== undefined
+      ? { occurrenceAttributes: annotation.occurrence_attributes }
       : {}),
   };
 }

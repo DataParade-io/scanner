@@ -26,7 +26,7 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
     const matchSpy = jest.spyOn(matchPiiSignals, "matchPiiSignalsInFile");
 
     const result = await scanRepoByManifestLayers("fixture", tempDir, [
-      "mentions",
+      "occurrences",
       "raw_hits",
       "data_items",
     ]);
@@ -35,11 +35,11 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
     // Once per file, not once per layer; YAML has no comment-stripped second pass.
     expect(matchSpy).toHaveBeenCalledTimes(2);
 
-    const mentions = result.findings.filter((finding) => finding.layer === "mentions");
+    const occurrences = result.findings.filter((finding) => finding.layer === "occurrences");
     const rawHits = result.findings.filter((finding) => finding.layer === "raw-hits");
     const dataItems = result.findings.filter((finding) => finding.layer === "data-items");
 
-    expect(mentions.length).toBeGreaterThan(0);
+    expect(occurrences.length).toBeGreaterThan(0);
     expect(rawHits.length).toBeGreaterThan(0);
     expect(dataItems.length).toBeGreaterThan(0);
 
@@ -59,7 +59,7 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
     const ingestSpy = jest.spyOn(fileSystem, "ingestFileSystemWithOutcomes");
     const inventorySpy = jest.spyOn(personalDataInventory, "buildPersonalDataInventory");
 
-    await scanRepoByManifestLayers("fixture", tempDir, ["components", "mentions"]);
+    await scanRepoByManifestLayers("fixture", tempDir, ["components", "occurrences"]);
 
     expect(ingestSpy).toHaveBeenCalledTimes(1);
     expect(inventorySpy).not.toHaveBeenCalled();

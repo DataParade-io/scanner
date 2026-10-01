@@ -307,8 +307,8 @@ function assignRolledPersonalDataOneToOne(
 /** @see assignRolledPersonalDataOneToOne */
 export const assignDataItemsOneToOne = assignRolledPersonalDataOneToOne;
 
-/** Mentions share the same rolled-finding slice assignment as data-items. */
-export const assignMentionsOneToOne = assignRolledPersonalDataOneToOne;
+/** Occurrences share the same rolled-finding slice assignment as data-items. */
+export const assignOccurrencesOneToOne = assignRolledPersonalDataOneToOne;
 
 /**
  * Data-flow assignment: when duplicate gold rows match one finding, credit the

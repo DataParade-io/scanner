@@ -1,7 +1,7 @@
 import {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
-  assignMentionsOneToOne,
+  assignOccurrencesOneToOne,
   assignOneToOne,
   buildAcceptedGoldExpectation,
   buildScannerFinding,
@@ -243,13 +243,13 @@ describe("assignDataItemsOneToOne evidence-scoped slices", () => {
   });
 });
 
-describe("assignMentionsOneToOne evidence-scoped slices", () => {
+describe("assignOccurrencesOneToOne evidence-scoped slices", () => {
   it("credits gold when adjacent-line findings span the evidence range", () => {
     const expectations = [
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/User.php", 537, 539)],
         }),
@@ -260,8 +260,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
     const adjacentFindings = [537, 538, 539].map((line, index) =>
       withId(
         buildScannerFinding({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/User.php", line, line)],
         }),
@@ -269,7 +269,7 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
       ),
     );
 
-    const result = assignMentionsOneToOne(expectations, adjacentFindings);
+    const result = assignOccurrencesOneToOne(expectations, adjacentFindings);
 
     expect(result.pairs).toEqual([
       { expectationId: "gold-mail", findingId: "finding-0" },
@@ -282,8 +282,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
     const expectations = [
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/app.yml", 1, 1)],
         }),
@@ -294,8 +294,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
     const duplicateFindings = [
       withId(
         buildScannerFinding({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/app.yml", 1, 1)],
         }),
@@ -303,8 +303,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
       ),
       withId(
         buildScannerFinding({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/app.yml", 1, 1)],
         }),
@@ -312,19 +312,19 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
       ),
     ];
 
-    const result = assignMentionsOneToOne(expectations, duplicateFindings);
+    const result = assignOccurrencesOneToOne(expectations, duplicateFindings);
 
     expect(result.pairs).toEqual([]);
     expect(result.unmatchedExpectationIds).toEqual(["gold-email"]);
     expect(result.ambiguous).toBe(true);
   });
 
-  it("credits multiple mention gold rows on distinct slices of one rolled finding", () => {
+  it("credits multiple occurrence gold rows on distinct slices of one rolled finding", () => {
     const expectations = [
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/Entity/User.php", 537, 539)],
         }),
@@ -332,8 +332,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
       ),
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/Entity/User.php", 581, 583)],
         }),
@@ -343,8 +343,8 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
 
     const emailFinding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: [
           sampleEvidence("src/Entity/User.php", 537, 537),
@@ -354,7 +354,7 @@ describe("assignMentionsOneToOne evidence-scoped slices", () => {
       "finding-email",
     );
 
-    const result = assignMentionsOneToOne(expectations, [emailFinding]);
+    const result = assignOccurrencesOneToOne(expectations, [emailFinding]);
 
     expect(result.pairs).toEqual(
       expect.arrayContaining([

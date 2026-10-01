@@ -1,7 +1,7 @@
 import {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
-  assignMentionsOneToOne,
+  assignOccurrencesOneToOne,
   assignOneToOne,
 } from "./assignment";
 import type { AssignmentResult } from "./assignment";
@@ -56,8 +56,8 @@ export function computeStrictRecall(
   const assignment =
     layer === "data-items"
       ? assignDataItemsOneToOne(positives, findings)
-      : layer === "mentions"
-        ? assignMentionsOneToOne(positives, findings)
+      : layer === "occurrences"
+        ? assignOccurrencesOneToOne(positives, findings)
       : layer === "data-flows"
         ? assignDataFlowsOneToOne(positives, findings)
       : assignOneToOne(positives, findings);

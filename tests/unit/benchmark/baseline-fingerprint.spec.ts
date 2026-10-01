@@ -16,7 +16,7 @@ describe("baseline fingerprint digests", () => {
     const annotationsDir = path.join(repoDir, "annotations");
     fs.mkdirSync(annotationsDir, { recursive: true });
     fs.writeFileSync(path.join(repoDir, "manifest.yaml"), "repository: alpha\ncommit: b\n", "utf8");
-    fs.writeFileSync(path.join(annotationsDir, "mentions.yaml"), "annotations: []\n", "utf8");
+    fs.writeFileSync(path.join(annotationsDir, "occurrences.yaml"), "annotations: []\n", "utf8");
 
     const digestA = digestCorpusGold(tempDir);
     const digestB = digestCorpusGold(tempDir);
@@ -39,7 +39,7 @@ describe("baseline fingerprint digests", () => {
     fs.mkdirSync(annotationsDir, { recursive: true });
     const manifestPath = path.join(repoDir, "manifest.yaml");
     fs.writeFileSync(manifestPath, "repository: beta\ncommit: c\n", "utf8");
-    fs.writeFileSync(path.join(annotationsDir, "mentions.yaml"), "annotations: []\n", "utf8");
+    fs.writeFileSync(path.join(annotationsDir, "occurrences.yaml"), "annotations: []\n", "utf8");
 
     const before = digestCorpusGold(tempDir);
     fs.appendFileSync(manifestPath, "# changed\n", "utf8");
@@ -60,7 +60,7 @@ describe("baseline fingerprint digests", () => {
         "scope:",
         "  include: []",
         "coverage:",
-        "  layers: [mentions]",
+        "  layers: [occurrences]",
         "  languages: [typescript]",
         "  domains: [fixture]",
         "selection_rationale: test",
@@ -70,7 +70,7 @@ describe("baseline fingerprint digests", () => {
       "utf8",
     );
     fs.mkdirSync(path.join(repoDir, "annotations"), { recursive: true });
-    fs.writeFileSync(path.join(repoDir, "annotations", "mentions.yaml"), "annotations: []\n", "utf8");
+    fs.writeFileSync(path.join(repoDir, "annotations", "occurrences.yaml"), "annotations: []\n", "utf8");
 
     const fingerprint = buildBaselineFingerprint({
       benchmarkRoot: tempDir,

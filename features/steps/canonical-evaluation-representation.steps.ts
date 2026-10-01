@@ -319,8 +319,8 @@ Given("an expectation whose concept leaf is driver licence", function (this: Can
   this.expectations = [
     withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "driver_licence",
         conceptAncestry: ["national_identifier", "driver_licence"],
         evidenceLocations: evidence,
@@ -331,8 +331,8 @@ Given("an expectation whose concept leaf is driver licence", function (this: Can
   this.findings = [
     withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "national_identifier",
         conceptAncestry: ["national_identifier"],
         evidenceLocations: evidence,
@@ -356,11 +356,11 @@ Then("ancestor-category correctness is reported separately", function (this: Can
 
 // --- KDATAP-95cfe1: gold adapter scenarios (KDATAP-521953) ---
 
-Given("a mention expectation with a legacy subject name", function (this: CanonicalWorld) {
+Given("a occurrence expectation with a legacy subject name", function (this: CanonicalWorld) {
   this.legacyInput = {
-    id: "mention-legacy-name",
-    layer: "mentions",
-    subject: { key: "mention:username", name: "userLogin" },
+    id: "occurrence-legacy-name",
+    layer: "occurrences",
+    subject: { key: "occurrence:username", name: "userLogin" },
     evidence: sampleEvidence("src/config.yml", 5, 5),
     rationale: "cucumber gold adapter scenario",
     expected: { status: "positive", labels: [] },
@@ -453,7 +453,7 @@ Then(
 Then("the legacy name is not promoted to authoritative source identity", function (this: CanonicalWorld) {
   const record = normalizedRecord(this);
   assert.notStrictEqual(record.identity.identityKey, "userLogin");
-  assert.strictEqual(record.identity.identityKey, "mention:username");
+  assert.strictEqual(record.identity.identityKey, "occurrence:username");
 });
 
 Then("every evidence-linked observed token is preserved with provenance", function () {
@@ -946,8 +946,8 @@ Given(
     this.expectations = [
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:rare",
+          layer: "occurrences",
+          identityKey: "occurrence:rare",
           conceptLeaf: "rare_concept",
           evidenceLocations: [sampleEvidence("src/rare.ts", 1, 1)],
           declaredCapabilitySupported: {
@@ -982,8 +982,8 @@ Given(
     this.expectations = [
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/email.ts", 1, 1)],
           declaredCapabilitySupported: { supported: true },
@@ -992,8 +992,8 @@ Given(
       ),
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:rare",
+          layer: "occurrences",
+          identityKey: "occurrence:rare",
           conceptLeaf: "rare_concept",
           evidenceLocations: [sampleEvidence("src/rare.ts", 2, 2)],
           declaredCapabilitySupported: {
@@ -1036,8 +1036,8 @@ Given(
       ),
       withId(
         buildAcceptedGoldExpectation({
-          layer: "mentions",
-          identityKey: "mention:email",
+          layer: "occurrences",
+          identityKey: "occurrence:email",
           conceptLeaf: "email_address",
           evidenceLocations: [sampleEvidence("src/email.ts", 1, 1)],
         }),

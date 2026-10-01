@@ -5,7 +5,7 @@ export {
 export type {
   OrchestratorScanResult,
   ScanDataItem,
-  ScanMention,
+  ScanOccurrence,
 } from "./core/pipeline/orchestrator-result";
 
 export {

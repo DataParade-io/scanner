@@ -22,7 +22,7 @@ import type { DetectedDataFlow } from "../../../src/core/types/data-flow";
 import { componentEvalCases } from "../../eval/layers/components/cases";
 import { scanCanonicalComponents } from "../../eval/layers/components/adapter";
 import { scanCanonicalDataFlows } from "../../eval/layers/data-flows/adapter";
-import { scanCanonicalMentions } from "../../eval/layers/mentions/adapter";
+import { scanCanonicalOccurrences } from "../../eval/layers/occurrences/adapter";
 import { scanCanonicalRawHits } from "../../eval/layers/raw-hits/adapter";
 
 function component(overrides: Partial<DetectedComponent> & Pick<DetectedComponent, "id" | "name" | "type">): DetectedComponent {
@@ -55,7 +55,7 @@ function flow(overrides: Partial<DetectedDataFlow> & Pick<DetectedDataFlow, "id"
 
 describe("scanner canonical adapters", () => {
   it("stamps CANONICAL_CONTRACT_VERSION and adapter map digest on every finding", async () => {
-    const scan = await scanCanonicalMentions("jvm-manifests-basic");
+    const scan = await scanCanonicalOccurrences("jvm-manifests-basic");
     expect(scan.findings.length).toBeGreaterThan(0);
     const digest = resolveScannerAdapterMapVersion();
     for (const finding of scan.findings) {
@@ -68,7 +68,7 @@ describe("scanner canonical adapters", () => {
   it("maps personal-data labels to observed tokens, not classification", () => {
     const finding = adaptPersonalDataFinding(
       {
-        subjectKey: "mention:username",
+        subjectKey: "occurrence:username",
         labels: ["username", "credentials"],
         evidenceLocations: [
           {
@@ -78,12 +78,12 @@ describe("scanner canonical adapters", () => {
           },
         ],
       },
-      "mentions",
+      "occurrences",
     );
 
-    expect(extractPersonalDataRuleId("mention:username")).toBe("username");
+    expect(extractPersonalDataRuleId("occurrence:username")).toBe("username");
     expect(finding.classification.conceptLeaf).toBe(ruleIdToConceptLeaf("username"));
-    expect(finding.identity.identityKey).toBe("mention:username");
+    expect(finding.identity.identityKey).toBe("occurrence:username");
     expect(finding.observedTokenCandidates?.map((token) => token.value)).toEqual([
       "username",
       "credentials",
@@ -418,18 +418,18 @@ describe("scanner canonical adapters", () => {
     expect(adapted.flowEndpoints).toBeDefined();
   });
 
-  it("derives mentions and raw hits from the same rule inventory", async () => {
-    const [mentions, rawHits] = await Promise.all([
-      scanCanonicalMentions("jvm-manifests-basic"),
+  it("derives occurrences and raw hits from the same rule inventory", async () => {
+    const [occurrences, rawHits] = await Promise.all([
+      scanCanonicalOccurrences("jvm-manifests-basic"),
       scanCanonicalRawHits("jvm-manifests-basic"),
     ]);
-    const mention = mentions.findings.find(
-      (entry) => entry.identity.identityKey === "mention:username",
+    const occurrence = occurrences.findings.find(
+      (entry) => entry.identity.identityKey === "occurrence:username",
     );
     const raw = rawHits.findings.find((entry) => entry.identity.identityKey === "raw_hit:username");
-    expect(mention).toBeDefined();
+    expect(occurrence).toBeDefined();
     expect(raw).toBeDefined();
-    expect(mention!.classification.conceptLeaf).toBe(raw!.classification.conceptLeaf);
+    expect(occurrence!.classification.conceptLeaf).toBe(raw!.classification.conceptLeaf);
   });
 
   it("covers a committed component eval case end-to-end", async () => {

@@ -197,7 +197,7 @@ export function slugMatchesComponent(slug: string, component: AnnotationRecord):
   });
 }
 
-export function rationaleMentionsSlug(rationale: string, slug: string): boolean {
+export function rationaleOccurrencesSlug(rationale: string, slug: string): boolean {
   const text = rationale.toLowerCase();
   const normalized = normalizeSlug(slug);
   const variants = [normalized, normalized.replace(/_/g, " "), normalized.replace(/_/g, "-")];
@@ -217,7 +217,7 @@ export function resolveFlowSide(
   let matched = candidates.filter((component) => slugMatchesComponent(slug, component));
 
   if (matched.length === 0) {
-    matched = candidates.filter((component) => rationaleMentionsSlug(rationale, slug));
+    matched = candidates.filter((component) => rationaleOccurrencesSlug(rationale, slug));
   }
 
   if (matched.length === 0) {

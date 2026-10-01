@@ -46,8 +46,8 @@ export function toHeadlineLayer(layer: string): HeadlineLayer | null {
   if (canonical === "raw_hits") {
     return null;
   }
-  if (canonical === "pii_signals") {
-    return "mentions";
+  if (canonical === "pii_signals" || canonical === "mentions") {
+    return "occurrences";
   }
   if (canonical === "data_items") {
     return "data-items";
@@ -282,8 +282,9 @@ function resolveCorpusLayerForHeadline(
   manifestLayers: string[],
   headlineLayer: HeadlineLayer,
 ): string | null {
-  if (headlineLayer === "mentions" && manifestLayers.includes("pii_signals")) {
-    return "pii_signals";
+  if (headlineLayer === "occurrences") {
+    const legacy = manifestLayers.find((layer) => layer === "pii_signals" || layer === "mentions");
+    if (legacy) return legacy;
   }
   const underscored = headlineLayer.replace(/-/g, "_");
   if (manifestLayers.includes(underscored)) {

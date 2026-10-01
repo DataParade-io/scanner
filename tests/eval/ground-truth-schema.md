@@ -1,8 +1,8 @@
 # Ground-truth schema for fixture and corpus evaluation
 
-Schema version: `ground-truth/2`. Version 2 adds optional `mention_attributes` on mention gold and agent labeling packets (KDATAP-8b2c8a); version 1 records remain valid.
+Schema version: `ground-truth/3`. Version 3 renames "mention" to **occurrence** throughout (KDATAP-3f9029): the layer is `occurrences`, subject keys are `occurrence:<concept>`, gold lives in `annotations/occurrences.yaml`, and attributes are `occurrence_attributes`. An occurrence is one place where a data item appears in code, with its location and role, following the term used by Sourcegraph's SCIP code-intelligence format. Readers still accept the version 2 names (`mentions`, `mention:`, `mention_attributes`) and the older layer name. Version 2 added optional attributes on occurrence gold and agent labeling packets (KDATAP-8b2c8a); version 1 records remain valid.
 
-Four **headline layers** (`mentions`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/2` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
+Four **headline layers** (`occurrences`, `data-items`, `components`, `data-flows`) form the evaluation vector. Jest also runs **diagnostic** layers — `raw-hits` and `data-actions` — that are scanned and reported but excluded from headline gates and the `scorecard-vector/3` vector. There is **no cross-layer scalar**: metrics pool within each layer only.
 
 Subject keys are stable identities used in Jest fixture eval (`tests/eval/layers/`) and benchmark corpus annotations (`tests/benchmark/`).
 
@@ -12,7 +12,7 @@ Subject keys are stable identities used in Jest fixture eval (`tests/eval/layers
 
 | Layer | Jest key | Corpus layer | What it measures |
 | --- | --- | --- | --- |
-| Mentions | `mentions` | `mentions` | File+line receipt that a personal-data concept was seen |
+| Occurrences | `occurrences` | `occurrences` | File+line receipt that a personal-data concept was seen |
 | Data items | `data-items` | `data_items` | Unique personal-data concept in a fixture (rolled up across hits) |
 | Components | `components` | `components` | Detected infrastructure and third-party assets |
 | Data flows | `data-flows` | `data_flows` | Directed edges between components |
@@ -24,7 +24,7 @@ Personal-data headline layers share heuristic rules (`patterns/pii-signals.rules
 | Layer | Jest key | Corpus layer | Role |
 | --- | --- | --- | --- |
 | Raw hits | `raw-hits` | `raw_hits` | YAML heuristic pattern match before roll-up (one finding per line hit). Fixture eval and scorecard sidecar (`diagnostic.raw-hits`) only — not a headline gate. |
-| Data actions | `data-actions` | `data_actions` | Privacy verbs on component nodes (`properties.dataActions`). Fixture eval diagnostic only — **not** a `scorecard-vector/2` headline gate; not in the `diagnostic.raw-hits` sidecar. |
+| Data actions | `data-actions` | `data_actions` | Privacy verbs on component nodes (`properties.dataActions`). Fixture eval diagnostic only — **not** a `scorecard-vector/3` headline gate; not in the `diagnostic.raw-hits` sidecar. |
 
 ## Identity rules
 
@@ -32,11 +32,11 @@ Personal-data headline layers share heuristic rules (`patterns/pii-signals.rules
 
 | Layer | Subject key format | Example |
 | --- | --- | --- |
-| Mention | `mention:<key>` | `mention:email` |
+| Occurrence | `occurrence:<key>` | `occurrence:email` |
 | Data item | `data_item:<key>` | `data_item:email` |
 | Raw hit (diagnostic) | `raw_hit:<key>` | `raw_hit:email` |
 
-Mention keys use `mention:<rule_id>` when aligned to a reviewed rule from `patterns/pii-signals.rules.yaml`, or `mention:<taxonomy_suffix>` for adjudication bookmarks. The concept leaf asserted in canonical gold may differ from the rule id; see [`canonical-representation.md`](./canonical-representation.md).
+Occurrence keys use `occurrence:<rule_id>` when aligned to a reviewed rule from `patterns/pii-signals.rules.yaml`, or `occurrence:<taxonomy_suffix>` for adjudication bookmarks. The concept leaf asserted in canonical gold may differ from the rule id; see [`canonical-representation.md`](./canonical-representation.md).
 
 ### Graph
 
@@ -56,7 +56,7 @@ Scoring lives in `tests/eval/score.ts`. Headline metrics are computed per layer;
 
 | Layer | Match rule |
 | --- | --- |
-| Mentions | Subject key **and** evidence span overlap **and** expected labels |
+| Occurrences | Subject key **and** evidence span overlap **and** expected labels |
 | Data items | Subject key **only** (identity match; evidence file anchors unread detection) |
 | Components | Subject key **and** evidence span overlap **and** expected labels |
 | Data flows | Subject key **and** evidence span overlap **and** expected labels |
@@ -75,9 +75,9 @@ Positives may set `documentedGap: true` for known scanner misses. They remain in
 
 **Precision** is not computed from negatives. Mark files as `exhaustiveScopeFiles` on gold cases. Then every scanner finding in those files is a precision denominator item; it is a true positive only if it matches some accepted positive gold case. A repository that does not use Stripe is not recorded as a negative. If the scanner emits Stripe there anyway, that unmatched finding lowers precision.
 
-## Mention attributes
+## Occurrence attributes
 
-Mention gold may assert structural attributes of the matched line in an optional `mention_attributes` block. The block is accepted only on the `mentions` layer, and unknown keys are rejected. A record asserts only the attributes it labels. Each attribute is scored as its own metric over matched gold that asserts it, following the vendor pattern; unasserted attributes never count against a finding.
+Occurrence gold may assert structural attributes of the matched line in an optional `occurrence_attributes` block. The block is accepted only on the `occurrences` layer, and unknown keys are rejected. A record asserts only the attributes it labels. Each attribute is scored as its own metric over matched gold that asserts it, following the vendor pattern; unasserted attributes never count against a finding.
 
 | Field | Value |
 | --- | --- |
@@ -91,7 +91,7 @@ Mention gold may assert structural attributes of the matched line in an optional
 `expected.status` keeps its meaning. For a concept such as email, `positive` means the line handles a value of the concept, and `negative` means the match is only the word (an import specifier, a connection or template name, prose, a config key).
 
 ```yaml
-mention_attributes:
+occurrence_attributes:
   syntax_kind: identifier
   declaration: {file_path: src/signup.js, line: 2, kind: parameter}
   owner: api
@@ -101,10 +101,10 @@ mention_attributes:
 
 ## Attribute and grouping metrics
 
-The mentions layer reports two extra blocks next to its headline metrics (KDATAP-ec05ea). Neither changes a headline denominator, and there is no cross-metric scalar.
+The occurrences layer reports two extra blocks next to its headline metrics (KDATAP-ec05ea). Neither changes a headline denominator, and there is no cross-metric scalar.
 
-- `mentionAttributes`: for each of `syntax_kind`, `declaration`, `type_annotation`, `owner`, and `touches`, accuracy over matched positive pairs whose gold asserts that attribute. `declaration` matches on file, line, and kind, or on `unresolved`; `touches` compares as a set.
-- `grouping`: pairwise precision and recall over matched positive mentions whose gold asserts `group`. Recall is the share of gold same-group pairs the scanner also puts together; precision is the share of scanner same-group pairs that gold also puts together. A mention without a predicted group is its own singleton.
+- `occurrenceAttributes`: for each of `syntax_kind`, `declaration`, `type_annotation`, `owner`, and `touches`, accuracy over matched positive pairs whose gold asserts that attribute. `declaration` matches on file, line, and kind, or on `unresolved`; `touches` compares as a set.
+- `grouping`: pairwise precision and recall over matched positive occurrences whose gold asserts `group`. Recall is the share of gold same-group pairs the scanner also puts together; precision is the share of scanner same-group pairs that gold also puts together. A occurrence without a predicted group is its own singleton.
 
 Each score carries a state:
 
@@ -112,13 +112,13 @@ Each score carries a state:
 | --- | --- |
 | `computable` | The value is defined over the stated denominator |
 | `not_asserted_by_gold` | No matched gold asserts the attribute |
-| `scanner_capability_not_declared` | No scanner mention finding carries the attribute; the denominator counts the gold that would be scored |
+| `scanner_capability_not_declared` | No scanner occurrence finding carries the attribute; the denominator counts the gold that would be scored |
 
 Packet scores merge by summing numerators and denominators of computable packets.
 
 ## Labeling packets
 
-Agents write proposed mention gold to a packet, never directly to `annotations/mentions.yaml`. One packet covers one labeling batch at `repos/<repo>/annotations/packets/<kanbus-issue-id>.yaml`:
+Agents write proposed occurrence gold to a packet, never directly to `annotations/occurrences.yaml`. One packet covers one labeling batch at `repos/<repo>/annotations/packets/<kanbus-issue-id>.yaml`:
 
 ```yaml
 packet:
@@ -127,14 +127,14 @@ packet:
   kanbus_issue: KDATAP-xxxxxx
   files: [repo/relative/path.js]
 annotations:
-  - ... # mention records, review_state: proposed
+  - ... # occurrence records, review_state: proposed
 ```
 
-`pnpm run benchmark:validate-packet <packet.yaml>` checks a packet and reports every problem at once. It requires the repo to be materialized at its pinned commit and `annotations/packets/<concept>-candidates.yaml` to exist. It rejects unknown fields, records that are not `mentions` or not `proposed`, duplicate ids, evidence or declaration lines that do not exist at the pinned commit, evidence outside `packet.files`, and any candidate line in `packet.files` without exactly one record. A record on a line the candidate inventory missed is kept with a warning. Accepted packets are merged into `annotations/mentions.yaml`.
+`pnpm run benchmark:validate-packet <packet.yaml>` checks a packet and reports every problem at once. It requires the repo to be materialized at its pinned commit and `annotations/packets/<concept>-candidates.yaml` to exist. It rejects unknown fields, records that are not `occurrences` or not `proposed`, duplicate ids, evidence or declaration lines that do not exist at the pinned commit, evidence outside `packet.files`, and any candidate line in `packet.files` without exactly one record. A record on a line the candidate inventory missed is kept with a warning. Accepted packets are merged into `annotations/occurrences.yaml`.
 
 ## Corpus layout
 
-Benchmark manifests and annotation YAML use snake_case layer names (`mentions`, `data_items`, `components`, `data_flows`). Mention annotations live at `annotations/mentions.yaml` with `mention:<rule_id>` subject keys.
+Benchmark manifests and annotation YAML use snake_case layer names (`occurrences`, `data_items`, `components`, `data_flows`). Occurrence annotations live at `annotations/occurrences.yaml` with `occurrence:<rule_id>` subject keys.
 
 ## Precision via exhaustive file scopes
 
@@ -146,8 +146,8 @@ A layer-wide exhaustive scope is closed-world for every concept in its files. Wh
 
 ```yaml
 concept_scopes:
-  mentions:
-    - subject_keys: [mention:email]
+  occurrences:
+    - subject_keys: [occurrence:email]
       exhaustive_scope_files: [ghost/core/core/server/models/member.js]
       provenance: {proposed_by: ..., proposed_at: ..., review_state: accepted}
 ```
@@ -167,7 +167,7 @@ Precision and recall null rates carry an explicit per-metric **computability sta
 | `unscorable_provenance` | Only locationless or otherwise unscoreable findings |
 | `computable` | Metric has a valid denominator |
 
-Recall and precision use separate states and denominators. See `scorecard-vector/2` in `tests/benchmark/README.md`.
+Recall and precision use separate states and denominators. See `scorecard-vector/3` in `tests/benchmark/README.md`.
 
 ## Eligibility reasons
 
@@ -193,9 +193,9 @@ Path eligibility uses a locked set of eleven reasons (`eligibility-reasons/1`), 
 
 ## Baseline readiness
 
-Published baselines use `baseline-artifact/1`. The embedded `readiness` block reports `not_evaluated`, `pass`, or `fail` with blockers and `invariantVersions` (including `ground-truth/2` and `eligibility-reasons/1`). Numeric readiness floors are a separate epic.
+Published baselines use `baseline-artifact/1`. The embedded `readiness` block reports `not_evaluated`, `pass`, or `fail` with blockers and `invariantVersions` (including `ground-truth/3` and `eligibility-reasons/1`). Numeric readiness floors are a separate epic.
 
 ## Known limitations (deferred)
 
-- **Raw hits vs mentions are isomorphic today** — both layers run the same YAML heuristic matcher (`matchPiiSignalsInFiles`); they differ only in subject-key prefix until a distinct roll-up stage exists for mentions.
+- **Raw hits vs occurrences are isomorphic today** — both layers run the same YAML heuristic matcher (`matchPiiSignalsInFiles`); they differ only in subject-key prefix until a distinct roll-up stage exists for occurrences.
 - **Negative cases are vacuous on current patterns** — the heuristic rule set has no negative fixtures that exercise false-positive rejection; expanding negative coverage is a heuristic flywheel item, not a schema change.

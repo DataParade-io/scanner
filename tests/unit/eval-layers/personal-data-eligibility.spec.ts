@@ -18,15 +18,15 @@ describe("eval-layers personal-data eligibility", () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
-  it("marks yaml with PII as layer-processed for mentions but not components profile", async () => {
+  it("marks yaml with PII as layer-processed for occurrences but not components profile", async () => {
     fs.writeFileSync(
       path.join(tempDir, "application.yml"),
       "username: billing_app\n",
     );
 
-    const mentions = await collectPersonalDataFindings(tempDir, "mentions");
-    const mentionsLedger = createLayerLedger("mentions", mentions.layerOutcomes);
-    expect(eligibleProcessedPaths(mentionsLedger)).toContain("application.yml");
+    const occurrences = await collectPersonalDataFindings(tempDir, "occurrences");
+    const occurrencesLedger = createLayerLedger("occurrences", occurrences.layerOutcomes);
+    expect(eligibleProcessedPaths(occurrencesLedger)).toContain("application.yml");
 
     const componentsLedger = createLayerLedger("components", [
       layerOutcome("application.yml", "unsupported_file_type_or_language"),
@@ -41,7 +41,7 @@ describe("eval-layers personal-data eligibility", () => {
     const rawFirst = await collectPersonalDataFindings(tempDir, "raw-hits");
     const itemsSecond = await collectPersonalDataFindings(tempDir, "data-items");
 
-    const mentionsOnly = await collectPersonalDataFindings(tempDir, "mentions");
+    const occurrencesOnly = await collectPersonalDataFindings(tempDir, "occurrences");
     const rawOnly = await collectPersonalDataFindings(tempDir, "raw-hits");
 
     expect(rawFirst.layerOutcomes).toEqual(rawOnly.layerOutcomes);
@@ -49,8 +49,8 @@ describe("eval-layers personal-data eligibility", () => {
       eligibleProcessedPaths(createLayerLedger("raw-hits", rawOnly.layerOutcomes)),
     );
     expect(itemsSecond.layerOutcomes.length).toBeGreaterThan(0);
-    expect(mentionsOnly.layerOutcomes).toEqual(
-      (await collectPersonalDataFindings(tempDir, "mentions")).layerOutcomes,
+    expect(occurrencesOnly.layerOutcomes).toEqual(
+      (await collectPersonalDataFindings(tempDir, "occurrences")).layerOutcomes,
     );
   });
 });

@@ -26,12 +26,12 @@ import { isAcceptedEvaluablePositive } from "../../../src/eval/canonical/types";
 import type { CanonicalGoldExpectation } from "../../../src/eval/canonical/types";
 import type { EvalConceptScope, LayerFinding, ScopeDenominators } from "../types";
 import {
-  computeMentionAttributeMetrics,
+  computeOccurrenceAttributeMetrics,
   computePairwiseGrouping,
-  declaredMentionAttributes,
-  type GroupedMention,
-  type MatchedMentionPair,
-} from "../../../src/eval/canonical/mention-attribute-metrics";
+  declaredOccurrenceAttributes,
+  type GroupedOccurrence,
+  type MatchedOccurrencePair,
+} from "../../../src/eval/canonical/occurrence-attribute-metrics";
 
 function scopeBucketKey(fixture: string, layer: EvalLayer): string {
   return `${fixture}::${layer}`;
@@ -273,9 +273,9 @@ export function evaluateCanonical(
   const bucketReports: LayerEvaluationReport[] = [];
   const outcomeByCaseId = new Map<string, LayerEvaluationReport["perExpectation"][number] & { fixture: string }>();
 
-  const mentionPairs: MatchedMentionPair[] = [];
-  const groupedMentions: GroupedMention[] = [];
-  const mentionFindings: LayerFinding[] = [];
+  const occurrencePairs: MatchedOccurrencePair[] = [];
+  const groupedOccurrences: GroupedOccurrence[] = [];
+  const occurrenceFindings: LayerFinding[] = [];
 
   let positiveCaseCount = 0;
   let unreadPositiveCount = 0;
@@ -345,11 +345,11 @@ export function evaluateCanonical(
     });
     bucketReports.push(report);
 
-    if (bucket.layer === "mentions") {
+    if (bucket.layer === "occurrences") {
       const layerFindings = (scan?.findings ?? []).filter(
         (finding) => finding.layer === undefined || finding.layer === bucket.layer,
       );
-      mentionFindings.push(...layerFindings);
+      occurrenceFindings.push(...layerFindings);
       const findingById = new Map(findings.map((finding, index) => [finding.id, layerFindings[index]]));
       const caseById = new Map(bucket.cases.map((caseRecord) => [caseRecord.id, caseRecord]));
       for (const pair of report.assignment.pairs) {
@@ -358,10 +358,10 @@ export function evaluateCanonical(
           continue;
         }
         const finding = findingById.get(pair.findingId);
-        mentionPairs.push({ gold: caseRecord.mentionAttributes, finding: finding?.mentionAttributes });
-        groupedMentions.push({
-          goldGroup: caseRecord.mentionAttributes?.group,
-          predictedGroup: finding?.mentionAttributes?.group,
+        occurrencePairs.push({ gold: caseRecord.occurrenceAttributes, finding: finding?.occurrenceAttributes });
+        groupedOccurrences.push({
+          goldGroup: caseRecord.occurrenceAttributes?.group,
+          predictedGroup: finding?.occurrenceAttributes?.group,
         });
       }
     }
@@ -403,14 +403,14 @@ export function evaluateCanonical(
     negativeCaseCount,
     unreadNegativeCount,
   );
-  if (layer === "mentions") {
-    const findingAttributes = mentionFindings.map((finding) => finding.mentionAttributes);
-    scores.mentionAttributes = computeMentionAttributeMetrics(
-      mentionPairs,
-      declaredMentionAttributes(findingAttributes),
+  if (layer === "occurrences") {
+    const findingAttributes = occurrenceFindings.map((finding) => finding.occurrenceAttributes);
+    scores.occurrenceAttributes = computeOccurrenceAttributeMetrics(
+      occurrencePairs,
+      declaredOccurrenceAttributes(findingAttributes),
     );
     scores.grouping = computePairwiseGrouping(
-      groupedMentions,
+      groupedOccurrences,
       findingAttributes.some((attributes) => attributes?.group !== undefined),
     );
   }

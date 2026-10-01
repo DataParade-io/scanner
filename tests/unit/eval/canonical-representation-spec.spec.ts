@@ -16,7 +16,7 @@ const REQUIRED_SCENARIOS = [
   "Strict correctness uses asserted fields only",
   "Same-subtype components retain cardinality",
   "An ancestor concept is not an exact match",
-  "Mention legacy name is preserved as an observed token candidate",
+  "Occurrence legacy name is preserved as an observed token candidate",
   "Consolidated data item preserves every evidence-linked observed token",
   "Contradictory observed tokens require adjudication",
   "Asset display name is evidence not asserted instance",

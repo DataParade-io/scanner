@@ -11,7 +11,7 @@ export interface OrchestratorLedgerContext {
   config: ScanConfiguration;
 }
 
-export interface ScanMention {
+export interface ScanOccurrence {
   id: string;
   filePath: string;
   startLine: number;
@@ -29,17 +29,17 @@ export interface ScanMention {
 export interface ScanDataItemGroup {
   /** Group id, e.g. `email:customer`. */
   id: string;
-  mentionIds: string[];
+  occurrenceIds: string[];
 }
 
 export interface ScanDataItem {
   id: string;
-  mentionIds: string[];
+  occurrenceIds: string[];
   labels: string[];
   /**
    * The separate data items found under this concept, such as a member's email
-   * and a staff user's email (KDATAP-c8a46a). Mentions without a group are only
-   * listed in `mentionIds`.
+   * and a staff user's email (KDATAP-c8a46a). Occurrences without a group are only
+   * listed in `occurrenceIds`.
    */
   groups?: ScanDataItemGroup[];
 }
@@ -48,7 +48,7 @@ export interface OrchestratorScanResult {
   scanResult: ScanResult;
   files: FileInfo[];
   findings: RawFinding[];
-  mentions: ScanMention[];
+  occurrences: ScanOccurrence[];
   dataItems: ScanDataItem[];
   ledgerContext?: OrchestratorLedgerContext;
 }

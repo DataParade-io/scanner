@@ -76,7 +76,7 @@ export {
 export {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
-  assignMentionsOneToOne,
+  assignOccurrencesOneToOne,
   assignOneToOne,
   oneFindingCannotSatisfyBoth,
 } from "../../../src/eval/canonical/assignment";
