@@ -1,4 +1,4 @@
-import { appendFileSync } from "node:fs";
+import { appendFileSync, readFileSync } from "node:fs";
 import type { FileInfo } from "../core/types/file";
 import { ingestFileSystemWithOutcomes } from "../ingest/file-system";
 import type { PathEligibilityOutcome } from "../ingest/eligibility";
@@ -18,7 +18,7 @@ import {
   type ConceptFunctionIndex,
 } from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, qualify } from "../pii-signals/mention-group";
+import { applyGroupLabels, assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, qualify } from "../pii-signals/mention-group";
 import type { AnalyzedFile } from "../analyze/engine/analyzed-file";
 import {
   matchPiiSignalsInFile,
@@ -291,7 +291,13 @@ export function buildPersonalDataInventoryFromIngest(
     for (const match of file.content.matchAll(/\b(?:class|interface)\s+([A-Z][A-Za-z0-9_]*)/g)) declared.add(match[1]);
   }
   const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes, declared));
-  const hits = assignDeclarationGroups(withCallLinks(pending, functions, classes));
+  const grouped = assignDeclarationGroups(withCallLinks(pending, functions, classes));
+  // Optional data-item labels from a classifier: DATAPARADE_GROUP_LABELS names a JSON file
+  // mapping group names to data-item keys.
+  const labelsPath = process.env.DATAPARADE_GROUP_LABELS;
+  const hits = labelsPath
+    ? applyGroupLabels(grouped, JSON.parse(readFileSync(labelsPath, "utf8")) as Record<string, string>)
+    : grouped;
 
   return {
     hits,

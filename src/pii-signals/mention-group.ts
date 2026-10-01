@@ -474,3 +474,20 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     return name === undefined || name === hit.group ? hit : { ...hit, group: name };
   });
 }
+
+/**
+ * Merge groups by external data-item labels (KDATAP-c8a46a, DPKB-196f76). The labels
+ * map a deterministic group name (`email:member`, `email@a.js:12#email`) to a data-item
+ * key chosen by a classifier outside the scanner (`ghost:members.email`). Groups that
+ * share a key become one group, named by the key; groups without a label are unchanged.
+ * The scanner stays deterministic: the mapping is an input, not a model call.
+ */
+export function applyGroupLabels<T extends { id: string; group?: string }>(
+  hits: T[],
+  labels: Readonly<Record<string, string>>,
+): T[] {
+  return hits.map((hit) => {
+    const item = hit.group ? labels[hit.group] : undefined;
+    return item ? { ...hit, group: `${hit.id}:${item}` } : hit;
+  });
+}
