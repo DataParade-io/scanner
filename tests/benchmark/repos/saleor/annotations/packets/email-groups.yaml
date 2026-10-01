@@ -21,23 +21,19 @@ groups:
   subject: customer
   subject_kind: end_user
   purpose: customer sign-in, account confirmation, deletion, and email change
-  rationale: 'User.email of customers, evidenced by customer-only flows: account confirmation, account delete confirmation and customer password reset/set-password tasks in the user_email plugin (recipient_email from payload built in account/notifications.py from user.email; templates named account_set_customer_password / customer_email_* events), the customer_email_changed_event / customer_email_change_request_event records that consume old_email/new_email payload keys, Checkout.get_customer_email fallback (checkout/models.py:372), and the gift card flows that assign a card to a customer (giftcard/utils.py:144/148, docstring ''Restrict a gift card to a customer'') and look up the used_by User (order/utils.py:523).'
+  rationale: 'User.email of customers, evidenced by customer-only flows: account confirmation, account delete confirmation and customer password reset/set-password tasks in the user_email plugin (recipient_email from payload built in account/notifications.py from user.email; templates named account_set_customer_password / customer_email_* events), Checkout.get_customer_email fallback (checkout/models.py:372), and the gift card flows that assign a card to a customer (giftcard/utils.py:144/148, docstring ''Restrict a gift card to a customer'') and look up the used_by User (order/utils.py:523). The old_email/new_email keys the user_email and sendgrid tasks store in CustomerEvent parameters are the email-change event''s own items (customer-email-change-event-old-email / -new-email), not User.email (KDATAP-8fb0fd).'
   clusters:
   - c012
   - c016
   - c017
   - c045
   - c101
-  - c118
-  - c131
   - c134
   - c135
   - c138
   - c147
   - c161
   - c166
-  - c169
-  - c174
   - c175
   - c176
 - id: account-change-email-new-address
@@ -45,34 +41,30 @@ groups:
   subject: user changing their email (proposed new address)
   subject_kind: end_user
   purpose: address the confirmation link is sent to when a user requests an email change
-  rationale: send_request_user_change_email_notification takes new_email (notifications.py:101) and puts it in recipient_email and new_email of the payload. The user_email and sendgrid request-change tasks send to recipient_email and record it as new_email in the customer_email_change_request_event. This is a proposed address, not yet User.email.
+  rationale: send_request_user_change_email_notification takes new_email (notifications.py:101) and puts it in recipient_email and new_email of the payload. The user_email and sendgrid request-change tasks send to recipient_email The new_email key the tasks store in the customer_email_change_request_event is customer-email-change-event-new-email (KDATAP-8fb0fd). This is a proposed address, not yet User.email.
   clusters:
   - c010
   - c011
   - c013
-  - c132
   - c167
   - c168
-  - c170
 - id: account-change-email-old-address
   name: Previous account email (change-email confirmation)
   subject: user who changed their email (previous address)
   subject_kind: end_user
   purpose: address notified after the account email has been changed
-  rationale: send_user_change_email_notification(recipient_email, user, ...) (notifications.py:128) sends to recipient_email and puts the same value in payload old_email, while new_email is user.email. Tasks read payload old_email and record it in customer_email_changed_event. After the change this is no longer User.email.
+  rationale: send_user_change_email_notification(recipient_email, user, ...) (notifications.py:128) sends to recipient_email and puts the same value in payload old_email, while new_email is user.email. The user_email task sends to this recipient_email; the old_email key the tasks store in customer_email_changed_event is customer-email-change-event-old-email (KDATAP-8fb0fd). After the change this is no longer User.email.
   clusters:
   - c014
   - c015
-  - c117
   - c171
   - c172
-  - c173
 - id: order-customer-email
   name: Order customer email
   subject: customer of an order (Order.user_email and derived notification recipient)
   subject_kind: end_user
   purpose: address used to contact the customer about an order
-  rationale: Order.user_email column (order/models.py:161) with its index fields and filters, writes (replace_order.user_email, order_data['user_email'] filled from checkout_info.get_customer_email(), so this is a stored copy of the checkout email or user account email), reads in Order.get_customer_email, OrderInfo.customer_email (built from order.user_email / order_data['user_email']), payload recipient_email/email built from order.get_customer_email() or order_info.customer_email in order/notifications.py, order event customer_email/email params, and the user_email/sendgrid order task recipient_email values that consume those payloads.
+  rationale: Order.user_email column (order/models.py:161) with its index fields and filters, writes (replace_order.user_email, order_data['user_email'] filled from checkout_info.get_customer_email(), so this is a stored copy of the checkout email or user account email), reads in Order.get_customer_email, OrderInfo.customer_email (built from order.user_email / order_data['user_email']), payload recipient_email/email built from order.get_customer_email() or order_info.customer_email in order/notifications.py, order event customer_email parameters (the parameters email key stored in OrderEvent is order-event-email, KDATAP-8fb0fd), and the user_email/sendgrid order task recipient_email values that consume those payloads.
   clusters:
   - c037
   - c041
@@ -80,17 +72,11 @@ groups:
   - c070
   - c071
   - c072
-  - c073
   - c074
-  - c075
   - c076
-  - c077
   - c078
-  - c079
   - c080
-  - c081
   - c084
-  - c085
   - c086
   - c087
   - c088
@@ -179,15 +165,10 @@ groups:
   subject: customer a gift card is assigned to
   subject_kind: end_user
   purpose: restricting a gift card to one customer
-  rationale: GiftCard.assigned_to_email column (giftcard/models.py:77) with its update_fields save, isnull filter in checkout_cleaner, and the assigned event payload (assigned_to_email, previous_assigned_to_email built from gift_card.assigned_to_email or the previous value).
+  rationale: GiftCard.assigned_to_email column (giftcard/models.py:77) with its update_fields save, the gift_card.assigned_to_email writes in giftcard/utils.py:144/148, and the isnull filter in checkout_cleaner. The GiftCardEvent parameters that record it (assigned_to_email, previous_assigned_to_email) are separate items (gift-card-event-*), KDATAP-8fb0fd.
   clusters:
   - c068
   - c033
-  - c050
-  - c051
-  - c052
-  - c053
-  - c054
   - c057
   - c058
 - id: gift-card-notification-recipient-email
@@ -195,12 +176,10 @@ groups:
   subject: recipient of a gift card email
   subject_kind: other_person
   purpose: address a gift card is sent to
-  rationale: send_gift_cards_to_customer(user_email) passes user_email to send_gift_card_notification(email), which puts it in payload recipient_email. send_gift_card_email_task in user_email and sendgrid reads payload['recipient_email'] and passes it as email to gift_card_sent_event / gift_card_resent_event (parameters email).
+  rationale: send_gift_cards_to_customer(user_email) passes user_email to send_gift_card_notification(email), which puts it in payload recipient_email. send_gift_card_email_task in user_email and sendgrid reads payload['recipient_email'] and passes it as email to gift_card_sent_event / gift_card_resent_event (the email parameter of those functions); the parameters email key they store in GiftCardEvent is gift-card-event-email (KDATAP-8fb0fd).
   clusters:
   - c046
-  - c047
   - c048
-  - c049
   - c062
   - c129
   - c136
@@ -247,6 +226,70 @@ groups:
   - c115
   - c116
   - c124
+- id: customer-email-change-event-old-email
+  name: Customer email-change event old email
+  subject: customer who requested or confirmed an email change
+  subject_kind: end_user
+  purpose: audit record of the address before an email change
+  rationale: CustomerEvent parameters old_email, written by the user_email and sendgrid tasks into customer_email_change_request_event (user_email/tasks.py:62, sendgrid/tasks.py:88; the then-current User.email from the payload) and customer_email_changed_event (user_email/tasks.py:83, sendgrid/tasks.py:109; the previous address). A line that names the stored field it writes is that field's item, and an email-change event's old email is a different item from User.email (definition); one key in one column is one item across event types. Split out of customer-account-email and account-change-email-old-address in KDATAP-8fb0fd.
+  clusters:
+  - c117
+  - c131
+  - c169
+  - c173
+- id: customer-email-change-event-new-email
+  name: Customer email-change event new email
+  subject: customer who requested or confirmed an email change
+  subject_kind: end_user
+  purpose: audit record of the requested or new address of an email change
+  rationale: CustomerEvent parameters new_email, written by the user_email and sendgrid tasks into customer_email_change_request_event (user_email/tasks.py:63, sendgrid/tasks.py:89; the pending requested address) and customer_email_changed_event (user_email/tasks.py:84, sendgrid/tasks.py:110; the new User.email from the payload). A line that names the stored field it writes is that field's item, and an email-change event's new email is a different item from User.email and from the pending address in transit (definition). Split out of customer-account-email and account-change-email-new-address in KDATAP-8fb0fd.
+  clusters:
+  - c118
+  - c132
+  - c170
+  - c174
+- id: order-event-email
+  name: Order event recipient email
+  subject: customer of an order (recipient recorded on an order event)
+  subject_kind: end_user
+  purpose: audit record of the address an order email or invoice was sent to
+  rationale: 'OrderEvent parameters email, stored by the EMAIL_SENT event builders in order/events.py (96, 111, 126, 141, 155, 169: "email": customer_email) and the INVOICE_SENT event (227: parameters={"email": email}). It is a copy of the notification recipient kept in its own table, so a different item from Order.user_email; the customer_email / email function parameters that feed it stay with their source. Split out of order-customer-email (and needs_adjudication for :227) in KDATAP-8fb0fd.'
+  clusters:
+  - c073
+  - c075
+  - c077
+  - c079
+  - c081
+  - c083
+  - c085
+- id: gift-card-event-email
+  name: Gift card sent event email
+  subject: recipient of a gift card email (recorded on the gift card event)
+  subject_kind: other_person
+  purpose: audit record of the address a gift card was sent or resent to
+  rationale: GiftCardEvent parameters email stored by gift_card_sent_event and gift_card_resent_event (giftcard/events.py:129, 141). A stored copy of the notification recipient in the event table, so a different item from gift-card-notification-recipient-email, which keeps the email function parameters (122, 134). Split out in KDATAP-8fb0fd.
+  clusters:
+  - c047
+  - c049
+- id: gift-card-event-previous-assigned-to-email
+  name: Gift card event previous assignee email
+  subject: customer a gift card was previously assigned to
+  subject_kind: end_user
+  purpose: audit record of the previous assignee address when a gift card is reassigned or unassigned
+  rationale: gift_card_assigned_event and gift_card_unassigned_event take previous_email (giftcard/events.py:60, 81) and store it as GiftCardEvent parameters previous_assigned_to_email (71, 92). An address that was a column's value and is recorded elsewhere after a change is that record's item, not the column's (definition), as the account email-change old address is. Moved out of gift-card-assigned-to-email in KDATAP-8fb0fd.
+  clusters:
+  - c050
+  - c051
+  - c053
+  - c054
+- id: gift-card-event-assigned-to-email
+  name: Gift card event assignee email
+  subject: customer a gift card is assigned to (recorded on the gift card event)
+  subject_kind: end_user
+  purpose: audit record of the new assignee address
+  rationale: 'gift_card_assigned_event stores "assigned_to_email": gift_card.assigned_to_email in GiftCardEvent parameters (giftcard/events.py:73). The line names the stored event field it writes, a copy of GiftCard.assigned_to_email in another table, so it is that field''s item. Moved out of gift-card-assigned-to-email in KDATAP-8fb0fd for consistency with the other event-record keys.'
+  clusters:
+  - c052
 needs_adjudication:
 - cluster: c002
   candidate_groups:
@@ -384,11 +427,6 @@ needs_adjudication:
   - order-customer-email
   - customer-account-email
   reason: event_invoice_sent_notification email is called with payload['recipient_email'] of the invoice notification; the invoice payload builder is outside the sparse scope
-- cluster: c083
-  candidate_groups:
-  - order-customer-email
-  - customer-account-email
-  reason: parameters email in event_invoice_sent_notification; same invoice recipient of unseen origin as c082
 - cluster: c119
   candidate_groups:
   - order-customer-email
