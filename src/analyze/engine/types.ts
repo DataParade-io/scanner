@@ -269,6 +269,12 @@ export interface KeyDeclaration {
      */
     callRoot?: { receiver?: string; method: string };
   };
+  /**
+   * Where the object this key sits directly in goes (KDATAP-fb8019): an argument or keyword
+   * argument of a call, or a local variable later passed to one (`hops` 2). Unlike
+   * `container`, it covers keyword arguments (`create(parameters={...})`).
+   */
+  flow?: KeyFlow;
   /** The call whose argument is the object this key sits directly in, if any. */
   container?: {
     callee: string;
@@ -288,4 +294,30 @@ export interface KeyDeclaration {
 export interface ModuleVariable {
   name: string;
   line: number;
+}
+
+/** The call an object literal reaches, and how. */
+export interface KeyFlow {
+  /** Final name of the callee; for a deferred call, the function it defers. */
+  callee: string;
+  /** Class of the callee's receiver (`Model.objects.create` -> `Model`), when known. */
+  receiverClass?: string;
+  /** 0-based position of the argument, and its keyword when it has one. */
+  position: number;
+  keyword?: string;
+  /** 1 when the object is the argument itself, 2 through one local variable. */
+  hops: 1 | 2;
+}
+
+/** Where a function's parameter goes inside it (KDATAP-fb8019). */
+export interface ParameterSink {
+  function: string;
+  owner?: string;
+  param: string;
+  position: number;
+  /** The call the parameter's value is passed to, as `UseCall`. */
+  callee: string;
+  receiverClass?: string;
+  position0: number;
+  keyword?: string;
 }

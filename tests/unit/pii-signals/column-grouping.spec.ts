@@ -156,3 +156,114 @@ describe("column identity in the scan's grouping", () => {
     expect(inventory.hits.filter((h) => h.id === "email").every((h) => h.column === undefined)).toBe(true);
   });
 });
+
+describe("order-independent name claims", () => {
+  const hit = (filePath: string, line: number, group: string | undefined, column?: string, declared = false) => ({
+    id: "phone_number",
+    location: "code" as const,
+    evidence: { filePath, endLine: line },
+    ...(group ? { group } : {}),
+    ...(column ? { column } : {}),
+    ...(declared ? { columnDeclared: true } : {}),
+  });
+
+  const partition = (hits: ReturnType<typeof hit>[]): string[] => {
+    const out = assignDeclarationGroups(hits);
+    const keys = out.map((h) => `${h.evidence.filePath}:${h.evidence.endLine}`);
+    const groups = new Map<string, string[]>();
+    out.forEach((h, i) => groups.set(h.group as string, [...(groups.get(h.group as string) ?? []), keys[i]]));
+    return [...groups.values()].map((members) => members.sort().join("+")).sort();
+  };
+
+  it("lets no column claim a name that several columns' declarations carry, whatever the order", () => {
+    const hits = [
+      hit("cart/address.ts", 5, "phone_number:address", "cart_address.phone", true),
+      hit("order/address.ts", 5, "phone_number:address", "order_address.phone", true),
+      hit("types/a.ts", 12, "phone_number:address"),
+      hit("types/a.ts", 26, "phone_number:address"),
+    ];
+    const expected = ["cart/address.ts:5", "order/address.ts:5", "types/a.ts:12+types/a.ts:26"];
+    expect(partition(hits)).toEqual(expected);
+    expect(partition([...hits].reverse())).toEqual(expected);
+  });
+
+  it("finds a contested name even when only some declarations name it, and when file roles vote for it", () => {
+    // Only the cart declaration carries the name on its own line; the order model reaches it
+    // through its file (models/address.ts). The uncolumned type lines must follow neither.
+    const hits = [
+      hit("cart/src/models/address.ts", 5, "phone_number:address", "cart_address.phone", true),
+      hit("order/src/models/address.ts", 5, undefined, "order_address.phone", true),
+      hit("types/a.ts", 12, "phone_number:address"),
+      hit("types/a.ts", 26, "phone_number:address"),
+    ];
+    const expected = ["cart/src/models/address.ts:5", "order/src/models/address.ts:5", "types/a.ts:12+types/a.ts:26"];
+    expect(partition(hits)).toEqual(expected);
+    expect(partition([...hits].reverse())).toEqual(expected);
+  });
+
+  it("still lets the one declared column carry its name, with the mentions that have none", () => {
+    const hits = [
+      hit("a/models.ts", 3, "phone_number:member", "members.phone", true),
+      hit("a/service.ts", 9, "phone_number:member"),
+      hit("a/copy.ts", 4, "phone_number:member", "events.from_phone"),
+    ];
+    // The copy line carries another column and stays out; the read joins the declaration.
+    expect(partition(hits)).toEqual(["a/copy.ts:4", "a/models.ts:3+a/service.ts:9"]);
+  });
+});
+
+describe("keys written into JSON record columns", () => {
+  beforeAll(async () => {
+    await ensureDeclarationEngine();
+  });
+
+  const models = [
+    "from django.db import models", //                                    1
+    "", //                                                                 2
+    "class OrderEvent(models.Model):", //                                  3
+    "    parameters = JSONField(blank=True, default=dict)", //             4
+    "", //                                                                 5
+    "class Customer(models.Model):", //                                    6
+    "    email = models.EmailField()", //                                  7
+  ];
+  const events = [
+    "def order_event(order_id, parameters):", //                           1
+    "    return OrderEvent.objects.create(order_id=order_id, parameters=parameters)", // 2
+    "",
+    "def direct(order_id, customer_email):", //                             4
+    "    return OrderEvent.objects.create(", //                            5
+    "        order_id=order_id,", //                                       6
+    "        parameters={", //                                             7
+    '            "email": customer_email,', //                             8
+    "        },", //                                                       9
+    "    )", //                                                           10
+  ];
+  const tasks = [
+    "def notify(order_id, recipient):", //                                 1
+    "    payload = {", //                                                  2
+    '        "email": recipient,', //                                      3
+    "    }", //                                                            4
+    "    order_event(order_id, parameters=payload)", //                    5
+    "    order_event(order_id, parameters={", //                           6
+    '        "email": recipient,', //                                      7
+    "    })", //                                                           8
+  ];
+
+  it("gives a key the record column of the JSON field it reaches, directly or through a factory", () => {
+    const inventory = buildPersonalDataInventoryFromIngest(
+      [file("models.py", "python", models), file("events.py", "python", events), file("tasks.py", "python", tasks)],
+      [],
+    );
+    const column = (filePath: string, line: number) =>
+      inventory.hits.find((h) => h.id === "email" && h.location !== "comment" && h.evidence.filePath === filePath && h.evidence.endLine === line)?.column;
+    expect(column("events.py", 8)).toBe("OrderEvent.parameters.email");
+    expect(column("tasks.py", 3)).toBe("OrderEvent.parameters.email");
+    expect(column("tasks.py", 7)).toBe("OrderEvent.parameters.email");
+    // The real column keeps its own identity, and the record key never joins it.
+    expect(column("models.py", 7)).toBe("Customer.email");
+    const groups = Object.fromEntries(
+      inventory.hits.filter((h) => h.id === "email" && h.location !== "comment").map((h) => [`${h.evidence.filePath}:${h.evidence.endLine}`, h.group]),
+    );
+    expect(groups["events.py:8"]).not.toBe(groups["models.py:7"]);
+  });
+});

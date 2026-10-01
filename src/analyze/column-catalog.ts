@@ -7,6 +7,7 @@ import type { AnalyzedFile } from "./engine/analyzed-file";
 import { analyzeSource } from "./engine/engine";
 import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
 import { packForFile } from "./languages";
+import { recordFacts, type RecordFacts } from "./json-record-keys";
 
 /**
  * Catalog of the stored columns a repository declares (KDATAP-33da4c): the closed set of
@@ -420,15 +421,29 @@ export function declaredColumns(files: readonly FileInfo[], concept: string, opt
  * per concept (KDATAP-7a094c). The analysis engine must be initialized.
  */
 export function collectColumnCandidates(files: readonly FileInfo[]): ColumnCandidate[] {
+  return collectColumnFacts(files).candidates;
+}
+
+/**
+ * Candidates and record-key facts (KDATAP-fb8019) in one parse of every file. The facts
+ * say where object literals and function parameters flow, for `recordKeyColumns`.
+ */
+export function collectColumnFacts(files: readonly FileInfo[]): { candidates: ColumnCandidate[]; facts: RecordFacts } {
   const candidates: ColumnCandidate[] = [];
+  const facts: RecordFacts = { keyFlows: [], sinks: [] };
   for (const file of files) {
     const pack = packForFile(file.language, file.path);
     const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
     try {
       candidates.push(...candidatesForFile(file, analyzed));
+      if (analyzed) {
+        const found = recordFacts(analyzed, file.path);
+        facts.keyFlows.push(...found.keyFlows);
+        facts.sinks.push(...found.sinks);
+      }
     } finally {
       analyzed?.dispose();
     }
   }
-  return candidates;
+  return { candidates, facts };
 }
