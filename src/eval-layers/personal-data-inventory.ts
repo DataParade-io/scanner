@@ -217,7 +217,7 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
       const target = resolveCallArgument(functions, hit.id, argument);
       if (!target) continue;
       resolved += 1;
-      links.add(declarationNodeId(hit.id, target.filePath, target.line));
+      links.add(declarationNodeId(hit.id, target.filePath, target.line, target.name));
     }
     return links.size > 0 ? { ...hit, callLinks: [...links] } : hit;
   });

@@ -93,7 +93,7 @@ describe("passedValueDeclarations", () => {
 
   it("links a keyword argument to the variable passed into it", () => {
     const lines = ["def send(recipient_email, payload):", "    log(customer_email=recipient_email)"];
-    expect(passed(lines, 2)).toEqual([1]);
+    expect(passed(lines, 2)).toEqual([{ line: 1, name: "recipient_email" }]);
   });
 
   it("does not link variables that are only compared", () => {
@@ -147,7 +147,10 @@ describe("queried table entities", () => {
       ],
       [],
     );
-    const groups = new Set(hits.filter((hit) => hit.id === "email" && hit.location === "code").map((hit) => hit.group));
+    // The query lines (line 2 of each file) join through the one table they query.
+    const groups = new Set(
+      hits.filter((hit) => hit.id === "email" && hit.location === "code" && hit.evidence.startLine === 2).map((hit) => hit.group),
+    );
     expect([...groups]).toEqual(["email:user"]);
   });
 });

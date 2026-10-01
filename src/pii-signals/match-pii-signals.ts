@@ -50,7 +50,7 @@ export interface PiiSignalHit {
   /** Entity of the class the mention is reached through (`usersService.createOne({ email })` -> `user`). */
   receiverEntity?: string;
   /** Same-file declaration lines of variables passed into a key on this line. */
-  passedDeclarations?: number[];
+  passedDeclarations?: Array<{ line: number; name: string }>;
   /**
    * Parameter declarations in other (or the same) files that a call argument on this
    * line passes into, as `${signalId}@${filePath}:${line}` (KDATAP-c8a46a).

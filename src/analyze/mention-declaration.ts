@@ -6,29 +6,35 @@ import type { DeclarationKind, SameFileDeclaration } from "./engine/types";
  * .agents/skills/curate-scanner-evaluation-corpus/references/mention-attribute-labeling.md.
  * `unresolved` means the name is imported, global, or not declared in this file.
  */
+/**
+ * `name` is the declared binding's name, so two bindings declared on one line
+ * (`{ memberEmail, buyerEmail }`) stay distinct for grouping (KDATAP-c8a46a).
+ */
 export type MentionDeclaration =
-  | { line: number; kind: Exclude<DeclarationKind, "import"> }
+  | { line: number; kind: Exclude<DeclarationKind, "import">; name?: string }
   | "unresolved";
 
-function fromSame(declaration: SameFileDeclaration | undefined): MentionDeclaration {
+function fromSame(declaration: SameFileDeclaration | undefined, name?: string): MentionDeclaration {
   if (!declaration || declaration.kind === "import") return "unresolved";
-  return { line: declaration.line, kind: declaration.kind };
+  return { line: declaration.line, kind: declaration.kind, ...(name ? { name } : {}) };
 }
 
 /** A key, field, or variable being defined declares on its own line (labeling rules 1 and 3). */
 function ownLine(site: Extract<Site, { role: "definition" }>): MentionDeclaration | undefined {
-  if (site.kind === "parameter") return { line: site.line, kind: "parameter" };
-  if (site.kind === "key" || (site.kind === "field" && !site.implicit)) return { line: site.line, kind: "field" };
-  if (site.kind === "local") return { line: site.line, kind: "local" };
+  if (site.kind === "parameter") return { line: site.line, kind: "parameter", name: site.name };
+  if (site.kind === "key" || (site.kind === "field" && !site.implicit)) return { line: site.line, kind: "field", name: site.name };
+  if (site.kind === "local") return { line: site.line, kind: "local", name: site.name };
   return undefined;
 }
 
 function readDeclaration(file: AnalyzedFile, site: Site): MentionDeclaration {
-  if (site.role === "reference") return fromSame(file.lookup(site.name, site.node));
+  if (site.role === "reference") return fromSame(file.lookup(site.name, site.node), site.name);
   if (site.role === "member") {
     const root = site.root;
-    if (root.type === "identifier") return fromSame(file.lookup(root.name, root.node));
-    if (root.type === "self" && root.firstMember) return fromSame(file.lookupMember(root.firstMember, root.node));
+    if (root.type === "identifier") return fromSame(file.lookup(root.name, root.node), root.name);
+    if (root.type === "self" && root.firstMember) {
+      return fromSame(file.lookupMember(root.firstMember, root.node), root.firstMember);
+    }
   }
   return "unresolved";
 }
