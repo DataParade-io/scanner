@@ -2,7 +2,7 @@ import path from "path";
 import type { FileInfo } from "../core/types/file";
 import type { AnalyzedFile, Site } from "./engine/analyzed-file";
 import { analyzeSource, isAnalysisEngineReady } from "./engine/engine";
-import type { InvocationArgument } from "./engine/types";
+import type { BindingUse, FunctionDefinition, InvocationArgument } from "./engine/types";
 import { packForFile } from "./languages";
 
 /**
@@ -10,6 +10,8 @@ import { packForFile } from "./languages";
  * (outline, symbols on a line, definition, callers, key writers) for tools that trace a
  * mention to the data it reads. Deterministic, no model calls. The repository is indexed
  * once into plain data (the parse trees are freed); per-file questions parse the file again.
+ * `uses` and `members` walk forward from a value: where a binding goes, and who reads or
+ * writes a field.
  */
 
 /** Results returned per request unless the request sets `limit`. */
@@ -29,6 +31,8 @@ export interface NavRequest {
   file?: string;
   line?: number;
   name?: string;
+  /** `members`: the class whose property is read or written. */
+  owner?: string;
   limit?: number;
   /** Echoed back so a caller can match responses to requests. */
   id?: unknown;
@@ -87,6 +91,36 @@ interface FunctionRecord {
   line: number;
   endLine: number;
   owner?: string;
+  parameters: FunctionDefinition["parameters"];
+  destructured?: FunctionDefinition["destructured"];
+}
+
+interface AccessRecord {
+  file: string;
+  line: number;
+  column: number;
+  receiverClass?: string;
+  write: boolean;
+}
+
+/** Where a value passed in a call lands: the callee's parameter. */
+export interface NavTarget {
+  file: string;
+  line: number;
+  name: string;
+  kind: "parameter";
+}
+
+export interface NavPass {
+  line: number;
+  callee: string;
+  position: number;
+  keyword?: string;
+  receiverClass?: string;
+  /** The object-literal key the value sits under, when the argument is an object literal. */
+  key?: string;
+  /** The callee's parameter, when the callee resolves to exactly one function. */
+  target?: NavTarget;
 }
 
 interface ClassRecord {
@@ -142,6 +176,7 @@ export class CodeNavigator {
   private readonly classesByName = new Map<string, ClassRecord[]>();
   private readonly membersByName = new Map<string, MemberRecord[]>();
   private readonly callsByCallee = new Map<string, CallRecord[]>();
+  private readonly accessesByName = new Map<string, AccessRecord[]>();
 
   /**
    * Index the files that have a language pack. The engine must be initialized
@@ -182,6 +217,17 @@ export class CodeNavigator {
           line: fn.line,
           endLine: fn.endLine,
           ...(fn.owner ? { owner: fn.owner } : {}),
+          parameters: fn.parameters,
+          ...(fn.destructured ? { destructured: fn.destructured } : {}),
+        });
+      }
+      for (const access of analyzed.memberAccesses()) {
+        push(this.accessesByName, access.name, {
+          file: file.path,
+          line: access.line,
+          column: access.column,
+          write: access.write,
+          ...(access.receiverClass ? { receiverClass: access.receiverClass } : {}),
         });
       }
       for (const cls of analyzed.classDefinitions()) {
@@ -464,6 +510,113 @@ export class CodeNavigator {
     return { name, writers, total: all.length, truncated: all.length > limit };
   }
 
+  /**
+   * `{"op":"uses","file","line","name"}`: where the binding `name` (visible at the line)
+   * goes. `uses` are the later references to the same binding, in line order, each with
+   * its role. `passes` are the uses that hand the value to a call, with the callee
+   * resolved like `definition` and, when it is exactly one function, the parameter the
+   * value lands in.
+   */
+  uses(file: string, line: number, name: string, limit: number): Record<string, unknown> | string {
+    const info = this.sources.get(file);
+    const analyzed = info ? this.analyze(info) : undefined;
+    if (!analyzed) return `file could not be analyzed: ${file}`;
+    let found: ReturnType<AnalyzedFile["bindingUses"]>;
+    try {
+      found = analyzed.bindingUses(name, line);
+    } finally {
+      analyzed.dispose();
+    }
+    if (!found) return `no binding named ${name} is visible at ${file}:${line}`;
+    const lines = this.linesOf(file);
+    const all = found.uses;
+    const passes: NavPass[] = [];
+    for (const use of all) {
+      if (!use.call) continue;
+      const target = this.passTarget(use.call);
+      passes.push({
+        line: use.line,
+        callee: use.call.callee,
+        position: use.call.position,
+        ...(use.call.keyword ? { keyword: use.call.keyword } : {}),
+        ...(use.call.receiverClass ? { receiverClass: use.call.receiverClass } : {}),
+        ...(use.call.key ? { key: use.call.key } : {}),
+        ...(target ? { target } : {}),
+      });
+    }
+    return {
+      name,
+      binding: { line: found.line, kind: found.kind },
+      uses: all.slice(0, limit).map((use: BindingUse) => ({
+        line: use.line,
+        column: use.column,
+        code: (lines[use.line - 1] ?? "").trim(),
+        role: use.role,
+        ...(use.assignedTo ? { assignedTo: use.assignedTo } : {}),
+        ...(use.key !== undefined && use.role === "object_key" ? { key: use.key } : {}),
+      })),
+      passes: passes.slice(0, limit),
+      total: all.length,
+      truncated: all.length > limit || passes.length > limit,
+    };
+  }
+
+  /**
+   * The parameter a call argument lands in, when the callee is exactly one function
+   * (narrowed by the receiver class when known; a class resolves to its constructor).
+   * An object-literal argument key maps to the destructured name that reads it.
+   */
+  private passTarget(call: NonNullable<BindingUse["call"]>): NavTarget | undefined {
+    let functions = this.functionsByName.get(call.callee) ?? [];
+    if (call.receiverClass) {
+      const narrowed = functions.filter((fn) => fn.owner === call.receiverClass);
+      if (narrowed.length > 0) functions = narrowed;
+    }
+    if (functions.length === 0 && this.classesByName.has(call.callee)) {
+      functions = ["__init__", "constructor"].flatMap((init) =>
+        (this.functionsByName.get(init) ?? []).filter((fn) => fn.owner === call.callee),
+      );
+    }
+    if (functions.length !== 1) return undefined;
+    const fn = functions[0];
+    const parameter = fn.parameters.find((p) => (call.keyword !== undefined ? p.name === call.keyword : p.position === call.position));
+    if (parameter) return { file: fn.file, line: parameter.line, name: parameter.name, kind: "parameter" };
+    const key = fn.destructured?.find((d) => d.position === call.position)?.keys.find((k) => k.key === call.key);
+    return key ? { file: fn.file, line: key.line, name: key.name, kind: "parameter" } : undefined;
+  }
+
+  /**
+   * `{"op":"members","name","owner"?}`: property accesses `x.name` (and `x["name"]`,
+   * `x.get("name")`) across the repository, each a read or an assignment target
+   * (`write`). With `owner`, accesses whose receiver is typed as another class are left
+   * out and untyped receivers stay; typed matches come first.
+   */
+  members(name: string, owner: string | undefined, limit: number): Record<string, unknown> {
+    const all = (this.accessesByName.get(name) ?? []).filter(
+      (access) => !owner || !access.receiverClass || access.receiverClass === owner,
+    );
+    const ranked = [...all].sort(
+      (a, b) =>
+        Number(owner !== undefined && b.receiverClass === owner) - Number(owner !== undefined && a.receiverClass === owner) ||
+        a.file.localeCompare(b.file) ||
+        a.line - b.line ||
+        a.column - b.column,
+    );
+    return {
+      name,
+      ...(owner ? { owner } : {}),
+      members: ranked.slice(0, limit).map((access) => ({
+        file: access.file,
+        line: access.line,
+        ...(access.receiverClass ? { receiverClass: access.receiverClass } : {}),
+        write: access.write,
+        code: (this.linesOf(access.file)[access.line - 1] ?? "").trim(),
+      })),
+      total: all.length,
+      truncated: all.length > limit,
+    };
+  }
+
   private rankedByProximity<T extends { file: string; line: number }>(records: T[], from: string): T[] {
     return [...records].sort(
       (a, b) =>
@@ -496,6 +649,14 @@ export class CodeNavigator {
           const found = this.callers({ name: request.name, file, line: request.line }, limit);
           return typeof found === "string" ? fail(found) : done("callers", found);
         }
+        case "uses": {
+          if (!file || !hasLine || !request.name) return fail("uses needs an indexed file, a 1-based line and a name");
+          const found = this.uses(file, request.line as number, request.name, limit);
+          return typeof found === "string" ? fail(found) : done("uses", { line: request.line, ...found });
+        }
+        case "members":
+          if (!request.name) return fail("members needs a name");
+          return done("members", this.members(request.name, request.owner, limit));
         case "writers":
           if (!request.name) return fail("writers needs a name");
           return done("writers", this.writers(request.name, limit, file ?? ""));

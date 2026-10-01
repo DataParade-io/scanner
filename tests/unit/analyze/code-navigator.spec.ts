@@ -215,3 +215,160 @@ describe("code navigator", () => {
     expect(nav.handle({ op: "callers", file: "app/models.py", line: 1 })).toMatchObject({ ok: false });
   });
 });
+
+const FLOW_PY = [
+  "def notify(address, order):", //                                      1
+  "    pass", //                                                         2
+  "", //                                                                 3
+  "class Mailer:", //                                                    4
+  "    def __init__(self, to):", //                                      5
+  "        self.to = to", //                                             6
+  "", //                                                                 7
+  "def handle(request, order):", //                                      8
+  '    email = request.data["email"]', //                                9
+  "    notify(email, order)", //                                         10
+  "    notify(address=email, order=order)", //                           11
+  '    payload = {"to": email}', //                                      12
+  "    order.contact = email", //                                        13
+  "    Mailer(email)", //                                                14
+  "    print(email.lower())", //                                         15
+  "    inner = [x for x in [1] if x]", //                                16
+  "    def shadow(email):", //                                           17
+  "        return email", //                                             18
+  "    return email", //                                                 19
+];
+
+const FLOW_TS = [
+  "export function load(req: Req): void {", //                           1
+  "  const { email } = req.body;", //                                    2
+  "  register({ email, source: 'web' });", //                            3
+  "  const shadow = (email: string) => email;", //                       4
+  "  lookup(email.trim());", //                                          5
+  "  const copy = email;", //                                            6
+  "  user.email = copy;", //                                             7
+  "  console.log(user.email, user.name);", //                            8
+  "}", //                                                                9
+  "function register({ email, source }: { email: string; source: string }): void {}", // 10
+  "function lookup(address: string): void {}", //                        11
+  "class Profile {", //                                                  12
+  "  email = '';", //                                                    13
+  "  show(other: Other) {", //                                           14
+  "    return other.email;", //                                          15
+  "  }", //                                                              16
+  "}", //                                                                17
+  "export function touch(profile: Profile, loose) {", //                 18
+  "  profile.email = 'x';", //                                           19
+  "  return loose.email;", //                                            20
+  "}", //                                                                21
+];
+
+describe("code navigator forward walks", () => {
+  let nav: CodeNavigator;
+
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+    nav = new CodeNavigator([file("flow.py", "python", FLOW_PY), file("flow.ts", "typescript", FLOW_TS)]);
+  });
+
+  const roles = (response: any): string[] => response.uses.map((u: any) => `${u.line}:${u.role}${u.assignedTo ? `>${u.assignedTo}` : ""}${u.key ? `#${u.key}` : ""}`);
+
+  describe("uses", () => {
+    it("classifies each Python use and resolves where call arguments land", () => {
+      const response = nav.handle({ op: "uses", file: "flow.py", line: 9, name: "email" }) as any;
+      expect(response.binding).toEqual({ line: 9, kind: "local" });
+      // Line 18 is the shadowing parameter's own `email`, not this binding.
+      expect(roles(response)).toEqual([
+        "10:argument",
+        "11:assigned>address",
+        "12:object_key#to",
+        "13:assigned>contact",
+        "14:argument",
+        "15:argument",
+        "19:returned",
+      ]);
+      expect(response.uses[0]).toMatchObject({ code: "notify(email, order)", column: 11 });
+      expect(response.passes).toEqual([
+        { line: 10, callee: "notify", position: 0, target: { file: "flow.py", line: 1, name: "address", kind: "parameter" } },
+        { line: 11, callee: "notify", position: 0, keyword: "address", target: { file: "flow.py", line: 1, name: "address", kind: "parameter" } },
+        { line: 14, callee: "Mailer", position: 0, target: { file: "flow.py", line: 5, name: "to", kind: "parameter" } },
+        { line: 15, callee: "print", position: 0 },
+      ]);
+    });
+
+    it("walks a parameter that is only referenced on the line", () => {
+      const response = nav.handle({ op: "uses", file: "flow.py", line: 9, name: "request" }) as any;
+      expect(response.binding).toEqual({ line: 8, kind: "parameter" });
+      expect(roles(response)).toEqual(["9:assigned>email"]);
+    });
+
+    it("respects shadowing: the inner parameter has its own uses", () => {
+      const response = nav.handle({ op: "uses", file: "flow.py", line: 17, name: "email" }) as any;
+      expect(response.binding).toEqual({ line: 17, kind: "parameter" });
+      expect(roles(response)).toEqual(["18:returned"]);
+    });
+
+    it("walks a destructured TypeScript name and maps an object-literal key to a destructured parameter", () => {
+      const response = nav.handle({ op: "uses", file: "flow.ts", line: 2, name: "email" }) as any;
+      expect(response.binding).toEqual({ line: 2, kind: "local" });
+      expect(roles(response)).toEqual(["3:object_key#email", "5:argument", "6:assigned>copy"]);
+      expect(response.passes).toEqual([
+        { line: 3, callee: "register", position: 0, key: "email", target: { file: "flow.ts", line: 10, name: "email", kind: "parameter" } },
+        { line: 5, callee: "lookup", position: 0, target: { file: "flow.ts", line: 11, name: "address", kind: "parameter" } },
+      ]);
+    });
+
+    it("names the destructured targets of a value read through a member", () => {
+      const response = nav.handle({ op: "uses", file: "flow.ts", line: 2, name: "req" }) as any;
+      expect(roles(response)).toEqual(["2:assigned>email"]);
+    });
+
+    it("follows an assignment to a member", () => {
+      const response = nav.handle({ op: "uses", file: "flow.ts", line: 6, name: "copy" }) as any;
+      expect(roles(response)).toEqual(["7:assigned>email"]);
+    });
+
+    it("caps uses and reports truncation", () => {
+      const response = nav.handle({ op: "uses", file: "flow.py", line: 9, name: "email", limit: 2 }) as any;
+      expect(response.uses).toHaveLength(2);
+      expect(response.total).toBe(7);
+      expect(response.truncated).toBe(true);
+    });
+
+    it("answers an unknown binding with an error", () => {
+      expect(nav.handle({ op: "uses", file: "flow.py", line: 9, name: "nothing" })).toMatchObject({ ok: false });
+      expect(nav.handle({ op: "uses", file: "flow.py", name: "email" })).toMatchObject({ ok: false });
+    });
+  });
+
+  describe("members", () => {
+    it("lists reads and writes of a property across files", () => {
+      const response = nav.handle({ op: "members", name: "email" }) as any;
+      expect(response.members.map((m: any) => `${m.file}:${m.line}:${m.write ? "w" : "r"}`)).toEqual([
+        "flow.py:9:r",
+        "flow.ts:7:w",
+        "flow.ts:8:r",
+        "flow.ts:15:r",
+        "flow.ts:19:w",
+        "flow.ts:20:r",
+      ]);
+      expect(response.members[4]).toMatchObject({ receiverClass: "Profile", code: "profile.email = 'x';" });
+    });
+
+    it("narrows to the owner class and keeps untyped receivers", () => {
+      const response = nav.handle({ op: "members", name: "email", owner: "Profile" }) as any;
+      // `other: Other` is typed as another class and is dropped; `user` and `loose` are untyped.
+      expect(response.members.map((m: any) => m.line)).toEqual([19, 9, 7, 8, 20]);
+      expect(response.members[0].receiverClass).toBe("Profile");
+    });
+
+    it("finds Python subscripts and get calls", () => {
+      const py = new CodeNavigator([file("m.py", "python", ['a = data["email"]', 'b = data.get("email")', 'data["email"] = 1'])]);
+      const response = py.handle({ op: "members", name: "email" }) as any;
+      expect(response.members.map((m: any) => `${m.line}:${m.write ? "w" : "r"}`)).toEqual(["1:r", "2:r", "3:w"]);
+    });
+
+    it("needs a name", () => {
+      expect(nav.handle({ op: "members" })).toMatchObject({ ok: false });
+    });
+  });
+});
