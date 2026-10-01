@@ -28,6 +28,11 @@ export interface PiiSignalHit {
   commentContext?: CommentContext;
   /** Data item group of a code match, e.g. `email:customer` (KDATAP-c8a46a). */
   group?: string;
+  /**
+   * The evidence that named the group: `declaration`, `name` (a qualifier or defined
+   * field), `receiver-vote`, `table-vote`, `weak-name`, `file-vote`, or `location`.
+   */
+  groupBasis?: string;
   /** The group is only the receiver variable's name; a typed receiver's class may replace it. */
   receiverNamesEntity?: boolean;
   /**

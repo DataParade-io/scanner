@@ -37,6 +37,15 @@ export function buildScanPersonalDataLayers(
       ...(hit.location ? { location: hit.location } : {}),
       ...(hit.commentContext ? { commentContext: hit.commentContext } : {}),
       ...(hit.group ? { group: hit.group } : {}),
+      ...(hit.groupBasis ? { groupBasis: hit.groupBasis } : {}),
+      ...(hit.declaration
+        ? {
+            declaration:
+              hit.declaration === "unresolved"
+                ? ("unresolved" as const)
+                : { line: hit.declaration.line, kind: hit.declaration.kind },
+          }
+        : {}),
     };
   });
 

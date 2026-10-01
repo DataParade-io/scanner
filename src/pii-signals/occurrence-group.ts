@@ -283,6 +283,7 @@ interface GroupableHit {
   location?: "code" | "comment";
   evidence: { filePath: string; endLine?: number };
   group?: string;
+  groupBasis?: string;
   receiverEntity?: string;
   tableEntity?: string;
   weakGroup?: boolean;
@@ -308,6 +309,7 @@ export function declarationNodeId(signalId: string, filePath: string, line: numb
  */
 export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] {
   const refusedLog = process.env.DATAPARADE_REFUSED_LOG;
+  let phase = "declaration";
   const parent = new Map<string, string>();
   const find = (node: string): string => {
     let root = node;
@@ -321,6 +323,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // named sets together is refused (cannot-link), so one bridging line never merges
   // `email:member` with `email:customer`.
   const nameOf = new Map<string, string>();
+  // Which phase named each set (`name`, `receiver-vote`, `table-vote`, `weak-name`,
+  // `file-vote`), carried with the name so a graph export can state the evidence.
+  const basisOf = new Map<string, string>();
   const union = (left: string, right: string): void => {
     const a = find(left);
     const b = find(right);
@@ -341,13 +346,18 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       return;
     }
     parent.set(a, b);
-    if (nameA && !nameB) nameOf.set(b, nameA);
+    if (nameA && !nameB) {
+      nameOf.set(b, nameA);
+      const basis = basisOf.get(a);
+      if (basis) basisOf.set(b, basis);
+    }
   };
   const groupNode = (group: string): string => {
     const node = `group:${group}`;
     if (!parent.has(node)) {
       parent.set(node, node);
       nameOf.set(node, group);
+      basisOf.set(node, phase);
     }
     return node;
   };
@@ -359,7 +369,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // Joins run from most to least reliable: declaration (a declaration never spans two
   // data items in the labeled corpus), name, field, model file. A use of a variable
   // therefore follows its declaration's name rather than its own line's qualifier.
-  let phase = "declaration";
+  phase = "declaration";
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
@@ -482,8 +492,15 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   return hits.map((hit, index) => {
     if (hit.location === "comment") return hit;
     const root = find(`hit:${index}`);
-    const name = nameOf.get(root) ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
-    return name === undefined || name === hit.group ? hit : { ...hit, group: name };
+    const named = nameOf.get(root);
+    const name = named ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
+    if (name === undefined) return hit;
+    const groupBasis = named
+      ? (basisOf.get(root) ?? "name")
+      : declarationNameByRoot.has(root)
+        ? "declaration"
+        : "location";
+    return { ...hit, group: name, groupBasis };
   });
 }
 
