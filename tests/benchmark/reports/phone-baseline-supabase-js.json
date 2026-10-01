@@ -1,0 +1,246 @@
+{
+  "supabase-js": {
+    "cases": 219,
+    "emailFindings": 87,
+    "scores": {
+      "recall": 1,
+      "precision": 0.3194444444444444,
+      "negativeCasePassRate": 0.75,
+      "denominators": {
+        "evaluablePositives": 23,
+        "matchedPositives": 23,
+        "matchedWithCorrectLabels": 23,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 196,
+        "negativeCasesPassed": 147,
+        "exhaustiveScopedFindings": 72,
+        "exhaustiveScopedMatches": 23
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 23
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.9473684210526315,
+          "numerator": 18,
+          "denominator": 19
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 23
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 1,
+          "numerator": 3,
+          "denominator": 3
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.06666666666666667,
+          "numerator": 3,
+          "denominator": 45
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "string_literal": {
+        "total": 4,
+        "hit": 4
+      },
+      "identifier": {
+        "total": 4,
+        "hit": 4
+      },
+      "property_key": {
+        "total": 15,
+        "hit": 15
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "comment": {
+        "total": 146,
+        "hit": 0
+      },
+      "import_specifier": {
+        "total": 5,
+        "hit": 5
+      },
+      "string_literal": {
+        "total": 12,
+        "hit": 12
+      },
+      "type_name": {
+        "total": 29,
+        "hit": 29
+      },
+      "property_key": {
+        "total": 4,
+        "hit": 3
+      }
+    },
+    "recallByGroup": {
+      "user-phone": {
+        "total": 9,
+        "hit": 9
+      },
+      "otp-sign-in-phone": {
+        "total": 4,
+        "hit": 4
+      },
+      "(no group)": {
+        "total": 6,
+        "hit": 6
+      },
+      "mfa-factor-phone": {
+        "total": 3,
+        "hit": 3
+      },
+      "pending-new-phone": {
+        "total": 1,
+        "hit": 1
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1049",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1049",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/auth-js/src/GoTrueClient.ts:1049"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1050",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1050",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:1050#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1054",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1054",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:1050#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1242",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1242",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/auth-js/src/GoTrueClient.ts:1242"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1243",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1243",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:1243#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L1247",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:1247",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:1243#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L2304",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:2304",
+        "goldGroup": "otp-sign-in-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/core/auth-js/src/GoTrueClient.ts:2304"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L2305",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:2305",
+        "goldGroup": "otp-sign-in-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:2305#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L2309",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:2309",
+        "goldGroup": "otp-sign-in-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/GoTrueClient.ts:2305#phone"
+      },
+      {
+        "id": "supabase-js-phone-GoTrueClient-L5793",
+        "location": "packages/core/auth-js/src/GoTrueClient.ts:5793",
+        "goldGroup": "mfa-factor-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:mfaenroll_param"
+      },
+      {
+        "id": "supabase-js-phone-types-L500",
+        "location": "packages/core/auth-js/src/lib/types.ts:500",
+        "goldGroup": "pending-new-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:500#new_phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L504",
+        "location": "packages/core/auth-js/src/lib/types.ts:504",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:504#phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L677",
+        "location": "packages/core/auth-js/src/lib/types.ts:677",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:677#phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L706",
+        "location": "packages/core/auth-js/src/lib/types.ts:706",
+        "goldGroup": "otp-sign-in-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:706#phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L1906",
+        "location": "packages/core/auth-js/src/lib/types.ts:1906",
+        "goldGroup": "mfa-factor-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:1906#phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L1957",
+        "location": "packages/core/auth-js/src/lib/types.ts:1957",
+        "goldGroup": "mfa-factor-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:1957#phone"
+      },
+      {
+        "id": "supabase-js-phone-types-L2005",
+        "location": "packages/core/auth-js/src/lib/types.ts:2005",
+        "goldGroup": "user-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/core/auth-js/src/lib/types.ts:2005#phone"
+      }
+    ]
+  }
+}
