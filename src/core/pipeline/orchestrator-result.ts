@@ -24,6 +24,10 @@ export interface ScanOccurrence {
   commentContext?: CommentContext;
   /** Data item group, e.g. `email:customer`, when the scanner can tell. */
   group?: string;
+  /** The evidence that named the group (see `PiiSignalHit.groupBasis`). */
+  groupBasis?: string;
+  /** Same-file declaration of the mentioned name: its line and kind, or `unresolved`. */
+  declaration?: { line: number; kind: string } | "unresolved";
 }
 
 export interface ScanDataItemGroup {

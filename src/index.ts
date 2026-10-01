@@ -30,6 +30,15 @@ export {
   type StructureGraphConfig,
   type StructureGraphInfo,
 } from "./structure/graphify";
+export {
+  buildDataParadeGraph,
+  writeKnowledgeGraph,
+  DATAPARADE_GRAPH_FILE,
+  DATAPARADE_GRAPH_SCHEMA,
+  type DataParadeGraph,
+  type DataParadeNode,
+  type DataParadeLink,
+} from "./graph/build-dataparade-graph";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
 export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
