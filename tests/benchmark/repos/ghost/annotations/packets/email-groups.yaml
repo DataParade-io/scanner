@@ -10,7 +10,7 @@ groups:
   subject: member
   subject_kind: end_user
   purpose: sign-in, newsletters, comment notifications and other member communication
-  rationale: members.email column (schema.js:649, validated schema.js:654) is the model field. Clusters are reads and writes of it on Member instances (member.get('email'), memberModel.get('email'), findOne({email}), attrs.email in models/member.js, 'members.email' selector, member-repository create/edit/get lookups and pick lists), the member add/read request fields in api/endpoints/members.js, the member emails handed to email-service recipient building (sending-service buildRecipients member.email -> recipient.email -> mailgun-email-provider), the comment notification recipients and reporter (comments-service reportComment uses reporter.id as member_id, so the reporter is a member), the member import row email, memberEmail passed to triggerMemberSignupAutomation (from newMember.get('email') / memberModel.get('email')), the gift redemption member email (gift-service passes member.get('email')), and staff-service getDataFromIds member data (member.email of a Member model). Stored copies in other tables (stripe customers, recipients, events, suppressions) are separate groups.
+  rationale: 'members.email column (schema.js:649, validated schema.js:654) is the model field. Clusters are reads and writes of it on Member instances (member.get(''email''), memberModel.get(''email''), findOne({email}), attrs.email in models/member.js, ''members.email'' selector, member-repository create/edit/get lookups and pick lists), the member add/read request fields in api/endpoints/members.js, the comment notification recipients and reporter (comments-service reportComment uses reporter.id as member_id, so the reporter is a member), the member import row email, memberEmail passed to triggerMemberSignupAutomation (from newMember.get(''email'') / memberModel.get(''email'')), the gift redemption member email (gift-service passes member.get(''email'')), and staff-service getDataFromIds member data (member.email of a Member model). Stored copies in other tables (stripe customers, recipients, events, suppressions) are separate groups. The newsletter recipient building in sending-service/mailgun-email-provider (c100-c103) is not here: its members come from BatchSendingService.getBatchMembers (email: model.get(''member_email''), the email_recipients copy) or from EmailService.sendTestEmail (members.email of a matching member, else the typed test address), so it is in needs_adjudication (KDATAP-8fb0fd).'
   clusters:
   - c001
   - c003
@@ -24,10 +24,6 @@ groups:
   - c068
   - c070
   - c071
-  - c100
-  - c101
-  - c102
-  - c103
   - c128
   - c132
   - c135
@@ -296,7 +292,7 @@ groups:
   subject: member (newsletter send recipient)
   subject_kind: end_user
   purpose: member email recorded on an email_recipients row for a newsletter send
-  rationale: email_recipients.member_email column (schema.js:1646); written from memberRow.email in batch-sending-service. Copy of the member email.
+  rationale: 'email_recipients.member_email column (schema.js:1646); written from memberRow.email in batch-sending-service. Copy of the member email. Read back by BatchSendingService.getBatchMembers (email: model.get(''member_email'')) for the bulk send; the downstream SendingService recipient clusters (c100-c103) also receive test-send addresses, so they are in needs_adjudication rather than here (KDATAP-8fb0fd).'
   clusters:
   - c012
 - id: automation-run-member-email-copy
@@ -488,6 +484,26 @@ needs_adjudication:
   - donation-payer-email
   - gift-buyer-email
   reason: getMemberData(member) is fed a Member-derived object (staff-service.js:75), a donation event email and gift purchase/redemption emails
+- cluster: c100
+  candidate_groups:
+  - email-recipient-member-email-copy
+  - member-account-email
+  reason: 'SendingService.buildRecipients member.email -> recipient.email -> mailgun recipient-variables key. send() has two callers: BatchSendingService (members from getBatchMembers, email = email_recipients.member_email copy) and EmailService.sendTestEmail (members.email of a member matching a staff-typed test address, else the typed address). Two sources with different items; previously member-account-email (KDATAP-8fb0fd).'
+- cluster: c101
+  candidate_groups:
+  - email-recipient-member-email-copy
+  - member-account-email
+  reason: 'SendingService.buildRecipients member.email -> recipient.email -> mailgun recipient-variables key. send() has two callers: BatchSendingService (members from getBatchMembers, email = email_recipients.member_email copy) and EmailService.sendTestEmail (members.email of a member matching a staff-typed test address, else the typed address). Two sources with different items; previously member-account-email (KDATAP-8fb0fd).'
+- cluster: c102
+  candidate_groups:
+  - email-recipient-member-email-copy
+  - member-account-email
+  reason: 'SendingService.buildRecipients member.email -> recipient.email -> mailgun recipient-variables key. send() has two callers: BatchSendingService (members from getBatchMembers, email = email_recipients.member_email copy) and EmailService.sendTestEmail (members.email of a member matching a staff-typed test address, else the typed address). Two sources with different items; previously member-account-email (KDATAP-8fb0fd).'
+- cluster: c103
+  candidate_groups:
+  - email-recipient-member-email-copy
+  - member-account-email
+  reason: 'SendingService.buildRecipients member.email -> recipient.email -> mailgun recipient-variables key. send() has two callers: BatchSendingService (members from getBatchMembers, email = email_recipients.member_email copy) and EmailService.sendTestEmail (members.email of a member matching a staff-typed test address, else the typed address). Two sources with different items; previously member-account-email (KDATAP-8fb0fd).'
 removed_clusters:
 - cluster: c035
   reason: schema.js:404 'email' is a settings group name; relabeled negative in KDATAP-0254c6
