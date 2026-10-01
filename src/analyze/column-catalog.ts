@@ -96,6 +96,7 @@ const KNEX_TABLE_CALLS = new Set(["createTable", "createTableIfNotExists", "tabl
 /** Helper calls taking a table and a column name as their first two string arguments. */
 const COLUMN_HELPER = /(?:column|totype)/i;
 const DESTRUCTIVE_HELPER = /^(?:drop|remove|delete|rename)/i;
+const SQL_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 /** ORM field class names that point at another model rather than store a value. */
 const DJANGO_RELATION = /^(?:ForeignKey|OneToOneField|ManyToManyField|GenericForeignKey)$/;
@@ -355,7 +356,9 @@ function migrationCandidates(file: AnalyzedFile, filePath: string): ColumnCandid
       out.push({ table: table.firstString, column: first, type: call.callee, ...where });
     } else if (COLUMN_HELPER.test(call.callee) && !DESTRUCTIVE_HELPER.test(call.callee)) {
       const column = stringArgument(call.arguments[1]);
-      if (column === undefined) continue;
+      // Table and column names are identifiers; a label and a dotted path
+      // (`CsvColumn("Employee email", "employee.email")`) name a report column, not storage.
+      if (column === undefined || !SQL_IDENTIFIER.test(first) || !SQL_IDENTIFIER.test(column)) continue;
       // `addColumn('t', 'c', 'string')`, `createAddColumnMigration('t', 'c', { type: 'integer' })`.
       const type = stringArgument(call.arguments[2]) ?? call.options?.["type"];
       if (call.options && "references" in call.options) continue;

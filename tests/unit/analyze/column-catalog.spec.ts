@@ -418,6 +418,13 @@ describe("record types", () => {
     expect(summary(declaredColumns([file("a/run.ts", "typescript", counts)], "email"))).toEqual(["Run.member_email (record-type)"]);
   });
 
+  it("does not read report column helpers with labels or dotted paths as migrations", () => {
+    const report = ['CsvColumn("Employee email", "employee.email")', "helper.changeToType('users', 'email')"];
+    expect(summary(declaredColumns([file("reports/csv.py", "python", report.slice(0, 1)), file("m/1.js", "javascript", report.slice(1))], "email"))).toEqual([
+      "users.email (migration)",
+    ]);
+  });
+
   it("does not read test-tool configs as configured addresses", () => {
     const jest = ["module.exports = { collectCoverageFrom: ['src/**'] }"];
     expect(declaredColumns([file("pkg/jest.config.js", "javascript", jest)], "email", { include: "configured" })).toEqual([]);
