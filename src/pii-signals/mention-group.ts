@@ -167,7 +167,7 @@ export function mentionGroup(signalId: string, line: string): string | undefined
 // A file whose folder names its role (models/, services/, controllers/, ...) or whose name
 // ends in -repository is about one entity: models/member.js, services/users.ts.
 const MODEL_FILE =
-  /(^|\/)(models?|services|controllers|repositories|resolvers|routes)\/[^/]+$|[-_]repository\.[A-Za-z]+$|(^|\/)models?\.py$/;
+  /(^|\/)(models?|services|controllers|repositories|resolvers|routes)\/[^/]+$|[-_](?:repository|service)\.[A-Za-z]+$|(^|\/)models?\.py$/;
 const FILE_ROLE_WORDS = new Set([
   "repository", "model", "models", "index", "service", "services", "controller", "controllers",
   "resolver", "resolvers", "route", "routes",
