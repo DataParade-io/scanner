@@ -12,6 +12,7 @@ import type {
   Invocation,
   MemberAccess,
   MemberDefinition,
+  ModuleVariable,
   LanguagePack,
   PackConfig,
   SameFileDeclaration,
@@ -484,16 +485,40 @@ export class AnalyzedFile {
           access.parent !== null &&
           /^(assignment|assignment_expression|augmented_assignment|augmented_assignment_expression)$/.test(access.parent.type) &&
           access.parent.childForFieldName("left")?.id === access.id;
+        const receiverName = this.chainName(site.object);
         out.push({
           name: site.name,
           line: site.line,
           column: site.column,
           ...(className ? { receiverClass: className } : {}),
+          ...(receiverName ? { receiverName } : {}),
+          called:
+            access?.parent != null &&
+            (access.parent.type === "call_expression" || access.parent.type === "call") &&
+            access.parent.childForFieldName("function")?.id === access.id,
           write,
         });
       }
     }
     return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** The name an expression is known by: identifier, last property of a chain, or called function. */
+  private chainName(node: Node): string | undefined {
+    if (node.type === "identifier") return node.text;
+    const member = this.memberByNode.get(node.id);
+    if (member) return unquote(member.property.text);
+    const callee = node.type === "call_expression" || node.type === "call" ? node.childForFieldName("function") : undefined;
+    return callee ? this.chainName(callee) : undefined;
+  }
+
+  /** Variables assigned at module level (`DEFAULT_FROM_EMAIL = ...` in a settings module). */
+  moduleVariables(): ModuleVariable[] {
+    const out: ModuleVariable[] = [];
+    for (const defs of this.rootScope.defs.values()) {
+      for (const def of defs) if (def.kind === "local") out.push({ name: def.name, line: def.line });
+    }
+    return out.sort((a, b) => a.line - b.line);
   }
 
   /**

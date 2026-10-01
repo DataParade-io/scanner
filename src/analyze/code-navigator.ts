@@ -36,6 +36,8 @@ export interface NavRequest {
   name?: string;
   /** `columns`: the concept whose stored columns are listed (`email`). */
   concept?: string;
+  /** `columns`: `"configured"` adds configured address keys (settings, config, env). */
+  include?: string;
   /** `members`: the class whose property is read or written. */
   owner?: string;
   limit?: number;
@@ -628,10 +630,11 @@ export class CodeNavigator {
 
   /**
    * `{"op":"columns","concept"}`: the stored columns the repository declares for a
-   * concept, collapsed across migrations (KDATAP-33da4c). See `column-catalog.ts`.
+   * concept, collapsed across migrations (KDATAP-33da4c); with `include: "configured"`,
+   * also the configured address keys (KDATAP-6661dd). See `column-catalog.ts`.
    */
-  columns(concept: string, limit: number): Record<string, unknown> {
-    const all = collapseColumns(this.columnCandidates, concept);
+  columns(concept: string, limit: number, include?: "configured"): Record<string, unknown> {
+    const all = collapseColumns(this.columnCandidates, concept, { include });
     return { concept, columns: all.slice(0, limit), total: all.length, truncated: all.length > limit };
   }
 
@@ -677,7 +680,7 @@ export class CodeNavigator {
           return done("members", this.members(request.name, request.owner, limit));
         case "columns":
           if (!request.concept) return fail("columns needs a concept");
-          return done("columns", this.columns(request.concept, Number.isInteger(request.limit) && (request.limit ?? 0) > 0 ? (request.limit as number) : COLUMNS_DEFAULT_LIMIT));
+          return done("columns", this.columns(request.concept, Number.isInteger(request.limit) && (request.limit ?? 0) > 0 ? (request.limit as number) : COLUMNS_DEFAULT_LIMIT, request.include === "configured" ? "configured" : undefined));
         case "writers":
           if (!request.name) return fail("writers needs a name");
           return done("writers", this.writers(request.name, limit, file ?? ""));

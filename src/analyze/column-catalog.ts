@@ -21,9 +21,23 @@ import { packForFile } from "./languages";
  *     `addColumn`);
  *   - `content-type`: strapi content types, a `collectionName` with `attributes`, in
  *     source or in a `schema.json` read with `JSON.parse` (ingestion keeps JSON files).
+ *
+ * With `include: "configured"` the catalog also lists configured address keys
+ * (KDATAP-6661dd): places a site keeps an address it configures for itself, named by a
+ * literal key. Their `table` is `settings`, `config` or `env` and `evidence` is `setting`,
+ * `config` or `env`:
+ *   - literal-key reads: `settingsCache.get('members_support_address')`,
+ *     `config.get('mail:from')`, `getSetting('x')`, `os.getenv('X')`;
+ *   - member reads of a settings, config or env object: `process.env.EMAIL_FROM`,
+ *     `env['EMAIL_FROM']`, `os.environ['X']`, Django `settings.DEFAULT_FROM_EMAIL`;
+ *   - assignments in a settings module (`DEFAULT_FROM_EMAIL = ...` in settings.py), keys of
+ *     config and default-settings files, including `default-settings.json`.
  */
 
-export type ColumnEvidence = "orm-field" | "schema-object" | "migration" | "content-type";
+export type ColumnEvidence = "orm-field" | "schema-object" | "migration" | "content-type" | "setting" | "config" | "env";
+
+/** Evidence kinds of configured address keys, which the catalog lists only on request. */
+const CONFIGURED_EVIDENCE: ReadonlySet<ColumnEvidence> = new Set(["setting", "config", "env"]);
 
 export interface ColumnLocation {
   file: string;
@@ -79,6 +93,122 @@ export function columnCandidates(file: AnalyzedFile, filePath: string): ColumnCa
   for (const field of file.fieldDeclarations()) out.push(...ormFieldCandidates(field, filePath));
   for (const key of file.keyDeclarations()) out.push(...keyCandidates(key, filePath));
   out.push(...migrationCandidates(file, filePath));
+  out.push(...configuredCandidates(file, filePath));
+  return out;
+}
+
+// ---- configured address keys (KDATAP-6661dd) ------------------------------------------
+
+type ConfiguredTable = "settings" | "config" | "env";
+const TABLE_EVIDENCE: Record<ConfiguredTable, ColumnEvidence> = { settings: "setting", config: "config", env: "env" };
+
+/** Words of an identifier, split at case changes and non-alphanumerics: `mail:from` -> mail, from. */
+function wordsOf(name: string): string[] {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .split(/[^A-Za-z0-9]+/)
+    .filter((word) => word.length > 0)
+    .map((word) => word.toLowerCase());
+}
+
+/** Which kind of configuration a receiver or callee name stands for, or undefined. */
+function configuredTable(name: string | undefined): ConfiguredTable | undefined {
+  if (!name) return undefined;
+  const words = wordsOf(name);
+  if (words.some((word) => /^(?:env|environ|environment|getenv)$/.test(word))) return "env";
+  if (words.some((word) => /^settings?$/.test(word))) return "settings";
+  if (words.some((word) => /^(?:config|conf|configuration)$/.test(word))) return "config";
+  return undefined;
+}
+
+/** Functions that read a setting by a literal key: `getSetting('k')`, `os.getenv('X')`. */
+const SETTING_READER = /^(?:get_?(?:setting|config|conf|env|environment)s?|getenv)$/i;
+
+/** Words that make a configured key an address even when it does not name the concept. */
+const ADDRESS_ROLE_WORDS = new Set(["from", "sender", "support", "noreply"]);
+const ADDRESS_ROLE_RUNS = /replyto|mailfrom|defaultfrom|noreply/;
+/** A role word followed by one of these is not an address (`sender_name`, `support_url`). */
+const NOT_AN_ADDRESS_SUFFIX = new Set([
+  "name", "names", "count", "id", "ids", "url", "uri", "domain", "enabled", "subject", "body", "template", "label", "title", "type", "at", "time", "date", "flag",
+]);
+
+/** Last words that make a key about an address when the concept comes earlier: `email_from`. */
+const ADDRESS_TAIL_WORDS = new Set(["from", "to", "reply", "address", "addresses", "sender", "recipient", "recipients", "cc", "bcc"]);
+
+/**
+ * Whether a configured key is an address key (KDATAP-6661dd). It names the concept as its
+ * last word (`ADMIN_EMAIL`, `sender_email`), or names it earlier and ends in an address
+ * word (`EMAIL_FROM`, `fallbackEmailAddress`); or it carries an address-role word (from,
+ * sender, reply_to, support, noreply, mail_from, default_from). A key whose last word is
+ * not an address word (`email_track_clicks`, `sender_name`, `EMAIL_SMTP_HOST`) is not one.
+ * Words are split at case changes and at `:`, `.`, `_`, `-`.
+ */
+export function isConfiguredAddressKey(key: string, concept: string, filePath: string): boolean {
+  const words = wordsOf(key);
+  if (words.length === 0) return false;
+  const last = words[words.length - 1];
+  const isConcept = signalTokenMatcher(concept, filePath);
+  if (isConcept(last)) return true;
+  if (words.slice(0, -1).some((word) => isConcept(word)) && ADDRESS_TAIL_WORDS.has(last)) return true;
+  if (NOT_AN_ADDRESS_SUFFIX.has(last)) return false;
+  return words.some((word) => ADDRESS_ROLE_WORDS.has(word)) || ADDRESS_ROLE_RUNS.test(words.join(""));
+}
+
+/** A settings module (`settings.py`, `settings/base.py`) whose module variables are settings. */
+function isPythonSettingsModule(filePath: string): boolean {
+  return /(?:^|\/)settings(?:\/[^/]+)?\.py$/.test(filePath) || /(?:^|\/)settings\.py$/.test(filePath);
+}
+
+/** A config or default-settings source file, whose object keys are configured values. */
+function isConfigFile(filePath: string): boolean {
+  return /(?:^|\/)(?:config|settings|default[-_.]?settings|defaults?)(?:\.[\w-]+)*\.(?:js|ts|mjs|cjs)$/i.test(filePath) || /\.config\.(?:js|ts|mjs|cjs)$/i.test(filePath);
+}
+
+/** Literal-key reads, env and settings member reads, settings-module variables, config keys. */
+function configuredCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  const add = (table: ConfiguredTable, column: string, line: number): void => {
+    out.push({ table, column, file: filePath, line, evidence: TABLE_EVIDENCE[table] });
+  };
+  for (const access of file.memberAccesses()) {
+    const table = configuredTable(access.receiverName);
+    if (table && !access.called) add(table, access.name, access.line);
+  }
+  for (const call of file.invocations()) {
+    const key = stringArgument(call.arguments[0]);
+    if (key !== undefined && SETTING_READER.test(call.callee)) add(configuredTable(call.callee) ?? "settings", key, call.line);
+  }
+  if (isPythonSettingsModule(filePath)) {
+    for (const variable of file.moduleVariables()) add("settings", variable.name, variable.line);
+  }
+  if (isConfigFile(filePath)) {
+    for (const key of file.keyDeclarations()) if (key.value.kind !== "object") add("config", key.name, key.line);
+  }
+  return out;
+}
+
+/**
+ * Default-settings JSON (ghost `default-settings.json`): groups of settings, each a key
+ * with a `defaultValue` or a `type`. Returns nothing for other JSON.
+ */
+export function defaultSettingsCandidates(file: FileInfo): ColumnCandidate[] {
+  if (!/default[-_.]?settings[^/]*\.json$/i.test(file.path)) return [];
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(file.content);
+  } catch {
+    return [];
+  }
+  const lines = file.content.split(/\r?\n/);
+  const out: ColumnCandidate[] = [];
+  for (const group of Object.values(parsed as Record<string, unknown>)) {
+    if (typeof group !== "object" || group === null) continue;
+    for (const [key, setting] of Object.entries(group as Record<string, unknown>)) {
+      if (typeof setting !== "object" || setting === null || !("defaultValue" in setting || "type" in setting)) continue;
+      const line = lines.findIndex((text) => text.includes(`"${key}"`)) + 1;
+      out.push({ table: "settings", column: key, file: file.path, line: Math.max(line, 1), evidence: "setting" });
+    }
+  }
   return out;
 }
 
@@ -202,7 +332,9 @@ export function contentTypeCandidates(file: FileInfo): ColumnCandidate[] {
 
 /** Candidates of one file, whatever its language: parsed source, or a `schema.json`. */
 export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undefined): ColumnCandidate[] {
-  if (file.language === "json") return path.basename(file.path) === "schema.json" ? contentTypeCandidates(file) : [];
+  if (file.language === "json") {
+    return path.basename(file.path) === "schema.json" ? contentTypeCandidates(file) : defaultSettingsCandidates(file);
+  }
   return analyzed ? columnCandidates(analyzed, file.path) : [];
 }
 
@@ -212,9 +344,15 @@ export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undef
  * type names the concept (`EmailField`, strapi `type: 'email'`).
  */
 export function matchesConcept(candidate: ColumnCandidate, concept: string): boolean {
+  if (CONFIGURED_EVIDENCE.has(candidate.evidence)) return isConfiguredAddressKey(candidate.column, concept, candidate.file);
   if (signalTokenMatcher(concept, candidate.file)(candidate.column)) return true;
   const type = (candidate.type ?? "").replace(/^.*\./, "").toLowerCase();
   return type === concept.toLowerCase() || type === `${concept.toLowerCase()}field`;
+}
+
+/** `include: "configured"` adds the configured address keys to the declared columns. */
+export interface CatalogOptions {
+  include?: "configured";
 }
 
 /**
@@ -222,9 +360,10 @@ export function matchesConcept(candidate: ColumnCandidate, concept: string): boo
  * same kind of evidence is one entry that lists every location (a column touched by many
  * migrations). Sorted by table, column, then file.
  */
-export function collapseColumns(candidates: readonly ColumnCandidate[], concept: string): ColumnEntry[] {
+export function collapseColumns(candidates: readonly ColumnCandidate[], concept: string, options: CatalogOptions = {}): ColumnEntry[] {
   const byKey = new Map<string, ColumnEntry>();
   for (const candidate of candidates) {
+    if (CONFIGURED_EVIDENCE.has(candidate.evidence) && options.include !== "configured") continue;
     if (!matchesConcept(candidate, concept)) continue;
     const key = [candidate.evidence, candidate.table ?? "", candidate.model ?? "", candidate.column].join("\u0000");
     const location = { file: candidate.file, line: candidate.line };
@@ -248,7 +387,7 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
  * language pack and reads `schema.json` content types; the analysis engine must be
  * initialized (`initAnalysisEngine`).
  */
-export function declaredColumns(files: readonly FileInfo[], concept: string): ColumnEntry[] {
+export function declaredColumns(files: readonly FileInfo[], concept: string, options: CatalogOptions = {}): ColumnEntry[] {
   const candidates: ColumnCandidate[] = [];
   for (const file of files) {
     const pack = packForFile(file.language, file.path);
@@ -259,5 +398,5 @@ export function declaredColumns(files: readonly FileInfo[], concept: string): Co
       analyzed?.dispose();
     }
   }
-  return collapseColumns(candidates, concept);
+  return collapseColumns(candidates, concept, options);
 }

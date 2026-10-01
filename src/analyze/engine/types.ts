@@ -202,6 +202,14 @@ export interface MemberAccess {
   column: number;
   /** Class of the object read from, when the engine can tell. */
   receiverClass?: string;
+  /**
+   * How the object read from is named: the identifier (`config`), the last property of a
+   * chain (`process.env` -> `env`, `this.settingsCache` -> `settingsCache`), or the called
+   * function (`useEnv()`). Absent for other shapes (KDATAP-6661dd).
+   */
+  receiverName?: string;
+  /** The property is called as a method (`settings.getDefaultEmail()`), not read as a key. */
+  called: boolean;
   /** The access is the target of an assignment. */
   write: boolean;
 }
@@ -269,4 +277,10 @@ export interface KeyDeclaration {
     /** The variable the call's result is assigned to. */
     assignedTo?: string;
   };
+}
+
+/** A variable defined at module level, as in a Django settings module (KDATAP-6661dd). */
+export interface ModuleVariable {
+  name: string;
+  line: number;
 }

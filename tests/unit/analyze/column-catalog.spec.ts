@@ -216,3 +216,123 @@ describe("declared column catalog", () => {
     expect(nav.handle({ op: "columns" })).toMatchObject({ ok: false });
   });
 });
+
+const SETTINGS_PY = [
+  "import os", //                                                             1
+  "", //                                                                      2
+  'DEFAULT_FROM_EMAIL: str = os.environ.get("DEFAULT_FROM_EMAIL", "a@b.c")', // 3
+  'SERVER_EMAIL = os.getenv("SERVER_EMAIL")', //                              4
+  'SUPPORT_REPLY_TO = os.environ["SUPPORT_REPLY_TO"]', //                     5
+  "EMAIL_HOST = 'localhost'", //                                              6
+  "LOCALE = 'en'", //                                                         7
+];
+
+const SEND_PY = [
+  "from django.conf import settings", //                                      1
+  "def send(mail):", //                                                       2
+  "    mail.sender = settings.DEFAULT_FROM_EMAIL", //                         3
+  "    mail.host = settings.EMAIL_HOST", //                                   4
+  "    mail.sender_name = settings.SENDER_NAME", //                           5
+];
+
+const READS_JS = [
+  "const from = config.get('mail:from');", //                                  1
+  "const support = this.settingsCache.get('members_support_address');", //     2
+  "const reply = getSetting('reply_to_address');", //                          3
+  "const sender = process.env.EMAIL_FROM;", //                                 4
+  "const admin = env['ADMIN_EMAIL'];", //                                      5
+  "const other = env.get('MAIL_REPLYTO');", //                                 6
+  "const subject = settings.get('email_subject');", //                         7
+  "const clicks = process.env.EMAIL_TRACK_CLICKS;", //                         8
+  "const helper = settings.getDefaultEmail();", //                             9
+  "const noise = user.get('email_from');", //                                  10
+];
+
+const STRAPI_CONFIG = [
+  "export const config = {", //                                               1
+  "  default: {", //                                                          2
+  "    provider: 'sendmail',", //                                             3
+  "    settings: { defaultFrom: 'Strapi <no-reply@strapi.io>', defaultReplyTo: 'x' },", // 4
+  "  },", //                                                                  5
+  "};", //                                                                    6
+];
+
+const DEFAULT_SETTINGS_JSON = JSON.stringify(
+  {
+    members: {
+      members_support_address: { defaultValue: "noreply", flags: "PUBLIC,RO", type: "string" },
+      members_signup_access: { defaultValue: "all", type: "string" },
+      members_from_address: { defaultValue: "noreply", type: "string" },
+    },
+  },
+  null,
+  2,
+);
+
+describe("configured address keys", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  const configured = (files: FileInfo[]): string[] => summary(declaredColumns(files, "email", { include: "configured" }));
+
+  it("lists nothing configured unless asked", () => {
+    expect(declaredColumns([file("src/reads.js", "javascript", READS_JS)], "email")).toEqual([]);
+  });
+
+  it("finds literal-key reads of settings, config and env, by receiver name", () => {
+    expect(configured([file("src/reads.js", "javascript", READS_JS)])).toEqual([
+      "config.mail:from (config)",
+      "env.ADMIN_EMAIL (env)",
+      "env.EMAIL_FROM (env)",
+      "env.MAIL_REPLYTO (env)",
+      "settings.members_support_address (setting)",
+      "settings.reply_to_address (setting)",
+    ]);
+  });
+
+  it("finds Django settings: environment reads, settings-module assignments and settings members", () => {
+    const entries = declaredColumns(
+      [file("shop/settings.py", "python", SETTINGS_PY), file("shop/send.py", "python", SEND_PY)],
+      "email",
+      { include: "configured" },
+    );
+    expect(summary(entries)).toEqual([
+      "env.DEFAULT_FROM_EMAIL (env)",
+      "env.SERVER_EMAIL (env)",
+      "env.SUPPORT_REPLY_TO (env)",
+      "settings.DEFAULT_FROM_EMAIL (setting)",
+      "settings.SERVER_EMAIL (setting)",
+      "settings.SUPPORT_REPLY_TO (setting)",
+    ]);
+    // Every read and definition site is listed: the settings module and the sender.
+    expect(entries.find((e) => e.table === "settings" && e.column === "DEFAULT_FROM_EMAIL")?.locations).toEqual([
+      { file: "shop/send.py", line: 3 },
+      { file: "shop/settings.py", line: 3 },
+    ]);
+  });
+
+  it("finds keys in config files and default-settings JSON", () => {
+    const entries = declaredColumns(
+      [file("email/server/config.ts", "typescript", STRAPI_CONFIG), file("data/default-settings/default-settings.json", "json", DEFAULT_SETTINGS_JSON.split("\n"))],
+      "email",
+      { include: "configured" },
+    );
+    expect(summary(entries)).toEqual([
+      "config.defaultFrom (config)",
+      "config.defaultReplyTo (config)",
+      "settings.members_from_address (setting)",
+      "settings.members_support_address (setting)",
+    ]);
+    expect(entries.find((e) => e.column === "members_support_address")).toMatchObject({ file: "data/default-settings/default-settings.json", line: 3 });
+  });
+
+  it("returns configured entries from the navigator only with include", () => {
+    const nav = new CodeNavigator([file("src/reads.js", "javascript", READS_JS), file("shop/models.py", "python", DJANGO)]);
+    const plain = nav.handle({ op: "columns", concept: "email" }) as any;
+    expect(plain.columns.map((c: any) => c.evidence)).toEqual(["orm-field", "orm-field"]);
+    const withConfigured = nav.handle({ op: "columns", concept: "email", include: "configured" }) as any;
+    expect(withConfigured.columns.map((c: any) => c.evidence)).toContain("config");
+    expect(withConfigured.columns.find((c: any) => c.column === "mail:from")).toMatchObject({ table: "config", evidence: "config", locations: [{ file: "src/reads.js", line: 1 }] });
+  });
+});
