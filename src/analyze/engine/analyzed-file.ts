@@ -685,12 +685,30 @@ export class AnalyzedFile {
             kind,
             text: value.text.slice(0, 60),
             ...(isObject ? { keys: pairKeys(value), strings: objectStrings(value, 1) } : { keys: [], strings: {} }),
+            ...(kind === "call" ? this.callRoot(value) : {}),
           },
           ...this.keyContainer(pair),
         });
       }
     }
     return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** Where a method chain starts: `model.text().nullable()` -> `model` and `text`. */
+  private callRoot(call: Node): { callRoot?: { receiver?: string; method: string } } {
+    let node: Node = call;
+    for (let guard = 0; guard < 16; guard += 1) {
+      const callee = node.childForFieldName("function") ?? node.childForFieldName("constructor");
+      if (!callee) return {};
+      const member = this.memberByNode.get(callee.id);
+      if (!member) return callee.type === "identifier" ? { callRoot: { method: callee.text } } : {};
+      if (member.object.type === "call_expression" || member.object.type === "call") {
+        node = member.object;
+        continue;
+      }
+      return { callRoot: { receiver: member.object.text.slice(0, 60), method: unquote(member.property.text) } };
+    }
+    return {};
   }
 
   /** The call a key's object literal is an argument of. */

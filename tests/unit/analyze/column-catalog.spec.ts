@@ -1,5 +1,6 @@
 import { CodeNavigator } from "../../../src/analyze/code-navigator";
 import { declaredColumns, type ColumnEntry } from "../../../src/analyze/column-catalog";
+import { conceptProfile, normalizeTypeName } from "../../../src/analyze/concept-profile";
 import { initAnalysisEngine } from "../../../src/analyze/engine/engine";
 import { LANGUAGE_PACKS } from "../../../src/analyze/languages";
 import type { FileInfo } from "../../../src/core/types/file";
@@ -334,5 +335,100 @@ describe("configured address keys", () => {
     const withConfigured = nav.handle({ op: "columns", concept: "email", include: "configured" }) as any;
     expect(withConfigured.columns.map((c: any) => c.evidence)).toContain("config");
     expect(withConfigured.columns.find((c: any) => c.column === "mail:from")).toMatchObject({ table: "config", evidence: "config", locations: [{ file: "src/reads.js", line: 1 }] });
+  });
+});
+
+const PHONE_PY = [
+  "from phonenumber_field.modelfields import PhoneNumberField", //                       1
+  "", //                                                                                 2
+  "class Address(ModelWithMetadata):", //                                                3
+  '    phone = PossiblePhoneNumberField(blank=True, default="")', //                     4
+  "    billing_phone = models.CharField(max_length=30)", //                              5
+  "    contact = PhoneNumberField(null=True)", //                                        6
+  "    phone_verified = models.BooleanField(default=False)", //                          7
+  "    street = models.CharField(max_length=256)", //                                    8
+  "", //                                                                                 9
+  "class AddressForm(forms.Form):", //                                                   10
+  "    phone = forms.CharField()", //                                                    11
+  "", //                                                                                 12
+  "class AddressInput(Input):", //                                                       13
+  "    mobile = PossiblePhoneNumberField()", //                                          14
+];
+
+const DML_TS = [
+  "import { model } from '@medusajs/framework/utils'", //                                1
+  "", //                                                                                 2
+  "const Customer = model.define('customer', {", //                                      3
+  "  id: model.id({ prefix: 'cus' }).primaryKey(),", //                                  4
+  "  phone: model.text().nullable(),", //                                                5
+  "  email: model.text().searchable().nullable(),", //                                   6
+  "  phone_count: model.number(),", //                                                  7
+  "  addresses: model.hasMany(() => Address, { mappedBy: 'customer' }),", //            8
+  "})", //                                                                               9
+  "export const StockLocationAddress = model.define({ name: 'StockLocationAddress', tableName: 'stock_location_address' }, {", // 10
+  "  phone: model.text().nullable(),", //                                                11
+  "})", //                                                                               12
+];
+
+const PHONE_SETTINGS_PY = [
+  "import os", //                                                                        1
+  "TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER')", //                      2
+  "SUPPORT_PHONE = os.getenv('SUPPORT_PHONE')", //                                       3
+  "SMS_SENDER_PHONE = os.environ['SMS_SENDER_PHONE']", //                                4
+  "PHONE_VERIFIED = False", //                                                           5
+  "DEFAULT_FROM_EMAIL = 'a@b.c'", //                                                     6
+  "SENDER_ADDRESS = 'x'", //                                                             7
+];
+
+describe("concept-generic catalog", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("finds phone columns by the signal rules and by type, on any model base", () => {
+    const entries = declaredColumns([file("account/models.py", "python", PHONE_PY)], "phone_number");
+    // `contact` is catalogued for its PhoneNumberField type; the boolean flag, the form field and
+    // the Input class are not columns; `billing_phone` matches the phone rule inside a longer name.
+    expect(summary(entries)).toEqual(["Address.billing_phone (orm-field)", "Address.contact (orm-field)", "Address.phone (orm-field)"]);
+    expect(entries.find((e) => e.column === "phone")).toMatchObject({ model: "Address", line: 4, type: "PossiblePhoneNumberField" });
+  });
+
+  it("keeps the email catalog of the same file free of phone columns", () => {
+    expect(declaredColumns([file("account/models.py", "python", PHONE_PY)], "email")).toEqual([]);
+  });
+
+  it("parses Medusa DML models, with the define name as the table", () => {
+    const entries = declaredColumns([file("customer/models/customer.ts", "typescript", DML_TS)], "phone_number");
+    expect(summary(entries)).toEqual(["customer.phone (orm-field)", "stock_location_address.phone (orm-field)"]);
+    expect(entries[0]).toMatchObject({ model: "Customer", type: "text", line: 5 });
+    expect(entries[1]).toMatchObject({ model: "StockLocationAddress", line: 11 });
+    // The same models answer the email concept: `model.text().searchable()` is text.
+    expect(summary(declaredColumns([file("customer/models/customer.ts", "typescript", DML_TS)], "email"))).toEqual(["customer.email (orm-field)"]);
+  });
+
+  it("uses the concept's role words for configured keys: phone keys must name the phone", () => {
+    const entries = declaredColumns([file("shop/settings.py", "python", PHONE_SETTINGS_PY)], "phone_number", { include: "configured" });
+    expect(summary(entries)).toEqual([
+      "env.SMS_SENDER_PHONE (env)",
+      "env.SUPPORT_PHONE (env)",
+      "env.TWILIO_PHONE_NUMBER (env)",
+      "settings.SMS_SENDER_PHONE (setting)",
+      "settings.SUPPORT_PHONE (setting)",
+      "settings.TWILIO_PHONE_NUMBER (setting)",
+    ]);
+    // No email keys, no bare role words such as SENDER_ADDRESS, no flags.
+    const emails = declaredColumns([file("shop/settings.py", "python", PHONE_SETTINGS_PY)], "email", { include: "configured" });
+    expect(summary(emails)).toEqual(["settings.DEFAULT_FROM_EMAIL (setting)", "settings.SENDER_ADDRESS (setting)"]);
+  });
+
+  it("reads concept profiles from data, with a default for unknown concepts", () => {
+    const phone = conceptProfile("phone_number");
+    expect(phone.typeHints.has("possiblephonenumberfield")).toBe(true);
+    expect(phone.roleWordsSuffice).toBe(false);
+    expect(conceptProfile("email").roleWordsSuffice).toBe(true);
+    const unknown = conceptProfile("date_of_birth");
+    expect([...unknown.typeHints]).toEqual(["dateofbirth", "dateofbirthfield"]);
+    expect(unknown.negativeWords.has("enabled")).toBe(true);
+    expect(normalizeTypeName("phonenumber_field.modelfields.PhoneNumberField")).toBe("phonenumberfield");
   });
 });

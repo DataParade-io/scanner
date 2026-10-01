@@ -263,6 +263,11 @@ export interface KeyDeclaration {
     /** `object`: its keys, and its string or name-valued pairs. */
     keys: string[];
     strings: Record<string, string>;
+    /**
+     * `call`: where a method chain starts, `model.text().nullable()` -> receiver `model`,
+     * method `text` (KDATAP-0df343).
+     */
+    callRoot?: { receiver?: string; method: string };
   };
   /** The call whose argument is the object this key sits directly in, if any. */
   container?: {
