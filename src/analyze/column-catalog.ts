@@ -412,6 +412,14 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
  * initialized (`initAnalysisEngine`).
  */
 export function declaredColumns(files: readonly FileInfo[], concept: string, options: CatalogOptions = {}): ColumnEntry[] {
+  return collapseColumns(collectColumnCandidates(files), concept, options);
+}
+
+/**
+ * The column candidates of every file, for any concept: parse once, then `collapseColumns`
+ * per concept (KDATAP-7a094c). The analysis engine must be initialized.
+ */
+export function collectColumnCandidates(files: readonly FileInfo[]): ColumnCandidate[] {
   const candidates: ColumnCandidate[] = [];
   for (const file of files) {
     const pack = packForFile(file.language, file.path);
@@ -422,5 +430,5 @@ export function declaredColumns(files: readonly FileInfo[], concept: string, opt
       analyzed?.dispose();
     }
   }
-  return collapseColumns(candidates, concept, options);
+  return candidates;
 }

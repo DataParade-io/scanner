@@ -67,3 +67,8 @@ export function conceptProfile(concept: string): ConceptProfile {
     negativeWords: new Set(catalog.negative_words),
   };
 }
+
+/** Whether `patterns/concept-profiles.yaml` has an entry for the concept id. */
+export function hasConceptProfile(concept: string): boolean {
+  return loadCatalog().concept_profiles.some((profile) => profile.id === concept);
+}
