@@ -293,6 +293,10 @@ interface GroupableHit {
   callLinks?: string[];
   /** The catalogued stored column the mention names (KDATAP-7a094c). */
   column?: string;
+  /** The column is the catalog declaration the mention's own line is (KDATAP-fb8019). */
+  columnDeclared?: boolean;
+  /** The column is a key written into a JSON record column (KDATAP-fb8019). */
+  columnRecord?: boolean;
 }
 
 /** Id of a declaration node: signal, file, and 1-based line of the declaration. */
@@ -309,7 +313,21 @@ export function declarationNodeId(signalId: string, filePath: string, line: numb
  * links declarations across files.
  */
 export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] {
-  const refusedLog = process.env.DATAPARADE_REFUSED_LOG;
+  // A name that two columns' declarations both claim names none of them (KDATAP-fb8019).
+  // That is found by running the joins until no new contested name appears, so which column
+  // met the name first never matters; only the last run writes the refused log.
+  const contested = new Set<string>();
+  for (let round = 0; round < 4; round += 1) {
+    const found = new Set<string>();
+    assignOnce(hits, contested, found, false);
+    if ([...found].every((name) => contested.has(name))) break;
+    found.forEach((name) => contested.add(name));
+  }
+  return assignOnce(hits, contested, new Set<string>(), true);
+}
+
+function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlySet<string>, newlyContested: Set<string>, log: boolean): T[] {
+  const refusedLog = log ? process.env.DATAPARADE_REFUSED_LOG : undefined;
   const parent = new Map<string, string>();
   const find = (node: string): string => {
     let root = node;
@@ -326,6 +344,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // A set also carries the stored column its mentions name; two different columns are
   // never one data item (KDATAP-7a094c), so a join that would put them together is refused.
   const columnOf = new Map<string, string>();
+  // Sets whose column is a catalog declaration, and the name a join is trying to claim.
+  const declaredSets = new Set<string>();
+  let claiming: string | undefined;
   const union = (left: string, right: string): void => {
     const a = find(left);
     const b = find(right);
@@ -348,6 +369,8 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       return;
     }
     if (columnA && columnB && columnA !== columnB) {
+      // Two declared columns meeting at one name: the name is contested.
+      if (claiming && declaredSets.has(a) && declaredSets.has(b)) newlyContested.add(claiming);
       // Column cannot-link: the sets name different stored columns. The log names the phase
       // whose evidence would have joined them in `joinedBy`.
       if (refusedLog) {
@@ -363,6 +386,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     parent.set(a, b);
     if (nameA && !nameB) nameOf.set(b, nameA);
     if (columnA && !columnB) columnOf.set(b, columnA);
+    if (declaredSets.has(a) || declaredSets.has(b)) declaredSets.add(b);
   };
   const groupNode = (group: string): string => {
     const node = `group:${group}`;
@@ -371,6 +395,44 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       nameOf.set(node, group);
     }
     return node;
+  };
+  // A name carried by the declarations of two or more columns (`phone_number:address` over
+  // five tables' phone fields) names no one of them. Order must not decide who claims it:
+  // such a name is claimed by none, columned sets keep their own identity, and the
+  // mentions with no column join each other under it (KDATAP-fb8019).
+  const declaredColumnsByName = new Map<string, Set<string>>();
+  hits.forEach((hit) => {
+    if (hit.location === "comment" || !hit.column || !hit.columnDeclared) return;
+    const name = effectiveName(hit) ?? hit.group;
+    if (!name) return;
+    const columns = declaredColumnsByName.get(name) ?? new Set<string>();
+    columns.add(hit.column);
+    declaredColumnsByName.set(name, columns);
+  });
+  const isAmbiguousName = (name: string): boolean => contestedNames.has(name) || (declaredColumnsByName.get(name)?.size ?? 0) > 1;
+  const freeNode = (name: string): string => {
+    const node = `free:${name}`;
+    if (!parent.has(node)) {
+      parent.set(node, node);
+      nameOf.set(node, name);
+    }
+    return node;
+  };
+  /** The group node a set may join under `name`, or undefined when the claim is refused. */
+  const nameNodeFor = (setNode: string, name: string): string | undefined => {
+    if (!isAmbiguousName(name)) return groupNode(name);
+    // Only a set with no column of its own joins the free pile of an ambiguous name.
+    if (!columnOf.get(find(setNode))) return freeNode(name);
+    if (refusedLog) {
+      appendFileSync(refusedLog, `${JSON.stringify({ phase: "claim", joinedBy: phase, a: name, b: columnOf.get(find(setNode)), at: setNode })}\n`);
+    }
+    return undefined;
+  };
+  const joinName = (setNode: string, name: string): void => {
+    const node = nameNodeFor(setNode, name);
+    claiming = name;
+    if (node) union(setNode, node);
+    claiming = undefined;
   };
   const declarationNode = (hit: T): string | undefined =>
     hit.declaration && hit.declaration !== "unresolved"
@@ -386,6 +448,13 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     const node = `hit:${index}`;
     parent.set(node, node);
     if (hit.column) columnOf.set(node, hit.column);
+    if (hit.column && hit.columnDeclared) declaredSets.add(node);
+    // A key written into a JSON record column is a copy stored as its own data item: it
+    // joins the other keys of the same record column and nothing else (KDATAP-fb8019).
+    if (hit.columnRecord && hit.column) {
+      union(node, `record:${hit.column}`);
+      return;
+    }
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
     for (const passed of hit.passedDeclarations ?? []) {
@@ -405,9 +474,9 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     hit.weakGroup === true && !(hit.fieldKeys ?? []).some((field) => field.definition);
   phase = "name";
   hits.forEach((hit, index) => {
-    if (hit.location === "comment" || isWeak(hit)) return;
+    if (hit.location === "comment" || hit.columnRecord || isWeak(hit)) return;
     const name = effectiveName(hit);
-    if (name) union(`hit:${index}`, groupNode(name));
+    if (name) joinName(`hit:${index}`, name);
   });
 
   // An entity field read (`order.user_email`, `member.get('email')`) joins the
@@ -419,7 +488,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // is a copy into that item, so only definitions link there.
   phase = "field";
   hits.forEach((hit, index) => {
-    if (hit.location === "comment") return;
+    if (hit.location === "comment" || hit.columnRecord) return;
     for (const field of hit.fieldKeys ?? []) {
       if (hit.group && !field.definition) continue;
       const node = `${hit.id}:${field.key}`;
@@ -431,7 +500,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // so the mention joins the declaration of the parameter it is passed to.
   phase = "call";
   hits.forEach((hit, index) => {
-    if (hit.location === "comment") return;
+    if (hit.location === "comment" || hit.columnRecord) return;
     for (const link of hit.callLinks ?? []) union(`hit:${index}`, `decl:${link}`);
   });
 
@@ -446,7 +515,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   const votesFor = (vote: (hit: T) => string | undefined): void => {
     const votes = new Map<string, Map<string, number>>();
     hits.forEach((hit, index) => {
-      if (hit.location === "comment" || (hit.group && !isWeak(hit))) return;
+      if (hit.location === "comment" || hit.columnRecord || (hit.group && !isWeak(hit))) return;
       const group = vote(hit);
       if (!group) return;
       const root = find(`hit:${index}`);
@@ -457,7 +526,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     });
     for (const [root, counts] of votes) {
       const [best] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-      union(root, groupNode(best[0]));
+      joinName(root, best[0]);
     }
   };
   phase = "receiver-vote";
@@ -468,8 +537,8 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // Weak names apply now, subject to cannot-link.
   phase = "weak-name";
   hits.forEach((hit, index) => {
-    if (hit.location === "comment" || !isWeak(hit) || !hit.group) return;
-    union(`hit:${index}`, groupNode(hit.group));
+    if (hit.location === "comment" || hit.columnRecord || !isWeak(hit) || !hit.group) return;
+    joinName(`hit:${index}`, hit.group);
   });
   phase = "file-vote";
   votesFor((hit) => {
@@ -503,6 +572,10 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
 
   return hits.map((hit, index) => {
     if (hit.location === "comment") return hit;
+    if (hit.columnRecord && hit.column) {
+      const record = `${hit.id}@${hit.column}`;
+      return record === hit.group ? hit : { ...hit, group: record };
+    }
     const root = find(`hit:${index}`);
     const name = nameOf.get(root) ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
     return name === undefined || name === hit.group ? hit : { ...hit, group: name };
