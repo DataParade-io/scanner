@@ -58,3 +58,7 @@
 (call_expression
   function: (_) @call.callee
   arguments: (arguments (_) @call.argument)) @call
+
+; every call or construction, with or without arguments (callers, KDATAP-059e1e)
+(call_expression function: (_) @invocation.callee) @invocation
+(new_expression constructor: (_) @invocation.callee) @invocation

@@ -56,3 +56,6 @@
 (call
   function: (_) @call.callee
   arguments: (argument_list (_) @call.argument)) @call
+
+; every call, with or without arguments (callers, KDATAP-059e1e)
+(call function: (_) @invocation.callee) @invocation
