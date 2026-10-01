@@ -1,0 +1,263 @@
+import path from "path";
+import type { FileInfo } from "../core/types/file";
+import { signalTokenMatcher } from "../pii-signals/signal-token";
+import type { AnalyzedFile } from "./engine/analyzed-file";
+import { analyzeSource } from "./engine/engine";
+import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
+import { packForFile } from "./languages";
+
+/**
+ * Catalog of the stored columns a repository declares (KDATAP-33da4c): the closed set of
+ * "where can this concept be stored" that a decision model chooses from, and that
+ * grouping can link mentions to. Deterministic, no model calls.
+ *
+ * Declarations come from four sources, each found on the parse tree (the engine's
+ * class-field, key and call listings), not on raw text:
+ *   - `orm-field`: Django `models.*Field` class attributes, TypeORM `@Column` properties,
+ *     Sequelize `define` / `init` attribute objects, Mongoose `Schema` keys;
+ *   - `schema-object`: ghost-style objects, `members: { email: { type: 'string' } }`;
+ *   - `migration`: knex `createTable` / `table` / `alterTable` column calls, and helper
+ *     calls that take a table and a column name (`helper.changeToType('users', 'email')`,
+ *     `addColumn`);
+ *   - `content-type`: strapi content types, a `collectionName` with `attributes`, in
+ *     source or in a `schema.json` read with `JSON.parse` (ingestion keeps JSON files).
+ */
+
+export type ColumnEvidence = "orm-field" | "schema-object" | "migration" | "content-type";
+
+export interface ColumnLocation {
+  file: string;
+  line: number;
+}
+
+/** One declared column. `file` and `line` are the first location; `locations` lists all. */
+export interface ColumnEntry {
+  /** The table or collection name when known, else the model class. */
+  table?: string;
+  /** The class or content-type name when known. */
+  model?: string;
+  column: string;
+  file: string;
+  line: number;
+  evidence: ColumnEvidence;
+  /** The declared column type as written (`EmailField`, `string`, `varchar`), when known. */
+  type?: string;
+  locations: ColumnLocation[];
+}
+
+/** A declaration found in one file, before the concept filter and the collapse. */
+export type ColumnCandidate = Omit<ColumnEntry, "locations">;
+
+/** Column types that cannot hold an address; such columns are not catalogued. */
+const NON_TEXT_TYPE =
+  /^(?:int|integer|bigint|biginteger|smallint|tinyint|mediumint|serial|float|double|real|decimal|numeric|number|boolean|bool|bit|date|datetime|datetime2|timestamp|timestamptz|time|increments|bigincrements|uuid|binary|blob|enum|boolean(?:field)?|(?:positive|small|big)?(?:integer|auto)field|decimalfield|floatfield|datefield|datetimefield|timefield|durationfield|uuidfield|foreignkey|onetoonefield|manytomanyfield|relation|media|component|dynamiczone|password|uid)$/i;
+
+/** Knex column builder methods; the first argument is the column name. */
+const KNEX_COLUMN_METHODS = new Set([
+  "string", "text", "integer", "bigInteger", "boolean", "date", "dateTime", "datetime", "timestamp",
+  "time", "json", "jsonb", "uuid", "binary", "float", "double", "decimal", "enu", "enum", "specificType",
+  "tinyint", "smallint", "mediumint", "bigint", "increments", "bigIncrements", "char", "varchar",
+]);
+
+/** Knex calls that open a table; the first argument is the table name. */
+const KNEX_TABLE_CALLS = new Set(["createTable", "createTableIfNotExists", "table", "alterTable", "createTableLike"]);
+
+/** Helper calls taking a table and a column name as their first two string arguments. */
+const COLUMN_HELPER = /(?:column|totype)/i;
+const DESTRUCTIVE_HELPER = /^(?:drop|remove|delete|rename)/i;
+
+/** ORM field class names that point at another model rather than store a value. */
+const DJANGO_RELATION = /^(?:ForeignKey|OneToOneField|ManyToManyField|GenericForeignKey)$/;
+
+function isNonText(type: string | undefined): boolean {
+  return type !== undefined && NON_TEXT_TYPE.test(type.replace(/^.*\./, "").trim());
+}
+
+/** Column candidates declared in one analyzed file, for any concept. */
+export function columnCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  for (const field of file.fieldDeclarations()) out.push(...ormFieldCandidates(field, filePath));
+  for (const key of file.keyDeclarations()) out.push(...keyCandidates(key, filePath));
+  out.push(...migrationCandidates(file, filePath));
+  return out;
+}
+
+/** Django `models.*Field` attributes and TypeORM `@Column` properties. */
+function ormFieldCandidates(field: FieldDeclaration, filePath: string): ColumnCandidate[] {
+  const where = { file: filePath, line: field.line, evidence: "orm-field" as const };
+  const init = field.initializer;
+  if (init && /Field$/.test(init.callee) && !DJANGO_RELATION.test(init.callee)) {
+    const isModel = init.calleeText.startsWith("models.") || field.ownerBases.some((base) => /Model$/.test(base));
+    if (!isModel || isNonText(init.callee)) return [];
+    return [{ ...(field.owner ? { table: field.owner, model: field.owner } : {}), column: field.name, type: init.callee, ...where }];
+  }
+  const column = field.decorators.find((decorator) => /^(?:Column|PrimaryColumn)$/.test(decorator.name));
+  if (!column) return [];
+  const type = column.options["type"] ?? column.strings[0] ?? field.typeAnnotation;
+  if (isNonText(type)) return [];
+  const entity = field.ownerDecorators.find((decorator) => decorator.name === "Entity");
+  const table = entity?.strings[0] ?? entity?.options["name"] ?? field.owner;
+  return [
+    {
+      ...(table ? { table } : {}),
+      ...(field.owner ? { model: field.owner } : {}),
+      column: column.options["name"] ?? field.name,
+      ...(type ? { type } : {}),
+      ...where,
+    },
+  ];
+}
+
+/** Ghost-style schema objects, Sequelize and Mongoose attribute objects, strapi content types. */
+function keyCandidates(key: KeyDeclaration, filePath: string): ColumnCandidate[] {
+  const base = { column: key.name, file: filePath, line: key.line };
+  const typeText = key.value.strings["type"];
+  const container = key.container;
+  if (key.path[0] === "attributes" && key.ownerSiblings["collectionName"] !== undefined && key.value.kind === "object") {
+    if (typeText === undefined || isNonText(typeText)) return [];
+    const model = key.ownerSiblings["info.name"] ?? key.ownerSiblings["info.displayName"] ?? key.ownerSiblings["info.singularName"];
+    return [{ table: key.ownerSiblings["collectionName"], ...(model ? { model } : {}), type: typeText, evidence: "content-type", ...base }];
+  }
+  if (container && key.path.length === 0) {
+    const sequelizeDefine = container.callee === "define" && container.position === 1 && container.strings.length > 0;
+    const sequelizeInit = container.callee === "init" && container.position === 0 && !container.constructed;
+    const mongoose = container.callee === "Schema" && container.constructed && container.position === 0;
+    if (!sequelizeDefine && !sequelizeInit && !mongoose) return [];
+    // A Mongoose key is `email: String` or `email: { type: String }`; Sequelize needs `type`.
+    const type = key.value.kind === "object" ? typeText : mongoose && key.value.kind === "name" ? key.value.text : undefined;
+    if (type === undefined || isNonText(type)) return [];
+    const model = sequelizeDefine
+      ? container.strings[0]
+      : sequelizeInit
+        ? (container.options["modelName"] ?? container.receiver)
+        : container.assignedTo;
+    const table = sequelizeDefine
+      ? (container.options["tableName"] ?? container.strings[0])
+      : sequelizeInit
+        ? (container.options["tableName"] ?? container.options["modelName"] ?? container.receiver)
+        : container.assignedTo;
+    return [{ ...(table ? { table } : {}), ...(model ? { model } : {}), type, evidence: "orm-field", ...base }];
+  }
+  // Ghost-style: a table key at the top of the object, whose column keys carry a string `type`.
+  if (key.path.length === 1 && !container && key.value.kind === "object" && typeText !== undefined) {
+    if (isNonText(typeText) || key.value.keys.includes("references")) return [];
+    return [{ table: key.path[0], type: typeText, evidence: "schema-object", ...base }];
+  }
+  return [];
+}
+
+/** Knex column calls inside a table call, and helpers taking a table and a column name. */
+function migrationCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  for (const call of file.invocations()) {
+    const first = stringArgument(call.arguments[0]);
+    if (first === undefined) continue;
+    const where = { file: filePath, line: call.line, evidence: "migration" as const };
+    if (KNEX_COLUMN_METHODS.has(call.callee)) {
+      const table = call.ancestors?.find((ancestor) => KNEX_TABLE_CALLS.has(ancestor.callee) && ancestor.firstString !== undefined);
+      if (!table || isNonText(call.callee === "specificType" ? stringArgument(call.arguments[1]) : call.callee)) continue;
+      out.push({ table: table.firstString, column: first, type: call.callee, ...where });
+    } else if (COLUMN_HELPER.test(call.callee) && !DESTRUCTIVE_HELPER.test(call.callee)) {
+      const column = stringArgument(call.arguments[1]);
+      if (column === undefined) continue;
+      // `addColumn('t', 'c', 'string')`, `createAddColumnMigration('t', 'c', { type: 'integer' })`.
+      const type = stringArgument(call.arguments[2]) ?? call.options?.["type"];
+      if (call.options && "references" in call.options) continue;
+      if (isNonText(type)) continue;
+      out.push({ table: first, column, ...(type ? { type } : {}), ...where });
+    }
+  }
+  return out;
+}
+
+function stringArgument(argument: { text: string } | undefined): string | undefined {
+  const match = argument ? /^(["'`])([^"'`\\]*)\1$/.exec(argument.text.trim()) : null;
+  return match ? match[2] : undefined;
+}
+
+/**
+ * Strapi content-type `schema.json`: `collectionName`, `info`, and `attributes` whose keys
+ * carry a `type`. Returns nothing for JSON that is not a content type.
+ */
+export function contentTypeCandidates(file: FileInfo): ColumnCandidate[] {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(file.content);
+  } catch {
+    return [];
+  }
+  const schema = parsed as { collectionName?: unknown; info?: { displayName?: unknown; name?: unknown; singularName?: unknown }; attributes?: unknown };
+  if (typeof schema?.collectionName !== "string" || typeof schema.attributes !== "object" || schema.attributes === null) return [];
+  const model = [schema.info?.displayName, schema.info?.name, schema.info?.singularName].find((name): name is string => typeof name === "string");
+  const lines = file.content.split(/\r?\n/);
+  const out: ColumnCandidate[] = [];
+  for (const [column, attribute] of Object.entries(schema.attributes as Record<string, unknown>)) {
+    const type = (attribute as { type?: unknown } | null)?.type;
+    if (typeof type !== "string" || isNonText(type)) continue;
+    const line = lines.findIndex((text) => text.includes(`"${column}"`)) + 1;
+    out.push({ table: schema.collectionName, ...(model ? { model } : {}), column, type, file: file.path, line: Math.max(line, 1), evidence: "content-type" });
+  }
+  return out;
+}
+
+/** Candidates of one file, whatever its language: parsed source, or a `schema.json`. */
+export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undefined): ColumnCandidate[] {
+  if (file.language === "json") return path.basename(file.path) === "schema.json" ? contentTypeCandidates(file) : [];
+  return analyzed ? columnCandidates(analyzed, file.path) : [];
+}
+
+/**
+ * Whether a column is an occurrence of the concept: its name matches the concept's tokens
+ * as the scanner's signal does (`email`, `sender_email`, `customerEmail`), or its declared
+ * type names the concept (`EmailField`, strapi `type: 'email'`).
+ */
+export function matchesConcept(candidate: ColumnCandidate, concept: string): boolean {
+  if (signalTokenMatcher(concept, candidate.file)(candidate.column)) return true;
+  const type = (candidate.type ?? "").replace(/^.*\./, "").toLowerCase();
+  return type === concept.toLowerCase() || type === `${concept.toLowerCase()}field`;
+}
+
+/**
+ * Filter candidates by concept and collapse duplicates: the same table and column from the
+ * same kind of evidence is one entry that lists every location (a column touched by many
+ * migrations). Sorted by table, column, then file.
+ */
+export function collapseColumns(candidates: readonly ColumnCandidate[], concept: string): ColumnEntry[] {
+  const byKey = new Map<string, ColumnEntry>();
+  for (const candidate of candidates) {
+    if (!matchesConcept(candidate, concept)) continue;
+    const key = [candidate.evidence, candidate.table ?? "", candidate.model ?? "", candidate.column].join("\u0000");
+    const location = { file: candidate.file, line: candidate.line };
+    const known = byKey.get(key);
+    if (!known) {
+      byKey.set(key, { ...candidate, locations: [location] });
+    } else if (!known.locations.some((l) => l.file === location.file && l.line === location.line)) {
+      known.locations.push(location);
+    }
+  }
+  return [...byKey.values()]
+    .map((entry) => {
+      const locations = [...entry.locations].sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
+      return { ...entry, file: locations[0].file, line: locations[0].line, locations };
+    })
+    .sort((a, b) => (a.table ?? "").localeCompare(b.table ?? "") || a.column.localeCompare(b.column) || a.file.localeCompare(b.file));
+}
+
+/**
+ * The stored columns the files declare for a concept (`email`). Parses each file with a
+ * language pack and reads `schema.json` content types; the analysis engine must be
+ * initialized (`initAnalysisEngine`).
+ */
+export function declaredColumns(files: readonly FileInfo[], concept: string): ColumnEntry[] {
+  const candidates: ColumnCandidate[] = [];
+  for (const file of files) {
+    const pack = packForFile(file.language, file.path);
+    const analyzed = pack ? analyzeSource(pack, file.content) : undefined;
+    try {
+      candidates.push(...candidatesForFile(file, analyzed));
+    } finally {
+      analyzed?.dispose();
+    }
+  }
+  return collapseColumns(candidates, concept);
+}

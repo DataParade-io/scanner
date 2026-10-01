@@ -4,6 +4,9 @@ import type {
   BindingUse,
   CallSite,
   ClassDefinition,
+  DecoratorInfo,
+  FieldDeclaration,
+  KeyDeclaration,
   EnclosingRange,
   FunctionDefinition,
   Invocation,
@@ -518,6 +521,8 @@ export class AnalyzedFile {
         column: call.startPosition.column,
         deferred,
         ...(className ? { receiverClass: className } : {}),
+        ancestors: this.enclosingCalls(call),
+        ...(Object.keys(argumentLiterals(list).options).length > 0 ? { options: argumentLiterals(list).options } : {}),
         arguments: nodes.map((node, position) => {
           const keywordNode = node.childForFieldName("name");
           const value = keywordNode ? node.childForFieldName("value") : null;
@@ -530,6 +535,169 @@ export class AnalyzedFile {
       });
     }
     return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** The calls whose arguments contain `node`, innermost first (KDATAP-33da4c). */
+  private enclosingCalls(node: Node): Array<{ callee: string; firstString?: string }> {
+    const out: Array<{ callee: string; firstString?: string }> = [];
+    let child: Node = node;
+    for (let parent = node.parent; parent && out.length < 4; child = parent, parent = parent.parent) {
+      if (parent.type !== "call_expression" && parent.type !== "call" && parent.type !== "new_expression") continue;
+      const callee = parent.childForFieldName("function") ?? parent.childForFieldName("constructor");
+      if (!callee || callee.id === child.id) continue;
+      const member = this.memberByNode.get(callee.id);
+      const name = member ? member.property : callee.type === "identifier" ? callee : undefined;
+      if (!name) continue;
+      const first = parent.childForFieldName("arguments")?.namedChildren.find((c): c is Node => !!c && c.type !== "comment");
+      out.push({ callee: unquote(name.text), ...(first && isStringLiteral(first) ? { firstString: unquote(first.text) } : {}) });
+    }
+    return out;
+  }
+
+  /**
+   * Fields declared directly in class bodies, with their initializer call, decorators and
+   * the owner's bases and decorators (KDATAP-33da4c): Django `email = models.EmailField()`,
+   * TypeORM `@Column() email: string`. Fields first assigned in methods are left out.
+   */
+  fieldDeclarations(): FieldDeclaration[] {
+    const out: FieldDeclaration[] = [];
+    for (const sites of this.sitesByLine.values()) {
+      for (const site of sites) {
+        if (site.role !== "definition" || site.kind !== "field" || site.implicit) continue;
+        const declaration = site.node.parent;
+        if (!declaration) continue;
+        const classScope = this.nearestScope(declaration, (s) => s.kind === "class");
+        const value = declaration.childForFieldName("value") ?? declaration.childForFieldName("right");
+        const callee = value && (value.type === "call" || value.type === "call_expression") ? value.childForFieldName("function") : undefined;
+        const typeNode = declaration.childForFieldName("type");
+        const bases = classScope?.node.childForFieldName("superclasses");
+        out.push({
+          name: site.name,
+          line: site.line,
+          column: site.column,
+          ...(classScope?.name ? { owner: classScope.name } : {}),
+          ownerBases: bases ? bases.namedChildren.filter((c): c is Node => !!c && c.type !== "keyword_argument").map((c) => c.text) : [],
+          ownerDecorators: classScope ? this.decoratorsOf(classScope.node) : [],
+          decorators: this.decoratorsOf(declaration),
+          ...(typeNode ? { typeAnnotation: typeNode.text.replace(/^:\s*/, "") } : {}),
+          ...(callee && value
+            ? {
+                initializer: {
+                  callee: callee.text.split(".").pop() ?? callee.text,
+                  calleeText: callee.text,
+                  ...argumentLiterals(value.childForFieldName("arguments")),
+                },
+              }
+            : {}),
+        });
+      }
+    }
+    return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** Decorators written on a class or member node, including those before `export`. */
+  private decoratorsOf(node: Node): DecoratorInfo[] {
+    const holders = [node, ...(node.parent?.type === "export_statement" ? [node.parent] : [])];
+    const out: DecoratorInfo[] = [];
+    for (const holder of holders) {
+      for (const child of holder.namedChildren) {
+        if (!child || child.type !== "decorator") continue;
+        const expression = child.namedChildren[0];
+        if (!expression) continue;
+        const callee = expression.type === "call_expression" ? expression.childForFieldName("function") : expression;
+        if (!callee) continue;
+        out.push({
+          name: callee.text.split(".").pop() ?? callee.text,
+          ...argumentLiterals(expression.type === "call_expression" ? expression.childForFieldName("arguments") : null),
+        });
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Object-literal keys whose value is another expression, with the keys above them and
+   * the call the object is an argument of (KDATAP-33da4c): ghost-style schema objects
+   * (`members: { email: { type: 'string' } }`), Sequelize `define('User', { email: ... })`,
+   * Mongoose `new Schema({ email: String })`, content types (`collectionName` +
+   * `attributes`). Only `pair` keys; interface members and keyword arguments are left out.
+   */
+  keyDeclarations(): KeyDeclaration[] {
+    const out: KeyDeclaration[] = [];
+    for (const sites of this.sitesByLine.values()) {
+      for (const site of sites) {
+        if (site.role !== "definition" || site.kind !== "key") continue;
+        const pair = site.node.parent;
+        const value = pair?.type === "pair" ? pair.childForFieldName("value") : undefined;
+        if (!pair || !value) continue;
+        const path: string[] = [];
+        let ownerPair: Node | undefined;
+        for (let current = pair.parent; current; current = current.parent) {
+          if (this.scopes.get(current.id)?.kind === "function") break;
+          if (current.type === "pair") {
+            const key = current.childForFieldName("key");
+            if (key) path.push(unquote(key.text));
+            ownerPair ??= current;
+          }
+        }
+        const isObject = value.type === "object" || value.type === "dictionary";
+        const kind = isObject
+          ? "object"
+          : isStringLiteral(value)
+            ? "string"
+            : value.type === "identifier" || this.memberByNode.has(value.id)
+              ? "name"
+              : value.type === "call_expression" || value.type === "call" || value.type === "new_expression"
+                ? "call"
+                : "other";
+        out.push({
+          name: site.name,
+          line: site.line,
+          column: site.column,
+          path,
+          ownerSiblings: ownerPair?.parent ? objectStrings(ownerPair.parent, 2) : {},
+          value: {
+            kind,
+            text: value.text.slice(0, 60),
+            ...(isObject ? { keys: pairKeys(value), strings: objectStrings(value, 1) } : { keys: [], strings: {} }),
+          },
+          ...this.keyContainer(pair),
+        });
+      }
+    }
+    return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** The call a key's object literal is an argument of. */
+  private keyContainer(pair: Node): { container?: NonNullable<KeyDeclaration["container"]> } {
+    let object: Node | null = pair.parent;
+    if (!object) return {};
+    while (object.parent && /^(parenthesized_expression|as_expression|satisfies_expression)$/.test(object.parent.type)) object = object.parent;
+    const list = object.parent;
+    const call = list?.parent;
+    if (!list || !call || !/^(arguments|argument_list)$/.test(list.type)) return {};
+    if (call.type !== "call_expression" && call.type !== "call" && call.type !== "new_expression") return {};
+    const callee = call.childForFieldName("function") ?? call.childForFieldName("constructor");
+    if (!callee) return {};
+    const member = this.memberByNode.get(callee.id);
+    const args = list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment");
+    const options: Record<string, string> = {};
+    for (const arg of args) if (arg.type === "object" && arg.id !== object.id) Object.assign(options, objectStrings(arg, 1));
+    const holder = call.parent;
+    const target = holder?.childForFieldName("name") ?? holder?.childForFieldName("left");
+    return {
+      container: {
+        callee: unquote((member ? member.property : callee).text),
+        constructed: call.type === "new_expression",
+        position: args.findIndex((a) => a.id === object.id),
+        strings: args.filter(isStringLiteral).map((a) => unquote(a.text)),
+        options,
+        ...(member ? { receiver: member.object.text.slice(0, 60) } : {}),
+        ...(target && target.type === "identifier" && (holder?.childForFieldName("value")?.id === call.id || holder?.childForFieldName("right")?.id === call.id)
+          ? { assignedTo: target.text }
+          : {}),
+      },
+    };
   }
 
   /** Classes and interfaces defined in the file, with their extent. */
@@ -1194,6 +1362,55 @@ export class AnalyzedFile {
     }
     return { type: "other" };
   }
+}
+
+function isStringLiteral(node: Node): boolean {
+  return /^(string|template_string|concatenated_string)$/.test(node.type);
+}
+
+/** String-literal arguments, and the pairs of object-literal or keyword arguments. */
+function argumentLiterals(args: Node | null | undefined): { strings: string[]; options: Record<string, string> } {
+  const strings: string[] = [];
+  const options: Record<string, string> = {};
+  for (const arg of args?.namedChildren ?? []) {
+    if (!arg || arg.type === "comment") continue;
+    if (isStringLiteral(arg)) strings.push(unquote(arg.text));
+    else if (arg.type === "object") Object.assign(options, objectStrings(arg, 1));
+    else if (arg.type === "keyword_argument") {
+      const key = arg.childForFieldName("name");
+      const value = arg.childForFieldName("value");
+      if (key && value) options[key.text] = isStringLiteral(value) ? unquote(value.text) : value.text.slice(0, 60);
+    }
+  }
+  return { strings, options };
+}
+
+function pairKeys(object: Node): string[] {
+  return object.namedChildren
+    .filter((c): c is Node => !!c && c.type === "pair")
+    .map((pair) => unquote(pair.childForFieldName("key")?.text ?? ""));
+}
+
+/**
+ * Pairs of an object literal whose value is a string (unquoted) or a plain name or member
+ * (`type: DataTypes.STRING`); with `depth` 2, the string pairs of object values too, under
+ * dotted keys (`info.name`).
+ */
+function objectStrings(object: Node, depth: number): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const pair of object.namedChildren) {
+    if (!pair || pair.type !== "pair") continue;
+    const key = pair.childForFieldName("key");
+    const value = pair.childForFieldName("value");
+    if (!key || !value) continue;
+    const name = unquote(key.text);
+    if (isStringLiteral(value)) out[name] = unquote(value.text);
+    else if (value.type === "identifier" || value.type === "member_expression") out[name] = value.text.slice(0, 60);
+    else if (value.type === "object" && depth > 1) {
+      for (const [inner, text] of Object.entries(objectStrings(value, depth - 1))) out[`${name}.${inner}`] = text;
+    }
+  }
+  return out;
 }
 
 function addDefinition(

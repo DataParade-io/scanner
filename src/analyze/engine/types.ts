@@ -130,6 +130,15 @@ export interface Invocation {
   /** Class of the receiver of a method call, when the engine can tell. */
   receiverClass?: string;
   arguments: InvocationArgument[];
+  /**
+   * The calls this one sits inside the arguments of, innermost first, at most four
+   * (`knex.schema.alterTable('users', (table) => { table.string('email') })`: the
+   * `string` call has `alterTable` with first string `users`). A call is not enclosed by
+   * the calls in its own callee chain.
+   */
+  ancestors?: Array<{ callee: string; firstString?: string }>;
+  /** Pairs of object-literal and keyword arguments: the unquoted string, else the expression text. */
+  options?: Record<string, string>;
 }
 
 /** A class or interface defined in a file. Lines are 1-based and inclusive. */
@@ -195,4 +204,69 @@ export interface MemberAccess {
   receiverClass?: string;
   /** The access is the target of an assignment. */
   write: boolean;
+}
+
+/** A decorator on a class or class member: `@Column({ type: 'varchar' })`. */
+export interface DecoratorInfo {
+  name: string;
+  /** Unquoted string-literal arguments. */
+  strings: string[];
+  /** Pairs of an object-literal argument: the unquoted string, else the expression text. */
+  options: Record<string, string>;
+}
+
+/**
+ * A field declared in a class body, with what it is initialized to and decorated with
+ * (KDATAP-33da4c). `initializer` is set when the value is a call (`models.EmailField(...)`).
+ */
+export interface FieldDeclaration {
+  name: string;
+  line: number;
+  column: number;
+  /** The class that owns the field. */
+  owner?: string;
+  /** Base classes of the owner (`Model`, `models.Model`), as written. */
+  ownerBases: string[];
+  ownerDecorators: DecoratorInfo[];
+  decorators: DecoratorInfo[];
+  /** The declared type annotation (`email: string`), without the colon. */
+  typeAnnotation?: string;
+  initializer?: {
+    /** Final name of the callee (`EmailField`) and the callee as written (`models.EmailField`). */
+    callee: string;
+    calleeText: string;
+    strings: string[];
+    options: Record<string, string>;
+  };
+}
+
+/** An object-literal key with its value, and the object it sits in (KDATAP-33da4c). */
+export interface KeyDeclaration {
+  name: string;
+  line: number;
+  column: number;
+  /** Keys of the enclosing pairs, innermost first, up to a function boundary. */
+  path: string[];
+  /** String-valued pairs of the object that holds the innermost enclosing key (`info.name` for nested). */
+  ownerSiblings: Record<string, string>;
+  value: {
+    kind: "object" | "name" | "call" | "string" | "other";
+    text: string;
+    /** `object`: its keys, and its string or name-valued pairs. */
+    keys: string[];
+    strings: Record<string, string>;
+  };
+  /** The call whose argument is the object this key sits directly in, if any. */
+  container?: {
+    callee: string;
+    constructed: boolean;
+    position: number;
+    /** The call's string-literal arguments, in order. */
+    strings: string[];
+    /** String-valued pairs of the call's other object arguments (`{ tableName: 'users' }`). */
+    options: Record<string, string>;
+    receiver?: string;
+    /** The variable the call's result is assigned to. */
+    assignedTo?: string;
+  };
 }
