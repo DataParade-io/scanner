@@ -467,10 +467,22 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     }
   });
 
+  // A set with neither a name nor a declaration is named after its first member's
+  // location (`email~src/a.js:12`). It creates no pairs by itself, but gives an external
+  // data-item label (applyGroupLabels) a name to attach to.
+  const locationNameByRoot = new Map<string, string>();
+  hits.forEach((hit, index) => {
+    if (hit.location === "comment" || hit.evidence.endLine === undefined) return;
+    const root = find(`hit:${index}`);
+    const name = `${hit.id}~${hit.evidence.filePath}:${hit.evidence.endLine}`;
+    const current = locationNameByRoot.get(root);
+    if (current === undefined || name.localeCompare(current) < 0) locationNameByRoot.set(root, name);
+  });
+
   return hits.map((hit, index) => {
     if (hit.location === "comment") return hit;
     const root = find(`hit:${index}`);
-    const name = nameOf.get(root) ?? declarationNameByRoot.get(root);
+    const name = nameOf.get(root) ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
     return name === undefined || name === hit.group ? hit : { ...hit, group: name };
   });
 }

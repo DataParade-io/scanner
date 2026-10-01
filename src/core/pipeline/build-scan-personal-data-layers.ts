@@ -65,7 +65,9 @@ export function buildScanPersonalDataLayers(
     if (!entry.mentionIds.includes(mentionId)) {
       entry.mentionIds.push(mentionId);
     }
-    if (hit.group) {
+    // A location-named singleton (`email~file:line`) is a mention no evidence grouped; it
+    // stays on the mention for external labels but is not listed as a data item group.
+    if (hit.group && !hit.group.startsWith(`${hit.id}~`)) {
       const groupMentions = entry.groups.get(hit.group) ?? [];
       if (!groupMentions.includes(mentionId)) {
         groupMentions.push(mentionId);
