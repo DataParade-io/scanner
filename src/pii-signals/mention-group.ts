@@ -291,6 +291,8 @@ interface GroupableHit {
   passedDeclarations?: Array<{ line: number; name: string }>;
   passedMentionLines?: number[];
   callLinks?: string[];
+  /** The catalogued stored column the mention names (KDATAP-7a094c). */
+  column?: string;
 }
 
 /** Id of a declaration node: signal, file, and 1-based line of the declaration. */
@@ -321,12 +323,17 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   // named sets together is refused (cannot-link), so one bridging line never merges
   // `email:member` with `email:customer`.
   const nameOf = new Map<string, string>();
+  // A set also carries the stored column its mentions name; two different columns are
+  // never one data item (KDATAP-7a094c), so a join that would put them together is refused.
+  const columnOf = new Map<string, string>();
   const union = (left: string, right: string): void => {
     const a = find(left);
     const b = find(right);
     if (a === b) return;
     const nameA = nameOf.get(a);
     const nameB = nameOf.get(b);
+    const columnA = columnOf.get(a);
+    const columnB = columnOf.get(b);
     if (nameA && nameB && nameA !== nameB) {
       // Cannot-link refusal: two differently named sets that this phase's evidence would
       // have joined. Logged for merge evaluation when DATAPARADE_REFUSED_LOG is set.
@@ -340,8 +347,22 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
       }
       return;
     }
+    if (columnA && columnB && columnA !== columnB) {
+      // Column cannot-link: the sets name different stored columns. The log names the phase
+      // whose evidence would have joined them in `joinedBy`.
+      if (refusedLog) {
+        const index = left.startsWith("hit:") ? Number(left.slice(4)) : -1;
+        const hit = index >= 0 ? hits[index] : undefined;
+        appendFileSync(
+          refusedLog,
+          `${JSON.stringify({ phase: "column", joinedBy: phase, a: columnA, b: columnB, at: hit ? `${hit.evidence.filePath}:${hit.evidence.endLine ?? ""}` : left })}\n`,
+        );
+      }
+      return;
+    }
     parent.set(a, b);
     if (nameA && !nameB) nameOf.set(b, nameA);
+    if (columnA && !columnB) columnOf.set(b, columnA);
   };
   const groupNode = (group: string): string => {
     const node = `group:${group}`;
@@ -364,6 +385,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
     parent.set(node, node);
+    if (hit.column) columnOf.set(node, hit.column);
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
     for (const passed of hit.passedDeclarations ?? []) {

@@ -8,6 +8,9 @@ import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../ana
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
 import { mentionReceiver, type ReceiverVia } from "../analyze/mention-receiver";
+import { collapseColumns, collectColumnCandidates } from "../analyze/column-catalog";
+import { hasConceptProfile } from "../analyze/concept-profile";
+import { columnIndex, mentionColumn } from "../analyze/column-identity";
 import { mentionFieldKeys, passedMentionLines, passedValueDeclarations } from "../analyze/mention-fields";
 import {
   addConceptFunctions,
@@ -66,6 +69,7 @@ function withDeclarations(
   const lines = file.content.split(/\r?\n/);
   analyzed.setKnownClass((name) => declared.has(name));
   try {
+    const memberWrites = analyzed.memberAccesses().filter((access) => access.write);
     const definitions = analyzed.functionDefinitions();
     for (const name of analyzed.classNames()) {
       const set = classes.get(name.toLowerCase()) ?? new Set<string>();
@@ -96,6 +100,7 @@ function withDeclarations(
       );
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
       const tableEntity = queriedTableEntity(analyzed, lines, hit.evidence.endLine);
+      const columnHints = columnHintsOnLine(analyzed, memberWrites, hit.evidence.endLine, isConceptToken);
       const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken, lines[hit.evidence.endLine - 1]);
       let legacy = false;
       if (process.env.DATAPARADE_RECEIVER_STATS && found.className) {
@@ -112,6 +117,7 @@ function withDeclarations(
         ...(passedDeclarations.length > 0 ? { passedDeclarations } : {}),
         ...(passedLines.length > 0 ? { passedMentionLines: passedLines } : {}),
         ...(tableEntity ? { tableEntity } : {}),
+        ...(columnHints ? { columnHints } : {}),
       };
     });
   } catch {
@@ -119,6 +125,34 @@ function withDeclarations(
   } finally {
     analyzed.dispose();
   }
+}
+
+/**
+ * Keys and keyword arguments the line defines, and member writes on it, that name the
+ * concept: what the line says about which stored column it fills (KDATAP-7a094c).
+ */
+function columnHintsOnLine(
+  analyzed: AnalyzedFile,
+  writes: ReadonlyArray<{ name: string; line: number; receiverClass?: string; receiverName?: string }>,
+  line: number,
+  isConceptToken: (token: string) => boolean,
+): PiiSignalHit["columnHints"] {
+  const keys = [
+    ...new Set(
+      analyzed
+        .sitesOnLine(line)
+        .filter((site) => site.role === "definition" && site.kind === "key" && isConceptToken(site.name))
+        .map((site) => site.name),
+    ),
+  ];
+  const written = writes
+    .filter((access) => access.line === line && isConceptToken(access.name))
+    .map((access) => ({
+      name: access.name,
+      ...(access.receiverClass ? { receiverClass: access.receiverClass } : {}),
+      ...(access.receiverName ? { receiverName: access.receiverName } : {}),
+    }));
+  return keys.length > 0 || written.length > 0 ? { keys, writes: written } : undefined;
 }
 
 /** Query-builder calls that name a table: knex('t'), db('t'), .from('t'), .into('t'), .table('t'), joins. */
@@ -230,6 +264,31 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
   return out;
 }
 
+/**
+ * Give each code mention the catalogued stored column it names (KDATAP-7a094c). The
+ * catalog is per signal: the email and phone signals of one scan each use their own
+ * columns. Nothing happens for signals without a concept profile or when the engine is off.
+ */
+function withColumns(hits: PiiSignalHit[], files: FileInfo[]): PiiSignalHit[] {
+  const ids = new Set(hits.filter((hit) => hit.location !== "comment" && hasConceptProfile(hit.id)).map((hit) => hit.id));
+  if (ids.size === 0 || !isAnalysisEngineReady()) return hits;
+  const candidates = collectColumnCandidates(files);
+  const indexes = new Map([...ids].map((id) => [id, columnIndex(collapseColumns(candidates, id))]));
+  return hits.map((hit) => {
+    const index = indexes.get(hit.id);
+    if (!index || hit.location === "comment") return hit;
+    const column = mentionColumn(index, {
+      filePath: hit.evidence.filePath,
+      line: hit.evidence.endLine,
+      ...(hit.group ? { group: hit.group } : {}),
+      ...(hit.receiverEntity ? { receiverEntity: hit.receiverEntity } : {}),
+      ...(hit.tableEntity ? { tableEntity: hit.tableEntity } : {}),
+      ...(hit.columnHints ? { columnHints: hit.columnHints } : {}),
+    });
+    return column ? { ...hit, column } : hit;
+  });
+}
+
 function matchedHitsForFile(file: FileInfo): PiiSignalHit[] {
   const lines = file.content.split(/\r?\n/);
   const withGroup = (hit: PiiSignalHit): PiiSignalHit => {
@@ -291,7 +350,7 @@ export function buildPersonalDataInventoryFromIngest(
     for (const match of file.content.matchAll(/\b(?:class|interface)\s+([A-Z][A-Za-z0-9_]*)/g)) declared.add(match[1]);
   }
   const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes, declared));
-  const grouped = assignDeclarationGroups(withCallLinks(pending, functions, classes));
+  const grouped = assignDeclarationGroups(withColumns(withCallLinks(pending, functions, classes), files));
   // Optional data-item labels from a classifier: DATAPARADE_GROUP_LABELS names a JSON file
   // mapping group names to data-item keys.
   const labelsPath = process.env.DATAPARADE_GROUP_LABELS;

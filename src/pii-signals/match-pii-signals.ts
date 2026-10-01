@@ -60,6 +60,16 @@ export interface PiiSignalHit {
   tableEntity?: string;
   /** Lines of other mentions whose variable is passed into a concept key on this line. */
   passedMentionLines?: number[];
+  /**
+   * Keys and keyword arguments the line defines, and member writes on it, that name the
+   * concept (KDATAP-7a094c): the evidence for which stored column the mention names.
+   */
+  columnHints?: { keys: string[]; writes: Array<{ name: string; receiverClass?: string; receiverName?: string }> };
+  /**
+   * The catalogued stored column the mention names, as `table.column` (KDATAP-7a094c).
+   * Two different columns are never one data item.
+   */
+  column?: string;
 }
 
 export interface MatchPiiSignalsFileInput {
