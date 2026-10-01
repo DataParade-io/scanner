@@ -226,3 +226,15 @@ describe("deferred calls", () => {
     expect(groupOf("app/tasks.py", 1)).toBe(groupOf("app/notify.py", 3));
   });
 });
+
+describe("container-shaped owners", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("gives no field key to members of options or answers types", () => {
+    const lines = ["interface CmdOptions {", "  email?: string;", "}", "interface Member {", "  email: string;", "}"];
+    expect(keysOf("typescript", "a.ts", lines, 2)).toEqual([]);
+    expect(keysOf("typescript", "a.ts", lines, 5)).toEqual([{ key: "member.email", definition: true }]);
+  });
+});
