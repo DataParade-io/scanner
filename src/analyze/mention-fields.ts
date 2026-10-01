@@ -1,6 +1,9 @@
 import type { AnalyzedFile } from "./engine/analyzed-file";
 import { entityName } from "../pii-signals/mention-group";
 
+const CONTAINER_OWNER =
+  /(Options|Answers?|Params|Parameters|Args|Arguments|Body|Input|Payload|Props|Config|Request|Response|Data|Dto|DTO)$/;
+
 export interface MentionFieldKey {
   /** `entity.field`, e.g. `order.user_email` or `member.email`. */
   key: string;
@@ -30,6 +33,9 @@ export function mentionFieldKeys(
 ): MentionFieldKey[] {
   const keys = new Map<string, boolean>();
   const add = (owner: string | undefined, field: string, definition: boolean) => {
+    // A field of an options, answers, params or payload type describes an input shape, not
+    // an entity: `interface CmdOptions { email?: string }`, `interface Answers {...}`.
+    if (owner && CONTAINER_OWNER.test(owner)) return;
     const entity = owner ? entityName(owner) : undefined;
     if (!entity) return;
     const key = `${entity}.${field}`;
