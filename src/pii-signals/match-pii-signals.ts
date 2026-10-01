@@ -70,6 +70,13 @@ export interface PiiSignalHit {
    * Two different columns are never one data item.
    */
   column?: string;
+  /** The column is the catalog declaration the mention's own line is (KDATAP-fb8019). */
+  columnDeclared?: boolean;
+  /**
+   * The column is a key written into a JSON record column (`Model.field.key`, KDATAP-fb8019):
+   * a copy stored as its own data item, joined to nothing but the same record column.
+   */
+  columnRecord?: boolean;
 }
 
 export interface MatchPiiSignalsFileInput {

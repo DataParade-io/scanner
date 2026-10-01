@@ -8,9 +8,10 @@ import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../ana
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveMentionDeclaration } from "../analyze/mention-declaration";
 import { mentionReceiver, type ReceiverVia } from "../analyze/mention-receiver";
-import { collapseColumns, collectColumnCandidates } from "../analyze/column-catalog";
+import { collapseColumns, collectColumnFacts } from "../analyze/column-catalog";
+import { recordKeyColumns } from "../analyze/json-record-keys";
 import { hasConceptProfile } from "../analyze/concept-profile";
-import { columnIndex, mentionColumn } from "../analyze/column-identity";
+import { columnIndex, isDeclaredColumn, isRecordColumn, mentionColumn } from "../analyze/column-identity";
 import { mentionFieldKeys, passedMentionLines, passedValueDeclarations } from "../analyze/mention-fields";
 import {
   addConceptFunctions,
@@ -272,20 +273,28 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
 function withColumns(hits: PiiSignalHit[], files: FileInfo[]): PiiSignalHit[] {
   const ids = new Set(hits.filter((hit) => hit.location !== "comment" && hasConceptProfile(hit.id)).map((hit) => hit.id));
   if (ids.size === 0 || !isAnalysisEngineReady()) return hits;
-  const candidates = collectColumnCandidates(files);
-  const indexes = new Map([...ids].map((id) => [id, columnIndex(collapseColumns(candidates, id))]));
+  const { candidates, facts } = collectColumnFacts(files);
+  const recordKeys = recordKeyColumns(facts, candidates);
+  const indexes = new Map([...ids].map((id) => [id, columnIndex(collapseColumns(candidates, id), recordKeys)]));
   return hits.map((hit) => {
     const index = indexes.get(hit.id);
     if (!index || hit.location === "comment") return hit;
-    const column = mentionColumn(index, {
+    const evidence = {
       filePath: hit.evidence.filePath,
       line: hit.evidence.endLine,
       ...(hit.group ? { group: hit.group } : {}),
       ...(hit.receiverEntity ? { receiverEntity: hit.receiverEntity } : {}),
       ...(hit.tableEntity ? { tableEntity: hit.tableEntity } : {}),
       ...(hit.columnHints ? { columnHints: hit.columnHints } : {}),
-    });
-    return column ? { ...hit, column } : hit;
+    };
+    const column = mentionColumn(index, evidence);
+    if (!column) return hit;
+    return {
+      ...hit,
+      column,
+      ...(isDeclaredColumn(index, evidence, column) ? { columnDeclared: true } : {}),
+      ...(isRecordColumn(index, evidence, column) ? { columnRecord: true } : {}),
+    };
   });
 }
 
