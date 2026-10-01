@@ -106,19 +106,19 @@ export function passedValueDeclarations(
   file: AnalyzedFile,
   line: number,
   isConceptToken: (token: string) => boolean,
-): number[] {
+): Array<{ line: number; name: string }> {
   const sites = file.sitesOnLine(line);
   const passesIntoKey = sites.some(
     (site) => site.role === "definition" && site.kind === "key" && isConceptToken(site.name),
   );
   if (!passesIntoKey) return [];
-  const lines = new Set<number>();
+  const found = new Map<string, { line: number; name: string }>();
   for (const site of sites) {
     if (site.role !== "reference" || site.inCallee || !isConceptToken(site.name)) continue;
     const declaration = file.lookup(site.name, site.node);
     if (declaration && (declaration.kind === "parameter" || declaration.kind === "local")) {
-      lines.add(declaration.line);
+      found.set(`${declaration.line}#${site.name}`, { line: declaration.line, name: site.name });
     }
   }
-  return [...lines];
+  return [...found.values()];
 }

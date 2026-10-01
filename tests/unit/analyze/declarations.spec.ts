@@ -41,10 +41,10 @@ describe("engine declarations, JavaScript", () => {
 
   it("finds each kind of same-file declaration", () => {
     expect(file.declarationOf("email", 4)).toBeUndefined();
-    expect(file.declarationOf("recipient", 7, 20)).toEqual({ line: 6, kind: "parameter" });
-    expect(file.declarationOf("to", 8, 11)).toEqual({ line: 7, kind: "local" });
-    expect(file.declarationOf("sendWelcomeEmail", 12, 0)).toEqual({ line: 11, kind: "function" });
-    expect(file.declarationOf("Account", 12, 0)).toEqual({ line: 1, kind: "class" });
+    expect(file.declarationOf("recipient", 7, 20)).toMatchObject({ line: 6, kind: "parameter" });
+    expect(file.declarationOf("to", 8, 11)).toMatchObject({ line: 7, kind: "local" });
+    expect(file.declarationOf("sendWelcomeEmail", 12, 0)).toMatchObject({ line: 11, kind: "function" });
+    expect(file.declarationOf("Account", 12, 0)).toMatchObject({ line: 1, kind: "class" });
   });
 
   it("answers syntax kind and enclosing ranges", () => {
@@ -54,39 +54,39 @@ describe("engine declarations, JavaScript", () => {
   });
 
   it("resolves a class field read through this", () => {
-    expect(resolveMentionDeclaration(file, 4, concept)).toEqual({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(file, 4, concept)).toMatchObject({ line: 2, kind: "field" });
   });
 
   it("declares a class field on its own line", () => {
-    expect(resolveMentionDeclaration(file, 2, concept)).toEqual({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(file, 2, concept)).toMatchObject({ line: 2, kind: "field" });
   });
 
   it("declares a getter by itself as a function when it is the only occurrence", () => {
-    expect(resolveMentionDeclaration(file, 3, (t) => t === "address")).toEqual({ line: 3, kind: "function" });
+    expect(resolveMentionDeclaration(file, 3, (t) => t === "address")).toMatchObject({ line: 3, kind: "function" });
   });
 
   it("lets a parameter outrank the function name", () => {
-    expect(resolveMentionDeclaration(file, 11, concept)).toEqual({ line: 11, kind: "parameter" });
+    expect(resolveMentionDeclaration(file, 11, concept)).toMatchObject({ line: 11, kind: "parameter" });
   });
 
   it("declares an object key on its own line", () => {
-    expect(resolveMentionDeclaration(file, 12, concept)).toEqual({ line: 12, kind: "field" });
+    expect(resolveMentionDeclaration(file, 12, concept)).toMatchObject({ line: 12, kind: "field" });
   });
 
   it("declares a local named for the concept on its own line", () => {
-    expect(resolveMentionDeclaration(file, 13, concept)).toEqual({ line: 13, kind: "local" });
+    expect(resolveMentionDeclaration(file, 13, concept)).toMatchObject({ line: 13, kind: "local" });
   });
 
   it("follows a member read to the base declaration, and marks unknown bases unresolved", () => {
     const local = parse("javascript", "b.js", ["function f(member) {", "  return member.email;", "}", "audit(other.email);"]);
-    expect(resolveMentionDeclaration(local, 2, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(local, 2, concept)).toMatchObject({ line: 1, kind: "parameter" });
     expect(resolveMentionDeclaration(local, 4, concept)).toBe("unresolved");
     local.dispose();
   });
 
   it("prefers the value passed over the callee name", () => {
     const call = parse("javascript", "c.js", ["function f(email) {", "  return validator.isEmail(email);", "}"]);
-    expect(resolveMentionDeclaration(call, 2, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(call, 2, concept)).toMatchObject({ line: 1, kind: "parameter" });
     call.dispose();
   });
 
@@ -97,8 +97,8 @@ describe("engine declarations, JavaScript", () => {
       "function broken( { const x = ; ",
     ]);
     expect(broken.hasSyntaxError).toBe(true);
-    expect(resolveMentionDeclaration(broken, 1, concept)).toEqual({ line: 1, kind: "parameter" });
-    expect(broken.declarationOf("early", 1)).toEqual({ line: 2, kind: "local" });
+    expect(resolveMentionDeclaration(broken, 1, concept)).toMatchObject({ line: 1, kind: "parameter" });
+    expect(broken.declarationOf("early", 1)).toMatchObject({ line: 2, kind: "local" });
     broken.dispose();
   });
 });
@@ -124,22 +124,22 @@ describe("engine declarations, TypeScript", () => {
   afterAll(() => file.dispose());
 
   it("finds typed parameters, locals, and fields", () => {
-    expect(file.declarationOf("recipient", 8, 20)).toEqual({ line: 7, kind: "parameter" });
-    expect(file.declarationOf("target", 9, 0)).toEqual({ line: 8, kind: "local" });
-    expect(resolveMentionDeclaration(file, 2, concept)).toEqual({ line: 2, kind: "field" });
-    expect(resolveMentionDeclaration(file, 8, concept)).toEqual({ line: 7, kind: "parameter" });
+    expect(file.declarationOf("recipient", 8, 20)).toMatchObject({ line: 7, kind: "parameter" });
+    expect(file.declarationOf("target", 9, 0)).toMatchObject({ line: 8, kind: "local" });
+    expect(resolveMentionDeclaration(file, 2, concept)).toMatchObject({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(file, 8, concept)).toMatchObject({ line: 7, kind: "parameter" });
   });
 
   it("resolves this.x to a class field and a constructor parameter property", () => {
-    expect(resolveMentionDeclaration(file, 8, (t) => t === "defaultFrom")).toEqual({ line: 5, kind: "field" });
+    expect(resolveMentionDeclaration(file, 8, (t) => t === "defaultFrom")).toMatchObject({ line: 5, kind: "field" });
     const prop = parse("typescript", "b.ts", ["class A {", "  constructor(private email: string) {}", "  m() { return this.email; }", "}"]);
-    expect(resolveMentionDeclaration(prop, 3, concept)).toEqual({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(prop, 3, concept)).toMatchObject({ line: 2, kind: "field" });
     prop.dispose();
   });
 
   it("parses TSX", () => {
     const tsx = parse("typescript", "a.tsx", ["export const Row = ({ email }: Props) => <td>{email}</td>;"]);
-    expect(resolveMentionDeclaration(tsx, 1, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(tsx, 1, concept)).toMatchObject({ line: 1, kind: "parameter" });
     tsx.dispose();
   });
 
@@ -150,7 +150,7 @@ describe("engine declarations, TypeScript", () => {
       "const later: number = 1;",
     ]);
     expect(broken.hasSyntaxError).toBe(true);
-    expect(resolveMentionDeclaration(broken, 1, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(broken, 1, concept)).toMatchObject({ line: 1, kind: "parameter" });
     broken.dispose();
   });
 });
@@ -178,10 +178,10 @@ describe("engine declarations, Python", () => {
   afterAll(() => file.dispose());
 
   it("finds each kind of same-file declaration", () => {
-    expect(file.declarationOf("recipient", 4, 13)).toEqual({ line: 3, kind: "parameter" });
-    expect(file.declarationOf("to", 5, 0)).toEqual({ line: 4, kind: "local" });
-    expect(file.declarationOf("build", 10, 0)).toEqual({ line: 9, kind: "function" });
-    expect(file.declarationOf("Account", 10, 0)).toEqual({ line: 1, kind: "class" });
+    expect(file.declarationOf("recipient", 4, 13)).toMatchObject({ line: 3, kind: "parameter" });
+    expect(file.declarationOf("to", 5, 0)).toMatchObject({ line: 4, kind: "local" });
+    expect(file.declarationOf("build", 10, 0)).toMatchObject({ line: 9, kind: "function" });
+    expect(file.declarationOf("Account", 10, 0)).toMatchObject({ line: 1, kind: "class" });
   });
 
   it("answers syntax kind and enclosing ranges", () => {
@@ -191,28 +191,28 @@ describe("engine declarations, Python", () => {
   });
 
   it("declares a model field on its own line and resolves self.email to it", () => {
-    expect(resolveMentionDeclaration(file, 2, concept)).toEqual({ line: 2, kind: "field" });
-    expect(resolveMentionDeclaration(file, 5, concept)).toEqual({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(file, 2, concept)).toMatchObject({ line: 2, kind: "field" });
+    expect(resolveMentionDeclaration(file, 5, concept)).toMatchObject({ line: 2, kind: "field" });
   });
 
   it("takes the first self assignment as the field declaration", () => {
-    expect(resolveMentionDeclaration(file, 8, (t) => t === "backup_email")).toEqual({ line: 7, kind: "field" });
+    expect(resolveMentionDeclaration(file, 8, (t) => t === "backup_email")).toMatchObject({ line: 7, kind: "field" });
   });
 
   it("declares a parameter and a function by itself", () => {
-    expect(resolveMentionDeclaration(file, 3, concept)).toEqual({ line: 3, kind: "parameter" });
-    expect(resolveMentionDeclaration(file, 6, concept)).toEqual({ line: 6, kind: "function" });
+    expect(resolveMentionDeclaration(file, 3, concept)).toMatchObject({ line: 3, kind: "parameter" });
+    expect(resolveMentionDeclaration(file, 6, concept)).toMatchObject({ line: 6, kind: "function" });
   });
 
   it("declares dict keys and keyword arguments on their own line", () => {
-    expect(resolveMentionDeclaration(file, 10, concept)).toEqual({ line: 10, kind: "field" });
-    expect(resolveMentionDeclaration(file, 11, concept)).toEqual({ line: 11, kind: "field" });
+    expect(resolveMentionDeclaration(file, 10, concept)).toMatchObject({ line: 10, kind: "field" });
+    expect(resolveMentionDeclaration(file, 11, concept)).toMatchObject({ line: 11, kind: "field" });
   });
 
   it("reads a subscript or get() through to the base", () => {
     const f = parse("python", "b.py", ["def f(request):", "    a = request.POST['email']", "    b = request.get('email')"]);
-    expect(resolveMentionDeclaration(f, 2, concept)).toEqual({ line: 1, kind: "parameter" });
-    expect(resolveMentionDeclaration(f, 3, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(f, 2, concept)).toMatchObject({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(f, 3, concept)).toMatchObject({ line: 1, kind: "parameter" });
     f.dispose();
   });
 
@@ -232,7 +232,7 @@ describe("engine declarations, Python", () => {
       "    return recipient",
     ]);
     expect(broken.hasSyntaxError).toBe(true);
-    expect(resolveMentionDeclaration(broken, 2, concept)).toEqual({ line: 1, kind: "parameter" });
+    expect(resolveMentionDeclaration(broken, 2, concept)).toMatchObject({ line: 1, kind: "parameter" });
     broken.dispose();
   });
 });
@@ -247,7 +247,7 @@ describe("mention hits carry declarations", () => {
     const source = ["function f(user) {", "  return user.email;", "}", "// user.email in a comment"].join("\n");
     const { hits } = buildPersonalDataInventoryFromIngest([file("src/a.js", "javascript", source)], []);
     const code = hits.find((hit) => hit.location === "code" && hit.evidence.startLine === 2);
-    expect(code?.declaration).toEqual({ line: 1, kind: "parameter" });
+    expect(code?.declaration).toMatchObject({ line: 1, kind: "parameter" });
     const comment = hits.find((hit) => hit.location === "comment");
     expect(comment?.declaration).toBeUndefined();
   });

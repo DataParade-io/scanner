@@ -285,16 +285,16 @@ interface GroupableHit {
   receiverEntity?: string;
   tableEntity?: string;
   weakGroup?: boolean;
-  declaration?: { line: number; kind: string } | "unresolved";
+  declaration?: { line: number; kind: string; name?: string } | "unresolved";
   fieldKeys?: Array<{ key: string; definition: boolean }>;
-  passedDeclarations?: number[];
+  passedDeclarations?: Array<{ line: number; name: string }>;
   passedMentionLines?: number[];
   callLinks?: string[];
 }
 
 /** Id of a declaration node: signal, file, and 1-based line of the declaration. */
-export function declarationNodeId(signalId: string, filePath: string, line: number): string {
-  return `${signalId}@${filePath}:${line}`;
+export function declarationNodeId(signalId: string, filePath: string, line: number, name?: string): string {
+  return name ? `${signalId}@${filePath}:${line}#${name}` : `${signalId}@${filePath}:${line}`;
 }
 
 /**
@@ -339,7 +339,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
   };
   const declarationNode = (hit: T): string | undefined =>
     hit.declaration && hit.declaration !== "unresolved"
-      ? declarationNodeId(hit.id, hit.evidence.filePath, hit.declaration.line)
+      ? declarationNodeId(hit.id, hit.evidence.filePath, hit.declaration.line, hit.declaration.name)
       : undefined;
 
   // Joins run from most to least reliable: declaration (a declaration never spans two
@@ -351,8 +351,8 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
     parent.set(node, node);
     const declaration = declarationNode(hit);
     if (declaration) union(node, `decl:${declaration}`);
-    for (const line of hit.passedDeclarations ?? []) {
-      union(node, `decl:${declarationNodeId(hit.id, hit.evidence.filePath, line)}`);
+    for (const passed of hit.passedDeclarations ?? []) {
+      union(node, `decl:${declarationNodeId(hit.id, hit.evidence.filePath, passed.line, passed.name)}`);
     }
     // Every code mention is also reachable by its own line, for passed-variable links.
     if (hit.evidence.endLine !== undefined) {

@@ -85,13 +85,13 @@ export function resolveCallArgument(
   index: ConceptFunctionIndex,
   signalId: string,
   argument: ConceptCallArgument,
-): { filePath: string; line: number } | undefined {
-  const matches: Array<{ filePath: string; line: number }> = [];
+): { filePath: string; line: number; name: string } | undefined {
+  const matches: Array<{ filePath: string; line: number; name: string }> = [];
   for (const definition of index.get(signalId)?.get(argument.callee) ?? []) {
     const parameter = definition.parameters.find((candidate) =>
       argument.keyword !== undefined ? candidate.name === argument.keyword : candidate.position === argument.position,
     );
-    if (parameter) matches.push({ filePath: definition.filePath, line: parameter.line });
+    if (parameter) matches.push({ filePath: definition.filePath, line: parameter.line, name: parameter.name });
   }
   return matches.length === 1 ? matches[0] : undefined;
 }
