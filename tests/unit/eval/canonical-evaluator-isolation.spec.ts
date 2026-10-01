@@ -32,29 +32,29 @@ function annotationRow(
 }
 
 describe("canonical evaluator isolation", () => {
-  it("rejects stale pii_signal: mention keys at load time", () => {
+  it("rejects stale pii_signal: occurrence keys at load time", () => {
     expect(() =>
       loadCanonicalGoldFromAnnotation(
         annotationRow({
           id: "iso-pii-signal",
-          layer: "mentions",
+          layer: "occurrences",
           subject: { key: "pii_signal:email" },
         }),
       ),
-    ).toThrow(/requires mention: prefix/);
+    ).toThrow(/requires occurrence: prefix/);
   });
 
-  it("maps mention:email to concept leaf email_address via concept-map fallback", () => {
+  it("maps occurrence:email to concept leaf email_address via concept-map fallback", () => {
     const { record } = loadCanonicalGoldFromAnnotation(
       annotationRow({
         id: "iso-rule-map",
-        layer: "mentions",
-        subject: { key: "mention:email" },
+        layer: "occurrences",
+        subject: { key: "occurrence:email" },
         expected: { status: "positive", labels: ["email"] },
       }),
     );
 
-    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.identity.identityKey).toBe("occurrence:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptLeaf).not.toBe("email");
   });
@@ -62,8 +62,8 @@ describe("canonical evaluator isolation", () => {
   it("treats matching observedTokenCandidates without identity match as a strict miss", () => {
     const expectation = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: [evidence],
         observedTokenCandidates: [
@@ -80,8 +80,8 @@ describe("canonical evaluator isolation", () => {
 
     const finding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:phone",
+        layer: "occurrences",
+        identityKey: "occurrence:phone",
         conceptLeaf: "phone_number",
         evidenceLocations: [evidence],
         observedTokenCandidates: [

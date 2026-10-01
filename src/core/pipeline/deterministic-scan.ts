@@ -235,7 +235,7 @@ export function finalizeDeterministicScanResult(
     scanResult,
     files: work.files,
     findings: work.findings,
-    mentions: [],
+    occurrences: [],
     dataItems: [],
     ledgerContext: {
       ingestOutcomes: work.ingestOutcomes,

@@ -19,12 +19,12 @@ import {
   type FlowCandidateEndpoint,
   type FlowDispositionCandidate,
   type LayerScopeRecord,
-  MENTION_DECLARATION_KINDS,
-  MENTION_SYNTAX_KINDS,
-  type MentionAttributes,
-  type MentionDeclaration,
-  type MentionDeclarationKind,
-  type MentionSyntaxKind,
+  OCCURRENCE_DECLARATION_KINDS,
+  OCCURRENCE_SYNTAX_KINDS,
+  type OccurrenceAttributes,
+  type OccurrenceDeclaration,
+  type OccurrenceDeclarationKind,
+  type OccurrencesyntaxKind,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
   type ReviewState,
@@ -32,7 +32,7 @@ import {
 
 const LAYER_SUBJECT_PREFIX: Partial<Record<BenchmarkLayer, string>> = {
   raw_hits: "raw_hit:",
-  mentions: "mention:",
+  occurrences: "occurrence:",
   data_items: "data_item:",
 };
 
@@ -296,17 +296,17 @@ export function validateAnnotation(
     );
   }
 
-  if (raw.mention_attributes !== undefined) {
-    if (normalizedLayer !== "mentions") {
-      throw new Error(`${prefix}:mention_attributes is only supported on mentions layer`);
+  if (raw.occurrence_attributes !== undefined) {
+    if (normalizedLayer !== "occurrences") {
+      throw new Error(`${prefix}:occurrence_attributes is only supported on occurrences layer`);
     }
-    record.mention_attributes = validateMentionAttributes(raw.mention_attributes, prefix);
+    record.occurrence_attributes = validateOccurrenceAttributes(raw.occurrence_attributes, prefix);
   }
 
   return record;
 }
 
-const MENTION_ATTRIBUTE_KEYS = [
+const OCCURRENCE_ATTRIBUTE_KEYS = [
   "syntax_kind",
   "declaration",
   "type_annotation",
@@ -315,25 +315,25 @@ const MENTION_ATTRIBUTE_KEYS = [
   "group",
 ] as const;
 
-function validateMentionAttributes(raw: unknown, prefix: string): MentionAttributes {
-  const field = `${prefix}:mention_attributes`;
+function validateOccurrenceAttributes(raw: unknown, prefix: string): OccurrenceAttributes {
+  const field = `${prefix}:occurrence_attributes`;
   const block = isRecord(raw, field);
   for (const key of Object.keys(block)) {
-    if (!(MENTION_ATTRIBUTE_KEYS as readonly string[]).includes(key)) {
+    if (!(OCCURRENCE_ATTRIBUTE_KEYS as readonly string[]).includes(key)) {
       throw new Error(`Unknown field '${key}' in ${field}`);
     }
   }
 
-  const parsed: MentionAttributes = {};
+  const parsed: OccurrenceAttributes = {};
   if (block.syntax_kind !== undefined) {
     const kind = isNonEmptyString(block.syntax_kind, `${field}.syntax_kind`);
-    if (!MENTION_SYNTAX_KINDS.includes(kind as MentionSyntaxKind)) {
+    if (!OCCURRENCE_SYNTAX_KINDS.includes(kind as OccurrencesyntaxKind)) {
       throw new Error(`Unknown ${field}.syntax_kind '${kind}'`);
     }
-    parsed.syntax_kind = kind as MentionSyntaxKind;
+    parsed.syntax_kind = kind as OccurrencesyntaxKind;
   }
   if (block.declaration !== undefined) {
-    parsed.declaration = validateMentionDeclaration(block.declaration, `${field}.declaration`);
+    parsed.declaration = validateOccurrenceDeclaration(block.declaration, `${field}.declaration`);
   }
   if (block.type_annotation !== undefined) {
     parsed.type_annotation = isNonEmptyString(
@@ -355,7 +355,7 @@ function validateMentionAttributes(raw: unknown, prefix: string): MentionAttribu
   return parsed;
 }
 
-function validateMentionDeclaration(raw: unknown, field: string): MentionDeclaration {
+function validateOccurrenceDeclaration(raw: unknown, field: string): OccurrenceDeclaration {
   if (raw === "unresolved") {
     return "unresolved";
   }
@@ -373,13 +373,13 @@ function validateMentionDeclaration(raw: unknown, field: string): MentionDeclara
     throw new Error(`Expected positive integer ${field}.line`);
   }
   const kind = isNonEmptyString(block.kind, `${field}.kind`);
-  if (!MENTION_DECLARATION_KINDS.includes(kind as MentionDeclarationKind)) {
+  if (!OCCURRENCE_DECLARATION_KINDS.includes(kind as OccurrenceDeclarationKind)) {
     throw new Error(`Unknown ${field}.kind '${kind}'`);
   }
   return {
     file_path: isNonEmptyString(block.file_path, `${field}.file_path`),
     line,
-    kind: kind as MentionDeclarationKind,
+    kind: kind as OccurrenceDeclarationKind,
   };
 }
 
@@ -618,7 +618,12 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
   }
 
   const canonicalLayer = normalizeBenchmarkLayer(layer);
-  const filePath = path.join(repoDir, "annotations", `${canonicalLayer}.yaml`);
+  let filePath = path.join(repoDir, "annotations", `${canonicalLayer}.yaml`);
+  // Gold written before the rename (ground-truth/2) is named mentions.yaml.
+  const legacyPath = path.join(repoDir, "annotations", "mentions.yaml");
+  if (canonicalLayer === "occurrences" && !fs.existsSync(filePath) && fs.existsSync(legacyPath)) {
+    filePath = legacyPath;
+  }
 
   if (!fs.existsSync(filePath)) {
     throw new Error(
@@ -644,8 +649,35 @@ export function parseAnnotationRecords(filePath: string): AnnotationRecord[] {
   }
 
   return annotationsRaw.map((entry, index) =>
-    validateAnnotation(isRecord(entry, `${filePath}:annotations[${index}]`), filePath, index),
+    validateAnnotation(
+      normalizeLegacyOccurrenceRecord(isRecord(entry, `${filePath}:annotations[${index}]`)),
+      filePath,
+      index,
+    ),
   );
+}
+
+/**
+ * Read ground-truth/2 occurrence gold written before the mention -> occurrence rename
+ * (KDATAP-3f9029): layer `mentions`, subject keys `mention:<concept>`, and
+ * `mention_attributes`.
+ */
+export function normalizeLegacyOccurrenceRecord(raw: Record<string, unknown>): Record<string, unknown> {
+  if (raw.layer !== "mentions" && raw.mention_attributes === undefined) return raw;
+  const out: Record<string, unknown> = { ...raw };
+  if (out.layer === "mentions") out.layer = "occurrences";
+  const subject = out.subject;
+  if (typeof subject === "object" && subject !== null && !Array.isArray(subject)) {
+    const key = (subject as Record<string, unknown>).key;
+    if (typeof key === "string" && key.startsWith("mention:")) {
+      out.subject = { ...(subject as Record<string, unknown>), key: `occurrence:${key.slice("mention:".length)}` };
+    }
+  }
+  if (out.mention_attributes !== undefined && out.occurrence_attributes === undefined) {
+    out.occurrence_attributes = out.mention_attributes;
+  }
+  delete out.mention_attributes;
+  return out;
 }
 
 function validateLayerScopeProvenance(

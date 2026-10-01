@@ -91,8 +91,8 @@ describe("imported corpus gold", () => {
     // KDATAP-b702ea: 44 negative component decoys demoted accepted → rejected (LOADER_EXEMPTION fix).
     // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
     // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
-    // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
-    // KDATAP-3ccf91: -1 accepted mention:phone_number record (saleor-phone-pii-signal) superseded by the phone labeling packets.
+    // KDATAP-1c4998: -6 accepted occurrence:email records superseded by the proposed email labeling packets.
+    // KDATAP-3ccf91: -1 accepted occurrence:phone_number record (saleor-phone-pii-signal) superseded by the phone labeling packets.
     expect(acceptedEvalCases).toBe(1001);
   });
 
@@ -143,7 +143,7 @@ describe("imported corpus gold", () => {
       const scopes = loadLayerScopes(repoDir);
       expect(scopes.size).toBeGreaterThan(0);
       for (const layer of loadBenchmarkManifest(repoDir).coverage.layers) {
-        const canonical = layer === "pii_signals" ? "mentions" : layer;
+        const canonical = layer === "pii_signals" ? "occurrences" : layer;
         if (scopes.has(canonical as typeof layer)) {
           const record = scopes.get(canonical as typeof layer)!;
           expect(record.provenance.review_state).toBe("accepted");
@@ -236,11 +236,11 @@ describe("imported corpus gold", () => {
     expect(violations).toEqual([]);
   });
 
-  it("migrated mention gold uses mentions.yaml with canonical keys (KDATAP-fafa9f)", () => {
+  it("migrated occurrence gold uses occurrences.yaml with canonical keys (KDATAP-fafa9f)", () => {
     const legacyFiles: string[] = [];
     const piiKeyViolations: string[] = [];
-    let acceptedMentions = 0;
-    let adjudicationMentions = 0;
+    let acceptedOccurrences = 0;
+    let adjudicationOccurrences = 0;
 
     for (const repoKey of repoKeys) {
       const repoDir = path.join(benchmarkRoot, "repos", repoKey);
@@ -250,48 +250,48 @@ describe("imported corpus gold", () => {
       }
 
       const manifest = loadBenchmarkManifest(repoDir);
-      if (!manifest.coverage.layers.includes("mentions")) {
+      if (!manifest.coverage.layers.includes("occurrences")) {
         continue;
       }
 
-      const mentionsPath = path.join(repoDir, "annotations", "mentions.yaml");
-      expect(fs.existsSync(mentionsPath)).toBe(true);
+      const occurrencesPath = path.join(repoDir, "annotations", "occurrences.yaml");
+      expect(fs.existsSync(occurrencesPath)).toBe(true);
 
-      const annotations = loadAnnotations(repoDir, "mentions");
+      const annotations = loadAnnotations(repoDir, "occurrences");
       for (const annotation of annotations) {
         if (annotation.subject.key.startsWith("pii:")) {
           piiKeyViolations.push(`${repoKey}:${annotation.id}`);
         }
         if (annotation.provenance.review_state === "accepted") {
-          acceptedMentions += 1;
+          acceptedOccurrences += 1;
         }
         if (annotation.provenance.review_state === "needs_adjudication") {
-          adjudicationMentions += 1;
+          adjudicationOccurrences += 1;
         }
       }
     }
 
     expect(legacyFiles).toEqual([]);
     expect(piiKeyViolations).toEqual([]);
-    // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
-    // KDATAP-3ccf91: -1 accepted mention:phone_number record superseded by the phone labeling packets.
-    expect(acceptedMentions).toBe(64);
-    expect(adjudicationMentions).toBe(278);
+    // KDATAP-1c4998: -6 accepted occurrence:email records superseded by the proposed email labeling packets.
+    // KDATAP-3ccf91: -1 accepted occurrence:phone_number record superseded by the phone labeling packets.
+    expect(acceptedOccurrences).toBe(64);
+    expect(adjudicationOccurrences).toBe(278);
   });
 
-  it("maps accepted corpus mention:email to concept leaf email_address (KDATAP-fafa9f)", () => {
+  it("maps accepted corpus occurrence:email to concept leaf email_address (KDATAP-fafa9f)", () => {
     const repoDir = path.join(benchmarkRoot, "repos", "directus");
-    const annotations = loadAnnotations(repoDir, "mentions");
+    const annotations = loadAnnotations(repoDir, "occurrences");
     const sample = annotations.find(
       (entry) =>
-        entry.subject.key === "mention:email" &&
+        entry.subject.key === "occurrence:email" &&
         entry.provenance.review_state === "accepted",
     );
     expect(sample).toBeDefined();
 
     const { record } = loadCanonicalGoldFromAnnotation(sample!, { warn: () => undefined });
 
-    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.identity.identityKey).toBe("occurrence:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.disposition).toBe("accepted");
     expect(record.observedTokenCandidates?.some((token) => token.value === sample!.subject.name)).toBe(

@@ -13,7 +13,7 @@
 - scannerGitSha: c2d9d0bb8780540cdf193cab70e2c395c659ee9f
 - corpusGoldDigest: sha256:5f51893edc6210c9af8156393cd5f8055acb55f8335b7ed8dae45a991426e93b
 - evaluationContractVersion: 1.0.0
-- scorecardVectorContractVersion: scorecard-vector/2
+- scorecardVectorContractVersion: scorecard-vector/3
 - taxonomyDigest: sha256:83e357f218044c959a5f1d892707ccb25238ad9dc36cc5503b98e9f44aed22ef
 - conceptMapDigest: sha256:f718ba3c68f4bcb41fd7e85c16b1875226727f00c9a08b681921a27ba9123417
 - adapterMapDigest: sha256:d927b143ce5c79b4
@@ -67,7 +67,7 @@
 - canonicalContractVersion: 1.0.0
 - eligibilityReasonSetVersion: eligibility-reasons/1
 - groundTruthSchemaVersion: ground-truth/1
-- scorecardVectorContractVersion: scorecard-vector/2
+- scorecardVectorContractVersion: scorecard-vector/3
 
 ## Readiness
 
@@ -77,7 +77,7 @@
 
 ## Gold population
 
-### mentions
+### occurrences
 - acceptedCanonicalCount: 79
 - evaluablePositiveCount: 79
 - distinctConceptLeaves: 4
@@ -109,16 +109,16 @@
 
 - data-flows: 261
 - data-items: 189
-- mentions: 278
+- occurrences: 278
 
-## Scorecard (scorecard-vector/2)
+## Scorecard (scorecard-vector/3)
 
-- contract: scorecard-vector/2
+- contract: scorecard-vector/3
 - scanner: c2d9d0bb8780540cdf193cab70e2c395c659ee9f
 - review states: accepted
 - packets: 29
 
-### mentions
+### occurrences
 - summary: scorable
 - gate: scorable
 - Recall: 41.8% [computable; 33/79]
@@ -169,7 +169,7 @@
 
 ## Packet: auth0-express
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -191,7 +191,7 @@
 
 ## Packet: directus
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -213,7 +213,7 @@
 
 ## Packet: discourse
 
-### mentions
+### occurrences
 - acceptedCanonical=11, evaluable=11, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -235,7 +235,7 @@
 
 ## Packet: drupal
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -257,7 +257,7 @@
 
 ## Packet: easy-school
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -279,7 +279,7 @@
 
 ## Packet: exposed
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -301,7 +301,7 @@
 
 ## Packet: flask-login
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -323,7 +323,7 @@
 
 ## Packet: ghost
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -345,7 +345,7 @@
 
 ## Packet: gitea
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -367,7 +367,7 @@
 
 ## Packet: hyperswitch-vault
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -389,7 +389,7 @@
 
 ## Packet: keycloak
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -411,7 +411,7 @@
 
 ## Packet: magento
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=3
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -433,7 +433,7 @@
 
 ## Packet: medusa
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -455,7 +455,7 @@
 
 ## Packet: medusa-customer
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -477,7 +477,7 @@
 
 ## Packet: nopcommerce
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -499,7 +499,7 @@
 
 ## Packet: orchard-core
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -521,7 +521,7 @@
 
 ## Packet: ory-kratos-password
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -543,7 +543,7 @@
 
 ## Packet: pocketbase
 
-### mentions
+### occurrences
 - acceptedCanonical=5, evaluable=5, matched=3
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -565,7 +565,7 @@
 
 ## Packet: posthog-user
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -587,7 +587,7 @@
 
 ## Packet: redmine
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -609,7 +609,7 @@
 
 ## Packet: saleor
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -631,7 +631,7 @@
 
 ## Packet: spree
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -653,7 +653,7 @@
 
 ## Packet: spring-petclinic
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -675,7 +675,7 @@
 
 ## Packet: strapi
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -697,7 +697,7 @@
 
 ## Packet: supabase-js
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -719,7 +719,7 @@
 
 ## Packet: vapor
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -741,7 +741,7 @@
 
 ## Packet: vgs-django
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -763,7 +763,7 @@
 
 ## Packet: wordpress
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -785,7 +785,7 @@
 
 ## Packet: yjdh-employee
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -813,7 +813,7 @@
 ## Capability coverage (diagnostic only)
 
 - disclaimer: diagnostic_only_not_recall_denominator
-### mentions
+### occurrences
 - caseWeighted: 0.0%
 - distinctLeaf: 0.0%
 - supportedCount: 0

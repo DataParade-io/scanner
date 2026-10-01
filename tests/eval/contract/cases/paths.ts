@@ -7,14 +7,14 @@ export const pathContractScenarios: ContractScenario[] = [
   {
     name: "normalizes leading ./ and backslashes for evidence paths",
     cases: [
-      positiveCase("normalized-path", "mentions", "mention:email", "./src\\app.yml", 1, 1, [
+      positiveCase("normalized-path", "occurrences", "occurrence:email", "./src\\app.yml", 1, 1, [
         "user_email",
       ]),
     ],
     scanResults: [
       scanResult(
-        [finding("mention:email", VALID_PATH, 1, 1, ["user_email"], "mentions")],
-        "mentions",
+        [finding("occurrence:email", VALID_PATH, 1, 1, ["user_email"], "occurrences")],
+        "occurrences",
         [{ path: VALID_PATH, reason: "successfully_processed" }],
       ),
     ],
@@ -35,14 +35,14 @@ export const pathContractScenarios: ContractScenario[] = [
   {
     name: "rejects absolute evidence paths at evaluator boundary",
     cases: [
-      positiveCase("absolute-path", "mentions", "mention:email", "/etc/passwd", 1, 1, [
+      positiveCase("absolute-path", "occurrences", "occurrence:email", "/etc/passwd", 1, 1, [
         "user_email",
       ]),
     ],
     scanResults: [
       scanResult(
-        [finding("mention:email", VALID_PATH, 1, 1, ["user_email"], "mentions")],
-        "mentions",
+        [finding("occurrence:email", VALID_PATH, 1, 1, ["user_email"], "occurrences")],
+        "occurrences",
         [{ path: VALID_PATH, reason: "successfully_processed" }],
       ),
     ],
@@ -63,14 +63,14 @@ export const pathContractScenarios: ContractScenario[] = [
   {
     name: "rejects traversing evidence paths at evaluator boundary",
     cases: [
-      positiveCase("traversing-path", "mentions", "mention:email", "../secret.yml", 1, 1, [
+      positiveCase("traversing-path", "occurrences", "occurrence:email", "../secret.yml", 1, 1, [
         "user_email",
       ]),
     ],
     scanResults: [
       scanResult(
-        [finding("mention:email", VALID_PATH, 1, 1, ["user_email"], "mentions")],
-        "mentions",
+        [finding("occurrence:email", VALID_PATH, 1, 1, ["user_email"], "occurrences")],
+        "occurrences",
         [{ path: VALID_PATH, reason: "successfully_processed" }],
       ),
     ],
@@ -91,14 +91,14 @@ export const pathContractScenarios: ContractScenario[] = [
   {
     name: "rejects malformed evidence paths at evaluator boundary",
     cases: [
-      positiveCase("malformed-path", "mentions", "mention:email", "src//app.yml", 1, 1, [
+      positiveCase("malformed-path", "occurrences", "occurrence:email", "src//app.yml", 1, 1, [
         "user_email",
       ]),
     ],
     scanResults: [
       scanResult(
-        [finding("mention:email", VALID_PATH, 1, 1, ["user_email"], "mentions")],
-        "mentions",
+        [finding("occurrence:email", VALID_PATH, 1, 1, ["user_email"], "occurrences")],
+        "occurrences",
         [{ path: VALID_PATH, reason: "successfully_processed" }],
       ),
     ],

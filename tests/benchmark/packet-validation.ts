@@ -9,7 +9,7 @@ import type { AnnotationRecord } from "./schema";
  * Validation for agent-written labeling packets (KDATAP-8b2c8a).
  *
  * A packet lives at `repos/<repo>/annotations/packets/<issue-id>.yaml` and holds the
- * proposed mention gold for one batch of files. Unlike `loadAnnotations`, packet
+ * proposed occurrence gold for one batch of files. Unlike `loadAnnotations`, packet
  * validation is strict (unknown fields are errors), checks every evidence line against
  * the materialized source at the pinned commit, and requires exactly one record per
  * candidate line from `<concept>-candidates.yaml`. It reports every problem at once so
@@ -54,7 +54,7 @@ const PACKET_RECORD_KEYS = [
   "rationale",
   "expected",
   "provenance",
-  "mention_attributes",
+  "occurrence_attributes",
 ];
 
 function unknownKeys(value: Record<string, unknown>, allowed: string[]): string[] {
@@ -198,8 +198,8 @@ export function validatePacket(
       errors.push(`${where}: ${(error as Error).message}`);
       return;
     }
-    if (record.layer !== "mentions") {
-      errors.push(`${where}: packet records must be layer 'mentions'`);
+    if (record.layer !== "occurrences") {
+      errors.push(`${where}: packet records must be layer 'occurrences'`);
     }
     if (record.provenance.review_state !== "proposed") {
       errors.push(`${where}: packet records must have review_state 'proposed'`);
@@ -225,8 +225,8 @@ export function validatePacket(
         `${where}: subject.name must be the single token of the chosen occurrence, got '${name ?? ""}'`,
       );
     }
-    const declaration = record.mention_attributes?.declaration;
-    const syntaxKind = record.mention_attributes?.syntax_kind;
+    const declaration = record.occurrence_attributes?.declaration;
+    const syntaxKind = record.occurrence_attributes?.syntax_kind;
     const positive = record.expected.status === "positive";
     if (
       positive &&
@@ -234,7 +234,7 @@ export function validatePacket(
       declaration === undefined
     ) {
       errors.push(
-        `${where}: positive ${syntaxKind} needs mention_attributes.declaration ` +
+        `${where}: positive ${syntaxKind} needs occurrence_attributes.declaration ` +
           "(use 'unresolved' if it cannot be found)",
       );
     }

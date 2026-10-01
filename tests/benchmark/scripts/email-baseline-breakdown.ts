@@ -5,7 +5,7 @@
  *   node dist/tests/benchmark/scripts/email-baseline-breakdown.js <out.json> [--concept=email] [repo...]
  *   node dist/tests/benchmark/scripts/email-baseline-breakdown.js out.json --concept=phone_number saleor
  *
- * `--concept=<name>` (default `email`) picks the mention:<name> concept (KDATAP-3ccf91).
+ * `--concept=<name>` (default `email`) picks the occurrence:<name> concept (KDATAP-3ccf91).
  *
  * Scores only the email labeling packet records against only the email concept
  * scope (layer-wide scopes are ignored), then breaks results down by syntax kind,
@@ -29,19 +29,19 @@ async function main(): Promise<void> {
   const [outPath, ...restArgs] = process.argv.slice(2);
   const conceptArg = restArgs.find((arg) => arg.startsWith("--concept="));
   const concept = conceptArg ? conceptArg.slice("--concept=".length) : "email";
-  const subjectKey = `mention:${concept}`;
+  const subjectKey = `occurrence:${concept}`;
   const repoArgs = restArgs.filter((arg) => arg !== conceptArg);
   const repos = repoArgs.length > 0 ? repoArgs : ["ghost", "saleor"];
   const summary: Record<string, unknown> = {};
 
   for (const repoKey of repos) {
     const result = await runBenchmarkRepo(repoKey, { includeProposed: true });
-    // After the KDATAP-1c4998 correction, every mention:email label in these repos comes from the packets.
+    // After the KDATAP-1c4998 correction, every occurrence:email label in these repos comes from the packets.
     const cases: EvalCase[] = result.evalCases
-      .filter((c) => c.layer === "mentions" && c.subject.key === subjectKey)
+      .filter((c) => c.layer === "occurrences" && c.subject.key === subjectKey)
       .map((c) => ({ ...c, exhaustiveScopeFiles: undefined }));
     const emailFindings = result.scanResult.findings.filter(
-      (finding) => (finding.layer === undefined || finding.layer === "mentions") && (finding.key === subjectKey || finding.key.startsWith(`${subjectKey}:`)),
+      (finding) => (finding.layer === undefined || finding.layer === "occurrences") && (finding.key === subjectKey || finding.key.startsWith(`${subjectKey}:`)),
     );
     const report = scoreEvalCases(cases, [{ ...result.scanResult, findings: emailFindings }]);
 
@@ -52,29 +52,29 @@ async function main(): Promise<void> {
     for (const c of cases) {
       const r = outcome.get(c.id);
       if (!r) continue;
-      const kind = c.mentionAttributes?.syntax_kind ?? "unknown";
+      const kind = c.occurrenceAttributes?.syntax_kind ?? "unknown";
       if (c.expected.status === "positive") {
         bump(byKind, kind, r.matched);
-        bump(recallByGroup, c.mentionAttributes?.group ?? "(no group)", r.matched);
+        bump(recallByGroup, c.occurrenceAttributes?.group ?? "(no group)", r.matched);
       } else if (c.expected.status === "negative") {
         bump(negativesFlaggedByKind, kind, !r.negativeClean);
       }
     }
-    // Per positive mention: gold group and the scanner's group on the same line.
+    // Per positive occurrence: gold group and the scanner's group on the same line.
     const findingGroupByLine = new Map<string, string | null>();
     for (const finding of emailFindings) {
       for (const line of finding.sourceLines ?? []) {
-        findingGroupByLine.set(`${line.file_path}:${line.start_line}`, finding.mentionAttributes?.group ?? null);
+        findingGroupByLine.set(`${line.file_path}:${line.start_line}`, finding.occurrenceAttributes?.group ?? null);
       }
     }
     const groupingDetail = cases
-      .filter((c) => c.expected.status === "positive" && c.mentionAttributes?.group)
+      .filter((c) => c.expected.status === "positive" && c.occurrenceAttributes?.group)
       .map((c) => {
         const location = `${c.evidence?.file_path}:${c.evidence?.start_line}`;
         return {
           id: c.id,
           location,
-          goldGroup: c.mentionAttributes?.group,
+          goldGroup: c.occurrenceAttributes?.group,
           matched: outcome.get(c.id)?.matched ?? false,
           predictedGroup: findingGroupByLine.get(location) ?? null,
         };
@@ -87,7 +87,7 @@ async function main(): Promise<void> {
         precision: report.scores.precision,
         negativeCasePassRate: report.scores.negativeCasePassRate,
         denominators: report.scores.denominators,
-        mentionAttributes: report.scores.mentionAttributes,
+        occurrenceAttributes: report.scores.occurrenceAttributes,
         grouping: report.scores.grouping,
       },
       recallBySyntaxKind: byKind,

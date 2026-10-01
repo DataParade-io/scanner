@@ -195,7 +195,7 @@ function personalDataAssignmentCandidate(
 
 /**
  * Layer-aware pairing predicate for one-to-one assignment.
- * Recall pairing does not require exact concept leaf on mentions/raw-hits; classification
+ * Recall pairing does not require exact concept leaf on occurrences/raw-hits; classification
  * is scored separately via conceptCorrectness on assigned pairs.
  */
 export function assignmentCandidate(
@@ -233,7 +233,7 @@ function pairingCandidate(
       return dataActionsAssignmentCandidate(expectation, finding);
     case "data-items":
       return dataItemsAssignmentCandidate(expectation, finding);
-    case "mentions":
+    case "occurrences":
     case "raw-hits":
       return personalDataAssignmentCandidate(expectation, finding);
     case "data-flows":
@@ -258,7 +258,7 @@ function negativePairingCandidate(
       return dataActionsAssignmentCandidate(expectation, finding);
     case "data-items":
       return dataItemsAssignmentCandidate(expectation, finding);
-    case "mentions":
+    case "occurrences":
     case "raw-hits":
       return personalDataAssignmentCandidate(expectation, finding);
     case "data-flows":

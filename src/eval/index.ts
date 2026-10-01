@@ -25,7 +25,7 @@ export { isEvalPathContractValid, normalizeEvalPath } from "./path";
 export {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
-  assignMentionsOneToOne,
+  assignOccurrencesOneToOne,
   assignOneToOne,
   oneFindingCannotSatisfyBoth,
 } from "./canonical/assignment";

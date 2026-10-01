@@ -162,7 +162,7 @@ const reviewStateSchema = z.enum([
 ]);
 
 const headlineLayerSchema = z.enum([
-  "mentions",
+  "occurrences",
   "data-items",
   "components",
   "data-flows",

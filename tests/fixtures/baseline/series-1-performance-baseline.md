@@ -12,7 +12,7 @@ Materialized packets: 29
 
 | Layer | Recall | Precision |
 | --- | --- | --- |
-| mentions | 41.8% (33/79) | 0.9% (33/3693) |
+| occurrences | 41.8% (33/79) | 0.9% (33/3693) |
 | data-items | 27.1% (38/140) | 36.5% (38/104) |
 | components | 0.6% (3/519) | 13.6% (3/22) |
 | data-flows | 0.0% (0/158) | 0.0% (0/13) |
@@ -21,7 +21,7 @@ Materialized packets: 29
 
 # Scanner scorecard vector
 
-Contract: scorecard-vector/2
+Contract: scorecard-vector/3
 Generated: 2026-09-03T13:00:43.178Z
 Scanner: 6d241f8dd9a822a975a54e98f483096261d60aac
 Review states: accepted
@@ -29,7 +29,7 @@ Packets: 29
 
 ## Headline layers (no cross-layer scalar)
 
-### mentions
+### occurrences
 - Summary: scorable
 - Gate: scorable
 - Recall: 41.8% [computable; 33/79]
@@ -80,7 +80,7 @@ Packets: 29
 
 ## Packet: auth0-express
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -102,7 +102,7 @@ Packets: 29
 
 ## Packet: directus
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -124,7 +124,7 @@ Packets: 29
 
 ## Packet: discourse
 
-### mentions
+### occurrences
 - acceptedCanonical=11, evaluable=11, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -146,7 +146,7 @@ Packets: 29
 
 ## Packet: drupal
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -168,7 +168,7 @@ Packets: 29
 
 ## Packet: easy-school
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -190,7 +190,7 @@ Packets: 29
 
 ## Packet: exposed
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -212,7 +212,7 @@ Packets: 29
 
 ## Packet: flask-login
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -234,7 +234,7 @@ Packets: 29
 
 ## Packet: ghost
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -256,7 +256,7 @@ Packets: 29
 
 ## Packet: gitea
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -278,7 +278,7 @@ Packets: 29
 
 ## Packet: hyperswitch-vault
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -300,7 +300,7 @@ Packets: 29
 
 ## Packet: keycloak
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -322,7 +322,7 @@ Packets: 29
 
 ## Packet: magento
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=3
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -344,7 +344,7 @@ Packets: 29
 
 ## Packet: medusa
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -366,7 +366,7 @@ Packets: 29
 
 ## Packet: medusa-customer
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -388,7 +388,7 @@ Packets: 29
 
 ## Packet: nopcommerce
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -410,7 +410,7 @@ Packets: 29
 
 ## Packet: orchard-core
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -432,7 +432,7 @@ Packets: 29
 
 ## Packet: ory-kratos-password
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -454,7 +454,7 @@ Packets: 29
 
 ## Packet: pocketbase
 
-### mentions
+### occurrences
 - acceptedCanonical=5, evaluable=5, matched=3
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -476,7 +476,7 @@ Packets: 29
 
 ## Packet: posthog-user
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -498,7 +498,7 @@ Packets: 29
 
 ## Packet: redmine
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -520,7 +520,7 @@ Packets: 29
 
 ## Packet: saleor
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=2
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -542,7 +542,7 @@ Packets: 29
 
 ## Packet: spree
 
-### mentions
+### occurrences
 - acceptedCanonical=4, evaluable=4, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -564,7 +564,7 @@ Packets: 29
 
 ## Packet: spring-petclinic
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -586,7 +586,7 @@ Packets: 29
 
 ## Packet: strapi
 
-### mentions
+### occurrences
 - acceptedCanonical=3, evaluable=3, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -608,7 +608,7 @@ Packets: 29
 
 ## Packet: supabase-js
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=4
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -630,7 +630,7 @@ Packets: 29
 
 ## Packet: vapor
 
-### mentions
+### occurrences
 - acceptedCanonical=1, evaluable=1, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -652,7 +652,7 @@ Packets: 29
 
 ## Packet: vgs-django
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=0, matched=0
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -674,7 +674,7 @@ Packets: 29
 
 ## Packet: wordpress
 
-### mentions
+### occurrences
 - acceptedCanonical=6, evaluable=6, matched=0
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted
@@ -696,7 +696,7 @@ Packets: 29
 
 ## Packet: yjdh-employee
 
-### mentions
+### occurrences
 - acceptedCanonical=2, evaluable=2, matched=1
 - unread: 0 (0.0%)
 - capability (diagnostic): 0.0% case-weighted

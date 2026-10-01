@@ -37,7 +37,7 @@ export const BASELINE_READINESS_POLICY: BaselineReadinessPolicy = {
       minAcceptedCanonicalCount: 450,
       minDistinctPackets: 25,
     },
-    mentions: {
+    occurrences: {
       minAcceptedCanonicalCount: 50,
       minDistinctPackets: 15,
     },

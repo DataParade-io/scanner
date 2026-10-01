@@ -2,7 +2,7 @@
  * Stable identity keys for the four personal-data evaluation grades.
  *
  * - raw_hit: YAML heuristic pattern match before roll-up (one per line hit)
- * - mention: file+line receipt that a data item was seen
+ * - occurrence: file+line receipt that a data item was seen
  * - data_item: unique personal-data concept in a fixture (rolled up)
  */
 
@@ -15,19 +15,19 @@ export function rawHitIdentity(ruleId: string): string {
   return `raw_hit:${ruleId}`;
 }
 
-export function mentionIdentity(
+export function occurrenceIdentity(
   ruleId: string,
   filePath: string,
   startLine: number,
 ): string {
-  return `mention:${dataItemConceptId(ruleId)}:${filePath}:${startLine}`;
+  return `occurrence:${dataItemConceptId(ruleId)}:${filePath}:${startLine}`;
 }
 
 export function dataItemIdentity(ruleId: string): string {
   return `data_item:${dataItemConceptId(ruleId)}`;
 }
 
-/** @deprecated Use mentionIdentity or rawHitIdentity; kept for transitional imports. */
+/** @deprecated Use occurrenceIdentity or rawHitIdentity; kept for transitional imports. */
 export function piiSignalIdentity(ruleId: string): string {
   return rawHitIdentity(ruleId);
 }

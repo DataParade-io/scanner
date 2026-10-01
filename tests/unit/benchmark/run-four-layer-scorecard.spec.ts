@@ -65,7 +65,7 @@ function scanResult(): FixtureScanResult {
     findings: [],
     scannedFiles: ["src/app.ts"],
     eligibilityLedgers: {
-      mentions: createLayerLedger("mentions", [
+      occurrences: createLayerLedger("occurrences", [
         layerOutcome("src/app.ts", "successfully_processed"),
       ]),
       "data-flows": createLayerLedger("data-flows", [
@@ -89,7 +89,7 @@ jest.mock("../../benchmark/baseline", () => {
     ...actual,
     collectGoldPopulation: jest.fn(() => ({
       byLayer: {
-        mentions: {
+        occurrences: {
           acceptedCanonicalCount: 0,
           evaluablePositiveCount: 0,
           packetDiversity: { distinctPackets: 0, packetKeys: [] },
@@ -139,11 +139,11 @@ describe("run-four-layer-scorecard", () => {
       {
         repoKey: FIXTURE,
         materializedPath: "/tmp/materialized",
-        evalCases: [evalCase("mentions", "m1"), evalCase("data-flows", "f1")],
+        evalCases: [evalCase("occurrences", "m1"), evalCase("data-flows", "f1")],
         scanResult: scanResult(),
         canonicalRecords: [],
         layerScores: {
-          mentions: withMetricComputability(
+          occurrences: withMetricComputability(
             {
               recall: 1,
               ancestorCategoryRecall: null,
@@ -163,7 +163,7 @@ describe("run-four-layer-scorecard", () => {
                 exhaustiveScopedMatches: 0,
               },
             },
-            "mentions",
+            "occurrences",
           ),
           "data-flows": withMetricComputability(
             {
@@ -199,7 +199,7 @@ describe("run-four-layer-scorecard", () => {
     const vector = await runFourLayerScorecard({ repoKeys: [FIXTURE] });
 
     expect(vector.contractVersion).toBe(SCORECARD_VECTOR_CONTRACT_VERSION);
-    expect(vector.layers.mentions.gate.status).toBe("scorable");
+    expect(vector.layers.occurrences.gate.status).toBe("scorable");
     expect(vector.layers["data-flows"].gate.status).toBe("pending");
     expect(vector.layers["data-flows"].scores.recall).toBeNull();
     expect(vector.packets).toHaveLength(1);

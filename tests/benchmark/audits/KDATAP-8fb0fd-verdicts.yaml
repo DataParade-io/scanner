@@ -1,6 +1,6 @@
 task: KDATAP-8fb0fd
 judged_against: merge-eval definition.md (email), definition-generic.md (phone) and the settled rulings
-note: Each verdict judges the listed lines only (up to 8 per pile); unlisted mentions of large mixed piles were not judged.
+note: Each verdict judges the listed lines only (up to 8 per pile); unlisted occurrences of large mixed piles were not judged.
   corrected_gold paths are relative to the repo source root.
 counts:
   ghost:
@@ -23,7 +23,7 @@ verdicts:
   problem: mixed
   verdict: gold_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - sending-service.js:164
     - sending-service.js:176
     - sending-service.js:179
@@ -36,7 +36,7 @@ verdicts:
     sending-service.js:164 is not members.email: SendingService.send gets its members from BatchSendingService.getBatchMembers
     (email: model.get(''member_email''), the email_recipients copy) or from EmailService.sendTestEmail (members.email of a
     member matching a staff-typed test address, else the typed address). Two sources with different items, so needs_adjudication,
-    as the corpus does for getMemberData. The system''s members.email is one of the two candidates. The other 40 mentions
+    as the corpus does for getMemberData. The system''s members.email is one of the two candidates. The other 40 occurrences
     of the pile were not listed and were not judged.'
 - repo: ghost
   pile: ghost-f008
@@ -76,7 +76,7 @@ verdicts:
   problem: missed
   verdict: gold_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - mailgun-email-provider.js:129
     from: member-account-email
     to: needs_adjudication [email-recipient-member-email-copy, member-account-email]
@@ -107,7 +107,7 @@ verdicts:
   rationale: prepAttrsForEmailVerification :313-335 handles email = cleanedAttrs[property], the requested sender_email or
     sender_reply_to value. It is either pushed to emailsToVerify (pending) or compared with newsletter.get(property). All
     eight listed lines are labeled newsletter-address-verification. That is consistent with the settled pending-address ruling,
-    and the value can be either column, so it is not newsletters.sender_email. The unlisted mixed mentions were not judged.
+    and the value can be either column, so it is not newsletters.sender_email. The unlisted mixed occurrences were not judged.
 - repo: ghost
   pile: ghost-f056
   problem: missed
@@ -146,7 +146,7 @@ verdicts:
   problem: mixed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - order/events.py:96
     - order/events.py:111
     - order/events.py:126
@@ -160,7 +160,7 @@ verdicts:
     passed from the tasks'' payload recipient_email (order-customer-email). Both sides are right on these. :96, :111, :126,
     :141 store "email": customer_email in OrderEvent parameters. Each line names the stored field it writes, a copy in another
     table, so it is that record''s item (order-event-email), not Order.user_email. Gold and system both had it wrong. The
-    other 42 mentions of the pile were not listed.'
+    other 42 occurrences of the pile were not listed.'
 - repo: saleor
   pile: saleor-f008
   problem: missed
@@ -190,14 +190,14 @@ verdicts:
   problem: missed
   verdict: gold_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - giftcard/events.py:60
     - giftcard/events.py:71
     - giftcard/events.py:81
     - giftcard/events.py:92
     from: gift-card-assigned-to-email
     to: gift-card-event-previous-assigned-to-email (new)
-  - mentions:
+  - occurrences:
     - giftcard/events.py:73 (consistency, not in pile)
     from: gift-card-assigned-to-email
     to: gift-card-event-assigned-to-email (new)
@@ -211,7 +211,7 @@ verdicts:
   problem: missed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - giftcard/events.py:129
     - giftcard/events.py:141
     from: gift-card-notification-recipient-email
@@ -261,7 +261,7 @@ verdicts:
   problem: missed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - sendgrid/tasks.py:89
     from: account-change-email-new-address
     to: customer-email-change-event-new-email (new)
@@ -274,7 +274,7 @@ verdicts:
   problem: wrong_join
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - sendgrid/tasks.py:109
     from: account-change-email-old-address
     to: customer-email-change-event-old-email (new)
@@ -286,7 +286,7 @@ verdicts:
   problem: missed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - sendgrid/tasks.py:110
     from: customer-account-email
     to: customer-email-change-event-new-email (new)
@@ -306,7 +306,7 @@ verdicts:
   problem: missed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - user_email/tasks.py:63
     from: account-change-email-new-address
     to: customer-email-change-event-new-email (new)
@@ -326,7 +326,7 @@ verdicts:
   problem: wrong_join
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - user_email/tasks.py:83
     from: account-change-email-old-address
     to: customer-email-change-event-old-email (new)
@@ -338,7 +338,7 @@ verdicts:
   problem: missed
   verdict: both_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - user_email/tasks.py:84
     from: customer-account-email
     to: customer-email-change-event-new-email (new)
@@ -408,7 +408,7 @@ verdicts:
   problem: missed
   verdict: gold_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - email-address-parser.ts:294
     - email-address-parser.ts:296
     - email-address-parser.ts:306
@@ -423,7 +423,7 @@ verdicts:
   problem: missed
   verdict: gold_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - email-address-parser.ts:319
     - email-address-parser.ts:320
     - email-address-parser.ts:329
@@ -436,7 +436,7 @@ verdicts:
   problem: missed
   verdict: system_wrong
   corrected_gold:
-  - mentions:
+  - occurrences:
     - email/server/src/middlewares/rateLimit.ts:21
     - email/server/src/middlewares/rateLimit.ts:22
     - email/server/src/middlewares/rateLimit.ts:27

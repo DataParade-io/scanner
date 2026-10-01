@@ -124,8 +124,8 @@ function rateOrNull(numerator: number, denominator: number): number | null {
 
 function toHeadlineLayer(layer: string): HeadlineLayer | null {
   const canonical = normalizeBenchmarkLayer(layer as Parameters<typeof normalizeBenchmarkLayer>[0]);
-  if (canonical === "raw_hits" || canonical === "pii_signals") {
-    return canonical === "pii_signals" ? "mentions" : null;
+  if (canonical === "raw_hits") {
+    return null;
   }
   if (HEADLINE_LAYERS.includes(canonical as HeadlineLayer)) {
     return canonical as HeadlineLayer;

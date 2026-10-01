@@ -1,12 +1,12 @@
 import type { ColumnEntry } from "./column-catalog";
-import { classEntity, entityName } from "../pii-signals/mention-group";
+import { classEntity, entityName } from "../pii-signals/occurrence-group";
 
 /**
- * Which catalogued stored column a mention names (KDATAP-7a094c). Two mentions that name
+ * Which catalogued stored column a occurrence names (KDATAP-7a094c). Two occurrences that name
  * different columns are never one data item, whatever their names have in common: the
  * phone declarations of `cart_address` and `order_address` are both "address" phones.
  *
- * A mention names a column when (in this order):
+ * A occurrence names a column when (in this order):
  *   - its line is a catalog declaration location;
  *   - the line defines a key or keyword that is a catalog column's name, on a table the
  *     line names (or the only table with that column);
@@ -65,7 +65,7 @@ export function columnIndex(entries: readonly ColumnEntry[], recordKeys: Map<str
   return { byLocation, byName, recordKeys };
 }
 
-/** What a mention knows that can narrow a column name shared by several tables. */
+/** What a occurrence knows that can narrow a column name shared by several tables. */
 export interface ColumnEvidence {
   filePath: string;
   line?: number;
@@ -83,34 +83,34 @@ function resolve(candidates: readonly ColumnRef[] | undefined, entities: Readonl
   return narrowed.length === 1 ? narrowed[0].key : undefined;
 }
 
-/** The column a mention names, or undefined (most mentions name none). */
-export function mentionColumn(index: ColumnIndex, mention: ColumnEvidence): string | undefined {
+/** The column a occurrence names, or undefined (most occurrences name none). */
+export function occurrenceColumn(index: ColumnIndex, occurrence: ColumnEvidence): string | undefined {
   // Only what the line itself says about its model narrows a column name shared by several
   // tables: the class of its receiver and the table its function queries. A group
   // qualifier or a file name is too weak (`address` is the qualifier of five tables' phones).
   const entities = new Set<string>();
-  for (const name of [mention.receiverEntity, mention.tableEntity]) {
+  for (const name of [occurrence.receiverEntity, occurrence.tableEntity]) {
     if (!name) continue;
     entities.add(name);
     const normalized = entityName(name);
     if (normalized) entities.add(normalized);
   }
   // A key written into a JSON record column is that record column (`Model.field.key`).
-  const record = mention.line !== undefined ? index.recordKeys.get(`${mention.filePath}:${mention.line}`) : undefined;
+  const record = occurrence.line !== undefined ? index.recordKeys.get(`${occurrence.filePath}:${occurrence.line}`) : undefined;
   if (record) {
-    for (const key of mention.columnHints?.keys ?? []) if (record[key]) return record[key];
+    for (const key of occurrence.columnHints?.keys ?? []) if (record[key]) return record[key];
   }
   // A catalog declaration location is the column itself, whatever else the line says.
-  if (mention.line !== undefined) {
-    const declared = index.byLocation.get(`${mention.filePath}:${mention.line}`);
+  if (occurrence.line !== undefined) {
+    const declared = index.byLocation.get(`${occurrence.filePath}:${occurrence.line}`);
     if (declared) return declared;
   }
   // A key defined on the line decides over a column the line only reads.
-  for (const key of mention.columnHints?.keys ?? []) {
+  for (const key of occurrence.columnHints?.keys ?? []) {
     const found = resolve(index.byName.get(key), entities);
     if (found) return found;
   }
-  for (const write of mention.columnHints?.writes ?? []) {
+  for (const write of occurrence.columnHints?.writes ?? []) {
     const writeEntities = new Set(entities);
     for (const name of [write.receiverClass ? classEntity(write.receiverClass) : undefined, write.receiverName ? entityName(write.receiverName) : undefined]) {
       if (name) writeEntities.add(name);
@@ -121,13 +121,13 @@ export function mentionColumn(index: ColumnIndex, mention: ColumnEvidence): stri
   return undefined;
 }
 
-/** Whether the mention's column is the catalog declaration its own line is, the strongest evidence. */
-export function isDeclaredColumn(index: ColumnIndex, mention: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
-  return mention.line !== undefined && index.byLocation.get(`${mention.filePath}:${mention.line}`) === column;
+/** Whether the occurrence's column is the catalog declaration its own line is, the strongest evidence. */
+export function isDeclaredColumn(index: ColumnIndex, occurrence: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
+  return occurrence.line !== undefined && index.byLocation.get(`${occurrence.filePath}:${occurrence.line}`) === column;
 }
 
 /** Whether the column is a key written into a JSON record column rather than a catalog column. */
-export function isRecordColumn(index: ColumnIndex, mention: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
-  const record = mention.line !== undefined ? index.recordKeys.get(`${mention.filePath}:${mention.line}`) : undefined;
+export function isRecordColumn(index: ColumnIndex, occurrence: Pick<ColumnEvidence, "filePath" | "line">, column: string): boolean {
+  const record = occurrence.line !== undefined ? index.recordKeys.get(`${occurrence.filePath}:${occurrence.line}`) : undefined;
   return record !== undefined && Object.values(record).includes(column);
 }

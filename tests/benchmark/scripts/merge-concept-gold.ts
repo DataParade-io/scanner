@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Merge a concept's labeled packets and groups into mentions.yaml and add its
+ * Merge a concept's labeled packets and groups into occurrences.yaml and add its
  * concept scope to layer-scopes.yaml (KDATAP-3ccf91; same shape as the email merges).
  *
  *   node dist/tests/benchmark/scripts/merge-concept-gold.js <repo> <concept> <packet-prefix> <subject-key>
- *   node dist/tests/benchmark/scripts/merge-concept-gold.js saleor phone KDATAP-3ccf91 mention:phone_number
+ *   node dist/tests/benchmark/scripts/merge-concept-gold.js saleor phone KDATAP-3ccf91 occurrence:phone_number
  *
- * - Appends the normalized packet records, giving each positive mention in a group
- *   its `mention_attributes.group` from <concept>-groups.yaml. Mentions in
+ * - Appends the normalized packet records, giving each positive occurrence in a group
+ *   its `occurrence_attributes.group` from <concept>-groups.yaml. Occurrences in
  *   needs_adjudication clusters stay ungrouped.
- * - Removes older mentions.yaml records for the same subject key on a line the
+ * - Removes older occurrences.yaml records for the same subject key on a line the
  *   packets label again (they are superseded).
  * - Appends a proposed concept scope to layer-scopes.yaml from <concept>-scope.yaml.
  * - Rewrites the corpus-gold digest pin.
@@ -39,18 +39,18 @@ function main(): void {
   const benchmarkRoot = resolveDefaultBenchmarkRoot(__dirname);
   const repoDir = path.join(benchmarkRoot, "repos", repo);
   const packetsDir = path.join(repoDir, "annotations", "packets");
-  const mentionsPath = path.join(repoDir, "annotations", "mentions.yaml");
+  const occurrencesPath = path.join(repoDir, "annotations", "occurrences.yaml");
 
   const input = YAML.parse(fs.readFileSync(path.join(packetsDir, `${concept}-grouping-input.yaml`), "utf8")) as {
-    clusters: Record<string, { mentions: { id: string }[] }>;
+    clusters: Record<string, { occurrences: { id: string }[] }>;
   };
   const groups = YAML.parse(fs.readFileSync(path.join(packetsDir, `${concept}-groups.yaml`), "utf8")) as {
     groups: { id: string; clusters: string[] }[];
   };
-  const groupOfMention = new Map<string, string>();
+  const groupOfOccurrence = new Map<string, string>();
   for (const group of groups.groups) {
     for (const cluster of group.clusters) {
-      for (const mention of input.clusters[cluster].mentions) groupOfMention.set(mention.id, group.id);
+      for (const occurrence of input.clusters[cluster].occurrences) groupOfOccurrence.set(occurrence.id, group.id);
     }
   }
 
@@ -60,12 +60,12 @@ function main(): void {
     records.push(...parsed.annotations);
   }
   for (const record of records) {
-    const group = groupOfMention.get(record.id);
-    if (group) record.mention_attributes = { ...record.mention_attributes, group };
+    const group = groupOfOccurrence.get(record.id);
+    if (group) record.occurrence_attributes = { ...record.occurrence_attributes, group };
   }
 
   // Supersede older records for the same subject key on lines the packets label again.
-  let text = fs.readFileSync(mentionsPath, "utf8");
+  let text = fs.readFileSync(occurrencesPath, "utf8");
   const existing = YAML.parse(text) as { annotations: Record<string, any>[] };
   const labeled = new Set(records.map((r) => `${r.evidence.file_path}:${r.evidence.start_line}`));
   const existingIds = new Set(existing.annotations.map((a) => a.id));
@@ -84,7 +84,7 @@ function main(): void {
 
   if (!text.endsWith("\n")) text += "\n";
   text += indent(YAML.stringify(records, { lineWidth: 0 }), 2).replace(/\n+$/, "\n");
-  fs.writeFileSync(mentionsPath, text, "utf8");
+  fs.writeFileSync(occurrencesPath, text, "utf8");
 
   const scope = YAML.parse(fs.readFileSync(path.join(packetsDir, `${concept}-scope.yaml`), "utf8")) as {
     provenance: Record<string, string>;
@@ -100,7 +100,7 @@ function main(): void {
       provenance: scope.provenance,
     },
   ];
-  if (!/^concept_scopes:/m.test(scopes)) scopes += "concept_scopes:\n  mentions:\n";
+  if (!/^concept_scopes:/m.test(scopes)) scopes += "concept_scopes:\n  occurrences:\n";
   scopes += indent(YAML.stringify(entry, { lineWidth: 0 }), 4);
   fs.writeFileSync(scopesPath, scopes, "utf8");
 
@@ -109,7 +109,7 @@ function main(): void {
   fs.writeFileSync(pin, `# Pinned digest of all committed corpus gold YAML under tests/benchmark/repos/.\n${digest}\n`, "utf8");
 
   const positives = records.filter((r) => r.expected.status === "positive").length;
-  console.log(`appended ${records.length} records (${positives} positive, ${groupOfMention.size} grouped); digest ${digest}`);
+  console.log(`appended ${records.length} records (${positives} positive, ${groupOfOccurrence.size} grouped); digest ${digest}`);
 }
 
 main();

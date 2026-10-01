@@ -4,8 +4,8 @@ import { normalizeSubjectKey } from "../../benchmark/manifest";
 import path from "path";
 
 describe("benchmark/manifest normalizeSubjectKey", () => {
-  it("leaves mention keys unchanged", () => {
-    expect(normalizeSubjectKey("mentions", "mention:email")).toBe("mention:email");
+  it("leaves occurrence keys unchanged", () => {
+    expect(normalizeSubjectKey("occurrences", "occurrence:email")).toBe("occurrence:email");
   });
 
   it("leaves data_item keys unchanged", () => {
@@ -15,27 +15,27 @@ describe("benchmark/manifest normalizeSubjectKey", () => {
   });
 
   it("trims whitespace from keys", () => {
-    expect(normalizeSubjectKey("mentions", "  mention:email  ")).toBe("mention:email");
+    expect(normalizeSubjectKey("occurrences", "  occurrence:email  ")).toBe("occurrence:email");
   });
 });
 
-describe("benchmark/manifest corpus mention keys", () => {
-  it("rejects stale pii: keys when loading mentions annotations", () => {
+describe("benchmark/manifest corpus occurrence keys", () => {
+  it("rejects stale pii: keys when loading occurrences annotations", () => {
     const repoDir = path.join(__dirname, "../../benchmark/repos/auth0-express");
-    const annotations = loadAnnotations(repoDir, "mentions");
+    const annotations = loadAnnotations(repoDir, "occurrences");
     expect(annotations.length).toBeGreaterThan(0);
     for (const annotation of annotations) {
-      expect(annotation.subject.key).toMatch(/^mention:/);
+      expect(annotation.subject.key).toMatch(/^occurrence:/);
       expect(annotation.subject.key).not.toMatch(/^pii:/);
     }
   });
 
-  it("loads mentions.yaml only (no pii_signals.yaml fallback)", () => {
+  it("loads occurrences.yaml only (no pii_signals.yaml fallback)", () => {
     const repoDir = path.join(__dirname, "../../benchmark/repos/wordpress");
-    const mentionsPath = path.join(repoDir, "annotations", "mentions.yaml");
+    const occurrencesPath = path.join(repoDir, "annotations", "occurrences.yaml");
     const legacyPath = path.join(repoDir, "annotations", "pii_signals.yaml");
-    expect(loadAnnotations(repoDir, "mentions").length).toBeGreaterThan(0);
-    expect(fs.existsSync(mentionsPath)).toBe(true);
+    expect(loadAnnotations(repoDir, "occurrences").length).toBeGreaterThan(0);
+    expect(fs.existsSync(occurrencesPath)).toBe(true);
     expect(fs.existsSync(legacyPath)).toBe(false);
   });
 

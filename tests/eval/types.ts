@@ -9,10 +9,10 @@ import type { AssertedFlowEndpoints } from "../../src/eval/canonical/graph/types
 import type { FlowAssertion } from "../../src/eval/canonical/types";
 import type {
   AttributeMetricScore,
-  MentionAttributeValues,
+  OccurrenceAttributeValues,
   PairwiseGroupingScores,
-  ScoredMentionAttribute,
-} from "../../src/eval/canonical/mention-attribute-metrics";
+  ScoredOccurrenceAttribute,
+} from "../../src/eval/canonical/occurrence-attribute-metrics";
 
 export type EvalCaseStatus = "positive" | "negative" | "ambiguous";
 
@@ -21,7 +21,7 @@ export type EvalLayer =
   | "data-flows"
   | "raw-hits"
   | "data-items"
-  | "mentions"
+  | "occurrences"
   | "data-actions";
 
 export interface EvalSubject {
@@ -72,8 +72,8 @@ export interface EvalCase {
   flowCandidate?: FlowAnnotationCandidate;
   /** Non-scoring data-item migration audit block when carried through eval cases. */
   dataItemCandidate?: DataItemAnnotationCandidate;
-  /** Asserted mention attributes (mentions layer only, KDATAP-8b2c8a). */
-  mentionAttributes?: MentionAttributeValues;
+  /** Asserted occurrence attributes (occurrences layer only, KDATAP-8b2c8a). */
+  occurrenceAttributes?: OccurrenceAttributeValues;
 }
 
 export interface EvalConceptScope {
@@ -98,8 +98,8 @@ export interface LayerFinding {
   layer?: EvalLayer;
   flowEndpoints?: AssertedFlowEndpoints;
   flowAssertion?: FlowAssertion;
-  /** Attributes the scanner reports on a mention finding, when it emits them. */
-  mentionAttributes?: MentionAttributeValues;
+  /** Attributes the scanner reports on a occurrence finding, when it emits them. */
+  occurrenceAttributes?: OccurrenceAttributeValues;
 }
 
 export interface FixtureScanResult {
@@ -169,9 +169,9 @@ export interface EvalScores {
   unreadCount: number;
   denominators: EvalScoreDenominators;
   metricComputability: MetricComputability;
-  /** Mentions layer only: per-attribute accuracy over matched pairs whose gold asserts it. */
-  mentionAttributes?: Record<ScoredMentionAttribute, AttributeMetricScore>;
-  /** Mentions layer only: pairwise declaration-grouping precision and recall. */
+  /** Occurrences layer only: per-attribute accuracy over matched pairs whose gold asserts it. */
+  occurrenceAttributes?: Record<ScoredOccurrenceAttribute, AttributeMetricScore>;
+  /** Occurrences layer only: pairwise declaration-grouping precision and recall. */
   grouping?: PairwiseGroupingScores;
 }
 
