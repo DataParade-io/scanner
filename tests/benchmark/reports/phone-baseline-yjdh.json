@@ -1,0 +1,216 @@
+{
+  "yjdh-employee": {
+    "cases": 33,
+    "emailFindings": 66,
+    "scores": {
+      "recall": 0.7692307692307693,
+      "precision": 0.5555555555555556,
+      "negativeCasePassRate": 0.5,
+      "denominators": {
+        "evaluablePositives": 13,
+        "matchedPositives": 10,
+        "matchedWithCorrectLabels": 10,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 16,
+        "negativeCasesPassed": 8,
+        "exhaustiveScopedFindings": 18,
+        "exhaustiveScopedMatches": 10
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 10
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.6,
+          "numerator": 3,
+          "denominator": 5
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 10
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 1,
+          "numerator": 11,
+          "denominator": 11
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.3793103448275862,
+          "numerator": 11,
+          "denominator": 29
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "string_literal": {
+        "total": 5,
+        "hit": 5
+      },
+      "identifier": {
+        "total": 9,
+        "hit": 4
+      },
+      "property_key": {
+        "total": 1,
+        "hit": 1
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "import_specifier": {
+        "total": 4,
+        "hit": 3
+      },
+      "string_literal": {
+        "total": 7,
+        "hit": 6
+      },
+      "identifier": {
+        "total": 6,
+        "hit": 0
+      },
+      "type_name": {
+        "total": 1,
+        "hit": 1
+      }
+    },
+    "recallByGroup": {
+      "contact-person-phone": {
+        "total": 13,
+        "hit": 8
+      },
+      "employee-phone": {
+        "total": 2,
+        "hit": 2
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "yjdh-phone-applications-application-L203",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:203",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-application-L350",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:350",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:meta_company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-application-L498",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:498",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:base_application_serializer_company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-application-L944",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:944",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-models-L445",
+        "location": "backend/benefit/applications/models.py:445",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:application_company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-models-L1102",
+        "location": "backend/benefit/applications/models.py:1102",
+        "goldGroup": "employee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:employee"
+      },
+      {
+        "id": "yjdh-phone-applications-application_alteration_csv_report-L66",
+        "location": "backend/benefit/applications/services/application_alteration_csv_report.py:66",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-applications_csv_report-L238",
+        "location": "backend/benefit/applications/services/applications_csv_report.py:238",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-applications_csv_report-L265",
+        "location": "backend/benefit/applications/services/applications_csv_report.py:265",
+        "goldGroup": "employee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:employee"
+      },
+      {
+        "id": "yjdh-phone-applications-clone_application-L69",
+        "location": "backend/benefit/applications/services/clone_application.py:69",
+        "goldGroup": "contact-person-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:company_contact_person"
+      },
+      {
+        "id": "yjdh-phone-applications-application_handler-L91",
+        "location": "backend/benefit/applications/templates/application_handler.html:91",
+        "goldGroup": "contact-person-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-phone-applications-application-L87",
+        "location": "backend/benefit/applications/templates/application.html:87",
+        "goldGroup": "contact-person-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-phone-common-utils-L210",
+        "location": "backend/benefit/common/utils.py:210",
+        "goldGroup": "contact-person-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-phone-common-utils-L211",
+        "location": "backend/benefit/common/utils.py:211",
+        "goldGroup": "contact-person-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-phone-common-utils-L213",
+        "location": "backend/benefit/common/utils.py:213",
+        "goldGroup": "contact-person-phone",
+        "matched": false,
+        "predictedGroup": null
+      }
+    ]
+  }
+}
