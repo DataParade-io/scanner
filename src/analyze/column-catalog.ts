@@ -12,7 +12,7 @@ import { recordFacts, type RecordFacts } from "./json-record-keys";
 /**
  * Catalog of the stored columns a repository declares (KDATAP-33da4c): the closed set of
  * "where can this concept be stored" that a decision model chooses from, and that
- * grouping can link mentions to. Deterministic, no model calls.
+ * grouping can link occurrences to. Deterministic, no model calls.
  *
  * Declarations come from four sources, each found on the parse tree (the engine's
  * class-field, key and call listings), not on raw text:

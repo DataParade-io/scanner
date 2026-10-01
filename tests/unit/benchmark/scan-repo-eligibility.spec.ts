@@ -24,21 +24,21 @@ describe("scanRepoByManifestLayers eligibility", () => {
 
     const result = await scanRepoByManifestLayers("fixture", tempDir, [
       "components",
-      "mentions",
+      "occurrences",
     ]);
 
     const componentsEligible = eligibleProcessedPaths(result.eligibilityLedgers?.components);
-    const mentionsEligible = eligibleProcessedPaths(result.eligibilityLedgers?.mentions);
+    const occurrencesEligible = eligibleProcessedPaths(result.eligibilityLedgers?.occurrences);
 
     expect(componentsEligible).toContain("orch.ts");
-    expect(mentionsEligible).toContain("pii.yml");
+    expect(occurrencesEligible).toContain("pii.yml");
     expect(componentsEligible).not.toContain("pii.yml");
 
     const evalCase: EvalCase = {
-      id: "mentions-case",
+      id: "occurrences-case",
       fixture: "fixture",
-      layer: "mentions",
-      subject: { key: "mention:username" },
+      layer: "occurrences",
+      subject: { key: "occurrence:username" },
       evidence: { file_path: "pii.yml", start_line: 1, end_line: 1 },
       expected: { status: "positive", labels: ["username"] },
       rationale: "cross-layer isolation",
@@ -60,12 +60,12 @@ describe("scanRepoByManifestLayers eligibility", () => {
     fs.writeFileSync(path.join(tempDir, "signals.yml"), "email: a@b.com\n");
 
     const rawOnly = await scanRepoByManifestLayers("fixture", tempDir, ["raw_hits"]);
-    const mentionsOnly = await scanRepoByManifestLayers("fixture", tempDir, ["mentions"]);
+    const occurrencesOnly = await scanRepoByManifestLayers("fixture", tempDir, ["occurrences"]);
 
     expect(eligibleProcessedPaths(rawOnly.eligibilityLedgers?.["raw-hits"])).toEqual(
-      eligibleProcessedPaths(mentionsOnly.eligibilityLedgers?.mentions),
+      eligibleProcessedPaths(occurrencesOnly.eligibilityLedgers?.occurrences),
     );
-    expect(rawOnly.eligibilityLedgers?.mentions).toBeUndefined();
-    expect(mentionsOnly.eligibilityLedgers?.["raw-hits"]).toBeUndefined();
+    expect(rawOnly.eligibilityLedgers?.occurrences).toBeUndefined();
+    expect(occurrencesOnly.eligibilityLedgers?.["raw-hits"]).toBeUndefined();
   });
 });

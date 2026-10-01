@@ -6,13 +6,13 @@ import { stripCommentsForLanguage } from "../analyzers/shared/strip-comments-for
 import { CommentLines } from "../pii-signals/comment-context";
 import { analyzeSource, initAnalysisEngine, isAnalysisEngineReady } from "../analyze/engine/engine";
 import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
-import { resolveMentionDeclaration } from "../analyze/mention-declaration";
-import { mentionReceiver, type ReceiverVia } from "../analyze/mention-receiver";
+import { resolveOccurrenceDeclaration } from "../analyze/occurrence-declaration";
+import { occurrenceReceiver, type ReceiverVia } from "../analyze/occurrence-receiver";
 import { collapseColumns, collectColumnFacts } from "../analyze/column-catalog";
 import { recordKeyColumns } from "../analyze/json-record-keys";
 import { hasConceptProfile } from "../analyze/concept-profile";
-import { columnIndex, isDeclaredColumn, isRecordColumn, mentionColumn } from "../analyze/column-identity";
-import { mentionFieldKeys, passedMentionLines, passedValueDeclarations } from "../analyze/mention-fields";
+import { columnIndex, isDeclaredColumn, isRecordColumn, occurrenceColumn } from "../analyze/column-identity";
+import { occurrenceFieldKeys, passedOccurrenceLines, passedValueDeclarations } from "../analyze/occurrence-fields";
 import {
   addConceptFunctions,
   conceptCallArguments,
@@ -22,7 +22,7 @@ import {
   type ConceptFunctionIndex,
 } from "../analyze/call-links";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
-import { applyGroupLabels, assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, qualify } from "../pii-signals/mention-group";
+import { applyGroupLabels, assignDeclarationGroups, classEntity, declarationNodeId, identifierWords, qualify } from "../pii-signals/occurrence-group";
 import type { AnalyzedFile } from "../analyze/engine/analyzed-file";
 import {
   matchPiiSignalsInFile,
@@ -90,10 +90,10 @@ function withDeclarations(
     return hits.map((hit) => {
       if (hit.location !== "code") return hit;
       const isConceptToken = signalTokenMatcher(hit.id, file.path);
-      const declaration = resolveMentionDeclaration(analyzed, hit.evidence.endLine, isConceptToken);
-      const fieldKeys = mentionFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
+      const declaration = resolveOccurrenceDeclaration(analyzed, hit.evidence.endLine, isConceptToken);
+      const fieldKeys = occurrenceFieldKeys(analyzed, hit.evidence.endLine, lines[hit.evidence.endLine - 1] ?? "", isConceptToken);
       const passedDeclarations = passedValueDeclarations(analyzed, hit.evidence.endLine, isConceptToken);
-      const passedLines = passedMentionLines(
+      const passedLines = passedOccurrenceLines(
         analyzed,
         hit.evidence.endLine,
         isConceptToken,
@@ -102,11 +102,11 @@ function withDeclarations(
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
       const tableEntity = queriedTableEntity(analyzed, lines, hit.evidence.endLine);
       const columnHints = columnHintsOnLine(analyzed, memberWrites, hit.evidence.endLine, isConceptToken);
-      const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken, lines[hit.evidence.endLine - 1]);
+      const found = occurrenceReceiver(analyzed, hit.evidence.endLine, isConceptToken, lines[hit.evidence.endLine - 1]);
       let legacy = false;
       if (process.env.DATAPARADE_RECEIVER_STATS && found.className) {
         analyzed.setFactoryReturnTypes(false);
-        legacy = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken).className === found.className;
+        legacy = occurrenceReceiver(analyzed, hit.evidence.endLine, isConceptToken).className === found.className;
         analyzed.setFactoryReturnTypes(true);
       }
       return {
@@ -116,7 +116,7 @@ function withDeclarations(
         ...(declaration ? { declaration } : {}),
         ...(fieldKeys.length > 0 ? { fieldKeys } : {}),
         ...(passedDeclarations.length > 0 ? { passedDeclarations } : {}),
-        ...(passedLines.length > 0 ? { passedMentionLines: passedLines } : {}),
+        ...(passedLines.length > 0 ? { passedOccurrenceLines: passedLines } : {}),
         ...(tableEntity ? { tableEntity } : {}),
         ...(columnHints ? { columnHints } : {}),
       };
@@ -172,7 +172,7 @@ function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: numbe
   if (!scope) return undefined;
   const text = lines.slice(scope.startLine - 1, scope.endLine).join("\n");
   // Query-builder table calls count across the function; ORM model entry points only in
-  // the mention's own statement (two lines either side), since a function may touch
+  // the occurrence's own statement (two lines either side), since a function may touch
   // several models (`this.model('Role')` next to a user lookup).
   const near = lines.slice(Math.max(scope.startLine, line - 2) - 1, Math.min(scope.endLine, line + 2)).join("\n");
   const tables = new Set([
@@ -266,7 +266,7 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
 }
 
 /**
- * Give each code mention the catalogued stored column it names (KDATAP-7a094c). The
+ * Give each code occurrence the catalogued stored column it names (KDATAP-7a094c). The
  * catalog is per signal: the email and phone signals of one scan each use their own
  * columns. Nothing happens for signals without a concept profile or when the engine is off.
  */
@@ -287,7 +287,7 @@ function withColumns(hits: PiiSignalHit[], files: FileInfo[]): PiiSignalHit[] {
       ...(hit.tableEntity ? { tableEntity: hit.tableEntity } : {}),
       ...(hit.columnHints ? { columnHints: hit.columnHints } : {}),
     };
-    const column = mentionColumn(index, evidence);
+    const column = occurrenceColumn(index, evidence);
     if (!column) return hit;
     return {
       ...hit,
@@ -331,7 +331,7 @@ function matchedHitsForFile(file: FileInfo): PiiSignalHit[] {
 }
 
 /**
- * Load the tree-sitter engine used for mention declarations. A failure to load leaves
+ * Load the tree-sitter engine used for occurrence declarations. A failure to load leaves
  * the engine off: hits simply carry no declaration.
  */
 export async function ensureDeclarationEngine(): Promise<void> {

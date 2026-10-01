@@ -228,7 +228,7 @@ function printRepoResult(result: BenchmarkRepoResult): void {
     console.log(`  ${layer}: ${count}`);
   }
   const layerOrder: EvalLayer[] = [
-    "mentions",
+    "occurrences",
     "data-items",
     "components",
     "data-flows",

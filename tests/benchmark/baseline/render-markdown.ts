@@ -144,7 +144,7 @@ export function renderBaselineMarkdown(artifact: BaselineArtifact): string {
     ).slice(2),
   );
 
-  lines.push("## Scorecard (scorecard-vector/2)", "");
+  lines.push("## Scorecard (scorecard-vector/3)", "");
   lines.push(`- contract: ${artifact.scorecard.contractVersion}`);
   lines.push(`- scanner: ${artifact.scorecard.scannerGitSha}`);
   lines.push(`- review states: ${artifact.scorecard.reviewStates.join(", ")}`);

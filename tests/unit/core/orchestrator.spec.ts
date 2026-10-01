@@ -408,7 +408,7 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     expect(statsByLanguage.has("python")).toBe(true);
   });
 
-  it("exposes personal-data mentions and data items from the PII inventory layer", async () => {
+  it("exposes personal-data occurrences and data items from the PII inventory layer", async () => {
     const fixturesRoot = path.join(
       __dirname,
       "..",
@@ -418,20 +418,20 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     );
 
     const config = createDefaultScanConfiguration({ enableAiInference: false });
-    const { mentions, dataItems } = await scan(fixturesRoot, config);
+    const { occurrences, dataItems } = await scan(fixturesRoot, config);
 
-    expect(mentions.length).toBeGreaterThan(0);
+    expect(occurrences.length).toBeGreaterThan(0);
     expect(dataItems.length).toBeGreaterThan(0);
 
-    const loginMention = mentions.find(
+    const loginOccurrence = occurrences.find(
       (row) =>
-        row.id === "mention:email:src/auth/login.ts:13" &&
+        row.id === "occurrence:email:src/auth/login.ts:13" &&
         row.filePath === "src/auth/login.ts" &&
         row.startLine === 13,
     );
-    expect(loginMention).toEqual(
+    expect(loginOccurrence).toEqual(
       expect.objectContaining({
-        id: "mention:email:src/auth/login.ts:13",
+        id: "occurrence:email:src/auth/login.ts:13",
         filePath: "src/auth/login.ts",
         startLine: 13,
         endLine: 13,
@@ -440,7 +440,7 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     );
 
     const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
-    expect(emailDataItem?.mentionIds).toContain("mention:email:src/auth/login.ts:13");
+    expect(emailDataItem?.occurrenceIds).toContain("occurrence:email:src/auth/login.ts:13");
     expect(emailDataItem).toEqual(
       expect.objectContaining({
         id: "data_item:email",
@@ -449,7 +449,7 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     );
   });
 
-  it("assigns distinct mention ids for the same rule on different lines", async () => {
+  it("assigns distinct occurrence ids for the same rule on different lines", async () => {
     const fixturesRoot = path.join(
       __dirname,
       "..",
@@ -459,16 +459,16 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     );
 
     const config = createDefaultScanConfiguration({ enableAiInference: false });
-    const { mentions, dataItems } = await scan(fixturesRoot, config);
+    const { occurrences, dataItems } = await scan(fixturesRoot, config);
 
-    const emailMentions = mentions.filter((row) => row.id.startsWith("mention:email:"));
-    expect(emailMentions.length).toBe(2);
-    expect(new Set(emailMentions.map((row) => row.id)).size).toBe(2);
+    const emailOccurrences = occurrences.filter((row) => row.id.startsWith("occurrence:email:"));
+    expect(emailOccurrences.length).toBe(2);
+    expect(new Set(emailOccurrences.map((row) => row.id)).size).toBe(2);
 
     const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
     expect(emailDataItem).toEqual({
       id: "data_item:email",
-      mentionIds: emailMentions.map((row) => row.id).sort((a, b) => a.localeCompare(b)),
+      occurrenceIds: emailOccurrences.map((row) => row.id).sort((a, b) => a.localeCompare(b)),
       labels: ["user_email"],
     });
   });

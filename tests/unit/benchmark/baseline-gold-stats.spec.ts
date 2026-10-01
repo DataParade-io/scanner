@@ -11,7 +11,7 @@ function annotation(
   overrides: Partial<AnnotationRecord> & Pick<AnnotationRecord, "id" | "layer">,
 ): AnnotationRecord {
   return {
-    subject: { key: "mention:email" },
+    subject: { key: "occurrence:email" },
     evidence: { file_path: "src/a.ts", start_line: 1, end_line: 1 },
     rationale: "test",
     expected: { status: "positive", labels: ["email_address"] },

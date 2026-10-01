@@ -20,7 +20,7 @@ const PROVENANCE = {
 };
 
 function normalizeLayer(layer: string): string {
-  return layer === "pii_signals" ? "mentions" : layer;
+  return layer === "pii_signals" ? "occurrences" : layer;
 }
 
 function listRepoDirs(): string[] {

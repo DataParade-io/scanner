@@ -43,8 +43,8 @@ describe("canonical strict matching", () => {
   it("treats identity mismatch with matching observed-token candidate as a strict miss", () => {
     const expectation = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: evidence,
         observedTokenCandidates: [
@@ -59,8 +59,8 @@ describe("canonical strict matching", () => {
     );
     const finding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:phone",
+        layer: "occurrences",
+        identityKey: "occurrence:phone",
         conceptLeaf: "phone_number",
         evidenceLocations: evidence,
         observedTokenCandidates: [
@@ -159,8 +159,8 @@ describe("canonical concept correctness", () => {
   it("does not credit exact-leaf when only ancestor matches", () => {
     const expectation = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "driver_licence",
         conceptAncestry: ["national_identifier", "driver_licence"],
         evidenceLocations: evidence,
@@ -168,8 +168,8 @@ describe("canonical concept correctness", () => {
     );
     const finding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "national_identifier",
         conceptAncestry: ["national_identifier"],
         evidenceLocations: evidence,

@@ -1,10 +1,10 @@
 # Email declaration grouping (KDATAP-5739c5 ghost, KDATAP-8ab5e2 saleor)
 
-Group the positive email mentions of one repo into distinct data items: which email address is it, and whose. The result is gold for the declaration-grouping layer (pairwise precision and recall over mention pairs).
+Group the positive email occurrences of one repo into distinct data items: which email address is it, and whose. The result is gold for the declaration-grouping layer (pairwise precision and recall over occurrence pairs).
 
 ## Input
 
-`tests/benchmark/repos/<repo>/annotations/packets/email-grouping-input.yaml`. Every positive mention is listed once, already clustered by shared declaration: mentions that point at the same declaration are the same data by construction and share a cluster id (`c001` ...). Mentions with no shared declaration (field selectors, keys declared on their own line, schema columns) are single-mention clusters.
+`tests/benchmark/repos/<repo>/annotations/packets/email-grouping-input.yaml`. Every positive occurrence is listed once, already clustered by shared declaration: occurrences that point at the same declaration are the same data by construction and share a cluster id (`c001` ...). Occurrences with no shared declaration (field selectors, keys declared on their own line, schema columns) are single-occurrence clusters.
 
 Read the source at the pinned commit (`pnpm run benchmark:materialize <repo>`, then `tests/benchmark/.cache/repos/<repo>@<commit>/`).
 
@@ -56,6 +56,6 @@ Each group also has `subject_kind`, from a closed list, so reports can filter on
 | `organization` | An address the organization configures for itself (sender, support, reply-to) |
 | `machine_identity` | A service account or integration identity |
 
-Every group keeps its mentions in the knowledge base whatever its `subject_kind`; hiding or routing a group (for example leaving `organization` addresses out of a privacy inventory) belongs to the report that uses it.
+Every group keeps its occurrences in the knowledge base whatever its `subject_kind`; hiding or routing a group (for example leaving `organization` addresses out of a privacy inventory) belongs to the report that uses it.
 
 Every input cluster appears exactly once across `groups[*].clusters` and `needs_adjudication`. Group ids are unique. A group may hold a single cluster.

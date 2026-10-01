@@ -2,7 +2,7 @@ import type { PathEligibilityOutcome } from "../ingest/eligibility";
 import type { PiiSignalHit } from "../pii-signals/match-pii-signals";
 import {
   dataItemIdentity,
-  mentionIdentity,
+  occurrenceIdentity,
   rawHitIdentity,
 } from "./identities";
 import { buildPersonalDataLayerLedger } from "./build-layer-ledger";
@@ -22,9 +22,9 @@ export interface PersonalDataFinding {
   subjectKey: string;
   labels: string[];
   evidenceLocations: PersonalDataEvidence[];
-  /** Data item group of a mention finding (KDATAP-c8a46a). */
+  /** Data item group of a occurrence finding (KDATAP-c8a46a). */
   group?: string;
-  /** Same-file declaration of a mention finding (KDATAP-8e47c2). */
+  /** Same-file declaration of a occurrence finding (KDATAP-8e47c2). */
   declaration?: { line: number; kind: string } | "unresolved";
 }
 
@@ -69,9 +69,9 @@ function hitToRawFinding(hit: PiiSignalHit): PersonalDataFinding {
   };
 }
 
-function hitToMentionFinding(hit: PiiSignalHit): PersonalDataFinding {
+function hitToOccurrenceFinding(hit: PiiSignalHit): PersonalDataFinding {
   return {
-    subjectKey: mentionIdentity(
+    subjectKey: occurrenceIdentity(
       hit.id,
       hit.evidence.filePath,
       hit.evidence.startLine,
@@ -114,15 +114,15 @@ function hitsToDataItemFindings(hits: PiiSignalHit[]): PersonalDataFinding[] {
     .sort((left, right) => left.subjectKey.localeCompare(right.subjectKey));
 }
 
-export type PersonalDataEvalLayer = "raw-hits" | "mentions" | "data-items";
+export type PersonalDataEvalLayer = "raw-hits" | "occurrences" | "data-items";
 
 const PERSONAL_DATA_LAYER_MAP: Record<PersonalDataEvalLayer, EvalLayerId> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
-/** Matches in code; comment and docstring matches are context, not mentions. */
+/** Matches in code; comment and docstring matches are context, not occurrences. */
 function codeHits(hits: PiiSignalHit[]): PiiSignalHit[] {
   return hits.filter((hit) => hit.location !== "comment");
 }
@@ -134,8 +134,8 @@ export function projectPersonalDataFindings(
   switch (layer) {
     case "raw-hits":
       return inventory.hits.map(hitToRawFinding);
-    case "mentions":
-      return codeHits(inventory.hits).map(hitToMentionFinding);
+    case "occurrences":
+      return codeHits(inventory.hits).map(hitToOccurrenceFinding);
     case "data-items":
       return hitsToDataItemFindings(codeHits(inventory.hits));
   }

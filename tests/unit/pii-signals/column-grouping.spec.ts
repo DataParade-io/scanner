@@ -1,10 +1,10 @@
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { columnIndex, mentionColumn } from "../../../src/analyze/column-identity";
+import { columnIndex, occurrenceColumn } from "../../../src/analyze/column-identity";
 import type { ColumnEntry } from "../../../src/analyze/column-catalog";
 import { buildPersonalDataInventoryFromIngest, ensureDeclarationEngine } from "../../../src/eval-layers/personal-data-inventory";
-import { assignDeclarationGroups } from "../../../src/pii-signals/mention-group";
+import { assignDeclarationGroups } from "../../../src/pii-signals/occurrence-group";
 import type { FileInfo } from "../../../src/core/types/file";
 
 function file(filePath: string, language: FileInfo["language"], lines: string[]): FileInfo {
@@ -22,7 +22,7 @@ const entry = (table: string, column: string, filePath: string, line: number, mo
   locations: [{ file: filePath, line }],
 });
 
-describe("mention column identity", () => {
+describe("occurrence column identity", () => {
   const index = columnIndex([
     entry("cart_address", "phone", "cart/models/address.ts", 5, "Address"),
     entry("order_address", "phone", "order/models/address.ts", 5, "Address"),
@@ -33,21 +33,21 @@ describe("mention column identity", () => {
   ]);
 
   it("names the column a declaration location is", () => {
-    expect(mentionColumn(index, { filePath: "order/models/address.ts", line: 5 })).toBe("order_address.phone");
-    expect(mentionColumn(index, { filePath: "order/models/address.ts", line: 6 })).toBeUndefined();
+    expect(occurrenceColumn(index, { filePath: "order/models/address.ts", line: 5 })).toBe("order_address.phone");
+    expect(occurrenceColumn(index, { filePath: "order/models/address.ts", line: 6 })).toBeUndefined();
   });
 
   it("names the column of a key the line defines when only one table has it, or the line names the table", () => {
     // from_email exists in one table: a copy line that reads another column still carries it.
-    expect(mentionColumn(index, { filePath: "h.js", line: 3, columnHints: { keys: ["from_email"], writes: [] } })).toBe("members_email_change_events.from_email");
+    expect(occurrenceColumn(index, { filePath: "h.js", line: 3, columnHints: { keys: ["from_email"], writes: [] } })).toBe("members_email_change_events.from_email");
     // email exists in two tables: the entity the line names decides, and without one there is no column.
-    expect(mentionColumn(index, { filePath: "h.js", line: 4, receiverEntity: "member", columnHints: { keys: ["email"], writes: [] } })).toBe("members.email");
-    expect(mentionColumn(index, { filePath: "h.js", line: 4, columnHints: { keys: ["email"], writes: [] } })).toBeUndefined();
+    expect(occurrenceColumn(index, { filePath: "h.js", line: 4, receiverEntity: "member", columnHints: { keys: ["email"], writes: [] } })).toBe("members.email");
+    expect(occurrenceColumn(index, { filePath: "h.js", line: 4, columnHints: { keys: ["email"], writes: [] } })).toBeUndefined();
   });
 
   it("resolves a write target by the receiver's class or name", () => {
-    expect(mentionColumn(index, { filePath: "h.js", columnHints: { keys: [], writes: [{ name: "email", receiverClass: "User" }] } })).toBe("users.email");
-    expect(mentionColumn(index, { filePath: "h.js", columnHints: { keys: [], writes: [{ name: "email", receiverName: "members" }] } })).toBe("members.email");
+    expect(occurrenceColumn(index, { filePath: "h.js", columnHints: { keys: [], writes: [{ name: "email", receiverClass: "User" }] } })).toBe("users.email");
+    expect(occurrenceColumn(index, { filePath: "h.js", columnHints: { keys: [], writes: [{ name: "email", receiverName: "members" }] } })).toBe("members.email");
   });
 });
 
@@ -71,7 +71,7 @@ describe("column cannot-link in assignDeclarationGroups", () => {
       ]);
       expect(out[0].group).toBe("phone_number:address");
       expect(out[1].group).not.toBe(out[0].group);
-      // The unnamed-by-column mention joins the name's set that took the name first.
+      // The unnamed-by-column occurrence joins the name's set that took the name first.
       expect(out[2].group).toBe("phone_number:address");
       const refused = fs.readFileSync(log, "utf8").trim().split("\n").map((line) => JSON.parse(line));
       expect(refused).toEqual([expect.objectContaining({ phase: "column", joinedBy: "name", a: "order_address.phone", b: "cart_address.phone" })]);
@@ -80,7 +80,7 @@ describe("column cannot-link in assignDeclarationGroups", () => {
     }
   });
 
-  it("still joins mentions of the same column", () => {
+  it("still joins occurrences of the same column", () => {
     const out = assignDeclarationGroups([
       hit("a.ts", 5, "phone_number:address", "cart_address.phone"),
       hit("b.ts", 7, "phone_number:address", "cart_address.phone"),
@@ -201,7 +201,7 @@ describe("order-independent name claims", () => {
     expect(partition([...hits].reverse())).toEqual(expected);
   });
 
-  it("still lets the one declared column carry its name, with the mentions that have none", () => {
+  it("still lets the one declared column carry its name, with the occurrences that have none", () => {
     const hits = [
       hit("a/models.ts", 3, "phone_number:member", "members.phone", true),
       hit("a/service.ts", 9, "phone_number:member"),

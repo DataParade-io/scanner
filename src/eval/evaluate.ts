@@ -1,7 +1,7 @@
 import {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
-  assignMentionsOneToOne,
+  assignOccurrencesOneToOne,
   assignOneToOne,
   type AssignmentResult,
 } from "./canonical/assignment";
@@ -23,7 +23,7 @@ import type {
 const LAYER_GENERIC_LABELS: Record<CanonicalLayer, ReadonlySet<string>> = {
   components: new Set(["component"]),
   "data-flows": new Set(["data_flow", "dataflow"]),
-  mentions: new Set(["pii", "pii_signal", "mention"]),
+  occurrences: new Set(["pii", "pii_signal", "occurrence"]),
   "raw-hits": new Set(["pii", "pii_signal", "raw_hit"]),
   "data-items": new Set(["data_item", "dataitem"]),
   "data-actions": new Set(["data_action"]),
@@ -143,8 +143,8 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
   const assignment =
     layer === "data-items"
       ? assignDataItemsOneToOne([...evaluableExpectations], [...findings])
-      : layer === "mentions"
-        ? assignMentionsOneToOne([...evaluableExpectations], [...findings])
+      : layer === "occurrences"
+        ? assignOccurrencesOneToOne([...evaluableExpectations], [...findings])
       : layer === "data-flows"
         ? assignDataFlowsOneToOne([...evaluableExpectations], [...findings])
       : assignOneToOne([...evaluableExpectations], [...findings]);

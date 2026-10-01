@@ -125,9 +125,9 @@ describe("detection census", () => {
           sourceLines: [{ file_path: "students/views.py", start_line: 2, end_line: 2 }],
         },
         {
-          key: "mention:email",
+          key: "occurrence:email",
           labels: ["email"],
-          layer: "mentions",
+          layer: "occurrences",
           sourceFilePaths: ["students/models.py"],
           sourceLines: [{ file_path: "students/models.py", start_line: 3, end_line: 3 }],
         },

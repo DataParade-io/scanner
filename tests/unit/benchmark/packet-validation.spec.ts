@@ -30,8 +30,8 @@ const CANDIDATES: CandidateLine[] = [
 function record(id: string, line: number, extra: Record<string, unknown> = {}) {
   return {
     id,
-    layer: "mentions",
-    subject: { key: "mention:email", name: "email" },
+    layer: "occurrences",
+    subject: { key: "occurrence:email", name: "email" },
     evidence: { file_path: "src/signup.js", start_line: line, end_line: line },
     rationale: "Labeled for the packet validator test.",
     expected: { status: "positive", labels: ["email"] },
@@ -55,17 +55,17 @@ function validPacket() {
     annotations: [
       record("import-mailer", 1, {
         expected: { status: "negative", labels: ["email"] },
-        mention_attributes: { syntax_kind: "import_specifier" },
+        occurrence_attributes: { syntax_kind: "import_specifier" },
       }),
       record("add-signup-param", 2, {
-        mention_attributes: {
+        occurrence_attributes: {
           syntax_kind: "identifier",
           declaration: { file_path: "src/signup.js", line: 2, kind: "parameter" },
           owner: "api",
         },
       }),
       record("send-to", 4, {
-        mention_attributes: {
+        occurrence_attributes: {
           syntax_kind: "identifier",
           declaration: { file_path: "src/signup.js", line: 2, kind: "parameter" },
           owner: "api",
@@ -122,11 +122,11 @@ describe("benchmark/packet-validation", () => {
     expect(errors).toContain("annotations[3]: line 99 is outside 'src/signup.js' (5 lines)");
   });
 
-  it("rejects unknown fields on records and in mention_attributes", () => {
+  it("rejects unknown fields on records and in occurrence_attributes", () => {
     const packet = validPacket();
     packet.annotations[0] = { ...packet.annotations[0], confidence: 0.9 } as never;
     packet.annotations[1] = record("add-signup-param", 2, {
-      mention_attributes: { syntax_kind: "identifier", purpose: "signup" },
+      occurrence_attributes: { syntax_kind: "identifier", purpose: "signup" },
     });
     const { errors } = run(packet);
     expect(errors).toContain("annotations[0]: unknown field 'confidence'");
@@ -141,7 +141,7 @@ describe("benchmark/packet-validation", () => {
     );
   });
 
-  it("rejects records that are not proposed or not mentions", () => {
+  it("rejects records that are not proposed or not occurrences", () => {
     const packet = validPacket();
     packet.annotations[1] = record("add-signup-param", 2, {
       provenance: { proposed_by: "agent", proposed_at: "2026-09-28", review_state: "accepted" },
@@ -154,7 +154,7 @@ describe("benchmark/packet-validation", () => {
   it("rejects a declaration that points outside the file", () => {
     const packet = validPacket();
     packet.annotations[2] = record("send-to", 4, {
-      mention_attributes: {
+      occurrence_attributes: {
         declaration: { file_path: "src/signup.js", line: 40, kind: "parameter" },
       },
     });
@@ -166,10 +166,10 @@ describe("benchmark/packet-validation", () => {
   it("requires a declaration on positive identifier and property_key lines", () => {
     const packet = validPacket();
     packet.annotations[1] = record("add-signup-param", 2, {
-      mention_attributes: { syntax_kind: "identifier", owner: "api" },
+      occurrence_attributes: { syntax_kind: "identifier", owner: "api" },
     });
     expect(run(packet).errors).toContain(
-      "annotations[1]: positive identifier needs mention_attributes.declaration (use 'unresolved' if it cannot be found)",
+      "annotations[1]: positive identifier needs occurrence_attributes.declaration (use 'unresolved' if it cannot be found)",
     );
   });
 
@@ -177,7 +177,7 @@ describe("benchmark/packet-validation", () => {
     const packet = validPacket();
     packet.annotations[0] = record("import-mailer", 1, {
       expected: { status: "negative", labels: ["email"] },
-      mention_attributes: {
+      occurrence_attributes: {
         syntax_kind: "import_specifier",
         declaration: { file_path: "src/signup.js", line: 1, kind: "local" },
       },
@@ -190,8 +190,8 @@ describe("benchmark/packet-validation", () => {
   it("rejects a subject.name that is not a single token", () => {
     const packet = validPacket();
     packet.annotations[2] = record("send-to", 4, {
-      subject: { key: "mention:email", name: "return mailer.send({ to: email });" },
-      mention_attributes: {
+      subject: { key: "occurrence:email", name: "return mailer.send({ to: email });" },
+      occurrence_attributes: {
         syntax_kind: "identifier",
         declaration: { file_path: "src/signup.js", line: 2, kind: "parameter" },
       },
@@ -224,11 +224,11 @@ describe("benchmark/packet-validation", () => {
   });
 });
 
-describe("benchmark/manifest mention_attributes", () => {
-  it("parses asserted mention attributes", () => {
+describe("benchmark/manifest occurrence_attributes", () => {
+  it("parses asserted occurrence attributes", () => {
     const parsed = validateAnnotation(
       record("x", 2, {
-        mention_attributes: {
+        occurrence_attributes: {
           syntax_kind: "property_key",
           declaration: "unresolved",
           type_annotation: "SignupDto",
@@ -238,7 +238,7 @@ describe("benchmark/manifest mention_attributes", () => {
       "file.yaml",
       0,
     );
-    expect(parsed.mention_attributes).toEqual({
+    expect(parsed.occurrence_attributes).toEqual({
       syntax_kind: "property_key",
       declaration: "unresolved",
       type_annotation: "SignupDto",
@@ -246,21 +246,38 @@ describe("benchmark/manifest mention_attributes", () => {
     });
   });
 
-  it("rejects mention attributes on other layers and unknown syntax kinds", () => {
+  it("rejects occurrence attributes on other layers and unknown syntax kinds", () => {
     const onComponents = {
-      ...record("x", 2, { mention_attributes: { owner: "api" } }),
+      ...record("x", 2, { occurrence_attributes: { owner: "api" } }),
       layer: "components",
       subject: { key: "asset:api" },
     };
     expect(() => validateAnnotation(onComponents, "file.yaml", 0)).toThrow(
-      /only supported on mentions layer/,
+      /only supported on occurrences layer/,
     );
     expect(() =>
       validateAnnotation(
-        record("x", 2, { mention_attributes: { syntax_kind: "keyword" } }),
+        record("x", 2, { occurrence_attributes: { syntax_kind: "keyword" } }),
         "file.yaml",
         0,
       ),
     ).toThrow(/syntax_kind 'keyword'/);
+  });
+});
+
+describe("legacy occurrence gold (ground-truth/2)", () => {
+  it("reads mention layer, keys and attributes as occurrences", () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { normalizeLegacyOccurrenceRecord } = require("../../benchmark/manifest");
+    const out = normalizeLegacyOccurrenceRecord({
+      layer: "mentions",
+      subject: { key: "mention:email", name: "email" },
+      mention_attributes: { syntax_kind: "identifier" },
+    });
+    expect(out).toEqual({
+      layer: "occurrences",
+      subject: { key: "occurrence:email", name: "email" },
+      occurrence_attributes: { syntax_kind: "identifier" },
+    });
   });
 });

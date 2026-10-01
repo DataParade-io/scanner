@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Export mention fragments and labeled fragment pairs for merge evaluation (KDATAP-9afaa1).
+ * Export occurrence fragments and labeled fragment pairs for merge evaluation (KDATAP-9afaa1).
  *
  *   node dist/tests/benchmark/scripts/email-fragment-pairs.js <grouping-report.json> <out-dir> [repo...]
  *
  * A fragment is one predicted group from deterministic grouping (or a single ungrouped
- * mention). Each fragment's gold label is the majority gold group of its mentions; a
- * fragment whose mentions disagree is flagged `mixed`. Every pair of fragments in a repo
+ * occurrence). Each fragment's gold label is the majority gold group of its occurrences; a
+ * fragment whose occurrences disagree is flagged `mixed`. Every pair of fragments in a repo
  * is labeled `same` when their gold labels match. The report also gives the oracle-merge
  * ceiling: pairwise precision and recall if fragments were merged exactly by gold label.
  * Each fragment also carries `context`: a numbered code window (4 lines either side)
@@ -32,7 +32,7 @@ interface Fragment {
   name: string | null;
   gold: string;
   mixed: boolean;
-  mentions: number;
+  occurrences: number;
   files: string[];
   lines: Array<{ location: string; code: string }>;
   context: Array<{ location: string; window: string }>;
@@ -112,7 +112,7 @@ function main(): void {
         name: key.startsWith("single:") ? null : key,
         gold,
         mixed: counts.size > 1,
-        mentions: members.length,
+        occurrences: members.length,
         files: files.sort(),
         lines: members.slice(0, 8).map((member) => ({ location: member.location, code: codeAt(member.location) })),
         context: members

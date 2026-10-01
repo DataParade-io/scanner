@@ -75,12 +75,12 @@ const LAYER_SCORES: Record<string, LayerScoreConfig> = {
     findingsLayer: "raw-hits",
     findingsFormat: "identity",
   },
-  "Mention Identity": {
-    name: "Mention Identity",
-    id: "local-eval-mention-identity",
-    key: "mention-identity",
+  "Occurrence Identity": {
+    name: "Occurrence Identity",
+    id: "local-eval-occurrence-identity",
+    key: "occurrence-identity",
     scoreClass: "SubjectIdentityScore",
-    findingsLayer: "mentions",
+    findingsLayer: "occurrences",
     findingsFormat: "identity",
   },
   "Raw Hit Span": {
@@ -91,12 +91,12 @@ const LAYER_SCORES: Record<string, LayerScoreConfig> = {
     findingsLayer: "raw-hits",
     findingsFormat: "span",
   },
-  "Mention Span": {
-    name: "Mention Span",
-    id: "local-eval-mention-span",
-    key: "mention-span",
+  "Occurrence Span": {
+    name: "Occurrence Span",
+    id: "local-eval-occurrence-span",
+    key: "occurrence-span",
     scoreClass: "SubjectSpanOverlapScore",
-    findingsLayer: "mentions",
+    findingsLayer: "occurrences",
     findingsFormat: "span",
   },
 };
@@ -292,13 +292,13 @@ Given(
 );
 
 Given(
-  "the Mention Identity score is on the scorecard",
+  "the Occurrence Identity score is on the scorecard",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Identity");
+    const skip = skipUnlessScoreAvailable("Occurrence Identity");
     if (skip) {
       return skip;
     }
-    assertScoreOnScorecard(getWorld(this), "Mention Identity");
+    assertScoreOnScorecard(getWorld(this), "Occurrence Identity");
   },
 );
 
@@ -314,13 +314,13 @@ Given(
 );
 
 Given(
-  "the Mention Span score is on the scorecard",
+  "the Occurrence Span score is on the scorecard",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Span");
+    const skip = skipUnlessScoreAvailable("Occurrence Span");
     if (skip) {
       return skip;
     }
-    assertScoreOnScorecard(getWorld(this), "Mention Span");
+    assertScoreOnScorecard(getWorld(this), "Occurrence Span");
   },
 );
 
@@ -420,32 +420,32 @@ Given(
 );
 
 Given(
-  "a mention gold dataset with a matching subjectKey",
+  "a occurrence gold dataset with a matching subjectKey",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Identity");
+    const skip = skipUnlessScoreAvailable("Occurrence Identity");
     if (skip) {
       return skip;
     }
 
     const w = getWorld(this);
-    w.datasetFile = materializeDataset("mention-identity-hit.csv");
+    w.datasetFile = materializeDataset("occurrence-identity-hit.csv");
     const dataset = readFileSync(w.datasetFile, "utf8");
-    assert.match(dataset, /mention:username/);
+    assert.match(dataset, /occurrence:username/);
   },
 );
 
 Given(
-  "a mention gold dataset with a missing subjectKey",
+  "a occurrence gold dataset with a missing subjectKey",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Identity");
+    const skip = skipUnlessScoreAvailable("Occurrence Identity");
     if (skip) {
       return skip;
     }
 
     const w = getWorld(this);
-    w.datasetFile = materializeDataset("mention-identity-miss.csv");
+    w.datasetFile = materializeDataset("occurrence-identity-miss.csv");
     const dataset = readFileSync(w.datasetFile, "utf8");
-    assert.match(dataset, /mention:passport/);
+    assert.match(dataset, /occurrence:passport/);
   },
 );
 
@@ -465,17 +465,17 @@ Given(
 );
 
 Given(
-  "a mention gold dataset with an overlapping span and subjectKey",
+  "a occurrence gold dataset with an overlapping span and subjectKey",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Span");
+    const skip = skipUnlessScoreAvailable("Occurrence Span");
     if (skip) {
       return skip;
     }
 
     const w = getWorld(this);
-    w.datasetFile = materializeDataset("mention-hit.csv");
+    w.datasetFile = materializeDataset("occurrence-hit.csv");
     const dataset = readFileSync(w.datasetFile, "utf8");
-    assert.match(dataset, /mention:username/);
+    assert.match(dataset, /occurrence:username/);
   },
 );
 
@@ -508,15 +508,15 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Mention Identity score",
+  "I run plexus evaluate accuracy for the Occurrence Identity score",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Identity");
+    const skip = skipUnlessScoreAvailable("Occurrence Identity");
     if (skip) {
       return skip;
     }
 
     const w = getWorld(this);
-    w.activeScoreName = "Mention Identity";
+    w.activeScoreName = "Occurrence Identity";
     runLayerScoreEval(w);
   },
 );
@@ -536,15 +536,15 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Mention Span score",
+  "I run plexus evaluate accuracy for the Occurrence Span score",
   function (this: ScannerLayerWorld) {
-    const skip = skipUnlessScoreAvailable("Mention Span");
+    const skip = skipUnlessScoreAvailable("Occurrence Span");
     if (skip) {
       return skip;
     }
 
     const w = getWorld(this);
-    w.activeScoreName = "Mention Span";
+    w.activeScoreName = "Occurrence Span";
     runLayerScoreEval(w);
   },
 );

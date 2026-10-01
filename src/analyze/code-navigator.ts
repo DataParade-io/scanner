@@ -9,7 +9,7 @@ import { packForFile } from "./languages";
 /**
  * Code navigator over the tree-sitter engine (KDATAP-059e1e): LSP-style answers
  * (outline, symbols on a line, definition, callers, key writers) for tools that trace a
- * mention to the data it reads. Deterministic, no model calls. The repository is indexed
+ * occurrence to the data it reads. Deterministic, no model calls. The repository is indexed
  * once into plain data (the parse trees are freed); per-file questions parse the file again.
  * `uses` and `members` walk forward from a value: where a binding goes, and who reads or
  * writes a field.
@@ -507,7 +507,7 @@ export class CodeNavigator {
    * `{"op":"writers","name"}`: sites that define a key, keyword argument or field named
    * `name` across the repository (`@definition.key` / `@definition.field`), in path order.
    * A `file` hint ranks that file first and then the nearest directories, so the sites
-   * around a mention survive the cap.
+   * around a occurrence survive the cap.
    */
   writers(name: string, limit: number, from = ""): Record<string, unknown> {
     const all = this.rankedByProximity(this.membersByName.get(name) ?? [], from);

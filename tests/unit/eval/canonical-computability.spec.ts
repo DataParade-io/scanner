@@ -24,7 +24,7 @@ function emptyDenominators(
 describe("metric computability resolvers", () => {
   it("marks recall computable when evaluable positives exist", () => {
     const result = resolveRecallComputability({
-      layer: "mentions",
+      layer: "occurrences",
       denominators: emptyDenominators({ evaluablePositives: 3, matchedPositives: 2 }),
       scope: { reviewedScopeFileCount: 0, processedScopeFileCount: 0 },
       recall: 2 / 3,
@@ -61,7 +61,7 @@ describe("metric computability resolvers", () => {
 
   it("distinguishes precision no reviewed scope from zero predictions", () => {
     const noScope = resolvePrecisionComputability({
-      layer: "mentions",
+      layer: "occurrences",
       denominators: emptyDenominators(),
       scope: { reviewedScopeFileCount: 0, processedScopeFileCount: 0 },
       recall: 1,
@@ -74,7 +74,7 @@ describe("metric computability resolvers", () => {
       locationlessFindingCount: 0,
     });
     const zeroPredictions = resolvePrecisionComputability({
-      layer: "mentions",
+      layer: "occurrences",
       denominators: emptyDenominators(),
       scope: { reviewedScopeFileCount: 2, processedScopeFileCount: 2 },
       recall: 1,
@@ -112,7 +112,7 @@ describe("metric computability resolvers", () => {
 
   it("computes full metric block with independent recall and precision states", () => {
     const block = computeMetricComputability({
-      layer: "mentions",
+      layer: "occurrences",
       denominators: emptyDenominators({ evaluablePositives: 2, matchedPositives: 1 }),
       scope: { reviewedScopeFileCount: 0, processedScopeFileCount: 0 },
       recall: 0.5,

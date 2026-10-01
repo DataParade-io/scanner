@@ -74,11 +74,11 @@ describe("personal-data inventory tags comment matches", () => {
     ]);
   });
 
-  it("mention and data-item projections use code matches only", () => {
+  it("occurrence and data-item projections use code matches only", () => {
     const content = ["// email the member", "const email = member.get('email');"].join("\n");
     const inventory = buildPersonalDataInventoryFromIngest([file("src/a.js", "javascript", content)], []);
-    const mentions = projectPersonalDataFindings(inventory, "mentions").filter((f) => f.subjectKey.startsWith("mention:email"));
-    expect(mentions.map((f) => f.evidenceLocations[0]?.startLine)).toEqual([2]);
+    const occurrences = projectPersonalDataFindings(inventory, "occurrences").filter((f) => f.subjectKey.startsWith("occurrence:email"));
+    expect(occurrences.map((f) => f.evidenceLocations[0]?.startLine)).toEqual([2]);
     const raw = projectPersonalDataFindings(inventory, "raw-hits").filter((f) => f.subjectKey.includes("email"));
     expect(raw).toHaveLength(2);
   });

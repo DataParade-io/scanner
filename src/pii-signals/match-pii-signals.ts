@@ -1,7 +1,7 @@
 import type { PiiSignalRule } from "./pii-signal-rules";
 import type { CommentContext } from "./comment-context";
 import { loadPiiSignalRules } from "./pii-signal-rules";
-import type { MentionDeclaration } from "../analyze/mention-declaration";
+import type { OccurrenceDeclaration } from "../analyze/occurrence-declaration";
 import {
   extractLineIdentifierTokens,
   resolveAliasRuleIdsForToken,
@@ -21,7 +21,7 @@ export interface PiiSignalHit {
   evidence: PiiSignalEvidence;
   /**
    * Where the match sits: in code, or only in a comment or docstring. Comment
-   * matches are kept as context; mention and data-item layers use code matches.
+   * matches are kept as context; occurrence and data-item layers use code matches.
    */
   location?: "code" | "comment";
   /** Comments immediately around a code match (KDATAP-b512a8). */
@@ -41,13 +41,13 @@ export interface PiiSignalHit {
    * Same-file declaration of the mentioned name, or `unresolved` (KDATAP-8e47c2).
    * Absent when the line has no code occurrence to declare or the file is not analyzed.
    */
-  declaration?: MentionDeclaration;
+  declaration?: OccurrenceDeclaration;
   /**
    * Entity fields the line defines or reads, as `entity.field` (`order.user_email`).
    * `definition` is true where the line declares the field (KDATAP-c8a46a).
    */
   fieldKeys?: Array<{ key: string; definition: boolean }>;
-  /** Entity of the class the mention is reached through (`usersService.createOne({ email })` -> `user`). */
+  /** Entity of the class the occurrence is reached through (`usersService.createOne({ email })` -> `user`). */
   receiverEntity?: string;
   /** Same-file declaration lines of variables passed into a key on this line. */
   passedDeclarations?: Array<{ line: number; name: string }>;
@@ -58,19 +58,19 @@ export interface PiiSignalHit {
   callLinks?: string[];
   /** Entity of the one table the enclosing function queries through a query builder. */
   tableEntity?: string;
-  /** Lines of other mentions whose variable is passed into a concept key on this line. */
-  passedMentionLines?: number[];
+  /** Lines of other occurrences whose variable is passed into a concept key on this line. */
+  passedOccurrenceLines?: number[];
   /**
    * Keys and keyword arguments the line defines, and member writes on it, that name the
-   * concept (KDATAP-7a094c): the evidence for which stored column the mention names.
+   * concept (KDATAP-7a094c): the evidence for which stored column the occurrence names.
    */
   columnHints?: { keys: string[]; writes: Array<{ name: string; receiverClass?: string; receiverName?: string }> };
   /**
-   * The catalogued stored column the mention names, as `table.column` (KDATAP-7a094c).
+   * The catalogued stored column the occurrence names, as `table.column` (KDATAP-7a094c).
    * Two different columns are never one data item.
    */
   column?: string;
-  /** The column is the catalog declaration the mention's own line is (KDATAP-fb8019). */
+  /** The column is the catalog declaration the occurrence's own line is (KDATAP-fb8019). */
   columnDeclared?: boolean;
   /**
    * The column is a key written into a JSON record column (`Model.field.key`, KDATAP-fb8019):
@@ -84,7 +84,7 @@ export interface MatchPiiSignalsFileInput {
   content: string;
 }
 
-export { piiSignalIdentity, rawHitIdentity, mentionIdentity, dataItemIdentity } from "../eval-layers/identities";
+export { piiSignalIdentity, rawHitIdentity, occurrenceIdentity, dataItemIdentity } from "../eval-layers/identities";
 
 function ruleById(rules: PiiSignalRule[]): Map<string, PiiSignalRule> {
   return new Map(rules.map((rule) => [rule.id, rule]));

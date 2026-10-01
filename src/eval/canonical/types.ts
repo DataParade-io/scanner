@@ -3,7 +3,7 @@ import type { ContractEnvelope } from "./contract";
 export type CanonicalLayer =
   | "components"
   | "data-flows"
-  | "mentions"
+  | "occurrences"
   | "data-items"
   | "raw-hits"
   | "data-actions";

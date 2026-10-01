@@ -7,9 +7,9 @@ import { adaptPersonalDataFinding } from "../../../src/eval/canonical/scanner/pe
 import { resolveScannerAdapterMapVersion } from "../../../src/eval/canonical/scanner/manifest";
 import type { CanonicalGoldExpectation, CanonicalScannerFinding, EvidenceLocation } from "../../../src/eval/canonical/types";
 
-const PERSONAL_DATA_LAYER: Record<"raw-hits" | "mentions" | "data-items", PersonalDataEvalLayer> = {
+const PERSONAL_DATA_LAYER: Record<"raw-hits" | "occurrences" | "data-items", PersonalDataEvalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
@@ -160,7 +160,7 @@ export function canonicalFindingFromLayerFinding(
     canonical = layerFindingToComponent(finding, adapterMapVersion);
   } else if (layer === "data-actions") {
     canonical = layerFindingToDataAction(finding, adapterMapVersion);
-  } else if (layer === "raw-hits" || layer === "mentions" || layer === "data-items") {
+  } else if (layer === "raw-hits" || layer === "occurrences" || layer === "data-items") {
     canonical = layerFindingToPersonalData(finding, PERSONAL_DATA_LAYER[layer], adapterMapVersion);
   } else if (layer === "data-flows") {
     const evidenceLocations = finding.sourceLines.map(toEvidenceLocation);

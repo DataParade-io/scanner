@@ -23,7 +23,7 @@ describe("inferDataFlowProtocol", () => {
     ).toBe("graphql");
   });
 
-  it("returns graphql when source code mentions graphql", () => {
+  it("returns graphql when source code occurrences graphql", () => {
     expect(
       inferDataFlowProtocol(
         baseFlow({

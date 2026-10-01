@@ -18,14 +18,14 @@ describe("layer-scopes loader", () => {
     expect(scopes.get("components")?.provenance.review_state).toBe("accepted");
   });
 
-  it("merges pii_signals into mentions on load", () => {
+  it("merges pii_signals into occurrences on load", () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "layer-scopes-"));
     try {
       fs.writeFileSync(
         path.join(tempDir, "layer-scopes.yaml"),
         [
           "layer_scopes:",
-          "  mentions:",
+          "  occurrences:",
           "    exhaustive_scope_files: [a.rb]",
           "    provenance:",
           "      proposed_by: test",
@@ -42,7 +42,7 @@ describe("layer-scopes loader", () => {
       );
 
       const scopes = loadLayerScopes(tempDir);
-      expect(scopes.get("mentions")?.exhaustive_scope_files).toEqual(["a.rb", "b.rb"]);
+      expect(scopes.get("occurrences")?.exhaustive_scope_files).toEqual(["a.rb", "b.rb"]);
       expect(scopes.has("pii_signals")).toBe(false);
     } finally {
       fs.rmSync(tempDir, { recursive: true, force: true });

@@ -6,8 +6,8 @@
  *   node dist/tests/benchmark/scripts/build-grouping-input.js saleor phone KDATAP-3ccf91
  *
  * Reads every `<packet-prefix>*.yaml` packet in annotations/packets/ and clusters the
- * positive mentions by shared declaration (file:line). Positive mentions with no
- * declaration (field-name strings, keys) are single-mention clusters. Clusters are
+ * positive occurrences by shared declaration (file:line). Positive occurrences with no
+ * declaration (field-name strings, keys) are single-occurrence clusters. Clusters are
  * numbered c001... in declaration file and line order.
  */
 import fs from "fs";
@@ -21,7 +21,7 @@ interface PacketRecord {
   subject: { name: string };
   evidence: { file_path: string; start_line: number };
   expected: { status: string };
-  mention_attributes?: {
+  occurrence_attributes?: {
     syntax_kind?: string;
     declaration?: { file_path: string; line: number } | "unresolved";
   };
@@ -31,7 +31,7 @@ interface Entry {
   key: string;
   file: string;
   line: number;
-  mention: Record<string, unknown>;
+  occurrence: Record<string, unknown>;
 }
 
 function main(): void {
@@ -55,7 +55,7 @@ function main(): void {
     const batchName = batch.replace(/\.yaml$/, "");
     for (const record of parsed.annotations) {
       if (record.expected.status !== "positive") continue;
-      const attrs = record.mention_attributes ?? {};
+      const attrs = record.occurrence_attributes ?? {};
       const decl = attrs.declaration;
       const hasDecl = decl !== undefined && decl !== "unresolved";
       const file = hasDecl ? decl.file_path : record.evidence.file_path;
@@ -69,7 +69,7 @@ function main(): void {
         key: hasDecl ? key : `${key}#${record.id}`,
         file,
         line,
-        mention: {
+        occurrence: {
           id: record.id,
           batch: batchName,
           file: record.evidence.file_path,
@@ -95,8 +95,8 @@ function main(): void {
     const shared = members.length > 1 || !first.key.includes("#");
     clusters[`c${String(index + 1).padStart(3, "0")}`] = {
       declaration: shared ? first.key : `${first.file}:${first.line} (no shared declaration)`,
-      mentions: members
-        .map((member) => member.mention)
+      occurrences: members
+        .map((member) => member.occurrence)
         .sort((a, b) => String(a.file).localeCompare(String(b.file)) || Number(a.line) - Number(b.line)),
     };
   });
@@ -104,10 +104,10 @@ function main(): void {
   const outPath = path.join(packetsDir, `${concept}-grouping-input.yaml`);
   fs.writeFileSync(
     outPath,
-    YAML.stringify({ repo, concept, positive_mentions: entries.length, clusters }),
+    YAML.stringify({ repo, concept, positive_occurrences: entries.length, clusters }),
     "utf8",
   );
-  console.log(`${entries.length} positive mentions in ${ordered.length} clusters -> ${outPath}`);
+  console.log(`${entries.length} positive occurrences in ${ordered.length} clusters -> ${outPath}`);
 }
 
 function commitOf(root: string, repo: string): string {

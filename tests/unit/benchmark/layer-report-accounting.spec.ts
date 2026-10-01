@@ -41,12 +41,12 @@ function acceptedRecord(
 function migrationRecord(id: string): PacketCanonicalRecordWithDiagnostics {
   return {
     id,
-    headlineLayer: "mentions",
+    headlineLayer: "occurrences",
     conversions: ["legacy_subject_name"],
     record: {
       contractVersion: "1.0.0",
       adapterMapVersion: "fixture-adapter-map",
-      identity: { layer: "mentions", identityKey: `mention:${id}` },
+      identity: { layer: "occurrences", identityKey: `occurrence:${id}` },
       classification: { conceptLeaf: "", conceptAncestry: [] },
       evidenceLocations: [{ file_path: "src/legacy.ts", start_line: 1, end_line: 1 }],
       disposition: "migration_incomplete",
@@ -58,10 +58,10 @@ function evalCase(id: string, status: EvalCase["expected"]["status"] = "positive
   return {
     id,
     fixture: FIXTURE,
-    layer: "mentions",
-    subject: { key: `mention:${id}` },
+    layer: "occurrences",
+    subject: { key: `occurrence:${id}` },
     evidence: { file_path: "src/app.ts", start_line: 1, end_line: 1 },
-    expected: { status, labels: ["mention"] },
+    expected: { status, labels: ["occurrence"] },
     rationale: "test",
   };
 }
@@ -99,7 +99,7 @@ function report(partial: {
       unreadCount: partial.unreadCount ?? 0,
       denominators,
       metricComputability: computeMetricComputability({
-        layer: "mentions",
+        layer: "occurrences",
         denominators,
         scope: { reviewedScopeFileCount: 1, processedScopeFileCount: 1 },
         recall: 1,
@@ -121,16 +121,16 @@ function scanResult(): FixtureScanResult {
     fixture: FIXTURE,
     findings: [
       {
-        key: "mention:hit",
-        labels: ["mention"],
-        layer: "mentions",
+        key: "occurrence:hit",
+        labels: ["occurrence"],
+        layer: "occurrences",
         sourceFilePaths: ["src/app.ts"],
         sourceLines: [{ file_path: "src/app.ts", start_line: 1, end_line: 1 }],
       },
     ],
     scannedFiles: ["src/app.ts"],
     eligibilityLedgers: {
-      mentions: createLayerLedger("mentions", [
+      occurrences: createLayerLedger("occurrences", [
         layerOutcome("src/app.ts", "successfully_processed"),
         layerOutcome("src/blocked.ts", "unsupported_file_type_or_language"),
       ]),
@@ -141,11 +141,11 @@ function scanResult(): FixtureScanResult {
 describe("layer-report-accounting", () => {
   it("counts accepted canonical positives separately from migration-incomplete rows", () => {
     const accounting = buildLayerReportAccounting({
-      layer: "mentions",
+      layer: "occurrences",
       report: report({ evaluablePositives: 2, matchedPositives: 1 }),
       cases: [evalCase("a1"), evalCase("a2")],
       scanResult: scanResult(),
-      canonicalRecords: [acceptedRecord("mentions", "a1"), migrationRecord("legacy-1")],
+      canonicalRecords: [acceptedRecord("occurrences", "a1"), migrationRecord("legacy-1")],
       gate: { status: "scorable" },
       computability: {
         metrics: { recall: { state: "computable" } },
@@ -161,7 +161,7 @@ describe("layer-report-accounting", () => {
 
   it("computes unread rate over accepted canonical positives plus negative cases", () => {
     const accounting = buildLayerReportAccounting({
-      layer: "mentions",
+      layer: "occurrences",
       report: report({
         evaluablePositives: 1,
         matchedPositives: 1,
@@ -170,7 +170,7 @@ describe("layer-report-accounting", () => {
       }),
       cases: [evalCase("a1"), evalCase("n1", "negative")],
       scanResult: scanResult(),
-      canonicalRecords: [acceptedRecord("mentions", "a1")],
+      canonicalRecords: [acceptedRecord("occurrences", "a1")],
       gate: { status: "scorable" },
       computability: {
         metrics: { recall: { state: "computable" } },
@@ -183,11 +183,11 @@ describe("layer-report-accounting", () => {
 
   it("pools denominators across packets when aggregating accounting", () => {
     const first = buildLayerReportAccounting({
-      layer: "mentions",
+      layer: "occurrences",
       report: report({ evaluablePositives: 2, matchedPositives: 1 }),
       cases: [evalCase("a1"), evalCase("a2")],
       scanResult: scanResult(),
-      canonicalRecords: [acceptedRecord("mentions", "a1"), acceptedRecord("mentions", "a2")],
+      canonicalRecords: [acceptedRecord("occurrences", "a1"), acceptedRecord("occurrences", "a2")],
       gate: { status: "scorable" },
       computability: {
         metrics: { recall: { state: "computable" } },
@@ -195,11 +195,11 @@ describe("layer-report-accounting", () => {
       },
     });
     const second = buildLayerReportAccounting({
-      layer: "mentions",
+      layer: "occurrences",
       report: report({ evaluablePositives: 2, matchedPositives: 1 }),
       cases: [evalCase("b1"), evalCase("b2")],
       scanResult: scanResult(),
-      canonicalRecords: [acceptedRecord("mentions", "b1"), acceptedRecord("mentions", "b2")],
+      canonicalRecords: [acceptedRecord("occurrences", "b1"), acceptedRecord("occurrences", "b2")],
       gate: { status: "scorable" },
       computability: {
         metrics: { recall: { state: "computable" } },
@@ -215,16 +215,16 @@ describe("layer-report-accounting", () => {
 
   it("keeps capability slice diagnostic without changing recall denominator", () => {
     const accounting = buildLayerReportAccounting({
-      layer: "mentions",
+      layer: "occurrences",
       report: report({ evaluablePositives: 2, matchedPositives: 1 }),
       cases: [evalCase("a1"), evalCase("a2")],
       scanResult: scanResult(),
       canonicalRecords: [
-        acceptedRecord("mentions", "a1"),
+        acceptedRecord("occurrences", "a1"),
         {
-          ...acceptedRecord("mentions", "a2"),
+          ...acceptedRecord("occurrences", "a2"),
           record: {
-            ...acceptedRecord("mentions", "a2").record,
+            ...acceptedRecord("occurrences", "a2").record,
             declaredCapabilitySupported: { supported: false, reason: "unsupported" },
           },
         },

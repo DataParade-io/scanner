@@ -59,7 +59,7 @@ function emptyScoresForLayer(layer: EvalLayer): EvalScores {
   };
 }
 
-function scorableMentionsReport(): EvalScoreReport {
+function scorableOccurrencesReport(): EvalScoreReport {
   const denominators = {
     evaluablePositives: 2,
     matchedPositives: 1,
@@ -81,7 +81,7 @@ function scorableMentionsReport(): EvalScoreReport {
       unreadCount: 0,
       denominators,
       metricComputability: computeMetricComputability({
-        layer: "mentions",
+        layer: "occurrences",
         denominators,
         scope: { reviewedScopeFileCount: 1, processedScopeFileCount: 1 },
         recall: 0.5,
@@ -113,8 +113,8 @@ function buildMinimalScorecard() {
         repoKey: "fixture-packet",
         evalCases: [],
         layerScores: {
-          mentions: scorableMentionsReport(),
-          "raw-hits": emptyLayerReport("mentions"),
+          occurrences: scorableOccurrencesReport(),
+          "raw-hits": emptyLayerReport("occurrences"),
         },
       },
     ],
@@ -162,7 +162,7 @@ function buildMinimalBaselineArtifact(): BaselineArtifact {
       reviewStateCounts: {
         provenance: "corpus-annotations",
         byLayer: {
-          mentions: {
+          occurrences: {
             accepted: 2,
             proposed: 0,
             rejected: 0,
@@ -179,7 +179,7 @@ function buildMinimalBaselineArtifact(): BaselineArtifact {
       annotationStatusCounts: {
         provenance: "corpus-annotations",
         byLayer: {
-          mentions: { positive: 2, negative: 0, ambiguous: 0 },
+          occurrences: { positive: 2, negative: 0, ambiguous: 0 },
         },
         total: { positive: 2, negative: 0, ambiguous: 0 },
       },
@@ -206,10 +206,10 @@ function buildMinimalBaselineArtifact(): BaselineArtifact {
         },
         perLayer: [
           {
-            layer: "mentions",
+            layer: "occurrences",
             orchestratorLanguages: [],
             personalDataLanguages: ["typescript"],
-            profileDigest: "sha256:fixture-layer-mentions",
+            profileDigest: "sha256:fixture-layer-occurrences",
           },
           {
             layer: "data-items",
@@ -242,7 +242,7 @@ function buildMinimalBaselineArtifact(): BaselineArtifact {
     },
     goldPopulation: {
       byLayer: {
-        mentions: {
+        occurrences: {
           acceptedCanonicalCount: 2,
           evaluablePositiveCount: 2,
           packetDiversity: { distinctPackets: 1, packetKeys: ["fixture-packet"] },
@@ -277,7 +277,7 @@ function buildMinimalBaselineArtifact(): BaselineArtifact {
     capabilityCoverage: {
       disclaimer: CAPABILITY_COVERAGE_DISCLAIMER,
       byLayer: {
-        mentions: {
+        occurrences: {
           caseWeighted: 0,
           distinctLeaf: 0,
           supportedCount: 0,
@@ -335,7 +335,7 @@ describe("baseline artifact", () => {
     expect(markdown).toContain("- Predecessor: none");
   });
 
-  it("embeds scorecard-vector/2 without cross-layer scalar", () => {
+  it("embeds scorecard-vector/3 without cross-layer scalar", () => {
     expect(minimalArtifact.scorecard.contractVersion).toBe(SCORECARD_VECTOR_CONTRACT_VERSION);
     assertNoCrossLayerScalar(minimalArtifact.scorecard);
     expect(minimalArtifact).not.toHaveProperty("overall");

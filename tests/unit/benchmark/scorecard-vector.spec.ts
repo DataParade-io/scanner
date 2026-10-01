@@ -137,8 +137,8 @@ function positiveCase(layer: EvalCase["layer"], id: string): EvalCase {
 describe("scorecard-vector", () => {
   it("pools denominators across packets instead of averaging recall rates", () => {
     const aggregated = aggregateEvalScores([
-      reportWithDenominators("mentions", { evaluablePositives: 10, matchedPositives: 8 }),
-      reportWithDenominators("mentions", { evaluablePositives: 10, matchedPositives: 2 }),
+      reportWithDenominators("occurrences", { evaluablePositives: 10, matchedPositives: 8 }),
+      reportWithDenominators("occurrences", { evaluablePositives: 10, matchedPositives: 2 }),
     ]);
 
     expect(aggregated.recall).toBe(0.5);
@@ -154,9 +154,9 @@ describe("scorecard-vector", () => {
       packets: [
         {
           repoKey: "packet-a",
-          evalCases: [positiveCase("mentions", "m1")],
+          evalCases: [positiveCase("occurrences", "m1")],
           layerScores: {
-            mentions: reportWithDenominators("mentions", {
+            occurrences: reportWithDenominators("occurrences", {
               evaluablePositives: 1,
               matchedPositives: 1,
             }),
@@ -213,9 +213,9 @@ describe("scorecard-vector", () => {
 
   it("keeps recall computable when precision has no reviewed scope", () => {
     const entry = buildScorecardLayerEntry(
-      "mentions",
+      "occurrences",
       reportWithDenominators(
-        "mentions",
+        "occurrences",
         { evaluablePositives: 2, matchedPositives: 1 },
         {},
         { reviewedScopeFileCount: 0, processedScopeFileCount: 0 },
@@ -231,8 +231,8 @@ describe("scorecard-vector", () => {
 
   it("uses provisional gate when review states are not accepted-only", () => {
     const entry = buildScorecardLayerEntry(
-      "mentions",
-      reportWithDenominators("mentions", { evaluablePositives: 2, matchedPositives: 2 }),
+      "occurrences",
+      reportWithDenominators("occurrences", { evaluablePositives: 2, matchedPositives: 2 }),
       2,
       true,
     );
@@ -255,11 +255,11 @@ describe("scorecard-vector", () => {
         {
           repoKey: "packet-a",
           evalCases: [
-            positiveCase("mentions", "m1"),
+            positiveCase("occurrences", "m1"),
             positiveCase("data-flows", "f1"),
           ],
           layerScores: {
-            mentions: reportWithDenominators("mentions", {
+            occurrences: reportWithDenominators("occurrences", {
               evaluablePositives: 1,
               matchedPositives: 1,
             }),
@@ -281,9 +281,9 @@ describe("scorecard-vector", () => {
         },
         {
           repoKey: "packet-b",
-          evalCases: [positiveCase("mentions", "m2")],
+          evalCases: [positiveCase("occurrences", "m2")],
           layerScores: {
-            mentions: reportWithDenominators("mentions", {
+            occurrences: reportWithDenominators("occurrences", {
               evaluablePositives: 1,
               matchedPositives: 0,
             }),
@@ -293,7 +293,7 @@ describe("scorecard-vector", () => {
     });
 
     expect(vector.contractVersion).toBe(SCORECARD_VECTOR_CONTRACT_VERSION);
-    expect(vector.layers.mentions.scores.recall).toBe(0.5);
+    expect(vector.layers.occurrences.scores.recall).toBe(0.5);
     expect(vector.layers["data-flows"].gate.status).toBe("pending");
     expect(vector.layers["data-flows"].scores.recall).toBeNull();
     expect(vector.layers["data-flows"].computability.metrics.precision.state).toBe("computable");

@@ -4,7 +4,7 @@ export type EvalLayerId =
   | "data-flows"
   | "raw-hits"
   | "data-items"
-  | "mentions"
+  | "occurrences"
   | "data-actions";
 
 import type { FileLanguage } from "../core/types/file";
@@ -60,7 +60,7 @@ export function isLanguageSupportedForEvalLayer(
     case "data-flows":
     case "data-actions":
       return isOrchestratorLayerLanguage(language);
-    case "mentions":
+    case "occurrences":
     case "raw-hits":
     case "data-items":
       return isPersonalDataLayerLanguage(language);
@@ -74,5 +74,5 @@ export function orchestratorEvalLayers(): EvalLayerId[] {
 }
 
 export function personalDataEvalLayers(): EvalLayerId[] {
-  return ["mentions", "raw-hits", "data-items"];
+  return ["occurrences", "raw-hits", "data-items"];
 }

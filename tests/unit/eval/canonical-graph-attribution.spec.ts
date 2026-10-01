@@ -15,8 +15,8 @@ describe("graph match attribution", () => {
   it("does not treat ancestor-only semantic match as strictCorrect", () => {
     const expectation = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "driver_licence",
         conceptAncestry: ["national_identifier", "driver_licence"],
         evidenceLocations: evidence,
@@ -24,8 +24,8 @@ describe("graph match attribution", () => {
     );
     const finding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:driver-licence",
+        layer: "occurrences",
+        identityKey: "occurrence:driver-licence",
         conceptLeaf: "national_identifier",
         conceptAncestry: ["national_identifier"],
         evidenceLocations: evidence,

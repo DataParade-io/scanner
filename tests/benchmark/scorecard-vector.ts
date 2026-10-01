@@ -31,17 +31,17 @@ import {
 } from "./layer-report-accounting";
 import { isDataFlowsLayerScoreable } from "./baseline/evaluate-readiness";
 import {
-  SCORED_MENTION_ATTRIBUTES,
+  SCORED_OCCURRENCE_ATTRIBUTES,
   type AttributeMetricScore,
-  type ScoredMentionAttribute,
-} from "../../src/eval/canonical/mention-attribute-metrics";
+  type ScoredOccurrenceAttribute,
+} from "../../src/eval/canonical/occurrence-attribute-metrics";
 import type { GoldPopulationStats } from "./baseline/types";
 
 export type { LayerReportAccounting } from "./layer-report-accounting";
 
 export { HEADLINE_LAYERS, DIAGNOSTIC_LAYERS, type HeadlineLayer };
 
-export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/2";
+export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/3";
 
 export type LayerGateStatus = "scorable" | "pending" | "skip" | "provisional";
 
@@ -401,11 +401,11 @@ function aggregateLayerScores(
     unreadCount,
     denominators,
     metricComputability,
-    ...aggregateMentionExtras(reports),
+    ...aggregateOccurrenceExtras(reports),
   };
 }
 
-/** Sum attribute and grouping numerators and denominators across packets (mentions layer). */
+/** Sum attribute and grouping numerators and denominators across packets (occurrences layer). */
 export function mergeAttributeScores(scores: AttributeMetricScore[]): AttributeMetricScore {
   const numerator = scores.reduce((sum, score) => sum + score.numerator, 0);
   const denominator = scores.reduce((sum, score) => sum + score.denominator, 0);
@@ -421,17 +421,17 @@ export function mergeAttributeScores(scores: AttributeMetricScore[]): AttributeM
   return { state, value: null, numerator, denominator };
 }
 
-function aggregateMentionExtras(reports: EvalScoreReport[]): Pick<EvalScores, "mentionAttributes" | "grouping"> {
-  const withAttributes = reports.filter((report) => report.scores.mentionAttributes !== undefined);
+function aggregateOccurrenceExtras(reports: EvalScoreReport[]): Pick<EvalScores, "occurrenceAttributes" | "grouping"> {
+  const withAttributes = reports.filter((report) => report.scores.occurrenceAttributes !== undefined);
   const withGrouping = reports.filter((report) => report.scores.grouping !== undefined);
-  const extras: Pick<EvalScores, "mentionAttributes" | "grouping"> = {};
+  const extras: Pick<EvalScores, "occurrenceAttributes" | "grouping"> = {};
   if (withAttributes.length > 0) {
-    extras.mentionAttributes = Object.fromEntries(
-      SCORED_MENTION_ATTRIBUTES.map((attribute) => [
+    extras.occurrenceAttributes = Object.fromEntries(
+      SCORED_OCCURRENCE_ATTRIBUTES.map((attribute) => [
         attribute,
-        mergeAttributeScores(withAttributes.map((report) => report.scores.mentionAttributes![attribute])),
+        mergeAttributeScores(withAttributes.map((report) => report.scores.occurrenceAttributes![attribute])),
       ]),
-    ) as Record<ScoredMentionAttribute, AttributeMetricScore>;
+    ) as Record<ScoredOccurrenceAttribute, AttributeMetricScore>;
   }
   if (withGrouping.length > 0) {
     extras.grouping = {
@@ -452,7 +452,7 @@ export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
   if (reports.length === 0) {
     return emptyScores();
   }
-  return aggregateLayerScores(reports, "mentions", []);
+  return aggregateLayerScores(reports, "occurrences", []);
 }
 
 function buildPacketLayers(
@@ -629,9 +629,9 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
     if (entry.accounting.migrationIncomplete.total > 0) {
       lines.push(`- Migration incomplete: ${entry.accounting.migrationIncomplete.total}`);
     }
-    if (entry.scores.mentionAttributes) {
-      for (const attribute of SCORED_MENTION_ATTRIBUTES) {
-        lines.push(`- Attribute ${attribute}: ${formatAttributeScore(entry.scores.mentionAttributes[attribute])}`);
+    if (entry.scores.occurrenceAttributes) {
+      for (const attribute of SCORED_OCCURRENCE_ATTRIBUTES) {
+        lines.push(`- Attribute ${attribute}: ${formatAttributeScore(entry.scores.occurrenceAttributes[attribute])}`);
       }
     }
     if (entry.scores.grouping) {

@@ -137,8 +137,8 @@ describe("canonical metrics", () => {
   it("counts unsupported capability as strict false negative", () => {
     const unsupported = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:rare",
+        layer: "occurrences",
+        identityKey: "occurrence:rare",
         conceptLeaf: "rare_concept",
         evidenceLocations: evidenceA,
         declaredCapabilitySupported: {
@@ -157,8 +157,8 @@ describe("canonical metrics", () => {
   it("keeps capability coverage separate from recall denominator", () => {
     const supported = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: evidenceA,
         declaredCapabilitySupported: { supported: true },
@@ -167,8 +167,8 @@ describe("canonical metrics", () => {
     );
     const unsupported = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:rare",
+        layer: "occurrences",
+        identityKey: "occurrence:rare",
         conceptLeaf: "rare_concept",
         evidenceLocations: evidenceB,
         declaredCapabilitySupported: {
@@ -187,8 +187,8 @@ describe("canonical metrics", () => {
   it("excludes migration-incomplete records from baseline false negatives", () => {
     const accepted = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: evidenceA,
       }),

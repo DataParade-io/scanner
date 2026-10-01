@@ -8,7 +8,7 @@ Behaviour specification for the versioned canonical representation emitted by bo
 
 The current `${type}:${name}` subject keys in `ground-truth-schema.md` are **legacy**. This document defines the canonical contract that replaces overloaded key strings and the `EvalCase` / `LayerFinding` pair as scoring currency.
 
-Headline layers: `mentions`, `data-items`, `components`, and `data-flows`. The `raw-hits` and `data-actions` layers are diagnostic only and do not participate in headline gates.
+Headline layers: `occurrences`, `data-items`, `components`, and `data-flows`. The `raw-hits` and `data-actions` layers are diagnostic only and do not participate in headline gates.
 
 ---
 
@@ -90,7 +90,7 @@ Never promoted to canonical identity automatically. Never used to rescue a canon
 
 | Layer | Legacy `subject.name` becomes | Must not |
 | --- | --- | --- |
-| Mentions | Evidence-linked observed source token on that exact occurrence | Promote to authoritative source identity or concept |
+| Occurrences | Evidence-linked observed source token on that exact occurrence | Promote to authoritative source identity or concept |
 | Data items | Collection of observed tokens per evidence location; consolidation preserves all spellings | Collapse to one arbitrary value; discard contradictory values |
 | Assets / actors | Observed code or display evidence | Required canonical instance |
 | Third parties | Vendor candidate cross-checked against asserted vendor | Auto-copy into canonical vendor; mismatch without adjudication |

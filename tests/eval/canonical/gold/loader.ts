@@ -35,8 +35,9 @@ const CORPUS_TO_CANONICAL_LAYER: Record<BenchmarkLayer, CanonicalLayer> = {
   data_items: "data-items",
   data_actions: "data-actions",
   raw_hits: "raw-hits",
-  mentions: "mentions",
-  pii_signals: "mentions",
+  occurrences: "occurrences",
+  pii_signals: "occurrences",
+  mentions: "occurrences",
 };
 
 export interface LoadCanonicalGoldOptions {
@@ -146,12 +147,12 @@ interface ResolvedGoldFields {
   displayText?: string;
 }
 
-function resolveMentionOrRawHitIdentity(
+function resolveOccurrenceOrRawHitIdentity(
   record: AnnotationRecord,
-  canonicalLayer: "mentions" | "raw-hits",
+  canonicalLayer: "occurrences" | "raw-hits",
 ): Pick<ResolvedGoldFields, "identityKey" | "conceptLeaf" | "conceptAncestry"> {
   const key = record.subject.key.trim();
-  const expectedPrefix = canonicalLayer === "mentions" ? "mention:" : "raw_hit:";
+  const expectedPrefix = canonicalLayer === "occurrences" ? "occurrence:" : "raw_hit:";
 
   if (!key.startsWith(expectedPrefix)) {
     throw new Error(
@@ -468,9 +469,9 @@ function resolveGoldFields(
   let partial: ResolvedGoldFields;
 
   switch (canonicalLayer) {
-    case "mentions":
+    case "occurrences":
     case "raw-hits": {
-      const identity = resolveMentionOrRawHitIdentity(record, canonicalLayer);
+      const identity = resolveOccurrenceOrRawHitIdentity(record, canonicalLayer);
       partial = { ...identity, observedTokenCandidates: [] };
       break;
     }

@@ -1,10 +1,10 @@
 repo: strapi
 concept: email
-positive_mentions: 152
+positive_occurrences: 152
 clusters:
   c001:
     declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:14
-    mentions:
+    occurrences:
     - id: strapi-services-audit-logs-l15
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
@@ -14,7 +14,7 @@ clusters:
       text: let displayName = user.email;
   c002:
     declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:25 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-services-audit-logs-l25
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
@@ -24,7 +24,7 @@ clusters:
       text: 'email: user.email,'
   c003:
     declaration: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts:102 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-services-audit-logs-l102
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
@@ -34,7 +34,7 @@ clusters:
       text: 'select: [''id'', ''email'', ''username'', ''firstname'', ''lastname''],'
   c004:
     declaration: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts:25
-    mentions:
+    occurrences:
     - id: strapi-authentication-utils-middlewares-l26
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
@@ -51,7 +51,7 @@ clusters:
       text: const user = await getService('user').findOneByEmail(profile.email);
   c005:
     declaration: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts:64
-    mentions:
+    occurrences:
     - id: strapi-authentication-utils-middlewares-l64
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
@@ -68,7 +68,7 @@ clusters:
       text: email,
   c006:
     declaration: packages/core/admin/ee/server/src/controllers/user.ts:14 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-l14
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/user.ts
@@ -78,7 +78,7 @@ clusters:
       text: const pickUserCreationAttributes = pick(['firstname', 'lastname', 'email', 'roles']);
   c007:
     declaration: packages/core/admin/ee/server/src/controllers/user.ts:40 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-l40
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/user.ts
@@ -88,7 +88,7 @@ clusters:
       text: 'const cleanData = { ...body, email: _.get(body, `email`, ``).toLowerCase() };'
   c008:
     declaration: packages/core/admin/ee/server/src/controllers/user.ts:47 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-l47
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/user.ts
@@ -98,7 +98,7 @@ clusters:
       text: 'const userAlreadyExists = await getService(''user'').exists({ email: attributes.email });'
   c009:
     declaration: packages/core/admin/ee/server/src/controllers/user.ts:73 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-l73
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/user.ts
@@ -108,7 +108,7 @@ clusters:
       text: if (_.has(data, 'email')) {
   c010:
     declaration: packages/core/admin/ee/server/src/controllers/user.ts:76 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-l76
       batch: KDATAP-6089a6
       file: packages/core/admin/ee/server/src/controllers/user.ts
@@ -118,7 +118,7 @@ clusters:
       text: 'email: data.email,'
   c011:
     declaration: packages/core/admin/ee/server/src/services/auth.ts:18
-    mentions:
+    occurrences:
     - id: strapi-auth-ee-L18
       batch: KDATAP-fc825a
       file: packages/core/admin/ee/server/src/services/auth.ts
@@ -135,7 +135,7 @@ clusters:
       text: 'const user = await strapi.db.query(''admin::user'').findOne({ where: { email, isActive: true } });'
   c012:
     declaration: packages/core/admin/ee/server/src/services/auth.ts:19
-    mentions:
+    occurrences:
     - id: strapi-auth-ee-L36
       batch: KDATAP-fc825a
       file: packages/core/admin/ee/server/src/services/auth.ts
@@ -145,7 +145,7 @@ clusters:
       text: 'to: user.email,'
   c013:
     declaration: packages/core/admin/ee/server/src/services/auth.ts:43 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-auth-ee-L43
       batch: KDATAP-fc825a
       file: packages/core/admin/ee/server/src/services/auth.ts
@@ -155,7 +155,7 @@ clusters:
       text: 'user: _.pick(user, [''email'', ''firstname'', ''lastname'', ''username'']),'
   c014:
     declaration: packages/core/admin/server/src/content-types/User.ts:39 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-content-types-user-l39
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/content-types/User.ts
@@ -165,7 +165,7 @@ clusters:
       text: 'email: {'
   c015:
     declaration: packages/core/admin/server/src/content-types/User.ts:40 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-content-types-user-l40
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/content-types/User.ts
@@ -175,7 +175,7 @@ clusters:
       text: 'type: ''email'','
   c016:
     declaration: packages/core/admin/server/src/controllers/authenticated-user.ts:27
-    mentions:
+    occurrences:
     - id: strapi-controllers-authenticated-user-l41
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/controllers/authenticated-user.ts
@@ -185,7 +185,7 @@ clusters:
       text: if (userInfo.email !== undefined) {
   c017:
     declaration: packages/core/admin/server/src/controllers/authenticated-user.ts:44 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-authenticated-user-l44
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/controllers/authenticated-user.ts
@@ -195,7 +195,7 @@ clusters:
       text: 'email: userInfo.email,'
   c018:
     declaration: packages/core/admin/server/src/controllers/user.ts:27 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-L27
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/controllers/user.ts
@@ -205,7 +205,7 @@ clusters:
       text: 'const cleanData = { ...body, email: _.get(body, `email`, ``).toLowerCase() };'
   c019:
     declaration: packages/core/admin/server/src/controllers/user.ts:34 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-L34
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/controllers/user.ts
@@ -215,7 +215,7 @@ clusters:
       text: '''email'','
   c020:
     declaration: packages/core/admin/server/src/controllers/user.ts:40 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-L40
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/controllers/user.ts
@@ -225,7 +225,7 @@ clusters:
       text: 'email: attributes.email,'
   c021:
     declaration: packages/core/admin/server/src/controllers/user.ts:101 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-L101
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/controllers/user.ts
@@ -235,7 +235,7 @@ clusters:
       text: if (_.has(data, 'email')) {
   c022:
     declaration: packages/core/admin/server/src/controllers/user.ts:104 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-user-L104
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/controllers/user.ts
@@ -245,7 +245,7 @@ clusters:
       text: 'email: data.email,'
   c023:
     declaration: packages/core/admin/server/src/middlewares/rateLimit.ts:28
-    mentions:
+    occurrences:
     - id: strapi-middlewares-ratelimit-l28
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/middlewares/rateLimit.ts
@@ -255,7 +255,7 @@ clusters:
       text: const requestEmail = get('request.body.email')(ctx);
   c024:
     declaration: packages/core/admin/server/src/middlewares/rateLimit.ts:29
-    mentions:
+    occurrences:
     - id: strapi-middlewares-ratelimit-l29
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/middlewares/rateLimit.ts
@@ -272,7 +272,7 @@ clusters:
       text: 'prefixKey: `${userEmail}:${requestPath}:${ctx.request.ip}`,'
   c025:
     declaration: packages/core/admin/server/src/services/auth.ts:87
-    mentions:
+    occurrences:
     - id: strapi-auth-L87
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/auth.ts
@@ -289,7 +289,7 @@ clusters:
       text: 'const user: AdminUser = await strapi.db.query(''admin::user'').findOne({ where: { email } });'
   c026:
     declaration: packages/core/admin/server/src/services/auth.ts:111
-    mentions:
+    occurrences:
     - id: strapi-auth-L111
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/auth.ts
@@ -306,7 +306,7 @@ clusters:
       text: '.findOne({ where: { email, isActive: true } });'
   c027:
     declaration: packages/core/admin/server/src/services/auth.ts:112
-    mentions:
+    occurrences:
     - id: strapi-auth-L131
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/auth.ts
@@ -316,7 +316,7 @@ clusters:
       text: 'to: user.email,'
   c028:
     declaration: packages/core/admin/server/src/services/auth.ts:138 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-auth-L138
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/auth.ts
@@ -326,7 +326,7 @@ clusters:
       text: 'user: _.pick(user, [''email'', ''firstname'', ''lastname'', ''username'']),'
   c029:
     declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:9 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-passport-local-strategy-l9
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/services/passport/local-strategy.ts
@@ -336,7 +336,7 @@ clusters:
       text: 'usernameField: ''email'','
   c030:
     declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:13
-    mentions:
+    occurrences:
     - id: strapi-passport-local-strategy-l13
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/services/passport/local-strategy.ts
@@ -346,7 +346,7 @@ clusters:
       text: '(email: string, password: string, done: any) => {'
   c031:
     declaration: packages/core/admin/server/src/services/passport/local-strategy.ts:15 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-passport-local-strategy-l15
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/services/passport/local-strategy.ts
@@ -356,7 +356,7 @@ clusters:
       text: '.checkCredentials({ email: toLower(email), password })'
   c032:
     declaration: packages/core/admin/server/src/services/user.ts:195
-    mentions:
+    occurrences:
     - id: strapi-user-L195
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/user.ts
@@ -380,7 +380,7 @@ clusters:
       text: 'throw new Error(`User not found for email: ${email}`);'
   c033:
     declaration: packages/core/admin/server/src/services/user.ts:268 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-user-L268
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/user.ts
@@ -390,7 +390,7 @@ clusters:
       text: '): Promise<Pick<AdminUser, ''email'' | ''firstname'' | ''lastname''> | undefined> => {'
   c034:
     declaration: packages/core/admin/server/src/services/user.ts:275 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-user-L275
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/user.ts
@@ -400,7 +400,7 @@ clusters:
       text: return _.pick(user, ['email', 'firstname', 'lastname']);
   c035:
     declaration: packages/core/admin/server/src/services/user.ts:321
-    mentions:
+    occurrences:
     - id: strapi-user-L321
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/user.ts
@@ -410,7 +410,7 @@ clusters:
       text: 'const findOneByEmail = async (email: string, populate = []) => {'
   c036:
     declaration: packages/core/admin/server/src/services/user.ts:323 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-user-L323
       batch: KDATAP-fc825a
       file: packages/core/admin/server/src/services/user.ts
@@ -420,7 +420,7 @@ clusters:
       text: 'where: { email: { $eqi: email } },'
   c037:
     declaration: packages/core/admin/server/src/utils/normalize-email.ts:12
-    mentions:
+    occurrences:
     - id: strapi-utils-normalize-email-l12
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/utils/normalize-email.ts
@@ -437,7 +437,7 @@ clusters:
       text: if (typeof email === 'string') {
   c038:
     declaration: packages/core/admin/server/src/utils/normalize-email.ts:15 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-utils-normalize-email-l15
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/utils/normalize-email.ts
@@ -447,7 +447,7 @@ clusters:
       text: 'return { ...payload, email: email.toLowerCase() };'
   c039:
     declaration: packages/core/admin/server/src/validation/user.ts:8 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-validation-user-l8
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/validation/user.ts
@@ -457,7 +457,7 @@ clusters:
       text: 'email: validators.email.required(),'
   c040:
     declaration: packages/core/admin/server/src/validation/user.ts:19 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-validation-user-l19
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/validation/user.ts
@@ -467,7 +467,7 @@ clusters:
       text: 'email: validators.email.notNull(),'
   c041:
     declaration: packages/core/admin/server/src/validation/user.ts:37 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-validation-user-l37
       batch: KDATAP-6089a6
       file: packages/core/admin/server/src/validation/user.ts
@@ -477,7 +477,7 @@ clusters:
       text: 'email: validators.email.notNull(),'
   c042:
     declaration: packages/core/admin/shared/contracts/authentication.ts:10 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l10
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -487,7 +487,7 @@ clusters:
       text: 'user: Pick<AdminUser, ''email'' | ''password''>;'
   c043:
     declaration: packages/core/admin/shared/contracts/authentication.ts:12 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l12
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -497,7 +497,7 @@ clusters:
       text: 'body: Pick<AdminUser, ''email'' | ''password''> & {'
   c044:
     declaration: packages/core/admin/shared/contracts/authentication.ts:57 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l57
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -507,7 +507,7 @@ clusters:
       text: 'email?: string;'
   c045:
     declaration: packages/core/admin/shared/contracts/authentication.ts:72 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l72
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -517,7 +517,7 @@ clusters:
       text: 'userInfo: Pick<AdminUser, ''firstname'' | ''lastname'' | ''email'' | ''password''>;'
   c046:
     declaration: packages/core/admin/shared/contracts/authentication.ts:93 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l93
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -527,7 +527,7 @@ clusters:
       text: 'body: Pick<AdminUser, ''email'' | ''firstname'' | ''lastname'' | ''password''> & {'
   c047:
     declaration: packages/core/admin/shared/contracts/authentication.ts:115 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-contracts-authentication-l115
       batch: KDATAP-6089a6
       file: packages/core/admin/shared/contracts/authentication.ts
@@ -537,7 +537,7 @@ clusters:
       text: 'email: string;'
   c048:
     declaration: packages/core/email/server/src/controllers/email.ts:44 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-controllers-email-L44
       batch: KDATAP-e5e3e0
       file: packages/core/email/server/src/controllers/email.ts
@@ -547,7 +547,7 @@ clusters:
       text: 'subject: `Strapi test mail to: ${to}`,'
   c049:
     declaration: packages/core/email/server/src/middlewares/rateLimit.ts:21
-    mentions:
+    occurrences:
     - id: strapi-rateLimit-L21
       batch: KDATAP-a3b99d
       file: packages/core/email/server/src/middlewares/rateLimit.ts
@@ -557,7 +557,7 @@ clusters:
       text: const requestEmail = get('request.body.email')(ctx);
   c050:
     declaration: packages/core/email/server/src/middlewares/rateLimit.ts:22
-    mentions:
+    occurrences:
     - id: strapi-rateLimit-L22
       batch: KDATAP-a3b99d
       file: packages/core/email/server/src/middlewares/rateLimit.ts
@@ -574,7 +574,7 @@ clusters:
       text: 'prefixKey: `${userEmail}`,'
   c051:
     declaration: packages/core/email/server/src/types.ts:20 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-types-L20
       batch: KDATAP-e5e3e0
       file: packages/core/email/server/src/types.ts
@@ -584,7 +584,7 @@ clusters:
       text: 'email: string;'
   c052:
     declaration: packages/core/email/shared/email-address-parser.ts:16 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L16
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -594,7 +594,7 @@ clusters:
       text: 'email: string;'
   c053:
     declaration: packages/core/email/shared/email-address-parser.ts:217
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L217
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -625,7 +625,7 @@ clusters:
       text: let decoded = decodeRfc2047(emailString);
   c054:
     declaration: packages/core/email/shared/email-address-parser.ts:219 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L219
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -635,7 +635,7 @@ clusters:
       text: 'return { name: null, email: '''', original: emailString || '''' };'
   c055:
     declaration: packages/core/email/shared/email-address-parser.ts:237
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L237
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -652,7 +652,7 @@ clusters:
       text: email,
   c056:
     declaration: packages/core/email/shared/email-address-parser.ts:266 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L266
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -662,7 +662,7 @@ clusters:
       text: 'email: trimmedDecoded,'
   c057:
     declaration: packages/core/email/shared/email-address-parser.ts:274 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L274
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -672,7 +672,7 @@ clusters:
       text: 'email: trimmedDecoded,'
   c058:
     declaration: packages/core/email/shared/email-address-parser.ts:294
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L294
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -703,7 +703,7 @@ clusters:
       text: return `${name} <${email}>`;
   c059:
     declaration: packages/core/email/shared/email-address-parser.ts:319
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L319
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -727,7 +727,7 @@ clusters:
       text: return emailPattern.test(email);
   c060:
     declaration: packages/core/email/shared/email-address-parser.ts:344
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L344
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -751,7 +751,7 @@ clusters:
       text: for (const char of emailsString) {
   c061:
     declaration: packages/core/email/shared/email-address-parser.ts:345 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-email-address-parser-L345
       batch: KDATAP-00c6c6
       file: packages/core/email/shared/email-address-parser.ts
@@ -761,7 +761,7 @@ clusters:
       text: '): ParsedEmailAddress[] => {'
   c062:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:11 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-active-user-L11
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -771,7 +771,7 @@ clusters:
       text: 'email?: string;'
   c063:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:16 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-active-user-L16
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -781,7 +781,7 @@ clusters:
       text: 'email: string;'
   c064:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:21 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-active-user-L21
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -791,7 +791,7 @@ clusters:
       text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
   c065:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:25
-    mentions:
+    occurrences:
     - id: strapi-active-user-L25
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -801,7 +801,7 @@ clusters:
       text: 'async function setActive({ email, active }: CmdOptions) {'
   c066:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:29
-    mentions:
+    occurrences:
     - id: strapi-active-user-L29
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -832,7 +832,7 @@ clusters:
       text: console.log(`Successfully set ${cleanEmail} active status to ${cleanActive}`);
   c067:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:63
-    mentions:
+    occurrences:
     - id: strapi-active-user-L63
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -863,7 +863,7 @@ clusters:
       text: return setActive({ email, active });
   c068:
     declaration: packages/core/strapi/src/cli/commands/admin/active-user.ts:87 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-active-user-L87
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/active-user.ts
@@ -873,7 +873,7 @@ clusters:
       text: .option('-e, --email <email>', 'The user email')
   c069:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:11 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-block-user-L11
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -883,7 +883,7 @@ clusters:
       text: 'email?: string;'
   c070:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:16 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-block-user-L16
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -893,7 +893,7 @@ clusters:
       text: 'email: string;'
   c071:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:21 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-block-user-L21
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -903,7 +903,7 @@ clusters:
       text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
   c072:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:25
-    mentions:
+    occurrences:
     - id: strapi-block-user-L25
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -913,7 +913,7 @@ clusters:
       text: 'async function setBlock({ email, block }: CmdOptions) {'
   c073:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:29
-    mentions:
+    occurrences:
     - id: strapi-block-user-L29
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -944,7 +944,7 @@ clusters:
       text: console.log(`Successfully set ${cleanEmail} block status to ${cleanBlock}`);
   c074:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:61
-    mentions:
+    occurrences:
     - id: strapi-block-user-L61
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -975,7 +975,7 @@ clusters:
       text: return setBlock({ email, block });
   c075:
     declaration: packages/core/strapi/src/cli/commands/admin/block-user.ts:85 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-block-user-L85
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/block-user.ts
@@ -985,7 +985,7 @@ clusters:
       text: .option('-e, --email <email>', 'The user email')
   c076:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:12 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-create-user-L12
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -995,7 +995,7 @@ clusters:
       text: 'email?: string;'
   c077:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:37 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-create-user-L37
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1005,7 +1005,7 @@ clusters:
       text: 'email: emailValidator,'
   c078:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:44 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-create-user-L44
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1015,7 +1015,7 @@ clusters:
       text: 'email: string;'
   c079:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:59 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-create-user-L59
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1025,7 +1025,7 @@ clusters:
       text: 'name: ''email'','
   c080:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:62
-    mentions:
+    occurrences:
     - id: strapi-create-user-L62
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1042,7 +1042,7 @@ clusters:
       text: return validEmail === value || validEmail;
   c081:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:84
-    mentions:
+    occurrences:
     - id: strapi-create-user-L84
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1073,7 +1073,7 @@ clusters:
       text: email,
   c082:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:114
-    mentions:
+    occurrences:
     - id: strapi-create-user-L114
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1111,7 +1111,7 @@ clusters:
       text: return createAdmin({ email, password, firstname, lastname });
   c083:
     declaration: packages/core/strapi/src/cli/commands/admin/create-user.ts:153 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-create-user-L153
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/create-user.ts
@@ -1121,7 +1121,7 @@ clusters:
       text: .option('-e, --email <email>', 'Email of the new admin')
   c084:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:12 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L12
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1131,7 +1131,7 @@ clusters:
       text: 'email?: string;'
   c085:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:18 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L18
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1141,7 +1141,7 @@ clusters:
       text: 'email: emailValidator,'
   c086:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:22 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L22
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1151,7 +1151,7 @@ clusters:
       text: 'email: string;'
   c087:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:33 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L33
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1161,7 +1161,7 @@ clusters:
       text: 'name: ''email'','
   c088:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:36
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L36
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1178,7 +1178,7 @@ clusters:
       text: return validEmail === value || validEmail;
   c089:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:47
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L47
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1202,7 +1202,7 @@ clusters:
       text: console.error(`User with email "${email}" does not exist`);
   c090:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:73
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L73
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1247,7 +1247,7 @@ clusters:
       text: return deleteAdmin({ email });
   c091:
     declaration: packages/core/strapi/src/cli/commands/admin/delete-user.ts:111 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-delete-user-L111
       batch: KDATAP-faabdc
       file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
@@ -1257,7 +1257,7 @@ clusters:
       text: .option('-e, --email <email>', 'Email of the current admin')
   c092:
     declaration: packages/core/strapi/src/cli/commands/admin/list-users.ts:17 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-admin-list-users-l17
       batch: KDATAP-6089a6
       file: packages/core/strapi/src/cli/commands/admin/list-users.ts
@@ -1267,7 +1267,7 @@ clusters:
       text: 'select: [''id'', ''firstname'', ''lastname'', ''email'', ''isActive'', ''blocked''],'
   c093:
     declaration: packages/core/strapi/src/cli/commands/admin/list-users.ts:34
-    mentions:
+    occurrences:
     - id: strapi-admin-list-users-l38
       batch: KDATAP-6089a6
       file: packages/core/strapi/src/cli/commands/admin/list-users.ts
@@ -1277,7 +1277,7 @@ clusters:
       text: user.email,
   c094:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:11 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L11
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
@@ -1287,7 +1287,7 @@ clusters:
       text: 'email?: string;'
   c095:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:16 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L16
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
@@ -1297,7 +1297,7 @@ clusters:
       text: 'email: string;'
   c096:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:22 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L22
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
@@ -1307,7 +1307,7 @@ clusters:
       text: '{ type: ''input'', name: ''email'', message: ''User email?'' },'
   c097:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:31
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L31
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
@@ -1324,7 +1324,7 @@ clusters:
       text: await app.admin!.services.user.resetPasswordByEmail(email, password);
   c098:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:45
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L45
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
@@ -1355,7 +1355,7 @@ clusters:
       text: return changePassword({ email, password });
   c099:
     declaration: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts:73 (no shared declaration)
-    mentions:
+    occurrences:
     - id: strapi-reset-user-password-L73
       batch: KDATAP-fc825a
       file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts

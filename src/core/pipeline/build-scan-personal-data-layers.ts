@@ -1,9 +1,9 @@
 import {
   dataItemIdentity,
-  mentionIdentity,
+  occurrenceIdentity,
 } from "../../eval-layers/identities";
 import type { PersonalDataInventory } from "../../eval-layers/personal-data-inventory";
-import type { ScanDataItem, ScanMention } from "./orchestrator-result";
+import type { ScanDataItem, ScanOccurrence } from "./orchestrator-result";
 
 function lineSnippet(content: string, startLine: number, endLine: number): string | undefined {
   const lines = content.split(/\r?\n/);
@@ -17,10 +17,10 @@ function lineSnippet(content: string, startLine: number, endLine: number): strin
 
 export function buildScanPersonalDataLayers(
   inventory: PersonalDataInventory,
-): { mentions: ScanMention[]; dataItems: ScanDataItem[] } {
+): { occurrences: ScanOccurrence[]; dataItems: ScanDataItem[] } {
   const contentByPath = new Map(inventory.files.map((file) => [file.path, file.content]));
 
-  const mentions: ScanMention[] = inventory.hits.map((hit) => {
+  const occurrences: ScanOccurrence[] = inventory.hits.map((hit) => {
     const content = contentByPath.get(hit.evidence.filePath);
     const code =
       content !== undefined
@@ -28,7 +28,7 @@ export function buildScanPersonalDataLayers(
         : undefined;
 
     return {
-      id: mentionIdentity(hit.id, hit.evidence.filePath, hit.evidence.startLine),
+      id: occurrenceIdentity(hit.id, hit.evidence.filePath, hit.evidence.startLine),
       filePath: hit.evidence.filePath,
       startLine: hit.evidence.startLine,
       endLine: hit.evidence.endLine,
@@ -42,54 +42,54 @@ export function buildScanPersonalDataLayers(
 
   const dataItemsById = new Map<
     string,
-    { labels: Set<string>; mentionIds: string[]; groups: Map<string, string[]> }
+    { labels: Set<string>; occurrenceIds: string[]; groups: Map<string, string[]> }
   >();
 
-  // Data items roll up code matches; comment matches stay on the mention list as context.
+  // Data items roll up code matches; comment matches stay on the occurrence list as context.
   for (const hit of inventory.hits.filter((candidate) => candidate.location !== "comment")) {
     const id = dataItemIdentity(hit.id);
-    const mentionId = mentionIdentity(
+    const occurrenceId = occurrenceIdentity(
       hit.id,
       hit.evidence.filePath,
       hit.evidence.startLine,
     );
     let entry = dataItemsById.get(id);
     if (!entry) {
-      entry = { labels: new Set(hit.labels), mentionIds: [], groups: new Map() };
+      entry = { labels: new Set(hit.labels), occurrenceIds: [], groups: new Map() };
       dataItemsById.set(id, entry);
     } else {
       for (const label of hit.labels) {
         entry.labels.add(label);
       }
     }
-    if (!entry.mentionIds.includes(mentionId)) {
-      entry.mentionIds.push(mentionId);
+    if (!entry.occurrenceIds.includes(occurrenceId)) {
+      entry.occurrenceIds.push(occurrenceId);
     }
-    // A location-named singleton (`email~file:line`) is a mention no evidence grouped; it
-    // stays on the mention for external labels but is not listed as a data item group.
+    // A location-named singleton (`email~file:line`) is a occurrence no evidence grouped; it
+    // stays on the occurrence for external labels but is not listed as a data item group.
     if (hit.group && !hit.group.startsWith(`${hit.id}~`)) {
-      const groupMentions = entry.groups.get(hit.group) ?? [];
-      if (!groupMentions.includes(mentionId)) {
-        groupMentions.push(mentionId);
+      const groupOccurrences = entry.groups.get(hit.group) ?? [];
+      if (!groupOccurrences.includes(occurrenceId)) {
+        groupOccurrences.push(occurrenceId);
       }
-      entry.groups.set(hit.group, groupMentions);
+      entry.groups.set(hit.group, groupOccurrences);
     }
   }
 
   const dataItems: ScanDataItem[] = [...dataItemsById.entries()]
     .map(([id, entry]) => ({
       id,
-      mentionIds: [...entry.mentionIds],
+      occurrenceIds: [...entry.occurrenceIds],
       labels: [...entry.labels].sort((left, right) => left.localeCompare(right)),
       ...(entry.groups.size > 0
         ? {
             groups: [...entry.groups.entries()]
-              .map(([groupId, mentionIds]) => ({ id: groupId, mentionIds }))
+              .map(([groupId, occurrenceIds]) => ({ id: groupId, occurrenceIds }))
               .sort((left, right) => left.id.localeCompare(right.id)),
           }
         : {}),
     }))
     .sort((left, right) => left.id.localeCompare(right.id));
 
-  return { mentions, dataItems };
+  return { occurrences, dataItems };
 }

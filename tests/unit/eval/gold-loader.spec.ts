@@ -11,7 +11,7 @@ import type { AnnotationRecord } from "../../benchmark/schema";
 import { componentEvalCases } from "../../eval/layers/components/cases";
 import { dataActionEvalCases } from "../../eval/layers/data-actions/cases";
 import { dataFlowEvalCases } from "../../eval/layers/data-flows/cases";
-import { mentionEvalCases } from "../../eval/layers/mentions/cases";
+import { occurrenceEvalCases } from "../../eval/layers/occurrences/cases";
 import { loadAnnotations } from "../../benchmark/manifest";
 import { annotationToEvalCase } from "../../benchmark/to-eval-cases";
 import path from "path";
@@ -102,27 +102,27 @@ describe("loadCanonicalGoldFromAnnotation (corpus-shaped rows)", () => {
     expect(isAcceptedEvaluablePositive(record)).toBe(false);
   });
 
-  it("maps canonical mention:email using expected labels", () => {
+  it("maps canonical occurrence:email using expected labels", () => {
     const { record } = loadCanonicalGoldFromAnnotation(
       corpusAnnotation({
-        id: "corpus-mention-email",
-        layer: "mentions",
-        subject: { key: "mention:email" },
+        id: "corpus-occurrence-email",
+        layer: "occurrences",
+        subject: { key: "occurrence:email" },
         expected: { status: "positive", labels: ["email_address"] },
       }),
     );
 
-    expect(record.identity.identityKey).toBe("mention:email");
+    expect(record.identity.identityKey).toBe("occurrence:email");
     expect(record.classification.conceptLeaf).toBe("email_address");
     expect(record.classification.conceptLeaf).not.toBe(ruleIdToConceptLeaf("username"));
   });
 
-  it("falls back to concept-map for mention rule-id suffixes when labels are empty", () => {
+  it("falls back to concept-map for occurrence rule-id suffixes when labels are empty", () => {
     const { record, diagnostics } = loadCanonicalGoldFromAnnotation(
       corpusAnnotation({
-        id: "corpus-mention-email",
-        layer: "mentions",
-        subject: { key: "mention:email" },
+        id: "corpus-occurrence-email",
+        layer: "occurrences",
+        subject: { key: "occurrence:email" },
         expected: { status: "positive", labels: [] },
       }),
     );
@@ -145,7 +145,7 @@ describe("loadCanonicalGoldFromAnnotation corpus bridge", () => {
     const benchmarkRoot = path.join(__dirname, "../../benchmark");
     const repoDir = path.join(benchmarkRoot, "repos", "wordpress");
 
-    const layers = ["components", "data_flows", "mentions", "data_items"] as const;
+    const layers = ["components", "data_flows", "occurrences", "data_items"] as const;
     for (const layer of layers) {
       const annotations = loadAnnotations(repoDir, layer);
       expect(annotations.length).toBeGreaterThan(0);
@@ -161,7 +161,7 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     const allCases = [
       ...componentEvalCases,
       ...dataFlowEvalCases,
-      ...mentionEvalCases,
+      ...occurrenceEvalCases,
     ];
 
     for (const caseRecord of allCases) {
@@ -222,13 +222,13 @@ describe("loadCanonicalGoldFromEvalCase (fixture gold)", () => {
     expect(record.classification.conceptLeaf).toBe("disclose");
   });
 
-  it("maps fixture mention:username through concept-map fallback", () => {
-    const fixtureCase = mentionEvalCases.find((entry) => entry.id === "mention-jvm-yaml-username");
+  it("maps fixture occurrence:username through concept-map fallback", () => {
+    const fixtureCase = occurrenceEvalCases.find((entry) => entry.id === "occurrence-jvm-yaml-username");
     expect(fixtureCase).toBeDefined();
 
     const { record } = loadCanonicalGoldFromEvalCase(fixtureCase!);
 
-    expect(record.identity.identityKey).toBe("mention:username");
+    expect(record.identity.identityKey).toBe("occurrence:username");
     expect(record.classification.conceptLeaf).toBe("username");
     expect(record.classification.conceptAncestry).toEqual(["user_identifier", "username"]);
   });

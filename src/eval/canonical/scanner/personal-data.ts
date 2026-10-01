@@ -6,18 +6,18 @@ import { resolveScannerAdapterMapVersion } from "./manifest";
 
 const LAYER_BY_EVAL: Record<PersonalDataEvalLayer, CanonicalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
-const RULE_ID_PREFIXES = ["raw_hit:", "mention:", "data_item:"] as const;
+const RULE_ID_PREFIXES = ["raw_hit:", "occurrence:", "data_item:"] as const;
 
 export function extractPersonalDataRuleId(subjectKey: string): string {
   const normalized = subjectKey.trim().toLowerCase();
   for (const prefix of RULE_ID_PREFIXES) {
     if (normalized.startsWith(prefix)) {
       const rest = normalized.slice(prefix.length);
-      if (prefix === "mention:") {
+      if (prefix === "occurrence:") {
         const ruleEnd = rest.indexOf(":");
         return ruleEnd === -1 ? rest : rest.slice(0, ruleEnd);
       }
@@ -33,8 +33,8 @@ export function personalDataConceptIdentityKey(
   ruleId: string,
 ): string {
   switch (layer) {
-    case "mentions":
-      return `mention:${ruleId}`;
+    case "occurrences":
+      return `occurrence:${ruleId}`;
     case "raw-hits":
       return `raw_hit:${ruleId}`;
     case "data-items":

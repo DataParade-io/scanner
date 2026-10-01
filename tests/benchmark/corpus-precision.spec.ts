@@ -321,9 +321,9 @@ describe("corpus precision end-to-end", () => {
           sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
         },
         {
-          key: "mention:postgresql",
-          labels: ["mention"],
-          layer: "mentions",
+          key: "occurrence:postgresql",
+          labels: ["occurrence"],
+          layer: "occurrences",
           sourceFilePaths: ["pom.xml"],
           sourceLines: [{ file_path: "pom.xml", start_line: 1, end_line: 1 }],
         },
