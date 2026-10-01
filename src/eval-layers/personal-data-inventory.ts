@@ -96,7 +96,7 @@ function withDeclarations(
       );
       const callArguments = conceptCallArguments(analyzed, hit.evidence.endLine, isConceptToken);
       const tableEntity = queriedTableEntity(analyzed, lines, hit.evidence.endLine);
-      const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken);
+      const found = mentionReceiver(analyzed, hit.evidence.endLine, isConceptToken, lines[hit.evidence.endLine - 1]);
       let legacy = false;
       if (process.env.DATAPARADE_RECEIVER_STATS && found.className) {
         analyzed.setFactoryReturnTypes(false);
