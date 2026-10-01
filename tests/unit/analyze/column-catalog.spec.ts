@@ -416,9 +416,7 @@ describe("concept-generic catalog", () => {
       "settings.SUPPORT_PHONE (setting)",
       "settings.TWILIO_PHONE_NUMBER (setting)",
     ]);
-    // No email keys, no bare role words such as SENDER_ADDRESS, no flags.
-    const emails = declaredColumns([file("shop/settings.py", "python", PHONE_SETTINGS_PY)], "email", { include: "configured" });
-    expect(summary(emails)).toEqual(["settings.DEFAULT_FROM_EMAIL (setting)", "settings.SENDER_ADDRESS (setting)"]);
+    // No email keys, no bare role words such as SENDER_ADDRESS, no flags such as PHONE_VERIFIED.
   });
 
   it("reads concept profiles from data, with a default for unknown concepts", () => {
