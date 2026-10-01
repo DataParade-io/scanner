@@ -1,0 +1,526 @@
+packet:
+  repo: medusa
+  concept: phone
+  kanbus_issue: KDATAP-939370
+  files:
+  - packages/modules/cart/src/models/address.ts
+  - packages/modules/cart/src/types/address.ts
+  - packages/modules/customer/src/models/address.ts
+  - packages/modules/customer/src/models/customer.ts
+  - packages/modules/customer/src/types/services/address.ts
+  - packages/modules/fulfillment/src/models/address.ts
+  - packages/modules/fulfillment/src/schema/index.ts
+  - packages/modules/notification/src/models/notification.ts
+  - packages/modules/order/src/models/address.ts
+  - packages/modules/order/src/schema/index.ts
+  - packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+  - packages/modules/settings/src/utils/computed-columns.ts
+  - packages/modules/settings/src/utils/render-mode-mapper.ts
+  - packages/modules/stock-location/src/models/stock-location-address.ts
+  - packages/modules/stock-location/src/schema/index.ts
+annotations:
+- id: medusa-address-L17
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/cart/src/models/address.ts
+    start_line: 17
+    end_line: 17
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the cart address phone (cart Address.phone, shipping and billing addresses).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/cart
+    declaration:
+      file_path: packages/modules/cart/src/models/address.ts
+      line: 17
+      kind: field
+- id: medusa-address-L12
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/cart/src/types/address.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Type member declaring the phone field of the cart address phone (cart Address.phone, shipping and billing addresses).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/cart
+    declaration:
+      file_path: packages/modules/cart/src/types/address.ts
+      line: 12
+      kind: field
+- id: medusa-address-L19
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/customer/src/models/address.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the customer address phone (CustomerAddress.phone).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/customer
+    declaration:
+      file_path: packages/modules/customer/src/models/address.ts
+      line: 19
+      kind: field
+- id: medusa-customer-L13
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/customer/src/models/customer.ts
+    start_line: 13
+    end_line: 13
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the customer phone (Customer.phone).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/customer
+    declaration:
+      file_path: packages/modules/customer/src/models/customer.ts
+      line: 13
+      kind: field
+- id: medusa-services-address-L12
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/customer/src/types/services/address.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Type member declaring the phone field of the customer address phone (CustomerAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/customer
+    declaration:
+      file_path: packages/modules/customer/src/types/services/address.ts
+      line: 12
+      kind: field
+- id: medusa-address-L26
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/customer/src/types/services/address.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Type member declaring the phone field of the customer address phone (CustomerAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/customer
+    declaration:
+      file_path: packages/modules/customer/src/types/services/address.ts
+      line: 26
+      kind: field
+- id: medusa-address-L14
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/fulfillment/src/models/address.ts
+    start_line: 14
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the fulfillment address phone (FulfillmentAddress.phone).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/fulfillment
+    declaration:
+      file_path: packages/modules/fulfillment/src/models/address.ts
+      line: 14
+      kind: field
+- id: medusa-index-L25
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/fulfillment/src/schema/index.ts
+    start_line: 25
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: GraphQL schema field exposing the phone of the fulfillment address phone (FulfillmentAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/fulfillment
+    declaration:
+      file_path: packages/modules/fulfillment/src/schema/index.ts
+      line: 25
+      kind: field
+- id: medusa-notification-L7
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/notification/src/models/notification.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Comment or doc example text mentioning a phone; no value or declaration handled.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: packages/modules/notification
+- id: medusa-notification-L9
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/notification/src/models/notification.ts
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Comment or doc example text mentioning a phone; no value or declaration handled.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: packages/modules/notification
+- id: medusa-address-L16
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/order/src/models/address.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the order address phone (OrderAddress.phone).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/order
+    declaration:
+      file_path: packages/modules/order/src/models/address.ts
+      line: 16
+      kind: field
+- id: medusa-index-L122
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/order/src/schema/index.ts
+    start_line: 122
+    end_line: 122
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: GraphQL schema field exposing the phone of the order address phone (OrderAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/order
+    declaration:
+      file_path: packages/modules/order/src/schema/index.ts
+      line: 122
+      kind: field
+- id: medusa-medusa-payments-L487
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+    start_line: 487
+    end_line: 487
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Passes the customer phone to the payment provider account holder request.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/payment
+    declaration:
+      file_path: packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+      line: 487
+      kind: field
+- id: medusa-medusa-payments-L544
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+    start_line: 544
+    end_line: 544
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Passes the customer phone to the payment provider account holder request.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/payment
+    declaration:
+      file_path: packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+      line: 544
+      kind: field
+- id: medusa-computed-columns-L121
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/settings/src/utils/computed-columns.ts
+    start_line: 121
+    end_line: 121
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Passes the customer phone to the payment provider account holder request.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/settings
+    declaration:
+      file_path: packages/modules/settings/src/utils/computed-columns.ts
+      line: 121
+      kind: field
+- id: medusa-computed-columns-L127
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/settings/src/utils/computed-columns.ts
+    start_line: 127
+    end_line: 127
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Passes the customer phone to the payment provider account holder request.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/settings
+    declaration:
+      file_path: packages/modules/settings/src/utils/computed-columns.ts
+      line: 127
+      kind: field
+- id: medusa-render-mode-mapper-L23
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/settings/src/utils/render-mode-mapper.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Render-mode name or field-name pattern for the settings view configuration (display hint); no phone value handled.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/modules/settings
+- id: medusa-render-mode-mapper-L148
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/settings/src/utils/render-mode-mapper.ts
+    start_line: 148
+    end_line: 148
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Render-mode name or field-name pattern for the settings view configuration (display hint); no phone value handled.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/modules/settings
+- id: medusa-render-mode-mapper-L149
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/settings/src/utils/render-mode-mapper.ts
+    start_line: 149
+    end_line: 149
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Render-mode name or field-name pattern for the settings view configuration (display hint); no phone value handled.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: packages/modules/settings
+- id: medusa-stock-location-address-L12
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/stock-location/src/models/stock-location-address.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: 'Model column definition: the stored phone column of the stock location address phone (StockLocationAddress.phone).'
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/stock-location
+    declaration:
+      file_path: packages/modules/stock-location/src/models/stock-location-address.ts
+      line: 12
+      kind: field
+- id: medusa-index-L9
+  layer: mentions
+  subject:
+    key: mention:phone_number
+    name: phone
+  evidence:
+    file_path: packages/modules/stock-location/src/schema/index.ts
+    start_line: 9
+    end_line: 9
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: GraphQL schema field exposing the phone of the stock location address phone (StockLocationAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: packages/modules/stock-location
+    declaration:
+      file_path: packages/modules/stock-location/src/schema/index.ts
+      line: 9
+      kind: field
