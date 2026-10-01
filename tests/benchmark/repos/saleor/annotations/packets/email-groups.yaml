@@ -278,10 +278,17 @@ groups:
   purpose: audit record of the previous assignee address when a gift card is reassigned or unassigned
   rationale: gift_card_assigned_event and gift_card_unassigned_event take previous_email (giftcard/events.py:60, 81) and store it as GiftCardEvent parameters previous_assigned_to_email (71, 92). An address that was a column's value and is recorded elsewhere after a change is that record's item, not the column's (definition), as the account email-change old address is. Moved out of gift-card-assigned-to-email in KDATAP-8fb0fd.
   clusters:
-  - c050
   - c051
-  - c053
   - c054
+- id: gift-card-previous-assigned-to-email
+  name: Gift card previous assignee email
+  subject: customer a gift card was previously assigned to
+  subject_kind: end_user
+  purpose: the address a gift card was assigned to before a reassignment or unassignment, passed to the event builder
+  rationale: gift_card_assigned_event and gift_card_unassigned_event take previous_email (giftcard/events.py:60, 81), the gift card's previous assigned_to_email, no longer in the column after the change. A parameter follows its source and a line that writes into a record is the record's item, as for the account email change (old address item vs the event's old_email key) and the order events (parameter vs event key). The event keys (71, 92) stay gift-card-event-previous-assigned-to-email. Ruling 2026-10-01, from KDATAP-fb8019's review.
+  clusters:
+  - c050
+  - c053
 - id: gift-card-event-assigned-to-email
   name: Gift card event assignee email
   subject: customer a gift card is assigned to (recorded on the gift card event)
