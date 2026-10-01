@@ -380,6 +380,50 @@ const PHONE_SETTINGS_PY = [
   "SENDER_ADDRESS = 'x'", //                                                             7
 ];
 
+const RECORD_TS = [
+  "export interface User {", //                                          1
+  "  id: string", //                                                     2
+  "  new_email?: string", //                                             3
+  "  email?: string", //                                                 4
+  "  phone?: string", //                                                 5
+  "  email_confirmed_at?: string", //                                    6
+  "  created_at: string", //                                             7
+  "}", //                                                                8
+  "export type VerifyEmailOtpParams = { email: string; token: string }", // 9
+  "export type Factor = { id: string; created_at: string; phone_verified: boolean }", // 10
+  "export interface Options { id: string; email: string }", //           11
+];
+
+describe("record types", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("lists members of interfaces and object type aliases that have an id and a row timestamp", () => {
+    const entries = declaredColumns([file("auth/src/lib/types.ts", "typescript", RECORD_TS)], "email");
+    // Parameter types and types without a row timestamp are not records; timestamps typed as
+    // strings (`email_confirmed_at`) hold no address.
+    expect(summary(entries)).toEqual(["User.email (record-type)", "User.new_email (record-type)"]);
+    expect(entries[0]).toMatchObject({ model: "User", line: 4, type: "string" });
+    expect(summary(declaredColumns([file("auth/src/lib/types.ts", "typescript", RECORD_TS)], "phone_number"))).toEqual(["User.phone (record-type)"]);
+  });
+
+  it("uses record types only where the repository declares no storage for the concept", () => {
+    const files = [file("auth/src/lib/types.ts", "typescript", RECORD_TS), file("db/models.ts", "typescript", TYPEORM)];
+    expect(summary(declaredColumns(files, "email"))).toEqual(["people.email (orm-field)", "people.mail_address (orm-field)"]);
+  });
+
+  it("reads a nullable union by its non-null member", () => {
+    const counts = ["interface Run { id: string; created_at: Date; email_sent_count: number | null; member_email: string | null }"];
+    expect(summary(declaredColumns([file("a/run.ts", "typescript", counts)], "email"))).toEqual(["Run.member_email (record-type)"]);
+  });
+
+  it("does not read test-tool configs as configured addresses", () => {
+    const jest = ["module.exports = { collectCoverageFrom: ['src/**'] }"];
+    expect(declaredColumns([file("pkg/jest.config.js", "javascript", jest)], "email", { include: "configured" })).toEqual([]);
+  });
+});
+
 describe("concept-generic catalog", () => {
   beforeAll(async () => {
     await initAnalysisEngine(LANGUAGE_PACKS);

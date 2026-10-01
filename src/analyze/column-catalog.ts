@@ -23,7 +23,13 @@ import { recordFacts, type RecordFacts } from "./json-record-keys";
  *     calls that take a table and a column name (`helper.changeToType('users', 'email')`,
  *     `addColumn`);
  *   - `content-type`: strapi content types, a `collectionName` with `attributes`, in
- *     source or in a `schema.json` read with `JSON.parse` (ingestion keeps JSON files).
+ *     source or in a `schema.json` read with `JSON.parse` (ingestion keeps JSON files);
+ *   - `record-type` (KDATAP-e3ff3c): TypeScript record types, an `interface` or object type
+ *     alias with an `id` member and a created or updated timestamp member, the rows a client
+ *     SDK or service reads and writes (`interface User { id; email; new_email; created_at }`).
+ *     Parameter and option types, which carry neither, are not records. Record types are a
+ *     fallback: where a repository declares storage for the concept (any source above), the
+ *     stored columns decide and its DTO and response types, views of them, are left out.
  *
  * With `include: "configured"` the catalog also lists configured address keys
  * (KDATAP-6661dd): places a site keeps an address it configures for itself, named by a
@@ -37,7 +43,15 @@ import { recordFacts, type RecordFacts } from "./json-record-keys";
  *     config and default-settings files, including `default-settings.json`.
  */
 
-export type ColumnEvidence = "orm-field" | "schema-object" | "migration" | "content-type" | "setting" | "config" | "env";
+export type ColumnEvidence =
+  | "orm-field"
+  | "schema-object"
+  | "migration"
+  | "content-type"
+  | "record-type"
+  | "setting"
+  | "config"
+  | "env";
 
 /** Evidence kinds of configured address keys, which the catalog lists only on request. */
 const CONFIGURED_EVIDENCE: ReadonlySet<ColumnEvidence> = new Set(["setting", "config", "env"]);
@@ -87,7 +101,11 @@ const DESTRUCTIVE_HELPER = /^(?:drop|remove|delete|rename)/i;
 const DJANGO_RELATION = /^(?:ForeignKey|OneToOneField|ManyToManyField|GenericForeignKey)$/;
 
 function isNonText(type: string | undefined): boolean {
-  return type !== undefined && NON_TEXT_TYPE.test(type.replace(/^.*\./, "").trim());
+  if (type === undefined) return false;
+  // A nullable union (`number | null`) is its non-null member.
+  const members = type.split("|").map((t) => t.trim()).filter((t) => t && !/^(?:null|undefined)$/.test(t));
+  const single = members.length === 1 ? members[0] : type;
+  return NON_TEXT_TYPE.test(single.replace(/^.*\./, "").trim());
 }
 
 /** Column candidates declared in one analyzed file, for any concept. */
@@ -96,6 +114,7 @@ export function columnCandidates(file: AnalyzedFile, filePath: string): ColumnCa
   for (const field of file.fieldDeclarations()) out.push(...ormFieldCandidates(field, filePath));
   for (const key of file.keyDeclarations()) out.push(...keyCandidates(key, filePath));
   out.push(...migrationCandidates(file, filePath));
+  out.push(...recordTypeCandidates(file, filePath));
   out.push(...configuredCandidates(file, filePath));
   return out;
 }
@@ -173,7 +192,11 @@ function isPythonSettingsModule(filePath: string): boolean {
 }
 
 /** A config or default-settings source file, whose object keys are configured values. */
+/** Build, test and lint tool configs (`jest.config.js`): they configure tooling, not the app's addresses. */
+const TOOL_CONFIG = /(?:^|\/)(?:jest|vitest|vite|webpack|rollup|babel|eslint|prettier|tailwind|postcss|tsup|karma|playwright|cypress|commitlint|lint-staged|stylelint)\.config\./i;
+
 function isConfigFile(filePath: string): boolean {
+  if (TOOL_CONFIG.test(filePath)) return false;
   return /(?:^|\/)(?:config|settings|default[-_.]?settings|defaults?)(?:\.[\w-]+)*\.(?:js|ts|mjs|cjs)$/i.test(filePath) || /\.config\.(?:js|ts|mjs|cjs)$/i.test(filePath);
 }
 
@@ -301,6 +324,24 @@ function keyCandidates(key: KeyDeclaration, filePath: string): ColumnCandidate[]
   return [];
 }
 
+/** A record's row timestamps: `created_at`, `updatedAt`, `inserted_at`. */
+const ROW_TIMESTAMP = /^(?:created|updated|inserted)(?:_at|At)$/;
+
+/** Members of TypeScript record types: named object types with an `id` and a row timestamp. */
+function recordTypeCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  for (const record of file.recordTypes()) {
+    const names = new Set(record.members.map((member) => member.name));
+    if (!names.has("id") || ![...names].some((name) => ROW_TIMESTAMP.test(name))) continue;
+    for (const member of record.members) {
+      // Timestamps typed as strings (`email_confirmed_at`) hold no address.
+      if (member.name === "id" || /(?:_at|At)$/.test(member.name) || isNonText(member.type)) continue;
+      out.push({ table: record.name, model: record.name, column: member.name, ...(member.type ? { type: member.type } : {}), file: filePath, line: member.line, evidence: "record-type" });
+    }
+  }
+  return out;
+}
+
 /** Knex column calls inside a table call, and helpers taking a table and a column name. */
 function migrationCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
   const out: ColumnCandidate[] = [];
@@ -399,7 +440,10 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
       known.locations.push(location);
     }
   }
-  return [...byKey.values()]
+  const entries = [...byKey.values()];
+  const declaresStorage = entries.some((entry) => entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence));
+  return entries
+    .filter((entry) => !declaresStorage || entry.evidence !== "record-type")
     .map((entry) => {
       const locations = [...entry.locations].sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
       return { ...entry, file: locations[0].file, line: locations[0].line, locations };
