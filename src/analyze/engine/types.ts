@@ -9,6 +9,7 @@
  *   @import.name                            a name bound by an import
  *   @member @member.object @member.property   property access and subscripts
  *   @call @call.callee @call.argument       calls and their arguments
+ *   @invocation @invocation.callee          every call or construction, with or without arguments
  *
  * Parameter positions come from the grammar's `parameters` (or `parameter`) child
  * field of a function node; a keyword argument is an argument node with `name` and
@@ -92,7 +93,55 @@ export interface FunctionDefinition {
   name: string;
   /** 1-based line of the function's name. */
   line: number;
+  /** 1-based last line of the function. */
+  endLine: number;
+  /** The class whose body directly defines the function (a method), when there is one. */
+  owner?: string;
   parameters: FunctionParameter[];
+}
+
+/** One argument of a call as written: its text, position and keyword. */
+export interface InvocationArgument {
+  /** 0-based position among the call's arguments. */
+  position: number;
+  keyword?: string;
+  /** The argument's value text (the part after `name=` for a keyword argument). */
+  text: string;
+}
+
+/**
+ * A call or construction (`new C()`), whether or not it has arguments (KDATAP-059e1e).
+ * A deferred call (`task.delay(...)`) is reported against the function it defers.
+ */
+export interface Invocation {
+  /** Final name of the callee, as in `CallSite.callee`. */
+  callee: string;
+  /** 1-based line the call starts on, and 0-based column. */
+  line: number;
+  column: number;
+  /** The call goes through a deferral method (`.delay`). */
+  deferred: boolean;
+  /** Class of the receiver of a method call, when the engine can tell. */
+  receiverClass?: string;
+  arguments: InvocationArgument[];
+}
+
+/** A class or interface defined in a file. Lines are 1-based and inclusive. */
+export interface ClassDefinition {
+  name: string;
+  line: number;
+  endLine: number;
+}
+
+/** A field or key definition (`@definition.field` / `@definition.key`) in a file. */
+export interface MemberDefinition {
+  name: string;
+  kind: "field" | "key";
+  /** 1-based line and 0-based column of the name. */
+  line: number;
+  column: number;
+  /** The class or enclosing key that owns it, when there is one. */
+  owner?: string;
 }
 
 export interface LanguagePack {

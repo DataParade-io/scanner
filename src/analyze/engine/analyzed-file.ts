@@ -2,8 +2,11 @@ import type { Node, Query, Tree } from "web-tree-sitter";
 import type {
   DeclarationKind,
   CallSite,
+  ClassDefinition,
   EnclosingRange,
   FunctionDefinition,
+  Invocation,
+  MemberDefinition,
   LanguagePack,
   PackConfig,
   SameFileDeclaration,
@@ -105,6 +108,7 @@ export class AnalyzedFile {
   private readonly callByNode = new Map<number, Node>();
   private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
+  private readonly invocationNodes: Array<{ call: Node; callee: Node }> = [];
   private factoryReturnTypes = true;
   private knownClass: ((name: string) => boolean) | undefined;
 
@@ -306,9 +310,92 @@ export class AnalyzedFile {
         }
         position += 1;
       });
-      out.push({ name, line: (nameNode ?? scope.node).startPosition.row + 1, parameters });
+      const owner = scope.parent?.kind === "class" ? scope.parent.name : undefined;
+      out.push({
+        name,
+        line: (nameNode ?? scope.node).startPosition.row + 1,
+        endLine: scope.node.endPosition.row + 1,
+        ...(owner ? { owner } : {}),
+        parameters,
+      });
     }
     return out.sort((a, b) => a.line - b.line);
+  }
+
+  /**
+   * Every call and construction in the file, with or without arguments, in source order
+   * (KDATAP-059e1e). The callee name follows `callSitesOnLine`, including the deferred
+   * `task.delay(...)` rule. `receiverClass` is set for a method call whose receiver the
+   * engine can type.
+   */
+  invocations(): Invocation[] {
+    const out: Invocation[] = [];
+    for (const { call, callee } of this.invocationNodes) {
+      const member = this.memberByNode.get(callee.id);
+      if (!member && callee.type !== "identifier") continue;
+      const { nameNode, deferred } = this.calleeNameNode(callee, member);
+      const list = call.childForFieldName("arguments");
+      const nodes = !list
+        ? []
+        : /^(argument_list|arguments)$/.test(list.type)
+          ? list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment")
+          : [list];
+      const className = member ? this.classOfReceiver(member.object) : undefined;
+      out.push({
+        callee: unquote(nameNode.text),
+        line: call.startPosition.row + 1,
+        column: call.startPosition.column,
+        deferred,
+        ...(className ? { receiverClass: className } : {}),
+        arguments: nodes.map((node, position) => {
+          const keywordNode = node.childForFieldName("name");
+          const value = keywordNode ? node.childForFieldName("value") : null;
+          return {
+            position,
+            ...(keywordNode && value ? { keyword: keywordNode.text } : {}),
+            text: (value ?? node).text,
+          };
+        }),
+      });
+    }
+    return out.sort((a, b) => a.line - b.line || a.column - b.column);
+  }
+
+  /** Classes and interfaces defined in the file, with their extent. */
+  classDefinitions(): ClassDefinition[] {
+    const out: ClassDefinition[] = [];
+    for (const scope of this.scopes.values()) {
+      if (scope.kind === "class" && scope.name) {
+        out.push({ name: scope.name, line: scope.node.startPosition.row + 1, endLine: scope.node.endPosition.row + 1 });
+      }
+    }
+    return out.sort((a, b) => a.line - b.line);
+  }
+
+  /**
+   * Every `@definition.field` and `@definition.key` in the file, the places a data field
+   * or key gets its name (KDATAP-059e1e). A field's owner is its class; a key's owner is
+   * `definitionOwner`'s (the object key or class that contains it).
+   */
+  memberDefinitions(): MemberDefinition[] {
+    const out: MemberDefinition[] = [];
+    for (const sites of this.sitesByLine.values()) {
+      for (const site of sites) {
+        if (site.role !== "definition" || (site.kind !== "field" && site.kind !== "key")) continue;
+        const owner =
+          site.kind === "field"
+            ? this.enclosingClass(site.line, site.column)?.name
+            : this.definitionOwner(site.line, site.column);
+        out.push({
+          name: site.name,
+          kind: site.kind,
+          line: site.line,
+          column: site.column,
+          ...(owner ? { owner } : {}),
+        });
+      }
+    }
+    return out.sort((a, b) => a.line - b.line || a.column - b.column);
   }
 
   // ---- class resolution ------------------------------------------------------------
@@ -694,6 +781,9 @@ export class AnalyzedFile {
       const object = byName.get("member.object")?.[0];
       const property = byName.get("member.property")?.[0];
       if (member && object && property) members.push({ node: member, object, property });
+      const invocation = byName.get("invocation")?.[0];
+      const invoked = byName.get("invocation.callee")?.[0];
+      if (invocation && invoked) this.invocationNodes.push({ call: invocation, callee: invoked });
       const call = byName.get("call")?.[0];
       const callee = byName.get("call.callee")?.[0];
       if (call && callee) {
@@ -747,13 +837,7 @@ export class AnalyzedFile {
 
   private addCallSite(callee: Node, argument: Node): void {
     const member = this.memberByNode.get(callee.id);
-    let nameNode = member ? member.property : callee;
-    // A deferred call (`send_email_task.delay(...)` in Celery) calls the function it is
-    // made on: the callee is `send_email_task`, not `delay`.
-    if (member && this.config.deferredCallMethods?.includes(unquote(member.property.text))) {
-      const target = this.memberByNode.get(member.object.id)?.property ?? member.object;
-      if (target.type === "identifier" || this.memberByNode.has(member.object.id)) nameNode = target;
-    }
+    const { nameNode } = this.calleeNameNode(callee, member);
     if (!member && callee.type !== "identifier") return;
     const list = argument.parent;
     if (!list) return;
@@ -773,6 +857,23 @@ export class AnalyzedFile {
       ...(member ? { receiver: member.object } : {}),
     });
     this.callSitesByRow.set(row, sites);
+  }
+
+  /**
+   * The node naming the function a call calls. A deferred call (`send_email_task.delay(...)`
+   * in Celery) calls the function it is made on: the callee is `send_email_task`, not `delay`.
+   */
+  private calleeNameNode(callee: Node, member: { object: Node; property: Node } | undefined): { nameNode: Node; deferred: boolean } {
+    let nameNode = member ? member.property : callee;
+    let deferred = false;
+    if (member && this.config.deferredCallMethods?.includes(unquote(member.property.text))) {
+      const target = this.memberByNode.get(member.object.id)?.property ?? member.object;
+      if (target.type === "identifier" || this.memberByNode.has(member.object.id)) {
+        nameNode = target;
+        deferred = true;
+      }
+    }
+    return { nameNode, deferred };
   }
 
   /** Bound names inside a pattern node: destructuring, tuple targets, parameter shapes. */

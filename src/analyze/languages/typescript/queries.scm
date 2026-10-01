@@ -72,3 +72,7 @@
 (abstract_method_signature name: (property_identifier) @definition.function)
 (required_parameter (accessibility_modifier) pattern: (identifier) @definition.field)
 (optional_parameter (accessibility_modifier) pattern: (identifier) @definition.field)
+
+; every call or construction, with or without arguments (callers, KDATAP-059e1e)
+(call_expression function: (_) @invocation.callee) @invocation
+(new_expression constructor: (_) @invocation.callee) @invocation
