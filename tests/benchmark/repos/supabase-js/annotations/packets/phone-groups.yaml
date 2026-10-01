@@ -1,0 +1,75 @@
+repo: supabase-js
+concept: phone
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+groups:
+  - id: user-phone
+    name: Auth user phone
+    subject: the project's auth user (end user signing in, or the same user as the target of an admin call)
+    subject_kind: end_user
+    purpose: the user's account phone number, stored on the auth user record
+    rationale: "The auth user record's phone decides the item: User.phone as the server returns it (types.ts:504); PasswordCredentialsBase.phone (types.ts:677) with the signUp branch, destructure and /signup body (GoTrueClient.ts:1049/1050/1054: POST /signup creates the user with this number) and the signInWithPassword branch, destructure and password-grant body (1242/1243/1247: a sign-in input looked up against the stored phone); and the access token's phone claim (types.ts:2005), a copy issued from the record. As for email, admin target users are the same record and User type, not a separate subject kind."
+    clusters:
+      - c001
+      - c002
+      - c003
+      - c004
+      - c010
+      - c012
+      - c018
+  - id: pending-new-phone
+    name: Requested new phone (pending change)
+    subject: the auth user changing their phone number
+    subject_kind: end_user
+    purpose: a phone change awaiting OTP confirmation
+    rationale: "User.new_phone (types.ts:500): the requested new number, not yet the stored phone, returned by the server until the phone_change OTP is verified. A pending value is its own item."
+    clusters:
+      - c009
+  - id: otp-sign-in-phone
+    name: Passwordless sign-in phone (OTP recipient)
+    subject: the person signing in without a password
+    subject_kind: end_user
+    purpose: the number a sign-in OTP is requested for
+    rationale: "SignInWithPasswordlessCredentials.phone (types.ts:706) and signInWithOtp's branch, destructure and /otp body (GoTrueClient.ts:2304/2305/2309). The number entered in an OTP sign-in request is not yet a stored value (signInWithOtp returns no user and the server may create the user from it), so it is its own item, as the passwordless sign-in address is for email."
+    clusters:
+      - c005
+      - c006
+      - c013
+  - id: mfa-factor-phone
+    name: MFA phone factor number
+    subject: the auth user enrolling a phone second factor
+    subject_kind: end_user
+    purpose: number that MFA challenge codes are sent to
+    rationale: "MFAEnrollPhoneParamFields.phone (types.ts:1906, 'Phone number associated with a factor') with the /factors enroll body that sends params.phone (GoTrueClient.ts:5793), and the enroll response's phone (types.ts:1957, 'Phone number of the MFA factor'). The number is stored on the MFA factor, not on the user record, so it is a different item from the user's phone even when the values match."
+    clusters:
+      - c016
+      - c017
+needs_adjudication:
+  - cluster: c011
+    candidate_groups:
+      - pending-new-phone
+      - user-phone
+    reason: "UserAttributes.phone (types.ts:538) is one declaration with two uses: the signed-in user's updateUser parameter, a requested change confirmed by an OTP sent to the new number (pending), and, through AdminUserAttributes extends Omit<UserAttributes, 'data'>, the admin createUser and updateUserById attributes, which the server writes into the user record directly. The line cannot be given one item."
+  - cluster: c014
+    candidate_groups:
+      - user-phone
+      - otp-sign-in-phone
+      - pending-new-phone
+    reason: "VerifyMobileOtpParams.phone (types.ts:844) is the number an OTP was sent to for type sms (sign-up or sign-in: the user's phone or the passwordless sign-in number) or phone_change (per the verifyOtp docs, an OTP sent to a new phone number). The type is chosen per call, so the field holds different items."
+  - cluster: c007
+    candidate_groups:
+      - user-phone
+      - pending-new-phone
+    reason: "resend branches on ResendParams.phone for type sms (resending a phone sign-up confirmation: the number signUp wrote to the user) or phone_change, where the source does not say whether the number is the current phone that locates the user or the pending new number the OTP goes to."
+  - cluster: c008
+    candidate_groups:
+      - user-phone
+      - pending-new-phone
+    reason: "resend destructures and posts ResendParams.phone (GoTrueClient.ts:2753/2757) for type sms or phone_change; the source does not settle which number a phone_change resend carries."
+  - cluster: c015
+    candidate_groups:
+      - user-phone
+      - pending-new-phone
+    reason: "ResendParams.phone declaration (types.ts:911), shared by the sms and phone_change resend types; the source does not settle which number a phone_change resend carries."
