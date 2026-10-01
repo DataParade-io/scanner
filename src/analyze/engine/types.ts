@@ -98,6 +98,12 @@ export interface FunctionDefinition {
   /** The class whose body directly defines the function (a method), when there is one. */
   owner?: string;
   parameters: FunctionParameter[];
+  /**
+   * Object-pattern parameters (`{ email, password: pw }`), which have no single name:
+   * the property key each destructured name reads, at the parameter's position
+   * (KDATAP-059e1e).
+   */
+  destructured?: Array<{ position: number; keys: Array<{ key: string; name: string; line: number }> }>;
 }
 
 /** One argument of a call as written: its text, position and keyword. */
@@ -151,4 +157,42 @@ export interface LanguagePack {
   /** Absolute path of the pack's `queries.scm`. */
   queriesFile: string;
   config: PackConfig;
+}
+
+/** How a use of a binding relates to the value it reads. */
+export type UseRole = "argument" | "assigned" | "returned" | "object_key" | "read";
+
+/** The call a use is an argument of (directly, or as a value of an object-literal argument). */
+export interface UseCall {
+  /** Final name of the callee, as in `CallSite.callee`. */
+  callee: string;
+  /** 0-based position of the argument. */
+  position: number;
+  keyword?: string;
+  receiverClass?: string;
+  /** The object-literal key the use is the value of, when the argument is an object literal. */
+  key?: string;
+}
+
+/** A later reference that resolves to the same binding (KDATAP-059e1e). Lines are 1-based. */
+export interface BindingUse {
+  line: number;
+  column: number;
+  role: UseRole;
+  /** `assigned`: the member, key, keyword or bound names the value is stored in. */
+  assignedTo?: string;
+  /** `object_key`: the key the value sits under. */
+  key?: string;
+  call?: UseCall;
+}
+
+/** A property access `x.name`, `x["name"]` or `x.get("name")` (KDATAP-059e1e). */
+export interface MemberAccess {
+  name: string;
+  line: number;
+  column: number;
+  /** Class of the object read from, when the engine can tell. */
+  receiverClass?: string;
+  /** The access is the target of an assignment. */
+  write: boolean;
 }

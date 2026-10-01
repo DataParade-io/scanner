@@ -1,11 +1,13 @@
 import type { Node, Query, Tree } from "web-tree-sitter";
 import type {
   DeclarationKind,
+  BindingUse,
   CallSite,
   ClassDefinition,
   EnclosingRange,
   FunctionDefinition,
   Invocation,
+  MemberAccess,
   MemberDefinition,
   LanguagePack,
   PackConfig,
@@ -108,6 +110,7 @@ export class AnalyzedFile {
   private readonly callByNode = new Map<number, Node>();
   private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
+  private readonly callSiteByArgument = new Map<number, CallSite & { argument: Node; receiver?: Node }>();
   private readonly invocationNodes: Array<{ call: Node; callee: Node }> = [];
   private factoryReturnTypes = true;
   private knownClass: ((name: string) => boolean) | undefined;
@@ -301,12 +304,16 @@ export class AnalyzedFile {
       const params = list.type === "identifier" ? [list] : list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment");
       const skipFirst = scope.parent?.kind === "class" ? this.config.implicitFirstParameters ?? [] : [];
       const parameters: FunctionDefinition["parameters"] = [];
+      const destructured: NonNullable<FunctionDefinition["destructured"]> = [];
       let position = 0;
       params.forEach((param, index) => {
         const names = this.bindings(param);
         if (index === 0 && names.length === 1 && skipFirst.includes(names[0].text)) return;
         if (names.length === 1) {
           parameters.push({ name: names[0].text, position, line: names[0].startPosition.row + 1 });
+        } else {
+          const keys = this.patternKeys(param);
+          if (keys.length > 0) destructured.push({ position, keys });
         }
         position += 1;
       });
@@ -317,9 +324,173 @@ export class AnalyzedFile {
         endLine: scope.node.endPosition.row + 1,
         ...(owner ? { owner } : {}),
         parameters,
+        ...(destructured.length > 0 ? { destructured } : {}),
       });
     }
     return out.sort((a, b) => a.line - b.line);
+  }
+
+  /** The property keys an object-pattern parameter reads, with the name each binds. */
+  private patternKeys(param: Node): Array<{ key: string; name: string; line: number }> {
+    const pattern = param.type === "object_pattern" ? param : param.childForFieldName("pattern");
+    if (!pattern || pattern.type !== "object_pattern") return [];
+    const out: Array<{ key: string; name: string; line: number }> = [];
+    for (const child of pattern.namedChildren) {
+      if (!child) continue;
+      const target =
+        child.type === "object_assignment_pattern" ? (child.childForFieldName("left") ?? child) : child;
+      if (target.type === "shorthand_property_identifier_pattern") {
+        out.push({ key: target.text, name: target.text, line: target.startPosition.row + 1 });
+      } else if (target.type === "pair_pattern") {
+        const key = target.childForFieldName("key");
+        const names = this.bindings(target.childForFieldName("value") ?? target);
+        if (key && names.length === 1) {
+          out.push({ key: unquote(key.text), name: names[0].text, line: names[0].startPosition.row + 1 });
+        }
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Every later reference to the binding that `name` resolves to at a 1-based line
+   * (KDATAP-059e1e), with what each use does with the value. The name may be defined on
+   * the line (a parameter, an assignment target, a destructured name) or only referenced
+   * there; a definition on the line wins. Uses are the references that resolve to the same
+   * first declaration (so shadowing is respected), after it and within its scope, in
+   * source order. A reassignment is a new definition, not a use. Undefined when no
+   * binding of that name is visible.
+   */
+  bindingUses(name: string, line: number): { line: number; kind: SameFileDeclaration["kind"]; uses: BindingUse[] } | undefined {
+    const sites = this.sitesOnLine(line).filter((site) => site.name === name);
+    const lexical = sites.find((site) => site.role === "definition" && site.kind !== "key" && site.kind !== "field");
+    const referenced = sites.find((site) => site.role === "reference");
+    const anchor =
+      lexical?.node ??
+      referenced?.node ??
+      this.tree.rootNode.descendantForPosition({ row: line - 1, column: 0 });
+    const def = anchor ? this.definitionsOf(name, anchor)?.[0] : undefined;
+    if (!def) return undefined;
+    const scope = this.scopeAround(def.node);
+    const uses: BindingUse[] = [];
+    for (let row = def.node.startPosition.row; row <= scope.node.endPosition.row; row += 1) {
+      for (const site of this.sitesByLine.get(row) ?? []) {
+        if (site.role !== "reference" || site.name !== name || site.node.startIndex <= def.node.startIndex) continue;
+        if (site.node.type === "shorthand_property_identifier_pattern") continue;
+        if (this.definitionsOf(name, site.node)?.[0] !== def) continue;
+        uses.push(this.classifyUse(site.node));
+      }
+    }
+    return { ...toDeclaration(def), uses };
+  }
+
+  /** Wrappers a value passes through unchanged for the purpose of where it goes next. */
+  private static readonly TRANSPARENT = new Set([
+    "parenthesized_expression", "await_expression", "await", "as_expression", "non_null_expression",
+    "satisfies_expression", "spread_element", "list_splat", "dictionary_splat", "array", "list", "tuple",
+  ]);
+
+  private classifyUse(node: Node): BindingUse {
+    const base = { line: node.startPosition.row + 1, column: node.startPosition.column };
+    if (node.type === "shorthand_property_identifier") {
+      return this.objectKeyUse(base, node.parent, node.text);
+    }
+    // Climb to the whole expression the value is part of: through member reads, the
+    // callee of a call (`req.body.email.trim()`), and default-value operators.
+    let top: Node = node;
+    for (let guard = 0; guard < 24; guard += 1) {
+      const parent: Node | null = top.parent;
+      if (!parent) break;
+      const member = this.memberByNode.get(parent.id);
+      const isCall = parent.type === "call_expression" || parent.type === "call";
+      const operator = parent.childForFieldName("operator")?.text;
+      if (
+        AnalyzedFile.TRANSPARENT.has(parent.type) ||
+        (member && member.object.id === top.id) ||
+        (isCall && parent.childForFieldName("function")?.id === top.id) ||
+        ((parent.type === "binary_expression" || parent.type === "boolean_operator") &&
+          ["??", "||", "&&", "or", "and"].includes(operator ?? ""))
+      ) {
+        top = parent;
+        continue;
+      }
+      break;
+    }
+    const parent = top.parent;
+    const keywordHolder =
+      parent && this.callSiteByArgument.has(parent.id) && parent.childForFieldName("value")?.id === top.id ? parent : undefined;
+    const argument = this.callSiteByArgument.get(top.id) ?? (keywordHolder && this.callSiteByArgument.get(keywordHolder.id));
+    if (argument) {
+      const call = this.useCall(argument);
+      if (argument.keyword) return { ...base, role: "assigned", assignedTo: argument.keyword, call };
+      return { ...base, role: "argument", call };
+    }
+    if (!parent) return { ...base, role: "read" };
+    if (parent.type === "return_statement") return { ...base, role: "returned" };
+    if ((parent.type === "arrow_function" || parent.type === "lambda") && parent.childForFieldName("body")?.id === top.id) {
+      return { ...base, role: "returned" };
+    }
+    if (parent.type === "pair" && parent.childForFieldName("value")?.id === top.id) {
+      const key = parent.childForFieldName("key");
+      return this.objectKeyUse(base, parent.parent, key ? unquote(key.text) : "");
+    }
+    const value = parent.childForFieldName("value") ?? parent.childForFieldName("right");
+    const target = parent.childForFieldName("name") ?? parent.childForFieldName("left");
+    if (value?.id === top.id && target) {
+      const property = this.memberByNode.get(target.id)?.property;
+      const names = property ? [] : this.bindings(target);
+      const assignedTo = property ? unquote(property.text) : names.length > 0 ? names.map((n) => n.text).join(", ") : target.text.slice(0, 80);
+      return { ...base, role: "assigned", assignedTo };
+    }
+    return { ...base, role: "read" };
+  }
+
+  private useCall(site: CallSite & { receiver?: Node }, key?: string): NonNullable<BindingUse["call"]> {
+    const receiverClass = site.receiver ? this.classOfReceiver(site.receiver) : undefined;
+    return {
+      callee: site.callee,
+      position: site.position,
+      ...(site.keyword ? { keyword: site.keyword } : {}),
+      ...(receiverClass ? { receiverClass } : {}),
+      ...(key ? { key } : {}),
+    };
+  }
+
+  /** A value under an object-literal key, with the call the literal is an argument of, if any. */
+  private objectKeyUse(base: { line: number; column: number }, object: Node | null, key: string): BindingUse {
+    let holder: Node | null = object;
+    while (holder?.parent && AnalyzedFile.TRANSPARENT.has(holder.parent.type)) holder = holder.parent;
+    const site = holder ? this.callSiteByArgument.get(holder.id) : undefined;
+    return { ...base, role: "object_key", key, ...(site ? { call: this.useCall(site, key) } : {}) };
+  }
+
+  /**
+   * Every property access in the file: `x.name`, `x["name"]` and `x.get("name")`
+   * (KDATAP-059e1e). `write` marks the target of an assignment (`x.name = ...`).
+   */
+  memberAccesses(): MemberAccess[] {
+    const out: MemberAccess[] = [];
+    for (const sites of this.sitesByLine.values()) {
+      for (const site of sites) {
+        if (site.role !== "member") continue;
+        const holder = site.node.parent;
+        const access = holder && this.memberByNode.get(holder.id)?.property.id === site.node.id ? holder : undefined;
+        const className = this.classOfSiteReceiver(site);
+        const write =
+          access?.parent !== undefined &&
+          access.parent !== null &&
+          /^(assignment|assignment_expression|augmented_assignment|augmented_assignment_expression)$/.test(access.parent.type) &&
+          access.parent.childForFieldName("left")?.id === access.id;
+        out.push({
+          name: site.name,
+          line: site.line,
+          column: site.column,
+          ...(className ? { receiverClass: className } : {}),
+          write,
+        });
+      }
+    }
+    return out.sort((a, b) => a.line - b.line || a.column - b.column);
   }
 
   /**
@@ -848,14 +1019,16 @@ export class AnalyzedFile {
     const keyword = keywordNode && argument.childForFieldName("value") ? keywordNode.text : undefined;
     const row = argument.startPosition.row;
     const sites = this.callSitesByRow.get(row) ?? [];
-    sites.push({
+    const site = {
       callee: unquote(nameNode.text),
       position,
       ...(keyword ? { keyword } : {}),
       line: row + 1,
       argument,
       ...(member ? { receiver: member.object } : {}),
-    });
+    };
+    sites.push(site);
+    this.callSiteByArgument.set(argument.id, site);
     this.callSitesByRow.set(row, sites);
   }
 
