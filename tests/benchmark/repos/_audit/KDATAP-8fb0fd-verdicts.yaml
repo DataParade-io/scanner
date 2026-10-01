@@ -1,0 +1,488 @@
+task: KDATAP-8fb0fd
+judged_against: merge-eval definition.md (email), definition-generic.md (phone) and the settled rulings
+note: Each verdict judges the listed lines only (up to 8 per pile); unlisted mentions of large mixed piles were not judged.
+  corrected_gold paths are relative to the repo source root.
+counts:
+  ghost:
+    gold_wrong: 2
+    system_wrong: 13
+  saleor:
+    both_wrong: 8
+    system_wrong: 12
+    gold_wrong: 1
+  directus:
+    system_wrong: 1
+  strapi:
+    system_wrong: 9
+    gold_wrong: 2
+  medusa:
+    system_wrong: 3
+verdicts:
+- repo: ghost
+  pile: ghost-f006
+  problem: mixed
+  verdict: gold_wrong
+  corrected_gold:
+  - mentions:
+    - sending-service.js:164
+    - sending-service.js:176
+    - sending-service.js:179
+    - mailgun-email-provider.js:129
+    from: member-account-email
+    to: needs_adjudication [email-recipient-member-email-copy, member-account-email]
+  rationale: 'Seven listed lines are members.email and the gold has them right: schema.js:649 is the column; staff-service.js:75
+    reads member.email of a Member model (getDataFromIds); staff-service-emails.js:416 is memberEmail passed from gift-service
+    member.get(''email''); member-repository.js:202-286 is memberEmail handed to the signup automation from the member model.
+    sending-service.js:164 is not members.email: SendingService.send gets its members from BatchSendingService.getBatchMembers
+    (email: model.get(''member_email''), the email_recipients copy) or from EmailService.sendTestEmail (members.email of a
+    member matching a staff-typed test address, else the typed address). Two sources with different items, so needs_adjudication,
+    as the corpus does for getMemberData. The system''s members.email is one of the two candidates. The other 40 mentions
+    of the pile were not listed and were not judged.'
+- repo: ghost
+  pile: ghost-f008
+  problem: mixed
+  verdict: system_wrong
+  rationale: 'schema.js:914 is members_email_change_events.to_email and :921 is from_email: two columns. The previous address
+    recorded in an email-change event is its own item (settled), and to_email is a different column too. The gold''s split
+    is right.'
+- repo: ghost
+  pile: ghost-f020
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: schema.js:2108 is the isEmail validation of email_design_settings.sender_email (table starts at :2034, field
+    at :2104), not newsletters.sender_email. Different table and configured address, so the gold's email-design-sender-email
+    is right.
+- repo: ghost
+  pile: ghost-f026
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: schema.js:2339 is the isEmail validation of welcome_email_automated_emails.sender_reply_to (table at :2307, field
+    at :2335), not the settings sender_reply_to. The gold's automated-email-reply-to is right.
+- repo: ghost
+  pile: ghost-f031
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: ghost-mailer.js getFromAddress(requestedFromAddress, ...) reads message.from first and only falls back to emailAddress.service.defaultFromEmail
+    at :39. The definition says to label a fallback fragment by the address it reads first, so this is the per-message outbound
+    from-address, as the gold has it, not the configured mail:from default.
+- repo: ghost
+  pile: ghost-f032
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: 'ghost-mailer.js:80 calls getFromAddress(message.from, message.replyTo), which is the per-message from-address.
+    Same reasoning as ghost-f031: the gold''s outbound-message-from-address is right.'
+- repo: ghost
+  pile: ghost-f045
+  problem: missed
+  verdict: gold_wrong
+  corrected_gold:
+  - mentions:
+    - mailgun-email-provider.js:129
+    from: member-account-email
+    to: needs_adjudication [email-recipient-member-email-copy, member-account-email]
+  rationale: mailgun-email-provider.js:129 keys recipient variables by recipient.email, which comes from SendingService.buildRecipients.
+    Its sources are the email_recipients.member_email copy (bulk send through getBatchMembers) and the test-send addresses
+    (sendTestEmail), not members.email directly. With two sources of different items it belongs in needs_adjudication, with
+    sending-service.js:164/176/179. Leaving it alone does not contradict that.
+- repo: ghost
+  pile: ghost-f046
+  problem: mixed
+  verdict: system_wrong
+  rationale: 'email-address-service.ts: EmailAddresses.from (:7), getAddressFromString(from) (:86) and preferred.from in the
+    sending-domain warning (:180) are the per-message from-address. EmailAddresses.replyTo (:8) and preferred.replyTo (:117,
+    :120) are the per-message reply-to. Configured addresses by purpose are separate items, and neither is the mail:from default,
+    which the service reads separately through defaultFromEmail. The gold''s from/reply-to split is right.'
+- repo: ghost
+  pile: ghost-f052
+  problem: mixed
+  verdict: system_wrong
+  rationale: newsletters-service.js getText/getHTML (:65, :77, :81, :82), respondWithEmailVerification (:371, :372) and sendEmailVerificationMagicLink
+    (:385) carry the sender or reply-to address awaiting verification, which is its own item (settled). :386 is defaultFromAddress,
+    the site default sender used as the from of the verification mail. Neither is newsletters.sender_email, so the gold's
+    split is right.
+- repo: ghost
+  pile: ghost-f053
+  problem: mixed
+  verdict: system_wrong
+  rationale: prepAttrsForEmailVerification :313-335 handles email = cleanedAttrs[property], the requested sender_email or
+    sender_reply_to value. It is either pushed to emailsToVerify (pending) or compared with newsletter.get(property). All
+    eight listed lines are labeled newsletter-address-verification. That is consistent with the settled pending-address ruling,
+    and the value can be either column, so it is not newsletters.sender_email. The unlisted mixed mentions were not judged.
+- repo: ghost
+  pile: ghost-f056
+  problem: missed
+  verdict: system_wrong
+  rationale: comments-service-emails.js:220-221 read reporter.email. The reporter is frame.options.context.member (comments-controller
+    report -> reportComment), the signed-in member, so this is members.email. The gold's member-account-email is right, and
+    the pile should have joined it.
+- repo: ghost
+  pile: ghost-f057
+  problem: missed
+  verdict: system_wrong
+  rationale: members/api.js getText(url, type, email) (:111-:199) receives the email the magic-link service sends to (sign-in,
+    sign-up, or updateEmail new address). It is the same value getHTML receives (ghost-f058). The gold's single member-magic-link-recipient
+    item is right, and the system split it in two.
+- repo: ghost
+  pile: ghost-f058
+  problem: missed
+  verdict: system_wrong
+  rationale: members/api.js getHTML(url, type, email) (:204-:223) passes the same magic-link email to the templates. It is
+    the same item as getText (ghost-f057), so the gold is right.
+- repo: ghost
+  pile: ghost-f064
+  problem: missed
+  verdict: system_wrong
+  rationale: 'members.js:405 requestUserEmail: frame.user.get(''email'') is the requesting staff user''s users.email, passed
+    to the import completion mail. The gold''s staff-user-email is right.'
+- repo: ghost
+  pile: ghost-f038
+  problem: missed
+  verdict: system_wrong
+  rationale: passwordreset.js:170 sends to data.email, the address from the reset request that generateToken looked up with
+    models.User.getByEmail. A request input looked up against users.email is that column's item, so the gold's staff-user-email
+    is right.
+- repo: saleor
+  pile: saleor-f001
+  problem: mixed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - order/events.py:96
+    - order/events.py:111
+    - order/events.py:126
+    - order/events.py:141
+    - order/events.py:155
+    - order/events.py:169
+    - order/events.py:227 (from needs_adjudication)
+    from: order-customer-email
+    to: order-event-email (new)
+  rationale: 'order/events.py :90, :105, :120, :135 are the customer_email parameters of the EMAIL_SENT event builders, values
+    passed from the tasks'' payload recipient_email (order-customer-email). Both sides are right on these. :96, :111, :126,
+    :141 store "email": customer_email in OrderEvent parameters. Each line names the stored field it writes, a copy in another
+    table, so it is that record''s item (order-event-email), not Order.user_email. Gold and system both had it wrong. The
+    other 42 mentions of the pile were not listed.'
+- repo: saleor
+  pile: saleor-f008
+  problem: missed
+  verdict: system_wrong
+  rationale: account/notifications.py:101, :110, :112 are new_email of send_request_user_change_email_notification, the requested
+    address before it is User.email. That is a pending address (settled). The tasks receive it as payload recipient_email
+    (user_email/tasks.py:46, :53), so the gold's account-change-email-new-address joins them, and the system should have too.
+- repo: saleor
+  pile: saleor-f009
+  problem: mixed
+  verdict: system_wrong
+  rationale: 'notifications.py:111 (old_email: user.email), :137 (new_email: user.email) and :164 (recipient_email: user.email)
+    are User.email. complete_checkout.py:1693/1694 read checkout_info.checkout.email (Checkout.email), which only gets passed
+    to retrieve_user_by_email. checkout/models.py:372 is the get_customer_email fallback to self.user.email. order/utils.py:714
+    filter(user_email=user.email) looks up by Order.user_email, so it is that column''s item. The gold has each right; the
+    system pulled Checkout.email and the Order.user_email lookup into User.email.'
+- repo: saleor
+  pile: saleor-f010
+  problem: missed
+  verdict: system_wrong
+  rationale: send_user_change_email_notification(recipient_email, user) puts recipient_email in payload old_email and user.email
+    in new_email (:134, :136). recipient_email is therefore the previous address, no longer User.email, and it is the same
+    value the user_email task sends to (tasks.py:70, :77). The gold's account-change-email-old-address is right, and the system
+    missed the join.
+- repo: saleor
+  pile: saleor-f011
+  problem: missed
+  verdict: gold_wrong
+  corrected_gold:
+  - mentions:
+    - giftcard/events.py:60
+    - giftcard/events.py:71
+    - giftcard/events.py:81
+    - giftcard/events.py:92
+    from: gift-card-assigned-to-email
+    to: gift-card-event-previous-assigned-to-email (new)
+  - mentions:
+    - giftcard/events.py:73 (consistency, not in pile)
+    from: gift-card-assigned-to-email
+    to: gift-card-event-assigned-to-email (new)
+  rationale: giftcard/events.py gift_card_assigned_event and gift_card_unassigned_event take previous_email (:60, :81) and
+    store it as GiftCardEvent parameters previous_assigned_to_email (:71, :92). An address that was a column's value and is
+    recorded elsewhere after a change is that record's item, not the column's (definition). The gold had it as GiftCard.assigned_to_email;
+    the system kept it apart, which is right. The callers (GraphQL mutations) are outside the sparse checkout, but the parameter
+    and key names settle it.
+- repo: saleor
+  pile: saleor-f013
+  problem: missed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - giftcard/events.py:129
+    - giftcard/events.py:141
+    from: gift-card-notification-recipient-email
+    to: gift-card-event-email (new)
+  rationale: 'gift_card_sent_event/gift_card_resent_event take email (:122, :134); the tasks pass payload[''recipient_email'']
+    (user_email/tasks.py:134, sendgrid/tasks.py:318), so those lines are gift-card-notification-recipient-email, as the gold
+    has it. :129 and :141 store parameters={"email": email} in GiftCardEvent, the record''s own item (gift-card-event-email).
+    The gold was wrong on :129/:141. The system was wrong to leave the parameters apart from the recipient flow.'
+- repo: saleor
+  pile: saleor-f014
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: giftcard/models.py:64 is the GiftCard.created_by_email column, a different column from assigned_to_email (:77).
+    The gold is right.
+- repo: saleor
+  pile: saleor-f015
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: giftcard/models.py:65 is the GiftCard.used_by_email column, a different column from assigned_to_email. The gold
+    is right.
+- repo: saleor
+  pile: saleor-f017
+  problem: mixed
+  verdict: system_wrong
+  rationale: giftcard/utils.py:303 created_by_email=user_email writes the column, and :390/:404 filter by created_by_email;
+    all three are created-by, as the gold has it. order/actions.py:1601 replace_order.user_email = original_order.user_email
+    writes Order.user_email (rows copied within one column are one item). :349/:361 are the user_email parameter of send_gift_cards_to_customer,
+    so they are not created_by_email. The gold puts them in gift-card-notification-recipient-email. Strictly their only visible
+    source is order.user_email (gift_cards_create :290/:325, needs_adjudication). That is a note for the integrator; the gold
+    was not changed.
+- repo: saleor
+  pile: saleor-f018
+  problem: mixed
+  verdict: system_wrong
+  rationale: 'order/utils.py:523 User.objects.filter(email=used_by_email) looks up by User.email, so the definition makes
+    that line User.email (customer-account-email), as the gold has it. The other listed lines feed or write GiftCard.used_by_email
+    (:525 writes it; giftcard/utils.py:389/:403 filter by it), and both sides agree on those. Note: :455/:464/:517 carry checkout_info.get_customer_email()
+    into the column; gold and system agree on used-by, and this was not reopened.'
+- repo: saleor
+  pile: saleor-f019
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: sendgrid/tasks.py:25 from_email = (configuration.sender_address, ...) is the plugin's configured sender, not
+    User.email. The gold's sendgrid-plugin-sender-address is right.
+- repo: saleor
+  pile: saleor-f021
+  problem: missed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - sendgrid/tasks.py:89
+    from: account-change-email-new-address
+    to: customer-email-change-event-new-email (new)
+  rationale: 'sendgrid/tasks.py:89 "new_email": payload["recipient_email"] stores the requested address as CustomerEvent parameters
+    new_email. The line names the stored event field, and an email-change event''s new email is its own item (definition).
+    The gold had it as the pending address in transit. The system left it alone, though the same field is written at user_email/tasks.py:63,
+    :84 and sendgrid/tasks.py:110.'
+- repo: saleor
+  pile: saleor-f022
+  problem: wrong_join
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - sendgrid/tasks.py:109
+    from: account-change-email-old-address
+    to: customer-email-change-event-old-email (new)
+  rationale: 'sendgrid/tasks.py:109 "old_email": payload["old_email"] stores the previous address in customer_email_changed_event
+    parameters. That is the email-change event''s old email (settled: its own item), not User.email, so the system''s join
+    is wrong. The gold had folded it into the payload old-address group; it now goes with the other writes of that event field.'
+- repo: saleor
+  pile: saleor-f023
+  problem: missed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - sendgrid/tasks.py:110
+    from: customer-account-email
+    to: customer-email-change-event-new-email (new)
+  rationale: 'sendgrid/tasks.py:110 "new_email": payload["new_email"] stores the new User.email in customer_email_changed_event
+    parameters. The definition lists an email-change event''s old or new email as a different item from the column, so customer-account-email
+    was wrong. The same field is written at user_email/tasks.py:84, :63 and sendgrid/tasks.py:89, which the system did not
+    join.'
+- repo: saleor
+  pile: saleor-f024
+  problem: missed
+  verdict: system_wrong
+  rationale: 'sendgrid/tasks.py:318 "email": payload["recipient_email"] passes the SEND_GIFT_CARD payload recipient as the
+    email keyword of gift_card_sent_event/resent_event. That is a value passed, the same item as its source, the gift card
+    notification recipient, as the gold has it. The system missed the join.'
+- repo: saleor
+  pile: saleor-f029
+  problem: missed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - user_email/tasks.py:63
+    from: account-change-email-new-address
+    to: customer-email-change-event-new-email (new)
+  rationale: 'user_email/tasks.py send_request_email_change_email_task: recipient_email (:46, :53) is the payload''s pending
+    new address (gold right, joined with notifications.py:101-112). :63 "new_email": recipient_email stores it in the change-request
+    event''s parameters, which is the event field''s item. The gold was wrong on :63. The system was wrong to join :63 with
+    the recipient and to miss the join with the notification payload.'
+- repo: saleor
+  pile: saleor-f031
+  problem: wrong_join
+  verdict: system_wrong
+  rationale: user_email/tasks.py:70/:77 recipient_email of send_user_change_email_notification_task is payload recipient_email,
+    which notifications.py:134/:136 set to the previous address (old_email). After the change it is not User.email, so the
+    gold's account-change-email-old-address is right.
+- repo: saleor
+  pile: saleor-f032
+  problem: wrong_join
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - user_email/tasks.py:83
+    from: account-change-email-old-address
+    to: customer-email-change-event-old-email (new)
+  rationale: 'user_email/tasks.py:83 "old_email": payload.get("old_email") stores the previous address in customer_email_changed_event
+    parameters. It is the event''s old-email field, not User.email (the system is wrong), and it goes with that field''s other
+    writes rather than the payload address (the gold is corrected).'
+- repo: saleor
+  pile: saleor-f033
+  problem: missed
+  verdict: both_wrong
+  corrected_gold:
+  - mentions:
+    - user_email/tasks.py:84
+    from: customer-account-email
+    to: customer-email-change-event-new-email (new)
+  rationale: 'user_email/tasks.py:84 "new_email": payload.get("new_email") stores the new User.email in customer_email_changed_event
+    parameters. An email-change event''s new email is a different item from the column (definition). The gold had customer-account-email.
+    The system left it alone instead of joining the same field at sendgrid/tasks.py:110.'
+- repo: saleor
+  pile: saleor-f036
+  problem: missed
+  verdict: system_wrong
+  rationale: user_email/tasks.py:121/:125 recipient_email of send_gift_card_email_task is the SEND_GIFT_CARD payload recipient_email
+    built by send_gift_card_notification(email). The gold's gift-card-notification-recipient-email is right.
+- repo: saleor
+  pile: saleor-f037
+  problem: missed
+  verdict: system_wrong
+  rationale: 'user_email/tasks.py:134 "email": payload["recipient_email"] passes the same recipient as the email keyword of
+    the gift card event function. It is a value passed, so it is the recipient item, as the gold has it.'
+- repo: directus
+  pile: directus-f018
+  problem: missed
+  verdict: system_wrong
+  rationale: ldap.ts:41 UserInfo.email is the field that getUserInfo fills from the LDAP mail attribute (:148-149). syncUser
+    writes it into directus_users.email (:264 update payload, :292 create payload). An input written into the column is that
+    column's item, the same as the other auth drivers' profile emails, so the gold's user-account-email is right.
+- repo: strapi
+  pile: strapi-f001
+  problem: missed
+  verdict: system_wrong
+  rationale: 'email-address-parser.ts: ParsedEmailAddress.email (:16), the field parseEmailAddress returns. It carries the
+    same value as parseEmailAddress''s emailString input and result, so the parser flow is one group (gold right). The system
+    split it into separate piles. Its only consumer is Settings.tsx:415-416 (defaultFrom/defaultReplyTo), so the group mixes
+    the configured sender and reply-to; that was noted, not changed.'
+- repo: strapi
+  pile: strapi-f003
+  problem: missed
+  verdict: system_wrong
+  rationale: 'email-address-parser.ts: the angle-bracket email of parseEmailAddress (:237, :253), returned as ParsedEmailAddress.email.
+    It carries the same value as parseEmailAddress''s emailString input and result, so the parser flow is one group (gold
+    right). The system split it into separate piles. Its only consumer is Settings.tsx:415-416 (defaultFrom/defaultReplyTo),
+    so the group mixes the configured sender and reply-to; that was noted, not changed.'
+- repo: strapi
+  pile: strapi-f004
+  problem: missed
+  verdict: system_wrong
+  rationale: 'email-address-parser.ts: the "email (comment)" branch of parseEmailAddress (:266). It carries the same value
+    as parseEmailAddress''s emailString input and result, so the parser flow is one group (gold right). The system split it
+    into separate piles. Its only consumer is Settings.tsx:415-416 (defaultFrom/defaultReplyTo), so the group mixes the configured
+    sender and reply-to; that was noted, not changed.'
+- repo: strapi
+  pile: strapi-f005
+  problem: missed
+  verdict: system_wrong
+  rationale: 'email-address-parser.ts: the fallback branch of parseEmailAddress (:274). It carries the same value as parseEmailAddress''s
+    emailString input and result, so the parser flow is one group (gold right). The system split it into separate piles. Its
+    only consumer is Settings.tsx:415-416 (defaultFrom/defaultReplyTo), so the group mixes the configured sender and reply-to;
+    that was noted, not changed.'
+- repo: strapi
+  pile: strapi-f002
+  problem: missed
+  verdict: system_wrong
+  rationale: email-address-parser.ts:217 emailString, :219 the empty-result email, and :345 parseMultipleEmailAddresses' ParsedEmailAddress[]
+    (built by addresses.map(parseEmailAddress) at :392) are all part of the parseEmailAddress flow. The gold groups them with
+    the other parser lines, and the system missed those joins.
+- repo: strapi
+  pile: strapi-f006
+  problem: missed
+  verdict: gold_wrong
+  corrected_gold:
+  - mentions:
+    - email-address-parser.ts:294
+    - email-address-parser.ts:296
+    - email-address-parser.ts:306
+    - email-address-parser.ts:309
+    from: email-address-parser-values
+    to: needs_adjudication [email-address-parser-values]
+  rationale: formatEmailAddress(name, email) (:294-309) has no caller in scope and shares no value with parseEmailAddress.
+    Only the file and the parameter name tied it to email-address-parser-values, and similar names are not evidence. Whose
+    address it formats is not visible, so needs_adjudication. The system leaving it alone is right.
+- repo: strapi
+  pile: strapi-f007
+  problem: missed
+  verdict: gold_wrong
+  corrected_gold:
+  - mentions:
+    - email-address-parser.ts:319
+    - email-address-parser.ts:320
+    - email-address-parser.ts:329
+    from: email-address-parser-values
+    to: needs_adjudication [email-address-parser-values]
+  rationale: isValidEmail(email) (:319-329) has no caller in scope and shares no value with parseEmailAddress, so it goes
+    to needs_adjudication for the same reason as strapi-f006. The system is right.
+- repo: strapi
+  pile: strapi-f012
+  problem: missed
+  verdict: system_wrong
+  corrected_gold:
+  - mentions:
+    - email/server/src/middlewares/rateLimit.ts:21
+    - email/server/src/middlewares/rateLimit.ts:22
+    - email/server/src/middlewares/rateLimit.ts:27
+    from: needs_adjudication
+    to: admin-user-email (consistency, not in pile)
+  rationale: 'admin rateLimit.ts:28-38 reads request.body.email on the admin /login and /register-admin routes. That is the
+    same request field the login handler looks up and registerAdmin writes into admin::user, so it is admin-user-email, as
+    the gold has it. Consistency correction: the email plugin''s twin middleware (email/server/src/middlewares/rateLimit.ts:21,22,27)
+    is used only on the admin /forgot-password route (routes/authentication.ts:46), so it moved from needs_adjudication to
+    admin-user-email.'
+- repo: strapi
+  pile: strapi-f019
+  problem: missed
+  verdict: system_wrong
+  rationale: contracts/authentication.ts:57 is RegistrationInfo.Response data.email, the email of the admin::user row found
+    by its registration token. The gold's admin-user-email is right.
+- repo: strapi
+  pile: strapi-f022
+  problem: missed
+  verdict: system_wrong
+  rationale: contracts/authentication.ts:115 is ForgotPassword.Request body.email, which forgotPassword looks up in admin::user.
+    A request input looked up against the column is its item, so the gold is right.
+- repo: strapi
+  pile: strapi-f024
+  problem: missed
+  verdict: system_wrong
+  rationale: email/server/src/types.ts:20 is EmailTemplateData.user.email. Its only callers in scope (admin auth.ts:129 and
+    ee auth.ts:34, forgot-password) pass _.pick(user, ['email', ...]) of an admin::user. The gold is right. The users-permissions
+    plugin is not in the sparse checkout.
+- repo: medusa
+  pile: medusa-f036
+  problem: mixed
+  verdict: system_wrong
+  rationale: 'http/customer/common.ts: :76 (BaseCustomerAddress.phone) and :374 (BaseUpdateCustomerAddress.phone) are CustomerAddress.phone;
+    :127 (BaseCustomer.phone) and :293 (BaseUpdateCustomer.phone) are Customer.phone. Different columns of different tables,
+    so the gold''s split is right.'
+- repo: medusa
+  pile: medusa-f037
+  problem: mixed
+  verdict: system_wrong
+  rationale: common.ts:266 (BaseCreateCustomer.phone) is Customer.phone and :312 (BaseCreateCustomerAddress.phone) is CustomerAddress.phone.
+    The gold is right.
+- repo: medusa
+  pile: medusa-f051
+  problem: mixed
+  verdict: system_wrong
+  rationale: The pile joins the phone columns of the cart (cart/models/address.ts:17), customer address (customer/models/address.ts:19
+    and the module's Create/UpdateAddressDTO :12/:26, which carry customer_id), fulfillment (:14), order (:16) and stock-location
+    (:12) address tables. Separate tables are separate items (settled). The gold is right.
