@@ -1,0 +1,1533 @@
+packet:
+  repo: yjdh-employee
+  concept: email
+  kanbus_issue: KDATAP-79b7d8
+  files:
+    - backend/benefit/applications/admin.py
+    - backend/benefit/applications/api/v1/application_batch_views.py
+    - backend/benefit/applications/api/v1/application_views.py
+    - backend/benefit/applications/api/v1/serializers/application.py
+    - backend/benefit/applications/api/v1/serializers/batch.py
+    - backend/benefit/applications/api/v1/serializers/employee.py
+    - backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+    - backend/benefit/applications/management/commands/check_drafts_to_delete.py
+    - backend/benefit/applications/management/commands/request_payslip.py
+    - backend/benefit/applications/models.py
+    - backend/benefit/applications/services/ahjo_payload.py
+    - backend/benefit/applications/services/application_alteration_csv_report.py
+    - backend/benefit/applications/services/applications_csv_report.py
+    - backend/benefit/applications/services/clone_application.py
+    - backend/benefit/applications/services/talpa_csv_service.py
+    - backend/benefit/applications/templates/application.html
+    - backend/benefit/applications/templates/application_handler.html
+    - backend/benefit/calculator/admin.py
+annotations:
+  - id: yjdh-email-applications-admin-L115
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/admin.py
+      start_line: 115
+      end_line: 115
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Admin list_display column that shows Application.company_contact_person_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-admin-L132
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/admin.py
+      start_line: 132
+      end_line: 132
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Admin search_fields entry: looks applications up by the Application.company_contact_person_email column."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application_batch_views-L83
+    layer: mentions
+    subject:
+      key: mention:email
+      name: applications__company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/application_batch_views.py
+      start_line: 83
+      end_line: 83
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Batch search field that looks batches up by their applications' company_contact_person_email column.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application_views-L234
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/application_views.py
+      start_line: 234
+      end_line: 234
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Application API search_fields: lookup by the Application.company_contact_person_email column."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application-L204
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 204
+      end_line: 204
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Application serializer field list exposes and accepts company_contact_person_email (read from and written to the column).
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application-L355
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 355
+      end_line: 355
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: extra_kwargs key configuring the company_contact_person_email serializer field.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application-L356
+    layer: mentions
+    subject:
+      key: mention:email
+      name: help_text
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 356
+      end_line: 356
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Help text describing the field; prose, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application-L945
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 945
+      end_line: 945
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Names company_contact_person_email as a field required before submission; the validation reads that column's value.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-batch-L59
+    layer: mentions
+    subject:
+      key: mention:email
+      name: expert_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/batch.py
+      start_line: 59
+      end_line: 59
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Batch serializer field list exposes and accepts ApplicationBatch.expert_inspector_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-batch-L62
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/batch.py
+      start_line: 62
+      end_line: 62
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Batch serializer field list exposes and accepts ApplicationBatch.p2p_inspector_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-batch-L89
+    layer: mentions
+    subject:
+      key: mention:email
+      name: expert_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/batch.py
+      start_line: 89
+      end_line: 89
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: extra_kwargs key configuring the expert_inspector_email serializer field.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-batch-L91
+    layer: mentions
+    subject:
+      key: mention:email
+      name: help_text
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/batch.py
+      start_line: 91
+      end_line: 91
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Help text describing the field; prose, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-employee-L22
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/employee.py
+      start_line: 22
+      end_line: 22
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Employee serializer field list exposes and accepts Employee.email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L10
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 10
+      end_line: 10
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L11
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 11
+      end_line: 11
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L12
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 12
+      end_line: 12
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L65
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_benefit_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 65
+      end_line: 65
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Function declaration whose name mentions email (notification subject or template helper); not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L70
+    layer: mentions
+    subject:
+      key: mention:email
+      name: mail
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 70
+      end_line: 70
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Docstring about sending a notification mail; prose, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: comment
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L72
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 72
+      end_line: 72
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email template context (application number, company name, dates, language); no address in it.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L78
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_benefit_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 78
+      end_line: 78
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email subject line; text, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L79
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 79
+      end_line: 79
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L80
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 80
+      end_line: 80
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_and_notify_ending_benefits-L82
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_and_notify_ending_benefits.py
+      start_line: 82
+      end_line: 82
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Call to a notification helper named for email; it passes the application object, the line holds no address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L10
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 10
+      end_line: 10
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L11
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 11
+      end_line: 11
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L12
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 12
+      end_line: 12
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L74
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_draft_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 74
+      end_line: 74
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Function declaration whose name mentions email (notification subject or template helper); not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L79
+    layer: mentions
+    subject:
+      key: mention:email
+      name: mail
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 79
+      end_line: 79
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Docstring about sending a notification mail; prose, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: comment
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L83
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 83
+      end_line: 83
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email template context (application number, company name, dates, language); no address in it.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L86
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_draft_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 86
+      end_line: 86
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email subject line; text, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L87
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 87
+      end_line: 87
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L88
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 88
+      end_line: 88
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-check_drafts_to_delete-L90
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/check_drafts_to_delete.py
+      start_line: 90
+      end_line: 90
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Call to a notification helper named for email; it passes the application object, the line holds no address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L12
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 12
+      end_line: 12
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L13
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 13
+      end_line: 13
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L14
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 14
+      end_line: 14
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Imports a notification helper whose name mentions email; a function name, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L80
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_benefit_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 80
+      end_line: 80
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Function declaration whose name mentions email (notification subject or template helper); not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L87
+    layer: mentions
+    subject:
+      key: mention:email
+      name: mail
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 87
+      end_line: 87
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Docstring about sending a notification mail; prose, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: comment
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L89
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_email_template_context
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 89
+      end_line: 89
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email template context (application number, company name, dates, language); no address in it.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L90
+    layer: mentions
+    subject:
+      key: mention:email
+      name: get_benefit_notice_email_notification_subject
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 90
+      end_line: 90
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Builds the email subject line; text, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L91
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 91
+      end_line: 91
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L92
+    layer: mentions
+    subject:
+      key: mention:email
+      name: render_email_template
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 92
+      end_line: 92
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Renders an email template body; template name and context, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-request_payslip-L94
+    layer: mentions
+    subject:
+      key: mention:email
+      name: send_email_to_applicant
+    evidence:
+      file_path: backend/benefit/applications/management/commands/request_payslip.py
+      start_line: 94
+      end_line: 94
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Call to a notification helper named for email; it passes the application object, the line holds no address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-models-L449
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 449
+      end_line: 449
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Model column definition: the stored Application.company_contact_person_email, the applicant company's contact person address used for notifications."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-applications-models-L450
+    layer: mentions
+    subject:
+      key: mention:email
+      name: verbose_name
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 450
+      end_line: 450
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Field options and verbose label of the column defined on the line above; a label, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-models-L860
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 860
+      end_line: 860
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Model column definition: the stored ApplicationBatch.p2p_inspector_email of the City P2P inspector."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 860
+        kind: field
+  - id: yjdh-email-applications-models-L861
+    layer: mentions
+    subject:
+      key: mention:email
+      name: verbose_name
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 861
+      end_line: 861
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Field options and verbose label of the column defined on the line above; a label, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-models-L870
+    layer: mentions
+    subject:
+      key: mention:email
+      name: expert_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 870
+      end_line: 870
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Model column definition: the stored ApplicationBatch.expert_inspector_email of the City expert inspector (handler for Talpa)."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 870
+        kind: field
+  - id: yjdh-email-applications-models-L871
+    layer: mentions
+    subject:
+      key: mention:email
+      name: verbose_name
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 871
+      end_line: 871
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Field options and verbose label of the column defined on the line above; a label, not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-models-L936
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 936
+      end_line: 936
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Reads self.p2p_inspector_email as a field required to complete a P2P-accepted batch.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 860
+        kind: field
+  - id: yjdh-email-applications-models-L979
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 979
+      end_line: 979
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Writes self.p2p_inspector_email from the p2p_settings AhjoSetting; the line names the stored column as its write target, so it is that column's item.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 860
+        kind: field
+  - id: yjdh-email-applications-models-L1106
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 1106
+      end_line: 1106
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Model column definition: the stored Employee.email of the employee the benefit application is for."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 1106
+        kind: field
+  - id: yjdh-email-applications-models-L1177
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 1177
+      end_line: 1177
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Employee __str__ reads self.email (Employee.email).
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 1106
+        kind: field
+  - id: yjdh-email-applications-ahjo_payload-L263
+    layer: mentions
+    subject:
+      key: mention:email
+      name: sender_initiator
+    evidence:
+      file_path: backend/benefit/applications/services/ahjo_payload.py
+      start_line: 263
+      end_line: 263
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Ahjo agent role name; not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-ahjo_payload-L269
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/services/ahjo_payload.py
+      start_line: 269
+      end_line: 269
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Ahjo case payload Email of the sender_initiator agent reads application.company_contact_person_email; a payload key carries its source's item.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-applications-application_alteration_csv_report-L53
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 53
+      end_line: 53
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Local email reads settings.DEFAULT_SYSTEM_EMAIL, the service's configured contact address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+        line: 53
+        kind: local
+  - id: yjdh-email-applications-application_alteration_csv_report-L55
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 55
+      end_line: 55
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Writes the configured DEFAULT_SYSTEM_EMAIL (local email) into the recovery invoice 'Lisätietoja antaa' column next to the handler's name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+        line: 53
+        kind: local
+  - id: yjdh-email-applications-application_alteration_csv_report-L65
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 65
+      end_line: 65
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Reads application.company_contact_person_email into the billing contact person column of the recovery CSV.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-applications-applications_csv_report-L234
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 234
+      end_line: 234
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CSV column source selecting Application.company_contact_person_email by name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-applications_csv_report-L266
+    layer: mentions
+    subject:
+      key: mention:email
+      name: email
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 266
+      end_line: 266
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CSV column source selecting Employee.email by dotted name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-applications_csv_report-L333
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 333
+      end_line: 333
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CSV column source selecting ApplicationBatch.p2p_inspector_email by dotted name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-clone_application-L66
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/services/clone_application.py
+      start_line: 66
+      end_line: 66
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Clone writes the base application's company_contact_person_email into the new Application row's same column: rows copied within one column are the same item."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: property_key
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-applications-talpa_csv_service-L73
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/services/talpa_csv_service.py
+      start_line: 73
+      end_line: 73
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Talpa CSV column source selecting ApplicationBatch.p2p_inspector_email by dotted name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application_handler-L94
+    layer: mentions
+    subject:
+      key: mention:email
+      name: Email
+    evidence:
+      file_path: backend/benefit/applications/templates/application_handler.html
+      start_line: 94
+      end_line: 94
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Translated field label; not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application_handler-L95
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/templates/application_handler.html
+      start_line: 95
+      end_line: 95
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Handler PDF template renders application.company_contact_person_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-applications-application_handler-L377
+    layer: mentions
+    subject:
+      key: mention:email
+      name: p2p_inspector_email
+    evidence:
+      file_path: backend/benefit/applications/templates/application_handler.html
+      start_line: 377
+      end_line: 377
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Handler PDF template renders batch.p2p_inspector_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 860
+        kind: field
+  - id: yjdh-email-applications-application-L90
+    layer: mentions
+    subject:
+      key: mention:email
+      name: Email
+    evidence:
+      file_path: backend/benefit/applications/templates/application.html
+      start_line: 90
+      end_line: 90
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Translated field label; not an address.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-email-applications-application-L91
+    layer: mentions
+    subject:
+      key: mention:email
+      name: company_contact_person_email
+    evidence:
+      file_path: backend/benefit/applications/templates/application.html
+      start_line: 91
+      end_line: 91
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Application PDF template renders application.company_contact_person_email.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 449
+        kind: field
+  - id: yjdh-email-calculator-admin-L72
+    layer: mentions
+    subject:
+      key: mention:email
+      name: application__company_contact_person_email
+    evidence:
+      file_path: backend/benefit/calculator/admin.py
+      start_line: 72
+      end_line: 72
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: "Calculation admin search field: lookup by the application's company_contact_person_email column."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/calculator

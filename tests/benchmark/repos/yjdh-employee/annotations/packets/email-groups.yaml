@@ -1,0 +1,107 @@
+repo: yjdh-employee
+concept: email
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+groups:
+  - id: contact-person-email
+    name: Company contact person email
+    subject: contact person of the applicant company (employer)
+    subject_kind: other_person
+    purpose: contact and notification address for an application
+    rationale: "The Application.company_contact_person_email column (applications/models.py:449) decides the item. Its serializer field list, extra_kwargs and submit-time required-field entries (serializers/application.py:204/355/945), the admin, API, batch and calculation search lookups and list column by that name, the CSV selector (applications_csv_report.py:234), the reads by instance in send_email_to_applicant (automatic_messages.py:99/120/125/126: the recipient of every applicant notification), the Ahjo case agent Email (ahjo_payload.py:269), the recovery CSV contact (application_alteration_csv_report.py:65) and both PDF templates belong to it. clone_application.py:66 writes the value into a new Application row's same column: rows copied within one column are the same item."
+    clusters:
+      - c001
+      - c002
+      - c003
+      - c004
+      - c005
+      - c006
+      - c007
+      - c012
+      - c017
+      - c021
+  - id: employee-email
+    name: Employee email
+    subject: employee the benefit application is for
+    subject_kind: other_person
+    purpose: contact address of the subsidised employee
+    rationale: "The Employee.email column (applications/models.py:1106) decides the item: its __str__ read (1177), the employee serializer field (serializers/employee.py:22) and the employee.email CSV selector (applications_csv_report.py:266). The employee is a different subject from the company contact person and from any signed-in user."
+    clusters:
+      - c011
+      - c015
+      - c018
+  - id: p2p-inspector-email
+    name: P2P inspector email
+    subject: City of Helsinki P2P inspector of a decision batch
+    subject_kind: workforce
+    purpose: inspector contact recorded on a decided application batch
+    rationale: "The ApplicationBatch.p2p_inspector_email column (applications/models.py:860) decides the item: the required-field read for P2P-accepted batches (936), the write from the p2p_settings AhjoSetting (979; the line names the column as its write target, so it is that column, not the setting), the batch serializer field (batch.py:62), the CSV and Talpa selectors (applications_csv_report.py:333, talpa_csv_service.py:73) and the handler PDF template (application_handler.html:377). The inspector is City staff but is stored as free text on the batch, not as a User row, so it is not the handler user email."
+    clusters:
+      - c009
+      - c013
+      - c019
+      - c020
+  - id: expert-inspector-email
+    name: Expert inspector email
+    subject: City of Helsinki expert inspector (application handler named for Talpa)
+    subject_kind: workforce
+    purpose: expert inspector contact recorded on an application batch
+    rationale: The ApplicationBatch.expert_inspector_email column (applications/models.py:870) decides the item, with its batch serializer field and extra_kwargs (batch.py:59/89). A different column from p2p_inspector_email, so a different item.
+    clusters:
+      - c008
+      - c010
+      - c014
+  - id: handler-user-email
+    name: Handler user email
+    subject: application handler (City staff user, is_staff, signs in through Azure ADFS)
+    subject_kind: workforce
+    purpose: staff account address filled from the ADFS mail claim
+    rationale: "User.email of handler accounts. AUTH_ADFS CLAIM_MAPPING {'email': 'mail'} (settings.py:582) names User.email as the field the ADFS sign-in writes. The User table holds applicants and handlers told apart by is_staff (users/models.py is_handler), so the two kinds are separate items."
+    clusters:
+      - c023
+  - id: applicant-user-email
+    name: Applicant user email
+    subject: applicant (signed-in company representative)
+    subject_kind: end_user
+    purpose: applicant account address
+    rationale: "User.email of applicant accounts: TermsOfServiceApproval approvals are created only by signed-in applicants (terms/api/v1/views.py:56 approved_by=user under BFIsApplicant), so its __str__ (terms/models.py:293) and admin filter and search (terms/admin.py:79/86) read applicant User.email; the GDPR serialize_fields entry (users/models.py:26) exports it to the Helsinki profile GDPR API, which serves citizen accounts, not ADFS handlers."
+    clusters:
+      - c027
+      - c028
+      - c030
+      - c031
+  - id: default-from-email
+    name: Configured sender address
+    subject: the Helsinki-lisä service (DEFAULT_FROM_EMAIL)
+    subject_kind: organization
+    purpose: from address of applicant notification emails
+    rationale: "settings.DEFAULT_FROM_EMAIL: the env schema default noreply-helsinkilisa@hel.fi (settings.py:141), the settings constant (380) and the send_mail from_email read in send_email_to_applicant (automatic_messages.py:119)."
+    clusters:
+      - c022
+  - id: system-contact-email
+    name: Configured system contact address
+    subject: the Helsinki-lisä service (DEFAULT_SYSTEM_EMAIL)
+    subject_kind: organization
+    purpose: service contact address printed as the further-information contact in recovery invoice CSVs
+    rationale: "settings.DEFAULT_SYSTEM_EMAIL: env schema default helsinkilisa@hel.fi (settings.py:142), the settings constant (679), and the local read and use in the alteration CSV handler column (application_alteration_csv_report.py:53/55). A different configured address and purpose from DEFAULT_FROM_EMAIL."
+    clusters:
+      - c016
+      - c024
+needs_adjudication:
+  - cluster: c025
+    candidate_groups:
+      - applicant-user-email
+      - handler-user-email
+    reason: "ApplicantTermsApproval.approved_by is the request user who submitted the application (serializers/application.py:1292-1303): an applicant for applicant-origin applications, but a handler for handler-origin (paper) applications, which approve HANDLER_TERMS (terms/models.py terms_approval_needed). This line reads User.email of either kind and the source gives no way to tell which one a row holds."
+  - cluster: c026
+    candidate_groups:
+      - applicant-user-email
+      - handler-user-email
+    reason: "ApplicantTermsApproval.approved_by is the request user who submitted the application (serializers/application.py:1292-1303): an applicant for applicant-origin applications, but a handler for handler-origin (paper) applications, which approve HANDLER_TERMS (terms/models.py terms_approval_needed). This line reads User.email of either kind and the source gives no way to tell which one a row holds."
+  - cluster: c029
+    candidate_groups:
+      - applicant-user-email
+      - handler-user-email
+    reason: "ApplicantTermsApproval.approved_by is the request user who submitted the application (serializers/application.py:1292-1303): an applicant for applicant-origin applications, but a handler for handler-origin (paper) applications, which approve HANDLER_TERMS (terms/models.py terms_approval_needed). This line reads User.email of either kind and the source gives no way to tell which one a row holds."
