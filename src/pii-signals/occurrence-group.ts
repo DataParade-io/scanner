@@ -283,6 +283,7 @@ interface GroupableHit {
   location?: "code" | "comment";
   evidence: { filePath: string; endLine?: number };
   group?: string;
+  groupBasis?: string;
   receiverEntity?: string;
   tableEntity?: string;
   weakGroup?: boolean;
@@ -328,6 +329,7 @@ export function assignDeclarationGroups<T extends GroupableHit>(hits: T[]): T[] 
 
 function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlySet<string>, newlyContested: Set<string>, log: boolean): T[] {
   const refusedLog = log ? process.env.DATAPARADE_REFUSED_LOG : undefined;
+  let phase = "declaration";
   const parent = new Map<string, string>();
   const find = (node: string): string => {
     let root = node;
@@ -347,6 +349,9 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
   // Sets whose column is a catalog declaration, and the name a join is trying to claim.
   const declaredSets = new Set<string>();
   let claiming: string | undefined;
+  // Which phase named each set (`name`, `receiver-vote`, `table-vote`, `weak-name`,
+  // `file-vote`), carried with the name so a graph export can state the evidence.
+  const basisOf = new Map<string, string>();
   const union = (left: string, right: string): void => {
     const a = find(left);
     const b = find(right);
@@ -384,7 +389,11 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
       return;
     }
     parent.set(a, b);
-    if (nameA && !nameB) nameOf.set(b, nameA);
+    if (nameA && !nameB) {
+      nameOf.set(b, nameA);
+      const basis = basisOf.get(a);
+      if (basis) basisOf.set(b, basis);
+    }
     if (columnA && !columnB) columnOf.set(b, columnA);
     if (declaredSets.has(a) || declaredSets.has(b)) declaredSets.add(b);
   };
@@ -393,6 +402,7 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
     if (!parent.has(node)) {
       parent.set(node, node);
       nameOf.set(node, group);
+      basisOf.set(node, phase);
     }
     return node;
   };
@@ -442,7 +452,7 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
   // Joins run from most to least reliable: declaration (a declaration never spans two
   // data items in the labeled corpus), name, field, model file. A use of a variable
   // therefore follows its declaration's name rather than its own line's qualifier.
-  let phase = "declaration";
+  phase = "declaration";
   hits.forEach((hit, index) => {
     if (hit.location === "comment") return;
     const node = `hit:${index}`;
@@ -577,8 +587,15 @@ function assignOnce<T extends GroupableHit>(hits: T[], contestedNames: ReadonlyS
       return record === hit.group ? hit : { ...hit, group: record };
     }
     const root = find(`hit:${index}`);
-    const name = nameOf.get(root) ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
-    return name === undefined || name === hit.group ? hit : { ...hit, group: name };
+    const named = nameOf.get(root);
+    const name = named ?? declarationNameByRoot.get(root) ?? locationNameByRoot.get(root);
+    if (name === undefined) return hit;
+    const groupBasis = named
+      ? (basisOf.get(root) ?? "name")
+      : declarationNameByRoot.has(root)
+        ? "declaration"
+        : "location";
+    return { ...hit, group: name, groupBasis };
   });
 }
 
