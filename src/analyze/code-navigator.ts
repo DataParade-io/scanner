@@ -1,6 +1,7 @@
 import path from "path";
 import type { FileInfo } from "../core/types/file";
 import type { AnalyzedFile, Site } from "./engine/analyzed-file";
+import { candidatesForFile, collapseColumns, type ColumnCandidate } from "./column-catalog";
 import { analyzeSource, isAnalysisEngineReady } from "./engine/engine";
 import type { BindingUse, FunctionDefinition, InvocationArgument } from "./engine/types";
 import { packForFile } from "./languages";
@@ -16,6 +17,8 @@ import { packForFile } from "./languages";
 
 /** Results returned per request unless the request sets `limit`. */
 export const DEFAULT_LIMIT = 8;
+/** Columns returned per `columns` request unless it sets `limit`: a catalog is read whole. */
+export const COLUMNS_DEFAULT_LIMIT = 200;
 /** Longest function text an outline returns, in lines. */
 export const OUTLINE_MAX_LINES = 60;
 /** Longest code window of a definition, in lines. */
@@ -31,6 +34,8 @@ export interface NavRequest {
   file?: string;
   line?: number;
   name?: string;
+  /** `columns`: the concept whose stored columns are listed (`email`). */
+  concept?: string;
   /** `members`: the class whose property is read or written. */
   owner?: string;
   limit?: number;
@@ -176,6 +181,7 @@ export class CodeNavigator {
   private readonly classesByName = new Map<string, ClassRecord[]>();
   private readonly membersByName = new Map<string, MemberRecord[]>();
   private readonly callsByCallee = new Map<string, CallRecord[]>();
+  private readonly columnCandidates: ColumnCandidate[] = [];
   private readonly accessesByName = new Map<string, AccessRecord[]>();
 
   /**
@@ -185,6 +191,8 @@ export class CodeNavigator {
   constructor(files: readonly FileInfo[]) {
     if (!isAnalysisEngineReady()) throw new Error("analysis engine is not initialized");
     for (const file of files) {
+      // Content-type `schema.json` is read directly: it has no language pack.
+      if (file.language === "json") this.columnCandidates.push(...candidatesForFile(file, undefined));
       if (!packForFile(file.language, file.path)) continue;
       this.sources.set(file.path, file);
       // Every class declared anywhere, found by keyword so it is complete before the first parse.
@@ -211,6 +219,7 @@ export class CodeNavigator {
     const analyzed = this.analyze(file);
     if (!analyzed) return;
     try {
+      this.columnCandidates.push(...candidatesForFile(file, analyzed));
       for (const fn of analyzed.functionDefinitions()) {
         push(this.functionsByName, fn.name, {
           file: file.path,
@@ -617,6 +626,15 @@ export class CodeNavigator {
     };
   }
 
+  /**
+   * `{"op":"columns","concept"}`: the stored columns the repository declares for a
+   * concept, collapsed across migrations (KDATAP-33da4c). See `column-catalog.ts`.
+   */
+  columns(concept: string, limit: number): Record<string, unknown> {
+    const all = collapseColumns(this.columnCandidates, concept);
+    return { concept, columns: all.slice(0, limit), total: all.length, truncated: all.length > limit };
+  }
+
   private rankedByProximity<T extends { file: string; line: number }>(records: T[], from: string): T[] {
     return [...records].sort(
       (a, b) =>
@@ -657,6 +675,9 @@ export class CodeNavigator {
         case "members":
           if (!request.name) return fail("members needs a name");
           return done("members", this.members(request.name, request.owner, limit));
+        case "columns":
+          if (!request.concept) return fail("columns needs a concept");
+          return done("columns", this.columns(request.concept, Number.isInteger(request.limit) && (request.limit ?? 0) > 0 ? (request.limit as number) : COLUMNS_DEFAULT_LIMIT));
         case "writers":
           if (!request.name) return fail("writers needs a name");
           return done("writers", this.writers(request.name, limit, file ?? ""));
