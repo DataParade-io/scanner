@@ -1,0 +1,232 @@
+repo: saleor
+concept: phone
+positive_mentions: 26
+clusters:
+  c001:
+    declaration: saleor/account/forms.py:16 (no shared declaration)
+    mentions:
+      - id: saleor-forms-L16
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/forms.py
+        line: 16
+        name: phone
+        syntax_kind: string_literal
+        text: initial["phone"] = f"+{country_code_for_region(country_code)}"
+  c002:
+    declaration: saleor/account/i18n.py:109
+    mentions:
+      - id: saleor-i18n-L109
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/i18n.py
+        line: 109
+        name: phone
+        syntax_kind: property_key
+        text: phone = PossiblePhoneNumberFormField(required=False)
+  c003:
+    declaration: saleor/account/i18n.py:138
+    mentions:
+      - id: saleor-i18n-L138
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/i18n.py
+        line: 138
+        name: phone
+        syntax_kind: identifier
+        text: phone = data.get("phone")
+      - id: saleor-i18n-L140
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/i18n.py
+        line: 140
+        name: phone
+        syntax_kind: identifier
+        text: "if phone:"
+      - id: saleor-i18n-L142
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/i18n.py
+        line: 142
+        name: phone
+        syntax_kind: identifier
+        text: data["phone"] = validate_possible_number(phone, country)
+  c004:
+    declaration: saleor/account/i18n.py:144 (no shared declaration)
+    mentions:
+      - id: saleor-i18n-L144
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/i18n.py
+        line: 144
+        name: phone
+        syntax_kind: string_literal
+        text: self.add_error("phone", error)
+  c005:
+    declaration: saleor/account/models.py:74
+    mentions:
+      - id: saleor-models-L74
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/models.py
+        line: 74
+        name: phone
+        syntax_kind: property_key
+        text: phone = PossiblePhoneNumberField(blank=True, default="", db_index=True)
+      - id: saleor-search-L137
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/search.py
+        line: 137
+        name: phone
+        syntax_kind: identifier
+        text: "if address.phone:"
+      - id: saleor-search-L140
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/search.py
+        line: 140
+        name: phone
+        syntax_kind: identifier
+        text: Value(address.phone.as_e164), config="simple", weight=weight
+      - id: saleor-anonymize-L27
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/core/anonymize.py
+        line: 27
+        name: phone
+        syntax_kind: identifier
+        text: address.phone = obfuscate_string(address.phone, phone=True)
+  c006:
+    declaration: saleor/account/models.py:98 (no shared declaration)
+    mentions:
+      - id: saleor-models-L98
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/models.py
+        line: 98
+        name: phone
+        syntax_kind: string_literal
+        text: '"phone",'
+  c007:
+    declaration: saleor/account/models.py:123 (no shared declaration)
+    mentions:
+      - id: saleor-models-L123
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/models.py
+        line: 123
+        name: phone
+        syntax_kind: string_literal
+        text: 'if isinstance(data["phone"], PhoneNumber) and not
+          data["validation_skipped"]:'
+  c008:
+    declaration: saleor/account/models.py:124 (no shared declaration)
+    mentions:
+      - id: saleor-models-L124
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/models.py
+        line: 124
+        name: phone
+        syntax_kind: string_literal
+        text: data["phone"] = data["phone"].as_e164
+  c009:
+    declaration: saleor/account/validators.py:8
+    mentions:
+      - id: saleor-validators-L8
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 8
+        name: phone
+        syntax_kind: identifier
+        text: "def validate_possible_number(phone, country=None):"
+  c010:
+    declaration: saleor/account/validators.py:9
+    mentions:
+      - id: saleor-validators-L9
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 9
+        name: phone_number
+        syntax_kind: identifier
+        text: phone_number = to_python(phone, country)
+      - id: saleor-validators-L11
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 11
+        name: phone_number
+        syntax_kind: identifier
+        text: phone_number
+      - id: saleor-validators-L12
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 12
+        name: phone_number
+        syntax_kind: identifier
+        text: and not is_possible_number(phone_number)
+      - id: saleor-validators-L13
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 13
+        name: phone_number
+        syntax_kind: identifier
+        text: or not phone_number.is_valid()
+      - id: saleor-validators-L19
+        batch: KDATAP-3ccf91-account
+        file: saleor/account/validators.py
+        line: 19
+        name: phone_number
+        syntax_kind: identifier
+        text: return phone_number
+  c011:
+    declaration: saleor/checkout/webhooks/calculate_taxes.py:40 (no shared declaration)
+    mentions:
+      - id: saleor-calculate_taxes-L40
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/checkout/webhooks/calculate_taxes.py
+        line: 40
+        name: phone
+        syntax_kind: string_literal
+        text: '"phone",'
+  c012:
+    declaration: saleor/order/notifications.py:243 (no shared declaration)
+    mentions:
+      - id: saleor-notifications-L243
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/order/notifications.py
+        line: 243
+        name: phone
+        syntax_kind: string_literal
+        text: '"phone",'
+  c013:
+    declaration: saleor/order/notifications.py:252 (no shared declaration)
+    mentions:
+      - id: saleor-notifications-L252
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/order/notifications.py
+        line: 252
+        name: phone
+        syntax_kind: string_literal
+        text: address["phone"] = str(address["phone"])
+  c014:
+    declaration: saleor/order/webhooks/order_calculate_taxes.py:119 (no shared declaration)
+    mentions:
+      - id: saleor-order_calculate_taxes-L119
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/order/webhooks/order_calculate_taxes.py
+        line: 119
+        name: phone
+        syntax_kind: string_literal
+        text: '"phone",'
+  c015:
+    declaration: saleor/plugins/email_common.py:134
+    mentions:
+      - id: saleor-email_common-L134
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/plugins/email_common.py
+        line: 134
+        name: phone
+        syntax_kind: identifier
+        text: phone = address.get("phone")
+      - id: saleor-email_common-L135
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/plugins/email_common.py
+        line: 135
+        name: phone
+        syntax_kind: identifier
+        text: "if include_phone and phone:"
+      - id: saleor-email_common-L136
+        batch: KDATAP-3ccf91-payloads
+        file: saleor/plugins/email_common.py
+        line: 136
+        name: phone
+        syntax_kind: identifier
+        text: address_lines.append(str(phone))

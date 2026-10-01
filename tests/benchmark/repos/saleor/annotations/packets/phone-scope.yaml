@@ -1,0 +1,41 @@
+concept: phone
+layer: mentions
+purpose: Exhaustive phone number mention scope for KDATAP-3ccf91 labeling over the sparse saleor checkout. Merged into layer-scopes.yaml with the labels.
+provenance:
+  proposed_by: claude-sonnet-5-5
+  proposed_at: '2026-10-01'
+  review_state: proposed
+files:
+- path: saleor/account/forms.py
+  theme: address form
+  candidates: 2
+- path: saleor/account/i18n.py
+  theme: address form
+  candidates: 10
+- path: saleor/account/models.py
+  theme: address model
+  candidates: 7
+- path: saleor/account/search.py
+  theme: address search
+  candidates: 2
+- path: saleor/account/validators.py
+  theme: phone validation
+  candidates: 9
+- path: saleor/checkout/webhooks/calculate_taxes.py
+  theme: tax webhook payloads
+  candidates: 1
+- path: saleor/core/anonymize.py
+  theme: anonymization
+  candidates: 3
+- path: saleor/order/notifications.py
+  theme: order notifications
+  candidates: 2
+- path: saleor/order/webhooks/order_calculate_taxes.py
+  theme: tax webhook payloads
+  candidates: 1
+- path: saleor/plugins/email_common.py
+  theme: email address formatting
+  candidates: 4
+- path: saleor/settings.py
+  theme: settings
+  candidates: 1

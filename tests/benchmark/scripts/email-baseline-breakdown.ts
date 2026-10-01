@@ -2,7 +2,10 @@
 /**
  * Email-only provisional baseline with a per-case breakdown (KDATAP-1c4998).
  *
- *   node dist/tests/benchmark/scripts/email-baseline-breakdown.js <out.json> [repo...]
+ *   node dist/tests/benchmark/scripts/email-baseline-breakdown.js <out.json> [--concept=email] [repo...]
+ *   node dist/tests/benchmark/scripts/email-baseline-breakdown.js out.json --concept=phone_number saleor
+ *
+ * `--concept=<name>` (default `email`) picks the mention:<name> concept (KDATAP-3ccf91).
  *
  * Scores only the email labeling packet records against only the email concept
  * scope (layer-wide scopes are ignored), then breaks results down by syntax kind,
@@ -23,7 +26,11 @@ function bump(counts: Counts, key: string, hit: boolean): void {
 }
 
 async function main(): Promise<void> {
-  const [outPath, ...repoArgs] = process.argv.slice(2);
+  const [outPath, ...restArgs] = process.argv.slice(2);
+  const conceptArg = restArgs.find((arg) => arg.startsWith("--concept="));
+  const concept = conceptArg ? conceptArg.slice("--concept=".length) : "email";
+  const subjectKey = `mention:${concept}`;
+  const repoArgs = restArgs.filter((arg) => arg !== conceptArg);
   const repos = repoArgs.length > 0 ? repoArgs : ["ghost", "saleor"];
   const summary: Record<string, unknown> = {};
 
@@ -31,10 +38,10 @@ async function main(): Promise<void> {
     const result = await runBenchmarkRepo(repoKey, { includeProposed: true });
     // After the KDATAP-1c4998 correction, every mention:email label in these repos comes from the packets.
     const cases: EvalCase[] = result.evalCases
-      .filter((c) => c.layer === "mentions" && c.subject.key === "mention:email")
+      .filter((c) => c.layer === "mentions" && c.subject.key === subjectKey)
       .map((c) => ({ ...c, exhaustiveScopeFiles: undefined }));
     const emailFindings = result.scanResult.findings.filter(
-      (finding) => (finding.layer === undefined || finding.layer === "mentions") && (finding.key === "mention:email" || finding.key.startsWith("mention:email:")),
+      (finding) => (finding.layer === undefined || finding.layer === "mentions") && (finding.key === subjectKey || finding.key.startsWith(`${subjectKey}:`)),
     );
     const report = scoreEvalCases(cases, [{ ...result.scanResult, findings: emailFindings }]);
 
@@ -88,7 +95,7 @@ async function main(): Promise<void> {
       recallByGroup,
       groupingDetail,
     };
-    console.log(`${repoKey}: ${cases.length} email cases, ${emailFindings.length} email findings, recall ${report.scores.recall}, precision ${report.scores.precision}`);
+    console.log(`${repoKey}: ${cases.length} ${concept} cases, ${emailFindings.length} ${concept} findings, recall ${report.scores.recall}, precision ${report.scores.precision}`);
   }
 
   fs.writeFileSync(outPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");

@@ -167,26 +167,6 @@ annotations:
       review_state: needs_adjudication
       reviewed_by: grok-4.6-refine
       reviewed_at: 2026-08-30
-  - id: saleor-phone-pii-signal
-    layer: mentions
-    subject:
-      key: mention:phone_number
-      name: phone
-    evidence:
-      file_path: saleor/account/models.py
-      start_line: 74
-      end_line: 74
-    expected:
-      status: positive
-      labels:
-        - phone_number
-    rationale: Explicit phone-number model field
-    provenance:
-      proposed_by: pii-signal-backport
-      proposed_at: 2026-08-30
-      review_state: accepted
-      reviewed_by: grok-4.6-refine
-      reviewed_at: 2026-08-30
   - id: saleor-user-first-name-pii-signal
     layer: mentions
     subject:
@@ -3446,7 +3426,7 @@ annotations:
         line: 94
         kind: parameter
       owner: saleor
-      group: customer-account-email
+      group: gift-card-assigned-to-email
   - id: saleor-utils-L145
     layer: mentions
     subject:
@@ -3494,7 +3474,7 @@ annotations:
         line: 94
         kind: parameter
       owner: saleor
-      group: customer-account-email
+      group: gift-card-assigned-to-email
   - id: saleor-giftcard-utils-L160
     layer: mentions
     subject:
@@ -15009,4 +14989,980 @@ annotations:
       review_state: proposed
     mention_attributes:
       syntax_kind: identifier
+      owner: saleor
+  - id: saleor-forms-L1
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phonenumbers
+    evidence:
+      file_path: saleor/account/forms.py
+      start_line: 1
+      end_line: 1
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports a library function for country calling codes; a module import, not a phone number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: saleor
+  - id: saleor-forms-L16
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/forms.py
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Sets the initial value of the address form phone field to the country calling code prefix; the key is the form field that collects the number stored in Address.phone.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-i18n-L46
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: PossiblePhoneNumberFormField
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 46
+      end_line: 46
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Class name of the phone form field type; defines a field class, no number or field instance.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+  - id: saleor-i18n-L47
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 47
+      end_line: 47
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Docstring describing the phone input field class.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: comment
+      owner: saleor
+  - id: saleor-i18n-L51
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: tel
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 51
+      end_line: 51
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: HTML input type "tel" for the widget; presentation setting, no number handled.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+  - id: saleor-i18n-L84
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 84
+      end_line: 84
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Maps the form field name to the browser autocomplete hint "tel"; configuration of hints, no number handled.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+  - id: saleor-i18n-L102
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 102
+      end_line: 102
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Form label text "Phone number"; a label, not a value.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+  - id: saleor-i18n-L109
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 109
+      end_line: 109
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Declares the phone field of the address form, which collects the number stored in Address.phone.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: property_key
+      owner: saleor
+      declaration:
+        file_path: saleor/account/i18n.py
+        line: 109
+        kind: field
+      group: address-phone-number
+  - id: saleor-i18n-L138
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 138
+      end_line: 138
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Local that reads the submitted phone number from the cleaned address form data.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/i18n.py
+        line: 138
+        kind: local
+      group: address-phone-number
+  - id: saleor-i18n-L140
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 140
+      end_line: 140
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Tests whether a phone number was submitted.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/i18n.py
+        line: 138
+        kind: local
+      group: address-phone-number
+  - id: saleor-i18n-L142
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 142
+      end_line: 142
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Passes the submitted phone number to validate_possible_number and writes the parsed result back to the form data.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/i18n.py
+        line: 138
+        kind: local
+      group: address-phone-number
+  - id: saleor-i18n-L144
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/i18n.py
+      start_line: 144
+      end_line: 144
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Attaches a validation error to the phone form field by name.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-models-L16
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phonenumber_field
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 16
+      end_line: 16
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phonenumber_field model field classes; a module import, not a value.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: saleor
+  - id: saleor-models-L34
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: PossiblePhoneNumberField
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 34
+      end_line: 34
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Class name of the custom phone model field type; names a field type, not the stored column.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+  - id: saleor-models-L35
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 35
+      end_line: 35
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Docstring describing the field type.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: comment
+      owner: saleor
+  - id: saleor-models-L74
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 74
+      end_line: 74
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Address.phone model field: the stored phone number column."
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: property_key
+      owner: saleor
+      declaration:
+        file_path: saleor/account/models.py
+        line: 74
+        kind: field
+      group: address-phone-number
+  - id: saleor-models-L98
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 98
+      end_line: 98
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Lists the phone column by name in the warehouse address GIN search index.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-models-L123
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 123
+      end_line: 123
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Reads the phone value out of the Address as_data dict by key to normalize it.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-models-L124
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/models.py
+      start_line: 124
+      end_line: 124
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Writes the E.164 form of the address phone back into the as_data dict.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-search-L137
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/search.py
+      start_line: 137
+      end_line: 137
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Reads address.phone, the stored Address.phone column, to decide whether to index it.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/models.py
+        line: 74
+        kind: field
+      group: address-phone-number
+  - id: saleor-search-L140
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/search.py
+      start_line: 140
+      end_line: 140
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Adds the E.164 form of address.phone to the address search vector.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/models.py
+        line: 74
+        kind: field
+      group: address-phone-number
+  - id: saleor-validators-L2
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phonenumber_field
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 2
+      end_line: 2
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phonenumber_field parser; a module import.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: saleor
+  - id: saleor-validators-L3
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phonenumbers
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 3
+      end_line: 3
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phonenumbers library check; a module import.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: import_specifier
+      owner: saleor
+  - id: saleor-validators-L8
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 8
+      end_line: 8
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Parameter holding the phone number being validated; the validator is the default validator of Address.phone and is called from the address form clean.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 8
+        kind: parameter
+      group: address-phone-number
+  - id: saleor-validators-L9
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone_number
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 9
+      end_line: 9
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Local holding the parsed phone number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 9
+        kind: local
+      group: address-phone-number
+  - id: saleor-validators-L11
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone_number
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 11
+      end_line: 11
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Tests the parsed phone number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 9
+        kind: local
+      group: address-phone-number
+  - id: saleor-validators-L12
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone_number
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 12
+      end_line: 12
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Checks the parsed phone number is possible.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 9
+        kind: local
+      group: address-phone-number
+  - id: saleor-validators-L13
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone_number
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 13
+      end_line: 13
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Checks the parsed phone number is valid.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 9
+        kind: local
+      group: address-phone-number
+  - id: saleor-validators-L16
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 16
+      end_line: 16
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Validation error message text; prose, no number handled.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+  - id: saleor-validators-L19
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone_number
+    evidence:
+      file_path: saleor/account/validators.py
+      start_line: 19
+      end_line: 19
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Returns the parsed phone number to the caller.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/validators.py
+        line: 9
+        kind: local
+      group: address-phone-number
+  - id: saleor-calculate_taxes-L40
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/checkout/webhooks/calculate_taxes.py
+      start_line: 40
+      end_line: 40
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Selects the address phone field by name for the tax calculation webhook payload of a checkout address.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-anonymize-L9
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/core/anonymize.py
+      start_line: 9
+      end_line: 9
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Boolean flag parameter selecting a longer cutoff; carries no number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+  - id: saleor-anonymize-L15
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/core/anonymize.py
+      start_line: 15
+      end_line: 15
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Reads the boolean flag to choose the obfuscation cutoff; carries no number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+  - id: saleor-anonymize-L27
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/core/anonymize.py
+      start_line: 27
+      end_line: 27
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Overwrites address.phone, the stored Address.phone column, with an obfuscated value (phone=True is the flag).
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/account/models.py
+        line: 74
+        kind: field
+      group: address-phone-number
+  - id: saleor-notifications-L243
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/order/notifications.py
+      start_line: 243
+      end_line: 243
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Selects the address phone field by name for the order notification address payload.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-notifications-L252
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/order/notifications.py
+      start_line: 252
+      end_line: 252
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Converts the phone value of the notification address payload to a string by key.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-order_calculate_taxes-L119
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/order/webhooks/order_calculate_taxes.py
+      start_line: 119
+      end_line: 119
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Selects the address phone field by name for the order tax calculation webhook payload.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
+      owner: saleor
+      group: address-phone-number
+  - id: saleor-email_common-L127
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: include_phone
+    evidence:
+      file_path: saleor/plugins/email_common.py
+      start_line: 127
+      end_line: 127
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Boolean flag parameter controlling whether the phone is printed; carries no number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+  - id: saleor-email_common-L134
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/plugins/email_common.py
+      start_line: 134
+      end_line: 134
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Local holding the phone read from the address dict of the email payload.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/plugins/email_common.py
+        line: 134
+        kind: local
+      group: address-phone-number
+  - id: saleor-email_common-L135
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/plugins/email_common.py
+      start_line: 135
+      end_line: 135
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Tests whether the address has a phone to print (include_phone is the flag).
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/plugins/email_common.py
+        line: 134
+        kind: local
+      group: address-phone-number
+  - id: saleor-email_common-L136
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phone
+    evidence:
+      file_path: saleor/plugins/email_common.py
+      start_line: 136
+      end_line: 136
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Appends the phone to the formatted address lines.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: identifier
+      owner: saleor
+      declaration:
+        file_path: saleor/plugins/email_common.py
+        line: 134
+        kind: local
+      group: address-phone-number
+  - id: saleor-settings-L338
+    layer: mentions
+    subject:
+      key: mention:phone_number
+      name: phonenumber_field
+    evidence:
+      file_path: saleor/settings.py
+      start_line: 338
+      end_line: 338
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Django app name in INSTALLED_APPS; not a phone number.
+    provenance:
+      proposed_by: claude-sonnet-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    mention_attributes:
+      syntax_kind: string_literal
       owner: saleor

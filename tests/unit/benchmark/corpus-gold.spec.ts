@@ -92,7 +92,8 @@ describe("imported corpus gold", () => {
     // Task 5.2: +53 accepted data_actions cases across 11 Tier A/B packets.
     // Tier C: +67 accepted (drupal 7, nopcommerce 8, magento 11, wordpress 15, discourse 26).
     // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
-    expect(acceptedEvalCases).toBe(1008);
+    // KDATAP-3ccf91: -1 accepted mention:phone_number record (saleor-phone-pii-signal) superseded by the phone labeling packets.
+    expect(acceptedEvalCases).toBe(1007);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
@@ -273,7 +274,8 @@ describe("imported corpus gold", () => {
     expect(legacyFiles).toEqual([]);
     expect(piiKeyViolations).toEqual([]);
     // KDATAP-1c4998: -6 accepted mention:email records superseded by the proposed email labeling packets.
-    expect(acceptedMentions).toBe(71);
+    // KDATAP-3ccf91: -1 accepted mention:phone_number record superseded by the phone labeling packets.
+    expect(acceptedMentions).toBe(70);
     expect(adjudicationMentions).toBe(278);
   });
 
