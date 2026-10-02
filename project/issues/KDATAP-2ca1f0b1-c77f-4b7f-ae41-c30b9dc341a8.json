@@ -3,17 +3,30 @@
   "title": "Optional Transformers.js local backend behind a flag",
   "description": "Add an optional sentiment backend using Transformers.js with a small local ONNX model (e.g. distilbert-sst2 or Cardiff Twitter RoBERTa), downloaded once and cached locally, selectable behind a flag. It must never be loaded by default and must not break the no-network-imports privacy guard for the default path. Compare against VADER on the gold set and on a real-corpus agreement check where only aggregate agreement numbers are recorded. Measure throughput of both backends on this M1. Done when: both backends run locally, throughput and agreement numbers are recorded, and the default stays VADER unless evidence says otherwise.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-85c99751-3005-4486-aeb7-8c78a099bb80",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f2950962-6168-40ad-b1df-64195ffaaa89",
+      "author": "home",
+      "text": "Optional transformer backend added: @huggingface/transformers (optionalDependency) with Xenova/distilbert-base-uncased-finetuned-sst-2-english q8, cached under ~/.cache/dataparade/sentiment-models after the one-time download (66 MB); loaded only via --sentiment-backend transformer so the default path never touches it. Backend selection reworked into async factories (createSentimentBackendAsync) with pre-scored dedupKey maps feeding the sync computeMeter. Committed scripts/sentiment-backend-eval.ts (runs under ts-node because onnxruntime-node cannot execute tensors inside jest's vm realm). Results on BlackbookM1: gold accuracy transformer 22/34 (0.647) vs vader 34/34 (1.000) - the binary SST-2 head labels 11/14 neutral messages negative and has no neutral concept; real-corpus label agreement vs vader 33.7% overall (3009 messages, window all, aggregate numbers only); throughput vader ~23123 msgs/sec vs transformer ~494 msgs/sec.",
+      "created_at": "2026-10-02T11:58:58.575836Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T11:41:05.390910Z",
-  "updated_at": "2026-10-02T11:41:05.390944Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T11:58:58.666215Z",
+  "closed_at": "2026-10-02T11:58:58.666175Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
