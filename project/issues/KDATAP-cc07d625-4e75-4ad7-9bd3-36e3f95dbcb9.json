@@ -3,17 +3,30 @@
   "title": "3-class Cardiff RoBERTa transformer backend",
   "description": "Extend the transformer backend to a 3-class head starting with Xenova/twitter-roberta-base-sentiment-latest (Cardiff NLP, ONNX, quantized variant), cached locally after one-time download; labels negative/neutral/positive map directly to neg/neu/pos.",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-be490990-2d8b-42ed-84b2-1786cf7e934f",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "7bb6e326-65c5-403a-8f9b-4d9e04d913a4",
+      "author": "home",
+      "text": "Transformer backend reworked into a model registry: default --sentiment-backend transformer now resolves to the epic-L winner SamLowe/roberta-base-go_emotions-onnx (28-emotion head mapped to pos/neu/neg via documented GO_EMOTIONS_POSITIVE/GO_EMOTIONS_NEGATIVE sets); the Cardiff 3-class head Xenova/twitter-roberta-base-sentiment-latest (task cc07d6 deliverable) is available as transformer-cardiff, plus transformer-xlmr and the sst2 baseline. Models are driven through AutoTokenizer + AutoModelForSequenceClassification with explicit 512-token truncation (pipeline-level truncation was insufficient: RoBERTa position-embedding ONNX graphs fail past 512 tokens and some repos leave model_max_length unset; 1200-char input clamp added). Quantized q8 variants cached locally after one-time download. Cardiff results on BlackbookM1: tuning accuracy 0.941, held-out 0.615, confusion pos 3/1/0 neu 0/6/3 neg 6/0/7, throughput ~267 msgs/sec, model 120.1 MB.",
+      "created_at": "2026-10-02T15:03:15.934199Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T14:42:48.287014Z",
-  "updated_at": "2026-10-02T14:43:30.742232Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T15:03:16.022868Z",
+  "closed_at": "2026-10-02T15:03:16.022830Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
