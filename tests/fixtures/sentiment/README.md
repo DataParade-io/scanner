@@ -16,5 +16,8 @@ Per-source subtrees:
   IDE `state.vscdb` fixtures are generated at test time, not committed;
   chats metadata fixtures at `chats/<hash>/<sid>/meta.json`)
 - `codex/` — Codex CLI rollout JSONL shapes (`~/.codex/sessions`)
+- `grok-bot/` — Grok Bot (Electron app) conversation blob shapes
+  (`~/Library/Application Support/Grok Bot/sand-client-persistence/*.blob`;
+  base32-of-storage-key filenames, `{schemaVersion,value:{entries}}` JSON)
 
 A CI lint guard rejects files in this tree that look like real session dumps.
