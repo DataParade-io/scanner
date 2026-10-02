@@ -1,0 +1,130 @@
+version: 1
+task: KDATAP-5fc7c8
+# Held-out eval set for the sentiment backends (KDATAP-be4909). Separate from
+# the VADER-tuning set (annotations/KDATAP-fe4c1d/sentiment-gold.yaml): these
+# cases are harder (sarcasm, frustrated-but-polite, terse commands, mixed
+# sentiment, coding jargon) and were written to NOT be tuned against any
+# backend. All messages synthetic; none are real.
+# Labels are the operator-facing reading: pos/neg mean expressed
+# satisfaction/frustration. Mixed cases are labeled by their dominant
+# emotion. Excluded = fully stripped (no score).
+labels:
+  # Sarcasm (neg).
+  - kind: sarcasm
+    text: "oh great, another rewrite from scratch, exactly what my afternoon needed"
+    source: claude-code
+    gold: neg
+  - kind: sarcasm
+    text: "wonderful, the migration wiped the database again"
+    source: cursor-agent
+    gold: neg
+  - kind: sarcasm
+    text: "love that the tests pass locally and fail in CI, brilliant"
+    source: codex
+    gold: neg
+  - kind: sarcasm
+    text: "thanks for deleting my uncommitted changes, really appreciate it"
+    source: claude-code
+    gold: neg
+  - kind: sarcasm
+    text: "just what I wanted, a three-hour build"
+    source: cursor-agent
+    gold: neg
+  # Frustrated but polite (neg).
+  - kind: frustrated-polite
+    text: "could you take another look? this still is not working and I have spent all morning on it"
+    source: claude-code
+    gold: neg
+  - kind: frustrated-polite
+    text: "I am sure it is my fault, but this is the fourth failed deploy and I am losing patience"
+    source: cursor-agent
+    gold: neg
+  - kind: frustrated-polite
+    text: "thanks for trying, but honestly this is worse than before"
+    source: codex
+    gold: neg
+  - kind: frustrated-polite
+    text: "I appreciate the effort, but I am quite frustrated with this approach now"
+    source: grok-bot
+    gold: neg
+  # Terse commands (neu).
+  - kind: terse-command
+    text: "rebase and force push"
+    source: claude-code
+    gold: neu
+  - kind: terse-command
+    text: "bump the version"
+    source: cursor-agent
+    gold: neu
+  - kind: terse-command
+    text: "skip the failing test for now"
+    source: codex
+    gold: neu
+  - kind: terse-command
+    text: "revert that commit"
+    source: claude-code
+    gold: neu
+  - kind: terse-command
+    text: "deploy to staging"
+    source: antigravity
+    gold: neu
+  # Mixed sentiment, complaint dominates (neg).
+  - kind: mixed
+    text: "thanks for the quick fix, but honestly the whole flow is still a mess"
+    source: claude-code
+    gold: neg
+  - kind: mixed
+    text: "it finally works, but I wasted two hours getting here"
+    source: cursor-agent
+    gold: neg
+  - kind: mixed
+    text: "great job on the refactor, I am just annoyed the docs were not updated"
+    source: codex
+    gold: neg
+  - kind: mixed
+    text: "appreciate the quick turnaround, though the results are disappointing"
+    source: grok-bot
+    gold: neg
+  # Coding jargon, neutral statements (neu).
+  - kind: coding-jargon
+    text: "the worker dies when the connection resets mid-stream"
+    source: claude-code
+    gold: neu
+  - kind: coding-jargon
+    text: "we throttle the client to avoid the 429 storm"
+    source: cursor-agent
+    gold: neu
+  - kind: coding-jargon
+    text: "guard the retry path against double registration"
+    source: codex
+    gold: neu
+  - kind: coding-jargon
+    text: "the deadlock only shows under load, kill the container to reset state"
+    source: antigravity
+    gold: neu
+  # Positive (pos).
+  - kind: positive
+    text: "solved my problem in one shot, brilliant"
+    source: claude-code
+    gold: pos
+  - kind: positive
+    text: "this refactor makes the code so much nicer, thanks"
+    source: cursor-agent
+    gold: pos
+  - kind: positive
+    text: "exactly the right call, the flaky test is gone now"
+    source: codex
+    gold: pos
+  - kind: positive
+    text: "smooth release today, nothing blew up, nice work"
+    source: grok-bot
+    gold: pos
+  # Excluded (no score).
+  - kind: excluded
+    text: "```\ndeadlock kill -9 1\n```"
+    source: claude-code
+    gold: excluded
+  - kind: excluded
+    text: "> quoted stack trace only, nothing else here"
+    source: codex
+    gold: excluded
