@@ -12,11 +12,12 @@ import type { SentimentSource } from "./record";
 import { scanAdapter } from "./scan";
 import type { ScanResult } from "./scan";
 import { computeMeter, gaugeBar } from "./meter";
-import type { MeterBands, MeterReport } from "./meter";
+import type { MeterBands, MeterReport, SentimentAggregate } from "./meter";
 import { loadSentimentWordList } from "./word-lists";
 import type { SentimentWordList } from "./word-lists";
 import { isInWindow, resolveWindow } from "./windows";
 import type { AbsoluteBounds } from "./windows";
+import { createSentimentBackend } from "./sentiment-classifier";
 
 /** Root overrides keyed at the adapter level; a missing key uses the defaults. */
 export type SentimentRoots = Partial<Record<"claude-code" | "cursor" | "codex" | "grok-bot" | "antigravity", string[]>>;
@@ -32,6 +33,8 @@ export interface RunSentimentOptions {
   roots?: SentimentRoots;
   bands?: MeterBands;
   wordList?: SentimentWordList;
+  /** Sentiment backend name; undefined disables the second metric, "vader" is the local default. */
+  sentimentBackend?: string;
   claudeOptions?: ClaudeCodeAdapterOptions;
   cursorOptions?: CursorAdapterOptions;
   codexOptions?: CodexAdapterOptions;
@@ -95,7 +98,15 @@ export async function runSentimentMeter(options: RunSentimentOptions): Promise<S
     inWindow.push(...result.records.filter((r) => isInWindow(new Date(r.timestamp).getTime(), window)));
   }
 
-  const report = computeMeter(inWindow, window, { bands: options.bands, wordList });
+  const report = computeMeter(inWindow, window, {
+    bands: options.bands,
+    wordList,
+    // undefined selects the default backend ("vader"); "" explicitly disables sentiment.
+    sentimentBackend:
+      options.sentimentBackend === ""
+        ? undefined
+        : createSentimentBackend(options.sentimentBackend),
+  });
   return { report, scanResults };
 }
 
@@ -109,6 +120,9 @@ export function formatMeterText(report: MeterReport): string {
     `Gauge: ${gaugeBarOf(report)}`,
     `Band: ${report.band}`,
   ];
+  if (report.sentiment) {
+    lines.push(`Sentiment: ${formatSentimentAggregate(report.sentiment)}`);
+  }
   const sources = Object.entries(report.perSource);
   if (sources.length > 0) {
     lines.push(
@@ -116,8 +130,27 @@ export function formatMeterText(report: MeterReport): string {
         .map(([source, s]) => `${source} ${s.messages} msgs (${s.thanksTokens} thanks / ${s.fbombTokens} fbombs)`)
         .join(", ")}`,
     );
+    if (report.sentiment) {
+      lines.push(
+        `Sentiment per source: ${sources
+          .map(([source, s]) =>
+            s.sentiment
+              ? `${source} ${formatSentimentAggregate(s.sentiment)}`
+              : `${source} (no scored messages)`,
+          )
+          .join(", ")}`,
+      );
+    }
   }
   return lines.join("\n");
+}
+
+function formatSentimentAggregate(aggregate: SentimentAggregate): string {
+  const mean =
+    aggregate.meanCompound === null
+      ? "n/a"
+      : `${aggregate.meanCompound >= 0 ? "+" : ""}${aggregate.meanCompound.toFixed(2)}`;
+  return `mean ${mean}, ${aggregate.pos} pos / ${aggregate.neu} neu / ${aggregate.neg} neg of ${aggregate.scoredMessages} scored (${aggregate.backend})`;
 }
 
 function gaugeBarOf(report: MeterReport): string {

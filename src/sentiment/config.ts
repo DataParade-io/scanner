@@ -9,6 +9,7 @@ const sentimentConfigSchema = z.object({
   sources: z.array(z.string().min(1)).optional(),
   roots: z.record(z.string().min(1), z.array(z.string().min(1))).optional(),
   words: z.string().min(1).optional(),
+  sentimentBackend: z.string().min(1).optional(),
   bands: z
     .object({
       mostlyGratefulAt: z.number().min(0).max(1),
