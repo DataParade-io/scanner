@@ -107,14 +107,28 @@ export function createCodexAdapter(options: CodexAdapterOptions = {}): Sentiment
 }
 
 /**
- * Harness-injected user-role content markers. Exact spellings are pinned by
- * KDATAP-f662b6 against a real Mac; unknown wrappers still ride along as user
- * items, so treat this list as the best documented set.
+ * Harness-injected user-role content markers, pinned against a real Mac
+ * corpus (KDATAP-f662b6): <environment_context>, <recommended_plugins>,
+ * <subagent_notification>, <turn_aborted>, <external_codex_apps_open_page>,
+ * <external_codex_apps_writing_block_edits>, <skill>, <realtime_delegation>,
+ * <in-app-browser-context>, and <codex_internal_context> are observed;
+ * <user_instructions> and <turn_context> stay as documented shapes. Unknown
+ * wrappers may still ride along as user items, so treat this list as the best
+ * documented set.
  */
 export const CODEX_INJECTED_MARKERS = [
   "<user_instructions>",
   "<environment_context>",
   "<turn_context>",
+  "<recommended_plugins>",
+  "<subagent_notification>",
+  "<turn_aborted>",
+  "<external_codex_apps_open_page>",
+  "<external_codex_apps_writing_block_edits>",
+  "<skill>",
+  "<realtime_delegation>",
+  "<in-app-browser-context",
+  "<codex_internal_context",
 ];
 
 export function isCodexInjectedText(text: string): boolean {
@@ -156,7 +170,13 @@ async function* extractCodexSession(
 
     if (type === "session_meta" && payload) {
       // Session attribution: session_meta payload id (fallback: filename UUID)
-      // and project from payload cwd.
+      // and project from payload cwd. Subagent rollouts (source containing a
+      // subagent object, with subagent_history_start_ordinal) hold delegation
+      // prompts injected by the parent thread, never typed input — skip them.
+      const source = payload.source;
+      if (source && typeof source === "object" && !Array.isArray(source) && "subagent" in (source as Record<string, unknown>)) {
+        return;
+      }
       const id = typeof payload.id === "string" ? payload.id : undefined;
       if (id) sessionId = id;
       if (typeof payload.cwd === "string") projectPath = payload.cwd;
@@ -165,13 +185,13 @@ async function* extractCodexSession(
       continue;
     }
 
-    // Never double-count event_msg user_message mirrors of response_item
-    // messages (community-verified strict mirrors); only response_item
-    // messages are emitted.
+    // Never double-count event_msg mirrors of response_item messages (real
+    // corpora carry item_completed mirrors, no user_message events); only
+    // response_item messages are emitted.
     if (type !== "response_item" || !payload) continue;
 
     const itemType = payload.type;
-    if (itemType !== "message") continue; // turn_context, reasoning, function calls, unknown: tolerantly ignored
+    if (itemType !== "message") continue; // turn_context, reasoning, function calls, compaction, unknown: tolerantly ignored
     const role = payload.role;
     if (role !== "user") continue;
 
@@ -190,10 +210,12 @@ async function* extractCodexSession(
     }
     if (isCodexInjectedText(text)) continue;
 
-    // Forked/resumed rollouts re-record inherited context: items with an
-    // ordinal below forked_from_ordinal_exclusive belong to the original
-    // rollout, which is scanned separately and counts them once.
-    if (forkedFromOrdinalExclusive !== undefined && ordinal < forkedFromOrdinalExclusive) {
+    // Rollout records carry a real ordinal (top-level field). Forked/resumed
+    // rollouts may re-record inherited context: items whose ordinal is below
+    // forked_from_ordinal_exclusive belong to the original rollout, which is
+    // scanned separately and counts them once.
+    const recordOrdinal = typeof parsed.ordinal === "number" ? parsed.ordinal : ordinal;
+    if (forkedFromOrdinalExclusive !== undefined && recordOrdinal < forkedFromOrdinalExclusive) {
       ordinal += 1;
       continue;
     }
@@ -207,7 +229,7 @@ async function* extractCodexSession(
     yield {
       source: "codex",
       sessionId,
-      recordId: `${sessionId}:${ordinal}`,
+      recordId: `${sessionId}:${recordOrdinal}`,
       projectPath: projectPath ?? "",
       timestamp: normalized,
       role: "human",
@@ -218,7 +240,7 @@ async function* extractCodexSession(
         timestamp: normalized,
         text,
       }),
-      provenance: { file: session.file, line, key: `${sessionId}:${ordinal}` },
+      provenance: { file: session.file, line, key: `${sessionId}:${recordOrdinal}` },
     };
     ordinal += 1;
   }
