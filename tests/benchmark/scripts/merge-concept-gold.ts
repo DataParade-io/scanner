@@ -66,10 +66,11 @@ function main(): void {
 
   // Supersede older records for the same subject key on lines the packets label again.
   let text = fs.readFileSync(occurrencesPath, "utf8");
-  const existing = YAML.parse(text) as { annotations: Record<string, any>[] };
+  // A new repo's occurrences.yaml starts as a bare `annotations:` key (KDATAP-973b69).
+  const existing = (YAML.parse(text) as { annotations: Record<string, any>[] | null } | null)?.annotations ?? [];
   const labeled = new Set(records.map((r) => `${r.evidence.file_path}:${r.evidence.start_line}`));
-  const existingIds = new Set(existing.annotations.map((a) => a.id));
-  const superseded = existing.annotations.filter(
+  const existingIds = new Set(existing.map((a) => a.id));
+  const superseded = existing.filter(
     (a) => a.subject?.key === subjectKey && labeled.has(`${a.evidence.file_path}:${a.evidence.start_line}`),
   );
   for (const old of superseded) {
