@@ -4,6 +4,7 @@ import {
   createTransformerBackend,
   DEFAULT_TRANSFORMER_MODEL,
   defaultTransformerCacheDir,
+  TRANSFORMER_MODELS,
 } from "../../../src/sentiment/transformer-backend";
 
 /**
@@ -14,19 +15,27 @@ import {
  * jest's vm realm), so tensor-executing assertions live in
  * scripts/sentiment-backend-eval.ts, which runs under plain ts-node.
  */
-const modelDir = path.join(defaultTransformerCacheDir(), "Xenova", "distilbert-base-uncased-finetuned-sst-2-english");
+const modelDir = path.join(defaultTransformerCacheDir(), "SamLowe", "roberta-base-go_emotions-onnx");
 const modelCached = fs.existsSync(modelDir);
 
 (modelCached ? describe : describe.skip)("transformer sentiment backend (model cached locally)", () => {
-  it("exposes the documented model id and backend name", async () => {
+  it("exposes the documented winner model and backend name", async () => {
     const backend = await createTransformerBackend();
-    expect(DEFAULT_TRANSFORMER_MODEL).toBe("Xenova/distilbert-base-uncased-finetuned-sst-2-english");
+    expect(DEFAULT_TRANSFORMER_MODEL).toBe("SamLowe/roberta-base-go_emotions-onnx");
     expect(backend.name).toBe("transformer");
   });
 
   it("routes fully excluded messages to null without running the model", async () => {
     const backend = await createTransformerBackend();
     expect(await backend.scoreMessage("```\nrm -rf /\n```")).toBeNull();
+  });
+
+  it("registers the comparison candidates with distinct model ids", () => {
+    expect(TRANSFORMER_MODELS.transformer.repo).toBe("SamLowe/roberta-base-go_emotions-onnx");
+    expect(TRANSFORMER_MODELS["transformer-cardiff"].repo).toBe("Xenova/twitter-roberta-base-sentiment-latest");
+    expect(TRANSFORMER_MODELS["transformer-xlmr"].repo).toBe("onnx-community/twitter-xlm-roberta-base-sentiment-ONNX");
+    expect(TRANSFORMER_MODELS["transformer-sst2"].head).toBe("binary");
+    expect(TRANSFORMER_MODELS["transformer-cardiff"].labels).toEqual(["negative", "neutral", "positive"]);
   });
 
   it("scores empty text as neutral zero without running the model", async () => {

@@ -150,9 +150,9 @@ export async function createSentimentBackendAsync(
       scoreMessage: async (text) => vader.scoreMessage(text),
     };
   }
-  if (backend === "transformer") {
+  if (backend === "transformer" || backend.startsWith("transformer-")) {
     const mod = await import("./transformer-backend");
-    return mod.createTransformerBackend();
+    return mod.createTransformerBackend({ model: backend });
   }
   throw new Error(`unknown sentiment backend: ${backend}`);
 }
