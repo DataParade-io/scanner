@@ -1,11 +1,11 @@
 {
   "id": "KDATAP-f66d1095-24fa-4ad2-9a80-896c12532b10",
   "title": "Research Grok Bot conversation storage",
-  "description": "Research where the Grok Bot desktop AI assistant app stores conversations on macOS: app container paths, database or file formats, session and authorship semantics, timestamps, and any dedup or fork behavior. Cite public docs or source where they exist; mark anything unverifiable as an assumption to check against a real Mac with the app installed. Nothing is assumed from the other adapters \u2014 Grok Bot gets its own research pass.\n\nDone when: a research summary with citations or clearly marked assumptions is recorded on this issue and validated against a real Mac.",
+  "description": "Research where the Grok Bot desktop AI assistant app stores conversations on macOS: app container paths, database or file formats, session and authorship semantics, timestamps, and any dedup or fork behavior. Cite public docs or source where they exist; mark anything unverifiable as an assumption to check against a real Mac with the app installed. Nothing is assumed from the other adapters — Grok Bot gets its own research pass.\n\nDone when: a research summary with citations or clearly marked assumptions is recorded on this issue and validated against a real Mac.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-24729463-e7e3-4b82-bc57-935f3c9803df",
   "labels": [],
@@ -14,29 +14,37 @@
     {
       "id": "0594ba3f-c886-495c-8de5-a4089e7f3a31",
       "author": "ubuntu",
-      "text": "BLOCKED on real-Mac research \u2014 cannot be done from this VM (no macOS, no Grok Bot install). What to research on Ryan's Mac with Grok Bot installed: (1) storage location \u2014 look under ~/Library/Containers/<bundle-id>/ and ~/Library/Application Support/ for the app's data dir; (2) format \u2014 SQLite (file magic 'SQLite format 3', then .tables/.schema) vs JSON/JSONL, and where conversation/message rows or files live; (3) session semantics \u2014 how one conversation is identified, whether there are folders/projects to attribute to; (4) authorship \u2014 which field reliably distinguishes human messages from assistant or injected (system prompt, tool, notification) content; (5) timestamps \u2014 epoch vs ISO, local vs UTC; (6) dedup/fork behavior \u2014 is the same message ever stored twice (e.g. retries, sync)? Record citations or mark each claim as an assumption, then validate against the real install. Once recorded, a1a9d4 (fixture capture) follows.",
+      "text": "BLOCKED on real-Mac research — cannot be done from this VM (no macOS, no Grok Bot install). What to research on Ryan's Mac with Grok Bot installed: (1) storage location — look under ~/Library/Containers/<bundle-id>/ and ~/Library/Application Support/ for the app's data dir; (2) format — SQLite (file magic 'SQLite format 3', then .tables/.schema) vs JSON/JSONL, and where conversation/message rows or files live; (3) session semantics — how one conversation is identified, whether there are folders/projects to attribute to; (4) authorship — which field reliably distinguishes human messages from assistant or injected (system prompt, tool, notification) content; (5) timestamps — epoch vs ISO, local vs UTC; (6) dedup/fork behavior — is the same message ever stored twice (e.g. retries, sync)? Record citations or mark each claim as an assumption, then validate against the real install. Once recorded, a1a9d4 (fixture capture) follows.",
       "created_at": "2026-10-02T03:30:26.205941Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "f70b6419-5d6a-46b5-bd62-80a60761698a",
+      "author": "home",
+      "text": "Research complete. Verified on BlackbookM1 real data (~/Library/Application Support/Grok Bot/); all numbers below are counts/field names only, no content inspected or recorded.\n\nAPP + DATA LAYOUT\n- Grok Bot.app (Electron, bundle id com.anysphere.sand). Not sandboxed; no IndexedDB. Conversations live in sand-client-persistence/*.blob.\n- Blob FILENAMES are lowercase base32 (RFC4648) of the UTF-8 storage key. Decoded keys of interest: sand.client.slice.transcript.replicas.<conversation-uuid> (10 conversation blobs). Other keys (ui-layout, account auth, cloud-agents.infos registry, send-journal, etc.) are not transcripts.\n- Blob CONTENT is plain JSON {schemaVersion:1,value:{entries:[...]}} (verified; only gateway-descriptor.json elsewhere is encrypted). Entries carry an internal persistedAt field for incremental scanning.\n\nENTRY SCHEMA (corpus-wide counts across 10 conversations, 1117 entries)\n- kind send-message (751): {id, message:{type,content}, timestampMs, requestId?, seq?, author?{id,name}, widgetSkipped?/widgetDismissed?, respondedValue?, deliverTo?, wake?}. message.type: text 716, widget 18, cursor-agent 13, local-tool-permission 2, connector 1, scm-connect 1.\n- kind message (361): {id, role, content, richText?(TipTap doc), isStreaming, timestampMs, clientNonce?, requestId?, seq?, fromUser?{name,authId}, fromAgent?{id,name,kind}, toAgent?, channel?/channelSender?/author? (fromUser variant)}. role user 291 (227 plain, 51 fromAgent, 13 fromUser), assistant 70 (all toAgent).\n- kind voice-call (4), event (1).\n\nAUTHORSHIP SEMANTICS (evidence: bundle JS via asar extract + corpus cross-tab + per-conversation seq/timestamp ordering)\n- Bundle display-role fn treats kind==message with (fromAgent!=null || toAgent!=null) as assistant-side; a helper derives send-message entries FROM agent-directed message entries (copies id/seq/content, author = that agent) — so send-message is a display/relay projection, and its ids do not overlap message ids.\n- Corpus confirms: send-message WITH author {id,name} (344) are all crew personas (Data Flow Intelligence 99, Charlie Munger 85, Project Manager 85, Knowledge Base 41, Scanner 34).\n- Seq-ordered walk of the 6 solo conversations confirms the rest: no-author send-message text always (a) opens conversations as a greeting and (b) immediately follows plain user messages / fromUser messages = the app's own persona output (incl. widget/cursor-agent/connector status sends). Zero content overlap between no-author send texts and message contents; ids are per-conversation-local (tbs0, t0s0 reused), and some conversations persist only a seq suffix (starts >1), so entries are pruned in place.\nASSUMPTION (marked, not provable from bundle alone): plain role=user messages are composer-typed/pasted human input; role=user with fromUser is human via a remote channel. Both alternate 1:1 with bot replies in every solo conversation, which supports this.\n- Crew conversations are the mirror image: send-message{author} = crew bot speech, plain role=user = human.\n\nCOUNTING RULE adopted for the adapter (for f37d2e): count kind=message, role=user WITHOUT fromAgent (plain + fromUser) as human speech. Skip: all send-message (bot persona or derived relay), role=user with fromAgent (crew bots), role=assistant, voice-call, event. Dedup key MUST include conversation uuid (ids are per-conversation-local). isStreaming is always false in corpus but entries can be rewritten in place -> incremental scan should watermark on persistedAt/mtime.",
+      "created_at": "2026-10-02T08:41:03.657275Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:58.293003Z",
-  "updated_at": "2026-10-02T03:30:26.206093Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:41:37.045809Z",
+  "closed_at": "2026-10-02T08:41:37.045768Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }

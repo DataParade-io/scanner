@@ -29,7 +29,7 @@ Each source implements the `SentimentAdapter` contract (`src/sentiment/adapter.t
 | Claude Code | `~/.claude/projects/**.jsonl` | Tool results, sidechains, meta/system/sdk prompts, compact summaries, command envelopes, and injected reminders are excluded; queued standalone command records are included |
 | Cursor | `state.vscdb` (global + workspaceStorage) and `~/.cursor/projects/<sanitized>/agent-transcripts/` | Read-only `node:sqlite` with copy-then-read WAL fallback; subagent composers/transcripts excluded; agent-CLI typed input rides in a trailing `<user_query>` block (after `<timestamp>`/`<image_files>` headers for queued follow-ups), harness follow-up templates excluded, `<timestamp>` headers parsed to UTC per line; requires **Node >= 22.5** |
 | Codex | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` | `response_item` user messages only; `event_msg` mirrors, tag-wrapped injections, AGENTS.md dumps, and other non-`user.*` `content_item_kinds` records never counted; fork inheritance respected via real ordinals |
-| Grok Bot | TBD | Later adapter; blocked on real-Mac research (KDATAP-f66d10) |
+| Grok Bot | `~/Library/Application Support/Grok Bot/sand-client-persistence/*.blob` | Filenames are base32 of the storage key; only `…transcript.replicas.<conversation-uuid>` blobs are conversations. Human speech is `kind:"message"` `role:"user"` without `fromAgent` (plain = typed/pasted, `fromUser` = remote channel); persona `send-message` output, crew `fromAgent` posts, and `role:"assistant"` entries never counted; entry ids are per-conversation-local so record ids embed the conversation uuid |
 
 ## Time windows
 
@@ -48,4 +48,4 @@ Flags override `~/.config/dataparade/sentiment.meter.yaml`, which overrides defa
 
 - Epics A–G (contract, patterns, windows, Claude Code, Cursor, Codex, meter/CLI) are complete.
 - Epic H: privacy and fixture guards plus the synthetic gold-label eval (100% exact match) are done. The real-corpus recall gate PASSED (KDATAP-713a0f, on BlackbookM1): 2315 real human messages yielded, 2310 counted, 5 excluded — each verified locally as a citation-dense AI-research paste — 99.8% genuine recall, zero harness-injected false positives. All-time meter reading after the gate: 2315 messages / 216 sessions, 25 thanks tokens, 127 f-bomb tokens ("cursing at the machine").
-- Epic I (Grok Bot adapter) is blocked on real-Mac research into the conversation storage format.
+- Epic I (Grok Bot adapter) is complete (KDATAP-247294): conversation blobs are plain `{schemaVersion,value:{entries}}` JSON with base32-of-storage-key filenames; human speech is `kind:"message"` `role:"user"` without `fromAgent` (plain = composer input, `fromUser` = remote channel); persona `send-message` output, crew bot posts, and assistant relays are excluded; per-conversation-local entry ids embed the conversation uuid for dedup. Verified live on BlackbookM1: 240 human messages over 9 conversations (all-time), included in meter windows.
