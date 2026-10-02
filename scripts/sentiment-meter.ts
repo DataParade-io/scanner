@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Coding-session sentiment meter: thanks vs. F-bombs.
  *
