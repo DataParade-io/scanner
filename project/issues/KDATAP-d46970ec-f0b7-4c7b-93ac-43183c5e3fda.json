@@ -3,9 +3,9 @@
   "title": "Define counting semantics and golden counting tests",
   "description": "Define and implement the counting semantics: each match occurrence increments its family token count; a message contributes at most once per family to the message-level count; the meter gauge uses token counts. Pin golden expected counts for the fixture corpus.\n\nDone when: occurrence and message-level counts are both produced; golden counting tests over the fixture skeleton pass deterministically; the same input always yields the same counts.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-ff39687f-feb1-4c65-bbe5-0a58de654de9",
   "labels": [],
@@ -19,10 +19,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "9620308b-82a0-488d-bfb0-841485d6b8ae",
+      "author": "ubuntu",
+      "text": "Semantics pinned: every match occurrence increments the family token count; a message contributes at most once per family to messageCount; the meter gauge uses token counts. Golden tests in tests/unit/sentiment/counting.spec.ts cover boundaries, exclusions, both-family messages, and determinism (pure function of text + word list). 17 counting tests green. Outcome: green.",
+      "created_at": "2026-10-02T03:01:04.606319Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:20.143612Z",
-  "updated_at": "2026-10-02T02:45:19.407591Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:01:04.978632Z",
+  "closed_at": "2026-10-02T03:01:04.978481Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},

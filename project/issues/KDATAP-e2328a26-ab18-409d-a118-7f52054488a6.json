@@ -3,9 +3,9 @@
   "title": "Implement exclusion strippers for code, quotes, and pastes",
   "description": "Strip non-authored regions before matching: fenced code blocks (backtick and tilde fences) and indented code blocks; markdown blockquote (greater-than prefixed) lines; pasted regions detected by a configurable heuristic (normalized length at least 2000 chars AND (at least 60 percent ASCII OR at least 10 non-blank lines)) \u2014 thresholds are config keys, tuned later against the real corpus.\n\nDone when: profanity inside code blocks and quoted text never counts; paste detection fires on synthetic log-paste fixtures and not on coherent prose fixtures; unit tests pass.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-ff39687f-feb1-4c65-bbe5-0a58de654de9",
   "labels": [],
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "ffa10b2c-75ed-43d5-88c9-52d5dd822851",
+      "author": "ubuntu",
+      "text": "Implemented src/sentiment/exclusions.ts: backtick and tilde fenced code, indented code blocks, blockquote lines, and the pasted-region heuristic (length >= 2000 AND (ascii ratio >= 0.6 OR non-blank lines >= 10)) with all three thresholds configurable via ExclusionThresholds, to be tuned against the real corpus in KDATAP-713a0f. Outcome: green.",
+      "created_at": "2026-10-02T03:01:03.737422Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:19.665981Z",
-  "updated_at": "2026-10-02T02:45:18.437360Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:01:03.963313Z",
+  "closed_at": "2026-10-02T03:01:03.963166Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
