@@ -3,17 +3,30 @@
   "title": "Synthetic sentiment gold set and accuracy eval",
   "description": "Author a small gold set of labeled synthetic messages modeled on real coding-chat patterns (no real text), covering positive, neutral, negative, and coding-domain-positive/negative usages. Add an eval that reports classification accuracy per backend. Done when: the gold set is committed, the eval runs in tests, and accuracy is recorded on BlackbookM1.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-85c99751-3005-4486-aeb7-8c78a099bb80",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "979ab4af-33b2-4505-a35f-2c2f2390b348",
+      "author": "home",
+      "text": "Synthetic gold set at annotations/KDATAP-fe4c1d/sentiment-gold.yaml: 36 labeled messages modeled on coding-chat patterns (10 positive, 2 positive-with-technical-words, 14 neutral commands/technical statements, 8 negative emotional, 2 negative-with-technical-words, 2 excluded/stripped), all synthetic, none real. Eval spec tests/unit/sentiment/sentiment-gold-eval.spec.ts gates accuracy at 0.85 and checks the excluded-null path. VADER result: 34/34 non-excluded correct (accuracy 1.000), 2/2 excluded routed to null.",
+      "created_at": "2026-10-02T11:50:51.767276Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T11:41:05.304639Z",
-  "updated_at": "2026-10-02T11:41:05.304678Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T11:50:51.831993Z",
+  "closed_at": "2026-10-02T11:50:51.831956Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
