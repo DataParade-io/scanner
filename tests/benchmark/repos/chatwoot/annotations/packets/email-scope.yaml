@@ -1,0 +1,3155 @@
+concept: email
+layer: occurrences
+purpose: "Email address occurrence scope for KDATAP-973b69 labeling over the chatwoot Rails application (held-out repo): app/ without the frontend bundle, lib/, config/ and db/schema.rb. Merged into layer-scopes.yaml with the labels."
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+materialized_scope:
+  - app/
+  - lib/
+  - config/
+  - db/schema.rb
+labeled_scope:
+  - app/ (less app/javascript/ and app/assets/)
+  - lib/ (less lib/seeders/ and lib/test_data/)
+  - config/ (less config/locales/)
+  - db/schema.rb
+left_out:
+  - path: app/javascript/
+    reason: the Vue dashboard, widget, portal and SDK frontend bundle (5,253 files); not the Rails app
+  - path: app/assets/
+    reason: administrate stylesheets and a small admin script; frontend assets
+  - path: config/locales/
+    reason: translation catalogs (en.yml plus Crowdin-synced locales); message text, not code
+  - path: lib/seeders/, lib/test_data/
+    reason: sample and test data generators for demo or load-test accounts (seed fixtures)
+  - path: db/migrate/, db/seeds.rb
+    reason: generated migration history and seed data; db/schema.rb is the labeled schema
+  - path: spec/, enterprise/, swagger/, public/, vendor/
+    reason: tests and fixtures, the enterprise edition overlay, API docs, static files and vendored code; not materialized
+  - path: .keep files
+    reason: empty placeholders
+not_added_beyond_token_candidates:
+  reason: Every candidate line from the email token list (email, e_mail, mail_to, mailto, recipient, sender, from_address) is labeled once. Lines that handle the value without a token on the line (for example the reply_to local in Email::ReplyToBuilder, the from/to/cc keys of MailPresenter#serialized_data, or whole attribute hashes passed on) are not added.
+labeling_conventions:
+  - "The record labels the chosen token on the line: positive when that token denotes or holds the value (a column, attribute, local, parameter, hash or payload key, request param, getter, or a literal naming the column), negative for comments, prose, translation keys, class and module names, function names, predicates, and container tokens that name a whole message or record (the stored email message hash, a Mail object, a sender record)."
+  - "Zero-argument Ruby methods that return the value (attribute readers, memoized getters, Liquid drop methods) count as getters: the def line and its call sites are positive. Methods that take an argument and act on a value are function names (negative); their parameters are positive."
+  - A line that writes or looks up a stored column (or an external system field) names that column's item; other lines take the item of the value they read. When one line reads several items (a fallback chain, a permitted-params list, a concatenation), it takes the item it reads first.
+files:
+  - path: app/actions/contact_identify_action.rb
+    candidates: 14
+  - path: app/actions/contact_merge_action.rb
+    candidates: 4
+  - path: app/builders/account_builder.rb
+    candidates: 7
+  - path: app/builders/agent_builder.rb
+    candidates: 10
+  - path: app/builders/campaigns/campaign_conversation_builder.rb
+    candidates: 1
+  - path: app/builders/contact_inbox_builder.rb
+    candidates: 8
+  - path: app/builders/contact_inbox_with_contact_builder.rb
+    candidates: 5
+  - path: app/builders/conversation_builder.rb
+    candidates: 0
+  - path: app/builders/csat_surveys/response_builder.rb
+    candidates: 0
+  - path: app/builders/email/base_builder.rb
+    candidates: 15
+  - path: app/builders/email/from_builder.rb
+    candidates: 8
+  - path: app/builders/email/reply_to_builder.rb
+    candidates: 9
+  - path: app/builders/email/sender_name_builder.rb
+    candidates: 16
+  - path: app/builders/messages/facebook/message_builder.rb
+    candidates: 4
+  - path: app/builders/messages/instagram/base_message_builder.rb
+    candidates: 6
+  - path: app/builders/messages/instagram/message_builder.rb
+    candidates: 0
+  - path: app/builders/messages/instagram/messenger/message_builder.rb
+    candidates: 0
+  - path: app/builders/messages/message_builder.rb
+    candidates: 53
+  - path: app/builders/messages/messenger/message_builder.rb
+    candidates: 3
+  - path: app/builders/notification_builder.rb
+    candidates: 1
+  - path: app/builders/notification_subscription_builder.rb
+    candidates: 0
+  - path: app/builders/v2/report_builder.rb
+    candidates: 1
+  - path: app/builders/v2/reports/agent_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/base_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/bot_metrics_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/channel_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/conversations/base_report_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/conversations/metric_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/conversations/report_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/drilldown_builder.rb
+    candidates: 1
+  - path: app/builders/v2/reports/drilldown_record_serializer.rb
+    candidates: 6
+  - path: app/builders/v2/reports/first_response_time_distribution_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/inbox_label_matrix_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/inbox_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/label_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/outgoing_messages_count_builder.rb
+    candidates: 3
+  - path: app/builders/v2/reports/team_summary_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/timeseries/base_timeseries_builder.rb
+    candidates: 0
+  - path: app/builders/v2/reports/timeseries/report_builder.rb
+    candidates: 0
+  - path: app/builders/year_in_review_builder.rb
+    candidates: 0
+  - path: app/channels/application_cable/channel.rb
+    candidates: 0
+  - path: app/channels/application_cable/connection.rb
+    candidates: 0
+  - path: app/channels/room_channel.rb
+    candidates: 0
+  - path: app/controllers/android_app_controller.rb
+    candidates: 0
+  - path: app/controllers/api/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/actions/contact_merges_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/agent_bots_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/agents_controller.rb
+    candidates: 17
+  - path: app/controllers/api/v1/accounts/articles/bulk_actions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/articles_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/assignable_agents_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/assignment_policies/inboxes_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/assignment_policies_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/automation_rules_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/branded_email_layouts_controller.rb
+    candidates: 10
+  - path: app/controllers/api/v1/accounts/bulk_actions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/campaigns_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/accounts/canned_responses_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/captain/preferences_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/captain/tasks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/categories_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/companies/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/companies/contacts_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/accounts/companies/conversations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/companies/notes_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/companies_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/concerns/inbox_health_management.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/concerns/inbox_secret_management.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contact_inboxes_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts/attachments_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/accounts/contacts/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts/contact_inboxes_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts/conversations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts/labels_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts/notes_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/contacts_controller.rb
+    candidates: 3
+  - path: app/controllers/api/v1/accounts/conversations/assignments_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/contact_info_requests_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/accounts/conversations/direct_uploads_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/draft_messages_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/labels_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/messages_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/participants_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/suggestions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations/unread_counts_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/conversations_controller.rb
+    candidates: 6
+  - path: app/controllers/api/v1/accounts/csat_survey_responses_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/custom_attribute_definitions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/custom_filters_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/dashboard_apps_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/data_imports_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/google/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/inbox_csat_templates_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/inbox_members_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/inboxes/assignment_policies_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/inboxes_controller.rb
+    candidates: 19
+  - path: app/controllers/api/v1/accounts/instagram/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/apps_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/base_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/dyte_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/hooks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/linear_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/notion_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+    candidates: 4
+  - path: app/controllers/api/v1/accounts/integrations/slack_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/labels_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/macros_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/microsoft/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/notification_settings_controller.rb
+    candidates: 2
+  - path: app/controllers/api/v1/accounts/notifications_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/notion/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/oauth_authorization_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/onboardings_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/portals_controller.rb
+    candidates: 7
+  - path: app/controllers/api/v1/accounts/search_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/team_members_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/teams_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/tiktok/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/twitter/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/upload_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/webhooks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/whatsapp/authorizations_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts/whatsapp/manual_setup_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/accounts_controller.rb
+    candidates: 11
+  - path: app/controllers/api/v1/integrations/webhooks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/notification_subscriptions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/profile/mfa_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/profile/sessions_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/profile/trusted_devices_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/profiles_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/webhooks_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/base_controller.rb
+    candidates: 5
+  - path: app/controllers/api/v1/widget/campaigns_controller.rb
+    candidates: 1
+  - path: app/controllers/api/v1/widget/configs_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/contacts_controller.rb
+    candidates: 2
+  - path: app/controllers/api/v1/widget/conversations_controller.rb
+    candidates: 9
+  - path: app/controllers/api/v1/widget/direct_uploads_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/events_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/inbox_members_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/integrations/dyte_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/labels_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v1/widget/messages_controller.rb
+    candidates: 4
+  - path: app/controllers/api/v2/accounts/live_reports_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v2/accounts/reports_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v2/accounts/summary_reports_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v2/accounts/year_in_reviews_controller.rb
+    candidates: 0
+  - path: app/controllers/api/v2/accounts_controller.rb
+    candidates: 3
+  - path: app/controllers/api_controller.rb
+    candidates: 0
+  - path: app/controllers/apple_app_controller.rb
+    candidates: 0
+  - path: app/controllers/application_controller.rb
+    candidates: 0
+  - path: app/controllers/auth/resend_confirmations_controller.rb
+    candidates: 5
+  - path: app/controllers/concerns/access_token_auth_helper.rb
+    candidates: 0
+  - path: app/controllers/concerns/attachment_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/auth_helper.rb
+    candidates: 0
+  - path: app/controllers/concerns/conversation_assignment_targets_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/conversation_custom_attributes_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/device_verification_guard.rb
+    candidates: 0
+  - path: app/controllers/concerns/domain_helper.rb
+    candidates: 0
+  - path: app/controllers/concerns/ensure_current_account_helper.rb
+    candidates: 0
+  - path: app/controllers/concerns/google_concern.rb
+    candidates: 1
+  - path: app/controllers/concerns/hmac_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/impersonation_logging.rb
+    candidates: 0
+  - path: app/controllers/concerns/instagram_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/label_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/meta_token_verify_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/mfa_authentication_helper.rb
+    candidates: 1
+  - path: app/controllers/concerns/mfa_enforcement_guard.rb
+    candidates: 0
+  - path: app/controllers/concerns/microsoft_concern.rb
+    candidates: 1
+  - path: app/controllers/concerns/notion_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/portal_home_data.rb
+    candidates: 0
+  - path: app/controllers/concerns/request_exception_handler.rb
+    candidates: 1
+  - path: app/controllers/concerns/switch_locale.rb
+    candidates: 0
+  - path: app/controllers/concerns/track_session_activity.rb
+    candidates: 0
+  - path: app/controllers/concerns/twitter_concern.rb
+    candidates: 0
+  - path: app/controllers/concerns/website_token_helper.rb
+    candidates: 0
+  - path: app/controllers/dashboard_controller.rb
+    candidates: 1
+  - path: app/controllers/devise_overrides/confirmations_controller.rb
+    candidates: 0
+  - path: app/controllers/devise_overrides/omniauth_callbacks_controller.rb
+    candidates: 16
+  - path: app/controllers/devise_overrides/passwords_controller.rb
+    candidates: 1
+  - path: app/controllers/devise_overrides/sessions_controller.rb
+    candidates: 7
+  - path: app/controllers/devise_overrides/token_validations_controller.rb
+    candidates: 0
+  - path: app/controllers/google/callbacks_controller.rb
+    candidates: 5
+  - path: app/controllers/health_controller.rb
+    candidates: 0
+  - path: app/controllers/instagram/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/installation/onboarding_controller.rb
+    candidates: 3
+  - path: app/controllers/linear/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/microsoft/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/microsoft_controller.rb
+    candidates: 0
+  - path: app/controllers/notion/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/oauth_callback_controller.rb
+    candidates: 18
+  - path: app/controllers/platform/api/v1/account_users_controller.rb
+    candidates: 0
+  - path: app/controllers/platform/api/v1/accounts_controller.rb
+    candidates: 1
+  - path: app/controllers/platform/api/v1/agent_bots_controller.rb
+    candidates: 0
+  - path: app/controllers/platform/api/v1/email_channel_migrations_controller.rb
+    candidates: 12
+  - path: app/controllers/platform/api/v1/users_controller.rb
+    candidates: 4
+  - path: app/controllers/platform_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/csat_survey_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/inboxes/contacts_controller.rb
+    candidates: 1
+  - path: app/controllers/public/api/v1/inboxes/conversations_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/inboxes/messages_controller.rb
+    candidates: 1
+  - path: app/controllers/public/api/v1/inboxes_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/portals/articles_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/portals/base_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/portals/categories_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/portals/search_controller.rb
+    candidates: 0
+  - path: app/controllers/public/api/v1/portals_controller.rb
+    candidates: 0
+  - path: app/controllers/public_controller.rb
+    candidates: 1
+  - path: app/controllers/robots_controller.rb
+    candidates: 0
+  - path: app/controllers/shopify/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/slack_uploads_controller.rb
+    candidates: 1
+  - path: app/controllers/super_admin/access_tokens_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/account_users_controller.rb
+    candidates: 1
+  - path: app/controllers/super_admin/accounts_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/agent_bots_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/app_configs_controller.rb
+    candidates: 1
+  - path: app/controllers/super_admin/application_controller.rb
+    candidates: 0
+  - path: app/controllers/super_admin/dashboard_controller.rb
+    candidates: 0
+  - path: app/controllers/super_admin/devise/sessions_controller.rb
+    candidates: 1
+  - path: app/controllers/super_admin/installation_configs_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/instance_statuses_controller.rb
+    candidates: 0
+  - path: app/controllers/super_admin/platform_apps_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/platform_banners_controller.rb
+    candidates: 0
+  - path: app/controllers/super_admin/push_diagnostics_controller.rb
+    candidates: 2
+  - path: app/controllers/super_admin/settings_controller.rb
+    candidates: 0
+  - path: app/controllers/super_admin/users_controller.rb
+    candidates: 27
+  - path: app/controllers/survey/responses_controller.rb
+    candidates: 0
+  - path: app/controllers/swagger_controller.rb
+    candidates: 0
+  - path: app/controllers/tiktok/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/twilio/callback_controller.rb
+    candidates: 0
+  - path: app/controllers/twilio/delivery_status_controller.rb
+    candidates: 0
+  - path: app/controllers/twitter/base_controller.rb
+    candidates: 0
+  - path: app/controllers/twitter/callbacks_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/instagram_controller.rb
+    candidates: 2
+  - path: app/controllers/webhooks/line_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/shopify_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/sms_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/telegram_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/tiktok_controller.rb
+    candidates: 0
+  - path: app/controllers/webhooks/whatsapp_controller.rb
+    candidates: 0
+  - path: app/controllers/widget_tests_controller.rb
+    candidates: 0
+  - path: app/controllers/widgets_controller.rb
+    candidates: 0
+  - path: app/dashboards/access_token_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/account_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/account_user_dashboard.rb
+    candidates: 2
+  - path: app/dashboards/agent_bot_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/installation_config_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/platform_app_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/platform_banner_dashboard.rb
+    candidates: 0
+  - path: app/dashboards/user_dashboard.rb
+    candidates: 6
+  - path: app/dispatchers/async_dispatcher.rb
+    candidates: 0
+  - path: app/dispatchers/base_dispatcher.rb
+    candidates: 0
+  - path: app/dispatchers/dispatcher.rb
+    candidates: 0
+  - path: app/dispatchers/sync_dispatcher.rb
+    candidates: 0
+  - path: app/drops/account_drop.rb
+    candidates: 0
+  - path: app/drops/base_drop.rb
+    candidates: 0
+  - path: app/drops/contact_drop.rb
+    candidates: 2
+  - path: app/drops/conversation_drop.rb
+    candidates: 5
+  - path: app/drops/inbox_drop.rb
+    candidates: 3
+  - path: app/drops/message_drop.rb
+    candidates: 2
+  - path: app/drops/user_drop.rb
+    candidates: 2
+  - path: app/fields/account_status_field.rb
+    candidates: 0
+  - path: app/fields/avatar_field.rb
+    candidates: 0
+  - path: app/fields/confirmed_at_field.rb
+    candidates: 0
+  - path: app/fields/count_field.rb
+    candidates: 0
+  - path: app/fields/secret_field.rb
+    candidates: 0
+  - path: app/fields/serialized_field.rb
+    candidates: 0
+  - path: app/fields/suspension_history_field.rb
+    candidates: 0
+  - path: app/finders/conversation_finder.rb
+    candidates: 0
+  - path: app/finders/data_import_error_finder.rb
+    candidates: 0
+  - path: app/finders/data_import_skip_log_finder.rb
+    candidates: 0
+  - path: app/finders/email_channel_finder.rb
+    candidates: 18
+  - path: app/finders/message_finder.rb
+    candidates: 1
+  - path: app/finders/notification_finder.rb
+    candidates: 0
+  - path: app/helpers/api/base_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v1/agents_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v1/canned_responses_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v1/conversations_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v1/inboxes_helper.rb
+    candidates: 2
+  - path: app/helpers/api/v1/widget/messages_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v2/accounts/heatmap_helper.rb
+    candidates: 0
+  - path: app/helpers/api/v2/accounts/reports_helper.rb
+    candidates: 0
+  - path: app/helpers/application_helper.rb
+    candidates: 0
+  - path: app/helpers/billing_helper.rb
+    candidates: 0
+  - path: app/helpers/cache_keys_helper.rb
+    candidates: 0
+  - path: app/helpers/contact_helper.rb
+    candidates: 0
+  - path: app/helpers/data_helper.rb
+    candidates: 0
+  - path: app/helpers/date_range_helper.rb
+    candidates: 0
+  - path: app/helpers/email_helper.rb
+    candidates: 20
+  - path: app/helpers/file_type_helper.rb
+    candidates: 0
+  - path: app/helpers/filters/filter_helper.rb
+    candidates: 0
+  - path: app/helpers/frontend_urls_helper.rb
+    candidates: 0
+  - path: app/helpers/home_helper.rb
+    candidates: 0
+  - path: app/helpers/instagram/integration_helper.rb
+    candidates: 0
+  - path: app/helpers/linear/integration_helper.rb
+    candidates: 0
+  - path: app/helpers/message_format_helper.rb
+    candidates: 0
+  - path: app/helpers/portal_helper.rb
+    candidates: 0
+  - path: app/helpers/report_helper.rb
+    candidates: 0
+  - path: app/helpers/reporting_event_helper.rb
+    candidates: 0
+  - path: app/helpers/shopify/integration_helper.rb
+    candidates: 0
+  - path: app/helpers/super_admin/account_features_helper.rb
+    candidates: 0
+  - path: app/helpers/super_admin/features.yml
+    candidates: 6
+  - path: app/helpers/super_admin/features_helper.rb
+    candidates: 0
+  - path: app/helpers/super_admin/navigation_helper.rb
+    candidates: 0
+  - path: app/helpers/tiktok/integration_helper.rb
+    candidates: 0
+  - path: app/helpers/timezone_helper.rb
+    candidates: 0
+  - path: app/helpers/widget_helper.rb
+    candidates: 0
+  - path: app/jobs/account/branding_enrichment_job.rb
+    candidates: 3
+  - path: app/jobs/account/contacts_export_job.rb
+    candidates: 2
+  - path: app/jobs/account/conversations_resolution_scheduler_job.rb
+    candidates: 0
+  - path: app/jobs/action_cable_broadcast_job.rb
+    candidates: 0
+  - path: app/jobs/agent_bots/webhook_job.rb
+    candidates: 0
+  - path: app/jobs/agents/destroy_job.rb
+    candidates: 0
+  - path: app/jobs/application_job.rb
+    candidates: 0
+  - path: app/jobs/auto_assignment/assignment_job.rb
+    candidates: 0
+  - path: app/jobs/auto_assignment/periodic_assignment_job.rb
+    candidates: 0
+  - path: app/jobs/automation_rules/process_pending_execution_job.rb
+    candidates: 1
+  - path: app/jobs/automation_rules/trigger_pending_executions_job.rb
+    candidates: 0
+  - path: app/jobs/avatar/avatar_from_favicon_job.rb
+    candidates: 0
+  - path: app/jobs/avatar/avatar_from_gravatar_job.rb
+    candidates: 3
+  - path: app/jobs/avatar/avatar_from_url_job.rb
+    candidates: 0
+  - path: app/jobs/bulk_actions_job.rb
+    candidates: 0
+  - path: app/jobs/campaigns/send_whatsapp_batch_job.rb
+    candidates: 0
+  - path: app/jobs/campaigns/trigger_oneoff_campaign_job.rb
+    candidates: 0
+  - path: app/jobs/channels/twilio/templates_sync_job.rb
+    candidates: 0
+  - path: app/jobs/channels/twilio/webhook_setup_job.rb
+    candidates: 0
+  - path: app/jobs/channels/whatsapp/health_sync_job.rb
+    candidates: 0
+  - path: app/jobs/channels/whatsapp/health_sync_scheduler_job.rb
+    candidates: 0
+  - path: app/jobs/channels/whatsapp/templates_sync_job.rb
+    candidates: 0
+  - path: app/jobs/channels/whatsapp/templates_sync_scheduler_job.rb
+    candidates: 0
+  - path: app/jobs/companies/delete_job.rb
+    candidates: 0
+  - path: app/jobs/companies/fetch_avatars_job.rb
+    candidates: 0
+  - path: app/jobs/companies/sync_contact_names_job.rb
+    candidates: 0
+  - path: app/jobs/contact_ip_lookup_job.rb
+    candidates: 0
+  - path: app/jobs/contacts/bulk_action_job.rb
+    candidates: 0
+  - path: app/jobs/conversation_reply_email_job.rb
+    candidates: 2
+  - path: app/jobs/conversations/activity_message_job.rb
+    candidates: 0
+  - path: app/jobs/conversations/reopen_snoozed_conversations_job.rb
+    candidates: 0
+  - path: app/jobs/conversations/resolution_job.rb
+    candidates: 0
+  - path: app/jobs/conversations/update_message_status_job.rb
+    candidates: 0
+  - path: app/jobs/conversations/user_mention_job.rb
+    candidates: 0
+  - path: app/jobs/crm/setup_job.rb
+    candidates: 0
+  - path: app/jobs/data_import_job.rb
+    candidates: 2
+  - path: app/jobs/data_imports/base_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/contacts_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/conversations_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/freshdesk/base_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/freshdesk/contacts_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/freshdesk/conversations_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/freshdesk/import_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/import_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/intercom/base_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/intercom/contacts_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/intercom/conversations_page_job.rb
+    candidates: 0
+  - path: app/jobs/data_imports/intercom/import_job.rb
+    candidates: 0
+  - path: app/jobs/delete_object_job.rb
+    candidates: 0
+  - path: app/jobs/event_dispatcher_job.rb
+    candidates: 0
+  - path: app/jobs/hook_job.rb
+    candidates: 2
+  - path: app/jobs/inboxes/fetch_imap_email_inboxes_job.rb
+    candidates: 7
+  - path: app/jobs/inboxes/fetch_imap_emails_job.rb
+    candidates: 38
+  - path: app/jobs/inboxes/sync_widget_pre_chat_custom_fields_job.rb
+    candidates: 0
+  - path: app/jobs/inboxes/update_widget_pre_chat_custom_fields_job.rb
+    candidates: 0
+  - path: app/jobs/internal/check_new_versions_job.rb
+    candidates: 0
+  - path: app/jobs/internal/delete_accounts_job.rb
+    candidates: 0
+  - path: app/jobs/internal/dispatch_conversation_monitors_job.rb
+    candidates: 0
+  - path: app/jobs/internal/process_stale_contacts_job.rb
+    candidates: 1
+  - path: app/jobs/internal/process_stale_redis_keys_job.rb
+    candidates: 0
+  - path: app/jobs/internal/remove_orphan_conversations_job.rb
+    candidates: 0
+  - path: app/jobs/internal/remove_stale_contact_inboxes_job.rb
+    candidates: 0
+  - path: app/jobs/internal/remove_stale_contacts_job.rb
+    candidates: 1
+  - path: app/jobs/internal/remove_stale_redis_keys_job.rb
+    candidates: 0
+  - path: app/jobs/internal/seed_account_job.rb
+    candidates: 0
+  - path: app/jobs/internal/trigger_daily_scheduled_items_job.rb
+    candidates: 0
+  - path: app/jobs/internal/trigger_hourly_scheduled_items_job.rb
+    candidates: 0
+  - path: app/jobs/labels/remove_associations_job.rb
+    candidates: 0
+  - path: app/jobs/labels/update_job.rb
+    candidates: 0
+  - path: app/jobs/macros_execution_job.rb
+    candidates: 0
+  - path: app/jobs/migration/add_search_indexes_job.rb
+    candidates: 2
+  - path: app/jobs/migration/backfill_companies_contacts_count_job.rb
+    candidates: 0
+  - path: app/jobs/migration/company_account_batch_job.rb
+    candidates: 6
+  - path: app/jobs/migration/company_backfill_job.rb
+    candidates: 0
+  - path: app/jobs/migration/conversation_batch_cache_label_job.rb
+    candidates: 0
+  - path: app/jobs/migration/conversation_cache_label_job.rb
+    candidates: 0
+  - path: app/jobs/migration/conversations_first_reply_scheduler_job.rb
+    candidates: 0
+  - path: app/jobs/migration/remove_message_notifications.rb
+    candidates: 0
+  - path: app/jobs/migration/remove_stale_notifications_job.rb
+    candidates: 0
+  - path: app/jobs/migration/update_first_response_time_in_reporting_events_job.rb
+    candidates: 3
+  - path: app/jobs/migration/validate_openai_hooks_job.rb
+    candidates: 0
+  - path: app/jobs/mutex_application_job.rb
+    candidates: 0
+  - path: app/jobs/notification/delete_notification_job.rb
+    candidates: 0
+  - path: app/jobs/notification/email_notification_job.rb
+    candidates: 3
+  - path: app/jobs/notification/push_notification_job.rb
+    candidates: 0
+  - path: app/jobs/notification/remove_duplicate_notification_job.rb
+    candidates: 0
+  - path: app/jobs/notification/remove_old_notification_job.rb
+    candidates: 0
+  - path: app/jobs/notification/reopen_snoozed_notifications_job.rb
+    candidates: 0
+  - path: app/jobs/send_on_slack_job.rb
+    candidates: 0
+  - path: app/jobs/send_reply_job.rb
+    candidates: 3
+  - path: app/jobs/slack_unfurl_job.rb
+    candidates: 0
+  - path: app/jobs/trigger_scheduled_items_job.rb
+    candidates: 0
+  - path: app/jobs/update_slack_message_job.rb
+    candidates: 0
+  - path: app/jobs/user_session_ip_lookup_job.rb
+    candidates: 0
+  - path: app/jobs/webhook_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/facebook_delivery_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/facebook_events_job.rb
+    candidates: 1
+  - path: app/jobs/webhooks/instagram_events_job.rb
+    candidates: 15
+  - path: app/jobs/webhooks/line_events_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/sms_events_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/telegram_events_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/tiktok_events_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/twilio_delivery_status_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/twilio_events_job.rb
+    candidates: 0
+  - path: app/jobs/webhooks/whatsapp_events_job.rb
+    candidates: 15
+  - path: app/listeners/action_cable_listener.rb
+    candidates: 0
+  - path: app/listeners/agent_bot_listener.rb
+    candidates: 0
+  - path: app/listeners/automation_rule_listener.rb
+    candidates: 1
+  - path: app/listeners/base_listener.rb
+    candidates: 0
+  - path: app/listeners/campaign_listener.rb
+    candidates: 0
+  - path: app/listeners/csat_survey_listener.rb
+    candidates: 0
+  - path: app/listeners/hook_listener.rb
+    candidates: 0
+  - path: app/listeners/installation_webhook_listener.rb
+    candidates: 0
+  - path: app/listeners/notification_listener.rb
+    candidates: 0
+  - path: app/listeners/participation_listener.rb
+    candidates: 0
+  - path: app/listeners/reporting_event_listener.rb
+    candidates: 2
+  - path: app/listeners/webhook_listener.rb
+    candidates: 0
+  - path: app/mailboxes/application_mailbox.rb
+    candidates: 10
+  - path: app/mailboxes/default_mailbox.rb
+    candidates: 0
+  - path: app/mailboxes/imap/imap_mailbox.rb
+    candidates: 10
+  - path: app/mailboxes/incoming_email_validity_helper.rb
+    candidates: 8
+  - path: app/mailboxes/mailbox_helper.rb
+    candidates: 11
+  - path: app/mailboxes/mailbox_inline_attachment_helper.rb
+    candidates: 1
+  - path: app/mailboxes/mailbox_sanitizer.rb
+    candidates: 5
+  - path: app/mailboxes/reply_mailbox.rb
+    candidates: 4
+  - path: app/mailers/administrator_notifications/account_compliance_mailer.rb
+    candidates: 5
+  - path: app/mailers/administrator_notifications/account_notification_mailer.rb
+    candidates: 2
+  - path: app/mailers/administrator_notifications/base_mailer.rb
+    candidates: 3
+  - path: app/mailers/administrator_notifications/channel_notifications_mailer.rb
+    candidates: 2
+  - path: app/mailers/administrator_notifications/integrations_notification_mailer.rb
+    candidates: 0
+  - path: app/mailers/agent_notifications/conversation_notifications_mailer.rb
+    candidates: 7
+  - path: app/mailers/application_mailer.rb
+    candidates: 5
+  - path: app/mailers/conversation_reply_mailer.rb
+    candidates: 62
+  - path: app/mailers/conversation_reply_mailer_attachment_helper.rb
+    candidates: 4
+  - path: app/mailers/conversation_reply_mailer_helper.rb
+    candidates: 31
+  - path: app/mailers/email_delivery_test_mailer.rb
+    candidates: 5
+  - path: app/mailers/portal_instructions_mailer.rb
+    candidates: 2
+  - path: app/mailers/references_header_builder.rb
+    candidates: 5
+  - path: app/mailers/team_notifications/automation_notification_mailer.rb
+    candidates: 5
+  - path: app/models/access_token.rb
+    candidates: 0
+  - path: app/models/account.rb
+    candidates: 14
+  - path: app/models/account_user.rb
+    candidates: 1
+  - path: app/models/agent_bot.rb
+    candidates: 1
+  - path: app/models/agent_bot_inbox.rb
+    candidates: 0
+  - path: app/models/application_record.rb
+    candidates: 1
+  - path: app/models/article.rb
+    candidates: 0
+  - path: app/models/assignment_policy.rb
+    candidates: 0
+  - path: app/models/attachment.rb
+    candidates: 0
+  - path: app/models/automation_rule.rb
+    candidates: 3
+  - path: app/models/automation_rule_pending_execution.rb
+    candidates: 1
+  - path: app/models/campaign.rb
+    candidates: 7
+  - path: app/models/canned_response.rb
+    candidates: 0
+  - path: app/models/category.rb
+    candidates: 0
+  - path: app/models/channel/api.rb
+    candidates: 0
+  - path: app/models/channel/email.rb
+    candidates: 14
+  - path: app/models/channel/facebook_page.rb
+    candidates: 0
+  - path: app/models/channel/instagram.rb
+    candidates: 0
+  - path: app/models/channel/line.rb
+    candidates: 0
+  - path: app/models/channel/sms.rb
+    candidates: 0
+  - path: app/models/channel/telegram.rb
+    candidates: 0
+  - path: app/models/channel/tiktok.rb
+    candidates: 0
+  - path: app/models/channel/twilio_sms.rb
+    candidates: 0
+  - path: app/models/channel/twitter_profile.rb
+    candidates: 0
+  - path: app/models/channel/web_widget.rb
+    candidates: 4
+  - path: app/models/channel/whatsapp.rb
+    candidates: 0
+  - path: app/models/company.rb
+    candidates: 0
+  - path: app/models/concerns/access_tokenable.rb
+    candidates: 0
+  - path: app/models/concerns/account_cache_revalidator.rb
+    candidates: 0
+  - path: app/models/concerns/account_captain_auto_resolve.rb
+    candidates: 0
+  - path: app/models/concerns/account_email_rate_limitable.rb
+    candidates: 29
+  - path: app/models/concerns/account_settings_schema.rb
+    candidates: 0
+  - path: app/models/concerns/activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/assignee_activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/assignment_handler.rb
+    candidates: 0
+  - path: app/models/concerns/auto_assignment_handler.rb
+    candidates: 0
+  - path: app/models/concerns/availability_statusable.rb
+    candidates: 0
+  - path: app/models/concerns/avatarable.rb
+    candidates: 3
+  - path: app/models/concerns/cache_keys.rb
+    candidates: 0
+  - path: app/models/concerns/captain_featurable.rb
+    candidates: 0
+  - path: app/models/concerns/channelable.rb
+    candidates: 0
+  - path: app/models/concerns/contact_company_association.rb
+    candidates: 6
+  - path: app/models/concerns/content_attribute_validator.rb
+    candidates: 0
+  - path: app/models/concerns/conversation_mute_helpers.rb
+    candidates: 0
+  - path: app/models/concerns/email_address_parseable.rb
+    candidates: 6
+  - path: app/models/concerns/featurable.rb
+    candidates: 0
+  - path: app/models/concerns/inbox_agent_availability.rb
+    candidates: 0
+  - path: app/models/concerns/inbox_bot_status.rb
+    candidates: 0
+  - path: app/models/concerns/inbox_branded_email_layoutable.rb
+    candidates: 14
+  - path: app/models/concerns/json_schema_validator.rb
+    candidates: 0
+  - path: app/models/concerns/label_activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/labelable.rb
+    candidates: 0
+  - path: app/models/concerns/liquidable.rb
+    candidates: 1
+  - path: app/models/concerns/llm_formattable.rb
+    candidates: 0
+  - path: app/models/concerns/message_filter_helpers.rb
+    candidates: 1
+  - path: app/models/concerns/out_of_offisable.rb
+    candidates: 0
+  - path: app/models/concerns/portal_config_schema.rb
+    candidates: 0
+  - path: app/models/concerns/priority_activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/pubsubable.rb
+    candidates: 0
+  - path: app/models/concerns/push_data_helper.rb
+    candidates: 0
+  - path: app/models/concerns/reauthorizable.rb
+    candidates: 9
+  - path: app/models/concerns/reportable.rb
+    candidates: 0
+  - path: app/models/concerns/sla_activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/sort_handler.rb
+    candidates: 0
+  - path: app/models/concerns/sso_authenticatable.rb
+    candidates: 4
+  - path: app/models/concerns/team_activity_message_handler.rb
+    candidates: 0
+  - path: app/models/concerns/user_attribute_helpers.rb
+    candidates: 1
+  - path: app/models/concerns/webhook_secretable.rb
+    candidates: 0
+  - path: app/models/contact.rb
+    candidates: 24
+  - path: app/models/contact_inbox.rb
+    candidates: 0
+  - path: app/models/conversation.rb
+    candidates: 1
+  - path: app/models/conversation_participant.rb
+    candidates: 0
+  - path: app/models/csat_survey_response.rb
+    candidates: 0
+  - path: app/models/custom_attribute_definition.rb
+    candidates: 1
+  - path: app/models/custom_filter.rb
+    candidates: 0
+  - path: app/models/dashboard_app.rb
+    candidates: 0
+  - path: app/models/data_import.rb
+    candidates: 0
+  - path: app/models/data_import_error.rb
+    candidates: 0
+  - path: app/models/data_import_item.rb
+    candidates: 0
+  - path: app/models/data_import_mapping.rb
+    candidates: 0
+  - path: app/models/email_template.rb
+    candidates: 7
+  - path: app/models/folder.rb
+    candidates: 0
+  - path: app/models/inbox.rb
+    candidates: 14
+  - path: app/models/inbox_assignment_policy.rb
+    candidates: 0
+  - path: app/models/inbox_member.rb
+    candidates: 0
+  - path: app/models/installation_config.rb
+    candidates: 0
+  - path: app/models/integrations.rb
+    candidates: 0
+  - path: app/models/integrations/app.rb
+    candidates: 0
+  - path: app/models/integrations/hook.rb
+    candidates: 0
+  - path: app/models/jsonb_attributes_length_validator.rb
+    candidates: 0
+  - path: app/models/kbase.rb
+    candidates: 0
+  - path: app/models/label.rb
+    candidates: 0
+  - path: app/models/macro.rb
+    candidates: 1
+  - path: app/models/mention.rb
+    candidates: 0
+  - path: app/models/message.rb
+    candidates: 30
+  - path: app/models/note.rb
+    candidates: 0
+  - path: app/models/notification.rb
+    candidates: 7
+  - path: app/models/notification_setting.rb
+    candidates: 3
+  - path: app/models/notification_subscription.rb
+    candidates: 0
+  - path: app/models/platform_app.rb
+    candidates: 0
+  - path: app/models/platform_app_permissible.rb
+    candidates: 0
+  - path: app/models/platform_banner.rb
+    candidates: 0
+  - path: app/models/portal.rb
+    candidates: 0
+  - path: app/models/related_category.rb
+    candidates: 0
+  - path: app/models/reporting_event.rb
+    candidates: 0
+  - path: app/models/reporting_events_rollup.rb
+    candidates: 0
+  - path: app/models/super_admin.rb
+    candidates: 4
+  - path: app/models/team.rb
+    candidates: 0
+  - path: app/models/team_member.rb
+    candidates: 0
+  - path: app/models/user.rb
+    candidates: 21
+  - path: app/models/user_session.rb
+    candidates: 0
+  - path: app/models/webhook.rb
+    candidates: 0
+  - path: app/models/working_hour.rb
+    candidates: 0
+  - path: app/policies/account_policy.rb
+    candidates: 0
+  - path: app/policies/agent_bot_policy.rb
+    candidates: 0
+  - path: app/policies/application_policy.rb
+    candidates: 0
+  - path: app/policies/article_policy.rb
+    candidates: 0
+  - path: app/policies/assignment_policy_policy.rb
+    candidates: 0
+  - path: app/policies/automation_rule_policy.rb
+    candidates: 0
+  - path: app/policies/campaign_policy.rb
+    candidates: 0
+  - path: app/policies/captain/tasks_policy.rb
+    candidates: 0
+  - path: app/policies/category_policy.rb
+    candidates: 0
+  - path: app/policies/company_policy.rb
+    candidates: 0
+  - path: app/policies/contact_policy.rb
+    candidates: 0
+  - path: app/policies/conversation_policy.rb
+    candidates: 0
+  - path: app/policies/csat_survey_response_policy.rb
+    candidates: 0
+  - path: app/policies/custom_attribute_definition_policy.rb
+    candidates: 0
+  - path: app/policies/custom_filter_policy.rb
+    candidates: 0
+  - path: app/policies/dashboard_app_policy.rb
+    candidates: 0
+  - path: app/policies/data_import_policy.rb
+    candidates: 0
+  - path: app/policies/hook_policy.rb
+    candidates: 0
+  - path: app/policies/inbox_policy.rb
+    candidates: 0
+  - path: app/policies/label_policy.rb
+    candidates: 0
+  - path: app/policies/macro_policy.rb
+    candidates: 0
+  - path: app/policies/portal_policy.rb
+    candidates: 0
+  - path: app/policies/report_policy.rb
+    candidates: 0
+  - path: app/policies/team_member_policy.rb
+    candidates: 0
+  - path: app/policies/team_policy.rb
+    candidates: 0
+  - path: app/policies/user_policy.rb
+    candidates: 0
+  - path: app/policies/webhook_policy.rb
+    candidates: 0
+  - path: app/presenters/agent_bot_presenter.rb
+    candidates: 0
+  - path: app/presenters/conversations/event_data_presenter.rb
+    candidates: 1
+  - path: app/presenters/html_parser.rb
+    candidates: 0
+  - path: app/presenters/inbox/event_data_presenter.rb
+    candidates: 3
+  - path: app/presenters/mail_presenter.rb
+    candidates: 22
+  - path: app/presenters/message_content_presenter.rb
+    candidates: 0
+  - path: app/presenters/messages/search_data_presenter.rb
+    candidates: 5
+  - path: app/presenters/reports/time_format_presenter.rb
+    candidates: 0
+  - path: app/services/account/sign_up_email_validation_service.rb
+    candidates: 10
+  - path: app/services/account_deletion_service.rb
+    candidates: 7
+  - path: app/services/action_service.rb
+    candidates: 10
+  - path: app/services/auto_assignment/agent_assignment_service.rb
+    candidates: 0
+  - path: app/services/auto_assignment/assignment_service.rb
+    candidates: 0
+  - path: app/services/auto_assignment/inbox_round_robin_service.rb
+    candidates: 0
+  - path: app/services/auto_assignment/rate_limiter.rb
+    candidates: 0
+  - path: app/services/auto_assignment/round_robin_selector.rb
+    candidates: 0
+  - path: app/services/automation_rules/action_service.rb
+    candidates: 3
+  - path: app/services/automation_rules/condition_validation_service.rb
+    candidates: 0
+  - path: app/services/automation_rules/conditions_filter_service.rb
+    candidates: 0
+  - path: app/services/base/send_on_channel_service.rb
+    candidates: 0
+  - path: app/services/base_refresh_oauth_token_service.rb
+    candidates: 1
+  - path: app/services/base_token_service.rb
+    candidates: 0
+  - path: app/services/captain/automation_condition_service.rb
+    candidates: 0
+  - path: app/services/captain/conversation_classifier_service.rb
+    candidates: 0
+  - path: app/services/captain/conversation_transcript.rb
+    candidates: 1
+  - path: app/services/captain/customer_context.rb
+    candidates: 0
+  - path: app/services/captain/jev_client.rb
+    candidates: 0
+  - path: app/services/companies/business_email_detector_service.rb
+    candidates: 7
+  - path: app/services/companies/contact_membership_service.rb
+    candidates: 0
+  - path: app/services/contact_inbox_source_id_resolver.rb
+    candidates: 0
+  - path: app/services/contacts/bulk_action_service.rb
+    candidates: 0
+  - path: app/services/contacts/bulk_assign_labels_service.rb
+    candidates: 0
+  - path: app/services/contacts/bulk_delete_service.rb
+    candidates: 0
+  - path: app/services/contacts/bulk_remove_labels_service.rb
+    candidates: 0
+  - path: app/services/contacts/company_association_service.rb
+    candidates: 6
+  - path: app/services/contacts/contactable_inboxes_service.rb
+    candidates: 5
+  - path: app/services/contacts/filter_service.rb
+    candidates: 0
+  - path: app/services/contacts/sync_attributes.rb
+    candidates: 2
+  - path: app/services/conversations/assignment_service.rb
+    candidates: 0
+  - path: app/services/conversations/delete_service.rb
+    candidates: 3
+  - path: app/services/conversations/filter_service.rb
+    candidates: 0
+  - path: app/services/conversations/message_window_service.rb
+    candidates: 0
+  - path: app/services/conversations/permission_filter_service.rb
+    candidates: 0
+  - path: app/services/conversations/sort_service.rb
+    candidates: 0
+  - path: app/services/conversations/typing_status_manager.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/broadcast_scope.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/builder.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/counter.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filter_query_counter.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_instrumentation.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_invalidator.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_snapshot_resolver.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_store.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_store_keys.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_count_version_cache.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/filtered_counter.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/listener.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/notifier.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/refresher.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/store.rb
+    candidates: 0
+  - path: app/services/conversations/unread_counts/store_keys.rb
+    candidates: 0
+  - path: app/services/crm/base_processor_service.rb
+    candidates: 1
+  - path: app/services/crm/leadsquared/api/activity_client.rb
+    candidates: 0
+  - path: app/services/crm/leadsquared/api/base_client.rb
+    candidates: 0
+  - path: app/services/crm/leadsquared/api/lead_client.rb
+    candidates: 1
+  - path: app/services/crm/leadsquared/lead_finder_service.rb
+    candidates: 4
+  - path: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    candidates: 1
+  - path: app/services/crm/leadsquared/mappers/conversation_mapper.rb
+    candidates: 4
+  - path: app/services/crm/leadsquared/processor_service.rb
+    candidates: 1
+  - path: app/services/crm/leadsquared/setup_service.rb
+    candidates: 0
+  - path: app/services/csat_survey_service.rb
+    candidates: 0
+  - path: app/services/csat_template_management_service.rb
+    candidates: 0
+  - path: app/services/csat_template_name_service.rb
+    candidates: 0
+  - path: app/services/csat_template_utility_analysis_service.rb
+    candidates: 0
+  - path: app/services/csat_template_utility_rubric.rb
+    candidates: 0
+  - path: app/services/data_import/contact_manager.rb
+    candidates: 7
+  - path: app/services/data_imports/creation_service.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/client.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/credentials_validator.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/importer.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/message_batch_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/metadata.rb
+    candidates: 5
+  - path: app/services/data_imports/freshdesk/normalizer.rb
+    candidates: 9
+  - path: app/services/data_imports/freshdesk/placeholder_inbox_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/source.rb
+    candidates: 0
+  - path: app/services/data_imports/freshdesk/source_bucket.rb
+    candidates: 4
+  - path: app/services/data_imports/freshdesk/ticket_page.rb
+    candidates: 0
+  - path: app/services/data_imports/importer.rb
+    candidates: 18
+  - path: app/services/data_imports/intercom/activity_content_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/client.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/creation_service.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/credentials_validator.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/importer.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/message_batch_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/placeholder_inbox_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/restart_service.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/retry_service.rb
+    candidates: 0
+  - path: app/services/data_imports/intercom/source.rb
+    candidates: 1
+  - path: app/services/data_imports/intercom/source_bucket.rb
+    candidates: 1
+  - path: app/services/data_imports/message_batch_builder.rb
+    candidates: 1
+  - path: app/services/data_imports/placeholder_inbox_builder.rb
+    candidates: 0
+  - path: app/services/data_imports/restart_service.rb
+    candidates: 0
+  - path: app/services/data_imports/retry_service.rb
+    candidates: 0
+  - path: app/services/data_imports/source.rb
+    candidates: 0
+  - path: app/services/email/send_on_email_service.rb
+    candidates: 5
+  - path: app/services/email/ses_suppression_service.rb
+    candidates: 5
+  - path: app/services/email_templates/db_resolver_service.rb
+    candidates: 8
+  - path: app/services/facebook/human_agent_tag_helpers.rb
+    candidates: 1
+  - path: app/services/facebook/page_details_service.rb
+    candidates: 0
+  - path: app/services/facebook/send_on_facebook_service.rb
+    candidates: 2
+  - path: app/services/filter_service.rb
+    candidates: 0
+  - path: app/services/filters/custom_attribute_filter_helper.rb
+    candidates: 0
+  - path: app/services/filters/date_filter_helper.rb
+    candidates: 0
+  - path: app/services/geocoder/setup_service.rb
+    candidates: 0
+  - path: app/services/google/refresh_oauth_token_service.rb
+    candidates: 0
+  - path: app/services/imap/authentication.rb
+    candidates: 0
+  - path: app/services/imap/base_fetch_email_service.rb
+    candidates: 20
+  - path: app/services/imap/deleted_message_tracker.rb
+    candidates: 1
+  - path: app/services/imap/fetch_email_service.rb
+    candidates: 2
+  - path: app/services/imap/google_fetch_email_service.rb
+    candidates: 2
+  - path: app/services/imap/microsoft_fetch_email_service.rb
+    candidates: 2
+  - path: app/services/impersonation_logger.rb
+    candidates: 2
+  - path: app/services/instagram/base_message_text.rb
+    candidates: 2
+  - path: app/services/instagram/base_send_service.rb
+    candidates: 3
+  - path: app/services/instagram/message_text.rb
+    candidates: 0
+  - path: app/services/instagram/messenger/message_text.rb
+    candidates: 0
+  - path: app/services/instagram/messenger/send_on_instagram_service.rb
+    candidates: 0
+  - path: app/services/instagram/read_status_service.rb
+    candidates: 1
+  - path: app/services/instagram/refresh_oauth_token_service.rb
+    candidates: 0
+  - path: app/services/instagram/send_on_instagram_service.rb
+    candidates: 0
+  - path: app/services/instagram/test_event_service.rb
+    candidates: 4
+  - path: app/services/instagram/user_details_service.rb
+    candidates: 0
+  - path: app/services/instagram/webhooks_base_service.rb
+    candidates: 0
+  - path: app/services/internal/remove_orphan_conversations_service.rb
+    candidates: 0
+  - path: app/services/internal/remove_stale_contact_inboxes_service.rb
+    candidates: 0
+  - path: app/services/internal/remove_stale_contacts_service.rb
+    candidates: 0
+  - path: app/services/internal/remove_stale_redis_keys_service.rb
+    candidates: 0
+  - path: app/services/ip_lookup_service.rb
+    candidates: 0
+  - path: app/services/labels/destroy_service.rb
+    candidates: 0
+  - path: app/services/labels/update_service.rb
+    candidates: 0
+  - path: app/services/line/incoming_message_service.rb
+    candidates: 1
+  - path: app/services/line/send_on_line_service.rb
+    candidates: 0
+  - path: app/services/linear/activity_message_service.rb
+    candidates: 0
+  - path: app/services/liquid/campaign_template_service.rb
+    candidates: 1
+  - path: app/services/llm_formatter/article_llm_formatter.rb
+    candidates: 0
+  - path: app/services/llm_formatter/contact_llm_formatter.rb
+    candidates: 1
+  - path: app/services/llm_formatter/conversation_llm_formatter.rb
+    candidates: 3
+  - path: app/services/llm_formatter/default_llm_formatter.rb
+    candidates: 0
+  - path: app/services/llm_formatter/llm_text_formatter_service.rb
+    candidates: 0
+  - path: app/services/macros/execution_service.rb
+    candidates: 0
+  - path: app/services/mailbox/conversation_finder.rb
+    candidates: 0
+  - path: app/services/mailbox/conversation_finder_strategies/base_strategy.rb
+    candidates: 0
+  - path: app/services/mailbox/conversation_finder_strategies/in_reply_to_strategy.rb
+    candidates: 4
+  - path: app/services/mailbox/conversation_finder_strategies/new_conversation_strategy.rb
+    candidates: 10
+  - path: app/services/mailbox/conversation_finder_strategies/receiver_uuid_strategy.rb
+    candidates: 3
+  - path: app/services/mailbox/conversation_finder_strategies/references_strategy.rb
+    candidates: 5
+  - path: app/services/message_templates/hook_execution_service.rb
+    candidates: 9
+  - path: app/services/message_templates/template/auto_resolve.rb
+    candidates: 0
+  - path: app/services/message_templates/template/csat_survey.rb
+    candidates: 0
+  - path: app/services/message_templates/template/email_collect.rb
+    candidates: 7
+  - path: app/services/message_templates/template/greeting.rb
+    candidates: 0
+  - path: app/services/message_templates/template/out_of_office.rb
+    candidates: 0
+  - path: app/services/messages/in_reply_to_message_builder.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderer_service.rb
+    candidates: 1
+  - path: app/services/messages/markdown_renderers/base_markdown_renderer.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderers/instagram_renderer.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderers/line_renderer.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderers/plain_text_renderer.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderers/telegram_renderer.rb
+    candidates: 0
+  - path: app/services/messages/markdown_renderers/whats_app_renderer.rb
+    candidates: 0
+  - path: app/services/messages/mention_service.rb
+    candidates: 1
+  - path: app/services/messages/new_message_notification_service.rb
+    candidates: 3
+  - path: app/services/messages/send_email_notification_service.rb
+    candidates: 13
+  - path: app/services/messages/status_update_service.rb
+    candidates: 0
+  - path: app/services/messages/webhook_content_normalizer.rb
+    candidates: 0
+  - path: app/services/mfa/authentication_service.rb
+    candidates: 0
+  - path: app/services/mfa/management_service.rb
+    candidates: 1
+  - path: app/services/mfa/setup_token_service.rb
+    candidates: 0
+  - path: app/services/mfa/token_service.rb
+    candidates: 0
+  - path: app/services/microsoft/refresh_oauth_token_service.rb
+    candidates: 0
+  - path: app/services/notification/email_notification_service.rb
+    candidates: 8
+  - path: app/services/notification/fcm_service.rb
+    candidates: 0
+  - path: app/services/notification/mark_conversation_read_service.rb
+    candidates: 0
+  - path: app/services/notification/push_notification_service.rb
+    candidates: 3
+  - path: app/services/notification/push_test_service.rb
+    candidates: 0
+  - path: app/services/onboarding/web_widget_creation_service.rb
+    candidates: 0
+  - path: app/services/reporting_events/backfill_service.rb
+    candidates: 0
+  - path: app/services/reporting_events/event_metric_registry.rb
+    candidates: 0
+  - path: app/services/reporting_events/metric_registry.rb
+    candidates: 0
+  - path: app/services/reporting_events/rollup_service.rb
+    candidates: 0
+  - path: app/services/reports/data_source.rb
+    candidates: 0
+  - path: app/services/reports/drilldown_timestamp_validator.rb
+    candidates: 0
+  - path: app/services/reports/raw_data_source.rb
+    candidates: 0
+  - path: app/services/reports/report_metric_registry.rb
+    candidates: 0
+  - path: app/services/request_device_info.rb
+    candidates: 0
+  - path: app/services/search_service.rb
+    candidates: 9
+  - path: app/services/shopify/api_context.rb
+    candidates: 0
+  - path: app/services/shopify/feature_gate.rb
+    candidates: 0
+  - path: app/services/shopify/installation_generation.rb
+    candidates: 0
+  - path: app/services/shopify/installation_service.rb
+    candidates: 0
+  - path: app/services/shopify/partner_client.rb
+    candidates: 0
+  - path: app/services/shopify/partner_configuration.rb
+    candidates: 0
+  - path: app/services/shopify/pending_installation.rb
+    candidates: 0
+  - path: app/services/shopify/shop_domain.rb
+    candidates: 0
+  - path: app/services/shopify/shop_identity.rb
+    candidates: 0
+  - path: app/services/shopify/subscription_fetcher.rb
+    candidates: 0
+  - path: app/services/shopify/subscription_snapshot.rb
+    candidates: 0
+  - path: app/services/shopify/uninstallation_service.rb
+    candidates: 0
+  - path: app/services/sms/delivery_status_service.rb
+    candidates: 0
+  - path: app/services/sms/incoming_message_service.rb
+    candidates: 1
+  - path: app/services/sms/oneoff_sms_campaign_service.rb
+    candidates: 0
+  - path: app/services/sms/send_on_sms_service.rb
+    candidates: 0
+  - path: app/services/social_channels/provider_name_backfill_service.rb
+    candidates: 0
+  - path: app/services/social_link_parser.rb
+    candidates: 0
+  - path: app/services/telegram/callback_query_param_helpers.rb
+    candidates: 7
+  - path: app/services/telegram/incoming_message_service.rb
+    candidates: 2
+  - path: app/services/telegram/param_helpers.rb
+    candidates: 3
+  - path: app/services/telegram/send_attachments_service.rb
+    candidates: 0
+  - path: app/services/telegram/send_on_telegram_service.rb
+    candidates: 0
+  - path: app/services/telegram/update_message_service.rb
+    candidates: 0
+  - path: app/services/tiktok/auth_client.rb
+    candidates: 0
+  - path: app/services/tiktok/client.rb
+    candidates: 2
+  - path: app/services/tiktok/message_service.rb
+    candidates: 1
+  - path: app/services/tiktok/messaging_helpers.rb
+    candidates: 0
+  - path: app/services/tiktok/read_status_service.rb
+    candidates: 0
+  - path: app/services/tiktok/send_on_tiktok_service.rb
+    candidates: 0
+  - path: app/services/tiktok/token_service.rb
+    candidates: 0
+  - path: app/services/twilio/csat_template_api_client.rb
+    candidates: 0
+  - path: app/services/twilio/csat_template_service.rb
+    candidates: 0
+  - path: app/services/twilio/delivery_status_service.rb
+    candidates: 0
+  - path: app/services/twilio/health_service.rb
+    candidates: 9
+  - path: app/services/twilio/incoming_message_service.rb
+    candidates: 1
+  - path: app/services/twilio/media_download_service.rb
+    candidates: 0
+  - path: app/services/twilio/oneoff_sms_campaign_service.rb
+    candidates: 0
+  - path: app/services/twilio/referral_params_helper.rb
+    candidates: 0
+  - path: app/services/twilio/send_on_twilio_service.rb
+    candidates: 0
+  - path: app/services/twilio/template_processor_service.rb
+    candidates: 0
+  - path: app/services/twilio/template_sync_service.rb
+    candidates: 0
+  - path: app/services/twilio/webhook_setup_service.rb
+    candidates: 8
+  - path: app/services/twilio/whatsapp_identifier_helper.rb
+    candidates: 0
+  - path: app/services/twitter/direct_message_parser_service.rb
+    candidates: 2
+  - path: app/services/twitter/send_on_twitter_service.rb
+    candidates: 2
+  - path: app/services/twitter/tweet_parser_service.rb
+    candidates: 1
+  - path: app/services/twitter/webhook_subscribe_service.rb
+    candidates: 0
+  - path: app/services/twitter/webhooks_base_service.rb
+    candidates: 0
+  - path: app/services/user_session_tracking_service.rb
+    candidates: 0
+  - path: app/services/website_branding_service.rb
+    candidates: 8
+  - path: app/services/whatsapp/authentication_template_guard.rb
+    candidates: 4
+  - path: app/services/whatsapp/business_management_token_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/business_management_token_validation_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/business_profile_service.rb
+    candidates: 1
+  - path: app/services/whatsapp/channel_creation_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/contact_info_request_eligibility_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/contact_info_request_service.rb
+    candidates: 2
+  - path: app/services/whatsapp/contact_info_response_service.rb
+    candidates: 4
+  - path: app/services/whatsapp/csat_template_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/embedded_signup_service.rb
+    candidates: 1
+  - path: app/services/whatsapp/facebook_api_client.rb
+    candidates: 0
+  - path: app/services/whatsapp/health_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/identifier_sync_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/identity_source_id_orderer.rb
+    candidates: 0
+  - path: app/services/whatsapp/in_reply_to_message_finder.rb
+    candidates: 0
+  - path: app/services/whatsapp/incoming_contact_message_handler.rb
+    candidates: 0
+  - path: app/services/whatsapp/incoming_message_base_service.rb
+    candidates: 2
+  - path: app/services/whatsapp/incoming_message_identifier_helper.rb
+    candidates: 3
+  - path: app/services/whatsapp/incoming_message_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/incoming_message_service_helpers.rb
+    candidates: 0
+  - path: app/services/whatsapp/incoming_message_whatsapp_cloud_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/liquid_template_processor_service.rb
+    candidates: 1
+  - path: app/services/whatsapp/manual_setup_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/manual_setup_validation_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/manual_webhook_status_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/media_upload_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/message_dedup_lock.rb
+    candidates: 0
+  - path: app/services/whatsapp/oneoff_campaign_service.rb
+    candidates: 10
+  - path: app/services/whatsapp/phone_info_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/phone_normalizers/argentina_phone_normalizer.rb
+    candidates: 0
+  - path: app/services/whatsapp/phone_normalizers/base_phone_normalizer.rb
+    candidates: 0
+  - path: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    candidates: 0
+  - path: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    candidates: 0
+  - path: app/services/whatsapp/phone_number_normalization_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/populate_template_parameters_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/providers/base_service.rb
+    candidates: 3
+  - path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/providers/whatsapp_cloud_contact_info_request_service.rb
+    candidates: 2
+  - path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    candidates: 6
+  - path: app/services/whatsapp/reauthorization_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/send_on_whatsapp_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/template_content_renderer_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/template_parameter_converter_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/template_processor_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/token_exchange_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/user_id_rotation_service.rb
+    candidates: 1
+  - path: app/services/whatsapp/webhook_channel_finder_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/webhook_setup_service.rb
+    candidates: 0
+  - path: app/services/whatsapp/webhook_teardown_service.rb
+    candidates: 0
+  - path: app/services/widget/token_service.rb
+    candidates: 0
+  - path: app/views/android_app/assetlinks.json.erb
+    candidates: 0
+  - path: app/views/api/v1/accounts/actions/contact_merges/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/avatar.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/reset_access_token.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/reset_secret.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agent_bots/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agents/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agents/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/agents/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/_article.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/_associated_article.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/edit.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/articles/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignable_agents/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/_assignment_policy.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/inboxes/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/inboxes/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/assignment_policies/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/clone.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/partials/_automation_rule.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/automation_rules/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/branded_email_layouts/show.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/branded_email_layouts/update.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/callbacks/facebook_pages.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/callbacks/reauthorize_page.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/callbacks/register_facebook_page.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/campaigns/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/campaigns/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/campaigns/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/campaigns/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/_associated_category.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/_category.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/categories/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/channels/twilio_channels/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/avatar.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/contacts/_contact.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/contacts/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/contacts/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/contacts/search.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/conversations/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/destroy_custom_attributes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/notes/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/search.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/companies/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contact_inboxes/filter.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/active.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/attachments/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/avatar.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/contact_inboxes/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/contactable_inboxes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/conversations/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/destroy_custom_attributes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/filter.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/labels/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/labels/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/notes/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/notes/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/notes/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/notes/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/search.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/contacts/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/attachments.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/custom_attributes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/destroy_custom_attributes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/filter.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/labels/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/labels/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/messages/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/messages/destroy.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/messages/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/messages/retry.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/messages/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/meta.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/participants/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/participants/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/search.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/toggle_status.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/unread.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/conversations/update_last_seen.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/create.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/csat_survey_responses/download.csv.erb
+    candidates: 3
+  - path: app/views/api/v1/accounts/csat_survey_responses/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/csat_survey_responses/metrics.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/csat_survey_responses/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_attribute_definitions/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_attribute_definitions/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_attribute_definitions/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_attribute_definitions/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_filters/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_filters/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_filters/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/custom_filters/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/dashboard_apps/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/dashboard_apps/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/dashboard_apps/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/dashboard_apps/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/data_imports/_data_import.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/data_imports/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/data_imports/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inbox_members/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inbox_members/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inbox_members/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/agent_bot.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/assignable_agents.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/assignment_policies/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/assignment_policies/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/campaigns.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/reset_secret.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/inboxes/show.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/inboxes/update.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/integrations/apps/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/apps/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/hooks/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/hooks/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/linear/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/slack/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/slack/list_all_channels.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/integrations/slack/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/labels/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/labels/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/labels/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/labels/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/macros/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/macros/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/macros/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/macros/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/notification_settings/show.json.jbuilder
+    candidates: 2
+  - path: app/views/api/v1/accounts/notifications/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/_portal.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/add_members.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/portals/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/_agent.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/search/_article.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/_contact.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/accounts/search/_conversation_search_result.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/_inbox.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/_message.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/articles.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/contacts.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/conversations.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/search/messages.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/team_members/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/team_members/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/teams/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/teams/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/teams/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/teams/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/webhooks/_webhook.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/webhooks/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/webhooks/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/webhooks/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/accounts/whatsapp/callbacks/embedded_signup.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/conversations/partials/_conversation.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_account.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_agent.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_agent_bot.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_agent_bot_slim.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_app.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_attachment.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_campaign.json.jbuilder
+    candidates: 2
+  - path: app/views/api/v1/models/_company.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_contact.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_contact_inbox.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_conversation.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_csat_survey_response.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_custom_attribute_definition.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_custom_filter.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_dashboard_app.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_hook.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_inbox.json.jbuilder
+    candidates: 11
+  - path: app/views/api/v1/models/_inbox_slim.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_macro.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_message.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_note.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_portal_config.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_team.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/models/_user.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/models/_widget_message.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/profile/mfa/backup_codes.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profile/mfa/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profile/mfa/destroy.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profile/mfa/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profile/mfa/verify.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profile/sessions/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/auto_offline.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/availability.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/avatar.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/reset_access_token.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/show.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/profiles/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/widget/campaigns/index.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/configs/create.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/contacts/set_user.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/contacts/show.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/contacts/update.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/conversations/create.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/widget/conversations/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/widget/inbox_members/index.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v1/widget/messages/create.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/messages/index.json.jbuilder
+    candidates: 1
+  - path: app/views/api/v1/widget/messages/update.json.jbuilder
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/agents.csv.erb
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/conversation_traffic.erb
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/conversations_summary.csv.erb
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/inboxes.csv.erb
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/labels.csv.erb
+    candidates: 0
+  - path: app/views/api/v2/accounts/reports/teams.csv.erb
+    candidates: 0
+  - path: app/views/apple_app/site_association.html.erb
+    candidates: 0
+  - path: app/views/dashboard/index.html.erb
+    candidates: 0
+  - path: app/views/devise/_auth.json.jbuilder
+    candidates: 0
+  - path: app/views/devise/mailer/_confirmation_body.html.erb
+    candidates: 1
+  - path: app/views/devise/mailer/confirmation_instructions.html.erb
+    candidates: 11
+  - path: app/views/devise/mailer/password_change.html.erb
+    candidates: 1
+  - path: app/views/devise/mailer/reset_password_instructions.html.erb
+    candidates: 2
+  - path: app/views/devise/mailer/unlock_instructions.html.erb
+    candidates: 1
+  - path: app/views/devise/token.json.jbuilder
+    candidates: 0
+  - path: app/views/devise_overrides/sessions/create_with_backup_codes.json.jbuilder
+    candidates: 0
+  - path: app/views/fields/account_status_field/_form.html.erb
+    candidates: 0
+  - path: app/views/fields/avatar_field/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/avatar_field/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/belongs_to/_form.html.erb
+    candidates: 0
+  - path: app/views/fields/belongs_to/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/belongs_to/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/belongs_to_search/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/confirmed_at_field/_form.html.erb
+    candidates: 0
+  - path: app/views/fields/confirmed_at_field/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/count_field/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/count_field/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/polymorphic/_form.html.erb
+    candidates: 0
+  - path: app/views/fields/polymorphic/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/polymorphic/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/secret_field/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/secret_field/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/serialized_field/_form.html.erb
+    candidates: 0
+  - path: app/views/fields/serialized_field/_index.html.erb
+    candidates: 0
+  - path: app/views/fields/serialized_field/_show.html.erb
+    candidates: 0
+  - path: app/views/fields/suspension_history_field/_show.html.erb
+    candidates: 0
+  - path: app/views/icons/_check-mark.html.erb
+    candidates: 0
+  - path: app/views/icons/_chevron-down.html.erb
+    candidates: 0
+  - path: app/views/icons/_chevron-right.html.erb
+    candidates: 0
+  - path: app/views/icons/_close.html.erb
+    candidates: 0
+  - path: app/views/icons/_globe.html.erb
+    candidates: 0
+  - path: app/views/icons/_hamburger.html.erb
+    candidates: 0
+  - path: app/views/icons/_monitor.html.erb
+    candidates: 0
+  - path: app/views/icons/_moon.html.erb
+    candidates: 0
+  - path: app/views/icons/_palette.html.erb
+    candidates: 0
+  - path: app/views/icons/_redirect.html.erb
+    candidates: 0
+  - path: app/views/icons/_sun.html.erb
+    candidates: 0
+  - path: app/views/icons/_user.html.erb
+    candidates: 0
+  - path: app/views/installation/onboarding/index.html.erb
+    candidates: 2
+  - path: app/views/layouts/_portal_analytics.html.erb
+    candidates: 0
+  - path: app/views/layouts/_portal_analytics_noscript.html.erb
+    candidates: 0
+  - path: app/views/layouts/_portal_head.html.erb
+    candidates: 0
+  - path: app/views/layouts/_portal_scripts.html.erb
+    candidates: 0
+  - path: app/views/layouts/mailer/base.liquid
+    candidates: 5
+  - path: app/views/layouts/portal.html+documentation.erb
+    candidates: 0
+  - path: app/views/layouts/portal.html+plain.erb
+    candidates: 0
+  - path: app/views/layouts/portal.html.erb
+    candidates: 0
+  - path: app/views/layouts/super_admin/application.html.erb
+    candidates: 0
+  - path: app/views/layouts/vueapp.html.erb
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/account_compliance_mailer/account_deleted.liquid
+    candidates: 2
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/account_deletion_for_inactivity.liquid
+    candidates: 1
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/account_deletion_user_initiated.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/automation_rule_disabled.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/contact_export_complete.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/contact_import_complete.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/account_notification_mailer/contact_import_failed.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/channel_notifications_mailer/email_disconnect.liquid
+    candidates: 1
+  - path: app/views/mailers/administrator_notifications/channel_notifications_mailer/facebook_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/channel_notifications_mailer/instagram_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/channel_notifications_mailer/whatsapp_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/integrations_notification_mailer/dialogflow_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/integrations_notification_mailer/openai_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/administrator_notifications/integrations_notification_mailer/slack_disconnect.liquid
+    candidates: 0
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/assigned_conversation_new_message.liquid
+    candidates: 0
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/conversation_assignment.liquid
+    candidates: 2
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/conversation_creation.liquid
+    candidates: 2
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/conversation_mention.liquid
+    candidates: 3
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/participating_conversation_new_message.liquid
+    candidates: 0
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/sla_missed_first_response.liquid
+    candidates: 0
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/sla_missed_next_response.liquid
+    candidates: 0
+  - path: app/views/mailers/agent_notifications/conversation_notifications_mailer/sla_missed_resolution.liquid
+    candidates: 0
+  - path: app/views/mailers/conversation_reply_mailer/conversation_transcript.html.erb
+    candidates: 13
+  - path: app/views/mailers/conversation_reply_mailer/email_reply.html.erb
+    candidates: 2
+  - path: app/views/mailers/conversation_reply_mailer/reply_with_summary.html.erb
+    candidates: 1
+  - path: app/views/mailers/conversation_reply_mailer/reply_without_summary.html.erb
+    candidates: 0
+  - path: app/views/mailers/email_delivery_test_mailer/delivery_test.liquid
+    candidates: 4
+  - path: app/views/mailers/portal_instructions_mailer/send_cname_instructions.liquid
+    candidates: 0
+  - path: app/views/mailers/team_notifications/automation_notification_mailer/conversation_creation.liquid
+    candidates: 0
+  - path: app/views/mailers/team_notifications/automation_notification_mailer/conversation_updated.liquid
+    candidates: 0
+  - path: app/views/mailers/team_notifications/automation_notification_mailer/message_created.liquid
+    candidates: 0
+  - path: app/views/microsoft/identity_association.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/accounts/create.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/accounts/index.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/accounts/show.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/accounts/update.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/agent_bots/avatar.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/agent_bots/create.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/agent_bots/index.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/agent_bots/show.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/agent_bots/update.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/models/_account.json.jbuilder
+    candidates: 1
+  - path: app/views/platform/api/v1/models/_agent_bot.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/models/_user.json.jbuilder
+    candidates: 1
+  - path: app/views/platform/api/v1/users/create.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/users/show.json.jbuilder
+    candidates: 0
+  - path: app/views/platform/api/v1/users/token.json.jbuilder
+    candidates: 1
+  - path: app/views/platform/api/v1/users/update.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/csat_survey/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/csat_survey/update.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/contacts/create.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/contacts/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/contacts/update.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/conversations/create.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/conversations/index.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/conversations/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/conversations/toggle_status.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/messages/create.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/messages/index.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/messages/update.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/inboxes/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_article.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_associated_category.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_category.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_contact.json.jbuilder
+    candidates: 1
+  - path: app/views/public/api/v1/models/_conversation.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_csat_survey.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_inbox.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/_message.json.jbuilder
+    candidates: 1
+  - path: app/views/public/api/v1/models/_search_article.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/hc/_associated_article.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/hc/_author.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/models/hc/_portal.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_article_count.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_authors.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_category-block.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_category-block.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_featured_articles.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_footer.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_hero.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_home_categories.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_thumbnail.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_uncategorized-block.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/_uncategorized-block.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/_article_body.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/_article_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/_content.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/_meta_head.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/index.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/index.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/show.html+documentation.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/show.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/show.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/articles/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_article_list.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_article_list.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_category-block.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_category-hero.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_hero.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/_meta_head.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/index.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/index.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/show.html+documentation.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/show.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/show.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/categories/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_article_card.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_avatar_group.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_breadcrumb.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_category_card.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_empty_state.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_footer.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_hero.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_section_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_sidebar.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_topbar.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/_user_avatar.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/articles/_actions.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/articles/_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/articles/_meta_head.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/categories/_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/documentation_layout/categories/_meta_head.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/error/404.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/index.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/not_active.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/_form.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/_results.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/_results_header.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/_search_handler.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/index.html+documentation.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/index.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/search/index.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/show.html+documentation.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/show.html+plain.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/show.html.erb
+    candidates: 0
+  - path: app/views/public/api/v1/portals/show.json.jbuilder
+    candidates: 0
+  - path: app/views/public/api/v1/portals/sitemap.xml.erb
+    candidates: 0
+  - path: app/views/super_admin/accounts/_reset_cache.html.erb
+    candidates: 0
+  - path: app/views/super_admin/accounts/_seed_data.html.erb
+    candidates: 0
+  - path: app/views/super_admin/accounts/edit.html.erb
+    candidates: 0
+  - path: app/views/super_admin/accounts/show.html.erb
+    candidates: 0
+  - path: app/views/super_admin/app_configs/show.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_collection.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_filters.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_flashes.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_icons.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_javascript.html.erb
+    candidates: 1
+  - path: app/views/super_admin/application/_nav_item.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_navigation.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_search.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_settings_menu.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/_stylesheet.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/index.html.erb
+    candidates: 0
+  - path: app/views/super_admin/application/show.html.erb
+    candidates: 0
+  - path: app/views/super_admin/dashboard/index.html.erb
+    candidates: 0
+  - path: app/views/super_admin/devise/sessions/new.html.erb
+    candidates: 3
+  - path: app/views/super_admin/instance_statuses/show.html.erb
+    candidates: 0
+  - path: app/views/super_admin/platform_banners/_form.html.erb
+    candidates: 0
+  - path: app/views/super_admin/push_diagnostics/show.html.erb
+    candidates: 1
+  - path: app/views/super_admin/settings/_upgrade_button_community.html.erb
+    candidates: 0
+  - path: app/views/super_admin/settings/_upgrade_button_enterprise.html.erb
+    candidates: 0
+  - path: app/views/super_admin/settings/show.html.erb
+    candidates: 0
+  - path: app/views/super_admin/shared/_account_user_form.html.erb
+    candidates: 0
+  - path: app/views/super_admin/users/_collection.html.erb
+    candidates: 0
+  - path: app/views/super_admin/users/_impersonate.erb
+    candidates: 0
+  - path: app/views/super_admin/users/show.html.erb
+    candidates: 25
+  - path: app/views/survey/responses/show.html.erb
+    candidates: 0
+  - path: app/views/widget_tests/index.html.erb
+    candidates: 1
+  - path: app/views/widgets/show.html.erb
+    candidates: 0
+  - path: config/agents/tools.yml
+    candidates: 0
+  - path: config/app.yml
+    candidates: 0
+  - path: config/application.rb
+    candidates: 0
+  - path: config/boot.rb
+    candidates: 0
+  - path: config/cable.yml
+    candidates: 0
+  - path: config/database.yml
+    candidates: 0
+  - path: config/elastic_apm.yml
+    candidates: 0
+  - path: config/environment.rb
+    candidates: 0
+  - path: config/environments/development.rb
+    candidates: 0
+  - path: config/environments/production.rb
+    candidates: 3
+  - path: config/environments/staging.rb
+    candidates: 0
+  - path: config/environments/test.rb
+    candidates: 2
+  - path: config/features.yml
+    candidates: 12
+  - path: config/initializers/00_init.rb
+    candidates: 0
+  - path: config/initializers/01_inject_enterprise_edition_module.rb
+    candidates: 0
+  - path: config/initializers/01_redis.rb
+    candidates: 1
+  - path: config/initializers/actioncable.rb
+    candidates: 0
+  - path: config/initializers/active_record_query_trace.rb
+    candidates: 0
+  - path: config/initializers/active_storage.rb
+    candidates: 0
+  - path: config/initializers/acts_as_taggable_on.rb
+    candidates: 0
+  - path: config/initializers/ai_agents.rb
+    candidates: 0
+  - path: config/initializers/application_controller_renderer.rb
+    candidates: 0
+  - path: config/initializers/assets.rb
+    candidates: 0
+  - path: config/initializers/audited.rb
+    candidates: 0
+  - path: config/initializers/backtrace_silencers.rb
+    candidates: 0
+  - path: config/initializers/content_security_policy.rb
+    candidates: 0
+  - path: config/initializers/cookies_serializer.rb
+    candidates: 0
+  - path: config/initializers/cors.rb
+    candidates: 0
+  - path: config/initializers/custom_error_codes.rb
+    candidates: 0
+  - path: config/initializers/datadog.rb
+    candidates: 0
+  - path: config/initializers/devise.rb
+    candidates: 24
+  - path: config/initializers/devise_token_auth.rb
+    candidates: 1
+  - path: config/initializers/event_handlers.rb
+    candidates: 0
+  - path: config/initializers/facebook_messenger.rb
+    candidates: 0
+  - path: config/initializers/feature_policy.rb
+    candidates: 0
+  - path: config/initializers/filter_parameter_logging.rb
+    candidates: 0
+  - path: config/initializers/geocoder.rb
+    candidates: 0
+  - path: config/initializers/git_sha.rb
+    candidates: 0
+  - path: config/initializers/i18n_pluralization.rb
+    candidates: 0
+  - path: config/initializers/inflections.rb
+    candidates: 0
+  - path: config/initializers/languages.rb
+    candidates: 0
+  - path: config/initializers/liquid_handler.rb
+    candidates: 0
+  - path: config/initializers/lograge.rb
+    candidates: 0
+  - path: config/initializers/mailer.rb
+    candidates: 3
+  - path: config/initializers/mime_types.rb
+    candidates: 0
+  - path: config/initializers/monkey_patches/chat.rb
+    candidates: 0
+  - path: config/initializers/monkey_patches/schema_dumper.rb
+    candidates: 0
+  - path: config/initializers/omniauth.rb
+    candidates: 0
+  - path: config/initializers/permissions_policy.rb
+    candidates: 0
+  - path: config/initializers/rack_attack.rb
+    candidates: 15
+  - path: config/initializers/rack_profiler.rb
+    candidates: 0
+  - path: config/initializers/rack_timeout.rb
+    candidates: 0
+  - path: config/initializers/searchkick.rb
+    candidates: 0
+  - path: config/initializers/secure_password.rb
+    candidates: 0
+  - path: config/initializers/sentry.rb
+    candidates: 0
+  - path: config/initializers/session_store.rb
+    candidates: 0
+  - path: config/initializers/sidekiq.rb
+    candidates: 0
+  - path: config/initializers/stripe.rb
+    candidates: 0
+  - path: config/initializers/warden_hooks.rb
+    candidates: 0
+  - path: config/initializers/wrap_parameters.rb
+    candidates: 0
+  - path: config/installation_config.yml
+    candidates: 25
+  - path: config/integration/apps.yml
+    candidates: 1
+  - path: config/languages/language_map.yml
+    candidates: 0
+  - path: config/llm.yml
+    candidates: 0
+  - path: config/llm_models.json
+    candidates: 0
+  - path: config/markdown_embeds.yml
+    candidates: 0
+  - path: config/newrelic.yml
+    candidates: 0
+  - path: config/puma.rb
+    candidates: 0
+  - path: config/rds-ca-2019-root.pem
+    candidates: 0
+  - path: config/routes.rb
+    candidates: 7
+  - path: config/schedule.yml
+    candidates: 2
+  - path: config/scout_apm.yml
+    candidates: 0
+  - path: config/secrets.yml
+    candidates: 0
+  - path: config/sidekiq.yml
+    candidates: 0
+  - path: config/spring.rb
+    candidates: 0
+  - path: config/storage.yml
+    candidates: 0
+  - path: config/vite.json
+    candidates: 0
+  - path: db/schema.rb
+    candidates: 47
+  - path: lib/action_view/template/handlers/liquid.rb
+    candidates: 0
+  - path: lib/active_storage/migrator.rb
+    candidates: 0
+  - path: lib/base_markdown_renderer.rb
+    candidates: 3
+  - path: lib/captain/base_task_service.rb
+    candidates: 0
+  - path: lib/captain/csat_utility_analysis_service.rb
+    candidates: 0
+  - path: lib/captain/follow_up_service.rb
+    candidates: 0
+  - path: lib/captain/label_suggestion_service.rb
+    candidates: 2
+  - path: lib/captain/overview_summary_service.rb
+    candidates: 0
+  - path: lib/captain/reply_suggestion_service.rb
+    candidates: 0
+  - path: lib/captain/rewrite_service.rb
+    candidates: 0
+  - path: lib/captain/summary_service.rb
+    candidates: 0
+  - path: lib/captain/tool_instrumentation.rb
+    candidates: 0
+  - path: lib/captain_response_dequeued_logger.rb
+    candidates: 0
+  - path: lib/chatwoot_app.rb
+    candidates: 0
+  - path: lib/chatwoot_captcha.rb
+    candidates: 0
+  - path: lib/chatwoot_exception_tracker.rb
+    candidates: 1
+  - path: lib/chatwoot_hub.rb
+    candidates: 2
+  - path: lib/chatwoot_markdown_renderer.rb
+    candidates: 0
+  - path: lib/config_loader.rb
+    candidates: 0
+  - path: lib/current.rb
+    candidates: 0
+  - path: lib/custom_exceptions/account.rb
+    candidates: 6
+  - path: lib/custom_exceptions/base.rb
+    candidates: 0
+  - path: lib/custom_exceptions/call_already_accepted.rb
+    candidates: 0
+  - path: lib/custom_exceptions/custom_filter.rb
+    candidates: 0
+  - path: lib/custom_exceptions/data_import/freshdesk_ticket_limit_error.rb
+    candidates: 0
+  - path: lib/custom_exceptions/inbox/limit_exceeded.rb
+    candidates: 0
+  - path: lib/custom_exceptions/pdf.rb
+    candidates: 0
+  - path: lib/custom_exceptions/whatsapp_contact_info_request_error.rb
+    candidates: 0
+  - path: lib/custom_markdown_renderer.rb
+    candidates: 0
+  - path: lib/dyte.rb
+    candidates: 0
+  - path: lib/events/base.rb
+    candidates: 0
+  - path: lib/events/types.rb
+    candidates: 0
+  - path: lib/exception_list.rb
+    candidates: 0
+  - path: lib/filters/filter_keys.yml
+    candidates: 1
+  - path: lib/global_config.rb
+    candidates: 0
+  - path: lib/global_config_service.rb
+    candidates: 0
+  - path: lib/integrations/bot_processor_service.rb
+    candidates: 0
+  - path: lib/integrations/captain/processor_service.rb
+    candidates: 1
+  - path: lib/integrations/cloudflare/realtime_kit_credentials_validator.rb
+    candidates: 0
+  - path: lib/integrations/dialogflow/processor_service.rb
+    candidates: 0
+  - path: lib/integrations/dyte/processor_service.rb
+    candidates: 1
+  - path: lib/integrations/facebook/delivery_status.rb
+    candidates: 2
+  - path: lib/integrations/facebook/message_creator.rb
+    candidates: 2
+  - path: lib/integrations/facebook/message_parser.rb
+    candidates: 6
+  - path: lib/integrations/google_translate/detect_language_service.rb
+    candidates: 0
+  - path: lib/integrations/google_translate/processor_service.rb
+    candidates: 14
+  - path: lib/integrations/linear/access_token_service.rb
+    candidates: 0
+  - path: lib/integrations/linear/auto_link_service.rb
+    candidates: 3
+  - path: lib/integrations/linear/processor_service.rb
+    candidates: 0
+  - path: lib/integrations/llm_base_service.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation_completion_helpers.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation_constants.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation_context.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation_helpers.rb
+    candidates: 0
+  - path: lib/integrations/llm_instrumentation_spans.rb
+    candidates: 0
+  - path: lib/integrations/openai/key_validator.rb
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/captain_overview_summary.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/csat_utility_analysis.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/fix_spelling_grammar.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/improve.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/label_suggestion.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/reply.liquid
+    candidates: 4
+  - path: lib/integrations/openai/openai_prompts/summary.liquid
+    candidates: 0
+  - path: lib/integrations/openai/openai_prompts/tone_rewrite.liquid
+    candidates: 0
+  - path: lib/integrations/slack/channel_builder.rb
+    candidates: 0
+  - path: lib/integrations/slack/emoji_formatter.rb
+    candidates: 0
+  - path: lib/integrations/slack/hook_builder.rb
+    candidates: 0
+  - path: lib/integrations/slack/incoming_message_builder.rb
+    candidates: 0
+  - path: lib/integrations/slack/link_unfurl_formatter.rb
+    candidates: 1
+  - path: lib/integrations/slack/send_on_slack_service.rb
+    candidates: 19
+  - path: lib/integrations/slack/slack_link_unfurl_service.rb
+    candidates: 1
+  - path: lib/integrations/slack/slack_message_helper.rb
+    candidates: 11
+  - path: lib/integrations/slack/update_slack_message_service.rb
+    candidates: 8
+  - path: lib/limits.rb
+    candidates: 0
+  - path: lib/linear.rb
+    candidates: 0
+  - path: lib/linear/mutations.rb
+    candidates: 0
+  - path: lib/linear/queries.rb
+    candidates: 0
+  - path: lib/llm/config.rb
+    candidates: 0
+  - path: lib/llm/exception_trackable.rb
+    candidates: 0
+  - path: lib/llm/feature_router.rb
+    candidates: 0
+  - path: lib/llm/models.rb
+    candidates: 0
+  - path: lib/llm_constants.rb
+    candidates: 0
+  - path: lib/markdown_renderer_url_sanitizer.rb
+    candidates: 0
+  - path: lib/microsoft_graph_auth.rb
+    candidates: 0
+  - path: lib/online_status_tracker.rb
+    candidates: 0
+  - path: lib/opentelemetry_config.rb
+    candidates: 0
+  - path: lib/redis/alfred.rb
+    candidates: 0
+  - path: lib/redis/config.rb
+    candidates: 0
+  - path: lib/redis/lock_manager.rb
+    candidates: 0
+  - path: lib/redis/redis_keys.rb
+    candidates: 8
+  - path: lib/redis/secure_storage.rb
+    candidates: 0
+  - path: lib/regex_helper.rb
+    candidates: 0
+  - path: lib/safe_fetch.rb
+    candidates: 0
+  - path: lib/safe_fetch/fetcher.rb
+    candidates: 0
+  - path: lib/safe_fetch/private_network_request.rb
+    candidates: 0
+  - path: lib/safe_fetch/request_options.rb
+    candidates: 0
+  - path: lib/tasks/annotate_rb.rake
+    candidates: 0
+  - path: lib/tasks/apply_sla.rake
+    candidates: 0
+  - path: lib/tasks/asset_clean.rake
+    candidates: 0
+  - path: lib/tasks/assignment_v2_migration.rake
+    candidates: 0
+  - path: lib/tasks/build.rake
+    candidates: 0
+  - path: lib/tasks/bulk_conversations.rake
+    candidates: 5
+  - path: lib/tasks/captain_assistant_migration.rake
+    candidates: 0
+  - path: lib/tasks/captain_chat.rake
+    candidates: 0
+  - path: lib/tasks/companies.rake
+    candidates: 2
+  - path: lib/tasks/db_enhancements.rake
+    candidates: 0
+  - path: lib/tasks/dev/variant_toggle.rake
+    candidates: 0
+  - path: lib/tasks/download_report.rake
+    candidates: 2
+  - path: lib/tasks/feature_defaults.rake
+    candidates: 0
+  - path: lib/tasks/generate_test_data.rake
+    candidates: 0
+  - path: lib/tasks/instance_id.rake
+    candidates: 0
+  - path: lib/tasks/ip_lookup.rake
+    candidates: 0
+  - path: lib/tasks/mfa.rake
+    candidates: 13
+  - path: lib/tasks/ops/cleanup_orphan_conversations.rake
+    candidates: 0
+  - path: lib/tasks/reporting_events_rollup.rake
+    candidates: 0
+  - path: lib/tasks/reporting_events_rollup_timezone_setup.rake
+    candidates: 0
+  - path: lib/tasks/ruby_llm.rake
+    candidates: 0
+  - path: lib/tasks/search_test_data.rake
+    candidates: 10
+  - path: lib/tasks/seed_reports_data.rake
+    candidates: 0
+  - path: lib/tasks/sidekiq_tasks.rake
+    candidates: 0
+  - path: lib/tasks/social_channels.rake
+    candidates: 0
+  - path: lib/tasks/storage_migrations.rake
+    candidates: 0
+  - path: lib/tasks/swagger.rake
+    candidates: 0
+  - path: lib/test_data.rb
+    candidates: 0
+  - path: lib/url_helper.rb
+    candidates: 0
+  - path: lib/vapid_service.rb
+    candidates: 0
+  - path: lib/webhooks/trigger.rb
+    candidates: 0
+  - path: lib/webhooks/twitter.rb
+    candidates: 0
