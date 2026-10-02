@@ -3,17 +3,30 @@
   "title": "Antigravity synthetic fixtures and gold labels",
   "description": "Author synthetic fixtures under tests/fixtures/sentiment/antigravity/ mirroring the pinned real format (synthetic text only), add a gold-label eval pass, update tests/fixtures/sentiment/README.md, README sources bullet, and the wiki source table. Done when: fixture guard, gold eval (100% exact match), and full suite pass.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-a4d0fb83-174a-4781-9468-2e6d6a76a801",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "3728f2ec-11af-48c5-8bb7-f36589fb2751",
+      "author": "home",
+      "text": "Done. Fixture corpus: antigravity conversation DBs are generated at test time by tests/unit/sentiment/helpers/antigravity-fixture.ts (binary SQLite fixtures never committed) with hand-encoded protobuf payloads matching the pinned real shape: a top-level desktop conversation (typed thanks + f-bomb turns, agent narration 15, tool turn 132, artifact attach 14-with-19.7, summary 23, one malformed payload), a nested sub-cascade with a delegation dispatch prompt (excluded), and a CLI-root conversation. Gold-label eval scans the generated corpus with 3 new antigravity labels (100% exact match). tests/fixtures/sentiment/README.md documents the generated-fixture pattern; README sources bullet and the wiki source table + status lines updated. Full suite: 194 suites / 1585 passed / 2 skipped; lint shows only the pre-existing benchmark require() error (tests/unit/benchmark/packet-validation.spec.ts:271).",
+      "created_at": "2026-10-02T09:16:13.824299Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:57:06.997548Z",
-  "updated_at": "2026-10-02T08:57:06.997578Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:16:13.895760Z",
+  "closed_at": "2026-10-02T09:16:13.895723Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",

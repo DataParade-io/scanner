@@ -3,17 +3,30 @@
   "title": "Antigravity human-message extraction with exclusions",
   "description": "Implement extract() for the Antigravity adapter per the research counting rule: human messages only; skip harness-injected content, agent/model output, tool calls, and system records with skip counters; timestamps normalized to RFC 3339 UTC; stable dedup keys. Done when: extraction tests pass on synthetic fixtures including injected and malformed shapes.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-a4d0fb83-174a-4781-9468-2e6d6a76a801",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "3499fa5d-5ba9-4925-96f6-28d2e31e5488",
+      "author": "home",
+      "text": "Done. extract() queries steps WHERE step_type = 14 ORDER BY idx and decodes the schema-less protobuf with a self-contained minimal reader (src/sentiment/adapters/antigravity.ts): user text from field 19.2 (parts list 19.3 never read — it concatenates to 19.2 and would double-count), artifact attach sends detected via field 19.7 and skipped, timestamps from field 5.1.1 seconds + 5.1.2 nanos normalized to RFC 3339 UTC, recordId '<conversation-uuid>:<idx>'. All other step types (15/132/23/101/17/0 = agent output and bookkeeping) are never selected. Unreadable DBs and unparseable payloads feed skipCounter.failedFiles/malformedLines, never fatal. Tests cover text extraction, attach skips, malformed counting, nested-cascade exclusion, and meter integration. Verified live: 448 human messages all-time (6 thanks tokens, 24 f-bomb tokens).",
+      "created_at": "2026-10-02T09:14:55.440990Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:57:06.841094Z",
-  "updated_at": "2026-10-02T08:57:06.841120Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:14:55.525940Z",
+  "closed_at": "2026-10-02T09:14:55.525903Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",

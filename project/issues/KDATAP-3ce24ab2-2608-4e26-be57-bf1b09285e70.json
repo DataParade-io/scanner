@@ -3,17 +3,30 @@
   "title": "Antigravity dedup, rescan, and doctor",
   "description": "Wire Antigravity into dedupeRecords semantics, incremental rescan (watermark/floor per storage shape), doctorAntigravity reporting counts only, runSentimentMeter default sources, src/index.ts exports, and CLI --doctor output. Done when: meter includes antigravity as a source; doctor reports live counts on BlackbookM1; full suite green.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-a4d0fb83-174a-4781-9468-2e6d6a76a801",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "802b36bc-bd78-44b1-b7f9-5262e46f0623",
+      "author": "home",
+      "text": "Done. Wiring consistent with the other sources:\n- Dedup: recordIds embed conversation uuid + step idx (stable native ids); scanAdapter union-dedups across roots. Every run is a full rescan with dedup absorbing overlap — identical to the other sources' current behavior (scan-state watermarks remain a shared framework for later).\n- Rescan robustness: conversation DBs are heavily WAL-mode (all 79 desktop DBs have -wal sidecars); openSqliteFile in sqlite-reader.ts was refactored out of openVscDb and reused here with copy-then-read snapshot semantics so reads see a consistent state while writers hold the original.\n- Doctor: doctorAntigravity() reports per-root present/conversationCount/nestedCount (counts only); wired into the CLI --doctor (text + JSON) with an --antigravity-home override flag; runSentimentMeter default sources now include antigravity; src/index.ts exports the adapter surface.\n- Live on BlackbookM1: doctor reports 79 conversations (55 nested skipped) + 37 (0 nested); all-time meter antigravity 448 msgs / 61 sessions / 6 thanks / 24 f-bomb tokens. Full suite green (16/16 sentiment suites, 154 tests; whole-suite run below in 31a852).",
+      "created_at": "2026-10-02T09:14:55.549029Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:57:06.918844Z",
-  "updated_at": "2026-10-02T08:57:06.918873Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:14:55.601715Z",
+  "closed_at": "2026-10-02T09:14:55.601677Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
