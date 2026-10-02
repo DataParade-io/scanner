@@ -1,3 +1,17 @@
 {"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u1","timestamp":"2026-10-01T12:00:00.000Z","message":{"role":"user","content":"thanks for the fix"}}
 {"type":"assistant","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"a1","timestamp":"2026-10-01T12:00:05.000Z","message":{"role":"assistant","content":[{"type":"text","text":"happy to help"}]}}
 {"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u2","timestamp":"2026-10-01T12:00:30.000Z","message":{"role":"user","content":[{"type":"tool_result","tool_use_id":"t1","content":"ok"}]}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u3","timestamp":"2026-10-01T12:01:00.000Z","isMeta":true,"message":{"role":"user","content":"is meta should not count"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u4","timestamp":"2026-10-01T12:01:10.000Z","isSidechain":true,"message":{"role":"user","content":"sidechain should not count"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u5","timestamp":"2026-10-01T12:01:20.000Z","promptSource":"system","message":{"role":"user","content":"system prompt source should not count"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u6","timestamp":"2026-10-01T12:01:30.000Z","promptSource":"sdk","message":{"role":"user","content":"sdk prompt source should not count"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u7","timestamp":"2026-10-01T12:02:00.000Z","message":{"role":"user","content":"<system-reminder>\nthe tool result above is relevant\n</system-reminder>"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u8","timestamp":"2026-10-01T12:02:10.000Z","message":{"role":"user","content":"<task-notification>background task done</task-notification>"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u9","timestamp":"2026-10-01T12:02:20.000Z","message":{"role":"user","content":"<command-name>/compact</command-name><command-message>compact</command-message>"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u10","timestamp":"2026-10-01T12:02:30.000Z","message":{"role":"user","content":"This session is being continued from a previous conversation that ran out of context."}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u11","timestamp":"2026-10-01T12:03:00.000Z","isCompactSummary":true,"message":{"role":"user","content":"compact summary continuation"}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u12","timestamp":"2026-10-01T12:03:10.000Z","message":{"role":"user","content":[{"type":"text","text":"looks fuckin great, thanks"},{"type":"image","source":{"type":"base64"}}]}}
+{"type":"user","sessionId":"session-abc123","cwd":"/Users/ryan/demo","uuid":"u13","timestamp":"2026-10-01T12:03:20.000Z","message":{"role":"user","content":[{"type":"text","text":"queued follow-up"},{"type":"text","text":"second block"}]},"attachment":{"prompt":"queued follow-up","origin":{"kind":"human"}}}
+not json at all
+{"type":"mystery","payload":{"unheard":"of"}}
+{"type":"user","sessionId":"session-abc123","uuid":"u15","message":{"role":"user","content":"no timestamp should be skipped and counted"}}
