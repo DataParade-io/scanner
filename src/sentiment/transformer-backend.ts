@@ -2,7 +2,11 @@ import os from "os";
 import path from "path";
 import { DEFAULT_EXCLUSION_THRESHOLDS, stripExcludedRegions } from "./exclusions";
 import type { ExclusionThresholds } from "./exclusions";
-import { labelForCompound } from "./sentiment-classifier";
+import {
+  codingFilterFor,
+  labelForCompound,
+  neutralizeCodingTerms,
+} from "./sentiment-classifier";
 import type { AsyncSentimentBackend, SentimentScore } from "./sentiment-classifier";
 
 /** Override the on-disk model cache with SENTIMENT_MODEL_CACHE_DIR if set. */
@@ -24,6 +28,12 @@ export interface TransformerModelSpec {
   head: "binary" | "softmax3" | "emotions";
   /** Model output label names, by head kind. */
   labels: string[];
+  /**
+   * Whether the text-level coding-domain filter applies by default. ML
+   * heads with a real neutral class read technical vocabulary neutrally on
+   * their own; the filter is measured per backend (KDATAP-d278a8).
+   */
+  defaultCodingFilter: boolean;
 }
 
 /**
@@ -51,6 +61,7 @@ export const TRANSFORMER_MODELS: Record<string, TransformerModelSpec> = {
       "joy", "love", "nervousness", "optimism", "pride", "realization",
       "relief", "remorse", "sadness", "surprise", "neutral",
     ],
+    defaultCodingFilter: false,
   },
   // KDATAP-cc07d6: 3-class Cardiff head with a real neutral class.
   "transformer-cardiff": {
@@ -59,6 +70,7 @@ export const TRANSFORMER_MODELS: Record<string, TransformerModelSpec> = {
     dtype: "q8",
     head: "softmax3",
     labels: ["negative", "neutral", "positive"],
+    defaultCodingFilter: false,
   },
   // KDATAP-e11340 candidates:
   "transformer-xlmr": {
@@ -67,6 +79,7 @@ export const TRANSFORMER_MODELS: Record<string, TransformerModelSpec> = {
     dtype: "q8",
     head: "softmax3",
     labels: ["negative", "neutral", "positive"],
+    defaultCodingFilter: false,
   },
   // KDATAP-2ca1f0 baseline: binary SST-2 head, kept for comparison only.
   "transformer-sst2": {
@@ -75,6 +88,7 @@ export const TRANSFORMER_MODELS: Record<string, TransformerModelSpec> = {
     dtype: "q8",
     head: "binary",
     labels: ["NEGATIVE", "POSITIVE"],
+    defaultCodingFilter: false,
   },
 };
 
@@ -99,6 +113,8 @@ export interface TransformerBackendOptions {
   model?: string;
   cacheDir?: string;
   thresholds?: ExclusionThresholds;
+  /** Coding-filter preference; "auto" (default) uses the spec's default. */
+  codingFilter?: "on" | "off" | "auto";
 }
 
 function neutralScore(): SentimentScore {
@@ -153,10 +169,10 @@ function scoreFromBinary(label: string, score: number): SentimentScore {
 }
 
 /**
- * Local Transformers.js backend. Unlike the VADER lexicon backend it gets no
- * token neutralization: the coding-domain overrides are a lexicon mechanism,
- * and how each model reads the same technical vocabulary is exactly what the
- * backend comparison (KDATAP-2ca1f0, KDATAP-e11340) measures.
+ * Local Transformers.js backend. The coding-domain filter is per-backend
+ * configurable ("on"/"off"/"auto"); by default the ML heads get none — how
+ * each model reads technical vocabulary unaided is the comparison signal
+ * (KDATAP-e11340, KDATAP-d278a8).
  */
 export async function createTransformerBackend(
   options: TransformerBackendOptions = {},
@@ -173,6 +189,7 @@ export async function createTransformerBackend(
       dtype: "q8",
       head: "binary",
       labels: ["NEGATIVE", "POSITIVE"],
+      defaultCodingFilter: false,
     };
     return buildBackend(rawSpec, options);
   }
@@ -185,6 +202,7 @@ async function buildBackend(
 ): Promise<AsyncSentimentBackend> {
   const cacheDir = options.cacheDir ?? defaultTransformerCacheDir();
   const thresholds = options.thresholds ?? DEFAULT_EXCLUSION_THRESHOLDS;
+  const codingFilter = codingFilterFor(options.codingFilter, spec.defaultCodingFilter);
   // Dynamic import keeps @huggingface/transformers (an optional dependency)
   // out of every default code path. Tokenizer and model are driven directly
   // (not via pipeline) so token-level truncation can be enforced: RoBERTa
@@ -225,7 +243,9 @@ async function buildBackend(
       const stripped = stripExcludedRegions(text, thresholds);
       if (stripped.trim() === "" && text.trim() !== "") return null;
       if (stripped.trim() === "") return neutralScore();
-      const input = stripped.length > MAX_SCORED_CHARS ? stripped.slice(0, MAX_SCORED_CHARS) : stripped;
+      const unfiltered = codingFilter ? neutralizeCodingTerms(stripped) : stripped;
+      const input =
+        unfiltered.length > MAX_SCORED_CHARS ? unfiltered.slice(0, MAX_SCORED_CHARS) : unfiltered;
       const inputs = tokenizer(input, { truncation: true, max_length: 512 });
       const output = await model(inputs);
       const logits = (output as unknown as { logits: { tolist(): number[][] } }).logits.tolist()[0];

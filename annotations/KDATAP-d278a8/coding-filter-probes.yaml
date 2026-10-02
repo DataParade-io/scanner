@@ -1,0 +1,58 @@
+version: 1
+task: KDATAP-d278a8
+# Synthetic coding-filter probe set (KDATAP-3191a7): ordinary coding phrases
+# that use the override vocabulary technically (expected neutral) alongside
+# genuinely negative phrases built from the same words. All synthetic; none
+# are real. Used to measure each backend/config's neu/neg split on the
+# filter vocabulary, not as a general accuracy benchmark.
+probes:
+  # Ordinary technical usage (expected: neu).
+  - text: "kill the process"
+    expected: neu
+  - text: "kill the stale worker and restart it"
+    expected: neu
+  - text: "add error handling to the parser"
+    expected: neu
+  - text: "fix the bug in the parser"
+    expected: neu
+  - text: "abort the migration"
+    expected: neu
+  - text: "the build failed, rerun it"
+    expected: neu
+  - text: "catch the exception and log it"
+    expected: neu
+  - text: "the server returns an error code 500"
+    expected: neu
+  - text: "tests fail because the fixture is missing"
+    expected: neu
+  - text: "the container crashed, restart it"
+    expected: neu
+  - text: "throw a TimeoutError if the request hangs"
+    expected: neu
+  - text: "the deploy aborted at stage two"
+    expected: neu
+  - text: "handle the timeout and retry with backoff"
+    expected: neu
+  - text: "log the exception with a stack trace"
+    expected: neu
+  - text: "the pipeline fails fast on missing config"
+    expected: neu
+  - text: "deadlock detected between the two workers, kill both"
+    expected: neu
+  - text: "the worker leaked memory all night"
+    expected: neu
+  - text: "add a guard against double registration"
+    expected: neu
+  - text: "the queue is blocked behind the stalled job"
+    expected: neu
+  # Genuinely negative, same vocabulary (expected: neg).
+  - text: "this crash is killing me"
+    expected: neg
+  - text: "I hate this error, it never goes away"
+    expected: neg
+  - text: "the failure is driving me insane"
+    expected: neg
+  - text: "I am sick and tired of these failed deploys"
+    expected: neg
+  - text: "every single build fails and I am furious"
+    expected: neg

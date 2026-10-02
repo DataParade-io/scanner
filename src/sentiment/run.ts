@@ -36,6 +36,8 @@ export interface RunSentimentOptions {
   wordList?: SentimentWordList;
   /** Sentiment backend name; undefined disables the second metric, "vader" is the local default. */
   sentimentBackend?: string;
+  /** Coding-domain filter preference: "on"/"off" overrides the per-backend default, "auto"/undefined uses it. */
+  sentimentCodingFilter?: "on" | "off" | "auto";
   claudeOptions?: ClaudeCodeAdapterOptions;
   cursorOptions?: CursorAdapterOptions;
   codexOptions?: CodexAdapterOptions;
@@ -104,7 +106,9 @@ export async function runSentimentMeter(options: RunSentimentOptions): Promise<S
   let sentiment: { backendName: string; scoresByDedupKey: Map<string, SentimentScore> } | undefined;
   const sentimentBackendName = options.sentimentBackend === "" ? null : options.sentimentBackend ?? "vader";
   if (sentimentBackendName) {
-    const backend = await createSentimentBackendAsync(sentimentBackendName);
+    const backend = await createSentimentBackendAsync(sentimentBackendName, {
+      codingFilter: options.sentimentCodingFilter,
+    });
     const scores = new Map<string, SentimentScore>();
     for (const record of inWindow) {
       const score = await backend.scoreMessage(record.text);
