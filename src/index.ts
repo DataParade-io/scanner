@@ -223,6 +223,16 @@ export {
 } from "./sentiment/adapters/grok-bot";
 export type { GrokBotAdapterOptions, GrokBotDoctorReport } from "./sentiment/adapters/grok-bot";
 export {
+  antigravityStepTimestampMs,
+  antigravityUserText,
+  createAntigravityAdapter,
+  defaultAntigravityRoots,
+  doctorAntigravity,
+  extractAntigravityRecords,
+  isArtifactAttachStep,
+} from "./sentiment/adapters/antigravity";
+export type { AntigravityAdapterOptions, AntigravityDoctorReport } from "./sentiment/adapters/antigravity";
+export {
   DEFAULT_METER_BANDS,
   computeMeter,
   gaugeBar,
