@@ -3,17 +3,30 @@
   "title": "Per-backend filter recommendation, configuration, tests and docs",
   "description": "From the study results decide keep/adjust/remove per backend, implement per-backend defaults with an on/off/auto override (API, CLI flag, config key), update tests and docs, and report the numbers table.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-3191a768-fa7e-472a-b1e3-a11c7fb6bb24",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "9580d889-c352-4c00-8cca-0ecc0c7e9535",
+      "author": "home",
+      "text": "Recommendation implemented: keep the coding-domain filter for VADER only, per-backend configurable. The filter stays essential for VADER (tuning 1.000 with vs 0.735 without; combined 0.767 vs 0.600; probes 17/19 vs 9/19 technical-use neu) and is redundant-and-harmful for the go_emotions transformer (gold accuracies identical with/without at 0.971/0.731/0.867; filter flips one genuine-frustration probe neg->neu and another neg->pos) so every transformer spec now carries defaultCodingFilter=false and VADER defaults true; 'auto' (the default) resolves per backend, 'on'/'off' override. Wiring: --sentiment-coding-filter on|off|auto CLI flag (invalid values rejected) and sentimentCodingFilter config key, threaded through run.ts to createSentimentBackendAsync. Tests: codingFilterFor resolution matrix, vader raw-vs-filter probe behavior, registry defaultCodingFilter=false assertions for all four transformer specs, CLI default-filter/on-off JSON counts and invalid-value rejection. Docs: README coding-domain-overrides bullet and wiki epic-M section with the full six-config table. Full suite: 197 suites, 1617 passed, 2 skipped; build clean; lint unchanged (one pre-existing error in benchmark packet-validation spec).",
+      "created_at": "2026-10-02T16:18:06.123848Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T16:09:13.523777Z",
-  "updated_at": "2026-10-02T16:09:13.523818Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T16:18:06.146216Z",
+  "closed_at": "2026-10-02T16:18:06.146182Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
