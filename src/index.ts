@@ -117,4 +117,32 @@ export type {
   RunDataActionPhaseOptions,
 } from "./data-actions";
 
+export {
+  SENTIMENT_SOURCES,
+  humanMessageRecordSchema,
+  isRfc3339Utc,
+  normalizeTimestampToRfc3339Utc,
+  parseTimestampToDate,
+} from "./sentiment/record";
+export type { HumanMessageRecord, SentimentSource } from "./sentiment/record";
+export {
+  buildDedupKey,
+  dedupeRecords,
+} from "./sentiment/dedup";
+export type { DedupStats } from "./sentiment/dedup";
+export type {
+  AdapterDiscoveryResult,
+  AdapterExtractResult,
+  SentimentAdapter,
+  SkipCounter,
+} from "./sentiment/adapter";
+export { createSkipCounter } from "./sentiment/adapter";
+export {
+  loadScanState,
+  recordScanWatermark,
+  updateScanWatermark,
+} from "./sentiment/scan-state";
+export type { ScanState, ScanWatermark } from "./sentiment/scan-state";
+
+
 
