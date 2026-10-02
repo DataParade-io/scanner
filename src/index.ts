@@ -199,6 +199,15 @@ export type {
   CursorComposerRef,
   CursorDoctorReport,
 } from "./sentiment/adapters/cursor";
+export {
+  CODEX_INJECTED_MARKERS,
+  createCodexAdapter,
+  defaultCodexHome,
+  doctorCodex,
+  extractCodexRecords,
+  isCodexInjectedText,
+} from "./sentiment/adapters/codex";
+export type { CodexAdapterOptions, CodexDoctorReport } from "./sentiment/adapters/codex";
 export { openVscDb, SqliteUnavailableError } from "./sentiment/adapters/sqlite-reader";
 export type { SqliteKVDatabase, KVRow } from "./sentiment/adapters/sqlite-reader";
 
