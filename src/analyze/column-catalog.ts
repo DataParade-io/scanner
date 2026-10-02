@@ -10,6 +10,7 @@ import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
 import { packForFile } from "./languages";
 import { recordFacts, type RecordFacts } from "./json-record-keys";
 import { schemaFileKind, type SchemaFile } from "../ingest/schema-files";
+import { classEntity } from "../pii-signals/occurrence-group";
 
 /**
  * Catalog of the stored columns a repository declares (KDATAP-33da4c): the closed set of
@@ -59,6 +60,7 @@ export type ColumnEvidence =
   | "migration"
   | "content-type"
   | "record-type"
+  | "copy-write"
   | "prisma-model"
   | "sql-ddl"
   | "setting"
@@ -85,6 +87,12 @@ export interface ColumnEntry {
   evidence: ColumnEvidence;
   /** The declared column type as written (`EmailField`, `string`, `varchar`), when known. */
   type?: string;
+  /**
+   * A column named for something else that is written from the concept's value
+   * (KDATAP-aef652): the first such write, e.g. `ContactInbox.create(source_id:
+   * contact.phone_number)`. The entry itself is the column's storage declaration.
+   */
+  writtenFrom?: { file: string; line: number; value: string };
   locations: ColumnLocation[];
 }
 
@@ -131,6 +139,7 @@ export function columnCandidates(file: AnalyzedFile, filePath: string): ColumnCa
   for (const key of file.keyDeclarations()) out.push(...keyCandidates(key, filePath));
   out.push(...migrationCandidates(file, filePath));
   out.push(...recordTypeCandidates(file, filePath));
+  out.push(...copyWriteCandidates(file, filePath));
   out.push(...configuredCandidates(file, filePath));
   return out;
 }
@@ -579,6 +588,72 @@ export function goStructCandidates(file: FileInfo): ColumnCandidate[] {
   );
 }
 
+// ---- copy columns (KDATAP-aef652) ------------------------------------------------------
+
+/** Model methods that write attributes given as keywords. */
+const MODEL_WRITE_METHODS = new Set([
+  "create", "create!", "new", "build", "update", "update!", "update_attributes", "update_attribute", "assign_attributes",
+  "find_or_create_by", "find_or_create_by!", "find_or_initialize_by", "create_or_find_by", "upsert", "insert",
+  "update_or_create", "get_or_create", "update_columns", "update_column",
+]);
+
+/**
+ * Keyword arguments anywhere (`ContactInbox.create(source_id: contact.phone_number)`,
+ * `ContactInboxWithContactBuilder.new(source_id: sender_email)`): candidate copy columns,
+ * concept-free. `collapseColumns` keeps one only when the value names the concept and the
+ * keyword is a storage column the call can be tied to.
+ */
+function copyWriteCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  for (const call of file.invocations()) {
+    for (const argument of call.arguments) {
+      if (!argument.keyword || !SQL_IDENTIFIER.test(argument.keyword) || GENERIC_KEYWORD.test(argument.keyword)) continue;
+      out.push({
+        ...((call.receiverClass ?? call.receiverConstant ?? call.receiverAssociation)
+          ? { model: call.receiverClass ?? call.receiverConstant ?? call.receiverAssociation }
+          : {}),
+        column: argument.keyword, file: filePath, line: call.line,
+        evidence: "copy-write", writtenFrom: { file: filePath, line: call.line, value: argument.text },
+      });
+    }
+  }
+  return out;
+}
+
+/** Keywords too generic to name one column (`value: email`, `to: phone`). */
+const GENERIC_KEYWORD = /^(?:value|values|data|name|key|id|to|from|text|body|content|params|attributes|options|args|input|payload|message|target|recipient|recipients|address|identifier|uid|user|contact|query|search|term|filter|where|q)$/i;
+
+/** The value a copy write stores names the concept: its last identifier (`contact.phone_number`, `phone`). */
+function writesConceptValue(value: string, concept: string, _filePath: string): boolean {
+  // One value: a variable or member chain, optionally indexed and transformed
+  // (`@contact.phone_number.delete('+')`, `phone[:phone].to_s`); not a hash, list or literal.
+  const text = value.trim();
+  if (!VALUE_CHAIN.test(text)) return false;
+  // The value read is the chain's last segment once transforms are dropped:
+  // `mailing_list_user.email` is an email, `@incoming_email.message_id` is not.
+  const segments = [...text.replace(/\([^()]*\)/g, "").replace(/\[[^\]]*\]/g, "").matchAll(/[A-Za-z_][A-Za-z0-9_]*[?!]?/g)].map((m) => m[0]);
+  while (segments.length > 1 && VALUE_TRANSFORMS.has(segments[segments.length - 1])) segments.pop();
+  const name = segments[segments.length - 1] ?? "";
+  // A constant names a kind, not a value (`CustomerEvents.EMAIL_CHANGE_REQUEST`).
+  if (NOT_A_VALUE_NAME.test(name) || name === name.toUpperCase()) return false;
+  // The concept's own head word names it (`sender_email`, `phone_identity`); the detection
+  // matcher's looser tokens (`mail`, `address`) are not enough to call a column a copy.
+  const head = concept.split("_")[0].toLowerCase();
+  return wordsOf(name).some((word) => word === head || word === `${head}s`);
+}
+
+/** Methods that transform a value without changing what it is. */
+const VALUE_TRANSFORMS = new Set([
+  "to_s", "downcase", "upcase", "strip", "squish", "presence", "try", "delete", "delete_prefix", "delete_suffix", "gsub", "sub",
+  "lower", "upper", "trim", "toLowerCase", "toUpperCase", "toString", "normalize", "first", "last", "dup", "freeze",
+]);
+
+/** A variable or member chain with optional calls and index reads. */
+const VALUE_CHAIN = /^[@$]{0,2}[A-Za-z_]\w*[?!]?(?:\[[^\]]*\]|\([^()]*\)|(?:\.|&\.|::|->)[A-Za-z_]\w*[?!]?)*$/;
+
+/** Names of something about a value, not the value (`email_count`, `phone_verified_at`). */
+const NOT_A_VALUE_NAME = /(?:^|_)(?:count|at|verified|confirmed|enabled|disabled|type|status|template|subject|body|domains?|token|hash)$/i;
+
 /** Rails and Laravel column types that hold text. */
 const MIGRATION_TEXT = /^(?:string|text|citext|char|varchar|mediumtext|longtext|tinytext)$/i;
 
@@ -703,6 +778,7 @@ export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undef
  * `PossiblePhoneNumberField`).
  */
 export function matchesConcept(candidate: ColumnCandidate, concept: string): boolean {
+  if (candidate.evidence === "copy-write") return false;
   if (CONFIGURED_EVIDENCE.has(candidate.evidence)) return isConfiguredAddressKey(candidate.column, concept, candidate.file);
   // A schema file's column names the value itself: the concept is its last word, or comes
   // before an address word (`contact_email`, `phone_number`; not `mobile_footer`,
@@ -736,6 +812,11 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
       known.locations.push(location);
     }
   }
+  // A storage column named for something else joins when the concept's value is written into it.
+  for (const copy of copyColumns(candidates, concept)) {
+    const key = [copy.evidence, copy.table ?? "", copy.model ?? "", copy.column].join("\u0000");
+    if (!byKey.has(key)) byKey.set(key, { ...copy, locations: [{ file: copy.file, line: copy.line }] });
+  }
   const entries = [...byKey.values()];
   const declaresStorage = entries.some((entry) => entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence));
   // SQL DDL fills in columns no model declares; a model and its generated SQL are one column.
@@ -751,6 +832,55 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
       return { ...entry, file: locations[0].file, line: locations[0].line, locations };
     })
     .sort((a, b) => (a.table ?? "").localeCompare(b.table ?? "") || a.column.localeCompare(b.column) || a.file.localeCompare(b.file));
+}
+
+/** Storage evidence: kinds that declare a stored column. */
+const STORAGE_EVIDENCE: ReadonlySet<ColumnEvidence> = new Set([
+  "orm-field", "schema-object", "migration", "content-type", "prisma-model", "sql-ddl",
+]);
+
+/**
+ * Storage columns whose names do not name the concept but into which a model write stores
+ * a value that does (`ContactInbox.create(source_id: contact.phone_number)` ->
+ * contact_inboxes.source_id). The column's own storage declaration is returned, with the
+ * write as `writtenFrom`; model and table are matched as entities (ContactInbox ~
+ * contact_inboxes).
+ */
+/** An owner's entity, with `-es` plurals of -x/-ch/-sh/-ss/-z stems singular (contact_inboxes -> contact_inbox). */
+function ownerEntity(name: string): string | undefined {
+  return classEntity(name)?.replace(/(x|ch|sh|ss|z)e$/, "$1");
+}
+
+function copyColumns(candidates: readonly ColumnCandidate[], concept: string): ColumnCandidate[] {
+  // Storage columns not named for the concept, by column name, with their owners' entities.
+  const storage = new Map<string, Array<{ candidate: ColumnCandidate; entities: Set<string> }>>();
+  for (const candidate of candidates) {
+    if (!STORAGE_EVIDENCE.has(candidate.evidence) || matchesConcept(candidate, concept)) continue;
+    const entities = new Set([candidate.table, candidate.model].flatMap((owner) => (owner ? [ownerEntity(owner)] : [])).filter((e): e is string => !!e));
+    const list = storage.get(candidate.column.toLowerCase()) ?? [];
+    if (!list.some((known) => [...known.entities].some((e) => entities.has(e)))) list.push({ candidate, entities });
+    storage.set(candidate.column.toLowerCase(), list);
+  }
+  const out = new Map<string, ColumnCandidate>();
+  for (const write of candidates) {
+    if (write.evidence !== "copy-write" || !write.writtenFrom) continue;
+    if (!writesConceptValue(write.writtenFrom.value, concept, write.file)) continue;
+    const owners = storage.get(write.column.toLowerCase());
+    if (!owners) continue;
+    // The call's model names the table, else the column name belongs to one table only.
+    // A builder, creator or factory named after a model writes that model
+    // (ContactInboxWithContactBuilder -> contact_inbox).
+    const entity = write.model ? ownerEntity(write.model.replace(/(?:Builder|Creator|Factory|Form)$/, "")) : undefined;
+    const ownsEntity = (o: { entities: Set<string> }): boolean =>
+      entity !== undefined && [...o.entities].some((e) => entity === e || entity.startsWith(`${e}_`));
+    const tied = owners.filter(ownsEntity);
+    const owner = tied.length === 1 ? tied[0] : tied.length === 0 && owners.length === 1 ? owners[0] : undefined;
+    if (!owner) continue;
+    const declared = owner.candidate;
+    const key = `${declared.table}.${declared.column}`;
+    if (!out.has(key)) out.set(key, { ...declared, evidence: "copy-write", writtenFrom: write.writtenFrom });
+  }
+  return [...out.values()];
 }
 
 /**

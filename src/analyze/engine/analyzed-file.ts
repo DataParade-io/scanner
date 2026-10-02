@@ -548,7 +548,7 @@ export class AnalyzedFile {
   invocations(): Invocation[] {
     const out: Invocation[] = [];
     for (const { call, callee } of this.invocationNodes) {
-      const member = this.memberByNode.get(callee.id);
+      const member = this.memberByNode.get(callee.id) ?? this.memberByProperty.get(callee.id);
       if (!member && callee.type !== "identifier") continue;
       const { nameNode, deferred } = this.calleeNameNode(callee, member);
       const list = call.childForFieldName("arguments");
@@ -558,20 +558,32 @@ export class AnalyzedFile {
           ? list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment")
           : [list];
       const className = member ? this.classOfReceiver(member.object) : undefined;
+      const constant =
+        member && (member.object.type === "constant" || member.object.type === "scope_resolution")
+          ? member.object.text.replace(/^::/, "").split("::").join("")
+          : member && member.object.type === "identifier" && isClassName(member.object.text)
+            ? member.object.text
+            : undefined;
+      // An association the call is made on (`inbox.contact_inboxes.where(...)` -> contact_inboxes).
+      const receiverMember = member ? (this.memberByNode.get(member.object.id) ?? this.memberByProperty.get(member.object.id)) : undefined;
+      const association = receiverMember && /^[a-z][a-z0-9_]*s$/.test(unquote(receiverMember.property.text)) ? unquote(receiverMember.property.text) : undefined;
       out.push({
         callee: unquote(nameNode.text),
         line: call.startPosition.row + 1,
         column: call.startPosition.column,
         deferred,
         ...(className ? { receiverClass: className } : {}),
+        ...(constant ? { receiverConstant: constant } : {}),
+        ...(association ? { receiverAssociation: association } : {}),
         ancestors: this.enclosingCalls(call),
         ...(Object.keys(argumentLiterals(list).options).length > 0 ? { options: argumentLiterals(list).options } : {}),
         arguments: nodes.map((node, position) => {
-          const keywordNode = node.childForFieldName("name");
+          // A keyword argument: `name=value` (Python), or a hash pair `key: value` (Ruby).
+          const keywordNode = node.childForFieldName("name") ?? (node.type === "pair" ? node.childForFieldName("key") : null);
           const value = keywordNode ? node.childForFieldName("value") : null;
           return {
             position,
-            ...(keywordNode && value ? { keyword: keywordNode.text } : {}),
+            ...(keywordNode && value ? { keyword: unquote(keywordNode.text.replace(/:$/, "")) } : {}),
             text: (value ?? node).text,
           };
         }),

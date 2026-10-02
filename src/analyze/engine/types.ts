@@ -134,6 +134,10 @@ export interface Invocation {
   deferred: boolean;
   /** Class of the receiver of a method call, when the engine can tell. */
   receiverClass?: string;
+  /** A class named directly as the receiver (`ContactInboxWithContactBuilder.new`), whatever kind of class. */
+  receiverConstant?: string;
+  /** A plural association the call is made on (`inbox.contact_inboxes.where(...)`). */
+  receiverAssociation?: string;
   arguments: InvocationArgument[];
   /**
    * The calls this one sits inside the arguments of, innermost first, at most four

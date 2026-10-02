@@ -603,6 +603,49 @@ describe("entity and struct declarations in Java, Go, SQLAlchemy and Drizzle", (
   });
 });
 
+describe("copy columns", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  const schemaRb = (path: string) => ({
+    path,
+    kind: "rails" as const,
+    content: [
+      'create_table "contact_inboxes" do |t|',
+      '  t.string "source_id"',
+      'end',
+      'create_table "messages" do |t|',
+      '  t.string "source_id"',
+      '  t.string "message_id"',
+      'end',
+    ].join("\n"),
+  });
+
+  it("admits a storage column written from the concept's value, tied to its model", () => {
+    const ruby = [
+      "class MailboxHelper", //                                                        1
+      "  def create_contact", //                                                       2
+      "    ContactInboxWithContactBuilder.new(source_id: sender_email, inbox: @inbox)", // 3
+      "    inbox.contact_inboxes.where(source_id: phone_source_id)", //                  4
+      "    Message.create(message_id: @incoming_email.message_id)", //                   5
+      "    Message.create(source_id: CustomerEvents::EMAIL_SENT)", //                     6
+      "  end", //                                                                      7
+      "end", //                                                                        8
+    ];
+    const files = [file("app/mailboxes/mailbox_helper.rb", "ruby", ruby)];
+    const email = declaredColumns(files, "email", {}, [schemaRb("db/schema.rb")]);
+    expect(summary(email)).toEqual(["contact_inboxes.source_id (copy-write)"]);
+    expect(email[0]).toMatchObject({ file: "db/schema.rb", line: 2, writtenFrom: { file: "app/mailboxes/mailbox_helper.rb", line: 3, value: "sender_email" } });
+    expect(summary(declaredColumns(files, "phone_number", {}, [schemaRb("db/schema.rb")]))).toEqual(["contact_inboxes.source_id (copy-write)"]);
+  });
+
+  it("does not admit a column whose name the concept's value cannot be tied to one table", () => {
+    const ruby = ["def f", "  Notifier.call(source_id: sender_email)", "end"];
+    expect(declaredColumns([file("app/x.rb", "ruby", ruby)], "email", {}, [schemaRb("db/schema.rb")])).toEqual([]);
+  });
+});
+
 describe("concept-generic catalog", () => {
   beforeAll(async () => {
     await initAnalysisEngine(LANGUAGE_PACKS);
