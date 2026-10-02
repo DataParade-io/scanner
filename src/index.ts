@@ -210,6 +210,34 @@ export {
 export type { CodexAdapterOptions, CodexDoctorReport } from "./sentiment/adapters/codex";
 export { openVscDb, SqliteUnavailableError } from "./sentiment/adapters/sqlite-reader";
 export type { SqliteKVDatabase, KVRow } from "./sentiment/adapters/sqlite-reader";
+export {
+  DEFAULT_METER_BANDS,
+  computeMeter,
+  gaugeBar,
+  meterOverRecords,
+} from "./sentiment/meter";
+export type {
+  MeterBand,
+  MeterBands,
+  MeterOptions,
+  MeterReport,
+  SourceBreakdown,
+} from "./sentiment/meter";
+export {
+  formatMeterText,
+  runSentimentMeter,
+} from "./sentiment/run";
+export type {
+  RunSentimentOptions,
+  SentimentRoots,
+  SentimentScanOutput,
+} from "./sentiment/run";
+export {
+  loadSentimentConfig,
+  resolveWithConfig,
+  sentimentConfigPath,
+} from "./sentiment/config";
+export type { SentimentConfig } from "./sentiment/config";
 
 
 
