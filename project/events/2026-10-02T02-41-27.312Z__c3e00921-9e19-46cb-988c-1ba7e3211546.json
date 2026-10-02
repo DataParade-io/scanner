@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "c3e00921-9e19-46cb-988c-1ba7e3211546",
+  "issue_id": "KDATAP-5219e258-d02c-4075-885e-1882d394d67f",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:27.312Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Time windows, timezone, and configurable day start",
+    "description": "Purpose: parameterize the meter's time period with correct timezone and DST behavior.\n\nScope: a pure resolveWindow(spec, now, timezone, dayStart) function supporting rolling windows (last-24h, N hours, N days), calendar windows (today, yesterday) where the day starts at a configurable day-start time defaulting to local midnight, and absolute since/until bounds; wall-clock to UTC conversion via Intl timezone offsets with no new runtime dependencies; explicit DST rules (23h/25h days, spring-forward gap clamps forward, fall-back ambiguity resolves earlier).\n\nDone when: window resolution is deterministic and pure; a message at 03:59 with day-start 04:00 falls in yesterday's window and one at 04:00:00 falls in today's; the pinned test matrix (UTC, America/Los_Angeles incl. DST transition dates, Asia/Tokyo, Australia/Lord_Howe, day-start 00:00/04:00/23:30) passes; per-source timestamp parsing (ISO-Z, epoch milliseconds, RFC3339) is normalized and tested.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

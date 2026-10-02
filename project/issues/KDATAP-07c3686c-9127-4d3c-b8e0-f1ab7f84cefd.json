@@ -1,0 +1,40 @@
+{
+  "id": "KDATAP-07c3686c-9127-4d3c-b8e0-f1ab7f84cefd",
+  "title": "Meter aggregation and CLI",
+  "description": "Purpose: turn counted messages into the per-window vibe meter and expose it through a CLI.\n\nScope: aggregation over the window (thanks count, F-bomb count, message-level counts, per-source and per-session breakdown); ratio gauge (thanks divided by thanks plus F-bombs, quiet when no human messages) with configurable bands; scripts/sentiment-meter.ts wired as pnpm run sentiment:meter; flags --window (today, yesterday, last-24h, Nh, Nd, all), --since/--until, --day-start HH:MM (default local midnight), --timezone (IANA), --sources, --json, --cache-dir, --doctor; personal config file ~/.config/dataparade/sentiment.meter.yaml with precedence flags over config over defaults; Gherkin feature specs in features/ with steps driving the library directly (no Plexus host needed).\n\nDone when: the meter renders counts-only output with the resolved window label (for example: today 04:00-04:00 America/Los_Angeles) for every window kind; --json emits the machine-readable report; output never contains message text; the Cucumber scenarios pass.",
+  "type": "epic",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-ff39687f-feb1-4c65-bbe5-0a58de654de9",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5219e258-d02c-4075-885e-1882d394d67f",
+      "type": "blocked-by"
+    },
+    {
+      "target": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-10-02T02:41:58.010035Z",
+  "updated_at": "2026-10-02T02:45:08.977132Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}

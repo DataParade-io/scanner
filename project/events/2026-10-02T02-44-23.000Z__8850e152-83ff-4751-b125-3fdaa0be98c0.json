@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "8850e152-83ff-4751-b125-3fdaa0be98c0",
+  "issue_id": "KDATAP-d3d98c74-8b18-49a5-9176-693d5dbbe068",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:23.000Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement Cursor human-message extraction",
+    "description": "Implement extraction: IDE type-1 (user) bubbles with text from the text field (not richText), timestamps from createdAt (epoch milliseconds), ordering from fullConversationHeadersOnly; verify on a real Mac that harness-injected context (context additions, terminal selections, system reminders) never appears in a type-1 bubble's text — if it does, classify and exclude those bubbles. Agent transcripts: user-role lines only, per the schema pinned in the capture task, with injected context excluded; store.db enriches metadata only (names, timestamps), never duplicates as a message source.\n\nDone when: golden extraction tests pass for IDE fixtures (both index shapes) and agent-transcript fixtures; injected content never counts.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
