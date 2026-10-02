@@ -31,7 +31,7 @@ tests/benchmark/
 
 ## Current corpus packets
 
-Thirty pinned packets live under `repos/`: the original ten (gitea, saleor, keycloak, hyperswitch-vault, medusa-customer, posthog-user, yjdh-employee, vgs-django, easy-school, ory-kratos-password) plus 19 expansion repos (discourse, redmine, wordpress, magento, nopcommerce, orchard-core, spring-petclinic, pocketbase, ghost, directus, spree, strapi, flask-login, exposed, vapor, supabase-js, auth0-express, drupal, medusa), plus the held-out chatwoot packet (KDATAP-973b69), which carries proposed email and phone_number occurrence gold only.
+Thirty-one pinned packets live under `repos/`: the original ten (gitea, saleor, keycloak, hyperswitch-vault, medusa-customer, posthog-user, yjdh-employee, vgs-django, easy-school, ory-kratos-password) plus 19 expansion repos (discourse, redmine, wordpress, magento, nopcommerce, orchard-core, spring-petclinic, pocketbase, ghost, directus, spree, strapi, flask-login, exposed, vapor, supabase-js, auth0-express, drupal, medusa), plus the held-out chatwoot (KDATAP-973b69) and calcom (KDATAP-b8e4a8) packets, which carry proposed email and phone_number occurrence gold only.
 
 `vgs-django` and `easy-school` remain the starter packets for unit tests. License notes in those manifests are unchanged.
 
@@ -170,7 +170,7 @@ Two lanes keep pull requests fast while still exercising the full pinned corpus 
 | Lane | Trigger | Clones upstream packets? | Commands |
 | --- | --- | --- | --- |
 | PR smoke | every pull request (`.github/workflows/ci.yml`) | **No** | `pnpm run ci:smoke` |
-| Full corpus | weekly schedule, manual dispatch, optional release hook (`.github/workflows/baseline-corpus.yml`) | **Yes** (all 30) | `benchmark:materialize -- --all` then `benchmark:validate-materializations` |
+| Full corpus | weekly schedule, manual dispatch, optional release hook (`.github/workflows/baseline-corpus.yml`) | **Yes** (all 31) | `benchmark:materialize -- --all` then `benchmark:validate-materializations` |
 
 **PR smoke** runs an allowlisted Jest subset only:
 
@@ -181,7 +181,7 @@ Two lanes keep pull requests fast while still exercising the full pinned corpus 
 - `tests/unit/benchmark/ci-smoke-digests.spec.ts` — pinned corpus/taxonomy/concept-map/adapter digests under `tests/fixtures/baseline/pins/`
 - `tests/unit/docs/evaluation-docs-contract.spec.ts` — evaluation prose aligned with layer constants and contract versions
 
-Corpus YAML for all 30 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
+Corpus YAML for all 31 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
 
 **Full corpus** materializes every pinned packet, then requires `validationStatus: valid` and matching `validatedHeadSha` for each packet. Partial manual dispatches may skip validation when `repo_keys` is set.
 
