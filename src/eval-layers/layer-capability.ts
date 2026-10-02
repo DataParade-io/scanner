@@ -41,6 +41,7 @@ const PERSONAL_DATA_LAYER_LANGUAGES = new Set<FileLanguage>([
   "env",
   "rust",
   "swift",
+  "ruby",
 ]);
 
 export function isOrchestratorLayerLanguage(language: FileLanguage): boolean {
