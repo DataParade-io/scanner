@@ -1,0 +1,927 @@
+candidates:
+  - file: apps/web/lib/booking.ts
+    line: 146
+    text: "attendees: { select: { name: true; email: true; phoneNumber: true } };"
+  - file: apps/web/lib/booking.ts
+    line: 168
+    text: "phoneNumber: string | null;"
+  - file: apps/web/lib/booking.ts
+    line: 187
+    text: "phoneNumber: true,"
+  - file: apps/web/lib/booking.ts
+    line: 207
+    text: (a.phoneNumber && a.phoneNumber === seatAttendee?.attendee?.phoneNumber)
+  - file: apps/web/lib/QueryCell.tsx
+    line: 19
+    text: interface QueryCellOptionsBase<TData, TError extends ErrorLike> {
+  - file: apps/web/lib/QueryCell.tsx
+    line: 28
+    text: interface QueryCellOptionsNoEmpty<TData, TError extends ErrorLike>
+  - file: apps/web/lib/QueryCell.tsx
+    line: 29
+    text: extends QueryCellOptionsBase<TData, TError> {
+  - file: apps/web/lib/QueryCell.tsx
+    line: 33
+    text: interface QueryCellOptionsWithEmpty<TData, TError extends ErrorLike>
+  - file: apps/web/lib/QueryCell.tsx
+    line: 34
+    text: extends QueryCellOptionsBase<TData, TError> {
+  - file: apps/web/lib/QueryCell.tsx
+    line: 42
+    text: export function QueryCell<TData, TError extends ErrorLike>(
+  - file: apps/web/lib/QueryCell.tsx
+    line: 43
+    text: "opts: QueryCellOptionsWithEmpty<TData, TError>"
+  - file: apps/web/lib/QueryCell.tsx
+    line: 45
+    text: export function QueryCell<TData, TError extends ErrorLike>(
+  - file: apps/web/lib/QueryCell.tsx
+    line: 46
+    text: "opts: QueryCellOptionsNoEmpty<TData, TError>"
+  - file: apps/web/lib/QueryCell.tsx
+    line: 49
+    text: export function QueryCell<TData, TError extends ErrorLike>(
+  - file: apps/web/lib/QueryCell.tsx
+    line: 50
+    text: "opts: QueryCellOptionsNoEmpty<TData, TError> |
+      QueryCellOptionsWithEmpty<TData, TError>"
+  - file: apps/web/lib/QueryCell.tsx
+    line: 54
+    text: const StatusLoader = opts.customLoader || <Loader />; // Fixes edge case
+      where this can return null form query cell
+  - file: packages/features/api-keys-legacy/api-keys/repositories/PrismaApiKeyRepository.ts
+    line: 52
+    text: if (apiKey.note?.startsWith("Cal.ai Phone API Key")) {
+  - file: packages/features/booking-audit/lib/repository/IAuditActorRepository.ts
+    line: 10
+    text: "phone: string | null;"
+  - file: packages/features/booking-audit/lib/repository/IAuditActorRepository.ts
+    line: 21
+    text: "phone: string | null;"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 29
+    text: "phone: string | null;"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 31
+    text: const { email, name, phone } = params;
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 34
+    text: 'const normalizedPhone = phone && phone.trim() !== "" ? phone : null;'
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 37
+    text: if (!normalizedEmail && !normalizedPhone) {
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 43
+    text: "phone: null,"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 61
+    text: "phone: normalizedPhone ?? undefined,"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 67
+    text: // If not found by email and phone exists, try to find by phone
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 68
+    text: if (normalizedPhone) {
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 69
+    text: const existingByPhone = await
+      this.deps.prismaClient.auditActor.findUnique({
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 70
+    text: "where: { phone: normalizedPhone },"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 74
+    text: if (existingByPhone) {
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 75
+    text: // Update existing record found by phone
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 77
+    text: "where: { phone: normalizedPhone },"
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 86
+    text: // Not found by either email or phone, create new record
+  - file: packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts
+    line: 92
+    text: "phone: normalizedPhone,"
+  - file: packages/features/booking-audit/lib/repository/PrismaBookingAuditRepository.ts
+    line: 17
+    text: "* Excludes PII fields like email and phone that aren't needed for display"
+  - file: packages/features/booking-audit/lib/service/BookingAuditTaskerProducerService.ts
+    line: 80
+    text: "phone: null,"
+  - file: packages/features/bookings/Booker/config.ts
+    line: 53
+    text: "* (mobile, month_view, week_view, column_view)"
+  - file: packages/features/bookings/Booker/config.ts
+    line: 60
+    text: "mobile: {"
+  - file: packages/features/bookings/Booker/config.ts
+    line: 192
+    text: if (prefersReducedMotion || layout === "mobile" || isEmbed) {
+  - file: packages/features/bookings/Booker/config.ts
+    line: 223
+    text: "mobile: {"
+  - file: packages/features/bookings/Booker/config.ts
+    line: 224
+    text: // Desktop tablet feels weird on mobile layout,
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 27
+    text: 'const isMobile = useMediaQuery("(max-width: 768px)");'
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 31
+    text: // But if it's mobile view, there is only one layout supported which is
+      'mobile'
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 32
+    text: 'const layout = isEmbed ? (isMobile ? "mobile" :
+      validateLayout(embedUiConfig.layout) || _layout) : _layout;'
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 46
+    text: if (isMobile && layout !== "mobile") {
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 47
+    text: setLayout("mobile");
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 48
+    text: '} else if (!isMobile && layout === "mobile") {'
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 51
+    text: "}, [isMobile, setLayout, layout, defaultLayout]);"
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 56
+    text: "!isMobile &&"
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 65
+    text: "}, [bookerLayouts, setLayout, _layout, isEmbed, isMobile]);"
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 69
+    text: // mobile supports showing the Form without Dialog
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 70
+    text: "mobile: !isEmbed,"
+  - file: packages/features/bookings/Booker/hooks/useBookerLayout.ts
+    line: 97
+    text: isMobile,
+  - file: packages/features/bookings/Booker/store.ts
+    line: 292
+    text: "defaultPhoneCountry?: CountryCode;"
+  - file: packages/features/bookings/Booker/store.ts
+    line: 430
+    text: "defaultPhoneCountry?: CountryCode | null;"
+  - file: packages/features/bookings/Booker/store.ts
+    line: 581
+    text: defaultPhoneCountry,
+  - file: packages/features/bookings/Booker/store.ts
+    line: 625
+    text: defaultPhoneCountry,
+  - file: packages/features/bookings/Booker/store.ts
+    line: 698
+    text: "defaultPhoneCountry: null,"
+  - file: packages/features/bookings/Booker/store.ts
+    line: 730
+    text: defaultPhoneCountry,
+  - file: packages/features/bookings/Booker/store.ts
+    line: 754
+    text: defaultPhoneCountry,
+  - file: packages/features/bookings/Booker/store.ts
+    line: 777
+    text: defaultPhoneCountry,
+  - file: packages/features/bookings/Booker/types.ts
+    line: 105
+    text: export type BookerLayout = "month_view" | "week_view" | "column_view" |
+      "mobile";
+  - file: packages/features/bookings/Booker/utils/isPrefetchNextMonthEnabled.ts
+    line: 23
+    text: if (bookerLayout === BookerLayouts.MONTH_VIEW || bookerLayout ===
+      "mobile") {
+  - file: packages/features/bookings/components/Header.tsx
+    line: 24
+    text: isMobile,
+  - file: packages/features/bookings/components/Header.tsx
+    line: 33
+    text: "isMobile: boolean;"
+  - file: packages/features/bookings/components/Header.tsx
+    line: 66
+    text: if (isMobile || !enabledLayouts) return null;
+  - file: packages/features/bookings/lib/BookingEmailSmsHandler.ts
+    line: 166
+    text: "phoneNumber: user.phoneNumber,"
+  - file: packages/features/bookings/lib/bookingSuccessRedirect.ts
+    line: 72
+    text: "phone?: string | null;"
+  - file: packages/features/bookings/lib/bookingSuccessRedirect.ts
+    line: 89
+    text: // Helper function to extract response details (e.g., phone, attendee's
+      first and last name)
+  - file: packages/features/bookings/lib/bookingSuccessRedirect.ts
+    line: 92
+    text: const phone = getSafe<string>(booking.responses, ["phone"]);
+  - file: packages/features/bookings/lib/bookingSuccessRedirect.ts
+    line: 97
+    text: if (phone) result.phone = phone;
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 24
+    text: "* PHONE -> Phone"
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 86
+    text: "[EventTypeCustomInputType.PHONE]: BookingFieldTypeEnum.phone,"
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 124
+    text: 'defaultLabel: "phone_number",'
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 125
+    text: 'type: "phone",'
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 126
+    text: 'name: "attendeePhoneNumber",'
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 157
+    text: "phone: {"
+  - file: packages/features/bookings/lib/getBookingFields.ts
+    line: 158
+    text: 'type: "phone",'
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 7
+    text: import { isValidPhoneNumber } from "libphonenumber-js/max";
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 20
+    text: "const ensureValidPhoneNumber = (value: string) => {"
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 72
+    text: if (optionInputField && optionInputField.type === "phone") {
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 73
+    text: parsedValue.optionValue = ensureValidPhoneNumber(parsedValue.optionValue);
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 76
+    text: '} else if (field.type === "phone") {'
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 77
+    text: 'return ensureValidPhoneNumber(typeof value === "string" ? value :
+      String(value));'
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 85
+    text: "* Handles all field type validations including email, phone, multiselect,
+      etc."
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 109
+    text: const phoneSchema = isPartialSchema
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 112
+    text: return isValidPhoneNumber(val);
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 230
+    text: if (field.type === "phone") {
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 231
+    text: // Determine if the phone field needs validation
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 234
+    text: // Validate phone number if the field is not hidden and requires validation
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 236
+    text: if (!(await phoneSchema.safeParseAsync(value)).success) {
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 267
+    text: if (typeOfOptionInput === "phone") {
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 268
+    text: if (!(await phoneSchema.safeParseAsync(optionValue)).success) {
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 390
+    text: // - Even a field response itself can be partial so the content isn't
+      validated e.g. a field with type="phone" can be given a partial phone
+      number(e.g. Specifying the country code like +91)
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 440
+    text: const attendeePhoneNumberField = bookingFields.find((field) => field.name
+      === "attendeePhoneNumber");
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 441
+    text: const isAttendeePhoneNumberFieldHidden = attendeePhoneNumberField?.hidden;
+  - file: packages/features/bookings/lib/getBookingResponsesSchema.ts
+    line: 447
+    text: if (isEmailFieldHidden && !isAttendeePhoneNumberFieldHidden) {
+  - file: packages/features/bookings/lib/getCalEventResponses.ts
+    line: 5
+    text: import { contructEmailFromPhoneNumber } from
+      "@calcom/lib/contructEmailFromPhoneNumber";
+  - file: packages/features/bookings/lib/getCalEventResponses.ts
+    line: 51
+    text: if (typeof backwardCompatibleResponses["attendeePhoneNumber"] !==
+      "string") {
+  - file: packages/features/bookings/lib/getCalEventResponses.ts
+    line: 58
+    text: 'message: "Both Phone and Email are missing",'
+  - file: packages/features/bookings/lib/getCalEventResponses.ts
+    line: 61
+    text: backwardCompatibleResponses.email = contructEmailFromPhoneNumber(
+  - file: packages/features/bookings/lib/getCalEventResponses.ts
+    line: 62
+    text: backwardCompatibleResponses["attendeePhoneNumber"]
+  - file: packages/features/bookings/lib/getUserBooking.ts
+    line: 44
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/lib/handleCancelBooking.ts
+    line: 225
+    text: "phoneNumber: attendee.phoneNumber,"
+  - file: packages/features/bookings/lib/handleConfirmation.ts
+    line: 128
+    text: "phoneNumber?: string | null;"
+  - file: packages/features/bookings/lib/handleNewBooking/createBooking.ts
+    line: 164
+    text: "phoneNumber: attendee.phoneNumber,"
+  - file: packages/features/bookings/lib/handleNewBooking/getBookingData.ts
+    line: 54
+    text: "attendeePhoneNumber: undefined,"
+  - file: packages/features/bookings/lib/handleNewBooking/getBookingData.ts
+    line: 83
+    text: "attendeePhoneNumber: responses.attendeePhoneNumber,"
+  - file: packages/features/bookings/lib/handleNewBooking/getEventTypesFromDB.ts
+    line: 147
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 1
+    text: import { isValidPhoneNumber } from "libphonenumber-js/max";
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 28
+    text: '} else if (etcInput.type === "PHONE") {'
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 29
+    text: validatePhoneInput(value, errorMessage);
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 41
+    text: "function validatePhoneInput(value: string | boolean | undefined,
+      errorMessage: string) {"
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 45
+    text: .refine((val) => isValidPhoneNumber(val), {
+  - file: packages/features/bookings/lib/handleNewBooking/handleCustomInputs.ts
+    line: 46
+    text: 'message: "Phone number is invalid",'
+  - file: packages/features/bookings/lib/handleNewBooking/types.ts
+    line: 20
+    text: "phoneNumber?: string;"
+  - file: packages/features/bookings/lib/handlePayment.ts
+    line: 23
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/handlePayment.ts
+    line: 47
+    text: "bookerPhoneNumber?: string | null;"
+  - file: packages/features/bookings/lib/handlePayment.ts
+    line: 176
+    text: bookerPhoneNumber
+  - file: packages/features/bookings/lib/handlePayment.ts
+    line: 187
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/handleSeats/create/createNewSeat.ts
+    line: 24
+    text: "phoneNumber?: string;"
+  - file: packages/features/bookings/lib/handleSeats/create/createNewSeat.ts
+    line: 85
+    text: "phoneNumber: input.attendee.phoneNumber,"
+  - file: packages/features/bookings/lib/handleSeats/create/createNewSeat.ts
+    line: 134
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/handleSeats/create/createNewSeat.ts
+    line: 167
+    text: "phoneNumber: inviteeToAdd.phoneNumber,"
+  - file: packages/features/bookings/lib/handleSeats/create/createNewSeat.ts
+    line: 277
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/handleSeats/handleSeats.ts
+    line: 126
+    text: "smsReminderNumber: invitee[0]?.phoneNumber || smsReminderNumber ||
+      undefined,"
+  - file: packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts
+    line: 6
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts
+    line: 11
+    text: "bookerPhoneNumber: string | undefined;"
+  - file: packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts
+    line: 23
+    text: "phoneNumber: bookerPhoneNumber,"
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 560
+    text: "attendeePhoneNumber: bookerPhoneNumber,"
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 687
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 1211
+    text: "phoneNumber: bookerPhoneNumber,"
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 1531
+    text: "phoneNumber: null,"
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 1596
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 1771
+    text: (bookingData.responses.attendeePhoneNumber &&
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 1772
+    text: attendee.phoneNumber === bookingData.responses.attendeePhoneNumber)
+  - file: packages/features/bookings/lib/service/RegularBookingService.ts
+    line: 2306
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/repositories/AttendeeRepository.ts
+    line: 10
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/AttendeeRepository.ts
+    line: 101
+    text: "phoneNumber: string | null;"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 42
+    text: "phoneNumber?: string | null;"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 194
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 325
+    text: "attendee: { select: { id: true, email: true, phoneNumber: true } },"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 459
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 883
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1185
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1332
+    text: bookerPhoneNumber,
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1338
+    text: "bookerPhoneNumber?: string;"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1348
+    text: "phoneNumber: bookerPhoneNumber,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1726
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/repositories/BookingRepository.ts
+    line: 1971
+    text: "phoneNumber: attendee.phoneNumber ?? null,"
+  - file: packages/features/bookings/repositories/BookingSeatRepository.ts
+    line: 33
+    text: "phoneNumber: true,"
+  - file: packages/features/bookings/services/BookingAttendeesService.ts
+    line: 39
+    text: "phoneNumber: string | null;"
+  - file: packages/features/bookings/services/BookingAttendeesService.ts
+    line: 110
+    text: "phoneNumber: a.phoneNumber || null,"
+  - file: packages/features/bookings/services/BookingAttendeesService.ts
+    line: 147
+    text: "phoneNumber: createdAttendee.phoneNumber,"
+  - file: packages/features/CalendarEventBuilder.ts
+    line: 52
+    text: 'attendee: Pick<Attendee, "locale" | "name" | "timeZone" | "email" |
+      "phoneNumber"> & {'
+  - file: packages/features/CalendarEventBuilder.ts
+    line: 66
+    text: "phoneNumber: attendee.phoneNumber,"
+  - file: packages/features/CalendarEventBuilder.ts
+    line: 238
+    text: (bookingResponses.attendeePhoneNumber &&
+  - file: packages/features/CalendarEventBuilder.ts
+    line: 239
+    text: s.attendee.phoneNumber === bookingResponses.attendeePhoneNumber)
+  - file: packages/features/calendars/components/DatePicker.tsx
+    line: 178
+    text: const isMobile = layout === "mobile";
+  - file: packages/features/calendars/components/DatePicker.tsx
+    line: 286
+    text: // Don't auto-select date when slots view on small screen is enabled on
+      mobile
+  - file: packages/features/calendars/weeklyview/state/store.ts
+    line: 23
+    text: "gridCellsPerHour: 4,"
+  - file: packages/features/calendars/weeklyview/state/store.ts
+    line: 47
+    text: const blockingDates = mergeOverlappingDateRanges(state.blockingDates ||
+      []); // We merge overlapping dates so we don't get duplicate blocking
+      "Cells" in the UI
+  - file: packages/features/calendars/weeklyview/types/state.ts
+    line: 38
+    text: "onEmptyCellClick?: (date: Date) => void;"
+  - file: packages/features/calendars/weeklyview/types/state.ts
+    line: 117
+    text: "gridCellsPerHour?: number;"
+  - file: packages/features/calendars/weeklyview/types/state.ts
+    line: 147
+    text: "* Border color for calendar cells"
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 15
+    text: export type GridCellToDateProps = {
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 17
+    text: "gridCellIdx: number;"
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 18
+    text: "totalGridCells: number;"
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 24
+    text: export function gridCellToDateTime({
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 26
+    text: gridCellIdx,
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 27
+    text: totalGridCells,
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 31
+    text: "}: GridCellToDateProps) {"
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 34
+    text: const minutesPerCell = minutesInSelection / totalGridCells;
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 35
+    text: const minutesIntoSelection = minutesPerCell * gridCellIdx;
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 39
+    text: const cellDateTime = dayjs(day)
+  - file: packages/features/calendars/weeklyview/utils/index.ts
+    line: 44
+    text: return cellDateTime;
+  - file: packages/features/credits/repositories/CreditsRepository.ts
+    line: 151
+    text: "phoneNumber: true,"
+  - file: packages/features/crmManager/crmManager.ts
+    line: 43
+    text: // Figure out which contacts to create and map phoneNumber to phone
+  - file: packages/features/crmManager/crmManager.ts
+    line: 49
+    text: "phone: attendee.phoneNumber ?? undefined,"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 18
+    text: "export const textFilter = (cellValue: unknown, filterValue:
+      TextFilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 19
+    text: if (filterValue.data.operator === "isEmpty" && !cellValue) {
+  - file: packages/features/data-table/lib/utils.ts
+    line: 23
+    text: if (typeof cellValue !== "string") {
+  - file: packages/features/data-table/lib/utils.ts
+    line: 29
+    text: return cellValue.toLowerCase() === (filterValue.data.operand ||
+      "").toLowerCase();
+  - file: packages/features/data-table/lib/utils.ts
+    line: 31
+    text: return cellValue.toLowerCase() !== (filterValue.data.operand ||
+      "").toLowerCase();
+  - file: packages/features/data-table/lib/utils.ts
+    line: 33
+    text: return cellValue.toLowerCase().includes((filterValue.data.operand ||
+      "").toLowerCase());
+  - file: packages/features/data-table/lib/utils.ts
+    line: 35
+    text: return !cellValue.toLowerCase().includes((filterValue.data.operand ||
+      "").toLowerCase());
+  - file: packages/features/data-table/lib/utils.ts
+    line: 37
+    text: return cellValue.toLowerCase().startsWith((filterValue.data.operand ||
+      "").toLowerCase());
+  - file: packages/features/data-table/lib/utils.ts
+    line: 39
+    text: return cellValue.toLowerCase().endsWith((filterValue.data.operand ||
+      "").toLowerCase());
+  - file: packages/features/data-table/lib/utils.ts
+    line: 41
+    text: return cellValue.trim() === "";
+  - file: packages/features/data-table/lib/utils.ts
+    line: 43
+    text: return cellValue.trim() !== "";
+  - file: packages/features/data-table/lib/utils.ts
+    line: 61
+    text: "export const multiSelectFilter = (cellValue: unknown | undefined,
+      filterValue: MultiSelectFilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 62
+    text: "const cellValueArray = Array.isArray(cellValue) ? cellValue :
+      [cellValue];"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 69
+    text: if (isAllString(filterValueArray) && isAllString(cellValueArray)) {
+  - file: packages/features/data-table/lib/utils.ts
+    line: 70
+    text: return cellValueArray.some((v) => filterValueArray.includes(v));
+  - file: packages/features/data-table/lib/utils.ts
+    line: 71
+    text: "} else if (isAllNumber(filterValueArray) && isAllNumber(cellValueArray))
+      {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 72
+    text: return cellValueArray.some((v) => filterValueArray.includes(v));
+  - file: packages/features/data-table/lib/utils.ts
+    line: 82
+    text: "export const singleSelectFilter = (cellValue: unknown | undefined,
+      filterValue: SingleSelectFilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 83
+    text: return filterValue.data === cellValue;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 90
+    text: "export const numberFilter = (cellValue: unknown, filterValue:
+      NumberFilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 91
+    text: if (typeof cellValue !== "number") {
+  - file: packages/features/data-table/lib/utils.ts
+    line: 97
+    text: return cellValue === filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 99
+    text: return cellValue !== filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 101
+    text: return cellValue > filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 103
+    text: return cellValue >= filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 105
+    text: return cellValue < filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 107
+    text: return cellValue <= filterValue.data.operand;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 113
+    text: "export const dateRangeFilter = (cellValue: unknown, filterValue:
+      DateRangeFilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 114
+    text: if (!(cellValue instanceof Date)) {
+  - file: packages/features/data-table/lib/utils.ts
+    line: 122
+    text: const cellValueStr = cellValue.toISOString();
+  - file: packages/features/data-table/lib/utils.ts
+    line: 124
+    text: return filterValue.data.startDate <= cellValueStr &&
+      filterValue.data.endDate >= cellValueStr;
+  - file: packages/features/data-table/lib/utils.ts
+    line: 135
+    text: "export const dataTableFilter = (cellValue: unknown, filterValue:
+      FilterValue) => {"
+  - file: packages/features/data-table/lib/utils.ts
+    line: 137
+    text: return singleSelectFilter(cellValue, filterValue);
+  - file: packages/features/data-table/lib/utils.ts
+    line: 139
+    text: return multiSelectFilter(cellValue, filterValue);
+  - file: packages/features/data-table/lib/utils.ts
+    line: 141
+    text: return textFilter(cellValue, filterValue);
+  - file: packages/features/data-table/lib/utils.ts
+    line: 143
+    text: return numberFilter(cellValue, filterValue);
+  - file: packages/features/data-table/lib/utils.ts
+    line: 145
+    text: return dateRangeFilter(cellValue, filterValue);
+  - file: packages/features/eventtypes/components/locations/types.ts
+    line: 18
+    text: "phoneInput?: string;"
+  - file: packages/features/eventtypes/lib/schemas.ts
+    line: 40
+    text: "hostPhoneNumber?: string;"
+  - file: packages/features/eventtypes/lib/types.ts
+    line: 46
+    text: "phoneNumber?: string | null;"
+  - file: packages/features/eventtypes/lib/types.ts
+    line: 73
+    text: "hostPhoneNumber?: string;"
+  - file: packages/features/eventtypes/lib/types.ts
+    line: 75
+    text: "phone?: string;"
+  - file: packages/features/eventtypes/lib/types.ts
+    line: 244
+    text: "phoneNumber?: string | null;"
+  - file: packages/features/eventtypes/repositories/eventTypeRepository.ts
+    line: 732
+    text: "phoneNumber: true,"
+  - file: packages/features/eventtypes/repositories/eventTypeRepository.ts
+    line: 1012
+    text: "phoneNumber: true,"
+  - file: packages/features/feature-opt-in/config.ts
+    line: 41
+    text: '/** Where to show the feedback dialog: "all" | "desktop" | "mobile".
+      Defaults to "all". */'
+  - file: packages/features/feature-opt-in/config.ts
+    line: 42
+    text: 'showOn?: "all" | "desktop" | "mobile";'
+  - file: packages/features/form-builder/fieldTypes.ts
+    line: 85
+    text: "phone: {"
+  - file: packages/features/form-builder/fieldTypes.ts
+    line: 86
+    text: 'label: "Phone",'
+  - file: packages/features/form-builder/fieldTypes.ts
+    line: 87
+    text: 'value: "phone",'
+  - file: packages/features/form-builder/propsTypes.ts
+    line: 4
+    text: 'phone: "text",'
+  - file: packages/features/form-builder/widget-types.ts
+    line: 56
+    text: 'type?: "text" | "number" | "email" | "tel" | "url";'
+  - file: packages/features/form/components/LocationSelect.tsx
+    line: 9
+    text: import { LinkIcon, MapIcon, MapPinIcon, PhoneIcon, VideoIcon } from
+      "@coss/ui/icons";
+  - file: packages/features/form/components/LocationSelect.tsx
+    line: 49
+    text: 'case "phone":'
+  - file: packages/features/form/components/LocationSelect.tsx
+    line: 50
+    text: return <PhoneIcon className={classNames("h-3.5 w-3.5",
+      customClassNames?.optionIcon)} />;
+  - file: packages/features/form/components/LocationSelect.tsx
+    line: 51
+    text: 'case "userPhone":'
+  - file: packages/features/form/components/LocationSelect.tsx
+    line: 52
+    text: return <PhoneIcon className={classNames("h-3.5 w-3.5",
+      customClassNames?.optionIcon)} />;
+  - file: packages/features/host/repositories/HostLocationRepository.ts
+    line: 35
+    text: "phoneNumber: string | null;"
+  - file: packages/features/host/repositories/HostLocationRepository.ts
+    line: 53
+    text: "phoneNumber: location.phoneNumber,"
+  - file: packages/features/host/repositories/HostRepository.ts
+    line: 59
+    text: "phoneNumber: true,"
+  - file: packages/features/host/repositories/HostRepository.ts
+    line: 112
+    text: "phoneNumber: true,"
+  - file: packages/features/tasker/tasks/crm/lib/buildCalendarEvent.ts
+    line: 43
+    text: "phoneNumber: true,"
+  - file: packages/features/tasker/tasks/crm/lib/buildCalendarEvent.ts
+    line: 73
+    text: "phoneNumber: attendee.phoneNumber || undefined,"
+  - file: packages/features/tasker/tasks/triggerNoShow/triggerGuestNoShow.ts
+    line: 18
+    text: "phoneNumber: string | null;"
+  - file: packages/features/watchlist/lib/freeEmailDomainCheck/freeEmailDomains.ts
+    line: 651
+    text: '"cyber-phone.eu",'
+  - file: packages/features/watchlist/lib/freeEmailDomainCheck/freeEmailDomains.ts
+    line: 989
+    text: '"fax.ru",'
+  - file: packages/features/watchlist/lib/freeEmailDomainCheck/freeEmailDomains.ts
+    line: 2003
+    text: '"mail2cell.com",'
+  - file: packages/features/watchlist/lib/freeEmailDomainCheck/freeEmailDomains.ts
+    line: 2950
+    text: '"mail2telephone.com",'
+  - file: packages/features/watchlist/lib/freeEmailDomainCheck/freeEmailDomains.ts
+    line: 3613
+    text: '"phone.net",'
+  - file: packages/lib/bookings/SystemField.ts
+    line: 12
+    text: '"attendeePhoneNumber",'
+  - file: packages/lib/bookings/SystemField.ts
+    line: 13
+    text: '"aiAgentCallPhoneNumber",'
+  - file: packages/lib/bookings/SystemField.ts
+    line: 17
+    text: export const CAL_AI_AGENT_PHONE_NUMBER_FIELD = "aiAgentCallPhoneNumber";
+  - file: packages/lib/bookings/SystemField.ts
+    line: 19
+    text: export const ATTENDEE_PHONE_NUMBER_FIELD = "attendeePhoneNumber";
+  - file: packages/lib/bookings/SystemField.ts
+    line: 21
+    text: export const SYSTEM_PHONE_FIELDS = new Set([
+  - file: packages/lib/bookings/SystemField.ts
+    line: 22
+    text: ATTENDEE_PHONE_NUMBER_FIELD,
+  - file: packages/lib/bookings/SystemField.ts
+    line: 24
+    text: CAL_AI_AGENT_PHONE_NUMBER_FIELD,
+  - file: packages/lib/CalEventParser.ts
+    line: 71
+    text: '`${attendee?.name || t("guest")}${attendee.phoneNumber ? ` -
+      ${attendee.phoneNumber}` : ""}\n${'
+  - file: packages/lib/constants.ts
+    line: 247
+    text: const _rawCalAiPrice =
+      process.env.NEXT_PUBLIC_CAL_AI_PHONE_NUMBER_MONTHLY_PRICE;
+  - file: packages/lib/constants.ts
+    line: 248
+    text: export const CAL_AI_PHONE_NUMBER_MONTHLY_PRICE = (() => {
+  - file: packages/lib/contructEmailFromPhoneNumber.ts
+    line: 1
+    text: "export const contructEmailFromPhoneNumber = (phoneNumber: string) => {"
+  - file: packages/lib/contructEmailFromPhoneNumber.ts
+    line: 2
+    text: const cleanedPhoneNumber = phoneNumber.replace(/\+/g, "");
+  - file: packages/lib/contructEmailFromPhoneNumber.ts
+    line: 3
+    text: return `${cleanedPhoneNumber}@sms.cal.com`;
+  - file: packages/lib/formatPhoneNumber.ts
+    line: 1
+    text: import { parsePhoneNumberWithError } from "libphonenumber-js/max";
+  - file: packages/lib/formatPhoneNumber.ts
+    line: 3
+    text: "export const formatPhoneNumber = (phoneNumber: string) => {"
+  - file: packages/lib/formatPhoneNumber.ts
+    line: 4
+    text: const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber);
+  - file: packages/lib/formatPhoneNumber.ts
+    line: 5
+    text: "return parsedPhoneNumber?.isValid() ?
+      parsedPhoneNumber.formatInternational() : phoneNumber;"
+  - file: packages/lib/hooks/useUserAgentData.ts
+    line: 9
+    text: "isMobile: boolean;"
+  - file: packages/lib/hooks/useUserAgentData.ts
+    line: 55
+    text: "isMobile: false,"
+  - file: packages/lib/hooks/useUserAgentData.ts
+    line: 66
+    text: const isMobile = os === "ios" || os === "android";
+  - file: packages/lib/hooks/useUserAgentData.ts
+    line: 68
+    text: setUserAgentData({ os, browser, isMobile });
+  - file: packages/lib/zod/eventType.ts
+    line: 14
+    text: "hostPhoneNumber?: string;"
+  - file: packages/lib/zod/eventType.ts
+    line: 32
+    text: "hostPhoneNumber: z.string().optional(),"
+  - file: packages/prisma/schema.prisma
+    line: 110
+    text: phoneNumber  String?
+  - file: packages/prisma/schema.prisma
+    line: 506
+    text: calAiPhoneNumbers              CalAiPhoneNumber[]
+  - file: packages/prisma/schema.prisma
+    line: 618
+    text: calAiPhoneNumbers      CalAiPhoneNumber[]
+  - file: packages/prisma/schema.prisma
+    line: 676
+    text: CAL_AI_PHONE_CALL
+  - file: packages/prisma/schema.prisma
+    line: 690
+    text: phoneNumber     String?
+  - file: packages/prisma/schema.prisma
+    line: 723
+    text: disablePhoneOnlySMSNotifications    Boolean    @default(false)
+  - file: packages/prisma/schema.prisma
+    line: 831
+    text: phoneNumber String?
+  - file: packages/prisma/schema.prisma
+    line: 1055
+    text: PHONE    @map("phone")
+  - file: packages/prisma/schema.prisma
+    line: 1351
+    text: phoneNumber String
+  - file: packages/prisma/schema.prisma
+    line: 2467
+    text: phone String?
+  - file: packages/prisma/schema.prisma
+    line: 2478
+    text: "@@unique([phone]) // Prevent duplicate phone actors"
+  - file: packages/prisma/schema.prisma
+    line: 2530
+    text: enum PhoneNumberSubscriptionStatus {
+  - file: packages/prisma/schema.prisma
+    line: 2564
+    text: inboundPhoneNumbers  CalAiPhoneNumber[] @relation("InboundAgent")
+  - file: packages/prisma/schema.prisma
+    line: 2565
+    text: outboundPhoneNumbers CalAiPhoneNumber[] @relation("OutboundAgent")
+  - file: packages/prisma/schema.prisma
+    line: 2573
+    text: model CalAiPhoneNumber {
+  - file: packages/prisma/schema.prisma
+    line: 2582
+    text: phoneNumber String @unique
+  - file: packages/prisma/schema.prisma
+    line: 2585
+    text: // Provider-specific phone number ID (e.g., Retell phone number ID)
+  - file: packages/prisma/schema.prisma
+    line: 2586
+    text: providerPhoneNumberId String? @unique
+  - file: packages/prisma/schema.prisma
+    line: 2593
+    text: subscriptionStatus   PhoneNumberSubscriptionStatus?
+  - file: packages/prisma/zod-utils.ts
+    line: 206
+    text: "attendeePhoneNumber: z.string().optional(),"
+  - file: packages/prisma/zod-utils.ts
+    line: 898
+    text: '"phone",'
+  - file: packages/prisma/zod-utils.ts
+    line: 997
+    text: '* e.g. If user is given a list of locations and he selects "Phone", then
+      he will be shown a phone input'
+  - file: packages/prisma/zod-utils.ts
+    line: 1004
+    text: 'type: z.enum(["address", "phone", "text"]),'
