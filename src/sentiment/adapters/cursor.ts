@@ -371,14 +371,32 @@ function extractOrderedBubbleIds(headersValue: string | undefined): string[] {
 }
 
 /**
+ * Harness follow-up prompts the agent runtime injects inside <user_query>
+ * after its own turns or subagent completions (pinned on a real Mac corpus,
+ * KDATAP-713a0f: 816 occurrences across three families, exact-templated
+ * boilerplate, never typed by a human). Prefix signatures, matched after
+ * unwrapping.
+ */
+export const CURSOR_AGENT_TEMPLATE_PROMPTS = [
+  "Briefly inform the user about the task result",
+  "Perform any necessary follow-up actions",
+  "The beginning of the above subagent result is already visible to the user",
+];
+
+/**
  * Agent-CLI transcript extraction, pinned against a real Mac corpus
- * (KDATAP-e9aa3c): user-role lines are {"role":"user","message":{"content":
- * [{"type":"text","text":...}]}}; genuinely typed input is always fully
- * wrapped in <user_query>...</user_query>; harness-injected context lines
- * (timestamp, dynamic_tools, dynamic_tool_catalog, available_subagent_types,
- * manually_attached_skills, open_subagent_context, cursor_commands) ride as
- * tagged user lines. Lines carry NO timestamps or ids — the record timestamp
- * is session-level: ~/.cursor/chats/<hash>/<sid>/meta.json updatedAtMs when
+ * (KDATAP-e9aa3c, corrected on KDATAP-713a0f): user-role lines are
+ * {"role":"user","message":{"content":[{"type":"text","text":...}]}}.
+ * Genuinely typed input ALWAYS lives inside a trailing
+ * <user_query>...</user_query> block — either as the whole line (in-turn)
+ * or after injected headers (<timestamp>, <image_files>, <dynamic_tools>,
+ * <available_subagent_types>, ...) when the message was a queued follow-up
+ * processed later. Lines whose text carries no trailing <user_query> block
+ * are harness context and are skipped, as are empty blocks and lines whose
+ * unwrapped text matches a harness follow-up template. Lines carry no ids;
+ * the record timestamp is the <timestamp> header when present (parsed to
+ * UTC from its "Weekday, Mon D, YYYY, H:MM AM/PM (UTC±H)" form), else
+ * session-level: ~/.cursor/chats/<hash>/<sid>/meta.json updatedAtMs when
  * present, else the transcript file mtime.
  */
 async function* extractAgentTranscript(
@@ -404,18 +422,13 @@ async function* extractAgentTranscript(
     if (type !== undefined && type !== "message") continue;
     const fullText = extractAgentText(parsed);
     if (!fullText || fullText.trim() === "") continue;
-    const stamped = lineTimestamp(parsed);
-    // Typed input arrives fully wrapped in <user_query>; everything else that
-    // leads with a tag is injected context. Untagged lines are counted as
-    // typed only when a timestamp exists to window them by.
-    const wrapped = unwrapUserQuery(fullText);
-    const text =
-      wrapped !== undefined
-        ? wrapped
-        : isInjectedText(fullText) || (!stamped && sessionTimestamp === undefined)
-          ? undefined
-          : fullText;
-    if (!text || text.trim() === "") continue;
+    // Typed input always sits in a trailing <user_query> block (pinned on a
+    // real Mac); lines without one are harness context. Harness follow-up
+    // templates also ride inside the block and are excluded by signature.
+    const text = unwrapUserQuery(fullText);
+    if (text === undefined || text.trim() === "") continue;
+    if (CURSOR_AGENT_TEMPLATE_PROMPTS.some((tpl) => text.startsWith(tpl))) continue;
+    const stamped = lineTimestamp(parsed) ?? timestampHeaderRfc3339(fullText);
     const timestamp = stamped ?? sessionTimestamp;
     if (!timestamp) continue;
     const messageId = `${session.sessionId}:${line}`;
@@ -439,11 +452,61 @@ async function* extractAgentTranscript(
   }
 }
 
-/** Inner text of a fully <user_query>-wrapped line, else undefined. */
+/**
+ * Inner text of the trailing <user_query>...</user_query> block, else
+ * undefined. Typed input is always in such a block: as the whole line when
+ * sent in-turn, or after injected headers (<timestamp>, <image_files>, ...)
+ * when it was a queued follow-up processed later.
+ */
 export function unwrapUserQuery(text: string): string | undefined {
   const trimmed = text.trim();
-  const match = /^<user_query>([\s\S]*)<\/user_query>$/.exec(trimmed);
+  const match = /<user_query>([\s\S]*)<\/user_query>\s*$/.exec(trimmed);
   return match ? match[1] : undefined;
+}
+
+/**
+ * Parse a <timestamp> header value — "Wednesday, Sep 2, 2026, 3:19 PM
+ * (UTC-4)" or "(UTC)" — into epoch ms, or undefined when absent/unparseable
+ * (some injected placeholders carry regex fragments instead of a date).
+ */
+export function parseCursorTimestampHeaderMs(value: string): number | undefined {
+  const match =
+    /^[A-Za-z]+,\s+([A-Za-z]{3,9})\s+(\d{1,2}),\s+(\d{4}),\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s+(AM|PM)\s+\(UTC(?:([+-])(\d{1,2})(?::(\d{2}))?)?\)$/.exec(
+      value.trim(),
+    );
+  if (!match) return undefined;
+  const month = MONTH_INDEX[match[1].slice(0, 3).toLowerCase()];
+  if (month === undefined) return undefined;
+  const day = Number(match[2]);
+  const year = Number(match[3]);
+  let hours = Number(match[4]) % 12;
+  if (match[7].toUpperCase() === "PM") hours += 12;
+  const minutes = Number(match[5]);
+  const seconds = match[6] ? Number(match[6]) : 0;
+  let offsetMinutes = 0;
+  if (match[8]) {
+    const sign = match[8] === "-" ? -1 : 1;
+    offsetMinutes = sign * (Number(match[9]) * 60 + (match[10] ? Number(match[10]) : 0));
+  }
+  const asUtcAssumed = Date.UTC(year, month, day, hours, minutes, seconds);
+  return asUtcAssumed - offsetMinutes * 60_000;
+}
+
+const MONTH_INDEX: Record<string, number> = {
+  jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+  jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+};
+
+function timestampHeaderMs(fullText: string): number | undefined {
+  const match = /<timestamp>([^<]*)<\/timestamp>/.exec(fullText);
+  if (!match) return undefined;
+  const ms = parseCursorTimestampHeaderMs(match[1]);
+  return Number.isFinite(ms) ? ms : undefined;
+}
+
+function timestampHeaderRfc3339(fullText: string): string | undefined {
+  const ms = timestampHeaderMs(fullText);
+  return ms !== undefined ? normalizeTimestampToRfc3339Utc(ms) : undefined;
 }
 
 /**
@@ -500,9 +563,10 @@ function contentText(content: unknown): string | undefined {
 }
 
 /**
- * Injected-context discrimination for agent transcripts (pinned on a real
- * Mac): injected lines lead with a tag — typed input is either fully wrapped
- * in <user_query> or untagged.
+ * Leading-tag heuristic, kept for callers that classify raw line text
+ * (pinned on a real Mac: harness context lines lead with a tag such as
+ * <timestamp> or <dynamic_tools>). Extraction itself now keys on the
+ * trailing <user_query> block instead of this heuristic.
  */
 export function isInjectedText(text: string): boolean {
   const trimmed = text.trim();

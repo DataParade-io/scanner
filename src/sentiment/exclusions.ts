@@ -1,20 +1,28 @@
 export interface ExclusionThresholds {
   pasteMinLength: number;
-  pasteMinAsciiRatio: number;
-  pasteMinNonBlankLines: number;
+  pasteMinCitationMarkers: number;
 }
 
+/**
+ * Tuned on the real Mac corpus (KDATAP-713a0f): the only pasted regions
+ * observed are web-research answers, whose signature is bracketed citation
+ * markers ("[1]", "[2]", ...) in bulk. Earlier shape thresholds (ascii ratio,
+ * line count) excluded the operator's own long orchestration briefs, which
+ * are genuine sentiment input — 7.8 percent of all Cursor agent messages —
+ * so the heuristic now requires both length and citation density. Genuine
+ * long briefs in the corpus carry at most 1-2 citation mentions; pastes carry
+ * dozens.
+ */
 export const DEFAULT_EXCLUSION_THRESHOLDS: ExclusionThresholds = {
-  pasteMinLength: 2000,
-  pasteMinAsciiRatio: 0.6,
-  pasteMinNonBlankLines: 10,
+  pasteMinLength: 4000,
+  pasteMinCitationMarkers: 3,
 };
 
 /**
  * Strip non-authored regions from a human message before matching:
  * fenced code blocks (backtick and tilde) and indented code blocks,
  * markdown blockquote lines, and pasted regions detected by a configurable
- * length/shape heuristic.
+ * length/citation heuristic.
  */
 export function stripExcludedRegions(
   text: string,
@@ -69,11 +77,6 @@ export function isPastedRegion(
 ): boolean {
   const normalized = text.trim();
   if (normalized.length < thresholds.pasteMinLength) return false;
-  const nonBlankLines = normalized.split("\n").filter((l) => l.trim() !== "").length;
-  const asciiChars = [...normalized].filter((c) => c.charCodeAt(0) < 128).length;
-  const asciiRatio = asciiChars / normalized.length;
-  return (
-    asciiRatio >= thresholds.pasteMinAsciiRatio ||
-    nonBlankLines >= thresholds.pasteMinNonBlankLines
-  );
+  const citationMarkers = (normalized.match(/\[\d+\]/g) ?? []).length;
+  return citationMarkers >= thresholds.pasteMinCitationMarkers;
 }

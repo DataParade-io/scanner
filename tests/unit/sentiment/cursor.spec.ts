@@ -7,6 +7,7 @@ import {
   discoverComposers,
   doctorCursor,
   isSubagentComposerId,
+  parseCursorTimestampHeaderMs,
   workspaceFolderFromUri,
 } from "../../../src/sentiment/adapters/cursor";
 import { extractCursorRecords } from "../../../src/sentiment/adapters/cursor";
@@ -158,9 +159,9 @@ describe("Cursor agent transcripts", () => {
         sanitizedProject: "-Users-ryan-demo",
         sessionId: "sess-1",
         lines: [
-          { type: "message", role: "user", text: "thanks, saved me", timestamp: 1727784000000 },
+          { type: "message", role: "user", message: { content: [{ type: "text", text: "<user_query>thanks, saved me</user_query>" }] } },
           { type: "message", role: "assistant", text: "glad", timestamp: 1727784001000 },
-          { type: "message", role: "user", text: "<system-reminder>injected</system-reminder>", timestamp: 1727784002000 },
+          { type: "message", role: "user", message: { content: [{ type: "text", text: "<system-reminder>injected</system-reminder>" }] } },
           { type: "context", role: "user", text: "not a message bubble", timestamp: 1727784003000 },
         ],
       }],
@@ -175,7 +176,7 @@ describe("Cursor agent transcripts", () => {
     cleanupCursorProfile(profile);
   });
 
-  it("extracts the real transcript schema: user_query wraps, tags are injected, session timestamp from meta.json", async () => {
+  it("extracts the real transcript schema: typed input rides in a trailing user_query block, headers precede it, templates are excluded", async () => {
     const adapter = createCursorAdapter({
       cursorUserDir: "/nonexistent",
       cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home"),
@@ -185,9 +186,9 @@ describe("Cursor agent transcripts", () => {
     expect(session).toBeDefined();
     const { records } = await extractCursorRecords(session!, { cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home") });
     const texts = records.map((r) => r.text);
-    // Real-shape lines: fully wrapped typed input, untagged typed line, plus
-    // the old tolerant shape; injected tags and turn_ended lines excluded.
-    // (Ordering is by timestamp after dedup, so assert on membership.)
+    // Counted: the four gold-labeled texts only. Skipped: tag-only injected
+    // lines (no user_query block), harness follow-up templates (with and
+    // without a <timestamp> header), assistant/turn_ended lines.
     expect(new Set(texts)).toEqual(new Set([
       "thanks that worked",
       "thanks, the queue fix worked",
@@ -195,14 +196,16 @@ describe("Cursor agent transcripts", () => {
       "typed without wrapper, thanks again",
     ]));
     expect(texts).toHaveLength(4);
-    // Lines carry no timestamps: session-level timestamp from chats meta.json.
-    for (const r of records.slice(1)) {
-      expect(r.timestamp).toBe("2024-10-01T12:00:10Z");
-    }
-    expect(new Date(records[0].timestamp).getTime()).toBe(1727784000000);
+    const byText = new Map(records.map((r) => [r.text, r.timestamp]));
+    // <timestamp> header parsed to UTC beats the session-level timestamp.
+    expect(byText.get("thanks that worked")).toBe("2024-09-30T12:00:00Z");
+    expect(byText.get("second typed message that cursed fuck")).toBe("2026-09-03T21:58:00Z");
+    // No header: session-level timestamp from chats meta.json updatedAtMs.
+    expect(byText.get("thanks, the queue fix worked")).toBe("2024-10-01T12:00:10Z");
+    expect(byText.get("typed without wrapper, thanks again")).toBe("2024-10-01T12:00:10Z");
   });
 
-  it("unwraps user_query text and never emits the wrapper itself", async () => {
+  it("unwraps user_query text and never emits the wrapper, headers, or templates", async () => {
     const adapter = createCursorAdapter({
       cursorUserDir: "/nonexistent",
       cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home"),
@@ -211,6 +214,16 @@ describe("Cursor agent transcripts", () => {
     const { records } = await extractCursorRecords(discovery.sessions[0], { cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home") });
     expect(records.every((r) => !r.text.includes("<user_query>"))).toBe(true);
     expect(records.every((r) => !r.text.includes("<timestamp>"))).toBe(true);
+    expect(records.every((r) => !r.text.startsWith("Briefly inform the user"))).toBe(true);
+    expect(records.every((r) => !r.text.startsWith("Perform any necessary"))).toBe(true);
+  });
+
+  it("parses <timestamp> header offsets, including bare UTC and +/-H:MM", () => {
+    expect(new Date(parseCursorTimestampHeaderMs("Wednesday, Sep 2, 2026, 3:19 PM (UTC-4)")!).toISOString()).toBe("2026-09-02T19:19:00.000Z");
+    expect(new Date(parseCursorTimestampHeaderMs("Thursday, Sep 3, 2026, 5:58 PM (UTC)")!).toISOString()).toBe("2026-09-03T17:58:00.000Z");
+    expect(new Date(parseCursorTimestampHeaderMs("Thursday, Sep 3, 2026, 5:58 PM (UTC+5:30)")!).toISOString()).toBe("2026-09-03T12:28:00.000Z");
+    expect(parseCursorTimestampHeaderMs(".*?")).toBeUndefined();
+    expect(parseCursorTimestampHeaderMs("")).toBeUndefined();
   });
 
   it("falls back to transcript mtime when chats meta.json is absent", async () => {

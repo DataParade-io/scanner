@@ -131,9 +131,39 @@ export const CODEX_INJECTED_MARKERS = [
   "<codex_internal_context",
 ];
 
+/**
+ * Heading-shaped harness injections (pinned on a real Mac corpus,
+ * KDATAP-713a0f): Codex records project AGENTS.md instructions as a user
+ * message whose text starts with "# AGENTS.md instructions for <path>", and
+ * Chrome-extension context as "# Chrome tabs:". Neither carries a tag, so the
+ * marker list above cannot catch them.
+ */
+export const CODEX_INJECTED_PREFIXES = [
+  "# AGENTS.md instructions for ",
+  "# Chrome tabs:",
+];
+
 export function isCodexInjectedText(text: string): boolean {
   const trimmed = text.trim();
-  return CODEX_INJECTED_MARKERS.some((marker) => trimmed.startsWith(marker));
+  return (
+    CODEX_INJECTED_MARKERS.some((marker) => trimmed.startsWith(marker)) ||
+    CODEX_INJECTED_PREFIXES.some((prefix) => trimmed.startsWith(prefix))
+  );
+}
+
+/**
+ * content_item_kinds discriminator (pinned on a real Mac corpus,
+ * KDATAP-713a0f): every user message carries
+ * internal_chat_message_metadata_passthrough.content_item_kinds; genuine
+ * typed input has only "user.text"/"user.image" kinds, while injected
+ * structures appear as "agents_md.instructions", "goal.internal_context",
+ * "environments.environment_context", "multi_agent.subagent_notification",
+ * "additional_content.*", "plugins.recommendations". A record whose kinds
+ * are known and contain no user.* kind is injected regardless of text shape.
+ */
+export function isInjectedByKinds(kinds: unknown): boolean {
+  if (!Array.isArray(kinds)) return false;
+  return !kinds.some((k) => typeof k === "string" && k.startsWith("user."));
 }
 
 export async function extractCodexRecords(
@@ -209,6 +239,14 @@ async function* extractCodexSession(
       continue;
     }
     if (isCodexInjectedText(text)) continue;
+    const kinds = (payload as Record<string, unknown>).internal_chat_message_metadata_passthrough;
+    if (isInjectedByKinds(
+      kinds && typeof kinds === "object"
+        ? (kinds as Record<string, unknown>).content_item_kinds
+        : undefined,
+    )) {
+      continue;
+    }
 
     // Rollout records carry a real ordinal (top-level field). Forked/resumed
     // rollouts may re-record inherited context: items whose ordinal is below

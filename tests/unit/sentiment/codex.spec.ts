@@ -64,10 +64,14 @@ describe("Codex human-message extraction", () => {
     // response_item user messages survive…
     expect(texts).toContain("thanks, this works");
     expect(texts).toContain("now fuck this linter into shape");
+    expect(texts).toContain("kinds say user text, thanks");
+    expect(texts).toContain("# Files mentioned by the user:\n\n## screenshot.png: /Users/ryan/demo/screenshot.png\nthe screenshot made it click, thanks");
     // …event_msg mirrors are not double-counted…
     expect(records.filter((r) => r.text === "thanks, this works")).toHaveLength(1);
     // …injected wrappers are excluded…
     expect(texts.join("\n")).not.toMatch(/user_instructions|environment_context|recommended_plugins|subagent_notification|in-app-browser-context|codex_internal_context|turn_aborted|realtime_delegation/);
+    // …heading-shaped injections and kind-tagged injected records are excluded…
+    expect(texts.join("\n")).not.toMatch(/do the thing|AGENTS\.md instructions|Chrome tabs/);
     // …compacted summary records stay out (message lives inside the payload).
     expect(texts.join("\n")).not.toMatch(/compaction summary/);
     // …malformed lines are counted, never fatal.
