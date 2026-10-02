@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import {
   agentPayload,
@@ -137,7 +138,7 @@ describe("Antigravity extraction", () => {
     const profile = generateAntigravityProfile([], []);
     try {
       const bad = path.join(profile.desktopRoot, "conversations", "bad.db");
-      require("fs").writeFileSync(bad, "this is not a sqlite db");
+      fs.writeFileSync(bad, "this is not a sqlite db");
       const { records, skipCounter } = await extractAntigravityRecords({
         source: "antigravity",
         sessionId: "bad",
