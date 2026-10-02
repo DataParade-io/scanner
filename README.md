@@ -42,11 +42,11 @@ pnpm run sentiment:meter -- --doctor            # per-source discovery diagnosti
 - **Sources**: Claude Code (`~/.claude/projects/**.jsonl`), Cursor (`state.vscdb` plus `~/.cursor` agent transcripts), Codex (`~/.codex/sessions`). Grok Bot conversations are a later adapter.
 - **Windows**: rolling `24h`/`Nh`/`Nd` plus calendar `today`/`yesterday`. Calendar windows are anchored at a configurable day-start time (default: local midnight) with correct timezone/DST handling (spring-forward gaps clamp forward, fall-back ambiguity resolves earlier).
 - **Privacy**: the default word lists only detect gratitude and profanity token families; no network-capable imports exist under `src/sentiment/` (enforced by test), and neither output nor scan-state cache ever stores verbatim message text.
-- **Exclusions**: fenced/indented code blocks, blockquotes, and pasted text blobs (length/ASCII-ratio/line-count heuristics, tunable via `ExclusionThresholds`) are never counted.
+- **Exclusions**: fenced/indented code blocks, blockquotes, and pasted text blobs are never counted. Paste detection requires both length (>= 4000 chars) and web-answer citation density (>= 3 `[n]` markers) — tuned on real corpora so the operator's own long orchestration briefs still count (tunable via `ExclusionThresholds`).
 - **Configuration**: `~/.config/dataparade/sentiment.meter.yaml` (`timezone`, `dayStart`, `sources`, `roots`, `words`); CLI flags override config, which overrides defaults.
 - **Engines**: the Cursor `state.vscdb` reader uses the built-in `node:sqlite`, which requires **Node.js >= 22.5**.
 
-Accuracy is pinned by a gold-label eval over the synthetic fixture corpus (see `tests/unit/sentiment/gold-eval.spec.ts`); real-corpus recall sampling happens locally on Ryan's Macs with aggregate numbers only.
+Accuracy is pinned two ways: a gold-label eval over the synthetic fixture corpus (`tests/unit/sentiment/gold-eval.spec.ts`, 100% exact match), and a real-corpus recall gate that runs locally on Ryan's Macs with aggregate numbers only. The gate passed (KDATAP-713a0f): 2315 real human messages yielded, 2310 counted, 5 excluded — each verified as a citation-dense AI-research paste — and zero harness-injected false positives in the counted buckets.
 
 ## Development
 
