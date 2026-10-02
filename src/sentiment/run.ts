@@ -1,9 +1,11 @@
 import { createClaudeCodeAdapter } from "./adapters/claude-code";
 import { createCursorAdapter } from "./adapters/cursor";
 import { createCodexAdapter } from "./adapters/codex";
+import { createGrokBotAdapter } from "./adapters/grok-bot";
 import type { CursorAdapterOptions } from "./adapters/cursor";
 import type { CodexAdapterOptions } from "./adapters/codex";
 import type { ClaudeCodeAdapterOptions } from "./adapters/claude-code";
+import type { GrokBotAdapterOptions } from "./adapters/grok-bot";
 import type { SentimentSource } from "./record";
 import { scanAdapter } from "./scan";
 import type { ScanResult } from "./scan";
@@ -15,7 +17,7 @@ import { isInWindow, resolveWindow } from "./windows";
 import type { AbsoluteBounds } from "./windows";
 
 /** Root overrides keyed at the adapter level; a missing key uses the defaults. */
-export type SentimentRoots = Partial<Record<"claude-code" | "cursor" | "codex", string[]>>;
+export type SentimentRoots = Partial<Record<"claude-code" | "cursor" | "codex" | "grok-bot", string[]>>;
 
 export interface RunSentimentOptions {
   window: string;
@@ -31,6 +33,7 @@ export interface RunSentimentOptions {
   claudeOptions?: ClaudeCodeAdapterOptions;
   cursorOptions?: CursorAdapterOptions;
   codexOptions?: CodexAdapterOptions;
+  grokOptions?: GrokBotAdapterOptions;
 }
 
 export interface SentimentScanOutput {
@@ -49,7 +52,7 @@ export async function runSentimentMeter(options: RunSentimentOptions): Promise<S
   const bounds: AbsoluteBounds = { since: options.since, until: options.until };
   const window = resolveWindow(options.window, now, timezone, options.dayStart ?? "00:00", bounds);
   const wordList = options.wordList ?? loadSentimentWordList();
-  const requested = options.sources ?? ["claude-code", "cursor-ide", "cursor-agent", "codex"];
+  const requested = options.sources ?? ["claude-code", "cursor-ide", "cursor-agent", "codex", "grok-bot"];
 
   const scanResults: SentimentScanOutput["scanResults"] = [];
   const inWindow: Parameters<typeof computeMeter>[0] = [];
@@ -74,6 +77,12 @@ export async function runSentimentMeter(options: RunSentimentOptions): Promise<S
     const adapter = createCodexAdapter(options.codexOptions);
     const result = await scanAdapter(adapter, options.roots?.codex);
     scanResults.push({ source: "codex", result });
+    inWindow.push(...result.records.filter((r) => isInWindow(new Date(r.timestamp).getTime(), window)));
+  }
+  if (requested.includes("grok-bot")) {
+    const adapter = createGrokBotAdapter(options.grokOptions);
+    const result = await scanAdapter(adapter, options.roots?.["grok-bot"]);
+    scanResults.push({ source: "grok-bot", result });
     inWindow.push(...result.records.filter((r) => isInWindow(new Date(r.timestamp).getTime(), window)));
   }
 
