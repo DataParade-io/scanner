@@ -36,6 +36,13 @@ describe("computeMeter", () => {
     expect(report.fbombMessages).toBe(1);
     expect(report.humanMessages).toBe(3);
     expect(report.sessionsScanned).toBe(3);
+    // Two records in the same session count as one scanned session.
+    const sharedSession = computeMeter(
+      [rec("thanks", "claude-code", "s9"), rec("fuck", "claude-code", "s9")],
+      { startMs: 0, endMs: now + 1, label: "test" },
+    );
+    expect(sharedSession.sessionsScanned).toBe(1);
+    expect(sharedSession.messagesScanned).toBe(2);
     expect(report.perSource["claude-code"].messages).toBe(2);
     expect(report.perSource["codex"].messages).toBe(1);
     expect(report.perSource["codex"].sessions).toBe(1);

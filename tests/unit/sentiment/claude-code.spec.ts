@@ -57,10 +57,17 @@ describe("Claude Code human-message extraction", () => {
     const texts = records.map((r) => r.text);
     expect(texts).toContain("thanks for the fix");
     expect(texts).toContain("looks fuckin great, thanks");
-    expect(texts).toContain("queued follow-up\nsecond block"); // human-origin queued command
+    expect(texts).toContain("queued follow-up\nsecond block"); // human-origin queued command riding on a user record
+    expect(texts).toContain("queued attachment prompt, thanks"); // standalone queued_command attachment record
     // Every excluded class:
     expect(texts.join("\n")).not.toMatch(/tool_result|is meta|sidechain|prompt source/);
     expect(texts.join("\n")).not.toMatch(/system-reminder|task-notification|command-name|continued from a previous/);
+    // Real-corpus injected shapes: local slash-command stdout echoes and
+    // user-role records whose origin.kind is not human.
+    expect(texts.join("\n")).not.toMatch(/local-command-stdout/);
+    expect(texts.join("\n")).not.toMatch(/background task finished|peer agent says/);
+    // Injected attachment record types are never queued commands.
+    expect(texts.join("\n")).not.toMatch(/injected context is not a queued command/);
     // Timestamps come from record fields, not line order.
     expect(records[0].timestamp).toBe("2026-10-01T12:00:00Z");
     // Malformed line and unknown record type counted, never fatal.
@@ -80,7 +87,20 @@ describe("Claude Code human-message extraction", () => {
 
   it("classifies injected wrapper texts", () => {
     expect(isInjectedText("<system-reminder>x</system-reminder>")).toBe(true);
+    expect(isInjectedText("<local-command-stdout>done</local-command-stdout>")).toBe(true);
+    expect(isInjectedText("<local-command-stderr>failed</local-command-stderr>")).toBe(true);
     expect(isInjectedText("thanks")).toBe(false);
+  });
+
+  it("marks standalone queued_command attachments with stable ids and dedups fork copies", async () => {
+    const adapter = createClaudeCodeAdapter();
+    const result = await scanAdapter(adapter, [FIXTURE_ROOT]);
+    const queued = result.records.filter((r) => r.recordId.startsWith("queued:"));
+    // One ride-along queued record plus one standalone attachment record; the
+    // fork copy of the attachment (same uuid) collapses.
+    expect(queued).toHaveLength(2);
+    expect(queued.map((r) => r.text)).toContain("queued attachment prompt, thanks");
+    expect(queued.every((r) => r.source === "claude-code")).toBe(true);
   });
 });
 

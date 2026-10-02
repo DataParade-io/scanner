@@ -79,7 +79,7 @@ export function computeMeter(
 
   for (const record of records) {
     report.messagesScanned += 1;
-    sessions.add(record.dedupKey);
+    sessions.add(record.sessionId);
     const source = record.source;
     perSource[source] ??= { messages: 0, thanksTokens: 0, fbombTokens: 0, sessions: 0 };
     perSource[source].messages += 1;
