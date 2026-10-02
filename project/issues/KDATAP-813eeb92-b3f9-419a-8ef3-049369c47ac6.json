@@ -3,7 +3,7 @@
   "title": "Add the personal config file",
   "description": "Add the personal config file at ~/.config/dataparade/sentiment.meter.yaml (XDG base) with keys: timezone, dayStart, sources, roots (extra or second-Mac source roots), words (override word-list path). Precedence: CLI flags over config over defaults. The config is user-machine state, deliberately outside the repo, matching how run-local settings are handled elsewhere.\n\nDone when: config loading works with each key, precedence tests pass, and a missing config file means pure defaults.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 3,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "e5661736-de67-45c4-b28b-d4b37ef07935",
+      "author": "ubuntu",
+      "text": "Added src/sentiment/config.ts: personal config at ~/.config/dataparade/sentiment.meter.yaml (XDG_CONFIG_HOME honored) with timezone, dayStart, sources, roots (extra or second-Mac roots per source), words (override word-list path), and bands. Precedence CLI flags over config over defaults, tested per key; a missing file means pure defaults. The config is user-machine state, deliberately outside the repo.",
+      "created_at": "2026-10-02T03:22:11.852612Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:39.814247Z",
-  "updated_at": "2026-10-02T02:45:27.241352Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:22:12.398746Z",
+  "closed_at": "2026-10-02T03:22:12.398611Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
