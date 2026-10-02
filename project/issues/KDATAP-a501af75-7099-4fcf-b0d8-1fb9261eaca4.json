@@ -3,9 +3,9 @@
   "title": "Implement the matching engine",
   "description": "Implement deterministic token matching over extracted human text: word-boundary matching against case-folded text; unicode normalization (curly quotes and dashes to ASCII) before matching; a path/URL guard so a token immediately followed by a path separator or file extension does not count (for example a token appearing in a filename).\n\nDone when: unit tests cover word boundaries (embedded occurrences do not match), case-insensitivity, normalization variants, and the path guard; matching is a pure function.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-ff39687f-feb1-4c65-bbe5-0a58de654de9",
   "labels": [],
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "99a879d2-b3e5-423d-ac02-347c7423385f",
+      "author": "ubuntu",
+      "text": "Implemented src/sentiment/counting.ts matching engine: case-folded word-boundary regex, unicode normalization (curly quotes/dashes to ASCII before matching), and a path/URL guard (hasPathLikeSuffix rejects token followed by '/' or a file extension so 'thanks.md' never counts). Tests cover boundaries, caps, normalization, and path cases. Outcome: green.",
+      "created_at": "2026-10-02T03:01:02.880692Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:19.184190Z",
-  "updated_at": "2026-10-02T02:45:17.943446Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:01:03.104540Z",
+  "closed_at": "2026-10-02T03:01:03.104404Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
