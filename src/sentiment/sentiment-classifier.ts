@@ -103,18 +103,25 @@ export function neutralizeCodingTerms(text: string): string {
 
 export interface VaderBackendOptions {
   thresholds?: ExclusionThresholds;
+  /**
+   * Apply the coding-domain neutralization before scoring (default true —
+   * the VADER lexicon needs it; KDATAP-d278a8 quantified this). Setting
+   * false scores the raw stripped text.
+   */
+  codingFilter?: boolean;
 }
 
 /** Offline VADER backend: per-message compound score, no network, no model download. */
 export function createVaderBackend(options: VaderBackendOptions = {}): SentimentBackend {
   const thresholds = options.thresholds ?? DEFAULT_EXCLUSION_THRESHOLDS;
+  const codingFilter = options.codingFilter ?? true;
   return {
     name: "vader",
     scoreMessage(text: string): SentimentScore | null {
       const stripped = stripExcludedRegions(text, thresholds);
       if (stripped.trim() === "" && text.trim() !== "") return null;
       const scores = SentimentIntensityAnalyzer.polarity_scores(
-        neutralizeCodingTerms(stripped),
+        codingFilter ? neutralizeCodingTerms(stripped) : stripped,
       );
       return {
         compound: scores.compound,
@@ -125,6 +132,25 @@ export function createVaderBackend(options: VaderBackendOptions = {}): Sentiment
       };
     },
   };
+}
+
+/**
+ * Shared backend options: `codingFilter` is "auto" by default — each backend
+ * applies its documented default (VADER: on, transformer family: off, see
+ * the per-backend defaults in the registries). "on"/"off" override the
+ * backend default (KDATAP-d278a8/ab09dd).
+ */
+export interface SentimentBackendOptions {
+  codingFilter?: "on" | "off" | "auto";
+}
+
+export function codingFilterFor(
+  preference: "on" | "off" | "auto" | undefined,
+  backendDefault: boolean,
+): boolean {
+  if (preference === "on") return true;
+  if (preference === "off") return false;
+  return backendDefault;
 }
 
 /** Registry of locally available sync backends; "vader" is the default. */
@@ -141,10 +167,11 @@ export function createSentimentBackend(name: string | undefined): SentimentBacke
  */
 export async function createSentimentBackendAsync(
   name: string | undefined,
+  options: SentimentBackendOptions = {},
 ): Promise<AsyncSentimentBackend> {
   const backend = name ?? "vader";
   if (backend === "vader") {
-    const vader = createVaderBackend();
+    const vader = createVaderBackend({ codingFilter: codingFilterFor(options.codingFilter, true) });
     return {
       name: vader.name,
       scoreMessage: async (text) => vader.scoreMessage(text),
@@ -152,7 +179,7 @@ export async function createSentimentBackendAsync(
   }
   if (backend === "transformer" || backend.startsWith("transformer-")) {
     const mod = await import("./transformer-backend");
-    return mod.createTransformerBackend({ model: backend });
+    return mod.createTransformerBackend({ model: backend, codingFilter: options.codingFilter });
   }
   throw new Error(`unknown sentiment backend: ${backend}`);
 }

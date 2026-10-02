@@ -36,6 +36,7 @@ export interface CliOptions {
   doctor?: boolean;
   configHome?: string;
   sentimentBackend?: string;
+  sentimentCodingFilter?: "on" | "off" | "auto";
   // Root overrides (test hooks and personal roots):
   claudeConfigDir?: string;
   cursorUserDir?: string;
@@ -53,6 +54,15 @@ export async function runCli(options: CliOptions): Promise<void> {
   const sources = (options.sources
     ? options.sources.split(",").map((s) => s.trim())
     : config.sources) as SentimentSource[] | undefined;
+
+  if (
+    options.sentimentCodingFilter &&
+    !["on", "off", "auto"].includes(options.sentimentCodingFilter)
+  ) {
+    throw new Error(
+      `invalid --sentiment-coding-filter: ${options.sentimentCodingFilter} (use on, off, or auto)`,
+    );
+  }
 
   if (options.doctor) {
     const claude = doctorClaudeCode(
@@ -93,6 +103,7 @@ export async function runCli(options: CliOptions): Promise<void> {
     sentimentBackend: options.sentimentBackend === ""
       ? ""
       : options.sentimentBackend ?? config.sentimentBackend,
+    sentimentCodingFilter: options.sentimentCodingFilter ?? config.sentimentCodingFilter,
     roots: config.roots as never,
     cursorOptions: {
       cursorUserDir: options.cursorUserDir,
@@ -144,6 +155,7 @@ async function main(): Promise<void> {
       json: { type: "boolean", default: false },
       "cache-dir": { type: "string" },
       "sentiment-backend": { type: "string" },
+      "sentiment-coding-filter": { type: "string" },
       doctor: { type: "boolean", default: false },
       "config-home": { type: "string" },
       "grok-data-dir": { type: "string" },
@@ -160,6 +172,7 @@ async function main(): Promise<void> {
     json: values.json,
     cacheDir: values["cache-dir"],
     sentimentBackend: values["sentiment-backend"],
+    sentimentCodingFilter: values["sentiment-coding-filter"] as "on" | "off" | "auto" | undefined,
     doctor: values.doctor,
     configHome: values["config-home"],
     grokDataDir: values["grok-data-dir"],

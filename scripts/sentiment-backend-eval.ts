@@ -8,7 +8,12 @@
  * only — no message text, no per-message scores.
  *
  * Usage:
- *   pnpm run sentiment:eval [--window all] [--bench-messages 300] [--models transformer,transformer-xlmr,...]
+ *   pnpm run sentiment:eval [--agreement] [--window all] [--bench-messages 300] [--models vader,transformer-sst2,transformer]
+ *
+ * Default run (KDATAP-3191a7 study): each backend in --models is evaluated in
+ * two configurations (coding filter on / off) against the tuning gold set,
+ * the held-out gold set, the combined gold set, and the synthetic coding-filter
+ * probe set. Pass --agreement to also compute real-corpus agreement vs VADER.
  */
 
 import fs from "fs";
@@ -27,6 +32,12 @@ import { loadSentimentConfig } from "../src/sentiment/config";
 
 const TUNING_GOLD_PATH = path.join(__dirname, "../annotations/KDATAP-fe4c1d/sentiment-gold.yaml");
 const HELDOUT_GOLD_PATH = path.join(__dirname, "../annotations/KDATAP-5fc7c8/sentiment-gold-heldout.yaml");
+const PROBE_PATH = path.join(__dirname, "../annotations/KDATAP-d278a8/coding-filter-probes.yaml");
+
+interface ProbeLabel {
+  text: string;
+  expected: SentimentLabel;
+}
 
 interface GoldLabel {
   text: string;
@@ -37,6 +48,10 @@ interface GoldLabel {
 
 function loadGold(pathname: string): GoldLabel[] {
   return (YAML.parse(fs.readFileSync(pathname, "utf8")) as { labels: GoldLabel[] }).labels;
+}
+
+function loadProbes(pathname: string): ProbeLabel[] {
+  return (YAML.parse(fs.readFileSync(pathname, "utf8")) as { probes: ProbeLabel[] }).probes;
 }
 
 interface AgreementStats {
@@ -185,6 +200,35 @@ function confusionMatrix(m: Record<string, Record<string, number>>): string {
     .join(", ");
 }
 
+interface ProbeEvalResult {
+  correct: number;
+  total: number;
+  /** byExpected[expected][predicted] counts */
+  byExpected: Record<string, Record<string, number>>;
+}
+
+function evalProbes(backend: AsyncSentimentBackend, probes: ProbeLabel[]): Promise<ProbeEvalResult> {
+  const result: ProbeEvalResult = { correct: 0, total: probes.length, byExpected: {} };
+  return (async () => {
+    for (const probe of probes) {
+      const score = await backend.scoreMessage(probe.text);
+      const predicted = score?.label ?? "(none)";
+      result.byExpected[probe.expected] ??= {};
+      result.byExpected[probe.expected][predicted] =
+        (result.byExpected[probe.expected][predicted] ?? 0) + 1;
+      if (predicted === probe.expected) result.correct += 1;
+    }
+    return result;
+  })();
+}
+
+function probeLine(result: ProbeEvalResult, expected: string): string {
+  const counts = result.byExpected[expected] ?? {};
+  return `${expected} ${counts[expected] ?? 0}/${result.byExpected[expected]
+    ? Object.values(result.byExpected[expected]).reduce((a, b) => a + b, 0)
+    : 0} (p${counts.pos ?? 0} u${counts.neu ?? 0} n${counts.neg ?? 0})`;
+}
+
 /** Size in MB of the quantized ONNX file cached on disk for a backend. */
 function modelSizeMb(name: string): number | null {
   const spec = TRANSFORMER_MODELS[name];
@@ -207,65 +251,90 @@ async function main(): Promise<void> {
     options: {
       window: { type: "string", default: "all" },
       "bench-messages": { type: "string", default: "300" },
-      models: { type: "string", default: "transformer,transformer-cardiff,transformer-xlmr,transformer-sst2" },
+      models: { type: "string", default: "vader,transformer-sst2,transformer" },
+      agreement: { type: "boolean", default: false },
     },
   });
   const windowSpec = values.window ?? "all";
   const benchCount = Number(values["bench-messages"] ?? 300);
   const modelNames = (values.models ?? "").split(",").map((m) => m.trim()).filter(Boolean);
+  const wantAgreement = values.agreement ?? false;
 
-  process.stdout.write(`Sentiment backend eval (window: ${windowSpec})\n`);
+  process.stdout.write(
+    `Sentiment coding-filter study (KDATAP-3191a7): gold sets + synthetic probe set, filter on vs off\n`,
+  );
 
   const tuningGold = loadGold(TUNING_GOLD_PATH);
   const heldoutGold = loadGold(HELDOUT_GOLD_PATH);
+  const combinedGold = [...tuningGold, ...heldoutGold];
+  const probes = loadProbes(PROBE_PATH);
+  process.stdout.write(
+    `gold: tuning ${tuningGold.length}, heldout ${heldoutGold.length}, combined ${combinedGold.length}; probes ${probes.length}\n\n`,
+  );
 
-  const vader = createVaderBackend();
-  const vaderAsync: AsyncSentimentBackend = {
-    name: "vader",
-    scoreMessage: async (text) => vader.scoreMessage(text),
-  };
-
-  const backends: { name: string; backend: AsyncSentimentBackend }[] = [
-    { name: "vader", backend: vaderAsync },
-  ];
+  // Six configs: each backend with the coding-domain filter on and off.
+  const configs: { name: string; base: string; backend: AsyncSentimentBackend }[] = [];
   for (const name of modelNames) {
-    backends.push({ name, backend: await createSentimentBackendAsync(name) });
+    if (name === "vader") {
+      const vaderOn = createVaderBackend({ codingFilter: true });
+      const vaderOff = createVaderBackend({ codingFilter: false });
+      configs.push(
+        { name: "vader+filter", base: name, backend: { name: "vader", scoreMessage: async (t) => vaderOn.scoreMessage(t) } },
+        { name: "vader-raw", base: name, backend: { name: "vader", scoreMessage: async (t) => vaderOff.scoreMessage(t) } },
+      );
+    } else {
+      configs.push(
+        { name: `${name}+filter`, base: name, backend: await createSentimentBackendAsync(name, { codingFilter: "on" }) },
+        { name: `${name}-raw`, base: name, backend: await createSentimentBackendAsync(name, { codingFilter: "off" }) },
+      );
+    }
   }
 
-  for (const { name, backend } of backends) {
+  for (const { name, backend } of configs) {
     const tuning = await evalGold(backend, tuningGold);
     const heldout = await evalGold(backend, heldoutGold);
+    const combined = await evalGold(backend, combinedGold);
+    const probeResult = await evalProbes(backend, probes);
+    process.stdout.write(`== ${name}\n`);
     process.stdout.write(
-      `${name}: tuning accuracy ${tuning.correct}/${tuning.scored} = ${(tuning.correct / tuning.scored).toFixed(3)} (excluded ${tuning.excludedCorrect}/${tuning.excluded})\n`,
+      `  probes ${probeResult.correct}/${probeResult.total} = ${(probeResult.correct / probeResult.total).toFixed(3)} | ${probeLine(probeResult, "neu")} | ${probeLine(probeResult, "neg")}\n`,
     );
     process.stdout.write(
-      `${name}: heldout accuracy ${heldout.correct}/${heldout.scored} = ${(heldout.correct / heldout.scored).toFixed(3)} (excluded ${heldout.excludedCorrect}/${heldout.excluded}); confusion ${confusionMatrix(heldout.confusion)}\n`,
+      `  tuning ${tuning.correct}/${tuning.scored} = ${(tuning.correct / tuning.scored).toFixed(3)} (excluded ${tuning.excludedCorrect}/${tuning.excluded}); confusion ${confusionMatrix(tuning.confusion)}\n`,
+    );
+    process.stdout.write(
+      `  heldout ${heldout.correct}/${heldout.scored} = ${(heldout.correct / heldout.scored).toFixed(3)} (excluded ${heldout.excludedCorrect}/${heldout.excluded}); confusion ${confusionMatrix(heldout.confusion)}\n`,
     );
     const kinds = Object.entries(heldout.byKind)
       .map(([kind, k]) => `${kind} ${k.correct}/${k.total}`)
       .join(", ");
-    process.stdout.write(`${name}: heldout by kind: ${kinds}\n`);
+    process.stdout.write(`  heldout by kind: ${kinds}\n`);
+    process.stdout.write(
+      `  combined ${combined.correct}/${combined.scored} = ${(combined.correct / combined.scored).toFixed(3)}; confusion ${confusionMatrix(combined.confusion)}\n`,
+    );
   }
 
-  // Real-corpus agreement vs VADER (aggregate numbers only), per ML backend.
-  for (const { name, backend } of backends) {
-    if (name === "vader") continue;
-    const { overall, perSource } = await realCorpusAgreement(windowSpec, backend);
-    process.stdout.write(
-      `agreement ${name} vs vader overall: compared ${overall.compared}, labels ${(overall.labelAgreementRate * 100).toFixed(1)}%, mean compound vader ${overall.meanCompoundVader.toFixed(3)} ${name} ${overall.meanCompoundOther.toFixed(3)}, mean |diff| ${overall.meanAbsCompoundDiff.toFixed(3)}\n`,
-    );
-    for (const [source, s] of Object.entries(perSource)) {
+  if (wantAgreement) {
+    // Real-corpus agreement vs VADER (aggregate numbers only), per ML backend.
+    for (const { name, base, backend } of configs) {
+      if (base === "vader") continue;
+      const { overall, perSource } = await realCorpusAgreement(windowSpec, backend);
       process.stdout.write(
-        `agreement ${name} ${source}: compared ${s.compared}, labels ${(s.labelAgreementRate * 100).toFixed(1)}%, mean compound vader ${s.meanCompoundVader.toFixed(3)} ${name} ${s.meanCompoundOther.toFixed(3)}, mean |diff| ${s.meanAbsCompoundDiff.toFixed(3)}\n`,
+        `agreement ${name} vs vader overall: compared ${overall.compared}, labels ${(overall.labelAgreementRate * 100).toFixed(1)}%, mean compound vader ${overall.meanCompoundVader.toFixed(3)} ${name} ${overall.meanCompoundOther.toFixed(3)}, mean |diff| ${overall.meanAbsCompoundDiff.toFixed(3)}\n`,
       );
+      for (const [source, s] of Object.entries(perSource)) {
+        process.stdout.write(
+          `agreement ${name} ${source}: compared ${s.compared}, labels ${(s.labelAgreementRate * 100).toFixed(1)}%, mean compound vader ${s.meanCompoundVader.toFixed(3)} ${name} ${s.meanCompoundOther.toFixed(3)}, mean |diff| ${s.meanAbsCompoundDiff.toFixed(3)}\n`,
+        );
+      }
     }
   }
 
   // Throughput on this machine + model size.
   const pool = syntheticPool(benchCount);
-  for (const { name, backend } of backends) {
+  for (const { name, base, backend } of configs) {
     const t = await throughput(backend, pool);
-    const size = modelSizeMb(name);
+    const size = modelSizeMb(base);
     process.stdout.write(
       `throughput ${name}: ${t.msgsPerSec.toFixed(0)} msgs/sec (${t.totalMs.toFixed(1)} ms for ${pool.length})${size !== null ? `, model ${size.toFixed(1)} MB` : ""}\n`,
     );
