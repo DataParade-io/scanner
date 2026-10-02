@@ -8,6 +8,7 @@ import {
   buildPersonalDataInventoryFromIngest,
 } from "../../src/eval-layers/collect-personal-data-findings";
 import { ensureDeclarationEngine } from "../../src/eval-layers/personal-data-inventory";
+import { readSchemaFiles } from "../../src/ingest/schema-files";
 import type { OrchestratorLedgerContext } from "../../src/core/pipeline/orchestrator-result";
 import { buildOrchestratorEvalLedgers } from "../../src/eval-layers/fixture-scan-ledger";
 import type { DetectedComponent } from "../../src/core/types/component";
@@ -211,6 +212,7 @@ export async function scanRepoByManifestLayers(
       ? buildPersonalDataInventoryFromIngest(
           sharedIngest.allIngestedFiles,
           sharedIngest.ingestOutcomes,
+          await readSchemaFiles(repoRoot),
         )
       : await buildPersonalDataInventory(repoRoot);
 

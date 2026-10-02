@@ -8,6 +8,7 @@ import { analyzeSource } from "./engine/engine";
 import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
 import { packForFile } from "./languages";
 import { recordFacts, type RecordFacts } from "./json-record-keys";
+import { schemaFileKind, type SchemaFile } from "../ingest/schema-files";
 
 /**
  * Catalog of the stored columns a repository declares (KDATAP-33da4c): the closed set of
@@ -31,6 +32,14 @@ import { recordFacts, type RecordFacts } from "./json-record-keys";
  *     fallback: where a repository declares storage for the concept (any source above), the
  *     stored columns decide and its DTO and response types, views of them, are left out.
  *
+ * Storage schema files (KDATAP-fded10), read beside the source and passed in as
+ * `SchemaFile`s, add two more:
+ *   - `prisma-model`: `model User { email String @unique }` in `*.prisma`, the table from
+ *     `@@map`, the column from `@map`; only `String` fields, never relations;
+ *   - `sql-ddl`: `CREATE TABLE` column definitions and `ALTER TABLE ... ADD COLUMN` in
+ *     `*.sql` (schema.sql, structure.sql, generated migrations). Used only for columns no
+ *     other source declares, so a Prisma or ORM model and its generated SQL are one column.
+ *
  * With `include: "configured"` the catalog also lists configured address keys
  * (KDATAP-6661dd): places a site keeps an address it configures for itself, named by a
  * literal key. Their `table` is `settings`, `config` or `env` and `evidence` is `setting`,
@@ -49,6 +58,8 @@ export type ColumnEvidence =
   | "migration"
   | "content-type"
   | "record-type"
+  | "prisma-model"
+  | "sql-ddl"
   | "setting"
   | "config"
   | "env";
@@ -173,6 +184,14 @@ export function conceptNameMatcher(concept: string, filePath: string): (token: s
  * (`SMS_PHONE`). A key ending in a negative word (`email_track_enabled`, `sender_name`)
  * is not one. Words are split at case changes and at `:`, `.`, `_`, `-`.
  */
+function namesConceptValue(name: string, concept: string, filePath: string): boolean {
+  const words = wordsOf(name);
+  if (words.length === 0) return false;
+  const isConcept = conceptNameMatcher(concept, filePath);
+  const last = words[words.length - 1];
+  return isConcept(last) || (words.slice(0, -1).some((word) => isConcept(word)) && conceptProfile(concept).tailWords.has(last));
+}
+
 export function isConfiguredAddressKey(key: string, concept: string, filePath: string): boolean {
   const words = wordsOf(key);
   if (words.length === 0) return false;
@@ -343,6 +362,150 @@ function recordTypeCandidates(file: AnalyzedFile, filePath: string): ColumnCandi
   return out;
 }
 
+// ---- storage schema files (KDATAP-fded10) -------------------------------------------
+
+/** Prisma scalar types that cannot hold an address; only `String` fields are columns here. */
+const PRISMA_TEXT = /^String\??$/;
+
+/** `model X { ... }` blocks of a Prisma schema: `String` fields, with `@map` and `@@map` names. */
+export function prismaCandidates(file: SchemaFile): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  const lines = file.content.split(/\r?\n/);
+  let model: string | undefined;
+  let fields: Array<{ name: string; column: string; line: number }> = [];
+  let table: string | undefined;
+  lines.forEach((raw, index) => {
+    const line = raw.replace(/\/\/.*$/, "").trim();
+    const open = /^model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/.exec(line);
+    if (open) {
+      model = open[1];
+      fields = [];
+      table = undefined;
+      return;
+    }
+    if (!model) return;
+    if (line.startsWith("}")) {
+      for (const field of fields) {
+        out.push({ table: table ?? model, model, column: field.column, type: "String", file: file.path, line: field.line, evidence: "prisma-model" });
+      }
+      model = undefined;
+      return;
+    }
+    const mapped = /^@@map\(\s*["']([^"']+)["']/.exec(line);
+    if (mapped) {
+      table = mapped[1];
+      return;
+    }
+    const field = /^([A-Za-z_][A-Za-z0-9_]*)\s+([A-Za-z_][A-Za-z0-9_]*\??(?:\[\])?)(.*)$/.exec(line);
+    if (!field || !PRISMA_TEXT.test(field[2]) || field[3].includes("@relation")) return;
+    const column = /@map\(\s*["']([^"']+)["']/.exec(field[3])?.[1] ?? field[1];
+    fields.push({ name: field[1], column, line: index + 1 });
+  });
+  return out;
+}
+
+/** Words that open a table constraint, not a column, inside `CREATE TABLE (...)`. */
+const SQL_CONSTRAINT = /^(?:constraint|primary|unique|foreign|key|index|check|exclude|fulltext|spatial|period|like)\b/i;
+
+function sqlName(text: string): string {
+  // `"public"."users"`, `` `users` ``, `[dbo].[users]` -> users
+  const parts = text.split(".");
+  return parts[parts.length - 1].replace(/^["`\[]|["`\]]$/g, "");
+}
+
+/** `CREATE TABLE` column definitions and `ALTER TABLE ... ADD [COLUMN]` in SQL DDL. */
+export function sqlCandidates(file: SchemaFile): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  const NAME = String.raw`(?:"[^"]+"|\x60[^\x60]+\x60|\[[^\]]+\]|[A-Za-z_][A-Za-z0-9_$]*)`;
+  const QUALIFIED = `${NAME}(?:\\s*\\.\\s*${NAME})*`;
+  const createTable = new RegExp(`^\\s*create\\s+(?:(?:global\\s+|local\\s+)?(?:temporary|temp|unlogged)\\s+)?table\\s+(?:if\\s+not\\s+exists\\s+)?(${QUALIFIED})\\s*\\(?`, "i");
+  const columnDef = new RegExp(`^\\s*(${NAME})\\s+([A-Za-z_][A-Za-z0-9_ ]*?)(?:\\s*\\(|\\s|,|$)`, "i");
+  const addColumn = new RegExp(`^\\s*alter\\s+table\\s+(?:only\\s+)?(?:if\\s+exists\\s+)?(${QUALIFIED})\\s+add\\s+(?:column\\s+)?(?:if\\s+not\\s+exists\\s+)?(${NAME})\\s+([A-Za-z_][A-Za-z0-9_ ]*)`, "i");
+  const lines = file.content.split(/\r?\n/);
+  let table: string | undefined;
+  let depth = 0;
+  lines.forEach((raw, index) => {
+    const line = raw.replace(/--.*$/, "");
+    if (table === undefined) {
+      const created = createTable.exec(line);
+      if (created) {
+        table = sqlName(created[1]);
+        depth = (line.match(/\(/g) ?? []).length - (line.match(/\)/g) ?? []).length;
+        return;
+      }
+      const added = addColumn.exec(line);
+      if (added) {
+        const type = added[3].trim().split(/\s+/)[0];
+        if (!isNonText(type)) out.push({ table: sqlName(added[1]), column: sqlName(added[2]), type, file: file.path, line: index + 1, evidence: "sql-ddl" });
+      }
+      return;
+    }
+    // Inside `CREATE TABLE name (`: one column per definition at depth 1.
+    const atTop = depth === 1;
+    depth += (line.match(/\(/g) ?? []).length - (line.match(/\)/g) ?? []).length;
+    if (atTop) {
+      const def = columnDef.exec(line);
+      if (def && !SQL_CONSTRAINT.test(def[1])) {
+        const type = def[2].trim().split(/\s+/)[0];
+        if (!isNonText(type)) out.push({ table, column: sqlName(def[1]), type, file: file.path, line: index + 1, evidence: "sql-ddl" });
+      }
+    }
+    if (depth <= 0 && /\)/.test(line)) table = undefined;
+  });
+  return out;
+}
+
+/** Rails and Laravel column types that hold text. */
+const MIGRATION_TEXT = /^(?:string|text|citext|char|varchar|mediumtext|longtext|tinytext)$/i;
+
+/**
+ * Rails `create_table :users do |t| t.string :email` and `add_column :users, :email, :string`;
+ * Laravel `Schema::create('users', function (Blueprint $table) { $table->string('email') })`
+ * and `Schema::table`. One table block at a time, by indentation-free brace or `do`/`end`
+ * tracking of the opening call only: a column call names the table opened before it.
+ */
+export function migrationFileCandidates(file: SchemaFile): ColumnCandidate[] {
+  const out: ColumnCandidate[] = [];
+  const name = String.raw`["':]?([A-Za-z_][A-Za-z0-9_]*)["']?`;
+  const openTable =
+    file.kind === "rails"
+      ? new RegExp(String.raw`^\s*create_table\s*\(?\s*${name}`)
+      : new RegExp(String.raw`Schema::(?:create|table)\s*\(\s*${name}`);
+  const column =
+    file.kind === "rails"
+      ? new RegExp(String.raw`^\s*t\.([a-z_]+)\s*\(?\s*${name}`)
+      : new RegExp(String.raw`\$table->([A-Za-z_]+)\s*\(\s*${name}`);
+  const addColumn = file.kind === "rails" ? new RegExp(String.raw`^\s*add_column\s*\(?\s*${name}\s*,\s*${name}\s*,\s*${name}`) : undefined;
+  let table: string | undefined;
+  file.content.split(/\r?\n/).forEach((line, index) => {
+    const opened = openTable.exec(line);
+    if (opened) {
+      table = opened[1];
+      return;
+    }
+    const added = addColumn?.exec(line);
+    if (added && MIGRATION_TEXT.test(added[3])) {
+      out.push({ table: added[1], column: added[2], type: added[3], file: file.path, line: index + 1, evidence: "migration" });
+      return;
+    }
+    const def = table !== undefined ? column.exec(line) : null;
+    if (def && MIGRATION_TEXT.test(def[1])) {
+      out.push({ table, column: def[2], type: def[1], file: file.path, line: index + 1, evidence: "migration" });
+    }
+  });
+  return out;
+}
+
+/** Migration scratch tables (`__new_users` in Drizzle sqlite rebuilds, `_prisma_migrations`). */
+const SCRATCH_TABLE = /^_/;
+
+/** Candidates of one storage schema file. */
+export function schemaFileCandidates(file: SchemaFile): ColumnCandidate[] {
+  const candidates =
+    file.kind === "prisma" ? prismaCandidates(file) : file.kind === "sql" ? sqlCandidates(file) : migrationFileCandidates(file);
+  return candidates.filter((candidate) => !SCRATCH_TABLE.test(candidate.table ?? ""));
+}
+
 /** Knex column calls inside a table call, and helpers taking a table and a column name. */
 function migrationCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
   const out: ColumnCandidate[] = [];
@@ -415,6 +578,10 @@ export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undef
  */
 export function matchesConcept(candidate: ColumnCandidate, concept: string): boolean {
   if (CONFIGURED_EVIDENCE.has(candidate.evidence)) return isConfiguredAddressKey(candidate.column, concept, candidate.file);
+  // A schema file's column names the value itself: the concept is its last word, or comes
+  // before an address word (`contact_email`, `phone_number`; not `mobile_footer`,
+  // `phone_number_health_error`).
+  if (schemaFileKind(candidate.file)) return namesConceptValue(candidate.column, concept, candidate.file);
   if (conceptNameMatcher(concept, candidate.file)(candidate.column)) return true;
   return candidate.type !== undefined && conceptProfile(concept).typeHints.has(normalizeTypeName(candidate.type));
 }
@@ -445,8 +612,14 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
   }
   const entries = [...byKey.values()];
   const declaresStorage = entries.some((entry) => entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence));
+  // SQL DDL fills in columns no model declares; a model and its generated SQL are one column.
+  const fold = (entry: ColumnEntry): string => `${(entry.table ?? "").toLowerCase()}.${entry.column.toLowerCase()}`;
+  const modelled = new Set(
+    entries.filter((entry) => entry.evidence !== "sql-ddl" && entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence)).map(fold),
+  );
   return entries
     .filter((entry) => !declaresStorage || entry.evidence !== "record-type")
+    .filter((entry) => entry.evidence !== "sql-ddl" || !modelled.has(fold(entry)))
     .map((entry) => {
       const locations = [...entry.locations].sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line);
       return { ...entry, file: locations[0].file, line: locations[0].line, locations };
@@ -459,24 +632,32 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
  * language pack and reads `schema.json` content types; the analysis engine must be
  * initialized (`initAnalysisEngine`).
  */
-export function declaredColumns(files: readonly FileInfo[], concept: string, options: CatalogOptions = {}): ColumnEntry[] {
-  return collapseColumns(collectColumnCandidates(files), concept, options);
+export function declaredColumns(
+  files: readonly FileInfo[],
+  concept: string,
+  options: CatalogOptions = {},
+  schemaFiles: readonly SchemaFile[] = [],
+): ColumnEntry[] {
+  return collapseColumns(collectColumnCandidates(files, schemaFiles), concept, options);
 }
 
 /**
  * The column candidates of every file, for any concept: parse once, then `collapseColumns`
  * per concept (KDATAP-7a094c). The analysis engine must be initialized.
  */
-export function collectColumnCandidates(files: readonly FileInfo[]): ColumnCandidate[] {
-  return collectColumnFacts(files).candidates;
+export function collectColumnCandidates(files: readonly FileInfo[], schemaFiles: readonly SchemaFile[] = []): ColumnCandidate[] {
+  return collectColumnFacts(files, schemaFiles).candidates;
 }
 
 /**
  * Candidates and record-key facts (KDATAP-fb8019) in one parse of every file. The facts
  * say where object literals and function parameters flow, for `recordKeyColumns`.
  */
-export function collectColumnFacts(files: readonly FileInfo[]): { candidates: ColumnCandidate[]; facts: RecordFacts } {
-  const candidates: ColumnCandidate[] = [];
+export function collectColumnFacts(
+  files: readonly FileInfo[],
+  schemaFiles: readonly SchemaFile[] = [],
+): { candidates: ColumnCandidate[]; facts: RecordFacts } {
+  const candidates: ColumnCandidate[] = schemaFiles.flatMap(schemaFileCandidates);
   const facts: RecordFacts = { keyFlows: [], sinks: [] };
   for (const file of files) {
     const pack = packForFile(file.language, file.path);

@@ -1,7 +1,8 @@
 import path from "path";
 import type { FileInfo } from "../core/types/file";
 import type { AnalyzedFile, Site } from "./engine/analyzed-file";
-import { candidatesForFile, collapseColumns, type ColumnCandidate } from "./column-catalog";
+import { candidatesForFile, collapseColumns, schemaFileCandidates, type ColumnCandidate } from "./column-catalog";
+import type { SchemaFile } from "../ingest/schema-files";
 import { analyzeSource, isAnalysisEngineReady } from "./engine/engine";
 import type { BindingUse, FunctionDefinition, InvocationArgument } from "./engine/types";
 import { packForFile } from "./languages";
@@ -190,8 +191,10 @@ export class CodeNavigator {
    * Index the files that have a language pack. The engine must be initialized
    * (`initAnalysisEngine`). Files the engine cannot parse are left out.
    */
-  constructor(files: readonly FileInfo[]) {
+  constructor(files: readonly FileInfo[], schemaFiles: readonly SchemaFile[] = []) {
     if (!isAnalysisEngineReady()) throw new Error("analysis engine is not initialized");
+    // Prisma schemas and SQL DDL declare columns without being source (KDATAP-fded10).
+    for (const file of schemaFiles) this.columnCandidates.push(...schemaFileCandidates(file));
     for (const file of files) {
       // Content-type `schema.json` is read directly: it has no language pack.
       if (file.language === "json") this.columnCandidates.push(...candidatesForFile(file, undefined));
