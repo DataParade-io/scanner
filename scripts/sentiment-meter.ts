@@ -7,6 +7,7 @@
  *
  * Usage:
  *   pnpm run sentiment:meter -- --window today --day-start 04:00
+ *   pnpm run sentiment:meter -- --window 24h --sentiment-backend vader
  */
 
 import { parseArgs } from "node:util";
@@ -34,6 +35,7 @@ export interface CliOptions {
   cacheDir?: string;
   doctor?: boolean;
   configHome?: string;
+  sentimentBackend?: string;
   // Root overrides (test hooks and personal roots):
   claudeConfigDir?: string;
   cursorUserDir?: string;
@@ -88,6 +90,9 @@ export async function runCli(options: CliOptions): Promise<void> {
     since: options.since,
     until: options.until,
     sources,
+    sentimentBackend: options.sentimentBackend === ""
+      ? ""
+      : options.sentimentBackend ?? config.sentimentBackend,
     roots: config.roots as never,
     cursorOptions: {
       cursorUserDir: options.cursorUserDir,
@@ -115,6 +120,7 @@ export async function runCli(options: CliOptions): Promise<void> {
           sessionsScanned: report.sessionsScanned,
           gauge: report.gauge,
           band: report.band,
+          sentiment: report.sentiment ?? null,
           perSource: report.perSource,
         },
         null,
@@ -137,6 +143,7 @@ async function main(): Promise<void> {
       sources: { type: "string" },
       json: { type: "boolean", default: false },
       "cache-dir": { type: "string" },
+      "sentiment-backend": { type: "string" },
       doctor: { type: "boolean", default: false },
       "config-home": { type: "string" },
       "grok-data-dir": { type: "string" },
@@ -152,6 +159,7 @@ async function main(): Promise<void> {
     sources: values.sources,
     json: values.json,
     cacheDir: values["cache-dir"],
+    sentimentBackend: values["sentiment-backend"],
     doctor: values.doctor,
     configHome: values["config-home"],
     grokDataDir: values["grok-data-dir"],

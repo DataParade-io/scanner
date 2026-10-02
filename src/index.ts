@@ -243,8 +243,22 @@ export type {
   MeterBands,
   MeterOptions,
   MeterReport,
+  SentimentAggregate,
   SourceBreakdown,
 } from "./sentiment/meter";
+export {
+  CODING_DOMAIN_OVERRIDES,
+  createSentimentBackend,
+  createVaderBackend,
+  labelForCompound,
+  neutralizeCodingTerms,
+  SENTIMENT_LABEL_THRESHOLDS,
+} from "./sentiment/sentiment-classifier";
+export type {
+  SentimentBackend,
+  SentimentLabel,
+  SentimentScore,
+} from "./sentiment/sentiment-classifier";
 export {
   formatMeterText,
   runSentimentMeter,
