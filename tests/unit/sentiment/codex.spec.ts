@@ -23,7 +23,7 @@ describe("Codex discovery", () => {
   it("finds date-partitioned fixture rollouts and tolerates a missing root", () => {
     const adapter = createCodexAdapter();
     const discovery = adapter.discover([FIXTURE_ROOT]);
-    expect(discovery.sessions).toHaveLength(2);
+    expect(discovery.sessions).toHaveLength(3);
     expect(discovery.sessions.every((s) => s.source === "codex")).toBe(true);
 
     const missing = adapter.discover(["/nonexistent/codex"]);
@@ -67,7 +67,9 @@ describe("Codex human-message extraction", () => {
     // …event_msg mirrors are not double-counted…
     expect(records.filter((r) => r.text === "thanks, this works")).toHaveLength(1);
     // …injected wrappers are excluded…
-    expect(texts.join("\n")).not.toMatch(/user_instructions|environment_context/);
+    expect(texts.join("\n")).not.toMatch(/user_instructions|environment_context|recommended_plugins|subagent_notification|in-app-browser-context|codex_internal_context|turn_aborted|realtime_delegation/);
+    // …compacted summary records stay out (message lives inside the payload).
+    expect(texts.join("\n")).not.toMatch(/compaction summary/);
     // …malformed lines are counted, never fatal.
     expect(skipCounter.malformedLines).toBeGreaterThanOrEqual(2);
     // Session and project attribution from session_meta.
@@ -96,8 +98,9 @@ describe("Codex human-message extraction", () => {
 describe("Codex forked/resumed rollouts", () => {
   it("counts inherited messages exactly once across the fork pair", async () => {
     const result = await scanAdapter(createCodexAdapter({ codexHome: FIXTURE_ROOT }));
-    // The fork re-records the two inherited messages (ordinal < 2); they are
-    // skipped there and counted once from the original rollout.
+    // The fork re-records the two inherited messages (real ordinals 1 and 5,
+    // below forked_from_ordinal_exclusive 6); they are skipped there and
+    // counted once from the original rollout.
     expect(result.records.filter((r) => r.text === "thanks, this works")).toHaveLength(1);
     expect(result.records.filter((r) => r.text === "now fuck this linter into shape")).toHaveLength(1);
     // The fork's own new message appears once.
@@ -105,10 +108,22 @@ describe("Codex forked/resumed rollouts", () => {
   });
 });
 
+describe("Codex subagent rollouts", () => {
+  it("skips subagent rollouts: their user items are delegation prompts", async () => {
+    const session = {
+      source: "codex" as const,
+      sessionId: "00000000-0000-0000-0000-000000000003",
+      file: path.join(FIXTURE_ROOT, "sessions", "2026", "10", "01", "rollout-1727784200-00000000-0000-0000-0000-000000000003.jsonl"),
+    };
+    const { records } = await extractCodexRecords(session);
+    expect(records).toEqual([]);
+  });
+});
+
 describe("Codex doctor", () => {
   it("reports rollout counts and missing roots", () => {
     const report = doctorCodex({ codexHome: FIXTURE_ROOT });
-    expect(report.rolloutCount).toBe(2);
+    expect(report.rolloutCount).toBe(3);
     expect(report.issues.some((i) => i.includes("sessions/ missing"))).toBe(false);
     const missing = doctorCodex({ codexHome: "/nonexistent" });
     expect(missing.issues).toContain("sessions/ missing");
@@ -118,7 +133,12 @@ describe("Codex doctor", () => {
 describe("Codex injected markers", () => {
   it("marks documented wrapper shapes", () => {
     expect(isCodexInjectedText("<environment_context> x")).toBe(true);
+    expect(isCodexInjectedText("<recommended_plugins>x</recommended_plugins>")).toBe(true);
+    expect(isCodexInjectedText("<turn_aborted>x</turn_aborted>")).toBe(true);
+    expect(isCodexInjectedText("<in-app-browser-context source=\"tab\">x</in-app-browser-context>")).toBe(true);
+    expect(isCodexInjectedText("<codex_internal_context source=\"plan\">x</codex_internal_context>")).toBe(true);
     expect(isCodexInjectedText("thanks")).toBe(false);
+    expect(isCodexInjectedText("PLEASE IMPLEMENT THIS PLAN: do things")).toBe(false);
     expect(CODEX_INJECTED_MARKERS.length).toBeGreaterThan(0);
   });
 });
