@@ -3,17 +3,30 @@
   "title": "Antigravity format research and pinning",
   "description": "Research Antigravity's real on-disk session format on BlackbookM1. Check ~/Library/Application Support/Antigravity, ~/.gemini/antigravity, ~/.antigravity, app bundle, and any state.vscdb (VS Code-based). Record schema/field names, entry kinds, authorship semantics, and counts only — never message text. Pin injected-content shapes and authorship with evidence or clearly marked assumptions. Done when: a research comment records locations, schemas, and the counting rule.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-a4d0fb83-174a-4781-9468-2e6d6a76a801",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "5876328e-7040-4332-82a0-690ad4fe02c2",
+      "author": "home",
+      "text": "Research complete. Verified live on BlackbookM1 (Antigravity 2.18.1 desktop + antigravity-cli); counts and schema/field names only, no message text inspected into any record.\n\nLOCATIONS\n- Desktop app data: ~/.gemini/antigravity/conversations/<conversation-uuid>.db (79 files, 352 MB) + conversation_summaries.db. ~/Library/Application Support/Antigravity/ is Electron shell data only (no transcripts; no User/globalStorage state.vscdb — Antigravity IDE.app is not installed).\n- CLI data: ~/.gemini/antigravity-cli/conversations/<conversation-uuid>.db (37 files, 112 MB) + its own conversation_summaries.db. Same schema.\n\nCONVERSATION DB SCHEMA (both roots)\n- steps(idx INTEGER PK, step_type INT, status INT, has_subtrajectory, metadata, error_details, permissions, task_details, render_info, step_payload BLOB, step_format INT) — the conversation stream, ordered by idx.\n- trajectory_meta(trajectory_id, cascade_id, trajectory_type, source) — 1 row; observed trajectory_type=4, source=1 in every file.\n- gen_metadata, executor_metadata, parent_references, trajectory_metadata_blob, battle_mode_infos (all empty in corpus).\n- step_payload is PROTOBUF with no shipped schema (desktop app bundle has none — @bufbuild/protobuf shell only; payloads written by the backend). Decoded structurally (all 33,582 steps across both roots parse cleanly).\n\nconversation_summaries.db columns: conversation_id, title, preview, step_count, last_modified_time, workspace_uris, status, source, project_id, agent_name, parent_conversation_id, nesting_depth, battle_id, winning_conversation_id, not_fully_idle, killed, last_user_input_time, last_user_input_step_index, app_data_dir, raw_summary, group_id.\n\nSTEP-TYPE DISTRIBUTION (desktop, 33,582 steps): 15 = 16,234 (agent narration), 132 = 15,280 (agent tool-call turns incl. run_command), 14 = 503 (USER TURNS), 101 = 1,110, 17 = 286, 23 = 150 (conversation summaries), 0 = 19.\n\nAUTHORSHIP / COUNTING RULE (evidence + marked assumption)\n- step_type 14 = the human turn. The user text sits at payload field path r.19.2 (verified: r.19.3 is a parts list whose r.19.3.1 entries CONCATENATE to r.19.2 — e.g. 176+1+1+154 = 332 chars — so count r.19.2 only; r.19.3/r.19.3.1 must be skipped or we double-count).\n- 37 of 503 type-14 steps have NO r.19.2: they carry r.19.7 { r.19.7.1 = file:// URI } instead — artifact/plan attach sends (UI action, not typed text). Skip.\n- Other types are agent output or records: 15/132/23/101/17 all skipped.\n- Per-step timestamps: payload r.5.1.1 (epoch seconds) + r.5.1.2 (nanos).\nASSUMPTION (marked): top-level conversations' type-14 messages are human-typed (all 62 first-messages in top desktop conversations and 37/37 CLI conversations are conversational dispatch text, none matching delegation shapes); probe tokens land in r.19.2 as expected.\n- Nested sub-cascades: 55/79 desktop conversations have parent_conversation_id !=  in summaries — their type-14 initial messages are agent-authored dispatch prompts (27/55 sampled start with You are tasked with/You are in PLANNING mode delegation shapes; top-level: 0/62). EXCLUDE conversations whose summary row has parent_conversation_id !=  (mirrors the Cursor subagent rule). CLI store has no nesting.\n- Battle mode (battle_id) and killed flags exist but are all-empty/unused in this corpus.\n\nEXPECTED YIELD: desktop top-level 448 type-14 steps (503 - 55 nested) minus ~37 no-text + CLI 37 = roughly 448 human messages. Attribution: conversation_summaries.workspace_uris for projectPath (39 cli summary rows have empty workspace_uris — fall back to empty). NOTE: cli summaries hold 61 rows for 37 files (stale rows) — join only on existing files.\n\nPRIVACY: all numbers above are counts; no text recorded.",
+      "created_at": "2026-10-02T09:06:07.073901Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:57:01.243852Z",
-  "updated_at": "2026-10-02T08:57:01.243880Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:06:07.128388Z",
+  "closed_at": "2026-10-02T09:06:07.128353Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
