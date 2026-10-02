@@ -3,17 +3,30 @@
   "title": "Local candidate survey and benchmark harness",
   "description": "Benchmark at least 3 small offline candidates on this M1: Cardiff twitter-roberta (task 1), onnx-community/twitter-xlm-roberta-base-sentiment-ONNX (XLM-T multilingual), SamLowe/roberta-base-go_emotions-onnx with a documented 28-emotion to pos/neu/neg mapping; survey Ollama/llama.cpp zero-shot without installing (neither runtime is present; note install size).",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-be490990-2d8b-42ed-84b2-1786cf7e934f",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "2f8b37ca-e951-4426-8997-6102a7cb7aee",
+      "author": "home",
+      "text": "Benchmarked four local backends on BlackbookM1 via the committed comparison harness (held-out accuracy, pos/neu/neg confusion matrix, throughput, model size, aggregate-only agreement vs VADER over 3012 real messages): go_emotions-mapped held-out 0.731 (confusion pos 4/0/0 neu 0/9/0 neg 7/0/6), Cardiff 3-class 0.615, XLM-T 0.577, sst2 baseline 0.346, vader 0.462 (vader keeps tuning set at 1.000). Throughput ~267-274 msgs/sec for the 3-class models, 508 for sst2, 23250 for vader; q8 sizes 119.6/120.1/266.3/64.5 MB. Agreement with VADER: go_emotions 50.4% labels (mean compound +0.056 vs +0.135, mean |diff| 0.278) - closest profile of all candidates. Sarcasm misread by every backend (0/5 held-out). Survey: Ollama and llama.cpp are NOT installed on this Mac; installing either would add a 1-2 GB runtime plus multi-GB model weights for throughput far below the 3-class classifiers, so zero-shot LLM candidates were not benchmarked; multilingual XLM-T and the emotion-mapped roberta were benchmarked instead; SetFit models are not supported by the Transformers.js runtime (no architecture support) and no distilled 3-class coding-domain model exists in ONNX form.",
+      "created_at": "2026-10-02T15:03:23.768139Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T14:42:48.361251Z",
-  "updated_at": "2026-10-02T14:43:30.795167Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T15:03:23.833087Z",
+  "closed_at": "2026-10-02T15:03:23.833049Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
