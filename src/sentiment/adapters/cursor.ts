@@ -19,6 +19,11 @@ export interface CursorAdapterOptions {
   cursorHomeDir?: string;
   /** Home directory override for tests. */
   homeDir?: string;
+  /**
+   * Session-level timestamp override (epoch ms) for agent transcripts whose
+   * lines carry no timestamps; defaults to chats meta.json then file mtime.
+   */
+  resolveSessionTimestampMs?: (sessionId: string, transcriptFile: string) => number | undefined;
 }
 
 const DEFAULT_HOME = process.env.HOME || "";
@@ -275,7 +280,7 @@ export function createCursorAdapter(options: CursorAdapterOptions = {}): Sentime
     source: "cursor-ide",
     discover,
     extract(session: DiscoveredSession): AsyncIterable<HumanMessageRecord> {
-      if (session.source === "cursor-agent") return extractAgentTranscript(session);
+      if (session.source === "cursor-agent") return extractAgentTranscript(session, options);
       return extractComposerBubbles(session, options);
     },
   };
@@ -366,11 +371,28 @@ function extractOrderedBubbleIds(headersValue: string | undefined): string[] {
 }
 
 /**
- * Agent-CLI transcript extraction: user-role lines only, per the schema to be
- * pinned from a real Mac (KDATAP-e9aa3c); injected context excluded;
- * store.db enriches metadata only and never duplicates as a message source.
+ * Agent-CLI transcript extraction, pinned against a real Mac corpus
+ * (KDATAP-e9aa3c): user-role lines are {"role":"user","message":{"content":
+ * [{"type":"text","text":...}]}}; genuinely typed input is always fully
+ * wrapped in <user_query>...</user_query>; harness-injected context lines
+ * (timestamp, dynamic_tools, dynamic_tool_catalog, available_subagent_types,
+ * manually_attached_skills, open_subagent_context, cursor_commands) ride as
+ * tagged user lines. Lines carry NO timestamps or ids — the record timestamp
+ * is session-level: ~/.cursor/chats/<hash>/<sid>/meta.json updatedAtMs when
+ * present, else the transcript file mtime.
  */
-async function* extractAgentTranscript(session: DiscoveredSession): AsyncIterable<HumanMessageRecord> {
+async function* extractAgentTranscript(
+  session: DiscoveredSession,
+  options: CursorAdapterOptions = {},
+): AsyncIterable<HumanMessageRecord> {
+  const lineTimestamp = (parsed: Record<string, unknown>): string | undefined => {
+    const ts = parsed.timestamp;
+    return typeof ts === "number" || typeof ts === "string" ? normalizeTimestampToRfc3339Utc(ts) : undefined;
+  };
+  const sessionMs = options.resolveSessionTimestampMs
+    ? options.resolveSessionTimestampMs(session.sessionId, session.file)
+    : defaultSessionTimestampMs(session.sessionId, session.file, defaultCursorHome(options));
+  const sessionTimestamp = sessionMs !== undefined ? normalizeTimestampToRfc3339Utc(sessionMs) : undefined;
   for await (const { line, text: raw } of streamJsonlLines(session.file)) {
     const trimmed = raw.trim();
     if (trimmed === "") continue;
@@ -380,13 +402,23 @@ async function* extractAgentTranscript(session: DiscoveredSession): AsyncIterabl
     if (role !== "user") continue;
     const type = typeof parsed.type === "string" ? parsed.type : undefined;
     if (type !== undefined && type !== "message") continue;
-    const text = extractAgentText(parsed);
-    if (!text || text.trim() === "" || isInjectedText(text)) continue;
-    const ts = parsed.timestamp;
-    const timestamp =
-      typeof ts === "number" || typeof ts === "string" ? normalizeTimestampToRfc3339Utc(ts) : undefined;
+    const fullText = extractAgentText(parsed);
+    if (!fullText || fullText.trim() === "") continue;
+    const stamped = lineTimestamp(parsed);
+    // Typed input arrives fully wrapped in <user_query>; everything else that
+    // leads with a tag is injected context. Untagged lines are counted as
+    // typed only when a timestamp exists to window them by.
+    const wrapped = unwrapUserQuery(fullText);
+    const text =
+      wrapped !== undefined
+        ? wrapped
+        : isInjectedText(fullText) || (!stamped && sessionTimestamp === undefined)
+          ? undefined
+          : fullText;
+    if (!text || text.trim() === "") continue;
+    const timestamp = stamped ?? sessionTimestamp;
     if (!timestamp) continue;
-    const messageId = typeof parsed.messageId === "string" ? parsed.messageId : `${session.sessionId}:${line}`;
+    const messageId = `${session.sessionId}:${line}`;
     yield {
       source: "cursor-agent",
       sessionId: session.sessionId,
@@ -407,28 +439,75 @@ async function* extractAgentTranscript(session: DiscoveredSession): AsyncIterabl
   }
 }
 
-function extractAgentText(parsed: Record<string, unknown>): string | undefined {
-  if (typeof parsed.text === "string") return parsed.text;
-  const content = parsed.content;
-  if (typeof content === "string") return content;
-  if (Array.isArray(content)) {
-    const parts = (content as Record<string, unknown>[])
-      .map((block) => (typeof block.text === "string" ? block.text : undefined))
-      .filter((t): t is string => t !== undefined);
-    return parts.length > 0 ? parts.join("\n") : undefined;
-  }
-  return undefined;
+/** Inner text of a fully <user_query>-wrapped line, else undefined. */
+export function unwrapUserQuery(text: string): string | undefined {
+  const trimmed = text.trim();
+  const match = /^<user_query>([\s\S]*)<\/user_query>$/.exec(trimmed);
+  return match ? match[1] : undefined;
 }
 
-/** Injected-context discrimination for agent transcripts (to verify on a real Mac). */
+/**
+ * Session timestamp for transcripts whose lines carry no time: the chats
+ * metadata (updatedAtMs, else createdAtMs) when the session id is registered
+ * under ~/.cursor/chats, else the transcript file mtime (end-of-session
+ * approximation; documented granularity limitation).
+ */
+export function defaultSessionTimestampMs(
+  sessionId: string,
+  transcriptFile: string,
+  cursorHome: string,
+): number | undefined {
+  const chatsDir = path.join(cursorHome, "chats");
+  try {
+    for (const hash of fs.readdirSync(chatsDir, { withFileTypes: true })) {
+      if (!hash.isDirectory()) continue;
+      const metaPath = path.join(chatsDir, hash.name, sessionId, "meta.json");
+      if (!fs.existsSync(metaPath)) continue;
+      const meta = JSON.parse(fs.readFileSync(metaPath, "utf8")) as {
+        updatedAtMs?: unknown;
+        createdAtMs?: unknown;
+      };
+      if (typeof meta.updatedAtMs === "number") return meta.updatedAtMs;
+      if (typeof meta.createdAtMs === "number") return meta.createdAtMs;
+    }
+  } catch {
+    // fall through to mtime
+  }
+  try {
+    return fs.statSync(transcriptFile).mtimeMs;
+  } catch {
+    return undefined;
+  }
+}
+
+function extractAgentText(parsed: Record<string, unknown>): string | undefined {
+  if (typeof parsed.text === "string") return parsed.text;
+  const message = parsed.message;
+  if (message && typeof message === "object" && !Array.isArray(message)) {
+    const t = contentText((message as Record<string, unknown>).content);
+    if (t !== undefined) return t;
+  }
+  return contentText(parsed.content);
+}
+
+function contentText(content: unknown): string | undefined {
+  if (typeof content === "string") return content;
+  if (!Array.isArray(content)) return undefined;
+  const parts = (content as Record<string, unknown>[])
+    .filter((block) => typeof block?.type === "string" && block.type === "text" && typeof block.text === "string")
+    .map((block) => block.text as string);
+  return parts.length > 0 ? parts.join("\n") : undefined;
+}
+
+/**
+ * Injected-context discrimination for agent transcripts (pinned on a real
+ * Mac): injected lines lead with a tag — typed input is either fully wrapped
+ * in <user_query> or untagged.
+ */
 export function isInjectedText(text: string): boolean {
   const trimmed = text.trim();
-  return (
-    trimmed.startsWith("<system-reminder>") ||
-    trimmed.startsWith("<context:") ||
-    trimmed.startsWith("<terminal-selection>") ||
-    trimmed === ""
-  );
+  if (trimmed === "") return false;
+  return /^<[a-zA-Z][a-zA-Z0-9_-]*[>\s]/.test(trimmed);
 }
 
 export async function extractCursorRecords(
@@ -439,7 +518,7 @@ export async function extractCursorRecords(
   const records: HumanMessageRecord[] = [];
   const iterable =
     session.source === "cursor-agent"
-      ? extractAgentTranscript(session)
+      ? extractAgentTranscript(session, options)
       : extractComposerBubbles(session, options, floorMs);
   for await (const record of iterable) records.push(record);
   return { records: dedupeRecords(records).records };
