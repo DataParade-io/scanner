@@ -143,6 +143,25 @@ export {
   updateScanWatermark,
 } from "./sentiment/scan-state";
 export type { ScanState, ScanWatermark } from "./sentiment/scan-state";
+export {
+  SENTIMENT_FAMILIES,
+  countMessage,
+  hasPathLikeSuffix,
+} from "./sentiment/counting";
+export type {
+  CountingOptions,
+  FamilyCount,
+  MessageCountResult,
+  SentimentFamily,
+} from "./sentiment/counting";
+export {
+  DEFAULT_EXCLUSION_THRESHOLDS,
+  isPastedRegion,
+  stripExcludedRegions,
+} from "./sentiment/exclusions";
+export type { ExclusionThresholds } from "./sentiment/exclusions";
+export { loadSentimentWordList } from "./sentiment/word-lists";
+export type { SentimentWordList } from "./sentiment/word-lists";
 
 
 
