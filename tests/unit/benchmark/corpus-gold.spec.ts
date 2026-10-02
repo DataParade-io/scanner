@@ -60,8 +60,9 @@ describe("imported corpus gold", () => {
   const benchmarkRoot = path.join(__dirname, "../../benchmark");
 
   // KDATAP-973b69: +1 held-out packet (chatwoot, occurrence gold only).
-  it("ships 30 pinned packets", () => {
-    expect(repoKeys).toHaveLength(30);
+  // KDATAP-b8e4a8: +1 held-out packet (calcom, occurrence gold only).
+  it("ships 31 pinned packets", () => {
+    expect(repoKeys).toHaveLength(31);
   });
 
   it("loads accepted annotations for every declared layer", () => {
