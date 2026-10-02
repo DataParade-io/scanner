@@ -19,5 +19,10 @@ Per-source subtrees:
 - `grok-bot/` — Grok Bot (Electron app) conversation blob shapes
   (`~/Library/Application Support/Grok Bot/sand-client-persistence/*.blob`;
   base32-of-storage-key filenames, `{schemaVersion,value:{entries}}` JSON)
+- `antigravity/` — (no committed files) Antigravity conversation SQLite DBs
+  (`~/.gemini/antigravity/conversations/*.db` and
+  `~/.gemini/antigravity-cli/conversations/*.db`) are generated at test time
+  by `tests/unit/sentiment/helpers/antigravity-fixture.ts`; protobuf payloads
+  are hand-encoded to the pinned real shape
 
 A CI lint guard rejects files in this tree that look like real session dumps.

@@ -5,6 +5,12 @@ import { createClaudeCodeAdapter } from "../../../src/sentiment/adapters/claude-
 import { createCursorAdapter } from "../../../src/sentiment/adapters/cursor";
 import { createCodexAdapter } from "../../../src/sentiment/adapters/codex";
 import { createGrokBotAdapter } from "../../../src/sentiment/adapters/grok-bot";
+import { createAntigravityAdapter } from "../../../src/sentiment/adapters/antigravity";
+import {
+  generateAntigravityProfile,
+  cleanupAntigravityProfile,
+  userTurnPayload,
+} from "../../unit/sentiment/helpers/antigravity-fixture";
 import { scanAdapter } from "../../../src/sentiment/scan";
 import { countMessage } from "../../../src/sentiment/counting";
 import { loadSentimentWordList } from "../../../src/sentiment/word-lists";
@@ -50,6 +56,34 @@ async function collectFixtureRecords(): Promise<{ text: string; source: string }
     createGrokBotAdapter({ grokBotDataDir: path.join(__dirname, "../../fixtures/sentiment/grok-bot") }),
   );
   for (const r of grok.records) records.push({ text: r.text, source: r.source });
+  const profile = generateAntigravityProfile(
+    [
+      {
+        conversationId: "aaaaaaaa-0000-4000-8000-0000000000aa",
+        workspaceUris: "file:///Users/ryan/demo",
+        steps: [
+          { stepType: 14, payload: userTurnPayload({ text: "thanks, that build finally passed", timestampMs: Date.parse("2026-10-01T12:00:00Z") }) },
+          { stepType: 14, payload: userTurnPayload({ text: "ok fuck, the types broke again", timestampMs: Date.parse("2026-10-01T12:01:00Z") }) },
+        ],
+      },
+    ],
+    [
+      {
+        conversationId: "cccccccc-0000-4000-8000-0000000000cc",
+        steps: [
+          { stepType: 14, payload: userTurnPayload({ text: "wtf, the cache ate my changes", timestampMs: Date.parse("2026-10-01T12:02:00Z") }) },
+        ],
+      },
+    ],
+  );
+  try {
+    const antigravity = await scanAdapter(
+      createAntigravityAdapter({ antigravityRoots: [profile.desktopRoot, profile.cliRoot] }),
+    );
+    for (const r of antigravity.records) records.push({ text: r.text, source: r.source });
+  } finally {
+    cleanupAntigravityProfile(profile);
+  }
   return records;
 }
 

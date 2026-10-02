@@ -39,7 +39,7 @@ pnpm run sentiment:meter -- --sources claude-code,codex
 pnpm run sentiment:meter -- --doctor            # per-source discovery diagnostics
 ```
 
-- **Sources**: Claude Code (`~/.claude/projects/**.jsonl`), Cursor (`state.vscdb` plus `~/.cursor` agent transcripts), Codex (`~/.codex/sessions`), Grok Bot (`~/Library/Application Support/Grok Bot/sand-client-persistence/*.blob`).
+- **Sources**: Claude Code (`~/.claude/projects/**.jsonl`), Cursor (`state.vscdb` plus `~/.cursor` agent transcripts), Codex (`~/.codex/sessions`), Grok Bot (`~/Library/Application Support/Grok Bot/sand-client-persistence/*.blob`), Antigravity (`~/.gemini/antigravity{,-cli}/conversations/*.db` + `conversation_summaries.db`).
 - **Windows**: rolling `24h`/`Nh`/`Nd` plus calendar `today`/`yesterday`. Calendar windows are anchored at a configurable day-start time (default: local midnight) with correct timezone/DST handling (spring-forward gaps clamp forward, fall-back ambiguity resolves earlier).
 - **Privacy**: the default word lists only detect gratitude and profanity token families; no network-capable imports exist under `src/sentiment/` (enforced by test), and neither output nor scan-state cache ever stores verbatim message text.
 - **Exclusions**: fenced/indented code blocks, blockquotes, and pasted text blobs are never counted. Paste detection requires both length (>= 4000 chars) and web-answer citation density (>= 3 `[n]` markers) — tuned on real corpora so the operator's own long orchestration briefs still count (tunable via `ExclusionThresholds`).
