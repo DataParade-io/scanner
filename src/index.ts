@@ -174,6 +174,17 @@ export type {
   WindowBounds,
   WindowSpec,
 } from "./sentiment/windows";
+export { scanAdapter } from "./sentiment/scan";
+export type { ScanResult } from "./sentiment/scan";
+export {
+  createClaudeCodeAdapter,
+  decodeProjectDirName,
+  doctorClaudeCode,
+  extractClaudeCodeRecords,
+  isInjectedText,
+} from "./sentiment/adapters/claude-code";
+export type { ClaudeCodeAdapterOptions, ClaudeCodeDoctorReport } from "./sentiment/adapters/claude-code";
+export type { DiscoveredSession } from "./sentiment/adapter";
 
 
 

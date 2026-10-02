@@ -42,7 +42,7 @@ export interface AdapterExtractResult {
  */
 export interface SentimentAdapter {
   source: SentimentSource;
-  discover(roots: string[]): Promise<AdapterDiscoveryResult> | AdapterDiscoveryResult;
+  discover(roots?: string[]): AdapterDiscoveryResult;
   extract(session: DiscoveredSession): AsyncIterable<HumanMessageRecord>;
 }
 
