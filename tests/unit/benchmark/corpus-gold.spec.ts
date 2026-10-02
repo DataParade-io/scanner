@@ -2,7 +2,7 @@ import * as fs from "fs";
 import path from "path";
 import YAML from "yaml";
 
-import { loadAnnotations, loadBenchmarkManifest, loadLayerScopes } from "../../benchmark/manifest";
+import { loadAnnotations, loadBenchmarkManifest, loadConceptScopes, loadLayerScopes } from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 import { loadCanonicalGoldFromAnnotation } from "../../eval/canonical";
 import { annotationsToEvalCases } from "../../benchmark/to-eval-cases";
@@ -59,8 +59,9 @@ describe("imported corpus gold", () => {
   const repoKeys = listBenchmarkRepoKeys();
   const benchmarkRoot = path.join(__dirname, "../../benchmark");
 
-  it("ships 29 pinned packets", () => {
-    expect(repoKeys).toHaveLength(29);
+  // KDATAP-973b69: +1 held-out packet (chatwoot, occurrence gold only).
+  it("ships 30 pinned packets", () => {
+    expect(repoKeys).toHaveLength(30);
   });
 
   it("loads accepted annotations for every declared layer", () => {
@@ -139,9 +140,13 @@ describe("imported corpus gold", () => {
       if (!fs.existsSync(scopesPath)) {
         continue;
       }
-      scopedPackets += 1;
       const scopes = loadLayerScopes(repoDir);
-      expect(scopes.size).toBeGreaterThan(0);
+      if (scopes.size === 0) {
+        // KDATAP-973b69: a held-out packet may hold only proposed concept scopes (chatwoot).
+        expect(loadConceptScopes(repoDir).size).toBeGreaterThan(0);
+        continue;
+      }
+      scopedPackets += 1;
       for (const layer of loadBenchmarkManifest(repoDir).coverage.layers) {
         const canonical = layer === "pii_signals" ? "occurrences" : layer;
         if (scopes.has(canonical as typeof layer)) {

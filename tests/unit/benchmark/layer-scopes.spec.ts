@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import path from "path";
 
-import { loadAnnotations, loadLayerScopes } from "../../benchmark/manifest";
+import { loadAnnotations, loadConceptScopes, loadLayerScopes } from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 
 describe("layer-scopes loader", () => {
@@ -94,7 +94,11 @@ describe("layer-scopes loader", () => {
         continue;
       }
       const scopes = loadLayerScopes(repoDir);
-      expect(scopes.size).toBeGreaterThan(0);
+      if (scopes.size === 0) {
+        // KDATAP-973b69: a held-out packet may ship only proposed concept scopes (chatwoot).
+        expect(loadConceptScopes(repoDir).size).toBeGreaterThan(0);
+        continue;
+      }
       for (const [, record] of scopes) {
         expect(record.provenance.proposed_by.length).toBeGreaterThan(0);
         expect(record.provenance.review_state).toBeDefined();

@@ -436,6 +436,15 @@ export function checkLayerScopeProvenance(benchmarkRoot: string): ReadinessBlock
 
       const scopeKey = normalizeBenchmarkLayer(layer);
       const scopeRecord = scopes.get(scopeKey);
+      // A held-out packet whose gold on this layer is all proposed (chatwoot, KDATAP-973b69)
+      // adds nothing to accepted-only headline scores, so its missing reviewed scope cannot
+      // make them unsound. It blocks again once any of its gold is accepted.
+      if (
+        !scopeRecord &&
+        !loadAnnotations(repoDir, layer).some((annotation) => annotation.provenance.review_state === "accepted")
+      ) {
+        continue;
+      }
       if (!scopeRecord) {
         blockers.push({
           code: "SCOPE_MISSING_OR_UNREVIEWED",
