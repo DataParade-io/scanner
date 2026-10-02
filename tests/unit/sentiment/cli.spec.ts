@@ -34,6 +34,8 @@ describe("sentiment-meter CLI", () => {
         window: "all",
         cursorUserDir: profile.userDir,
         cursorHomeDir: profile.cursorHome,
+        claudeConfigDir: "/nonexistent/claude",
+        codexHome: "/nonexistent/codex",
       }),
     );
     expect(output).toContain("Thanks: 2");
@@ -49,7 +51,14 @@ describe("sentiment-meter CLI", () => {
       globalComposers: [composer("c1", ["thanks"])],
     });
     const output = await captureStdout(() =>
-      runCli({ window: "all", json: true, cursorUserDir: profile.userDir, cursorHomeDir: profile.cursorHome }),
+      runCli({
+        window: "all",
+        json: true,
+        cursorUserDir: profile.userDir,
+        cursorHomeDir: profile.cursorHome,
+        claudeConfigDir: "/nonexistent/claude",
+        codexHome: "/nonexistent/codex",
+      }),
     );
     const payload = JSON.parse(output);
     expect(payload.thanksTokens).toBe(1);
@@ -60,7 +69,12 @@ describe("sentiment-meter CLI", () => {
 
   it("fails fast on an invalid timezone", async () => {
     await expect(
-      captureStdout(() => runCli({ window: "all", timezone: "Mars/Olympus" })),
+      captureStdout(() => runCli({
+        window: "all",
+        timezone: "Mars/Olympus",
+        claudeConfigDir: "/nonexistent/claude",
+        codexHome: "/nonexistent/codex",
+      })),
     ).rejects.toThrow(/invalid IANA timezone/);
   }, 30000);
 });

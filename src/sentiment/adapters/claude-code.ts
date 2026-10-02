@@ -156,6 +156,20 @@ export async function* extractSession(
     }
     const record = parsed as Record<string, unknown>;
     const type = typeof record.type === "string" ? record.type : undefined;
+
+    // Queued commands typed while the agent is busy arrive as standalone
+    // type:"attachment" records (attachment.type === "queued_command" with
+    // attachment.origin.kind === "human"), confirmed against a real corpus.
+    if (type === "attachment") {
+      const att = record.attachment as Record<string, unknown> | undefined;
+      if (!att || att.type !== "queued_command" || att.isMeta === true) continue;
+      if (!isHumanAttachment(att)) continue;
+      const prompt = typeof att.prompt === "string" ? att.prompt : undefined;
+      if (prompt === undefined || prompt.trim() === "") continue;
+      const yielded = humanRecord(session, skipCounter, record, prompt, line, true, typeof att.timestamp === "string" ? att.timestamp : undefined);
+      if (yielded) yield yielded;
+      continue;
+    }
     if (type !== "user") continue;
     const message = record.message as Record<string, unknown> | undefined;
     if (!message || message.role !== "user") continue;
@@ -165,6 +179,10 @@ export async function* extractSession(
     const promptSource = typeof record.promptSource === "string" ? record.promptSource : undefined;
     if (promptSource === "system" || promptSource === "sdk") continue;
     if (record.isCompactSummary === true) continue;
+    // origin.kind, when present, is authoritative: user-role records carrying
+    // task-notification or peer payloads are injected, not typed.
+    const origin = record.origin as Record<string, unknown> | undefined;
+    if (origin && typeof origin.kind === "string" && origin.kind !== "human") continue;
 
     const content = message.content;
     const text = extractHumanText(content);
@@ -172,36 +190,50 @@ export async function* extractSession(
     if (text.trim() === "") continue;
     if (isInjectedText(text)) continue;
 
-    const timestamp = typeof record.timestamp === "string" ? record.timestamp : undefined;
-    if (!timestamp) {
-      skipCounter.malformedLines += 1;
-      continue;
-    }
-    const uuid = typeof record.uuid === "string" ? record.uuid : undefined;
     const attachment = record.attachment as Record<string, unknown> | undefined;
-    const recordId =
-      attachment && typeof attachment.prompt === "string" && isHumanAttachment(attachment)
-        ? `queued:${uuid ?? `${session.sessionId}:${line}`}`
-        : uuid ?? `${session.sessionId}:${line}`;
-    const cwd = typeof record.cwd === "string" ? record.cwd : session.projectPath ?? "";
-    yield {
-      source: "claude-code",
-      sessionId: typeof record.sessionId === "string" ? record.sessionId : session.sessionId,
-      recordId,
-      projectPath: cwd,
-      timestamp: normalizeTimestampToRfc3339Utc(timestamp),
-      role: "human",
-      text,
-      dedupKey: buildDedupKey({
-        source: "claude-code",
-        recordId: uuid,
-        sessionId: session.sessionId,
-        timestamp: normalizeTimestampToRfc3339Utc(timestamp),
-        text,
-      }),
-      provenance: { file: session.file, line, key: recordId },
-    };
+    const queued = attachment !== undefined && typeof attachment.prompt === "string" && isHumanAttachment(attachment);
+    const yielded = humanRecord(session, skipCounter, record, text, line, queued);
+    if (yielded) yield yielded;
   }
+}
+
+function humanRecord(
+  session: DiscoveredSession,
+  skipCounter: SkipCounter,
+  record: Record<string, unknown>,
+  text: string,
+  line: number,
+  queued: boolean,
+  fallbackTimestamp?: string,
+): HumanMessageRecord | undefined {
+  const timestamp = typeof record.timestamp === "string" ? record.timestamp : fallbackTimestamp;
+  if (!timestamp) {
+    skipCounter.malformedLines += 1;
+    return undefined;
+  }
+  const uuid = typeof record.uuid === "string" ? record.uuid : undefined;
+  const recordId = queued
+    ? `queued:${uuid ?? `${session.sessionId}:${line}`}`
+    : uuid ?? `${session.sessionId}:${line}`;
+  const cwd = typeof record.cwd === "string" ? record.cwd : session.projectPath ?? "";
+  const normalized = normalizeTimestampToRfc3339Utc(timestamp);
+  return {
+    source: "claude-code",
+    sessionId: typeof record.sessionId === "string" ? record.sessionId : session.sessionId,
+    recordId,
+    projectPath: cwd,
+    timestamp: normalized,
+    role: "human",
+    text,
+    dedupKey: buildDedupKey({
+      source: "claude-code",
+      recordId: uuid,
+      sessionId: session.sessionId,
+      timestamp: normalized,
+      text,
+    }),
+    provenance: { file: session.file, line, key: recordId },
+  };
 }
 
 function isHumanAttachment(attachment: unknown): boolean {
@@ -241,6 +273,7 @@ export function isInjectedText(text: string): boolean {
   if (/^<task-notification>[\s\S]*<\/task-notification>$/.test(trimmed)) return true;
   if (/^<interrupted-request>[\s\S]*<\/interrupted-request>$/.test(trimmed)) return true;
   if (trimmed.startsWith("<command-name>") || trimmed.startsWith("<command-message>")) return true;
+  if (trimmed.startsWith("<local-command-stdout>") || trimmed.startsWith("<local-command-stderr>")) return true;
   if (/^This session is being continued from a previous conversation/.test(trimmed)) return true;
   return false;
 }
