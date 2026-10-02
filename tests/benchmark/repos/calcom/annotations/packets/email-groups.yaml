@@ -1,0 +1,1695 @@
+repo: calcom
+concept: email
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: '2026-10-02'
+  review_state: proposed
+groups:
+- id: user-email
+  name: Cal.com user email
+  subject: a Cal.com account user (users table), read as the signed-in user, organizer, host, round robin
+    candidate, team or organization member, credential owner or reporter
+  subject_kind: end_user
+  purpose: sign-in, sign-up, notifications, organizer identity on bookings and host matching
+  rationale: 'User.email column (schema.prisma:407, unique at 513/514) and its reads and writes: Prisma
+    selects and where clauses in the user, profile, membership, event type, host, booking and OAuth repositories;
+    NextAuth credentials, session and identity-provider linking (existing user lookups and email updates);
+    sign-up, username validation and password reset lookups; round robin and availability host lists (getLuckyUser,
+    getUserAvailability, BookingRepository host-as-attendee matching); team members on calendar events;
+    the BookingTimeStatus view column (it selects users.email). Request values that are matched against
+    User.email are this item: the teamMemberEmail / contact owner address used for routing, the sign-up
+    and login form address, TOTP JWT address. Team and organization members are users in the same column
+    with no flag, so they are not split.'
+  clusters:
+  - c001
+  - c003
+  - c010
+  - c011
+  - c013
+  - c015
+  - c017
+  - c020
+  - c025
+  - c026
+  - c027
+  - c030
+  - c033
+  - c034
+  - c037
+  - c038
+  - c039
+  - c040
+  - c041
+  - c042
+  - c043
+  - c044
+  - c045
+  - c046
+  - c047
+  - c048
+  - c049
+  - c050
+  - c051
+  - c054
+  - c056
+  - c057
+  - c058
+  - c059
+  - c062
+  - c063
+  - c064
+  - c065
+  - c067
+  - c071
+  - c073
+  - c074
+  - c075
+  - c076
+  - c077
+  - c079
+  - c080
+  - c081
+  - c083
+  - c084
+  - c085
+  - c086
+  - c087
+  - c088
+  - c089
+  - c090
+  - c091
+  - c092
+  - c094
+  - c096
+  - c098
+  - c101
+  - c103
+  - c104
+  - c107
+  - c108
+  - c114
+  - c116
+  - c118
+  - c120
+  - c121
+  - c122
+  - c124
+  - c125
+  - c126
+  - c127
+  - c128
+  - c129
+  - c131
+  - c132
+  - c133
+  - c134
+  - c135
+  - c136
+  - c137
+  - c138
+  - c139
+  - c140
+  - c141
+  - c142
+  - c143
+  - c144
+  - c145
+  - c146
+  - c148
+  - c174
+  - c178
+  - c179
+  - c180
+  - c181
+  - c182
+  - c186
+  - c196
+  - c198
+  - c227
+  - c228
+  - c229
+  - c232
+  - c233
+  - c241
+  - c244
+  - c246
+  - c249
+  - c250
+  - c252
+  - c254
+  - c256
+  - c259
+  - c264
+  - c265
+  - c266
+  - c267
+  - c277
+  - c278
+  - c293
+  - c298
+  - c301
+  - c302
+  - c303
+  - c304
+  - c306
+  - c308
+  - c309
+  - c310
+  - c311
+  - c312
+  - c313
+  - c314
+  - c315
+  - c316
+  - c317
+  - c318
+  - c320
+  - c322
+  - c327
+  - c329
+  - c331
+  - c349
+  - c351
+  - c354
+  - c357
+  - c365
+  - c366
+  - c367
+  - c368
+  - c371
+  - c373
+  - c380
+  - c391
+  - c394
+  - c399
+  - c406
+  - c407
+  - c408
+  - c409
+  - c411
+  - c412
+  - c413
+  - c414
+  - c415
+  - c416
+  - c417
+  - c418
+  - c419
+  - c421
+  - c422
+  - c423
+  - c426
+  - c427
+  - c435
+  - c436
+  - c443
+  - c446
+  - c448
+  - c449
+  - c450
+  - c452
+  - c479
+  - c480
+  - c481
+  - c484
+  - c486
+  - c487
+  - c488
+  - c492
+  - c494
+  - c496
+  - c497
+  - c499
+  - c500
+  - c501
+  - c503
+  - c504
+  - c507
+  - c508
+  - c510
+  - c512
+  - c514
+  - c515
+  - c516
+  - c519
+  - c520
+  - c529
+  - c532
+  - c534
+  - c540
+  - c543
+  - c548
+  - c550
+  - c551
+  - c552
+  - c553
+  - c554
+  - c555
+  - c556
+  - c557
+  - c570
+  - c571
+  - c573
+  - c574
+  - c575
+  - c576
+  - c577
+  - c582
+  - c583
+  - c588
+  - c596
+  - c598
+  - c603
+  - c604
+  - c607
+  - c608
+  - c609
+  - c610
+  - c611
+  - c612
+  - c613
+  - c614
+  - c615
+  - c616
+  - c617
+  - c620
+  - c621
+  - c622
+  - c631
+  - c632
+  - c633
+  - c634
+  - c635
+  - c636
+  - c637
+  - c638
+  - c640
+  - c641
+  - c642
+  - c644
+  - c645
+  - c647
+  - c649
+  - c650
+  - c652
+  - c653
+  - c654
+  - c655
+  - c656
+  - c668
+  - c669
+  - c670
+  - c671
+  - c672
+  - c673
+  - c674
+  - c675
+  - c676
+  - c677
+  - c678
+  - c679
+  - c681
+  - c682
+  - c683
+  - c684
+  - c685
+  - c686
+  - c687
+  - c688
+  - c689
+  - c691
+  - c692
+  - c693
+  - c694
+  - c695
+  - c696
+  - c697
+  - c698
+  - c699
+  - c700
+  - c701
+  - c702
+  - c703
+  - c704
+  - c705
+  - c706
+  - c707
+  - c708
+  - c711
+  - c712
+  - c713
+  - c716
+  - c720
+  - c721
+  - c723
+  - c724
+  - c730
+  - c734
+  - c735
+  - c736
+  - c741
+  - c742
+  - c743
+  - c745
+  - c746
+  - c747
+  - c748
+  - c749
+  - c750
+  - c751
+  - c752
+  - c753
+  - c754
+  - c755
+  - c756
+  - c757
+  - c760
+  - c764
+  - c766
+  - c767
+  - c768
+  - c769
+  - c772
+  - c773
+  - c774
+  - c777
+  - c778
+  - c779
+  - c780
+  - c781
+  - c782
+  - c784
+  - c787
+  - c788
+  - c789
+  - c790
+  - c791
+  - c792
+  - c793
+  - c794
+  - c795
+  - c796
+  - c797
+  - c798
+  - c799
+  - c800
+  - c801
+  - c802
+  - c803
+  - c804
+  - c805
+  - c806
+  - c807
+  - c808
+  - c809
+  - c810
+  - c811
+  - c812
+  - c815
+  - c816
+  - c820
+  - c821
+  - c826
+  - c845
+  - c850
+  - c851
+  - c852
+  - c853
+  - c854
+  - c857
+  - c858
+  - c859
+  - c860
+  - c861
+  - c876
+  - c877
+  - c878
+  - c879
+  - c880
+  - c881
+  - c882
+  - c883
+  - c884
+  - c885
+  - c886
+  - c888
+  - c889
+  - c890
+  - c892
+  - c895
+  - c896
+  - c897
+  - c900
+  - c901
+  - c903
+  - c906
+  - c907
+  - c910
+  - c911
+  - c912
+  - c917
+  - c920
+  - c922
+  - c925
+  - c931
+  - c976
+  - c982
+  - c983
+  - c985
+  - c986
+  - c988
+  - c990
+  - c991
+  - c992
+  - c996
+  - c1003
+  - c1014
+  - c1017
+  - c1018
+  - c1019
+  - c1021
+  - c1028
+- id: attendee-email
+  name: Booking attendee email
+  subject: a booking attendee (the booker and guests, Attendee table)
+  subject_kind: other_person
+  purpose: booking confirmations, reminders, seats, cancellation and reschedule handling, no-show and
+    CRM sync
+  rationale: 'Attendee.email column (schema.prisma:828, indexes 838/840) and its reads and writes: Prisma
+    attendee selects, creates and where clauses in the booking, attendee, seat and no-show code; the booker
+    address in flight at booking time (bookerEmail in RegularBookingService and its checks: blocklist,
+    spam, active booking limits, confirmation flags, payment, analytics lead), guests and invitees that
+    are written to Attendee rows, calendar event attendee lists built from Attendee rows, and lookups
+    by attendee address (getValidBookingFromEventTypeForAttendee, getBookingRequest, repository emails
+    parameters).'
+  clusters:
+  - c002
+  - c004
+  - c005
+  - c006
+  - c007
+  - c031
+  - c175
+  - c183
+  - c230
+  - c231
+  - c234
+  - c235
+  - c236
+  - c237
+  - c238
+  - c239
+  - c253
+  - c255
+  - c260
+  - c261
+  - c262
+  - c263
+  - c268
+  - c269
+  - c270
+  - c271
+  - c272
+  - c273
+  - c274
+  - c275
+  - c276
+  - c279
+  - c287
+  - c295
+  - c299
+  - c300
+  - c305
+  - c307
+  - c321
+  - c323
+  - c326
+  - c333
+  - c334
+  - c335
+  - c336
+  - c337
+  - c338
+  - c339
+  - c340
+  - c341
+  - c342
+  - c343
+  - c344
+  - c345
+  - c352
+  - c353
+  - c355
+  - c358
+  - c359
+  - c362
+  - c363
+  - c364
+  - c369
+  - c370
+  - c372
+  - c374
+  - c375
+  - c376
+  - c377
+  - c378
+  - c379
+  - c381
+  - c382
+  - c383
+  - c384
+  - c385
+  - c386
+  - c387
+  - c388
+  - c389
+  - c390
+  - c395
+  - c400
+  - c401
+  - c402
+  - c403
+  - c404
+  - c420
+  - c424
+  - c425
+  - c428
+  - c431
+  - c434
+  - c444
+  - c447
+  - c451
+  - c453
+  - c454
+  - c455
+  - c456
+  - c457
+  - c458
+  - c459
+  - c460
+  - c461
+  - c462
+  - c463
+  - c464
+  - c465
+  - c466
+  - c467
+  - c468
+  - c469
+  - c470
+  - c471
+  - c472
+  - c473
+  - c474
+  - c475
+  - c477
+  - c478
+  - c482
+  - c483
+  - c489
+  - c495
+  - c498
+  - c502
+  - c505
+  - c506
+  - c509
+  - c511
+  - c513
+  - c517
+  - c518
+  - c521
+  - c522
+  - c523
+  - c524
+  - c525
+  - c526
+  - c528
+  - c531
+  - c533
+  - c538
+  - c539
+  - c541
+  - c544
+  - c545
+  - c546
+  - c547
+  - c549
+  - c558
+  - c559
+  - c560
+  - c561
+  - c562
+  - c564
+  - c565
+  - c566
+  - c567
+  - c568
+  - c569
+  - c572
+  - c584
+  - c585
+  - c586
+  - c587
+  - c618
+  - c625
+  - c628
+  - c630
+  - c657
+  - c658
+  - c659
+  - c660
+  - c661
+  - c662
+  - c663
+  - c664
+  - c665
+  - c666
+  - c667
+  - c709
+  - c710
+  - c714
+  - c715
+  - c717
+  - c718
+  - c722
+  - c728
+  - c729
+  - c731
+  - c732
+  - c733
+  - c737
+  - c738
+  - c739
+  - c740
+  - c744
+  - c758
+  - c759
+  - c762
+  - c763
+  - c817
+  - c818
+  - c868
+  - c869
+  - c887
+  - c891
+  - c893
+  - c894
+  - c898
+  - c902
+  - c904
+  - c905
+  - c908
+  - c913
+  - c916
+  - c929
+  - c932
+  - c933
+  - c934
+  - c938
+  - c939
+  - c940
+  - c941
+  - c943
+  - c945
+  - c948
+  - c951
+  - c955
+  - c956
+  - c959
+  - c962
+  - c963
+  - c964
+  - c965
+  - c987
+  - c998
+  - c1013
+  - c1020
+- id: booking-report-booker-email
+  name: Booking report booker email
+  subject: the booker of a reported booking (BookingReport table)
+  subject_kind: other_person
+  purpose: spam and abuse reports and their review
+  rationale: 'BookingReport.bookerEmail column (schema.prisma:2145, index 2164): copy of the reported
+    booking''s booker address, written by the report repository, grouped, searched and matched by the
+    admin and organization watchlist operations (dismiss by email, pending reports by email or domain).'
+  clusters:
+  - c147
+  - c184
+  - c185
+  - c187
+  - c188
+  - c190
+  - c191
+  - c193
+  - c194
+  - c195
+  - c197
+  - c199
+  - c200
+  - c201
+  - c202
+  - c203
+  - c204
+  - c205
+  - c206
+  - c207
+  - c208
+  - c209
+  - c210
+  - c211
+  - c213
+  - c214
+  - c215
+  - c216
+  - c217
+  - c218
+  - c220
+  - c221
+  - c222
+  - c223
+  - c224
+  - c225
+  - c838
+  - c839
+  - c840
+  - c842
+  - c843
+  - c846
+  - c847
+  - c863
+  - c865
+  - c866
+  - c867
+  - c1007
+- id: eventtype-custom-reply-to
+  name: Event type custom Reply-To address
+  subject: the event type owner's configured Reply-To address
+  subject_kind: organization
+  purpose: Reply-To header of booking emails
+  rationale: EventType.customReplyToEmail column (schema.prisma:270) with its selects, managed event type
+    prop lists, calendar event copies (customReplyToEmail on CalendarEvent and the builders) and the getReplyToEmail
+    read.
+  clusters:
+  - c009
+  - c294
+  - c325
+  - c360
+  - c393
+  - c397
+  - c442
+  - c485
+  - c491
+  - c530
+  - c536
+  - c542
+  - c589
+  - c590
+  - c639
+  - c643
+  - c646
+  - c648
+  - c651
+  - c918
+  - c923
+  - c966
+  - c967
+  - c968
+  - c978
+  - c994
+  - c1016
+  - c1026
+  - c1027
+- id: booking-user-primary-email
+  name: Booking organizer address copy
+  subject: the organizer of a booking, as recorded on the booking
+  subject_kind: end_user
+  purpose: organizer address used for a booking's emails and calendar events after creation
+  rationale: 'Booking.userPrimaryEmail column (schema.prisma:860, ''User''s email at the time of booking''):
+    written from the calendar event organizer address at creation (createBooking) and by managed event
+    reassignment, selected by the booking repositories and read first when calendar events are rebuilt
+    (buildCalEventFromBooking, cancellation, payment and no-show fee events, daily webhook).'
+  clusters:
+  - c008
+  - c319
+  - c324
+  - c356
+  - c396
+  - c398
+  - c410
+  - c445
+  - c476
+  - c490
+  - c527
+  - c535
+  - c537
+  - c578
+  - c579
+  - c581
+  - c619
+  - c919
+  - c999
+  - c1010
+  - c1011
+- id: secondary-email
+  name: User secondary email
+  subject: a Cal.com user's additional address (SecondaryEmail table)
+  subject_kind: end_user
+  purpose: alternative organizer address for event types and verified booking identity
+  rationale: 'SecondaryEmail.email column (schema.prisma:1813, unique 1818/1819, index 1821): lookups
+    by secondary address in verify-email, the booker blocklist check and the user repository (raw union
+    query, swap with the primary address), the event type''s chosen secondary address used as organizer
+    address.'
+  clusters:
+  - c012
+  - c016
+  - c022
+  - c350
+  - c361
+  - c439
+  - c440
+  - c770
+  - c771
+  - c775
+  - c776
+  - c783
+  - c785
+  - c786
+  - c1006
+- id: watchlist-email
+  name: Watchlist blocked email entry
+  subject: a person whose address is blocked or reported in a watchlist entry
+  subject_kind: other_person
+  purpose: blocking bookings and sign-ups from listed addresses
+  rationale: 'Watchlist.value for EMAIL entries: lines that write it (admin and organization addToWatchlistByEmail
+    inputs) or look it up (repository value lookups and findBlocking conditions), and the address taken
+    back from an entry to unlock a sign-up user.'
+  clusters:
+  - c189
+  - c192
+  - c212
+  - c219
+  - c827
+  - c830
+  - c833
+  - c836
+  - c837
+  - c841
+  - c844
+  - c862
+  - c864
+- id: destinationcalendar-primary-email
+  name: Destination calendar primary email
+  subject: the Cal.com user's connected calendar account written to
+  subject_kind: end_user
+  purpose: destination calendar identity; optional organizer address for event types
+  rationale: 'DestinationCalendar.primaryEmail column (schema.prisma:356): selects, local type members,
+    writes from connected calendar data, the destination calendar selector display and the organizer address
+    override when useEventTypeDestinationCalendarEmail is set.'
+  clusters:
+  - c328
+  - c330
+  - c332
+  - c392
+  - c437
+  - c438
+  - c493
+  - c591
+  - c600
+  - c602
+  - c605
+  - c606
+  - c915
+  - c980
+  - c995
+  - c1012
+  - c1015
+- id: account-provider-email
+  name: Identity provider account email
+  subject: the address of a Cal.com user's linked OAuth/SAML identity
+  subject_kind: end_user
+  purpose: account linking and sign-in through Google, SAML or Azure AD
+  rationale: Account.providerEmail column (schema.prisma:1223), written from the provider address in the
+    NextAuth signIn callback, and the provider profile address read in that callback (domain checks, org
+    membership, username derivation).
+  clusters:
+  - c052
+  - c053
+  - c055
+  - c060
+  - c061
+  - c068
+  - c069
+  - c070
+  - c072
+  - c078
+  - c082
+  - c093
+  - c095
+  - c1001
+- id: auditactor-guest-email
+  name: Audit guest actor email
+  subject: a guest (non-registered person) acting on a booking, as an AuditActor of type GUEST
+  subject_kind: other_person
+  purpose: booking audit trail
+  rationale: 'AuditActor.email for GUEST actors: createIfNotExistsGuestActor lookups and writes, the guest
+    actor DTO and makeGuestActor, and the guest branch of the audit tasker producer.'
+  clusters:
+  - c157
+  - c158
+  - c160
+  - c162
+  - c163
+  - c164
+  - c165
+  - c166
+  - c167
+  - c168
+  - c169
+- id: booker-email-verification-email
+  name: Booker verification address
+  subject: the address a booker verifies with a code before booking
+  subject_kind: other_person
+  purpose: booker email verification (requiresBookerEmailVerification)
+  rationale: 'The unverified address of the booker email verification flow: the verified email in the
+    Booker store and its initializers, the verify-code input key (zod-utils ZVerifyCodeInputSchema). It
+    is not yet any stored column.'
+  clusters:
+  - c226
+  - c240
+  - c242
+  - c243
+  - c245
+  - c248
+  - c1029
+- id: closecom-contact-email
+  name: Close CRM contact email
+  subject: a contact in the Close CRM (created from booking attendees)
+  subject_kind: other_person
+  purpose: CRM sync of booking attendees
+  rationale: 'Close contact email fields: the email entries of Close contact search results, the requested
+    emails field, the query field name and the email entries written when creating or updating Close contacts
+    and lead contacts.'
+  clusters:
+  - c935
+  - c936
+  - c937
+  - c942
+  - c944
+  - c947
+  - c950
+  - c952
+  - c953
+  - c954
+  - c957
+- id: bookingaudit-data-attendee-email
+  name: Booking audit attendee address
+  subject: a booking attendee recorded in booking audit data
+  subject_kind: other_person
+  purpose: booking audit trail
+  rationale: 'Attendee addresses stored in the BookingAudit.data JSON column: attendeeEmail keys of the
+    no-show, seat booked and seat rescheduled audit data schemas and their display copies, and the attendee-removed
+    audit data.'
+  clusters:
+  - c149
+  - c150
+  - c151
+  - c152
+  - c153
+  - c154
+  - c155
+  - c156
+- id: user-pending-email-change
+  name: Pending account email change
+  subject: a Cal.com user's requested new address awaiting verification
+  subject_kind: end_user
+  purpose: email change verification
+  rationale: 'User.metadata emailChangeWaitingForVerification (zod-utils:388): read and cleared in verify-email,
+    the updatedEmail returned to the verify-email-change page, and the emailTo of the change-of-email
+    verification.'
+  clusters:
+  - c014
+  - c018
+  - c019
+  - c035
+  - c036
+  - c115
+  - c119
+  - c1025
+- id: videocallguest-email
+  name: Cal Video guest email
+  subject: a guest joining a Cal Video call
+  subject_kind: other_person
+  purpose: identifying guests in video calls and no-show detection
+  rationale: VideoCallGuest.email column (schema.prisma:138, unique 144, index 146), the guest repository
+    upsert and the guest session lookup in no-show detection.
+  clusters:
+  - c725
+  - c726
+  - c813
+  - c814
+  - c993
+- id: booking-responses-email
+  name: Booking responses email
+  subject: the booker, as recorded in the booking responses
+  subject_kind: other_person
+  purpose: stored booking form answers
+  rationale: 'The email key of the Booking.responses JSON column: the bookingResponses schema key (zod-utils:205,
+    the column''s zod type), the system field names for the booker''s email response, the stored responses
+    compared in the Booker store, the responses email key cleared when the email field is hidden, and
+    the default label map of the webhook payload builder.'
+  clusters:
+  - c247
+  - c280
+  - c281
+  - c291
+  - c292
+  - c899
+  - c914
+  - c1023
+- id: integration-calendar-email
+  name: Connected calendar account email
+  subject: the Cal.com user's account at an external calendar provider
+  subject_kind: end_user
+  purpose: listing connected calendars and matching them to the signed-in user
+  rationale: The email of an external calendar account as returned by the calendar integration (IntegrationCalendar
+    email, connectedCalendar.primary.email, the CalDAV account username); it is not stored until written
+    to DestinationCalendar.primaryEmail.
+  clusters:
+  - c592
+  - c593
+  - c595
+  - c597
+  - c599
+  - c601
+  - c928
+- id: config-blacklisted-guest-emails
+  name: Configured blocked guest addresses
+  subject: guests and bookers blocked by the installation configuration
+  subject_kind: other_person
+  purpose: removing blocked guests and blocking bookers
+  rationale: The BLACKLISTED_GUEST_EMAILS setting, its local list in RegularBookingService and checkIfBookerEmailIsBlocked,
+    and the checks against it.
+  clusters:
+  - c346
+  - c347
+  - c348
+  - c429
+  - c430
+- id: auditactor-app-email
+  name: Audit app actor email
+  subject: an app integration acting on a booking (AuditActor of type APP)
+  subject_kind: machine_identity
+  purpose: booking audit trail
+  rationale: 'AuditActor.email for APP actors: the createIfNotExistsAppActor upsert and the synthetic
+    @app.internal address built in the audit tasker producer.'
+  clusters:
+  - c161
+  - c170
+  - c171
+  - c172
+  - c176
+- id: reset-password-request-email
+  name: Password reset request email
+  subject: the Cal.com user who asked for a password reset
+  subject_kind: end_user
+  purpose: password reset links
+  rationale: ResetPasswordRequest.email column (schema.prisma:1076), written and counted by passwordResetRequest
+    and selected by the forgot-password page.
+  clusters:
+  - c032
+  - c099
+  - c100
+  - c102
+  - c1000
+- id: bookingfield-require-emails
+  name: Booking field required addresses
+  subject: bookers the event owner requires (addresses or domains)
+  subject_kind: other_person
+  purpose: restricting who can book
+  rationale: The requireEmails setting of an email booking field (zod-utils:1029) and its parsed list
+    in getBookingResponsesSchema.
+  clusters:
+  - c284
+  - c285
+  - c286
+  - c1032
+- id: booking-rescheduled-by
+  name: Booking rescheduled-by address
+  subject: the person who rescheduled a booking (booker or host)
+  subject_kind: other_person
+  purpose: recording who rescheduled
+  rationale: 'Booking.rescheduledBy (an emailSchema column): the booking request rescheduledBy key and
+    the reschedule page''s rescheduler address forwarded as rescheduledBy.'
+  clusters:
+  - c023
+  - c251
+- id: team-invite-email
+  name: Team invite address
+  subject: a person invited to a team or organization, before sign-up
+  subject_kind: workforce
+  purpose: team and organization invitations
+  rationale: VerificationToken.identifier of a team invite token (teamId set), used on the sign-up page
+    to prefill the form and guess a username.
+  clusters:
+  - c024
+  - c028
+  - c029
+- id: auditactor-email
+  name: Audit actor email
+  subject: a booking audit actor of any stored type
+  subject_kind: other_person
+  purpose: booking audit trail
+  rationale: AuditActor.email column (schema.prisma:2466, unique 2477, index 2479) and the untyped actor
+    row type in the audit actor repository interface.
+  clusters:
+  - c159
+  - c1009
+- id: bookingfield-exclude-emails
+  name: Booking field excluded addresses
+  subject: bookers the event owner excludes (addresses or domains)
+  subject_kind: other_person
+  purpose: restricting who can book
+  rationale: The excludeEmails setting of an email booking field (zod-utils:1027) and its parsed list
+    in getBookingResponsesSchema.
+  clusters:
+  - c283
+  - c1031
+- id: delegation-service-account-email
+  name: Delegation service account email
+  subject: the Google Workspace service account of a delegation credential
+  subject_kind: machine_identity
+  purpose: domain-wide delegation of calendar access
+  rationale: client_email of the service account key stored in DelegationCredential.serviceAccountKey
+    (zod-utils:880, serviceAccountKey.ts:13) and the redaction list key.
+  clusters:
+  - c974
+  - c981
+  - c1030
+- id: sendgrid-contact-email
+  name: SendGrid marketing contact email
+  subject: a Cal.com user synced to SendGrid marketing contacts
+  subject_kind: end_user
+  purpose: marketing contact sync
+  rationale: 'The SendGrid contact email field: the contact type member, the contact search query and
+    the contact upsert payload.'
+  clusters:
+  - c975
+  - c977
+  - c989
+- id: stripe-customer-email
+  name: Stripe customer email
+  subject: a Cal.com user's Stripe customer
+  subject_kind: end_user
+  purpose: billing
+  rationale: The Stripe customer email updated after an account email change (verify-email billing service
+    call).
+  clusters:
+  - c021
+- id: config-email-from
+  name: Installation sender address
+  subject: the installation's configured From address
+  subject_kind: organization
+  purpose: From address of outgoing emails
+  rationale: The EMAIL_FROM setting read by the mail transport config and the magic-link sender.
+  clusters:
+  - c105
+  - c984
+- id: verification-token-email
+  name: Email verification token identifier
+  subject: a Cal.com user whose address is being verified
+  subject_kind: end_user
+  purpose: email verification and email change links
+  rationale: VerificationToken.identifier written for an email verification link or an email change link
+    (verifyEmail.ts).
+  clusters:
+  - c112
+  - c117
+- id: booking-responses-guests
+  name: Booking responses guests
+  subject: booking guests, as recorded in the booking responses
+  subject_kind: other_person
+  purpose: stored booking form answers
+  rationale: The guests key of the Booking.responses JSON column, read and rewritten when an attendee
+    is removed.
+  clusters:
+  - c563
+- id: booking-cancelled-by
+  name: Booking cancelled-by address
+  subject: the person who cancelled a booking (booker or host)
+  subject_kind: other_person
+  purpose: recording who cancelled
+  rationale: 'Booking.cancelledBy (an emailSchema column): the cancel request key (zod-utils:332) and
+    the calendar sync cancellation that passes the organizer''s userPrimaryEmail as cancelledBy.'
+  clusters:
+  - c580
+  - c1024
+- id: creditexpenselog-email
+  name: Credit expense log email
+  subject: the recipient of a charged email, as logged
+  subject_kind: other_person
+  purpose: credit usage accounting
+  rationale: CreditExpenseLog.email column (schema.prisma:691) and its select in the credits repository.
+  clusters:
+  - c623
+  - c997
+- id: crm-contact-email
+  name: CRM contact email
+  subject: a contact in the connected CRM (created from booking attendees)
+  subject_kind: other_person
+  purpose: CRM sync of booking attendees
+  rationale: 'The email field of CRM contacts through the generic CRM service interface: contacts returned
+    by getContacts and the contacts to create.'
+  clusters:
+  - c624
+  - c626
+- id: verified-email
+  name: Verified workflow address
+  subject: an address a user or team verified for workflow sends
+  subject_kind: other_person
+  purpose: workflow email recipients
+  rationale: VerifiedEmail.email column (schema.prisma:1363) and the address validator used when adding
+    one.
+  clusters:
+  - c680
+  - c1002
+- id: closecom-contact-name-from-email
+  name: Close contact name filled from email
+  subject: a Close CRM contact without a name
+  subject_kind: other_person
+  purpose: CRM contact display name
+  rationale: The Close contact name written from the attendee's address when the attendee has no name
+    (CloseCom contact create and update).
+  clusters:
+  - c946
+  - c949
+- id: booking-denormalized-user-email
+  name: Denormalized booking organizer email
+  subject: the organizer of a booking, in the denormalized booking table
+  subject_kind: end_user
+  purpose: insights queries
+  rationale: BookingDenormalized.userEmail (schema.prisma:1545), a trigger-maintained copy of users.email,
+    and the BookingTimeStatusDenormalized view column over it.
+  clusters:
+  - c1004
+  - c1005
+- id: org-onboarding-owner-email
+  name: Organization onboarding owner email
+  subject: the intended owner of an organization being onboarded
+  subject_kind: workforce
+  purpose: organization onboarding
+  rationale: OrganizationOnboarding.orgOwnerEmail column (schema.prisma:2226, index 2267).
+  clusters:
+  - c1008
+- id: office365-credential-key-email
+  name: Outlook credential key email
+  subject: a Cal.com user's Microsoft account stored in an Outlook calendar credential
+  subject_kind: end_user
+  purpose: Office 365 calendar credential created on Azure AD sign-in
+  rationale: The email field written into the Outlook calendar Credential.key on Azure AD sign-in (next-auth-options).
+  clusters:
+  - c066
+- id: dub-customer-email
+  name: Dub lead customer email
+  subject: a new Cal.com user reported to Dub as a lead
+  subject_kind: end_user
+  purpose: referral attribution
+  rationale: The customerEmail of the Dub lead tracked at sign-up (next-auth-options).
+  clusters:
+  - c097
+- id: magic-link-signin-email
+  name: Magic link sign-in address
+  subject: a user signing in with an emailed link
+  subject_kind: end_user
+  purpose: NextAuth email sign-in
+  rationale: VerificationToken.identifier of a NextAuth email sign-in link, used by sendVerificationRequest.
+  clusters:
+  - c106
+- id: avatarapi-email
+  name: AvatarAPI lookup email
+  subject: a new Cal.com user whose avatar is looked up
+  subject_kind: end_user
+  purpose: avatar prefill
+  rationale: The email field of the AvatarAPI request body (prefillAvatar).
+  clusters:
+  - c130
+- id: vapid-subject-email
+  name: Web push VAPID contact address
+  subject: Cal.com's own contact address for push services
+  subject_kind: organization
+  purpose: web push VAPID subject
+  rationale: The hard-coded mailto support address passed as the VAPID subject (sendNotification).
+  clusters:
+  - c690
+- id: formbricks-person-email
+  name: Formbricks person email
+  subject: a Cal.com user who sent feedback
+  subject_kind: end_user
+  purpose: feedback surveys
+  rationale: The email attribute written to the Formbricks person (formbricks.ts).
+  clusters:
+  - c961
+- id: org-onboarding-invited-member-email
+  name: Organization onboarding invited member email
+  subject: a person invited during organization onboarding
+  subject_kind: workforce
+  purpose: organization onboarding invitations
+  rationale: The email of invitedMembers in OrganizationOnboarding (zod-utils:118), before the invite
+    is sent.
+  clusters:
+  - c1022
+needs_adjudication:
+- cluster: c109
+  candidate_groups:
+  - attendee-email
+  - booker-email-verification-email
+  reason: verifyCodeUnAuthenticated is called with the booker address during booking (RegularBookingService,
+    checkIfBookerEmailIsBlocked) and with the address being verified by the verify-code endpoints.
+- cluster: c110
+  candidate_groups:
+  - user-email
+  - secondary-email
+  - booker-email-verification-email
+  - verified-email
+  reason: VerifyEmailType.email is shared by the verification link sender (User.email or SecondaryEmail.email)
+    and the code sender (booker or workflow address).
+- cluster: c111
+  candidate_groups:
+  - user-email
+  - secondary-email
+  reason: sendEmailVerification is called with User.email (sign-up, admin unlock, lock) and with SecondaryEmail.email
+    (add and resend secondary email).
+- cluster: c113
+  candidate_groups:
+  - booker-email-verification-email
+  - verified-email
+  reason: sendEmailVerificationByCode is called by the booker verification hook and by the API v2 verified-resources
+    service that verifies a workflow address.
+- cluster: c123
+  candidate_groups:
+  - user-email
+  - team-invite-email
+  - account-provider-email
+  reason: getOrgUsernameFromEmail is called with User.email, sign-up form addresses, team invite token
+    identifiers and identity provider addresses.
+- cluster: c173
+  candidate_groups: &id001
+  - user-email
+  - attendee-email
+  reason: The enriched actor displayEmail field is filled from User.email for USER actors and from Attendee.email
+    for ATTENDEE actors (null for the others).
+- cluster: c177
+  candidate_groups: *id001
+  reason: The enriched actor displayEmail field is filled from User.email for USER actors and from Attendee.email
+    for ATTENDEE actors (null for the others).
+- cluster: c257
+  candidate_groups: &id002
+  - attendee-email
+  - user-email
+  - booking-user-primary-email
+  reason: 'The round robin reschedule handler compares members of mixed lists: original attendees and
+    organizer, new team members, organizer and attendees.'
+- cluster: c258
+  candidate_groups: *id002
+  reason: 'The round robin reschedule handler compares members of mixed lists: original attendees and
+    organizer, new team members, organizer and attendees.'
+- cluster: c282
+  candidate_groups: &id003
+  - attendee-email
+  - booking-responses-email
+  reason: 'The value of an email-type booking field: the system email field (the booker''s address) or
+    a custom email question whose answer is stored only in Booking.responses; the same code handles both.'
+- cluster: c288
+  candidate_groups:
+  - attendee-email
+  - booking-responses-email
+  reason: 'The values of a multi-email booking field: the guests field (written to Attendee rows) or a
+    custom multi-email question stored only in Booking.responses.'
+- cluster: c289
+  candidate_groups: *id003
+  reason: 'The value of an email-type booking field: the system email field (the booker''s address) or
+    a custom email question whose answer is stored only in Booking.responses; the same code handles both.'
+- cluster: c290
+  candidate_groups: *id003
+  reason: 'The value of an email-type booking field: the system email field (the booker''s address) or
+    a custom email question whose answer is stored only in Booking.responses; the same code handles both.'
+- cluster: c296
+  candidate_groups: &id004
+  - attendee-email
+  - booking-responses-email
+  reason: getCalEventResponses works on the booking request's responses at booking time (the booker address
+    in flight) or on a stored booking's Booking.responses.
+- cluster: c297
+  candidate_groups: *id004
+  reason: getCalEventResponses works on the booking request's responses at booking time (the booker address
+    in flight) or on a stored booking's Booking.responses.
+- cluster: c405
+  candidate_groups:
+  - booking-responses-email
+  - bookingseat-data-responses-email
+  reason: The responses read come from Booking.responses or, for a seat, from the BookingSeat.data responses.
+- cluster: c432
+  candidate_groups: &id005
+  - user-email
+  - secondary-email
+  reason: matchedEmail comes from a raw UNION query that returns users.email or SecondaryEmail.email.
+- cluster: c433
+  candidate_groups: *id005
+  reason: matchedEmail comes from a raw UNION query that returns users.email or SecondaryEmail.email.
+- cluster: c441
+  candidate_groups: &id006
+  - user-email
+  - secondary-email
+  - destinationcalendar-primary-email
+  - booking-user-primary-email
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c594
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c627
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c629
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c719
+  candidate_groups: &id007
+  - user-email
+  - videocallguest-email
+  reason: getUserOrGuestById fills the participant email from User.email for logged-in participants and
+    from VideoCallGuest.email for guest sessions.
+- cluster: c727
+  candidate_groups: *id007
+  reason: getUserOrGuestById fills the participant email from User.email for logged-in participants and
+    from VideoCallGuest.email for guest sessions.
+- cluster: c761
+  candidate_groups: *id005
+  reason: matchedEmail comes from a raw UNION query that returns users.email or SecondaryEmail.email.
+- cluster: c765
+  candidate_groups: *id005
+  reason: matchedEmail comes from a raw UNION query that returns users.email or SecondaryEmail.email.
+- cluster: c819
+  candidate_groups: &id008
+  - attendee-email
+  - user-email
+  - secondary-email
+  - booker-email-verification-email
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c822
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c823
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c824
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c825
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c828
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c829
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c831
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c832
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c834
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c835
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c848
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c849
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c855
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c856
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c870
+  candidate_groups: &id009
+  - attendee-email
+  - user-email
+  - watchlist-email
+  - booking-report-booker-email
+  reason: normalizeEmail and extractDomainFromEmail are called with watchlist inputs, Watchlist.value,
+    booking report inputs, booker addresses and User.email values.
+- cluster: c871
+  candidate_groups: *id009
+  reason: normalizeEmail and extractDomainFromEmail are called with watchlist inputs, Watchlist.value,
+    booking report inputs, booker addresses and User.email values.
+- cluster: c872
+  candidate_groups: *id009
+  reason: normalizeEmail and extractDomainFromEmail are called with watchlist inputs, Watchlist.value,
+    booking report inputs, booker addresses and User.email values.
+- cluster: c873
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c874
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c875
+  candidate_groups: *id008
+  reason: The single-address watchlist check chain (isBlocked, the watchlist controller and the blocking-entry
+    lookup params) is called with the booker address from the spam check, with sign-up and current User.email
+    values, and with addresses from the verification senders.
+- cluster: c909
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c921
+  candidate_groups: &id010
+  - attendee-email
+  - user-email
+  reason: 'The same field or mapper handles calendar event attendees (Attendee.email) and team members
+    (hosts'' User.email): CalendarService.mapAttendees is called with both lists and the builder''s PersonAttendeeCommonFields
+    types both.'
+- cluster: c924
+  candidate_groups: *id010
+  reason: 'The same field or mapper handles calendar event attendees (Attendee.email) and team members
+    (hosts'' User.email): CalendarService.mapAttendees is called with both lists and the builder''s PersonAttendeeCommonFields
+    types both.'
+- cluster: c926
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c927
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c930
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c958
+  candidate_groups:
+  - attendee-email
+  - user-email
+  reason: extractBaseEmail is called with booker and guest addresses and with hosts' User.email values.
+- cluster: c960
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c969
+  candidate_groups: *id006
+  reason: 'The calendar event organizer address is chosen per booking: RegularBookingService starts from
+    the organizer''s User.email and replaces it with the destination calendar''s primaryEmail or the event
+    type''s SecondaryEmail.email; rebuilt events read Booking.userPrimaryEmail first. The value read here
+    can be any of them.'
+- cluster: c970
+  candidate_groups: &id011
+  - attendee-email
+  - eventtype-custom-reply-to
+  - user-email
+  reason: The Reply-To list joins extra addresses passed by the email templates (attendee or organizer
+    addresses) with the Reply-To address (the custom Reply-To or the organizer).
+- cluster: c971
+  candidate_groups:
+  - eventtype-custom-reply-to
+  - user-email
+  - booking-user-primary-email
+  reason: getReplyToEmail returns the event type's custom Reply-To address or, failing that, the calendar
+    event organizer's address.
+- cluster: c972
+  candidate_groups: *id011
+  reason: The Reply-To list joins extra addresses passed by the email templates (attendee or organizer
+    addresses) with the Reply-To address (the custom Reply-To or the organizer).
+- cluster: c973
+  candidate_groups:
+  - attendee-email
+  - user-email
+  reason: isSmsCalEmail is called with attendee addresses and, from the base email template, with any
+    recipient (attendee or organizer).
+- cluster: c979
+  candidate_groups:
+  - user-email
+  - booker-email-verification-email
+  - secondary-email
+  reason: hashEmail builds rate-limit identifiers from User.email, the verify-code address and verification
+    link addresses.
