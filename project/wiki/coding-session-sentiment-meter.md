@@ -45,9 +45,29 @@ pnpm run sentiment:meter -- --doctor
 
 Flags override `~/.config/dataparade/sentiment.meter.yaml`, which overrides defaults. See the README "Sentiment meter" section for the full flag list.
 
+## Local sentiment classifier (epic K, KDATAP-85c997)
+
+A second packaged metric: every human message also gets a **compound sentiment score in [-1, +1]** and a `pos`/`neu`/`neg` label (thresholds ±0.05, standard VADER convention), scored on the same stripped text the counter uses (`stripExcludedRegions`). The meter aggregates mean compound score and pos/neu/neg message counts per window and per source (`MeterReport.sentiment`, `SourceBreakdown.sentiment`) — counts only.
+
+**Backends** (selected via `--sentiment-backend` / config `sentimentBackend`; default `vader`, empty string disables):
+
+- `vader` — offline `vader-sentiment` npm port, no model. `CODING_DOMAIN_OVERRIDES` (documented in `sentiment-classifier.ts`) neutralizes technical usage of kill/error/fail/bug/crash/abort/exception and related jargon to zero valence on word boundaries — verified numerically equivalent to lexicon removal. Emotional words are intentionally not overridden ("this crash sucks" stays negative).
+- `transformer` — optional `@huggingface/transformers` over `Xenova/distilbert-base-uncased-finetuned-sst-2-english` (q8 ONNX, ~66 MB, one-time download cached in `~/.cache/dataparade/sentiment-models`, then fully offline). Loaded only when explicitly selected (optional dependency, dynamic import), so the default path has no network-capable code. Gets no token neutralization; the resulting disagreement is the comparison signal.
+
+**Evaluation** (`scripts/sentiment-backend-eval.ts`, runs under ts-node — onnxruntime-node cannot execute tensors inside jest's vm realm; jest unit tests cover only non-inference paths):
+
+| Measure | VADER | Transformer |
+| --- | --- | --- |
+| Gold accuracy (36 synthetic messages, KDATAP-fe4c1d) | 34/34 = 1.000 | 22/34 = 0.647 (binary SST-2 head: no neutral, 11/14 neutral messages labeled negative) |
+| Real-corpus label agreement (window all, 3009 messages) | — | 33.7% labels equal vs VADER; mean compound VADER +0.135 vs transformer -0.514 |
+| Throughput on BlackbookM1 (sequential, synthetic pool) | ~23,000 msgs/sec | ~500 msgs/sec |
+
+Default recommendation: **VADER** — 100% gold accuracy with the coding-domain overrides, thousands of times faster, and its neutral band matches how operators actually write coding instructions.
+
 ## Status
 
 - Epics A–G (contract, patterns, windows, Claude Code, Cursor, Codex, meter/CLI) are complete.
 - Epic H: privacy and fixture guards plus the synthetic gold-label eval (100% exact match) are done. The real-corpus recall gate PASSED (KDATAP-713a0f, on BlackbookM1): 2315 real human messages yielded, 2310 counted, 5 excluded — each verified locally as a citation-dense AI-research paste — 99.8% genuine recall, zero harness-injected false positives. All-time meter reading after the gate: 2315 messages / 216 sessions, 25 thanks tokens, 127 f-bomb tokens ("cursing at the machine").
 - Epic I (Grok Bot adapter) is complete (KDATAP-247294): conversation blobs are plain `{schemaVersion,value:{entries}}` JSON with base32-of-storage-key filenames; human speech is `kind:"message"` `role:"user"` without `fromAgent` (plain = composer input, `fromUser` = remote channel); persona `send-message` output, crew bot posts, and assistant relays are excluded; per-conversation-local entry ids embed the conversation uuid for dedup. Verified live on BlackbookM1: 240 human messages over 9 conversations (all-time), included in meter windows.
 - Epic J (Antigravity adapter) is complete (KDATAP-a4d0fb): conversation DBs are SQLite `steps` tables with schema-less protobuf payloads; human speech is `step_type = 14` field 19.2; nested sub-cascades (agent dispatch prompts), artifact attach sends, and agent types (15/132/23/101/17) are excluded. Verified live on BlackbookM1 across the desktop (79 conversations, 55 nested skipped) and CLI (37) stores.
+- Epic K (local sentiment classifier) is complete (KDATAP-85c997): VADER backend with coding-domain overrides (KDATAP-40977f), meter/CLI aggregation (KDATAP-4f0397), synthetic gold set + eval (KDATAP-fe4c1d), optional Transformers.js backend behind a flag (KDATAP-2ca1f0), docs/tests (KDATAP-181c2f). All-time meter with sentiment: 3009 scored messages, mean compound +0.135, 1385 pos / 1041 neu / 583 neg. See the classifier section above for backend comparison and the default-backend recommendation (VADER).
