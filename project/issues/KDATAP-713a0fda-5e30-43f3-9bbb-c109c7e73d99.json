@@ -3,9 +3,9 @@
   "title": "Run accuracy gates and tune thresholds",
   "description": "Run the counting accuracy eval: exact match against the gold labels on synthetic fixtures (threshold: 100 percent); human-message recall sampled on Ryan's real corpus on the Macs, locally, recording only aggregate numbers (threshold: at least 95 percent); tune the paste-heuristic thresholds from the real corpus and re-run. Record outcomes in the annotation and findings.\n\nDone when: both gates pass with evidence recorded in Kanbus; threshold changes are config-only.",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
-  "assignee": "ubuntu",
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
   "labels": [],
@@ -19,29 +19,37 @@
     {
       "id": "8fb0f4f5-6ff7-4d87-828d-22ba5c07e62a",
       "author": "ubuntu",
-      "text": "Synthetic gate DONE: the 100% exact-match gate against the 7 gold labels runs in tests/unit/sentiment/gold-eval.spec.ts and passes (127/127 sentiment tests green). Paste-threshold behavior is configurable via ExclusionThresholds in src/sentiment/exclusions.ts, so any tuning is config-only as required. REMAINING (needs Ryan's real Macs, cannot run from this VM): (1) run the recall eval against the real ~/.claude, ~/.cursor, ~/.codex corpora \u2014 run 'pnpm run sentiment:meter -- --window 7d --json' and sample human messages, recording only aggregate counts (threshold \u226595% recall); (2) tune ExclusionThresholds (default: minPasteLength 2000, minAsciiRatio 0.60, minPasteLines 10) if real pastes/code lines are misclassified \u2014 adjust thresholds in code defaults or a ~/.config/dataparade/sentiment.meter.yaml override, then re-run the eval; (3) confirm which real Claude Code message shapes the compact-summary and queued-attachment heuristics should absorb (feeds KDATAP-e27d10). Leaving open until the real-corpus gate has evidence recorded.",
+      "text": "Synthetic gate DONE: the 100% exact-match gate against the 7 gold labels runs in tests/unit/sentiment/gold-eval.spec.ts and passes (127/127 sentiment tests green). Paste-threshold behavior is configurable via ExclusionThresholds in src/sentiment/exclusions.ts, so any tuning is config-only as required. REMAINING (needs Ryan's real Macs, cannot run from this VM): (1) run the recall eval against the real ~/.claude, ~/.cursor, ~/.codex corpora — run 'pnpm run sentiment:meter -- --window 7d --json' and sample human messages, recording only aggregate counts (threshold ≥95% recall); (2) tune ExclusionThresholds (default: minPasteLength 2000, minAsciiRatio 0.60, minPasteLines 10) if real pastes/code lines are misclassified — adjust thresholds in code defaults or a ~/.config/dataparade/sentiment.meter.yaml override, then re-run the eval; (3) confirm which real Claude Code message shapes the compact-summary and queued-attachment heuristics should absorb (feeds KDATAP-e27d10). Leaving open until the real-corpus gate has evidence recorded.",
       "created_at": "2026-10-02T03:29:23.413310Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "8b46af84-0548-4703-94a2-05c0f57fd2ec",
+      "author": "home",
+      "text": "Real-corpus accuracy gate run and paste-threshold tuning complete.\n\nCorpus fixes made this pass (pinned against this Mac's real data, no content committed):\n1. Cursor agent transcripts: typed input rides in a trailing <user_query> block, either whole-line or after injected headers (<timestamp>, <image_files>, ...); 816 harness follow-up prompts (three exact template families) ride inside <user_query> too and are now excluded by signature. <timestamp> headers are parsed to UTC (incl. bare UTC and +H:MM offsets), replacing the session-mtime approximation. Previously only 169 cursor-agent messages surfaced, 158+7 of them templates — 0 genuine; now 935 genuine.\n2. Codex: AGENTS.md instruction dumps (content_item_kinds without any user.* kind, plus the '# AGENTS.md instructions for' heading shape) and Chrome-tab context are now skipped; goal.internal_context / environment / plugin / subagent-notification kinds are structurally injected.\n3. Paste heuristic retuned: excluded only when >= 4000 chars AND >= 3 [n] citation markers. The previous shape rule (ascii/line-count) wrongly excluded 73 genuine long Cursor orchestration briefs (7.8 percent of the cursor corpus).\n\nGate numbers: 2315 human messages yielded across claude-code (666), cursor-agent (935), codex (714); 2310 counted; 5 excluded and each verified locally as citation-dense AI-research pastes (2 claude-code, 1 cursor-agent, 2 codex); genuine-message recall 99.8 percent; injected false positives in counted buckets: 0; 2 of the 5 pastes carried sentiment tokens that are deliberately lost (documented).\n\nMeter after tuning — all time: 2315 messages / 216 sessions, thanks 25 tokens, f-bomb 127 tokens, band 'cursing at the machine' (gauge 0.16); per source: claude-code 666 msgs/44 sessions/4 thanks/18 fbomb, cursor-agent 935/95/14/57, codex 714/77/7/52. Last 24h: 59 messages, 10 sessions, 0 thanks, 5 f-bomb tokens, all claude-code. Today: quiet.\n\nTests: 135 sentiment unit tests green (14 suites); lint unchanged except the one pre-existing benchmark error. Fixtures remain fully synthetic; no real session content was committed or printed.",
+      "created_at": "2026-10-02T08:27:14.278713Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:50.613015Z",
-  "updated_at": "2026-10-02T03:29:23.413438Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:27:19.293645Z",
+  "closed_at": "2026-10-02T08:27:19.293606Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
