@@ -171,6 +171,8 @@ const QUERIED_MODEL = /\.(?:query|getRepository|model)\s*\(\s*['"`]([A-Za-z_][\w
 function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: number): string | undefined {
   const scope = analyzed.enclosingFunction(line, 0);
   if (!scope) return undefined;
+  const prisma = enclosingPrismaModel(lines, scope.startLine, line);
+  if (prisma) return prisma;
   const text = lines.slice(scope.startLine - 1, scope.endLine).join("\n");
   // Query-builder table calls count across the function; ORM model entry points only in
   // the occurrence's own statement (two lines either side), since a function may touch
@@ -186,6 +188,32 @@ function queriedTableEntity(analyzed: AnalyzedFile, lines: string[], line: numbe
   const last = words[words.length - 1];
   if (!last) return undefined;
   return last.length > 3 && last.endsWith("s") && !last.endsWith("ss") ? last.slice(0, -1) : last;
+}
+
+/** A Prisma client model call: `prisma.attendee.create(`, `tx.bookingReport.findMany(`. */
+const PRISMA_MODEL_CALL =
+  /\.([a-z][A-Za-z0-9]*)\s*\.\s*(?:findMany|findFirst|findFirstOrThrow|findUnique|findUniqueOrThrow|create|createMany|createManyAndReturn|update|updateMany|upsert|delete|deleteMany|count|aggregate|groupBy)\s*\(/g;
+
+/**
+ * The model of the Prisma client call whose arguments contain a line (KDATAP-fded10):
+ * `prisma.attendee.create({ data: { email } })` -> `attendee` for the `email` line, however
+ * many lines the call spans. The innermost call still open at the line wins.
+ */
+function enclosingPrismaModel(lines: string[], start: number, line: number): string | undefined {
+  const text = lines.slice(start - 1, line).join("\n");
+  let found: string | undefined;
+  for (const match of text.matchAll(PRISMA_MODEL_CALL)) {
+    let depth = 0;
+    for (const char of text.slice((match.index ?? 0) + match[0].length - 1)) {
+      if (char === "(") depth += 1;
+      else if (char === ")") depth -= 1;
+      if (depth === 0) break;
+    }
+    if (depth > 0) found = match[1];
+  }
+  if (!found) return undefined;
+  const words = identifierWords(found);
+  return words.length > 0 ? words.join("_") : undefined;
 }
 
 const DATA_OWNER_CLASS = /(Service|Services|Repository|Model|Store|Dao|DAO|Entity)$/;
