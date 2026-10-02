@@ -10,9 +10,24 @@
   "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f57d5173-1be0-41f3-8029-7ea309ac7369",
+      "author": "ubuntu",
+      "text": "**Blocked from remote capture \u2014 needs Ryan's real Mac.** Cannot pin the agent-transcript line schema or check legacy .txt transcripts from this environment. Before implementing locally, capture from `~/.cursor/projects/<sanitized-path>/agent-transcripts/<session-id>/<session-id>.jsonl` and `~/.cursor/chats/<workspace-hash>/<session-id>/store.db`: (1) the exact line-level JSONL schema (type, role, text, timestamp field names and value shapes); (2) whether user lines are distinguishable from injected context at line level; (3) whether older plain-text .txt transcripts coexist in the same tree; (4) store.db table/column layout. Never commit real transcripts \u2014 encode into synthetic fixtures under tests/fixtures/sentiment/cursor/ and record findings here. Until then, the Cursor agent-transcript extractor in KDATAP-d3d98c runs against a best-documented tolerant shape (JSON object per line, role field, text/string content, epoch-ms timestamp) validated only against synthetic fixtures.",
+      "created_at": "2026-10-02T03:08:37.896924Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:22.494035Z",
-  "updated_at": "2026-10-02T02:44:22.494198Z",
+  "updated_at": "2026-10-02T03:08:37.897068Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,

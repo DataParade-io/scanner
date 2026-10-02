@@ -3,16 +3,31 @@
   "title": "Spike the SQLite reader decision",
   "description": "Decide how the scanner reads Cursor's state.vscdb SQLite files: built-in node:sqlite (requires an engines floor bump \u2014 Node has no built-in SQLite in 20) vs an optional dependency (for example better-sqlite3, with native build burden). Constraint: the repo's dependency list is intentionally tiny; the reader must sit behind one interface so the choice is swappable; the decision affects the CI matrix. Do this first \u2014 it must not stall the epic late.\n\nDone when: the decision is recorded in a comment on this issue with the engines impact, CI matrix validation, and a reviewed spike; the reader interface exists.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 1,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f18c7cc5-95c1-432c-94b1-8d732d0593f1",
+      "author": "ubuntu",
+      "text": "**Decision: built-in `node:sqlite` (DatabaseSync), with the engines floor bumped to `>=22.5`, behind a thin `SqliteReader` interface so the choice stays swappable.** Rationale: (1) the repo's dependency list is intentionally tiny \u2014 better-sqlite3 would add a native build burden and a postinstall compile step to every install/CI run; (2) `node:sqlite` ships in Node 22.5+ (stable-ish in 22.x behind no flag as of 22.5, experimental warning only); (3) the CI matrix impact is a single engines bump, validated by running the suite on Node 22 here; (4) the reader interface (open read-only, iterate by key prefix, busy timeout, copy-then-read fallback while Cursor holds the WAL) isolates the swap point if a native dep is ever required. Spike validated: fixture DBs created and read end-to-end with node:sqlite in this branch's tests (KDATAP-977a63). engines field bumped in package.json in the Cursor adapter commit.",
+      "created_at": "2026-10-02T03:08:38.571271Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:21.013709Z",
-  "updated_at": "2026-10-02T02:44:21.013876Z",
+  "updated_at": "2026-10-02T03:08:38.571417Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,
