@@ -25,6 +25,29 @@ Four headline layers (`occurrences`, `data-items`, `components`, `data-flows`) f
 
 Fixture ground truth lives under `tests/eval/layers/` with shared scoring in `tests/eval/score.ts` (delegates to `src/eval/`). Run `pnpm test tests/eval/` for deterministic Jest eval, or `pnpm run test:features` for Gherkin scenarios (Plexus scores plus pinned corpus packets such as easy-school SSN). See [tests/eval/README.md](./tests/eval/README.md) and [project/wiki/four-layer-evaluation.md](./project/wiki/four-layer-evaluation.md).
 
+## Sentiment meter
+
+A counts-only "coding-session sentiment meter" (thanks vs. F-bombs) scans local AI coding sessions and prints an aggregate vibe gauge. Everything stays local and the output contains **counts only — never message text**.
+
+```bash
+pnpm run sentiment:meter -- --window 24h        # rolling last 24 hours
+pnpm run sentiment:meter -- --window 3d         # rolling last 3 days
+pnpm run sentiment:meter -- --window today --day-start 04:00
+pnpm run sentiment:meter -- --window yesterday --timezone America/Los_Angeles
+pnpm run sentiment:meter -- --since 2026-10-01T00:00:00Z --until 2026-10-02T00:00:00Z
+pnpm run sentiment:meter -- --sources claude-code,codex
+pnpm run sentiment:meter -- --doctor            # per-source discovery diagnostics
+```
+
+- **Sources**: Claude Code (`~/.claude/projects/**.jsonl`), Cursor (`state.vscdb` plus `~/.cursor` agent transcripts), Codex (`~/.codex/sessions`). Grok Bot conversations are a later adapter.
+- **Windows**: rolling `24h`/`Nh`/`Nd` plus calendar `today`/`yesterday`. Calendar windows are anchored at a configurable day-start time (default: local midnight) with correct timezone/DST handling (spring-forward gaps clamp forward, fall-back ambiguity resolves earlier).
+- **Privacy**: the default word lists only detect gratitude and profanity token families; no network-capable imports exist under `src/sentiment/` (enforced by test), and neither output nor scan-state cache ever stores verbatim message text.
+- **Exclusions**: fenced/indented code blocks, blockquotes, and pasted text blobs (length/ASCII-ratio/line-count heuristics, tunable via `ExclusionThresholds`) are never counted.
+- **Configuration**: `~/.config/dataparade/sentiment.meter.yaml` (`timezone`, `dayStart`, `sources`, `roots`, `words`); CLI flags override config, which overrides defaults.
+- **Engines**: the Cursor `state.vscdb` reader uses the built-in `node:sqlite`, which requires **Node.js >= 22.5**.
+
+Accuracy is pinned by a gold-label eval over the synthetic fixture corpus (see `tests/unit/sentiment/gold-eval.spec.ts`); real-corpus recall sampling happens locally on Ryan's Macs with aggregate numbers only.
+
 ## Development
 
 ```bash

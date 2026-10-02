@@ -1,0 +1,51 @@
+# Coding-session sentiment meter
+
+Kanbus initiative KDATAP-6e486c — "Coding-session sentiment meter: thanks vs. F-bombs".
+
+## What it does
+
+Scans local AI coding-session sources, counts human messages that express gratitude versus frustration (F-bomb token family), and prints a counts-only gauge:
+
+```
+thanks: 12  f-bombs: 3  vibe: [##########|####] mixed (0.80)
+```
+
+The gauge is `thanks / (thanks + f-bombs)`; bands are `mostly-grateful` (>= 0.75), `mixed` (>= 0.40), `cursing` (< 0.40), plus a `quiet` state when there is nothing to count.
+
+## Privacy invariants (non-negotiable)
+
+- Everything stays local. There are no network-capable imports under `src/sentiment/` — enforced by `tests/unit/sentiment/privacy.spec.ts`.
+- Output is counts only. Message text is never echoed to the terminal, the `--json` report, or the scan-state cache. Also enforced by test with a secret-marker fixture.
+- Default word lists detect only the gratitude and F-bomb token families (`patterns/sentiment-words.yaml`, version 1). Matching is word-boundary, case-folded, Unicode-normalized, and skips path-like suffixes.
+- Code fences, indented code, blockquotes, and pasted text blobs are never counted (`src/sentiment/exclusions.ts`); thresholds are configurable via `ExclusionThresholds`.
+- The fixture-size lint guard (`scripts/guard-sentiment-fixtures.ts`) prevents real session dumps from being committed under `tests/fixtures/sentiment/`.
+
+## Sources and adapters
+
+Each source implements the `SentimentAdapter` contract (`src/sentiment/adapter.ts`): a sync `discover()` returning sessions plus a skip counter, and an async-iterable `extract()` yielding Zod-validated `HumanMessageRecord`s. Cross-file duplicates collapse via content-hash dedup (`dedup.ts`), and incremental rescans use JSONL line watermarks / SQLite `createdAt` floors with an overlap margin (`scan-state.ts`).
+
+| Source | Location | Notes |
+| --- | --- | --- |
+| Claude Code | `~/.claude/projects/**.jsonl` | Tool results, sidechains, meta/system/sdk prompts, compact summaries, command envelopes, and injected reminders are excluded |
+| Cursor | `state.vscdb` (global + workspaceStorage) and `~/.cursor/projects/<sanitized>/agent-transcripts/` | Read-only `node:sqlite` with copy-then-read WAL fallback; subagent composers excluded; requires **Node >= 22.5** |
+| Codex | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` | `response_item` user messages only; `event_msg` mirrors and injected `<user_instructions>`/`<environment_context>`/`<turn_context>` never counted; fork inheritance respected |
+| Grok Bot | TBD | Later adapter; blocked on real-Mac research (KDATAP-f66d10) |
+
+## Time windows
+
+`resolveWindow` (`src/sentiment/windows.ts`) supports rolling windows (`24h`, `Nh`, `Nd`) and calendar windows (`today`, `yesterday`) anchored at a configurable day-start time (default: local midnight). Offsets use `Intl` — no new dependencies. Spring-forward gaps clamp forward; fall-back ambiguity resolves to the earlier instant. Pinned DST tests cover `America/Los_Angeles`, `Asia/Tokyo`, `Australia/Lord_Howe`, and non-midnight day-starts.
+
+## Running it
+
+```bash
+pnpm run sentiment:meter -- --window today --day-start 04:00
+pnpm run sentiment:meter -- --doctor
+```
+
+Flags override `~/.config/dataparade/sentiment.meter.yaml`, which overrides defaults. See the README "Sentiment meter" section for the full flag list.
+
+## Status
+
+- Epics A–G (contract, patterns, windows, Claude Code, Cursor, Codex, meter/CLI) are complete.
+- Epic H: privacy and fixture guards plus the synthetic gold-label eval (100% exact match) are done; the real-corpus recall gate (>= 95%) and paste-threshold tuning run on Ryan's Macs only, with aggregate numbers recorded back here.
+- Epic I (Grok Bot adapter) is blocked on real-Mac research into the conversation storage format.
