@@ -1,0 +1,123 @@
+version: 1
+task: KDATAP-fe4c1d
+# Synthetic gold set for the local sentiment classifier (KDATAP-85c997).
+# All messages are modeled on common coding-chat patterns; none are real
+# messages. Labels reflect the operator-facing reading: "pos"/"neg" mean the
+# message expresses satisfaction/frustration, not that technical words appear.
+# Technical usage of kill/error/fail/bug/crash/abort/exception and friends is
+# "neu" by design (see CODING_DOMAIN_OVERRIDES).
+labels:
+  # Positive: gratitude and satisfaction.
+  - text: "that fixed it, thanks so much"
+    source: claude-code
+    gold: pos
+  - text: "perfect, exactly what I needed"
+    source: cursor-agent
+    gold: pos
+  - text: "great work, the build is green again"
+    source: claude-code
+    gold: pos
+  - text: "awesome, this saved me an hour"
+    source: codex
+    gold: pos
+  - text: "thanks, this works beautifully now"
+    source: cursor-agent
+    gold: pos
+  - text: "nice, that was exactly the missing piece"
+    source: claude-code
+    gold: pos
+  - text: "love it, ship it"
+    source: grok-bot
+    gold: pos
+  - text: "works like a charm, thank you"
+    source: antigravity
+    gold: pos
+  - text: "brilliant, that solved the whole thing"
+    source: claude-code
+    gold: pos
+  - text: "thank you, that was quick and clean"
+    source: codex
+    gold: pos
+  # Positive despite technical negative words (coding-domain overrides must fire).
+  - text: "great, you fixed the failing test, thanks"
+    source: claude-code
+    gold: pos
+  - text: "thanks, that killed the deadlock instantly"
+    source: cursor-agent
+    gold: pos
+  # Neutral: commands, questions, and technical statements.
+  - text: "run the test suite again"
+    source: claude-code
+    gold: neu
+  - text: "continue with the refactor"
+    source: cursor-agent
+    gold: neu
+  - text: "the parser throws an exception on empty input"
+    source: claude-code
+    gold: neu
+  - text: "kill the stale worker and restart the queue"
+    source: codex
+    gold: neu
+  - text: "we abort the release when lint errors appear"
+    source: cursor-agent
+    gold: neu
+  - text: "the crash happens in the retry path"
+    source: claude-code
+    gold: neu
+  - text: "add a unit test for the bug fix"
+    source: codex
+    gold: neu
+  - text: "the server returns error code 500"
+    source: grok-bot
+    gold: neu
+  - text: "this branch has a merge conflict with main"
+    source: antigravity
+    gold: neu
+  - text: "update the dependency and relock the manifest"
+    source: claude-code
+    gold: neu
+  - text: "the exception handler logs a warning"
+    source: cursor-agent
+    gold: neu
+  - text: "check whether the build fails on windows"
+    source: claude-code
+    gold: neu
+  # Negative: genuine frustration, not technical vocabulary.
+  - text: "this is awful, nothing works anymore"
+    source: claude-code
+    gold: neg
+  - text: "I am so frustrated with this stupid tool"
+    source: cursor-agent
+    gold: neg
+  - text: "everything sucks today, I hate this codebase"
+    source: codex
+    gold: neg
+  - text: "what a terrible mess, I give up"
+    source: claude-code
+    gold: neg
+  - text: "I hate how slow this is"
+    source: cursor-agent
+    gold: neg
+  - text: "damn it, not this again"
+    source: codex
+    gold: neg
+  - text: "this is driving me insane"
+    source: grok-bot
+    gold: neg
+  - text: "horrible experience, wasted my whole afternoon"
+    source: antigravity
+    gold: neg
+  # Negative even when mixed with technical words.
+  - text: "this crash sucks so much"
+    source: claude-code
+    gold: neg
+  - text: "I hate that the build fails every time"
+    source: cursor-agent
+    gold: neg
+  # Excluded: fully stripped messages produce no score.
+  - text: "```\nkill -9 1\n```"
+    source: claude-code
+    gold: excluded
+  - text: "> quoted error log only, nothing else here"
+    source: codex
+    gold: excluded
