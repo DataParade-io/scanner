@@ -3,7 +3,7 @@
   "title": "Implement Cursor IDE discovery across both index schemas",
   "description": "Implement discovery over ~/Library/Application Support/Cursor/User: globalStorage/state.vscdb (composerData and bubbleId keys in cursorDiskKV) plus workspaceStorage/<hash>/state.vscdb with workspace.json folder URIs for attribution. Union the Cursor 2.x per-workspace composer.composerData allComposers index, the 3.0+ central composer.composerHeaders index (with workspaceIdentifier), selectedComposerIds/lastFocusedComposerIds, and composerChatViewPane tab keys \u2014 the 3.0 migration is one-way and the central index misses old chats not re-opened since migration. Exclude subagent composers (task-tool style prefixed ids \u2014 verify on a real Mac). Open databases read-only with WAL present (never read state.vscdb without its -wal sidecar) and a busy timeout, with copy-then-read fallback while Cursor runs.\n\nDone when: discovery returns the same composer set from 2.x-shaped and 3.x-shaped fixture pairs, attributes project paths, and reads safely while a writer holds the DB.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "a0ebec4f-f3d4-4fbe-aa98-b34dad4614bb",
+      "author": "ubuntu",
+      "text": "Discovery unions four index shapes: composer.composerData allComposers (2.x), composer.composerHeaders keys (3.x), selectedComposerIds/lastFocusedComposerIds, and composerChatViewPane tab keys; deduped by composerId so a composer in both old and new indexes is one conversation. Project attribution via workspace.json folder URIs (file:// decoding). Subagent composers (task-tool style prefixes \u2014 spelling to verify on a real Mac) excluded. Reads are read-only with busy timeout and copy-then-read fallback while a writer holds the DB (WAL siblings exercised in tests). Outcome: green; exact index key spellings remain real-Mac verification items.",
+      "created_at": "2026-10-02T03:12:46.123234Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:21.502323Z",
-  "updated_at": "2026-10-02T02:45:22.432823Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:12:46.123455Z",
+  "closed_at": "2026-10-02T03:12:30.952854Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
