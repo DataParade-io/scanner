@@ -10,9 +10,22 @@
   "parent": "KDATAP-3191a768-fa7e-472a-b1e3-a11c7fb6bb24",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "d1d76335-fb19-4767-b0fa-5b32b5a04a36",
+      "author": "home",
+      "text": "Six-config coding-filter study complete (all synthetic data, aggregate numbers only). Eval: scripts/sentiment-backend-eval.ts now runs every backend with the filter on and off against tuning (36), held-out (28), combined (64) gold plus a 24-probe set (19 technical uses of filter vocabulary + 5 genuinely negative same-vocabulary phrases). Added the text-level filter to the transformer path (same neutralizeCodingTerms word-boundary replace applied before tokenization) and per-backend option plumbing: --sentiment-coding-filter on|off|auto, config key sentimentCodingFilter, auto = per-backend default. Results (accuracy, probes as neu/neg split): vader+filter 1.000/0.462/0.767, probes 0.875 (17/19 neu, 4/5 neg); vader-raw 0.735/0.423/0.600, probes 0.583 (9/19 neu, 5/5 neg); transformer-sst2+filter 0.676/0.346/0.533, probes 0.500 (12/19, 0/5); transformer-sst2-raw 0.676/0.346/0.533 (identical on gold), probes 0.708 (17/19, 0/5); transformer goemotions+filter 0.971/0.731/0.867, probes 0.917 (19/19, 3/5); goemotions-raw 0.971/0.731/0.867 (identical on gold), probes 0.917 (17/19, 5/5). Key finding: gold accuracies byte-identical with and without the filter for goemotions, but the filter flips one genuine-frustration probe neg->neu and another neg->pos (+0.413), so it is redundant and harmful there. Throughput re-measured: vader ~21-45k msgs/sec, sst2 ~435-470, goemotions ~253-263.",
+      "created_at": "2026-10-02T16:17:27.809685Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T16:09:13.437073Z",
-  "updated_at": "2026-10-02T16:09:16.086164Z",
+  "updated_at": "2026-10-02T16:17:27.809716Z",
   "closed_at": null,
   "agent": {
     "platform": "cursor",
