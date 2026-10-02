@@ -162,6 +162,18 @@ export {
 export type { ExclusionThresholds } from "./sentiment/exclusions";
 export { loadSentimentWordList } from "./sentiment/word-lists";
 export type { SentimentWordList } from "./sentiment/word-lists";
+export {
+  isInWindow,
+  parseDayStart,
+  parseWindowSpec,
+  resolveWindow,
+  validateTimeZone,
+} from "./sentiment/windows";
+export type {
+  AbsoluteBounds,
+  WindowBounds,
+  WindowSpec,
+} from "./sentiment/windows";
 
 
 
