@@ -214,6 +214,15 @@ export type { CodexAdapterOptions, CodexDoctorReport } from "./sentiment/adapter
 export { openVscDb, SqliteUnavailableError } from "./sentiment/adapters/sqlite-reader";
 export type { SqliteKVDatabase, KVRow } from "./sentiment/adapters/sqlite-reader";
 export {
+  conversationIdFromKeyName,
+  createGrokBotAdapter,
+  decodeBlobKeyName,
+  defaultGrokBotDataDir,
+  doctorGrokBot,
+  extractGrokBotRecords,
+} from "./sentiment/adapters/grok-bot";
+export type { GrokBotAdapterOptions, GrokBotDoctorReport } from "./sentiment/adapters/grok-bot";
+export {
   DEFAULT_METER_BANDS,
   computeMeter,
   gaugeBar,

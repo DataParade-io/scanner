@@ -4,6 +4,7 @@ import YAML from "yaml";
 import { createClaudeCodeAdapter } from "../../../src/sentiment/adapters/claude-code";
 import { createCursorAdapter } from "../../../src/sentiment/adapters/cursor";
 import { createCodexAdapter } from "../../../src/sentiment/adapters/codex";
+import { createGrokBotAdapter } from "../../../src/sentiment/adapters/grok-bot";
 import { scanAdapter } from "../../../src/sentiment/scan";
 import { countMessage } from "../../../src/sentiment/counting";
 import { loadSentimentWordList } from "../../../src/sentiment/word-lists";
@@ -45,6 +46,10 @@ async function collectFixtureRecords(): Promise<{ text: string; source: string }
     createCodexAdapter({ codexHome: path.join(__dirname, "../../fixtures/sentiment/codex") }),
   );
   for (const r of codex.records) records.push({ text: r.text, source: r.source });
+  const grok = await scanAdapter(
+    createGrokBotAdapter({ grokBotDataDir: path.join(__dirname, "../../fixtures/sentiment/grok-bot") }),
+  );
+  for (const r of grok.records) records.push({ text: r.text, source: r.source });
   return records;
 }
 
