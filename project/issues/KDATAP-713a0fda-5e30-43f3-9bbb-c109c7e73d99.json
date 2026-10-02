@@ -3,9 +3,9 @@
   "title": "Run accuracy gates and tune thresholds",
   "description": "Run the counting accuracy eval: exact match against the gold labels on synthetic fixtures (threshold: 100 percent); human-message recall sampled on Ryan's real corpus on the Macs, locally, recording only aggregate numbers (threshold: at least 95 percent); tune the paste-heuristic thresholds from the real corpus and re-run. Record outcomes in the annotation and findings.\n\nDone when: both gates pass with evidence recorded in Kanbus; threshold changes are config-only.",
   "type": "task",
-  "status": "open",
+  "status": "in_progress",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
   "labels": [],
@@ -15,9 +15,24 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "8fb0f4f5-6ff7-4d87-828d-22ba5c07e62a",
+      "author": "ubuntu",
+      "text": "Synthetic gate DONE: the 100% exact-match gate against the 7 gold labels runs in tests/unit/sentiment/gold-eval.spec.ts and passes (127/127 sentiment tests green). Paste-threshold behavior is configurable via ExclusionThresholds in src/sentiment/exclusions.ts, so any tuning is config-only as required. REMAINING (needs Ryan's real Macs, cannot run from this VM): (1) run the recall eval against the real ~/.claude, ~/.cursor, ~/.codex corpora \u2014 run 'pnpm run sentiment:meter -- --window 7d --json' and sample human messages, recording only aggregate counts (threshold \u226595% recall); (2) tune ExclusionThresholds (default: minPasteLength 2000, minAsciiRatio 0.60, minPasteLines 10) if real pastes/code lines are misclassified \u2014 adjust thresholds in code defaults or a ~/.config/dataparade/sentiment.meter.yaml override, then re-run the eval; (3) confirm which real Claude Code message shapes the compact-summary and queued-attachment heuristics should absorb (feeds KDATAP-e27d10). Leaving open until the real-corpus gate has evidence recorded.",
+      "created_at": "2026-10-02T03:29:23.413310Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:50.613015Z",
-  "updated_at": "2026-10-02T02:45:29.154877Z",
+  "updated_at": "2026-10-02T03:29:23.413438Z",
   "closed_at": null,
   "right_now_summary": null,
   "right_now_updated_at": null,
