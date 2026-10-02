@@ -3,17 +3,30 @@
   "title": "Gold set expansion with held-out split",
   "description": "Expand the synthetic gold set with harder cases (sarcasm, frustrated-but-polite, terse commands, mixed sentiment, coding jargon); keep existing VADER-tuning cases separate from new held-out eval cases; eval reports accuracy on held-out only plus confusion matrix per backend.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-be490990-2d8b-42ed-84b2-1786cf7e934f",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f29816d0-2c14-42c8-a01c-48fa284b155b",
+      "author": "home",
+      "text": "Held-out gold set added at annotations/KDATAP-5fc7c8/sentiment-gold-heldout.yaml: 28 harder synthetic cases in five kinds (5 sarcasm neg, 4 frustrated-but-polite neg, 5 terse commands neu, 4 mixed-sentiment neg, 4 coding-jargon neu, 4 positive pos, 2 excluded), kept separate from the VADER-tuning set (KDATAP-fe4c1d). The eval harness reports held-out accuracy, per-kind accuracy, and pos/neu/neg confusion matrices per backend; tuning-set accuracy is reported separately for continuity.",
+      "created_at": "2026-10-02T15:03:23.858663Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T14:42:48.436981Z",
-  "updated_at": "2026-10-02T14:42:48.437007Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T15:03:23.923431Z",
+  "closed_at": "2026-10-02T15:03:23.923393Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
