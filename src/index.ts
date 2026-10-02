@@ -185,6 +185,22 @@ export {
 } from "./sentiment/adapters/claude-code";
 export type { ClaudeCodeAdapterOptions, ClaudeCodeDoctorReport } from "./sentiment/adapters/claude-code";
 export type { DiscoveredSession } from "./sentiment/adapter";
+export {
+  createCursorAdapter,
+  decodeSanitizedProject,
+  discoverComposers,
+  doctorCursor,
+  extractCursorRecords,
+  isSubagentComposerId,
+  workspaceFolderFromUri,
+} from "./sentiment/adapters/cursor";
+export type {
+  CursorAdapterOptions,
+  CursorComposerRef,
+  CursorDoctorReport,
+} from "./sentiment/adapters/cursor";
+export { openVscDb, SqliteUnavailableError } from "./sentiment/adapters/sqlite-reader";
+export type { SqliteKVDatabase, KVRow } from "./sentiment/adapters/sqlite-reader";
 
 
 
