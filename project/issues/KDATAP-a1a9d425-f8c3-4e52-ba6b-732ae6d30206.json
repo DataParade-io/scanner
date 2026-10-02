@@ -3,9 +3,9 @@
   "title": "Capture Grok Bot fixtures",
   "description": "Capture fixture data from a real Grok Bot installation on a Mac, locally: session transcripts with human messages, injected content classes, duplicates/forks if any. Encode findings into synthetic fixtures under tests/fixtures/sentiment/grok-bot/; never commit real transcripts.\n\nDone when: synthetic fixtures encode the observed format; findings record the evidence.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 3,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-24729463-e7e3-4b82-bc57-935f3c9803df",
   "labels": [],
@@ -19,29 +19,37 @@
     {
       "id": "ac452f73-33a0-4131-800f-6135ca596359",
       "author": "ubuntu",
-      "text": "BLOCKED on KDATAP-f66d10: fixture capture requires a real Grok Bot installation on Ryan's Mac \u2014 this VM has no macOS and no Grok Bot app. Plan once research lands: copy (locally only) sample conversations covering plain human messages, injected content classes, and any duplicates/forks; hand-author synthetic fixtures under tests/fixtures/sentiment/grok-bot/ encoding the observed format (never commit real transcripts \u2014 the fixture guard enforces size/binary limits); then f37d2e implements the adapter against them.",
+      "text": "BLOCKED on KDATAP-f66d10: fixture capture requires a real Grok Bot installation on Ryan's Mac — this VM has no macOS and no Grok Bot app. Plan once research lands: copy (locally only) sample conversations covering plain human messages, injected content classes, and any duplicates/forks; hand-author synthetic fixtures under tests/fixtures/sentiment/grok-bot/ encoding the observed format (never commit real transcripts — the fixture guard enforces size/binary limits); then f37d2e implements the adapter against them.",
       "created_at": "2026-10-02T03:30:26.789386Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "79388527-168c-47f8-831a-0c2f5b51f277",
+      "author": "home",
+      "text": "Done (commit 2473f3b). Synthetic fixtures at tests/fixtures/sentiment/grok-bot/sand-client-persistence/ mirroring the real app layout per the f66d10 research:\n- Two conversation blobs (solo + crew shapes) with base32-of-storage-key filenames; contents cover: persona send-message text/widget/cursor-agent sends, no-author greeting/reply sends, crew-authored sends (Charlie Munger, Scanner, Project Manager), plain role=user messages (thanks + f-bomb), role=user fromAgent crew posts, role=assistant toAgent relay, role=user fromUser remote-channel message, voice-call and event entries, an empty-content malformed entry, and a widgetSkipped send.\n- One unparseable blob (per-file failure guard) and one non-transcript blob (sand.client.slice.ui-layout) that discovery must skip.\n- tests/fixtures/sentiment/README.md documents the grok-bot subtree.\nAll text is hand-authored synthetic; no real session content. Fixture-guard test passes.",
+      "created_at": "2026-10-02T08:54:00.404411Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:58.765693Z",
-  "updated_at": "2026-10-02T03:30:26.789555Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:54:00.490139Z",
+  "closed_at": "2026-10-02T08:54:00.490094Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
