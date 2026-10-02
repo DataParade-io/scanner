@@ -3,7 +3,7 @@
   "title": "L. Better local ML sentiment",
   "description": "Purpose: upgrade the local ML sentiment backend from the binary SST-2 head to a 3-class model with a real neutral class, and survey/benchmark other small offline candidates on BlackbookM1. Done when: at least 3 local candidates benchmarked (held-out gold accuracy, confusion matrix, throughput, model size, aggregate-only real-corpus agreement vs VADER), a winner wired into --sentiment-backend with VADER kept as fallback, and tests/docs updated. Privacy invariants unchanged: local only, counts/aggregates only in any persisted output, no message text.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,23 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "95201133-43cb-4c55-b5d5-a1d534285e07",
+      "author": "home",
+      "text": "Epic L complete on BlackbookM1: 3-class and emotion-mapped local ML backends implemented and benchmarked (go_emotions-mapped winner, Cardiff 3-class, XLM-T, sst2 baseline; q8, cached locally); held-out gold set with VADER-tuning split; winner wired behind --sentiment-backend transformer with vader fallback; docs updated (README + wiki comparison table). Recommendation: vader stays meter default, go_emotions-mapped becomes the default ML backend. All results aggregate-only, no message text persisted.",
+      "created_at": "2026-10-02T15:03:30.082245Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T14:42:42.972462Z",
-  "updated_at": "2026-10-02T14:42:48.251955Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T15:03:30.148567Z",
+  "closed_at": "2026-10-02T15:03:30.148527Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
