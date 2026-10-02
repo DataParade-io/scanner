@@ -1,11 +1,11 @@
 {
   "id": "KDATAP-e9aa3c7d-3f3c-45c3-b817-2d1c3a6e3891",
   "title": "Capture Cursor agent-transcript schema from a real Mac",
-  "description": "Capture and pin the agent-CLI transcript format from a real Mac: JSONL transcripts at ~/.cursor/projects/<sanitized-path>/agent-transcripts/<session-id>/<session-id>.jsonl (the project path with slashes replaced by dashes), with per-session metadata in ~/.cursor/chats/<workspace-hash>/<session-id>/store.db. The line-level schema (type, role, text, timestamp fields) is not publicly documented \u2014 pin it from real files before writing extraction. Also check whether older plain-text .txt transcripts coexist. Record findings; never commit real transcripts.\n\nDone when: the line schema is documented from real files, synthetic fixtures encode it, and findings record the evidence.",
+  "description": "Capture and pin the agent-CLI transcript format from a real Mac: JSONL transcripts at ~/.cursor/projects/<sanitized-path>/agent-transcripts/<session-id>/<session-id>.jsonl (the project path with slashes replaced by dashes), with per-session metadata in ~/.cursor/chats/<workspace-hash>/<session-id>/store.db. The line-level schema (type, role, text, timestamp fields) is not publicly documented — pin it from real files before writing extraction. Also check whether older plain-text .txt transcripts coexist. Record findings; never commit real transcripts.\n\nDone when: the line schema is documented from real files, synthetic fixtures encode it, and findings record the evidence.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
   "labels": [],
@@ -14,29 +14,37 @@
     {
       "id": "f57d5173-1be0-41f3-8029-7ea309ac7369",
       "author": "ubuntu",
-      "text": "**Blocked from remote capture \u2014 needs Ryan's real Mac.** Cannot pin the agent-transcript line schema or check legacy .txt transcripts from this environment. Before implementing locally, capture from `~/.cursor/projects/<sanitized-path>/agent-transcripts/<session-id>/<session-id>.jsonl` and `~/.cursor/chats/<workspace-hash>/<session-id>/store.db`: (1) the exact line-level JSONL schema (type, role, text, timestamp field names and value shapes); (2) whether user lines are distinguishable from injected context at line level; (3) whether older plain-text .txt transcripts coexist in the same tree; (4) store.db table/column layout. Never commit real transcripts \u2014 encode into synthetic fixtures under tests/fixtures/sentiment/cursor/ and record findings here. Until then, the Cursor agent-transcript extractor in KDATAP-d3d98c runs against a best-documented tolerant shape (JSON object per line, role field, text/string content, epoch-ms timestamp) validated only against synthetic fixtures.",
+      "text": "**Blocked from remote capture — needs Ryan's real Mac.** Cannot pin the agent-transcript line schema or check legacy .txt transcripts from this environment. Before implementing locally, capture from `~/.cursor/projects/<sanitized-path>/agent-transcripts/<session-id>/<session-id>.jsonl` and `~/.cursor/chats/<workspace-hash>/<session-id>/store.db`: (1) the exact line-level JSONL schema (type, role, text, timestamp field names and value shapes); (2) whether user lines are distinguishable from injected context at line level; (3) whether older plain-text .txt transcripts coexist in the same tree; (4) store.db table/column layout. Never commit real transcripts — encode into synthetic fixtures under tests/fixtures/sentiment/cursor/ and record findings here. Until then, the Cursor agent-transcript extractor in KDATAP-d3d98c runs against a best-documented tolerant shape (JSON object per line, role field, text/string content, epoch-ms timestamp) validated only against synthetic fixtures.",
       "created_at": "2026-10-02T03:08:37.896924Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "4b47246f-cd6c-4c39-af3c-e284d076fcdc",
+      "author": "home",
+      "text": "Captured and pinned the Cursor agent-CLI transcript schema from the real ~/.cursor on this Mac (487 JSONL files, 35405 lines; structural fields only, no text recorded anywhere).\n\n**Line schema (main transcripts at ~/.cursor/projects/<sanitized>/agent-transcripts/<sid>/<sid>.jsonl):**\n- Message lines carry only {role: user|assistant, message: {content: [...]}} — no top-level type, NO timestamps, NO message ids anywhere in the file. 2932 user lines, 31456 assistant lines.\n- User content is always exactly one block: {type: \"text\", text: string} (2932/2932). Assistant blocks: {type: text|tool_use}.\n- turn_ended control lines: {type: \"turn_ended\", status, error?} (1017).\n- Genuinely typed input is ALWAYS fully wrapped: <user_query>...</user_query> (165/165 wrapped, none empty, no partial wrappers). Injected context rides as tagged user-role lines: <timestamp> (1922), <dynamic_tools>, <dynamic_tool_catalog>, <available_subagent_types>, <manually_attached_skills>, <open_subagent_context>, <cursor_commands>. Untagged user lines exist (4, in one project) and are now treated as typed.\n- Subagent transcripts: <sid>/subagents/<uuid>.jsonl (plain uuid names, not agent- prefixed); their user lines are injected (787/801 <timestamp>). Discovery already skips them — unchanged.\n- No legacy .txt transcripts inside agent-transcripts dirs (0). The 678 .txt files live under <project>/agent-tools/<uuid>.txt and are tool outputs, not transcripts.\n\n**store.db does not exist.** Per-session metadata is ~/.cursor/chats/<workspace-hash>/<sid>/meta.json: {schemaVersion: 2, createdAtMs, updatedAtMs, hasConversation, cwd} (only present for some sessions). prompt_history.json may coexist.\n\n**Timestamps:** since lines carry no time, the adapter now resolves a session-level timestamp: meta.json updatedAtMs (else createdAtMs) when the session id is registered under ~/.cursor/chats, else the transcript file mtime (end-of-session approximation). This is a documented granularity limitation: window filtering is session-granular for cursor-agent; the <timestamp> injected tags parse cleanly but are not reliably adjacent to the typed lines (0-6+ lines away), so per-message attribution is not sound.\n\n**IDE state.vscdb (global + 19 workspace dbs, all scanned):** zero bubbleId:* rows and zero composer:* conversation rows anywhere; composer.composerData = {hasMigratedComposerData, hasMigratedMultipleComposers, lastFocusedComposerIds, selectedComposerIds} (no allComposers list); no composer.composerHeaders:<id> rows (only tableGateEnabled/version flags); composer.planMigrationToHomeDirCompleted = 1. Conversations have migrated out of state.vscdb to ~/.cursor — the cursor-ide source yields nothing on current versions (tolerant path retained).\n\nFixtures: real-shape lines (user_query wrap, <timestamp>/<dynamic_tools>/<available_subagent_types> injected, turn_ended, subagents dir) plus chats meta.json added to tests/fixtures/sentiment/cursor-home; 3 new gold labels. The meter now extracts real cursor-agent data: 169 human messages / 65 sessions over all time on this Mac. 132 sentiment tests green.",
+      "created_at": "2026-10-02T08:01:53.157580Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:22.494035Z",
-  "updated_at": "2026-10-02T03:08:37.897068Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:01:53.217488Z",
+  "closed_at": "2026-10-02T08:01:53.217444Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
