@@ -69,6 +69,30 @@ Held-out by kind (go_emotions winner): terse-command 5/5, coding-jargon 4/4, pos
 
 **Recommendation (KDATAP-55f716):** keep **VADER as the meter default** (fast, transparent, perfectly stable on the tuning set) and promote the **go_emotions-mapped model to the default ML backend behind `--sentiment-backend transformer`** — best held-out accuracy, never mislabels neutral as emotional (unlike Cardiff/XLM-T, which read terse technical commands as negative), and the closest real-corpus profile to VADER. Survey note: Ollama/llama.cpp zero-shot LLM candidates were **not** benchmarked — neither runtime is installed on this Mac, and installing one would add a ~1-2 GB runtime plus multi-GB model weights for a throughput far below the 3-class classifiers; revisit only if a runtime is already present.
 
+## Coding-domain filter study (epic M, KDATAP-3191a7)
+
+The 57-term coding-domain neutralization (`CODING_DOMAIN_OVERRIDES`) was previously VADER-only. Epic M made it a **text-level, per-backend option** for the transformer family too (`--sentiment-coding-filter on|off|auto`, config `sentimentCodingFilter`; `auto` = backend default) and ran every backend in two configurations against both gold sets plus a dedicated synthetic probe set (`annotations/KDATAP-d278a8/coding-filter-probes.yaml`: 19 ordinary technical uses of the filter vocabulary + 5 genuinely negative same-vocabulary phrases, e.g. "this crash is killing me").
+
+Six-config results (all synthetic data, aggregate numbers only; `pnpm run sentiment:eval`):
+
+| Config | Probes (24) | neu probes (19) | neg probes (5) | Tuning acc | Held-out acc | Combined acc | Combined confusion (actual → p/u/n) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| vader + filter | 0.875 | 17/19 | 4/5 | **1.000** | 0.462 | 0.767 | pos 14/1/1, neu 1/18/2, neg 7/2/14 |
+| vader raw | 0.583 | 9/19 | 5/5 | 0.735 | 0.423 | 0.600 | pos 13/1/2, neu 1/9/11, neg 7/2/14 |
+| transformer-sst2 + filter | 0.500 | 12/19 | 0/5 | 0.676 | 0.346 | 0.533 | pos 15/1/0, neu 4/17/0, neg 6/17/0 |
+| transformer-sst2 raw | 0.708 | 17/19 | 0/5 | 0.676 | 0.346 | 0.533 | pos 15/1/0, neu 4/17/0, neg 6/17/0 |
+| transformer (go_emotions) + filter | **0.917** | **19/19** | 3/5 | 0.971 | **0.731** | **0.867** | pos 16/0/0, neu 0/21/0, neg 8/0/15 |
+| transformer (go_emotions) raw | **0.917** | 17/19 | **5/5** | 0.971 | **0.731** | **0.867** | pos 16/0/0, neu 0/21/0, neg 8/0/15 |
+
+Findings:
+
+- **VADER needs the filter** (keep, default on): without it the lexicon reads 10 of 19 technical probes as negative and tuning accuracy drops 1.000 → 0.735 (combined 0.767 → 0.600). Residual cost: the filter still dampens one genuine-frustration probe to neutral ("this crash is killing me") — accepted, since the gold-set gains dominate.
+- **go_emotions: filter is redundant and harmful** (remove from default): gold-set accuracies are **byte-identical** with and without (0.971 / 0.731 / 0.867), and the filter hides real frustration — "this crash is killing me" flips neg → neu and "the failure is driving me insane" flips neg → **pos** (+0.413). It fixes only two technical probes ("tests fail because the fixture is missing", "deadlock … kill both"), a wash on the probe set (22/24 either way). The model maps jargon correctly on its own.
+- **transformer-sst2: filter is a no-op on gold** (identical 0.676/0.346/0.533) and net-harmful on probes (17/24 raw vs 12/24 filtered — neutralization pushes technical statements toward positive). Stays filter-off; it remains a weak baseline regardless (no reliable neutral class).
+- Defaults implemented: `auto` resolves to **filter on for VADER, off for every transformer spec** (`defaultCodingFilter` in the `TRANSFORMER_MODELS` registry); `on`/`off` override per run.
+
+**Recommendation (KDATAP-ab09dd): keep the filter for VADER only, per-backend configurable.** Implemented as `--sentiment-coding-filter on|off|auto` with `auto` per-backend defaults.
+
 ## Status
 
 - Epics A–G (contract, patterns, windows, Claude Code, Cursor, Codex, meter/CLI) are complete.
@@ -77,3 +101,4 @@ Held-out by kind (go_emotions winner): terse-command 5/5, coding-jargon 4/4, pos
 - Epic J (Antigravity adapter) is complete (KDATAP-a4d0fb): conversation DBs are SQLite `steps` tables with schema-less protobuf payloads; human speech is `step_type = 14` field 19.2; nested sub-cascades (agent dispatch prompts), artifact attach sends, and agent types (15/132/23/101/17) are excluded. Verified live on BlackbookM1 across the desktop (79 conversations, 55 nested skipped) and CLI (37) stores.
 - Epic K (local sentiment classifier) is complete (KDATAP-85c997): VADER backend with coding-domain overrides (KDATAP-40977f), meter/CLI aggregation (KDATAP-4f0397), synthetic gold set + eval (KDATAP-fe4c1d), optional Transformers.js backend behind a flag (KDATAP-2ca1f0), docs/tests (KDATAP-181c2f). All-time meter with VADER sentiment: 3009 scored messages, mean compound +0.135, 1385 pos / 1041 neu / 583 neg. See the classifier section above for backend comparison and the default-backend recommendation (VADER).
 - Epic L (better local ML sentiment) is complete (KDATAP-be4909): the default ML backend behind `--sentiment-backend transformer` is now the go_emotions classifier mapped onto pos/neu/neg (KDATAP-55f716), with the Cardiff 3-class head (KDATAP-cc07d6), XLM-T, and the SST-2 baseline kept as named comparison candidates (KDATAP-e11340). Held-out gold set with VADER-tuning split (KDATAP-5fc7c8). All-time meter with the winner: 3012 scored messages, mean compound +0.056, 435 pos / 2307 neu / 270 neg.
+- Epic M (coding-domain filter study) is complete (KDATAP-3191a7): the filter became a per-backend configurable text-level option (`--sentiment-coding-filter on|off|auto`, `auto` = on for VADER, off for the transformer family, per KDATAP-d278a8/ab09dd). Study outcome: VADER keeps the filter (tuning 1.000 vs 0.735 without); go_emotions runs filter-off (gold accuracies identical with/without, and the filter hid genuine frustration — one neg probe flipped to pos); SST-2 unaffected on gold. See the epic-M section above for the full six-config table.
