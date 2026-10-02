@@ -1,0 +1,3013 @@
+{
+  "chatwoot": {
+    "cases": 795,
+    "emailFindings": 5613,
+    "scores": {
+      "recall": 1,
+      "precision": 0.0015128593040847202,
+      "negativeCasePassRate": 0,
+      "denominators": {
+        "evaluablePositives": 1,
+        "matchedPositives": 1,
+        "matchedWithCorrectLabels": 1,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 4,
+        "negativeCasesPassed": 0,
+        "exhaustiveScopedFindings": 661,
+        "exhaustiveScopedMatches": 1
+      },
+      "occurrenceAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 1
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "recall": {
+          "state": "computable",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "property_key": {
+        "total": 72,
+        "hit": 1
+      },
+      "string_literal": {
+        "total": 71,
+        "hit": 0
+      },
+      "identifier": {
+        "total": 270,
+        "hit": 0
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "property_key": {
+        "total": 16,
+        "hit": 16
+      },
+      "string_literal": {
+        "total": 97,
+        "hit": 97
+      },
+      "comment": {
+        "total": 91,
+        "hit": 91
+      },
+      "identifier": {
+        "total": 178,
+        "hit": 178
+      }
+    },
+    "recallByGroup": {
+      "sms-channel-phone": {
+        "total": 8,
+        "hit": 0
+      },
+      "twilio-channel-phone": {
+        "total": 22,
+        "hit": 0
+      },
+      "whatsapp-channel-phone": {
+        "total": 94,
+        "hit": 0
+      },
+      "contact-phone": {
+        "total": 197,
+        "hit": 1
+      },
+      "shopify-customer-phone": {
+        "total": 2,
+        "hit": 0
+      },
+      "user-phone": {
+        "total": 1,
+        "hit": 0
+      },
+      "contact-inbox-source-id": {
+        "total": 54,
+        "hit": 0
+      },
+      "contact-name-phone-copy": {
+        "total": 5,
+        "hit": 0
+      },
+      "(no group)": {
+        "total": 7,
+        "hit": 0
+      },
+      "shared-contact-card-phone": {
+        "total": 4,
+        "hit": 0
+      },
+      "whatsapp-health-display-number": {
+        "total": 3,
+        "hit": 0
+      },
+      "inbox-name-phone-copy": {
+        "total": 1,
+        "hit": 0
+      },
+      "twilio-incoming-number": {
+        "total": 4,
+        "hit": 0
+      },
+      "leadsquared-lead-phone": {
+        "total": 5,
+        "hit": 0
+      },
+      "contact-imported-raw-phone": {
+        "total": 2,
+        "hit": 0
+      },
+      "account-brand-whatsapp-phone": {
+        "total": 3,
+        "hit": 0
+      },
+      "account-brand-phone": {
+        "total": 1,
+        "hit": 0
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "chatwoot-phone-db-schema-L664",
+        "location": "db/schema.rb:664",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:664"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L669",
+        "location": "db/schema.rb:669",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_channel_sms_on"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L695",
+        "location": "db/schema.rb:695",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:695"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L710",
+        "location": "db/schema.rb:710",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_channel_twilio_sms_on_account_sid_and"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L712",
+        "location": "db/schema.rb:712",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_channel_twilio_sms_on"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L750",
+        "location": "db/schema.rb:750",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:750"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L761",
+        "location": "db/schema.rb:761",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_channel_whatsapp_on"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L798",
+        "location": "db/schema.rb:798",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:798"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L815",
+        "location": "db/schema.rb:815",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:815"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L818",
+        "location": "db/schema.rb:818",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~db/schema.rb:818"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L823",
+        "location": "db/schema.rb:823",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_contacts_on_name_email_identifier"
+      },
+      {
+        "id": "chatwoot-phone-db-schema-L824",
+        "location": "db/schema.rb:824",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:index_contacts_on_and_account"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L54",
+        "location": "app/models/contact.rb:54",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L131",
+        "location": "app/models/contact.rb:131",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L149",
+        "location": "app/models/contact.rb:149",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L169",
+        "location": "app/models/contact.rb:169",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L179",
+        "location": "app/models/contact.rb:179",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L200",
+        "location": "app/models/contact.rb:200",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-contact-L202",
+        "location": "app/models/contact.rb:202",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-sms-L22",
+        "location": "app/models/channel/sms.rb:22",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/sms.rb:22"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-sms-L24",
+        "location": "app/models/channel/sms.rb:24",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/sms.rb:24"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-sms-L53",
+        "location": "app/models/channel/sms.rb:53",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/sms.rb:53"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-twilio-sms-L48",
+        "location": "app/models/channel/twilio_sms.rb:48",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/twilio_sms.rb:48"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-twilio-sms-L49",
+        "location": "app/models/channel/twilio_sms.rb:49",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/twilio_sms.rb:49"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-twilio-sms-L50",
+        "location": "app/models/channel/twilio_sms.rb:50",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/twilio_sms.rb:50"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-twilio-sms-L88",
+        "location": "app/models/channel/twilio_sms.rb:88",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/twilio_sms.rb:88"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-whatsapp-L30",
+        "location": "app/models/channel/whatsapp.rb:30",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/whatsapp.rb:30"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-whatsapp-L38",
+        "location": "app/models/channel/whatsapp.rb:38",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/whatsapp.rb:38"
+      },
+      {
+        "id": "chatwoot-phone-models-channel-web-widget-L97",
+        "location": "app/models/channel/web_widget.rb:97",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/models/channel/web_widget.rb:97"
+      },
+      {
+        "id": "chatwoot-phone-models-inbox-L194",
+        "location": "app/models/inbox.rb:194",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-models-inbox-L198",
+        "location": "app/models/inbox.rb:198",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-models-automation-rule-L57",
+        "location": "app/models/automation_rule.rb:57",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rule"
+      },
+      {
+        "id": "chatwoot-phone-models-custom-attribute-definition-L28",
+        "location": "app/models/custom_attribute_definition.rb:28",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:definition"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-identify-action-L13",
+        "location": "app/actions/contact_identify_action.rb:13",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/actions/contact_identify_action.rb:13"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-identify-action-L43",
+        "location": "app/actions/contact_identify_action.rb:43",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-identify-action-L67",
+        "location": "app/actions/contact_identify_action.rb:67",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/actions/contact_identify_action.rb:67"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-identify-action-L69",
+        "location": "app/actions/contact_identify_action.rb:69",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-identify-action-L94",
+        "location": "app/actions/contact_identify_action.rb:94",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/actions/contact_identify_action.rb:94"
+      },
+      {
+        "id": "chatwoot-phone-actions-contact-merge-action-L55",
+        "location": "app/actions/contact_merge_action.rb:55",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/actions/contact_merge_action.rb:55"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L23",
+        "location": "app/builders/contact_inbox_builder.rb:23",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_builder.rb:23"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L37",
+        "location": "app/builders/contact_inbox_builder.rb:37",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_builder.rb:37"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L38",
+        "location": "app/builders/contact_inbox_builder.rb:38",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L40",
+        "location": "app/builders/contact_inbox_builder.rb:40",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L44",
+        "location": "app/builders/contact_inbox_builder.rb:44",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L47",
+        "location": "app/builders/contact_inbox_builder.rb:47",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L51",
+        "location": "app/builders/contact_inbox_builder.rb:51",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L55",
+        "location": "app/builders/contact_inbox_builder.rb:55",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-builder-L57",
+        "location": "app/builders/contact_inbox_builder.rb:57",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-with-contact-builder-L54",
+        "location": "app/builders/contact_inbox_with_contact_builder.rb:54",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_with_contact_builder.rb:54"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-with-contact-builder-L111",
+        "location": "app/builders/contact_inbox_with_contact_builder.rb:111",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_with_contact_builder.rb:111"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-with-contact-builder-L113",
+        "location": "app/builders/contact_inbox_with_contact_builder.rb:113",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_with_contact_builder.rb:113"
+      },
+      {
+        "id": "chatwoot-phone-builders-contact-inbox-with-contact-builder-L114",
+        "location": "app/builders/contact_inbox_with_contact_builder.rb:114",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/builders/contact_inbox_with_contact_builder.rb:114"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-channels-twilio-channels-controller-L42",
+        "location": "app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:42",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:42"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-channels-twilio-channels-controller-L43",
+        "location": "app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:43",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:43"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-channels-twilio-channels-controller-L45",
+        "location": "app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:45",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:45"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-channels-twilio-channels-controller-L58",
+        "location": "app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:58",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:58"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-channels-twilio-channels-controller-L69",
+        "location": "app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:69",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb:69"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-companies-contacts-controller-L6",
+        "location": "app/controllers/api/v1/accounts/companies/contacts_controller.rb:6",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-contacts-controller-L5",
+        "location": "app/controllers/api/v1/accounts/contacts_controller.rb:5",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/contacts_controller.rb:5"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-contacts-controller-L28",
+        "location": "app/controllers/api/v1/accounts/contacts_controller.rb:28",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/contacts_controller.rb:28"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-contacts-controller-L174",
+        "location": "app/controllers/api/v1/accounts/contacts_controller.rb:174",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/contacts_controller.rb:174"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-integrations-shopify-controller-L82",
+        "location": "app/controllers/api/v1/accounts/integrations/shopify_controller.rb:82",
+        "goldGroup": "shopify-customer-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-integrations-shopify-controller-L88",
+        "location": "app/controllers/api/v1/accounts/integrations/shopify_controller.rb:88",
+        "goldGroup": "shopify-customer-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/accounts/integrations/shopify_controller.rb:88"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-accounts-integrations-shopify-controller-L120",
+        "location": "app/controllers/api/v1/accounts/integrations/shopify_controller.rb:120",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-profiles-controller-L78",
+        "location": "app/controllers/api/v1/profiles_controller.rb:78",
+        "goldGroup": "user-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/profiles_controller.rb:78"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-base-controller-L52",
+        "location": "app/controllers/api/v1/widget/base_controller.rb:52",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-base-controller-L57",
+        "location": "app/controllers/api/v1/widget/base_controller.rb:57",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-base-controller-L58",
+        "location": "app/controllers/api/v1/widget/base_controller.rb:58",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/widget/base_controller.rb:58"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-contacts-controller-L88",
+        "location": "app/controllers/api/v1/widget/contacts_controller.rb:88",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/widget/contacts_controller.rb:88"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-conversations-controller-L22",
+        "location": "app/controllers/api/v1/widget/conversations_controller.rb:22",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-controllers-api-v1-widget-conversations-controller-L98",
+        "location": "app/controllers/api/v1/widget/conversations_controller.rb:98",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/api/v1/widget/conversations_controller.rb:98"
+      },
+      {
+        "id": "chatwoot-phone-controllers-public-api-v1-inboxes-contacts-controller-L51",
+        "location": "app/controllers/public/api/v1/inboxes/contacts_controller.rb:51",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/public/api/v1/inboxes/contacts_controller.rb:51"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L8",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:8",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:8"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L29",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:29",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:29"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L42",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:42",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:42"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L60",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:60",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L66",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:66",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:66"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L67",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:67",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:67"
+      },
+      {
+        "id": "chatwoot-phone-controllers-webhooks-whatsapp-controller-L73",
+        "location": "app/controllers/webhooks/whatsapp_controller.rb:73",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/controllers/webhooks/whatsapp_controller.rb:73"
+      },
+      {
+        "id": "chatwoot-phone-drops-contact-drop-L10",
+        "location": "app/drops/contact_drop.rb:10",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/drops/contact_drop.rb:10"
+      },
+      {
+        "id": "chatwoot-phone-drops-contact-drop-L11",
+        "location": "app/drops/contact_drop.rb:11",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/drops/contact_drop.rb:11"
+      },
+      {
+        "id": "chatwoot-phone-jobs-account-contacts-export-job-L105",
+        "location": "app/jobs/account/contacts_export_job.rb:105",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/account/contacts_export_job.rb:105"
+      },
+      {
+        "id": "chatwoot-phone-jobs-data-import-job-L128",
+        "location": "app/jobs/data_import_job.rb:128",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-jobs-data-import-job-L135",
+        "location": "app/jobs/data_import_job.rb:135",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-jobs-migration-add-search-indexes-job-L10",
+        "location": "app/jobs/migration/add_search_indexes_job.rb:10",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/migration/add_search_indexes_job.rb:10"
+      },
+      {
+        "id": "chatwoot-phone-jobs-webhooks-sms-events-job-L9",
+        "location": "app/jobs/webhooks/sms_events_job.rb:9",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/webhooks/sms_events_job.rb:9"
+      },
+      {
+        "id": "chatwoot-phone-jobs-webhooks-whatsapp-events-job-L12",
+        "location": "app/jobs/webhooks/whatsapp_events_job.rb:12",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/webhooks/whatsapp_events_job.rb:12"
+      },
+      {
+        "id": "chatwoot-phone-jobs-webhooks-whatsapp-events-job-L162",
+        "location": "app/jobs/webhooks/whatsapp_events_job.rb:162",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/webhooks/whatsapp_events_job.rb:162"
+      },
+      {
+        "id": "chatwoot-phone-jobs-webhooks-whatsapp-events-job-L164",
+        "location": "app/jobs/webhooks/whatsapp_events_job.rb:164",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/jobs/webhooks/whatsapp_events_job.rb:164"
+      },
+      {
+        "id": "chatwoot-phone-jobs-webhooks-whatsapp-events-job-L179",
+        "location": "app/jobs/webhooks/whatsapp_events_job.rb:179",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L22",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:22",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:22"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L38",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:38",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:38"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L54",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:54",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:54"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L60",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:60",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:60"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L70",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:70",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:70"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L76",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:76",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:76"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L80",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:80",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:whatsapp"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L81",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:81",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:81"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L83",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:83",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:83"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L89",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:89",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:89"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L92",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:92",
+        "goldGroup": "contact-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:92"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L93",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:93",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:93"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L97",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:97",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:97"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L98",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:98",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:whatsapp"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L99",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:99",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:99"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L101",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:101",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L102",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:102",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:102"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L103",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:103",
+        "goldGroup": "contact-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L104",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:104",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L107",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:107",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:107"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-identifier-helper-L109",
+        "location": "app/services/whatsapp/incoming_message_identifier_helper.rb:109",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_identifier_helper.rb:109"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-base-service-L209",
+        "location": "app/services/whatsapp/incoming_message_base_service.rb:209",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-base-service-L211",
+        "location": "app/services/whatsapp/incoming_message_base_service.rb:211",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-base-service-L212",
+        "location": "app/services/whatsapp/incoming_message_base_service.rb:212",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:base"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-base-service-L213",
+        "location": "app/services/whatsapp/incoming_message_base_service.rb:213",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-base-service-L214",
+        "location": "app/services/whatsapp/incoming_message_base_service.rb:214",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L4",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L6",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:6",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L24",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:24",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L27",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:27",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L32",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:32",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L33",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:33",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L34",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:34",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L35",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:35",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identifier-sync-service-L37",
+        "location": "app/services/whatsapp/identifier_sync_service.rb:37",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:sync"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identity-source-id-orderer-L2",
+        "location": "app/services/whatsapp/identity_source_id_orderer.rb:2",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/identity_source_id_orderer.rb:2"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identity-source-id-orderer-L6",
+        "location": "app/services/whatsapp/identity_source_id_orderer.rb:6",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/identity_source_id_orderer.rb:6"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identity-source-id-orderer-L7",
+        "location": "app/services/whatsapp/identity_source_id_orderer.rb:7",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/identity_source_id_orderer.rb:7"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identity-source-id-orderer-L8",
+        "location": "app/services/whatsapp/identity_source_id_orderer.rb:8",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/identity_source_id_orderer.rb:8"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-identity-source-id-orderer-L13",
+        "location": "app/services/whatsapp/identity_source_id_orderer.rb:13",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/identity_source_id_orderer.rb:13"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L30",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:30",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L32",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:32",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L39",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:39",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L91",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:91",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L92",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:92",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L93",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:93",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L94",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:94",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L96",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:96",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L100",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:100",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L103",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:103",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L107",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:107",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L108",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:108",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L110",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:110",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:previous"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L113",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:113",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:previous"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L114",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:114",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L115",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:115",
+        "goldGroup": "contact-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number:previous"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L119",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:119",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L120",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:120",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L122",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:122",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L123",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:123",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L126",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:126",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L127",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:127",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L130",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:130",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L131",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:131",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L134",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:134",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L137",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:137",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:rotation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-user-id-rotation-service-L143",
+        "location": "app/services/whatsapp/user_id_rotation_service.rb:143",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-service-helpers-L63",
+        "location": "app/services/whatsapp/incoming_message_service_helpers.rb:63",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_service_helpers.rb:63"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-message-service-helpers-L64",
+        "location": "app/services/whatsapp/incoming_message_service_helpers.rb:64",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_message_service_helpers.rb:64"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-contact-message-handler-L26",
+        "location": "app/services/whatsapp/incoming_contact_message_handler.rb:26",
+        "goldGroup": "shared-contact-card-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_contact_message_handler.rb:26"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-contact-message-handler-L35",
+        "location": "app/services/whatsapp/incoming_contact_message_handler.rb:35",
+        "goldGroup": "shared-contact-card-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_contact_message_handler.rb:35"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-incoming-contact-message-handler-L39",
+        "location": "app/services/whatsapp/incoming_contact_message_handler.rb:39",
+        "goldGroup": "shared-contact-card-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/incoming_contact_message_handler.rb:39"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L10",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:10",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L11",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:11",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L16",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:16",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L88",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:88",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L89",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:89",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L90",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:90",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L91",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:91",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L93",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:93",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L96",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:96",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L97",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:97",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L100",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:100",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L101",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:101",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L102",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:102",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L103",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:103",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L105",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:105",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L108",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:108",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L112",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:112",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L117",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:117",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L119",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:119",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:response"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-response-service-L121",
+        "location": "app/services/whatsapp/contact_info_response_service.rb:121",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:reload"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-channel-finder-service-L7",
+        "location": "app/services/whatsapp/webhook_channel_finder_service.rb:7",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-channel-finder-service-L8",
+        "location": "app/services/whatsapp/webhook_channel_finder_service.rb:8",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-channel-finder-service-L16",
+        "location": "app/services/whatsapp/webhook_channel_finder_service.rb:16",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:finder"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-channel-finder-service-L25",
+        "location": "app/services/whatsapp/webhook_channel_finder_service.rb:25",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-channel-finder-service-L33",
+        "location": "app/services/whatsapp/webhook_channel_finder_service.rb:33",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:finder"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-contact-info-request-eligibility-service-L31",
+        "location": "app/services/whatsapp/contact_info_request_eligibility_service.rb:31",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L2",
+        "location": "app/services/whatsapp/phone_info_service.rb:2",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L6",
+        "location": "app/services/whatsapp/phone_info_service.rb:6",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L25",
+        "location": "app/services/whatsapp/phone_info_service.rb:25",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L26",
+        "location": "app/services/whatsapp/phone_info_service.rb:26",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L28",
+        "location": "app/services/whatsapp/phone_info_service.rb:28",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L29",
+        "location": "app/services/whatsapp/phone_info_service.rb:29",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L31",
+        "location": "app/services/whatsapp/phone_info_service.rb:31",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L36",
+        "location": "app/services/whatsapp/phone_info_service.rb:36",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L37",
+        "location": "app/services/whatsapp/phone_info_service.rb:37",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L38",
+        "location": "app/services/whatsapp/phone_info_service.rb:38",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L41",
+        "location": "app/services/whatsapp/phone_info_service.rb:41",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L43",
+        "location": "app/services/whatsapp/phone_info_service.rb:43",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L46",
+        "location": "app/services/whatsapp/phone_info_service.rb:46",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L47",
+        "location": "app/services/whatsapp/phone_info_service.rb:47",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L52",
+        "location": "app/services/whatsapp/phone_info_service.rb:52",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L53",
+        "location": "app/services/whatsapp/phone_info_service.rb:53",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:matches_expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L56",
+        "location": "app/services/whatsapp/phone_info_service.rb:56",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:matches_expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L57",
+        "location": "app/services/whatsapp/phone_info_service.rb:57",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L60",
+        "location": "app/services/whatsapp/phone_info_service.rb:60",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L61",
+        "location": "app/services/whatsapp/phone_info_service.rb:61",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L65",
+        "location": "app/services/whatsapp/phone_info_service.rb:65",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L71",
+        "location": "app/services/whatsapp/phone_info_service.rb:71",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L72",
+        "location": "app/services/whatsapp/phone_info_service.rb:72",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-phone-info-service-L74",
+        "location": "app/services/whatsapp/phone_info_service.rb:74",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:info"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L2",
+        "location": "app/services/whatsapp/channel_creation_service.rb:2",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:creation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L5",
+        "location": "app/services/whatsapp/channel_creation_service.rb:5",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:creation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L13",
+        "location": "app/services/whatsapp/channel_creation_service.rb:13",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L23",
+        "location": "app/services/whatsapp/channel_creation_service.rb:23",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:creation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L29",
+        "location": "app/services/whatsapp/channel_creation_service.rb:29",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:creation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-channel-creation-service-L44",
+        "location": "app/services/whatsapp/channel_creation_service.rb:44",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:creation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L15",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:15",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:signup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L17",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:17",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:signup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L41",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:41",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:expected"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L56",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:56",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:signup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L63",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:63",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:signup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L66",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:66",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:signup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L77",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:77",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-embedded-signup-service-L80",
+        "location": "app/services/whatsapp/embedded_signup_service.rb:80",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-reauthorization-service-L9",
+        "location": "app/services/whatsapp/reauthorization_service.rb:9",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:reauthorization"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-reauthorization-service-L14",
+        "location": "app/services/whatsapp/reauthorization_service.rb:14",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-reauthorization-service-L15",
+        "location": "app/services/whatsapp/reauthorization_service.rb:15",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-reauthorization-service-L19",
+        "location": "app/services/whatsapp/reauthorization_service.rb:19",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:reauthorization"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-reauthorization-service-L28",
+        "location": "app/services/whatsapp/reauthorization_service.rb:28",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:reauthorization"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-facebook-api-client-L34",
+        "location": "app/services/whatsapp/facebook_api_client.rb:34",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/facebook_api_client.rb:34"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-facebook-api-client-L44",
+        "location": "app/services/whatsapp/facebook_api_client.rb:44",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/facebook_api_client.rb:44"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-facebook-api-client-L49",
+        "location": "app/services/whatsapp/facebook_api_client.rb:49",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/whatsapp/facebook_api_client.rb:49"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-health-service-L22",
+        "location": "app/services/whatsapp/health_service.rb:22",
+        "goldGroup": "whatsapp-health-display-number",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-health-service-L111",
+        "location": "app/services/whatsapp/health_service.rb:111",
+        "goldGroup": "whatsapp-health-display-number",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-health-service-L148",
+        "location": "app/services/whatsapp/health_service.rb:148",
+        "goldGroup": "whatsapp-health-display-number",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-health-service-L181",
+        "location": "app/services/whatsapp/health_service.rb:181",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L16",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:16",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L23",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:23",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:ready"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L24",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:24",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L28",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:28",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L39",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:39",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L40",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:40",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L42",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:42",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L45",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:45",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L46",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:46",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L48",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:48",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L51",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:51",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:ready"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L57",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:57",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L58",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:58",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L59",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:59",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L86",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:86",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L87",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:87",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L92",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:92",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L96",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:96",
+        "goldGroup": "inbox-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L100",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:100",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-validation-service-L101",
+        "location": "app/services/whatsapp/manual_setup_validation_service.rb:101",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:validation"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-setup-service-L36",
+        "location": "app/services/whatsapp/manual_setup_service.rb:36",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:display"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-manual-webhook-status-service-L37",
+        "location": "app/services/whatsapp/manual_webhook_status_service.rb:37",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-setup-service-L107",
+        "location": "app/services/whatsapp/webhook_setup_service.rb:107",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-webhook-setup-service-L109",
+        "location": "app/services/whatsapp/webhook_setup_service.rb:109",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:setup"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-base-service-L14",
+        "location": "app/services/whatsapp/providers/base_service.rb:14",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:base"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L2",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:2",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L5",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:5",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L7",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:7",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L9",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:9",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L39",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:39",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L60",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:60",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L65",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:65",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L74",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:74",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L87",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:87",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L113",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:113",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-360-dialog-service-L120",
+        "location": "app/services/whatsapp/providers/whatsapp_360_dialog_service.rb:120",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:dialog"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L2",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:2",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L6",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:6",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L8",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:8",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L10",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:10",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L128",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:128",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L135",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:135",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L144",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:144",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L155",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:155",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L243",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:243",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-providers-whatsapp-cloud-service-L251",
+        "location": "app/services/whatsapp/providers/whatsapp_cloud_service.rb:251",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:cloud"
+      },
+      {
+        "id": "chatwoot-phone-services-csat-survey-service-L111",
+        "location": "app/services/csat_survey_service.rb:111",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:survey"
+      },
+      {
+        "id": "chatwoot-phone-services-csat-survey-service-L115",
+        "location": "app/services/csat_survey_service.rb:115",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:survey"
+      },
+      {
+        "id": "chatwoot-phone-services-csat-survey-service-L155",
+        "location": "app/services/csat_survey_service.rb:155",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:survey"
+      },
+      {
+        "id": "chatwoot-phone-services-csat-survey-service-L161",
+        "location": "app/services/csat_survey_service.rb:161",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:survey"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-send-on-twilio-service-L2",
+        "location": "app/services/twilio/send_on_twilio_service.rb:2",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-send-on-twilio-service-L4",
+        "location": "app/services/twilio/send_on_twilio_service.rb:4",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L33",
+        "location": "app/services/twilio/incoming_message_service.rb:33",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L60",
+        "location": "app/services/twilio/incoming_message_service.rb:60",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L69",
+        "location": "app/services/twilio/incoming_message_service.rb:69",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L70",
+        "location": "app/services/twilio/incoming_message_service.rb:70",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L75",
+        "location": "app/services/twilio/incoming_message_service.rb:75",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L76",
+        "location": "app/services/twilio/incoming_message_service.rb:76",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L78",
+        "location": "app/services/twilio/incoming_message_service.rb:78",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L86",
+        "location": "app/services/twilio/incoming_message_service.rb:86",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L121",
+        "location": "app/services/twilio/incoming_message_service.rb:121",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L122",
+        "location": "app/services/twilio/incoming_message_service.rb:122",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio_whatsapp_candidates"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L127",
+        "location": "app/services/twilio/incoming_message_service.rb:127",
+        "goldGroup": "contact-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L201",
+        "location": "app/services/twilio/incoming_message_service.rb:201",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L203",
+        "location": "app/services/twilio/incoming_message_service.rb:203",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L206",
+        "location": "app/services/twilio/incoming_message_service.rb:206",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L207",
+        "location": "app/services/twilio/incoming_message_service.rb:207",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted_twilio_whatsapp_candidates"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L210",
+        "location": "app/services/twilio/incoming_message_service.rb:210",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted_twilio_whatsapp_candidates"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-incoming-message-service-L211",
+        "location": "app/services/twilio/incoming_message_service.rb:211",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio_whatsapp_candidates"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L10",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:10",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:10"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L28",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:28",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:28"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L38",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:38",
+        "goldGroup": "contact-inbox-source-id",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:38"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L39",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:39",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:39"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L41",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:41",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:41"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L44",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:44",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio_whatsapp_candidates"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L45",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:45",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:45"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-whatsapp-identifier-helper-L47",
+        "location": "app/services/twilio/whatsapp_identifier_helper.rb:47",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/twilio/whatsapp_identifier_helper.rb:47"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-delivery-status-service-L52",
+        "location": "app/services/twilio/delivery_status_service.rb:52",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:statu"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-health-service-L70",
+        "location": "app/services/twilio/health_service.rb:70",
+        "goldGroup": "twilio-incoming-number",
+        "matched": false,
+        "predictedGroup": "phone_number:number"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-health-service-L88",
+        "location": "app/services/twilio/health_service.rb:88",
+        "goldGroup": "twilio-incoming-number",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-health-service-L89",
+        "location": "app/services/twilio/health_service.rb:89",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-webhook-setup-service-L29",
+        "location": "app/services/twilio/webhook_setup_service.rb:29",
+        "goldGroup": "twilio-incoming-number",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-webhook-setup-service-L31",
+        "location": "app/services/twilio/webhook_setup_service.rb:31",
+        "goldGroup": "twilio-incoming-number",
+        "matched": false,
+        "predictedGroup": "phone_number:setup"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-webhook-setup-service-L32",
+        "location": "app/services/twilio/webhook_setup_service.rb:32",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:twilio_not_found"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-webhook-setup-service-L42",
+        "location": "app/services/twilio/webhook_setup_service.rb:42",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-webhook-setup-service-L45",
+        "location": "app/services/twilio/webhook_setup_service.rb:45",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:channel"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-oneoff-sms-campaign-service-L21",
+        "location": "app/services/twilio/oneoff_sms_campaign_service.rb:21",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-oneoff-sms-campaign-service-L26",
+        "location": "app/services/twilio/oneoff_sms_campaign_service.rb:26",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-twilio-oneoff-sms-campaign-service-L28",
+        "location": "app/services/twilio/oneoff_sms_campaign_service.rb:28",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-oneoff-campaign-service-L55",
+        "location": "app/services/whatsapp/oneoff_campaign_service.rb:55",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-whatsapp-oneoff-campaign-service-L129",
+        "location": "app/services/whatsapp/oneoff_campaign_service.rb:129",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L51",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:51",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L54",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:54",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L58",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:58",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L60",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:60",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L64",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:64",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L68",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:68",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-contactable-inboxes-service-L70",
+        "location": "app/services/contacts/contactable_inboxes_service.rb:70",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-filter-service-L23",
+        "location": "app/services/contacts/filter_service.rb:23",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:filter"
+      },
+      {
+        "id": "chatwoot-phone-services-contacts-sync-attributes-L26",
+        "location": "app/services/contacts/sync_attributes.rb:26",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-base-processor-service-L59",
+        "location": "app/services/crm/base_processor_service.rb:59",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-api-lead-client-L26",
+        "location": "app/services/crm/leadsquared/api/lead_client.rb:26",
+        "goldGroup": "leadsquared-lead-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/crm/leadsquared/api/lead_client.rb:26"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-api-lead-client-L29",
+        "location": "app/services/crm/leadsquared/api/lead_client.rb:29",
+        "goldGroup": "leadsquared-lead-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/crm/leadsquared/api/lead_client.rb:29"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-lead-finder-service-L32",
+        "location": "app/services/crm/leadsquared/lead_finder_service.rb:32",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-lead-finder-service-L36",
+        "location": "app/services/crm/leadsquared/lead_finder_service.rb:36",
+        "goldGroup": "leadsquared-lead-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:finder"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-lead-finder-service-L38",
+        "location": "app/services/crm/leadsquared/lead_finder_service.rb:38",
+        "goldGroup": "leadsquared-lead-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:finder"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-mappers-contact-mapper-L23",
+        "location": "app/services/crm/leadsquared/mappers/contact_mapper.rb:23",
+        "goldGroup": "leadsquared-lead-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-mappers-contact-mapper-L28",
+        "location": "app/services/crm/leadsquared/mappers/contact_mapper.rb:28",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-mappers-contact-mapper-L32",
+        "location": "app/services/crm/leadsquared/mappers/contact_mapper.rb:32",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-mappers-contact-mapper-L34",
+        "location": "app/services/crm/leadsquared/mappers/contact_mapper.rb:34",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-crm-leadsquared-mappers-contact-mapper-L35",
+        "location": "app/services/crm/leadsquared/mappers/contact_mapper.rb:35",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L14",
+        "location": "app/services/data_import/contact_manager.rb:14",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:14"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L15",
+        "location": "app/services/data_import/contact_manager.rb:15",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:15"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L42",
+        "location": "app/services/data_import/contact_manager.rb:42",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:42"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L44",
+        "location": "app/services/data_import/contact_manager.rb:44",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:44"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L47",
+        "location": "app/services/data_import/contact_manager.rb:47",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:47"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L48",
+        "location": "app/services/data_import/contact_manager.rb:48",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:48"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L54",
+        "location": "app/services/data_import/contact_manager.rb:54",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-data-import-contact-manager-L66",
+        "location": "app/services/data_import/contact_manager.rb:66",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_import/contact_manager.rb:66"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-freshdesk-metadata-L13",
+        "location": "app/services/data_imports/freshdesk/metadata.rb:13",
+        "goldGroup": "contact-imported-raw-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/freshdesk/metadata.rb:13"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-freshdesk-normalizer-L9",
+        "location": "app/services/data_imports/freshdesk/normalizer.rb:9",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/freshdesk/normalizer.rb:9"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-intercom-source-L134",
+        "location": "app/services/data_imports/intercom/source.rb:134",
+        "goldGroup": "contact-imported-raw-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/intercom/source.rb:134"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L273",
+        "location": "app/services/data_imports/importer.rb:273",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:273"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L307",
+        "location": "app/services/data_imports/importer.rb:307",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact_available"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L324",
+        "location": "app/services/data_imports/importer.rb:324",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact_available"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L325",
+        "location": "app/services/data_imports/importer.rb:325",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L327",
+        "location": "app/services/data_imports/importer.rb:327",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:327"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L333",
+        "location": "app/services/data_imports/importer.rb:333",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:333"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L344",
+        "location": "app/services/data_imports/importer.rb:344",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:344"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L354",
+        "location": "app/services/data_imports/importer.rb:354",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:354"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L844",
+        "location": "app/services/data_imports/importer.rb:844",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:844"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L845",
+        "location": "app/services/data_imports/importer.rb:845",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:845"
+      },
+      {
+        "id": "chatwoot-phone-services-data-imports-importer-L846",
+        "location": "app/services/data_imports/importer.rb:846",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/data_imports/importer.rb:846"
+      },
+      {
+        "id": "chatwoot-phone-services-llm-formatter-contact-llm-formatter-L27",
+        "location": "app/services/llm_formatter/contact_llm_formatter.rb:27",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~app/services/llm_formatter/contact_llm_formatter.rb:27"
+      },
+      {
+        "id": "chatwoot-phone-services-search-service-L37",
+        "location": "app/services/search_service.rb:37",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-search-service-L167",
+        "location": "app/services/search_service.rb:167",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:search"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-incoming-message-service-L31",
+        "location": "app/services/sms/incoming_message_service.rb:31",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-incoming-message-service-L35",
+        "location": "app/services/sms/incoming_message_service.rb:35",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-incoming-message-service-L36",
+        "location": "app/services/sms/incoming_message_service.rb:36",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-incoming-message-service-L74",
+        "location": "app/services/sms/incoming_message_service.rb:74",
+        "goldGroup": "contact-name-phone-copy",
+        "matched": false,
+        "predictedGroup": "phone_number:formatted"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-incoming-message-service-L75",
+        "location": "app/services/sms/incoming_message_service.rb:75",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:message"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-oneoff-sms-campaign-service-L21",
+        "location": "app/services/sms/oneoff_sms_campaign_service.rb:21",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-sms-oneoff-sms-campaign-service-L24",
+        "location": "app/services/sms/oneoff_sms_campaign_service.rb:24",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-services-social-link-parser-L61",
+        "location": "app/services/social_link_parser.rb:61",
+        "goldGroup": "account-brand-whatsapp-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:parser"
+      },
+      {
+        "id": "chatwoot-phone-services-social-link-parser-L62",
+        "location": "app/services/social_link_parser.rb:62",
+        "goldGroup": "account-brand-whatsapp-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:parser"
+      },
+      {
+        "id": "chatwoot-phone-services-social-link-parser-L63",
+        "location": "app/services/social_link_parser.rb:63",
+        "goldGroup": "account-brand-whatsapp-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:parser"
+      },
+      {
+        "id": "chatwoot-phone-services-telegram-incoming-message-service-L186",
+        "location": "app/services/telegram/incoming_message_service.rb:186",
+        "goldGroup": "shared-contact-card-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:card"
+      },
+      {
+        "id": "chatwoot-phone-services-website-branding-service-L8",
+        "location": "app/services/website_branding_service.rb:8",
+        "goldGroup": "account-brand-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:branding"
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-accounts-csat-survey-responses-download-L26",
+        "location": "app/views/api/v1/accounts/csat_survey_responses/download.csv.erb:26",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-accounts-search-contact-L4",
+        "location": "app/views/api/v1/accounts/search/_contact.json.jbuilder:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-models-contact-L6",
+        "location": "app/views/api/v1/models/_contact.json.jbuilder:6",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-widget-configs-create-L32",
+        "location": "app/views/api/v1/widget/configs/create.json.jbuilder:32",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-widget-contacts-set-user-L4",
+        "location": "app/views/api/v1/widget/contacts/set_user.json.jbuilder:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-widget-contacts-show-L4",
+        "location": "app/views/api/v1/widget/contacts/show.json.jbuilder:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-api-v1-widget-contacts-update-L4",
+        "location": "app/views/api/v1/widget/contacts/update.json.jbuilder:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-public-api-v1-models-contact-L4",
+        "location": "app/views/public/api/v1/models/_contact.json.jbuilder:4",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-views-widget-tests-index-L50",
+        "location": "app/views/widget_tests/index.html.erb:50",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L703",
+        "location": "config/routes.rb:703",
+        "goldGroup": "sms-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:703"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L704",
+        "location": "config/routes.rb:704",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:704"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L705",
+        "location": "config/routes.rb:705",
+        "goldGroup": "whatsapp-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:705"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L728",
+        "location": "config/routes.rb:728",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:728"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L729",
+        "location": "config/routes.rb:729",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:729"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L730",
+        "location": "config/routes.rb:730",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:730"
+      },
+      {
+        "id": "chatwoot-phone-config-routes-L731",
+        "location": "config/routes.rb:731",
+        "goldGroup": "twilio-channel-phone",
+        "matched": false,
+        "predictedGroup": "phone_number~config/routes.rb:731"
+      },
+      {
+        "id": "chatwoot-phone-lib-filters-filter-keys-L139",
+        "location": "lib/filters/filter_keys.yml:139",
+        "goldGroup": "contact-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~lib/filters/filter_keys.yml:139"
+      },
+      {
+        "id": "chatwoot-phone-lib-integrations-slack-link-unfurl-formatter-L24",
+        "location": "lib/integrations/slack/link_unfurl_formatter.rb:24",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:field"
+      },
+      {
+        "id": "chatwoot-phone-lib-integrations-slack-slack-link-unfurl-service-L29",
+        "location": "lib/integrations/slack/slack_link_unfurl_service.rb:29",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": "phone_number:contact"
+      },
+      {
+        "id": "chatwoot-phone-lib-tasks-bulk-conversations-L110",
+        "location": "lib/tasks/bulk_conversations.rake:110",
+        "goldGroup": "contact-phone",
+        "matched": false,
+        "predictedGroup": null
+      }
+    ]
+  }
+}
