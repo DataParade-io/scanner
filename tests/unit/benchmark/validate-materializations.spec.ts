@@ -7,9 +7,9 @@ import {
 describe("materialization validation report", () => {
   it("reports materialization status for the corpus benchmark root", () => {
     const report = buildMaterializationValidationReport();
-    expect(report.totalPackets).toBe(30);
+    expect(report.totalPackets).toBe(31);
     if (report.validCount === 0) {
-      expect(report.failures).toHaveLength(30);
+      expect(report.failures).toHaveLength(31);
       expect(report.failures.every((failure) => failure.validationStatus === "missing")).toBe(
         true,
       );
