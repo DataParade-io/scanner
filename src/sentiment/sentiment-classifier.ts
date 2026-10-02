@@ -26,6 +26,12 @@ export interface SentimentBackend {
   scoreMessage(text: string): SentimentScore | null;
 }
 
+/** Same contract as SentimentBackend, for backends whose inference is async. */
+export interface AsyncSentimentBackend {
+  readonly name: string;
+  scoreMessage(text: string): Promise<SentimentScore | null>;
+}
+
 /**
  * Standard VADER convention: |compound| >= 0.05 is decisive, in between is
  * neutral.
@@ -121,9 +127,32 @@ export function createVaderBackend(options: VaderBackendOptions = {}): Sentiment
   };
 }
 
-/** Registry of locally available backends; "vader" is the default. */
+/** Registry of locally available sync backends; "vader" is the default. */
 export function createSentimentBackend(name: string | undefined): SentimentBackend {
   const backend = name ?? "vader";
   if (backend === "vader") return createVaderBackend();
+  throw new Error(`unknown sentiment backend: ${backend}`);
+}
+
+/**
+ * Registry including async backends ("transformer", lazily loaded only when
+ * selected so the default path never touches the optional dependency).
+ * `undefined` selects the default ("vader").
+ */
+export async function createSentimentBackendAsync(
+  name: string | undefined,
+): Promise<AsyncSentimentBackend> {
+  const backend = name ?? "vader";
+  if (backend === "vader") {
+    const vader = createVaderBackend();
+    return {
+      name: vader.name,
+      scoreMessage: async (text) => vader.scoreMessage(text),
+    };
+  }
+  if (backend === "transformer") {
+    const mod = await import("./transformer-backend");
+    return mod.createTransformerBackend();
+  }
   throw new Error(`unknown sentiment backend: ${backend}`);
 }

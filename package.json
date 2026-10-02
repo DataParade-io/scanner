@@ -56,6 +56,7 @@
     "eval:data-actions": "jest tests/eval/layers/data-actions/eval.test.ts",
     "eval:contract": "jest tests/eval/contract/contract.spec.ts",
     "sentiment:meter": "ts-node scripts/sentiment-meter.ts",
+    "sentiment:eval": "ts-node --files scripts/sentiment-backend-eval.ts",
     "ci:smoke": "pnpm run build && node dist/tests/benchmark/scripts/ci-smoke.js",
     "benchmark:materialize": "pnpm run build && node dist/tests/benchmark/scripts/materialize-repo.js",
     "benchmark:validate-materializations": "pnpm run build && node dist/tests/benchmark/scripts/validate-materializations.js",
@@ -104,5 +105,8 @@
     "LICENSE",
     "README.md",
     "package.json"
-  ]
+  ],
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4.3.0"
+  }
 }

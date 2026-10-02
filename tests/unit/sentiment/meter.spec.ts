@@ -2,6 +2,7 @@ import { computeMeter, DEFAULT_METER_BANDS, gaugeBar, meterOverRecords } from ".
 import type { HumanMessageRecord } from "../../../src/sentiment/record";
 import { buildDedupKey } from "../../../src/sentiment/dedup";
 import { createVaderBackend } from "../../../src/sentiment/sentiment-classifier";
+import type { SentimentScore } from "../../../src/sentiment/sentiment-classifier";
 
 let seq = 0;
 function rec(text: string, source: HumanMessageRecord["source"] = "claude-code", sessionId = "s1", timestamp = "2026-10-01T12:00:00Z"): HumanMessageRecord {
@@ -114,17 +115,23 @@ describe("computeMeter with a sentiment backend", () => {
   const win = { startMs: 0, endMs: now + 1, label: "test" };
   const vader = createVaderBackend();
 
+  function scoreRecords(records: HumanMessageRecord[]) {
+    const scores = new Map<string, SentimentScore>();
+    for (const record of records) {
+      const score = vader.scoreMessage(record.text);
+      if (score) scores.set(record.dedupKey, score);
+    }
+    return { backendName: vader.name, scoresByDedupKey: scores };
+  }
+
   it("aggregates mean compound and pos/neu/neg counts overall and per source", () => {
     const texts = [
       "this works great, thanks",
       "kill the stale worker process",
       "I hate this, it sucks",
     ];
-    const report = computeMeter(
-      texts.map((text, i) => rec(text, i === 2 ? "codex" : "claude-code", `s${i}`)),
-      win,
-      { sentimentBackend: vader },
-    );
+    const records = texts.map((text, i) => rec(text, i === 2 ? "codex" : "claude-code", `s${i}`));
+    const report = computeMeter(records, win, { sentiment: scoreRecords(records) });
     const overall = report.sentiment!;
     expect(overall.backend).toBe("vader");
     expect(overall.scoredMessages).toBe(3);
@@ -145,19 +152,15 @@ describe("computeMeter with a sentiment backend", () => {
   });
 
   it("skips fully excluded messages from the scored set", () => {
-    const report = computeMeter(
-      [rec("thanks a lot"), rec("```\nkill -9 1\n```")],
-      win,
-      { sentimentBackend: vader },
-    );
+    const records = [rec("thanks a lot"), rec("```\nkill -9 1\n```")];
+    const report = computeMeter(records, win, { sentiment: scoreRecords(records) });
     expect(report.sentiment!.scoredMessages).toBe(1);
     expect(report.sentiment!.pos).toBe(1);
   });
 
   it("reports a zero-scored aggregate with null mean", () => {
-    const report = computeMeter([rec("```\nrm -rf /\n```")], win, {
-      sentimentBackend: vader,
-    });
+    const records = [rec("```\nrm -rf /\n```")];
+    const report = computeMeter(records, win, { sentiment: scoreRecords(records) });
     expect(report.sentiment!.scoredMessages).toBe(0);
     expect(report.sentiment!.meanCompound).toBeNull();
   });
@@ -180,5 +183,16 @@ describe("computeMeter with a sentiment backend", () => {
     );
     expect(report.sentiment!.backend).toBe("vader");
     expect(report.sentiment!.pos).toBe(1);
+  });
+
+  it("rejects async backends in meterOverRecords", () => {
+    expect(() =>
+      meterOverRecords([rec("thanks")], {
+        window: "today",
+        now,
+        timezone: "UTC",
+        sentimentBackend: "transformer",
+      }),
+    ).toThrow(/runSentimentMeter for transformer/);
   });
 });
