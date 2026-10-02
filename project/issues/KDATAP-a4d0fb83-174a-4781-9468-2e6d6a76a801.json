@@ -3,7 +3,7 @@
   "title": "J. Antigravity adapter",
   "description": "Purpose: add Google Antigravity (VS Code-based AI IDE) session transcripts as a required later source, via its own adapter conforming to the shared normalized record. Ryan's Mac (BlackbookM1) has Antigravity installed; all research happens there with counts and schema/field names only, never message text.\n\nScope: (1) research and pin the real on-disk format on this Mac — look under ~/Library/Application Support/Antigravity, ~/.gemini/antigravity, ~/.antigravity, and any state.vscdb if VS Code-based — recording schema/field names and counts only; (2) discovery; (3) human-message extraction with injected-content exclusions; (4) dedup/rescan/doctor consistent with the other sources; (5) synthetic fixtures and tests, then wire into the CLI sources and doctor.\n\nDone when: the research is recorded (with citations or clearly marked assumptions); golden extraction tests pass on synthetic fixtures; Antigravity sessions appear in the meter counts alongside the other sources; privacy rules apply identically.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,23 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "d73329d0-c03d-4c9f-a567-7550a5915797",
+      "author": "home",
+      "text": "Epic J complete. 91efe7 (format research: SQLite steps table with schema-less protobuf payloads across ~/.gemini/antigravity and ~/.gemini/antigravity-cli; counting rule step_type=14 field 19.2; nested sub-cascades excluded), f2ecfb (discovery), 4f6071 (extraction with exclusions), 3ce24a (dedup/rescan WAL snapshotting/doctor/CLI wiring), 31a852 (test-time fixtures, gold eval 100%, docs) all closed. Antigravity is a meter source; live reading verified on BlackbookM1 (448 human messages all-time, 6 thanks / 24 f-bomb tokens).",
+      "created_at": "2026-10-02T09:16:13.921446Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:56:57.296751Z",
-  "updated_at": "2026-10-02T08:57:01.208176Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:16:13.973046Z",
+  "closed_at": "2026-10-02T09:16:13.973008Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",

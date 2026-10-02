@@ -3,17 +3,30 @@
   "title": "Antigravity discovery",
   "description": "Implement discover() for the Antigravity adapter per the research: enumerate conversation/session stores under the real data roots, tolerate missing roots, attribute stable session ids. Done when: discovery tests pass on synthetic fixtures and a missing root is reported, not fatal.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-a4d0fb83-174a-4781-9468-2e6d6a76a801",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "28cbc9c0-933b-4432-8d85-fa6e18111c70",
+      "author": "home",
+      "text": "Done. createAntigravityAdapter().discover() scans ~/.gemini/antigravity/conversations and ~/.gemini/antigravity-cli/conversations (root/home overrides; missing roots reported in skipCounter.missingRoots, never fatal). Nested sub-cascades are excluded up front by joining conversation_summaries.parent_conversation_id (stale summary rows for missing files ignored); sessionId = conversation uuid from filename; projectPath decoded from workspace_uris file:// URIs with an 'antigravity' fallback. Fixture DBs are generated at test time (tests/unit/sentiment/helpers/antigravity-fixture.ts) — binary SQLite fixtures are never committed, matching the cursor IDE fixture pattern. Live check: 79 desktop (55 nested skipped) + 37 CLI = 61 sessions discovered.",
+      "created_at": "2026-10-02T09:14:46.216418Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T08:57:06.761753Z",
-  "updated_at": "2026-10-02T08:57:06.761784Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T09:14:46.299476Z",
+  "closed_at": "2026-10-02T09:14:46.299438Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
