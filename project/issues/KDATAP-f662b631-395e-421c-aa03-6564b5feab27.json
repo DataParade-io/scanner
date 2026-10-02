@@ -3,9 +3,9 @@
   "title": "Verify Codex extraction semantics on a real Mac",
   "description": "Pin from a real Mac: the exact harness-injected user-role content markers (instruction and environment wrappers riding along as user items) in the current codex-cli version; whether event_msg user_message kind (for example plain) reliably distinguishes genuinely typed input; the forked_from_id / forked_from_ordinal_exclusive skip semantics on real resumed rollouts; whether compressed rollouts appear on disk in normal CLI use (skip-with-note if so). Record findings.\n\nDone when: each semantic is confirmed or corrected from real rollouts and encoded into synthetic fixtures; findings record the evidence.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-5ee1c57f-f1a6-4e1b-bd25-698614b9634e",
   "labels": [],
@@ -14,29 +14,37 @@
     {
       "id": "69e3ac85-9cc3-42ef-99da-ac0c0d3fbccd",
       "author": "ubuntu",
-      "text": "**Blocked from remote verification \u2014 needs Ryan's real Mac.** Implemented against the open-source openai/codex rollout format with synthetic fixtures; check locally and correct: (1) the exact harness-injected user-role content markers in the current codex-cli version (implemented: `<user_instructions>`, `<environment_context>`, `<turn_context>` wrappers \u2014 assumed spellings); (2) whether event_msg user_message `kind` (e.g. plain) reliably distinguishes genuinely typed input (implemented: event_msg mirrors are always skipped in favor of response_item); (3) the forked_from_id / forked_from_ordinal_exclusive skip semantics on real resumed rollouts (implemented: items with ordinal < forked_from_ordinal_exclusive are inherited and skipped); (4) whether compressed rollouts appear on disk in normal CLI use (skip-with-note if so). Record findings and correct the fixtures.",
+      "text": "**Blocked from remote verification — needs Ryan's real Mac.** Implemented against the open-source openai/codex rollout format with synthetic fixtures; check locally and correct: (1) the exact harness-injected user-role content markers in the current codex-cli version (implemented: `<user_instructions>`, `<environment_context>`, `<turn_context>` wrappers — assumed spellings); (2) whether event_msg user_message `kind` (e.g. plain) reliably distinguishes genuinely typed input (implemented: event_msg mirrors are always skipped in favor of response_item); (3) the forked_from_id / forked_from_ordinal_exclusive skip semantics on real resumed rollouts (implemented: items with ordinal < forked_from_ordinal_exclusive are inherited and skipped); (4) whether compressed rollouts appear on disk in normal CLI use (skip-with-note if so). Record findings and correct the fixtures.",
       "created_at": "2026-10-02T03:13:06.521077Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "6b1e1b12-10ef-4dab-b5dd-1aa43f35a048",
+      "author": "home",
+      "text": "Verified all four Codex semantics against the real ~/.codex/sessions corpus on this Mac (233 rollouts, ~280k lines; structural fields only, no text recorded).\n\n1. Harness-injected user-role content markers (current Codex Desktop-era rollouts): observed riding as user response_item texts: <environment_context> (99), <recommended_plugins> (173), <subagent_notification> (36), <turn_aborted> (5), <external_codex_apps_open_page> (19), <external_codex_apps_writing_block_edits> (1), <skill> (1), <realtime_delegation> (86), <in-app-browser-context ...> (33), <codex_internal_context ...> (41). The assumed <user_instructions>/<turn_context> wrappers do NOT appear as user-message text in this corpus — turn_context is now a top-level record type (2436 records), not a user message. All ten observed markers (plus the two documented ones) are now in CODEX_INJECTED_MARKERS. Untagged harness-ish prompts exist (\"PLEASE IMPLEMENT THIS PLAN:\" x18) but are left unfiltered — not clearly injected, flagged here for a human call.\n\n2. event_msg user_message: does not exist in current rollouts (0 occurrences in 124968 event_msg records; payload types are task_started, item_completed, token_count, task_complete, thread_settings_applied, turn_aborted, thread_goal_updated). Mirrors now happen via item_completed events. Skipping all event_msg records remains correct.\n\n3. forked_from_id / forked_from_ordinal_exclusive: every top-level record carries a real ordinal field (ordinal,timestamp,type on all ~280k records). Fork behavior is mixed on real data: one fork starts at ordinal 29302 > forked_from_ordinal_exclusive 29298 (inherited items NOT re-recorded), while other forks re-record sparse inherited items below the exclusive ordinal (e.g. ordinals 4..227 with forked 29298). The adapter previously compared a counted position instead of the real ordinal — fixed to use parsed.ordinal for both the skip decision and record ids. Subagent rollouts (session_meta.source containing a subagent object, 151 files, 855 user messages, subagent_history_start_ordinal present) hold parent-delegation prompts, never typed input — now skipped entirely, mirroring Claude sidechains.\n\n4. Compressed rollouts: yes, compaction appears in normal use — top-level compacted records (281) whose payload.message is a plain string summary plus replacement_history inside the payload. None of it is a response_item, so the adapter never double-counts or emits summaries; user messages continue after compaction as normal.\n\nAlso: session_meta has both id and session_id and they differ in 152/293 files (thread id vs session id); attribution keeps payload.id. All timestamps ISO RFC3339. Doctor unchanged (233 rollouts, 0 archived — archived_sessions/ absent is informational only).\n\nReal-corpus effect: codex human messages drop from 2172 to 731 / 78 sessions over all time (delegation prompts and injected wrappers excluded). Fixtures updated with real ordinals, the observed marker set, a compacted record, an item_completed mirror, and a subagent rollout; subagent-skip and ordinal-fork tests added. 133 sentiment tests green.",
+      "created_at": "2026-10-02T08:08:53.995153Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:31.853099Z",
-  "updated_at": "2026-10-02T03:13:06.521231Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:08:54.119110Z",
+  "closed_at": "2026-10-02T08:08:54.119064Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
