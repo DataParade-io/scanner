@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "4442df8f-87ca-49e5-876f-8e5af2c6e695",
+  "issue_id": "KDATAP-85c99751-3005-4486-aeb7-8c78a099bb80",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T11:40:52.417Z",
+  "actor_id": "example-user",
+  "payload": {
+    "title": "K. Local sentiment classifier",
+    "description": "Purpose: add a LOCAL (no cloud APIs) sentiment classifier for human user messages as a second packaged metric alongside thanks vs. F-bombs. Per-message compound score (-1..+1) plus pos/neu/neg labels, aggregated per window and per source in the meter report.\n\nScope: (a) VADER backend via the vader-sentiment npm package (offline port) run on the same code/quote/paste-stripped text the counter uses; (b) coding-domain lexicon overrides so technical usage of kill/error/fail/bug/crash/abort/exception is not negative; (c) meter aggregation (mean compound, pos/neu/neg counts) wired into CLI text and JSON; (d) a synthetic gold set modeled on coding-chat patterns plus an accuracy eval; (e) an optional Transformers.js backend behind a flag with a small local ONNX model, cached locally, compared against VADER on the gold set and a real-corpus agreement check (aggregate numbers only); (f) docs and tests.\n\nDone when: VADER and transformer backends both run locally on BlackbookM1 with throughput measured; gold accuracy reported; meter output carries the new counts only; privacy rules apply identically (no message text persisted anywhere).",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
