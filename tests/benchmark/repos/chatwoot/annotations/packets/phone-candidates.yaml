@@ -1,0 +1,2674 @@
+candidates:
+  - file: app/actions/contact_identify_action.rb
+    line: 13
+    text: "@attributes_to_update = [:identifier, :name, :email, :phone_number]"
+  - file: app/actions/contact_identify_action.rb
+    line: 18
+    text: merge_if_existing_phone_number_contact
+  - file: app/actions/contact_identify_action.rb
+    line: 42
+    text: def merge_if_existing_phone_number_contact
+  - file: app/actions/contact_identify_action.rb
+    line: 43
+    text: return unless merge_contacts?(existing_phone_number_contact, :phone_number)
+  - file: app/actions/contact_identify_action.rb
+    line: 44
+    text: return unless mergable_phone_contact?
+  - file: app/actions/contact_identify_action.rb
+    line: 46
+    text: process_contact_merge(existing_phone_number_contact)
+  - file: app/actions/contact_identify_action.rb
+    line: 66
+    text: def existing_phone_number_contact
+  - file: app/actions/contact_identify_action.rb
+    line: 67
+    text: return if params[:phone_number].blank?
+  - file: app/actions/contact_identify_action.rb
+    line: 69
+    text: "@existing_phone_number_contact ||= account.contacts.find_by(phone_number:
+      params[:phone_number])"
+  - file: app/actions/contact_identify_action.rb
+    line: 87
+    text: "# case: contact 1: email: 1@test.com, phone: 123456789"
+  - file: app/actions/contact_identify_action.rb
+    line: 88
+    text: "# params: email: 2@test.com, phone: 123456789"
+  - file: app/actions/contact_identify_action.rb
+    line: 90
+    text: def mergable_phone_contact?
+  - file: app/actions/contact_identify_action.rb
+    line: 93
+    text: if existing_phone_number_contact.email.present? &&
+      existing_phone_number_contact.email != params[:email]
+  - file: app/actions/contact_identify_action.rb
+    line: 94
+    text: "@attributes_to_update.delete(:phone_number)"
+  - file: app/actions/contact_merge_action.rb
+    line: 55
+    text: mergable_attribute_keys = %w[identifier name email phone_number
+      additional_attributes custom_attributes]
+  - file: app/builders/contact_inbox_builder.rb
+    line: 23
+    text: phone_source_id
+  - file: app/builders/contact_inbox_builder.rb
+    line: 37
+    text: def phone_source_id
+  - file: app/builders/contact_inbox_builder.rb
+    line: 38
+    text: raise ActionController::ParameterMissing, 'contact phone number' unless
+      @contact.phone_number
+  - file: app/builders/contact_inbox_builder.rb
+    line: 40
+    text: "@contact.phone_number"
+  - file: app/builders/contact_inbox_builder.rb
+    line: 44
+    text: raise ActionController::ParameterMissing, 'contact phone number' unless
+      @contact.phone_number
+  - file: app/builders/contact_inbox_builder.rb
+    line: 47
+    text: "@contact.phone_number.delete('+').to_s"
+  - file: app/builders/contact_inbox_builder.rb
+    line: 51
+    text: raise ActionController::ParameterMissing, 'contact phone number' unless
+      @contact.phone_number
+  - file: app/builders/contact_inbox_builder.rb
+    line: 55
+    text: "@contact.phone_number"
+  - file: app/builders/contact_inbox_builder.rb
+    line: 57
+    text: '"whatsapp:#{@contact.phone_number}"'
+  - file: app/builders/contact_inbox_builder.rb
+    line: 78
+    text: "# if the agent updates the contact’s email or phone number, or"
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 54
+    text: "phone_number: contact_attributes[:phone_number],"
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 70
+    text: contact ||= find_contact_by_phone_numbers
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 110
+    text: def find_contact_by_phone_numbers
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 111
+    text: phone_numbers = [contact_attributes[:phone_number],
+      *Array(contact_attributes[:phone_number_candidates])].compact_blank.uniq
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 113
+    text: phone_numbers.each do |phone_number|
+  - file: app/builders/contact_inbox_with_contact_builder.rb
+    line: 114
+    text: "contact = account.contacts.find_by(phone_number: phone_number)"
+  - file: app/controllers/api/v1/accounts/assignable_agents_controller.rb
+    line: 5
+    text: "# TODO: Remove this opt-in once mobile clients support AI assignees in
+      this payload."
+  - file: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    line: 42
+    text: def phone_number
+  - file: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    line: 43
+    text: return if permitted_params[:phone_number].blank?
+  - file: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    line: 45
+    text: "medium == 'sms' ? permitted_params[:phone_number] :
+      \"whatsapp:#{permitted_params[:phone_number]}\""
+  - file: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    line: 58
+    text: "phone_number: phone_number,"
+  - file: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+    line: 69
+    text: :messaging_service_sid, :phone_number, :account_sid, :auth_token, :name,
+      :medium, :api_key_sid
+  - file: app/controllers/api/v1/accounts/companies/contacts_controller.rb
+    line: 6
+    text: "'contacts.phone_number ILIKE :search',"
+  - file: app/controllers/api/v1/accounts/contacts_controller.rb
+    line: 5
+    text: "sort_on :phone_number, type: :string"
+  - file: app/controllers/api/v1/accounts/contacts_controller.rb
+    line: 28
+    text: "'name ILIKE :search OR email ILIKE :search OR phone_number ILIKE :search
+      OR contacts.identifier LIKE :search',"
+  - file: app/controllers/api/v1/accounts/contacts_controller.rb
+    line: 174
+    text: permitted_params = params.permit(:name, :identifier, :email,
+      :phone_number, :avatar, :avatar_url, :blocked,
+  - file: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+    line: 82
+    text: query << "phone:#{contact.phone_number}" if contact.phone_number.present?
+  - file: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+    line: 88
+    text: "fields: 'id,email,phone'"
+  - file: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+    line: 120
+    text: return unless contact.blank? || (contact.email.blank? &&
+      contact.phone_number.blank?)
+  - file: app/controllers/api/v1/accounts/whatsapp/authorizations_controller.rb
+    line: 33
+    text: "params: params.permit(:code, :business_id, :waba_id, :phone_number_id,
+      :is_coexistence).to_h.symbolize_keys,"
+  - file: app/controllers/api/v1/accounts/whatsapp/manual_setup_controller.rb
+    line: 57
+    text: params.permit(:waba_id, :phone_number_id, :access_token)
+  - file: app/controllers/api/v1/accounts/whatsapp/manual_setup_controller.rb
+    line: 61
+    text: params.permit(:waba_id, :phone_number_id, :access_token, :inbox_name)
+  - file: app/controllers/api/v1/profiles_controller.rb
+    line: 78
+    text: params.require(:profile).permit(:phone_number)
+  - file: app/controllers/api/v1/widget/base_controller.rb
+    line: 52
+    text: return if @contact.email.present? || @contact.phone_number.present? ||
+      @contact.identifier.present?
+  - file: app/controllers/api/v1/widget/base_controller.rb
+    line: 57
+    text: def contact_phone_number
+  - file: app/controllers/api/v1/widget/base_controller.rb
+    line: 58
+    text: permitted_params.dig(:contact, :phone_number)
+  - file: app/controllers/api/v1/widget/contacts_controller.rb
+    line: 51
+    text: "# (name/email/phone/custom_attributes with no identifier), which must
+      keep"
+  - file: app/controllers/api/v1/widget/contacts_controller.rb
+    line: 88
+    text: "params.permit(:website_token, :identifier, :identifier_hash, :email,
+      :name, :avatar_url, :phone_number, custom_attributes: {},"
+  - file: app/controllers/api/v1/widget/conversations_controller.rb
+    line: 22
+    text: "params: { email: contact_email, phone_number: contact_phone_number, name:
+      contact_name, custom_attributes: contact_custom_attributes },"
+  - file: app/controllers/api/v1/widget/conversations_controller.rb
+    line: 98
+    text: "params.permit(:id, :typing_status, :website_token, :email, contact:
+      [:name, :email, :phone_number, { custom_attributes: {} }],"
+  - file: app/controllers/devise_overrides/omniauth_callbacks_controller.rb
+    line: 27
+    text: def sign_in_user_on_mobile
+  - file: app/controllers/devise_overrides/omniauth_callbacks_controller.rb
+    line: 39
+    text: mobile_deep_link_base = GlobalConfigService.load('MOBILE_DEEP_LINK_BASE',
+      'chatwootapp')
+  - file: app/controllers/devise_overrides/omniauth_callbacks_controller.rb
+    line: 40
+    text: 'redirect_to "#{mobile_deep_link_base}://auth/saml?#{params}",
+      allow_other_host: true'
+  - file: app/controllers/public/api/v1/inboxes/contacts_controller.rb
+    line: 51
+    text: "params.permit(:identifier, :identifier_hash, :email, :name, :avatar_url,
+      :phone_number, custom_attributes: {})"
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 8
+    text: 'Rails.logger.warn("Rejected webhook for inactive WhatsApp number:
+      #{params[:phone_number]}")'
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 29
+    text: "channel = Channel::Whatsapp.find_by(phone_number: params[:phone_number])"
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 42
+    text: "@whatsapp_channel ||= whatsapp_business_payload_channel ||
+      Channel::Whatsapp.find_by(phone_number: params[:phone_number])"
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 60
+    text: "display_phone_number: metadata[:display_phone_number],"
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 61
+    text: "phone_number_id: metadata[:phone_number_id]"
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 66
+    text: phone_number = params[:phone_number]
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 67
+    text: return false if phone_number.blank?
+  - file: app/controllers/webhooks/whatsapp_controller.rb
+    line: 73
+    text: inactive_numbers_array.include?(phone_number)
+  - file: app/controllers/widgets_controller.rb
+    line: 97
+    text: "# Mobile WebViews (iOS/Android) load content from file:// or null
+      origins,"
+  - file: app/controllers/widgets_controller.rb
+    line: 101
+    text: return false unless @web_widget.allow_mobile_webview?
+  - file: app/drops/contact_drop.rb
+    line: 10
+    text: def phone_number
+  - file: app/drops/contact_drop.rb
+    line: 11
+    text: "@obj.try(:phone_number)"
+  - file: app/helpers/api/v2/accounts/heatmap_helper.rb
+    line: 17
+    text: "# add the dates as the first row, leave an empty cell for the hour column"
+  - file: app/jobs/account/contacts_export_job.rb
+    line: 105
+    text: "%w[id name email phone_number labels]"
+  - file: app/jobs/channels/whatsapp/health_sync_scheduler_job.rb
+    line: 8
+    text: .where('phone_number_health_checked_at <= ? OR
+      phone_number_health_checked_at IS NULL', 6.hours.ago)
+  - file: app/jobs/channels/whatsapp/health_sync_scheduler_job.rb
+    line: 9
+    text: .order(Arel.sql('phone_number_health_checked_at IS NULL DESC,
+      phone_number_health_checked_at ASC'))
+  - file: app/jobs/data_import_job.rb
+    line: 128
+    text: contact.identifier.presence || contact.email.presence ||
+      contact.phone_number.presence
+  - file: app/jobs/data_import_job.rb
+    line: 135
+    text: "@data_import.account.contacts.find_by(phone_number: contact.phone_number)
+      if contact.phone_number.present?"
+  - file: app/jobs/hook_job.rb
+    line: 76
+    text: "# This would have not been a problem if the email and phone number were
+      unique identifiers for contacts at LeadSquared"
+  - file: app/jobs/internal/process_stale_contacts_job.rb
+    line: 3
+    text: "# - have no identification (email, phone_number, and identifier are NULL)"
+  - file: app/jobs/internal/remove_stale_contacts_job.rb
+    line: 3
+    text: "# - have no identification (email, phone_number, and identifier are NULL)"
+  - file: app/jobs/migration/add_search_indexes_job.rb
+    line: 10
+    text: "[:name, :email, :phone_number, :identifier],"
+  - file: app/jobs/migration/add_search_indexes_job.rb
+    line: 13
+    text: "name: 'index_contacts_on_name_email_phone_number_identifier',"
+  - file: app/jobs/webhooks/sms_events_job.rb
+    line: 9
+    text: "channel = Channel::Sms.find_by(phone_number: params[:to])"
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 12
+    text: 'Rails.logger.warn("Inactive WhatsApp channel: #{channel&.phone_number ||
+      "unknown - #{params[:phone_number]}"}")'
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 77
+    text: '# - "from" is the business number; "to" is the contact phone and can be
+      omitted'
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 162
+    text: return unless params[:phone_number]
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 164
+    text: "Channel::Whatsapp.find_by(phone_number: params[:phone_number])"
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 170
+    text: "# we will give priority to the phone_number in the payload"
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 179
+    text: "display_phone_number: metadata[:display_phone_number],"
+  - file: app/jobs/webhooks/whatsapp_events_job.rb
+    line: 180
+    text: "phone_number_id: metadata[:phone_number_id]"
+  - file: app/models/automation_rule.rb
+    line: 57
+    text: mail_subject phone_number priority conversation_language labels
+      private_note captain_condition]
+  - file: app/models/channel/sms.rb
+    line: 6
+    text: "#  phone_number    :string           not null"
+  - file: app/models/channel/sms.rb
+    line: 15
+    text: "#  index_channel_sms_on_phone_number  (phone_number) UNIQUE"
+  - file: app/models/channel/sms.rb
+    line: 22
+    text: "EDITABLE_ATTRS = [:phone_number, { provider_config: {} }].freeze"
+  - file: app/models/channel/sms.rb
+    line: 24
+    text: "validates :phone_number, presence: true, uniqueness: true"
+  - file: app/models/channel/sms.rb
+    line: 53
+    text: "'from' => phone_number,"
+  - file: app/models/channel/twilio_sms.rb
+    line: 14
+    text: "#  phone_number                   :string"
+  - file: app/models/channel/twilio_sms.rb
+    line: 24
+    text: "#  index_channel_twilio_sms_on_account_sid_and_phone_number  (account_si\
+      d,phone_number) UNIQUE"
+  - file: app/models/channel/twilio_sms.rb
+    line: 26
+    text: "#  index_channel_twilio_sms_on_phone_number                  (phone_numb\
+      er) UNIQUE"
+  - file: app/models/channel/twilio_sms.rb
+    line: 47
+    text: "# Must have _one_ of messaging_service_sid _or_ phone_number, and
+      messaging_service_sid is preferred"
+  - file: app/models/channel/twilio_sms.rb
+    line: 48
+    text: "validates :messaging_service_sid, uniqueness: true, presence: true,
+      unless: :phone_number?"
+  - file: app/models/channel/twilio_sms.rb
+    line: 49
+    text: "validates :phone_number, absence: true, if: :messaging_service_sid?"
+  - file: app/models/channel/twilio_sms.rb
+    line: 50
+    text: "validates :phone_number, uniqueness: true, allow_nil: true"
+  - file: app/models/channel/twilio_sms.rb
+    line: 88
+    text: "{ from: phone_number }"
+  - file: app/models/channel/web_widget.rb
+    line: 54
+    text: 5 => :allow_mobile_webview,
+  - file: app/models/channel/web_widget.rb
+    line: 97
+    text: "'field_type': 'standard', 'label': 'Phone number', 'name': 'phoneNumber',
+      'type': 'text', 'required': false, 'enabled': false"
+  - file: app/models/channel/whatsapp.rb
+    line: 9
+    text: "#  phone_number                   :string           not null"
+  - file: app/models/channel/whatsapp.rb
+    line: 10
+    text: "#  phone_number_health            :jsonb            not null"
+  - file: app/models/channel/whatsapp.rb
+    line: 11
+    text: "#  phone_number_health_checked_at :datetime"
+  - file: app/models/channel/whatsapp.rb
+    line: 12
+    text: "#  phone_number_health_error      :string"
+  - file: app/models/channel/whatsapp.rb
+    line: 21
+    text: "#  index_channel_whatsapp_on_phone_number                    (phone_numb\
+      er) UNIQUE"
+  - file: app/models/channel/whatsapp.rb
+    line: 22
+    text: "#  index_channel_whatsapp_on_phone_number_health_checked_at  (phone_numb\
+      er_health_checked_at)"
+  - file: app/models/channel/whatsapp.rb
+    line: 30
+    text: "EDITABLE_ATTRS = [:phone_number, :provider, { provider_config: {}
+      }].freeze"
+  - file: app/models/channel/whatsapp.rb
+    line: 38
+    text: "validates :phone_number, presence: true, uniqueness: true"
+  - file: app/models/contact.rb
+    line: 20
+    text: "#  phone_number          :string"
+  - file: app/models/contact.rb
+    line: 34
+    text: "#  index_contacts_on_name_email_phone_number_identifier  (name,email,pho\
+      ne_number,identifier) USING gin"
+  - file: app/models/contact.rb
+    line: 35
+    text: "#  index_contacts_on_nonempty_fields                     (account_id,ema\
+      il,phone_number,identifier) WHERE (((email)::text <> ''::text) OR
+      ((phone_number)::text <> ''::text) OR ((identifier)::text <> ''::text))"
+  - file: app/models/contact.rb
+    line: 36
+    text: "#  index_contacts_on_phone_number_and_account_id         (phone_number,a\
+      ccount_id)"
+  - file: app/models/contact.rb
+    line: 37
+    text: "#  index_resolved_contact_account_id                     (account_id)
+      WHERE (((email)::text <> ''::text) OR ((phone_number)::text <> ''::text)
+      OR ((identifier)::text <> ''::text))"
+  - file: app/models/contact.rb
+    line: 54
+    text: validates :phone_number,
+  - file: app/models/contact.rb
+    line: 56
+    text: "format: { with: /\\A\\+[1-9]\\d{1,14}\\z/, message:
+      I18n.t('errors.contacts.phone_number.invalid') }"
+  - file: app/models/contact.rb
+    line: 126
+    text: "# 1. Have no identification (email, phone_number, and identifier are NULL
+      or empty string)"
+  - file: app/models/contact.rb
+    line: 131
+    text: .where('contacts.phone_number IS NULL OR contacts.phone_number = ?', '')
+  - file: app/models/contact.rb
+    line: 149
+    text: "phone_number: phone_number,"
+  - file: app/models/contact.rb
+    line: 169
+    text: "phone_number: phone_number,"
+  - file: app/models/contact.rb
+    line: 179
+    text: where("contacts.email <> '' OR contacts.phone_number <> '' OR
+      contacts.identifier <> ''")
+  - file: app/models/contact.rb
+    line: 183
+    text: phone_number_format
+  - file: app/models/contact.rb
+    line: 199
+    text: def phone_number_format
+  - file: app/models/contact.rb
+    line: 200
+    text: return if phone_number.blank?
+  - file: app/models/contact.rb
+    line: 202
+    text: self.phone_number = phone_number_was unless
+      phone_number.match?(/\A\+[1-9]\d{1,14}\z/)
+  - file: app/models/custom_attribute_definition.rb
+    line: 28
+    text: :contact => %w[name email phone_number identifier country_code city
+      company_name created_at last_activity_at referer blocked],
+  - file: app/models/inbox.rb
+    line: 194
+    text: "\"#{ENV.fetch('FRONTEND_URL',
+      nil)}/webhooks/sms/#{channel.phone_number.delete_prefix('+')}\""
+  - file: app/models/inbox.rb
+    line: 198
+    text: "\"#{ENV.fetch('FRONTEND_URL',
+      nil)}/webhooks/whatsapp/#{channel.phone_number}\""
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 51
+    text: return if @contact.phone_number.blank?
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 54
+    text: "{ source_id: @contact.phone_number.delete('+'), inbox: inbox }"
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 58
+    text: return if @contact.phone_number.blank?
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 60
+    text: "{ source_id: @contact.phone_number, inbox: inbox }"
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 64
+    text: return if @contact.phone_number.blank?
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 68
+    text: "{ source_id: @contact.phone_number, inbox: inbox }"
+  - file: app/services/contacts/contactable_inboxes_service.rb
+    line: 70
+    text: '{ source_id: "whatsapp:#{@contact.phone_number}", inbox: inbox }'
+  - file: app/services/contacts/filter_service.rb
+    line: 23
+    text: if query_hash['attribute_key'] == 'phone_number'
+  - file: app/services/contacts/sync_attributes.rb
+    line: 25
+    text: "# A contact with an email, phone number, identifier or social details is
+      a lead"
+  - file: app/services/contacts/sync_attributes.rb
+    line: 26
+    text: return unless @contact.email.present? || @contact.phone_number.present? ||
+      @contact.identifier.present? || social_details_present?
+  - file: app/services/crm/base_processor_service.rb
+    line: 59
+    text: contact.present? && (contact.email.present? ||
+      contact.phone_number.present? || has_social_profile)
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 13
+    text: "# The email address and phone fields are used as the default search
+      criteria."
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 15
+    text: '# We pass the "SearchBy" attribute with value "Phone" when a
+      MXDuplicateEntryException'
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 16
+    text: "# occurs, indicating a duplicate mobile number match that the default
+      search missed."
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 26
+    text: raise unless duplicate_phone_error?(e) && lead_data.key?('Mobile')
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 28
+    text: Rails.logger.warn 'LeadSquared duplicate phone detected, retrying with
+      SearchBy=Phone'
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 29
+    text: response = post(path, {}, formatted_data + [{ 'Attribute' => 'SearchBy',
+      'Value' => 'Phone' }])
+  - file: app/services/crm/leadsquared/api/lead_client.rb
+    line: 56
+    text: def duplicate_phone_error?(error)
+  - file: app/services/crm/leadsquared/lead_finder_service.rb
+    line: 20
+    text: lead_id = find_by_phone_number(contact) if lead_id.blank?
+  - file: app/services/crm/leadsquared/lead_finder_service.rb
+    line: 31
+    text: def find_by_phone_number(contact)
+  - file: app/services/crm/leadsquared/lead_finder_service.rb
+    line: 32
+    text: return if contact.phone_number.blank?
+  - file: app/services/crm/leadsquared/lead_finder_service.rb
+    line: 36
+    text: return if lead_data.blank? || lead_data['Mobile'].nil?
+  - file: app/services/crm/leadsquared/lead_finder_service.rb
+    line: 38
+    text: search_by_field(lead_data['Mobile'])
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 23
+    text: "'Mobile' => formatted_phone_number,"
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 28
+    text: def formatted_phone_number
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 29
+    text: "# it seems like leadsquared needs a different phone number format"
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 32
+    text: return nil if contact.phone_number.blank?
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 34
+    text: parsed = TelephoneNumber.parse(contact.phone_number)
+  - file: app/services/crm/leadsquared/mappers/contact_mapper.rb
+    line: 35
+    text: return contact.phone_number unless parsed.valid?
+  - file: app/services/crm/leadsquared/processor_service.rb
+    line: 64
+    text: "# may not be marked as unique, same with the phone number field"
+  - file: app/services/csat_survey_service.rb
+    line: 111
+    text: phone_number = conversation.contact_inbox.source_id
+  - file: app/services/csat_survey_service.rb
+    line: 115
+    text: message_id = inbox.channel.provider_service.send_template(phone_number,
+      template_info, message)
+  - file: app/services/csat_survey_service.rb
+    line: 155
+    text: phone_number = conversation.contact_inbox.source_id
+  - file: app/services/csat_survey_service.rb
+    line: 161
+    text: "phone_number: phone_number,"
+  - file: app/services/data_import/contact_manager.rb
+    line: 14
+    text: contact_params = params.slice(:email, :identifier, :phone_number)
+  - file: app/services/data_import/contact_manager.rb
+    line: 15
+    text: contact_params[:phone_number] =
+      format_phone_number(contact_params[:phone_number]) if
+      contact_params[:phone_number].present?
+  - file: app/services/data_import/contact_manager.rb
+    line: 23
+    text: contact ||= find_contact_by_phone_number(params)
+  - file: app/services/data_import/contact_manager.rb
+    line: 41
+    text: def find_contact_by_phone_number(params)
+  - file: app/services/data_import/contact_manager.rb
+    line: 42
+    text: return unless params[:phone_number]
+  - file: app/services/data_import/contact_manager.rb
+    line: 44
+    text: "@account.contacts.find_by(phone_number:
+      format_phone_number(params[:phone_number]))"
+  - file: app/services/data_import/contact_manager.rb
+    line: 47
+    text: def format_phone_number(phone_number)
+  - file: app/services/data_import/contact_manager.rb
+    line: 48
+    text: "phone_number.start_with?('+') ? phone_number : \"+#{phone_number}\""
+  - file: app/services/data_import/contact_manager.rb
+    line: 54
+    text: contact.phone_number = format_phone_number(params[:phone_number]) if
+      params[:phone_number].present?
+  - file: app/services/data_import/contact_manager.rb
+    line: 66
+    text: "contact.assign_attributes(custom_attributes:
+      contact.custom_attributes.merge(params.except(:identifier, :email, :name,
+      :phone_number)))"
+  - file: app/services/data_imports/freshdesk/metadata.rb
+    line: 13
+    text: "raw_phone: contact['phone'],"
+  - file: app/services/data_imports/freshdesk/normalizer.rb
+    line: 9
+    text: "'phone' => contact['mobile'].presence || contact['phone'],"
+  - file: app/services/data_imports/freshdesk/source_bucket.rb
+    line: 5
+    text: 3 => 'phone',
+  - file: app/services/data_imports/freshdesk/source_bucket.rb
+    line: 23
+    text: 21 => 'mobile_chat_sdk',
+  - file: app/services/data_imports/freshdesk/source_bucket.rb
+    line: 30
+    text: "'phone' => { key: 'phone', name: 'Phone' },"
+  - file: app/services/data_imports/freshdesk/source_bucket.rb
+    line: 37
+    text: "'mobihelp' => { key: 'mobile', name: 'Mobile' },"
+  - file: app/services/data_imports/freshdesk/source_bucket.rb
+    line: 48
+    text: "'mobile_chat_sdk' => { key: 'mobile', name: 'Mobile' },"
+  - file: app/services/data_imports/importer.rb
+    line: 18
+    text: PHONE_WITHOUT_PLUS_REGEX = /\A[1-9]\d{1,14}\z/
+  - file: app/services/data_imports/importer.rb
+    line: 273
+    text: return contact_payload if contact_payload['email'].present? ||
+      contact_payload['phone'].present? || contact_payload['name'].present?
+  - file: app/services/data_imports/importer.rb
+    line: 307
+    text: updates[:phone_number] = attrs[:phone_number] if
+      contact_phone_number_available?(contact, attrs[:phone_number])
+  - file: app/services/data_imports/importer.rb
+    line: 324
+    text: def contact_phone_number_available?(contact, phone_number)
+  - file: app/services/data_imports/importer.rb
+    line: 325
+    text: return false if contact.phone_number.present? || phone_number.blank?
+  - file: app/services/data_imports/importer.rb
+    line: 327
+    text: "@account.contacts.where.not(id: contact.id).where(phone_number:
+      phone_number).empty?"
+  - file: app/services/data_imports/importer.rb
+    line: 333
+    text: phone_number = normalized_phone(contact_payload)
+  - file: app/services/data_imports/importer.rb
+    line: 344
+    text: "return @account.contacts.find_by(phone_number: phone_number) if
+      phone_number.present?"
+  - file: app/services/data_imports/importer.rb
+    line: 354
+    text: "phone_number: normalized_phone(contact_payload),"
+  - file: app/services/data_imports/importer.rb
+    line: 843
+    text: def normalized_phone(contact_payload)
+  - file: app/services/data_imports/importer.rb
+    line: 844
+    text: phone = contact_payload['phone'].to_s.strip
+  - file: app/services/data_imports/importer.rb
+    line: 845
+    text: phone = "+#{phone}" if phone.match?(PHONE_WITHOUT_PLUS_REGEX)
+  - file: app/services/data_imports/importer.rb
+    line: 846
+    text: "phone.match?(E164_REGEX) ? phone : nil"
+  - file: app/services/data_imports/intercom/source_bucket.rb
+    line: 9
+    text: "'phone' => { key: 'phone', name: 'Phone' },"
+  - file: app/services/data_imports/intercom/source_bucket.rb
+    line: 10
+    text: "'phone_call' => { key: 'phone', name: 'Phone' },"
+  - file: app/services/data_imports/intercom/source_bucket.rb
+    line: 11
+    text: "'phone_switch' => { key: 'phone', name: 'Phone' },"
+  - file: app/services/data_imports/intercom/source.rb
+    line: 134
+    text: "raw_phone: contact_payload['phone']"
+  - file: app/services/line/send_on_line_service.rb
+    line: 48
+    text: "# LINE mobile app lazy-loads images and may fetch them well after the
+      message is sent."
+  - file: app/services/llm_formatter/contact_llm_formatter.rb
+    line: 27
+    text: 'attributes << "Phone: #{@record.phone_number}"'
+  - file: app/services/request_device_info.rb
+    line: 2
+    text: "# the Chatwoot mobile app's custom headers and legacy mobile UAs the same
+      way"
+  - file: app/services/request_device_info.rb
+    line: 5
+    text: "# CFNetwork UAs cannot distinguish iPhone from iPad; both get labelled
+      iPhone here."
+  - file: app/services/request_device_info.rb
+    line: 6
+    text: LEGACY_MOBILE_UAS = [
+  - file: app/services/request_device_info.rb
+    line: 8
+    text: "{ match: %r{\\AChatwoot/.*CFNetwork.*Darwin}, platform: 'iPhone', device:
+      'iPhone' }"
+  - file: app/services/request_device_info.rb
+    line: 10
+    text: private_constant :LEGACY_MOBILE_UAS
+  - file: app/services/request_device_info.rb
+    line: 18
+    text: "@to_h ||= mobile_client_headers || browser_attributes"
+  - file: app/services/request_device_info.rb
+    line: 25
+    text: '# A clean "on X" label: the device for mobile clients, the OS for desktop
+      browsers.'
+  - file: app/services/request_device_info.rb
+    line: 27
+    text: "@mobile ? to_h[:device_name] : to_h[:platform_name]"
+  - file: app/services/request_device_info.rb
+    line: 32
+    text: def mobile_client_headers
+  - file: app/services/request_device_info.rb
+    line: 36
+    text: "@mobile = true"
+  - file: app/services/request_device_info.rb
+    line: 60
+    text: patch_for_legacy_mobile(attrs)
+  - file: app/services/request_device_info.rb
+    line: 66
+    text: return 'iPhone' if normalized_platform == 'ios'
+  - file: app/services/request_device_info.rb
+    line: 71
+    text: def patch_for_legacy_mobile(attrs)
+  - file: app/services/request_device_info.rb
+    line: 74
+    text: hit = LEGACY_MOBILE_UAS.find { |m|
+      @request.user_agent.to_s.match?(m[:match]) }
+  - file: app/services/request_device_info.rb
+    line: 77
+    text: "@mobile = true"
+  - file: app/services/request_device_info.rb
+    line: 79
+    text: "browser_name: 'Chatwoot Mobile',"
+  - file: app/services/search_service.rb
+    line: 37
+    text: ILIKE :search OR contacts.phone_number ILIKE :search OR
+      contacts.identifier ILIKE :search
+  - file: app/services/search_service.rb
+    line: 167
+    text: '"name ILIKE :search OR email ILIKE :search OR phone_number'
+  - file: app/services/sms/incoming_message_service.rb
+    line: 31
+    text: def phone_number
+  - file: app/services/sms/incoming_message_service.rb
+    line: 35
+    text: def formatted_phone_number
+  - file: app/services/sms/incoming_message_service.rb
+    line: 36
+    text: TelephoneNumber.parse(phone_number).international_number
+  - file: app/services/sms/incoming_message_service.rb
+    line: 74
+    text: "name: formatted_phone_number,"
+  - file: app/services/sms/incoming_message_service.rb
+    line: 75
+    text: "phone_number: phone_number"
+  - file: app/services/sms/oneoff_sms_campaign_service.rb
+    line: 21
+    text: next if contact.phone_number.blank?
+  - file: app/services/sms/oneoff_sms_campaign_service.rb
+    line: 24
+    text: "send_message(to: contact.phone_number, content: content)"
+  - file: app/services/social_link_parser.rb
+    line: 48
+    text: return extract_whatsapp_phone(uri) if platform == :whatsapp
+  - file: app/services/social_link_parser.rb
+    line: 59
+    text: "# wa.me/1234567890 or api.whatsapp.com/send?phone=1234567890"
+  - file: app/services/social_link_parser.rb
+    line: 60
+    text: def extract_whatsapp_phone(uri)
+  - file: app/services/social_link_parser.rb
+    line: 61
+    text: phone = CGI.parse(uri.query.to_s)['phone']&.first
+  - file: app/services/social_link_parser.rb
+    line: 62
+    text: phone = uri.path.to_s.delete_prefix('/').delete_suffix('/') if phone.blank?
+  - file: app/services/social_link_parser.rb
+    line: 63
+    text: phone.presence&.gsub(/[^\d]/, '')
+  - file: app/services/telegram/incoming_message_service.rb
+    line: 186
+    text: "fallback_title: contact_card['phone_number'].to_s,"
+  - file: app/services/twilio/delivery_status_service.rb
+    line: 52
+    text: "::Channel::TwilioSms.find_by(account_sid: params[:AccountSid],
+      phone_number: params[:From])"
+  - file: app/services/twilio/health_service.rb
+    line: 16
+    text: "webhooks = channel.messaging_service_sid? ? messaging_service_webhooks :
+      phone_number_webhooks"
+  - file: app/services/twilio/health_service.rb
+    line: 43
+    text: return true unless sender[:type] == 'phone_number'
+  - file: app/services/twilio/health_service.rb
+    line: 68
+    text: "type: 'phone_number',"
+  - file: app/services/twilio/health_service.rb
+    line: 70
+    text: "label: number.phone_number,"
+  - file: app/services/twilio/health_service.rb
+    line: 88
+    text: "@number = channel.client.incoming_phone_numbers.list(phone_number:
+      channel.phone_number).first"
+  - file: app/services/twilio/health_service.rb
+    line: 89
+    text: 'raise "Phone number #{channel.phone_number} was not found in the
+      connected Twilio account" if @number.nil?'
+  - file: app/services/twilio/health_service.rb
+    line: 102
+    text: def phone_number_webhooks
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 33
+    text: "phone_number: params[:To])"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 57
+    text: "# Twilio WhatsApp phone payloads arrive as `whatsapp:+E164`. BSUID-only"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 59
+    text: "# nil when `From` is not phone-shaped."
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 60
+    text: def phone_number
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 62
+    text: return unless twilio_whatsapp_phone_source?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 67
+    text: "# Keep Twilio WhatsApp source ids in Twilio's native shape. Phone
+      messages use"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 69
+    text: def normalized_phone_number
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 70
+    text: return phone_number unless twilio_channel.whatsapp?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 75
+    text: def formatted_phone_number
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 76
+    text: return if phone_number.blank?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 78
+    text: TelephoneNumber.parse(phone_number).international_number
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 86
+    text: "source_id = twilio_channel.whatsapp? ? normalized_phone_number :
+      params[:From]"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 91
+    text: "# Update existing contact name if ProfileName is available and current
+      name is just phone number"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 121
+    text: "phone_number: phone_number.presence,"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 122
+    text: "additional_attributes: additional_attributes, phone_number_candidates:
+      twilio_whatsapp_phone_number_candidates"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 127
+    text: params[:ProfileName].presence || formatted_phone_number ||
+      twilio_whatsapp_display_identifier || params[:From]
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 194
+    text: "# Only update if current name exactly matches a phone number candidate"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 195
+    text: return unless contact_name_matches_phone_number?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 200
+    text: def contact_name_matches_phone_number?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 201
+    text: return false if phone_number.blank?
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 203
+    text: phone_name_candidates.include?(@contact.name)
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 206
+    text: def phone_name_candidates
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 207
+    text: "[phone_number, formatted_phone_number,
+      *formatted_twilio_whatsapp_phone_number_candidates].compact_blank.uniq"
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 210
+    text: def formatted_twilio_whatsapp_phone_number_candidates
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 211
+    text: Array(twilio_whatsapp_phone_number_candidates).flat_map do |candidate|
+  - file: app/services/twilio/incoming_message_service.rb
+    line: 212
+    text: "[candidate, TelephoneNumber.parse(candidate).international_number]"
+  - file: app/services/twilio/oneoff_sms_campaign_service.rb
+    line: 21
+    text: next if contact.phone_number.blank?
+  - file: app/services/twilio/oneoff_sms_campaign_service.rb
+    line: 26
+    text: "channel.send_message(to: contact.phone_number, body: content)"
+  - file: app/services/twilio/oneoff_sms_campaign_service.rb
+    line: 28
+    text: 'Rails.logger.error("[Twilio Campaign #{campaign.id}] Failed to send to
+      #{contact.phone_number}: #{e.message}")'
+  - file: app/services/twilio/send_on_twilio_service.rb
+    line: 2
+    text: "def send_csat_template_message(phone_number:, content_sid:,
+      content_variables: {})"
+  - file: app/services/twilio/send_on_twilio_service.rb
+    line: 4
+    text: "to: phone_number,"
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 12
+    text: update_phone_number
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 28
+    text: def update_phone_number
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 29
+    text: "phone_number = twilio_client.incoming_phone_numbers.list(phone_number:
+      channel.phone_number).first"
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 31
+    text: if phone_number.nil?
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 32
+    text: 'Rails.logger.warn "TWILIO_PHONE_NUMBER_NOT_FOUND:
+      #{channel.phone_number}"'
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 35
+    text: .incoming_phone_numbers(phone_number.sid)
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 42
+    text: sender = senders.find { |item| item.sender_id == channel.phone_number }
+  - file: app/services/twilio/webhook_setup_service.rb
+    line: 45
+    text: 'Rails.logger.warn "TWILIO_WHATSAPP_SENDER_NOT_FOUND:
+      #{channel.phone_number}"'
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 10
+    text: "phone_number: phone_number.presence"
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 14
+    text: def twilio_whatsapp_phone_source?
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 28
+    text: twilio_whatsapp_phone_source_id || twilio_whatsapp_bsuid_source_id,
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 38
+    text: def twilio_whatsapp_phone_source_id
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 39
+    text: return if phone_number.blank?
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 41
+    text: Whatsapp::PhoneNumberNormalizationService.new(inbox).normalize_and_find_contact_by_provider("whatsapp:#{phone_number}",
+      :twilio)
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 44
+    text: def twilio_whatsapp_phone_number_candidates
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 45
+    text: return unless twilio_channel.whatsapp? && phone_number.present?
+  - file: app/services/twilio/whatsapp_identifier_helper.rb
+    line: 47
+    text: candidates =
+      Whatsapp::PhoneNumberNormalizationService.new(inbox).phone_number_candidates(phone_number.delete_prefix('+')).drop(1)
+  - file: app/services/website_branding_service.rb
+    line: 8
+    text: "DATA_DEFAULTS = { description: nil, slogan: nil, phone: nil, address:
+      nil, links: nil, stock: nil, industries: [], is_nsfw: false }.freeze"
+  - file: app/services/website_branding_service.rb
+    line: 100
+    text: next if href.blank? || href.start_with?('#', 'javascript:', 'mailto:',
+      'tel:')
+  - file: app/services/whatsapp/authentication_template_guard.rb
+    line: 7
+    text: return I18n.t('errors.whatsapp.authentication_template_requires_phone') if
+      authentication_template?
+  - file: app/services/whatsapp/business_profile_service.rb
+    line: 12
+    text: "\"#{BASE_URI}/#{@api_version}/#{@channel.provider_config['phone_number_i\
+      d']}/whatsapp_business_profile\","
+  - file: app/services/whatsapp/business_profile_service.rb
+    line: 28
+    text: phone_number_id = @channel.provider_config['phone_number_id']
+  - file: app/services/whatsapp/business_profile_service.rb
+    line: 29
+    text: 'Rails.logger.warn("[WHATSAPP HEALTH] Business profile unavailable:
+      phone_number_id=#{phone_number_id} error_class=#{e.class.name}")'
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 2
+    text: def initialize(account, waba_info, phone_info, access_token)
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 5
+    text: "@phone_info = phone_info"
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 13
+    text: "raise I18n.t('errors.whatsapp.phone_number_already_exists', phone_number:
+      existing_channel.phone_number) if existing_channel"
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 23
+    text: raise ArgumentError, 'Phone info is required' if @phone_info.blank?
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 29
+    text: "phone_number: @phone_info[:phone_number]"
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 44
+    text: "phone_number: @phone_info[:phone_number],"
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 53
+    text: "phone_number_id: @phone_info[:phone_number_id],"
+  - file: app/services/whatsapp/channel_creation_service.rb
+    line: 70
+    text: business_name = @phone_info[:business_name] || @waba_info[:business_name]
+  - file: app/services/whatsapp/contact_info_request_eligibility_service.rb
+    line: 31
+    text: return :phone_already_available if
+      conversation.contact.phone_number.present?
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 10
+    text: phone_identity = shared_phone_identity
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 11
+    text: return if phone_identity.blank?
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 16
+    text: state = sync_contact_info_response(phone_identity)
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 88
+    text: def shared_phone_identity
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 89
+    text: phone = Array(contact_payload[:phones]).first&.with_indifferent_access ||
+      {}.with_indifferent_access
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 90
+    text: wa_id = phone[:wa_id].to_s
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 91
+    text: 'return { phone_number: "+#{wa_id}", source_id: wa_id } if
+      wa_id.match?(/\A\d{1,15}\z/)'
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 93
+    text: parsed_number = TelephoneNumber.parse(phone[:phone].to_s)
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 96
+    text: phone_number = parsed_number.e164_number
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 97
+    text: "{ phone_number: phone_number, source_id: phone_number.delete_prefix('+')
+      }"
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 100
+    text: def identity_conflict?(phone_identity)
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 101
+    text: phone_number = phone_identity[:phone_number]
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 102
+    text: return true if contact.phone_number.present? && contact.phone_number !=
+      phone_number
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 103
+    text: "return true if inbox.contact_inboxes.where(source_id:
+      phone_identity[:source_id]).where.not(contact_id: contact.id).exists?"
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 105
+    text: "contact.account.contacts.where(phone_number: phone_number).where.not(id:
+      contact.id).exists?"
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 108
+    text: def sync_contact_info_response(phone_identity)
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 112
+    text: "identity_conflict?(phone_identity) ? 'identity_conflict' :
+      sync_phone_identity(phone_identity)"
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 117
+    text: def sync_phone_identity(phone_identity)
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 119
+    text: "source_ids: [phone_identity[:source_id]], phone_number:
+      phone_identity[:phone_number]"
+  - file: app/services/whatsapp/contact_info_response_service.rb
+    line: 121
+    text: "contact.reload.phone_number == phone_identity[:phone_number] ? 'shared' :
+      'identity_conflict'"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 6
+    text: "@phone_number_id = params[:phone_number_id]"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 15
+    text: phone_info = fetch_phone_info(access_token)
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 17
+    text: channel = create_or_reauthorize_channel(access_token, phone_info)
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 39
+    text: def fetch_phone_info(access_token)
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 40
+    text: Whatsapp::PhoneInfoService.new(
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 41
+    text: "@waba_id, @phone_number_id, access_token, expected_phone_number:
+      reauthorizing_channel&.phone_number"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 45
+    text: "# When phone_number_id is omitted (coexistence completions can leave it
+      blank), this lets"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 46
+    text: "# PhoneInfoService match the WABA number against the channel being
+      reauthorized instead of"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 56
+    text: def create_or_reauthorize_channel(access_token, phone_info)
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 61
+    text: "phone_number_id: @phone_number_id,"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 63
+    text: ).perform(access_token, phone_info)
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 65
+    text: "waba_info = { waba_id: @waba_id, business_name:
+      phone_info[:business_name] }"
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 66
+    text: Whatsapp::ChannelCreationService.new(@account, waba_info, phone_info,
+      access_token).perform
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 77
+    text: 'Rails.logger.info "[WHATSAPP] Channel #{channel.phone_number} health
+      check passed"'
+  - file: app/services/whatsapp/embedded_signup_service.rb
+    line: 80
+    text: 'Rails.logger.error "[WHATSAPP] Health check failed for channel
+      #{channel.phone_number}: #{e.message}"'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 24
+    text: def fetch_phone_numbers(waba_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 26
+    text: '"#{BASE_URI}/#{@api_version}/#{waba_id}/phone_numbers",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 30
+    text: handle_response(response, 'WABA phone numbers fetch failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 33
+    text: def fetch_all_phone_numbers(waba_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 34
+    text: phone_numbers = []
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 39
+    text: '"#{BASE_URI}/#{@api_version}/#{waba_id}/phone_numbers",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 43
+    text: data = handle_response(response, 'WABA phone numbers fetch failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 44
+    text: phone_numbers.concat(data['data'] || [])
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 49
+    text: phone_numbers
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 62
+    text: def fetch_business_profile(phone_number_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 64
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}/whatsapp_business_profile",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 90
+    text: "def fetch_phone_number(phone_number_id, fields: nil)"
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 92
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 97
+    text: handle_response(response, 'Phone number fetch failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 112
+    text: def register_phone_number(phone_number_id, pin)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 114
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}/register",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 119
+    text: handle_response(response, 'Phone registration failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 124
+    text: def deregister_phone_number(phone_number_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 126
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}/deregister",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 130
+    text: handle_response(response, 'Phone deregistration failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 133
+    text: def phone_number_verified?(phone_number_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 135
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 140
+    text: data = handle_response(response, 'Phone status check failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 144
+    text: "def subscribe_phone_number_webhook(waba_id, phone_number_id,
+      callback_url, verify_token, subscribed_fields: nil)"
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 146
+    text: "# subscribed_fields (incl. `calls` when voice is enabled) is declared
+      here; the phone-level POST has no such field."
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 149
+    text: "# Phone-level override takes precedence over WABA-level, so numbers on
+      one WABA can route to different URLs."
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 150
+    text: override_phone_number_callback(phone_number_id, callback_url, verify_token)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 163
+    text: def override_phone_number_callback(phone_number_id, callback_url,
+      verify_token)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 165
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 175
+    text: handle_response(response, 'Phone number webhook callback override failed')
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 178
+    text: def clear_phone_number_callback_override(phone_number_id)
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 180
+    text: '"#{BASE_URI}/#{@api_version}/#{phone_number_id}",'
+  - file: app/services/whatsapp/facebook_api_client.rb
+    line: 189
+    text: handle_response(response, 'Phone number webhook callback clear failed')
+  - file: app/services/whatsapp/health_service.rb
+    line: 22
+    text: display_phone_number
+  - file: app/services/whatsapp/health_service.rb
+    line: 54
+    text: previous_health = @channel.phone_number_health
+  - file: app/services/whatsapp/health_service.rb
+    line: 71
+    text: phone_health =
+      format_phone_health_response(fetch_graph_data(@channel.provider_config['phone_number_id'],
+      phone_health_fields))
+  - file: app/services/whatsapp/health_service.rb
+    line: 74
+    text: "[phone_health.merge(business_health, profile_health || {}), nil]"
+  - file: app/services/whatsapp/health_service.rb
+    line: 76
+    text: return [phone_health, e] if phone_health
+  - file: app/services/whatsapp/health_service.rb
+    line: 84
+    text: raise ArgumentError, 'Phone number ID is missing' if
+      @channel.provider_config['phone_number_id'].blank?
+  - file: app/services/whatsapp/health_service.rb
+    line: 103
+    text: def phone_health_fields
+  - file: app/services/whatsapp/health_service.rb
+    line: 111
+    text: display_phone_number
+  - file: app/services/whatsapp/health_service.rb
+    line: 145
+    text: def format_phone_health_response(phone_response)
+  - file: app/services/whatsapp/health_service.rb
+    line: 147
+    text: "id: phone_response['id'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 148
+    text: "display_phone_number: phone_response['display_phone_number'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 149
+    text: "verified_name: phone_response['verified_name'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 150
+    text: "name_status: phone_response['name_status'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 151
+    text: "quality_rating: phone_response['quality_rating'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 152
+    text: "messaging_limit_tier:
+      phone_response['whatsapp_business_manager_messaging_limit'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 153
+    text: "status: phone_response['status'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 154
+    text: "account_mode: phone_response['account_mode'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 155
+    text: "code_verification_status: phone_response['code_verification_status'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 156
+    text: "webhook_configuration: phone_response['webhook_configuration'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 158
+    text: "throughput: phone_response['throughput'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 159
+    text: "throughput_level: phone_response.dig('throughput', 'level'),"
+  - file: app/services/whatsapp/health_service.rb
+    line: 160
+    text: "last_onboarded_time: phone_response['last_onboarded_time'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 161
+    text: "is_on_biz_app: phone_response['is_on_biz_app'],"
+  - file: app/services/whatsapp/health_service.rb
+    line: 162
+    text: "platform_type: phone_response['platform_type']"
+  - file: app/services/whatsapp/health_service.rb
+    line: 181
+    text: '"#{frontend_url}/webhooks/whatsapp/#{@channel.phone_number}"'
+  - file: app/services/whatsapp/health_service.rb
+    line: 188
+    text: "phone_number_health: health_status.slice(*PERSISTED_FIELDS),"
+  - file: app/services/whatsapp/health_service.rb
+    line: 189
+    text: "phone_number_health_checked_at: attempted_at,"
+  - file: app/services/whatsapp/health_service.rb
+    line: 190
+    text: "phone_number_health_error: error&.message&.truncate(500)"
+  - file: app/services/whatsapp/health_service.rb
+    line: 203
+    text: "phone_number_health_checked_at: attempted_at,"
+  - file: app/services/whatsapp/health_service.rb
+    line: 204
+    text: "phone_number_health_error: error.message.truncate(500)"
+  - file: app/services/whatsapp/health_service.rb
+    line: 211
+    text: .where('phone_number_health_checked_at < ? OR
+      phone_number_health_checked_at IS NULL', attempted_at)
+  - file: app/services/whatsapp/health_service.rb
+    line: 219
+    text: "'[WHATSAPP HEALTH] risky_phone_number ' \\"
+  - file: app/services/whatsapp/health_service.rb
+    line: 221
+    text: '"phone_number_id=#{health_status[:id]}
+      quality_rating=#{health_status[:quality_rating]} " \'
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 4
+    text: "def perform(source_ids: [], username: nil, phone_number: nil)"
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 6
+    text: update_contact(source_ids, username, phone_number)
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 24
+    text: def update_contact(source_ids, username, phone_number)
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 27
+    text: update_contact_phone_number(phone_number)
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 32
+    text: def update_contact_phone_number(phone_number)
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 33
+    text: phone_number = phone_number.presence
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 34
+    text: return if phone_number.blank? || synced_contact.phone_number.present?
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 35
+    text: "return if synced_contact.account.contacts.where(phone_number:
+      phone_number).where.not(id: synced_contact.id).exists?"
+  - file: app/services/whatsapp/identifier_sync_service.rb
+    line: 37
+    text: "synced_contact.update!(phone_number: phone_number)"
+  - file: app/services/whatsapp/identity_source_id_orderer.rb
+    line: 2
+    text: pattr_initialize [:inbox!, :phone_source_id, :source_ids!]
+  - file: app/services/whatsapp/identity_source_id_orderer.rb
+    line: 6
+    text: default_order = [phone_source_id, *identifiers].compact_blank.uniq
+  - file: app/services/whatsapp/identity_source_id_orderer.rb
+    line: 7
+    text: return default_order unless addressable_identifiers? &&
+      phone_source_id.present?
+  - file: app/services/whatsapp/identity_source_id_orderer.rb
+    line: 8
+    text: return default_order if contact_inbox_has_conversations?(phone_source_id)
+  - file: app/services/whatsapp/identity_source_id_orderer.rb
+    line: 13
+    text: "[existing_identifier, *(identifiers - [existing_identifier]),
+      phone_source_id].compact_blank.uniq"
+  - file: app/services/whatsapp/in_reply_to_message_finder.rb
+    line: 18
+    text: "# Phone-scoped and BSUID-scoped WAMIDs can carry the same message token"
+  - file: app/services/whatsapp/incoming_contact_message_handler.rb
+    line: 26
+    text: "phones = contact[:phones].presence || [{ phone: 'Phone number is not
+      available' }]"
+  - file: app/services/whatsapp/incoming_contact_message_handler.rb
+    line: 35
+    text: phones.each do |phone|
+  - file: app/services/whatsapp/incoming_contact_message_handler.rb
+    line: 39
+    text: "fallback_title: phone[:phone].to_s,"
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 118
+    text: "# on the phone backed thread it can actually reply through."
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 202
+    text: "# Only update if current name exactly matches a phone number candidate"
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 203
+    text: return unless contact_name_matches_phone_number?
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 208
+    text: def contact_name_matches_phone_number?
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 209
+    text: return false if (message_phone_number =
+      whatsapp_phone_number(messages_data.first[:from])).blank?
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 211
+    text: phone_number_candidates(message_phone_number).any? do |number|
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 212
+    text: phone_number = "+#{number}"
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 213
+    text: formatted_phone_number =
+      TelephoneNumber.parse(phone_number).international_number
+  - file: app/services/whatsapp/incoming_message_base_service.rb
+    line: 214
+    text: "@contact.name == phone_number || @contact.name == formatted_phone_number"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 14
+    text: "# The name falls back to the phone number rather than to the first source
+      id: that one is now"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 22
+    text: "update_whatsapp_identifiers(source_ids: source_ids, phone_number:
+      contact_attributes[:phone_number])"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 38
+    text: "update_whatsapp_identifiers(source_ids: source_ids, username:
+      contact_params.dig(:profile, :username), phone_number:
+      attrs[:phone_number])"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 51
+    text: "# Preserve existing conversation history: phone history wins for mixed
+      payloads, BSUID history"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 52
+    text: "# wins if the caller was first seen BSUID-only, and new mixed callers
+      start on the phone."
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 54
+    text: phone_source_id = whatsapp_phone_source_id(contact_params[:wa_id].presence
+      || messages_data.first[:from].presence)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 60
+    text: "Whatsapp::IdentitySourceIdOrderer.new(inbox: inbox, phone_source_id:
+      phone_source_id, source_ids: identifiers).perform"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 70
+    text: phone_source_id = whatsapp_phone_source_id(message[:to].presence)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 76
+    text: "Whatsapp::IdentitySourceIdOrderer.new(inbox: inbox, phone_source_id:
+      phone_source_id, source_ids: identifiers).perform"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 79
+    text: def whatsapp_phone_source_id(identifier)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 80
+    text: phone_number = whatsapp_phone_number(identifier)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 81
+    text: return if phone_number.blank?
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 83
+    text: processed_waid(phone_number)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 89
+    text: phone_identifier = contact_params[:wa_id].presence ||
+      messages_data.first[:from].presence
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 92
+    text: contact_params.dig(:profile, :name).presence || phone_identifier.presence
+      || source_identifier,
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 93
+    text: phone_identifier
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 97
+    text: def contact_attributes_for_identifier(name, phone_identifier)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 98
+    text: phone_number = whatsapp_phone_number(phone_identifier)
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 99
+    text: "return { name: name } if phone_number.blank?"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 101
+    text: formatted_phone_number = "+#{phone_number}"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 102
+    text: candidates = phone_number_candidates(phone_number).drop(1).map {
+      |candidate| "+#{candidate}" }
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 103
+    text: "display_name = name == phone_identifier ? formatted_phone_number : name"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 104
+    text: "{ name: display_name, phone_number: formatted_phone_number,
+      phone_number_candidates: candidates.presence }.compact"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 107
+    text: "def update_whatsapp_identifiers(source_ids: [], username: nil,
+      phone_number: nil)"
+  - file: app/services/whatsapp/incoming_message_identifier_helper.rb
+    line: 109
+    text: "phone_number: phone_number)"
+  - file: app/services/whatsapp/incoming_message_service_helpers.rb
+    line: 60
+    text: Whatsapp::PhoneNumberNormalizationService.new(inbox).normalize_and_find_contact_by_provider(waid,
+      :cloud)
+  - file: app/services/whatsapp/incoming_message_service_helpers.rb
+    line: 63
+    text: def phone_number_candidates(phone_number)
+  - file: app/services/whatsapp/incoming_message_service_helpers.rb
+    line: 64
+    text: Whatsapp::PhoneNumberNormalizationService.new(inbox).phone_number_candidates(phone_number)
+  - file: app/services/whatsapp/incoming_message_service_helpers.rb
+    line: 67
+    text: def whatsapp_phone_number(identifier)
+  - file: app/services/whatsapp/manual_setup_service.rb
+    line: 4
+    text: "def initialize(account:, waba_id:, phone_number_id:, access_token:,
+      inbox_name: nil)"
+  - file: app/services/whatsapp/manual_setup_service.rb
+    line: 7
+    text: "@phone_number_id = phone_number_id"
+  - file: app/services/whatsapp/manual_setup_service.rb
+    line: 28
+    text: "phone_number_id: @phone_number_id,"
+  - file: app/services/whatsapp/manual_setup_service.rb
+    line: 36
+    text: "phone_number: preview[:display_phone_number],"
+  - file: app/services/whatsapp/manual_setup_service.rb
+    line: 40
+    text: "phone_number_id: preview[:phone_number_id],"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 5
+    text: def initialize(waba_id:, phone_number_id:, access_token:)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 7
+    text: "@phone_number_id = phone_number_id"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 14
+    text: Rails.logger.info "#{LOG_PREFIX} Validation started waba_id=#{@waba_id}
+      phone_number_id=#{@phone_number_id}"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 16
+    text: phone_data = find_phone_data!.merge(
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 17
+    text: "@api_client.fetch_phone_number(@phone_number_id, fields:
+      'status,code_verification_status')"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 19
+    text: Rails.logger.info "#{LOG_PREFIX} Matched
+      phone_number_id=#{@phone_number_id}
+      fields=#{phone_data.keys.sort.join(',')} " \
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 20
+    text: "\"status=#{phone_data['status'].inspect} \" \\"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 21
+    text: "\"code_verification_status=#{phone_data['code_verification_status'].insp\
+      ect} \" \\"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 22
+    text: "\"name_status=#{phone_data['name_status'].inspect}\""
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 23
+    text: verify_phone_number_ready!(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 24
+    text: verify_uniqueness!(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 28
+    text: build_preview(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 35
+    text: raise ArgumentError, 'Phone Number ID is required' if
+      @phone_number_id.blank?
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 39
+    text: def find_phone_data!
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 40
+    text: phone_numbers = @api_client.fetch_all_phone_numbers(@waba_id)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 41
+    text: returned_phone_number_ids = phone_numbers.filter_map { |phone| phone['id']
+      }.join(',')
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 42
+    text: 'Rails.logger.info "#{LOG_PREFIX} Meta returned #{phone_numbers.size}
+      phone number(s) for waba_id=#{@waba_id} " \'
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 43
+    text: '"phone_number_ids=#{returned_phone_number_ids}"'
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 45
+    text: phone_data = phone_numbers.find { |phone| phone['id'].to_s ==
+      @phone_number_id.to_s }
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 46
+    text: raise ArgumentError, 'This Phone Number ID does not belong to the WABA ID
+      you entered.' if phone_data.blank?
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 48
+    text: phone_data
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 51
+    text: def verify_phone_number_ready!(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 52
+    text: return if phone_data['status'] == 'CONNECTED' ||
+      phone_data['code_verification_status'] == 'VERIFIED'
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 54
+    text: raise ArgumentError, 'Complete phone number verification in Meta before
+      continuing.'
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 57
+    text: def verify_uniqueness!(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 58
+    text: phone_number = normalized_phone_number(phone_data['display_phone_number'])
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 59
+    text: "raise ArgumentError, 'This WhatsApp number is already connected to
+      another inbox.' if Channel::Whatsapp.exists?(phone_number: phone_number)"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 61
+    text: duplicate_phone_id =
+      Channel::Whatsapp.exists?(["provider_config->>'phone_number_id' = ?",
+      @phone_number_id.to_s])
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 62
+    text: raise ArgumentError, 'This Phone Number ID is already used by another
+      WhatsApp inbox.' if duplicate_phone_id
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 86
+    text: def build_preview(phone_data)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 87
+    text: phone_number = normalized_phone_number(phone_data['display_phone_number'])
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 88
+    text: verified_name = phone_data['verified_name'].presence
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 92
+    text: "display_phone_number: phone_number,"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 93
+    text: "phone_number_id: phone_data['id'].to_s,"
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 96
+    text: 'suggested_inbox_name: "#{verified_name || phone_number} WhatsApp"'
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 100
+    text: def normalized_phone_number(phone_number)
+  - file: app/services/whatsapp/manual_setup_validation_service.rb
+    line: 101
+    text: digits = phone_number.to_s.gsub(/[^\d]/, '')
+  - file: app/services/whatsapp/manual_webhook_status_service.rb
+    line: 21
+    text: phone_number = @api_client.fetch_phone_number(
+  - file: app/services/whatsapp/manual_webhook_status_service.rb
+    line: 22
+    text: "@channel.provider_config['phone_number_id'],"
+  - file: app/services/whatsapp/manual_webhook_status_service.rb
+    line: 25
+    text: webhook_configuration = phone_number.fetch('webhook_configuration', {})
+  - file: app/services/whatsapp/manual_webhook_status_service.rb
+    line: 27
+    text: "%w[override_callback_uri phone_number whatsapp_business_account
+      application].any? do |key|"
+  - file: app/services/whatsapp/manual_webhook_status_service.rb
+    line: 37
+    text: "\"#{ENV.fetch('FRONTEND_URL',
+      nil)}/webhooks/whatsapp/#{@channel.phone_number}\""
+  - file: app/services/whatsapp/media_upload_service.rb
+    line: 64
+    text: "\"#{base_path}/#{version}/#{@whatsapp_channel.provider_config['phone_num\
+      ber_id']}/media\""
+  - file: app/services/whatsapp/oneoff_campaign_service.rb
+    line: 55
+    text: 'Rails.logger.info "Processing contact: #{contact.name}
+      (#{contact.phone_number})"'
+  - file: app/services/whatsapp/oneoff_campaign_service.rb
+    line: 129
+    text: return [contact.phone_number, nil] if contact.phone_number.present?
+  - file: app/services/whatsapp/oneoff_campaign_service.rb
+    line: 132
+    text: return [nil, 'Phone number and BSUID are missing'] if
+      bsuid_contact_inboxes.empty?
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 1
+    text: class Whatsapp::PhoneInfoService
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 2
+    text: "def initialize(waba_id, phone_number_id, access_token,
+      expected_phone_number: nil)"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 4
+    text: "@phone_number_id = phone_number_id"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 6
+    text: "@expected_phone_number = expected_phone_number"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 12
+    text: fetch_and_process_phone_info
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 22
+    text: def fetch_and_process_phone_info
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 25
+    text: phone_numbers = @api_client.fetch_all_phone_numbers(@waba_id)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 26
+    text: 'raise "No phone numbers found for WABA #{@waba_id}" if
+      phone_numbers.blank?'
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 28
+    text: phone_data = find_phone_data(phone_numbers)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 29
+    text: 'raise "No matching phone number found for WABA #{@waba_id}" if
+      phone_data.nil?'
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 31
+    text: build_phone_info(phone_data)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 36
+    text: def find_phone_data(phone_numbers)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 37
+    text: return find_by_id(phone_numbers) if @phone_number_id.present?
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 38
+    text: return find_by_expected_number(phone_numbers) if
+      @expected_phone_number.present?
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 41
+    text: 'raise "Multiple phone numbers found for WABA #{@waba_id}; unable to
+      determine the onboarded number" if phone_numbers.many?'
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 43
+    text: phone_numbers.first
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 46
+    text: def find_by_id(phone_numbers)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 47
+    text: phone_numbers.find { |phone| phone['id'] == @phone_number_id }
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 50
+    text: "# Coexistence completions can omit phone_number_id; when reauthorizing a
+      known channel,"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 52
+    text: def find_by_expected_number(phone_numbers)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 53
+    text: phone_numbers.find { |phone| matches_expected_phone_number?(phone) }
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 56
+    text: def matches_expected_phone_number?(phone)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 57
+    text: "\"+#{sanitize_phone_number(phone['display_phone_number'])}\" ==
+      @expected_phone_number"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 60
+    text: def build_phone_info(phone_data)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 61
+    text: display_phone_number =
+      sanitize_phone_number(phone_data['display_phone_number'])
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 64
+    text: "phone_number_id: phone_data['id'],"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 65
+    text: 'phone_number: "+#{display_phone_number}",'
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 66
+    text: "verified: phone_data['code_verification_status'] == 'VERIFIED',"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 67
+    text: "business_name: phone_data['verified_name'] ||
+      phone_data['display_phone_number']"
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 71
+    text: def sanitize_phone_number(phone_number)
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 72
+    text: return phone_number if phone_number.blank?
+  - file: app/services/whatsapp/phone_info_service.rb
+    line: 74
+    text: phone_number.gsub(/[\s\-\(\)\.\+]/, '').strip
+  - file: app/services/whatsapp/phone_normalizers/argentina_phone_normalizer.rb
+    line: 1
+    text: "# Handles Argentina phone number normalization"
+  - file: app/services/whatsapp/phone_normalizers/argentina_phone_normalizer.rb
+    line: 3
+    text: '# Argentina phone numbers can appear with or without "9" after country
+      code'
+  - file: app/services/whatsapp/phone_normalizers/argentina_phone_normalizer.rb
+    line: 5
+    text: class Whatsapp::PhoneNormalizers::ArgentinaPhoneNormalizer <
+      Whatsapp::PhoneNormalizers::BasePhoneNormalizer
+  - file: app/services/whatsapp/phone_normalizers/base_phone_normalizer.rb
+    line: 1
+    text: "# Base class for country-specific phone number normalizers"
+  - file: app/services/whatsapp/phone_normalizers/base_phone_normalizer.rb
+    line: 4
+    text: "# - normalize: logic to convert phone number to normalized format for
+      contact lookup"
+  - file: app/services/whatsapp/phone_normalizers/base_phone_normalizer.rb
+    line: 5
+    text: class Whatsapp::PhoneNormalizers::BasePhoneNormalizer
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 1
+    text: "# Handles Brazil phone number normalization"
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 5
+    text: '# Brazil changed its mobile number system by adding a "9" prefix to
+      existing numbers.'
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 6
+    text: '# This normalizer adds the "9" only to legacy eight-digit mobile ranges,
+      leaving'
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 8
+    text: class Whatsapp::PhoneNormalizers::BrazilPhoneNormalizer <
+      Whatsapp::PhoneNormalizers::BasePhoneNormalizer
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 11
+    text: LEGACY_MOBILE_NUMBER_PATTERN = /\A[6-9]\d{7}\z/
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 12
+    text: CANONICAL_MOBILE_NUMBER_PATTERN = /\A9([6-9]\d{7})\z/
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 19
+    text: return waid unless number.match?(LEGACY_MOBILE_NUMBER_PATTERN)
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 26
+    text: "[normalized, legacy_mobile_form(normalized)].compact.uniq"
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 35
+    text: "# Mirror of #normalize: strip the 9 only when what remains is itself a
+      legacy mobile range, never a landline."
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 36
+    text: def legacy_mobile_form(waid)
+  - file: app/services/whatsapp/phone_normalizers/brazil_phone_normalizer.rb
+    line: 39
+    text: match = subscriber(waid).match(CANONICAL_MOBILE_NUMBER_PATTERN)
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 1
+    text: "# Handles Mexico phone number normalization"
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 6
+    text: '# The mobile "1" only appears on the 13-digit form (52 + 1 + 10 digits),
+      so guard'
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 8
+    text: class Whatsapp::PhoneNormalizers::MexicoPhoneNormalizer <
+      Whatsapp::PhoneNormalizers::BasePhoneNormalizer
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 9
+    text: COUNTRY_CODE_WITH_MOBILE_LENGTH = 13
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 14
+    text: return waid unless waid.length == COUNTRY_CODE_WITH_MOBILE_LENGTH
+  - file: app/services/whatsapp/phone_normalizers/mexico_phone_normalizer.rb
+    line: 19
+    text: '# Safe both ways: the mobile "1" is a WhatsApp artifact, so both forms
+      carry the same ten-digit subscriber.'
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 1
+    text: "# Service to handle phone number normalization for WhatsApp messages"
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 2
+    text: "# Currently supports Brazil, Argentina, and Mexico phone number format
+      variations"
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 4
+    text: class Whatsapp::PhoneNumberNormalizationService
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 9
+    text: "# @param raw_number [String] The phone number in provider-specific format"
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 33
+    text: "# valid number (for example an Argentina landline without the mobile 9)."
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 34
+    text: def phone_number_candidates(clean_number)
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 75
+    text: Whatsapp::PhoneNormalizers::BrazilPhoneNormalizer,
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 76
+    text: Whatsapp::PhoneNormalizers::ArgentinaPhoneNormalizer,
+  - file: app/services/whatsapp/phone_number_normalization_service.rb
+    line: 77
+    text: Whatsapp::PhoneNormalizers::MexicoPhoneNormalizer
+  - file: app/services/whatsapp/providers/base_service.rb
+    line: 14
+    text: def send_message(_phone_number, _message)
+  - file: app/services/whatsapp/providers/base_service.rb
+    line: 18
+    text: def send_template(_phone_number, _template_info, _message)
+  - file: app/services/whatsapp/providers/base_service.rb
+    line: 58
+    text: '# User ID (BSUID, e.g. "BR.123..."), with no phone number available. The
+      Cloud API requires a BSUID to be'
+  - file: app/services/whatsapp/providers/base_service.rb
+    line: 61
+    text: "# the remainder is treated as a phone number (wa_id), which never
+      resolves. Phone numbers keep using `to`."
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 2
+    text: def send_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 5
+    text: send_attachment_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 7
+    text: send_interactive_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 9
+    text: send_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 13
+    text: def send_template(phone_number, template_info, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 18
+    text: "to: phone_number,"
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 39
+    text: "url: \"#{ENV.fetch('FRONTEND_URL',
+      nil)}/webhooks/whatsapp/#{whatsapp_channel.phone_number}\""
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 60
+    text: def send_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 65
+    text: "to: phone_number,"
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 74
+    text: def send_attachment_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 87
+    text: "'to' => phone_number,"
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 113
+    text: def send_interactive_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+    line: 120
+    text: "to: phone_number,"
+  - file: app/services/whatsapp/providers/whatsapp_cloud_contact_info_request_service.rb
+    line: 8
+    text: '"#{phone_id_path}/messages",'
+  - file: app/services/whatsapp/providers/whatsapp_cloud_contact_info_request_service.rb
+    line: 28
+    text: def phone_id_path
+  - file: app/services/whatsapp/providers/whatsapp_cloud_contact_info_request_service.rb
+    line: 31
+    text: "\"#{base_url}/#{api_version}/#{whatsapp_channel.provider_config['phone_n\
+      umber_id']}\""
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 2
+    text: def send_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 6
+    text: send_attachment_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 8
+    text: send_interactive_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 10
+    text: send_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 14
+    text: def send_template(phone_number, template_info, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 20
+    text: "# BSUID -> `recipient`; phone number -> `to` (see recipient_params in the
+      base provider)."
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 21
+    text: "**recipient_params(phone_number),"
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 27
+    text: '"#{phone_id_path}/messages",'
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 68
+    text: "# The templates check only proves the WABA/token pair, so verify the
+      phone_number_id belongs to this WABA when it changes."
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 71
+    text: phone_response =
+      HTTParty.get("#{business_account_path}/phone_numbers?fields=id&limit=100&access_token=#{config['api_key']}")
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 72
+    text: "ids = phone_response.parsed_response.is_a?(Hash) ?
+      Array(phone_response.parsed_response['data']) : []"
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 73
+    text: return true if phone_response.success? && ids.any? { |number| number['id']
+      == config['phone_number_id'].to_s }
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 75
+    text: log_transfer_failure('phone_number_id_check', phone_response)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 120
+    text: def phone_id_path(version = 'v13.0')
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 121
+    text: "\"#{api_base_path}/#{version}/#{whatsapp_channel.provider_config['phone_\
+      number_id']}\""
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 128
+    text: def send_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 130
+    text: '"#{phone_id_path}/messages",'
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 135
+    text: "**recipient_params(phone_number),"
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 144
+    text: def send_attachment_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 150
+    text: "\"#{phone_id_path('v24.0')}/messages\","
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 155
+    text: "**recipient_params(phone_number),"
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 243
+    text: def send_interactive_text_message(phone_number, message)
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 247
+    text: '"#{phone_id_path}/messages",'
+  - file: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+    line: 251
+    text: "**recipient_params(phone_number),"
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 2
+    text: def initialize(account:, inbox_id:, phone_number_id:, waba_id:)
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 5
+    text: "@phone_number_id = phone_number_id"
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 9
+    text: def perform(access_token, phone_info)
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 13
+    text: "# Validate phone number matches for reauthorization"
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 14
+    text: if phone_info[:phone_number] != channel.phone_number
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 15
+    text: 'raise StandardError, "Phone number mismatch. Expected
+      #{channel.phone_number}, got #{phone_info[:phone_number]}"'
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 19
+    text: update_channel_config(channel, access_token, phone_info)
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 28
+    text: def update_channel_config(channel, access_token, phone_info)
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 30
+    text: "# Legacy clients may omit phone_number_id; fall back to the value just
+      fetched from Meta."
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 31
+    text: resolved_phone_number_id = @phone_number_id.presence ||
+      phone_info[:phone_number_id]
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 36
+    text: "'phone_number_id' => resolved_phone_number_id,"
+  - file: app/services/whatsapp/reauthorization_service.rb
+    line: 43
+    text: business_name = phone_info[:business_name] || phone_info[:verified_name]
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 29
+    text: raw_phone_source_id = raw_whatsapp_phone_source_id(system[:wa_id]) if
+      system[:type] == 'user_changed_number'
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 30
+    text: phone_source_id = normalized_whatsapp_phone_source_id(raw_phone_source_id)
+      if raw_phone_source_id.present?
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 32
+    text: current_source_ids = [*rotated_source_ids,
+      phone_source_id].compact_blank.uniq
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 39
+    text: record_phone_identity(contact, phone_source_id, raw_phone_source_id) if
+      phone_source_id.present?
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 91
+    text: def record_phone_identity(contact, phone_source_id, raw_phone_source_id)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 92
+    text: phone_number = "+#{raw_phone_source_id}"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 93
+    text: previous_phone_number = contact.phone_number
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 94
+    text: conflicting_contact = conflicting_phone_contact(contact, phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 96
+    text: handle_phone_contact_collision(contact, conflicting_contact, phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 100
+    text: conflicting_contact_inbox = conflicting_phone_alias(contact,
+      phone_source_id)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 102
+    text: clear_stale_phone_number(contact)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 103
+    text: log_alias_collision(conflicting_contact_inbox, contact, phone_source_id)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 107
+    text: record_aliases(contact, [phone_source_id])
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 108
+    text: return if contact.phone_number == phone_number
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 110
+    text: contact.update!(phone_identity_attributes(contact, previous_phone_number,
+      phone_number))
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 113
+    text: def phone_identity_attributes(contact, previous_phone_number, phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 114
+    text: "attributes = { phone_number: phone_number }"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 115
+    text: attributes[:name] = phone_number if
+      auto_generated_phone_name?(contact.name, previous_phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 119
+    text: def auto_generated_phone_name?(name, phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 120
+    text: return false if name.blank? || phone_number.blank?
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 122
+    text: normalized_phone_number =
+      TelephoneNumber.parse(phone_number).international_number
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 123
+    text: "[phone_number, normalized_phone_number].compact_blank.uniq.include?(name)"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 126
+    text: def conflicting_phone_contact(contact, phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 127
+    text: "contact.account.contacts.where(phone_number: phone_number).where.not(id:
+      contact.id).first"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 130
+    text: def conflicting_phone_alias(contact, phone_source_id)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 131
+    text: "inbox.contact_inboxes.where(source_id:
+      phone_source_id).where.not(contact_id: contact.id).first"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 134
+    text: def handle_phone_contact_collision(contact, conflicting_contact,
+      phone_number)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 135
+    text: clear_stale_phone_number(contact)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 137
+    text: '"[WHATSAPP] identity rotation: #{phone_number} already belongs to contact
+      #{conflicting_contact.id} " \'
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 138
+    text: '"in account #{contact.account_id}; cleared the previous phone from
+      contact #{contact.id}"'
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 142
+    text: def clear_stale_phone_number(contact)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 143
+    text: "contact.update!(phone_number: nil) if contact.phone_number.present?"
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 146
+    text: def raw_whatsapp_phone_source_id(value)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 153
+    text: def normalized_whatsapp_phone_source_id(value)
+  - file: app/services/whatsapp/user_id_rotation_service.rb
+    line: 154
+    text: Whatsapp::PhoneNumberNormalizationService.new(inbox).normalize_and_find_contact_by_provider(value,
+      :cloud)
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 2
+    text: "# display_phone_number can arrive formatted or in a country-specific
+      variant (e.g. Brazil"
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 3
+    text: "# omits the mobile 9, Argentina adds a digit after the country code), so
+      we try the"
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 5
+    text: "# phone_number_id matches."
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 7
+    text: def initialize(display_phone_number:, phone_number_id:)
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 8
+    text: "@display_phone_number = display_phone_number"
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 9
+    text: "@phone_number_id = phone_number_id"
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 16
+    text: 'Channel::Whatsapp.find_by(phone_number: "+#{digits}"),'
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 19
+    text: candidates.compact.find { |channel|
+      channel.provider_config['phone_number_id'] == @phone_number_id }
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 25
+    text: "@digits ||= @display_phone_number.to_s.gsub(/[^0-9]/, '')"
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 29
+    text: normalizer = Whatsapp::PhoneNumberNormalizationService::NORMALIZERS
+  - file: app/services/whatsapp/webhook_channel_finder_service.rb
+    line: 33
+    text: 'Channel::Whatsapp.find_by(phone_number:
+      "+#{normalizer.normalize(digits)}")'
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 15
+    text: register_phone_number if should_register_phone_number?
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 33
+    text: def should_register_phone_number?
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 37
+    text: "!phone_number_verified? || phone_number_needs_registration?"
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 44
+    text: raise ArgumentError, 'Phone number ID is required' if
+      @channel.provider_config['phone_number_id'].blank?
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 47
+    text: def register_phone_number
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 48
+    text: phone_number_id = @channel.provider_config['phone_number_id']
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 51
+    text: "@api_client.register_phone_number(phone_number_id, pin)"
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 55
+    text: 'Rails.logger.warn("[WHATSAPP] Phone registration failed but continuing:
+      #{e.message}")'
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 59
+    text: "# Check if we have a stored PIN for this phone number"
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 76
+    text: phone_number_id = @channel.provider_config['phone_number_id']
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 78
+    text: "@api_client.subscribe_phone_number_webhook(@waba_id, phone_number_id,
+      callback_url, verify_token, subscribed_fields: subscribed_fields)"
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 107
+    text: phone_number = @channel.phone_number
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 109
+    text: '"#{frontend_url}/webhooks/whatsapp/#{phone_number}"'
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 112
+    text: def phone_number_verified?
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 113
+    text: phone_number_id = @channel.provider_config['phone_number_id']
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 117
+    text: verified = @api_client.phone_number_verified?(phone_number_id)
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 118
+    text: 'Rails.logger.info("[WHATSAPP] Phone number #{phone_number_id} is ready
+      for setup: #{verified}")'
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 123
+    text: 'Rails.logger.error("[WHATSAPP] Phone verification status check failed:
+      #{e.message}")'
+  - file: app/services/whatsapp/webhook_setup_service.rb
+    line: 128
+    text: def phone_number_needs_registration?
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 11
+    text: clear_phone_number_override(api_client)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 12
+    text: deregister_phone_number(api_client)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 28
+    text: (provider_config['phone_number_id'].present? ||
+      provider_config['business_account_id'].present?)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 31
+    text: def clear_phone_number_override(api_client)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 32
+    text: phone_number_id = provider_config['phone_number_id']
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 33
+    text: return if phone_number_id.blank?
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 35
+    text: api_client.clear_phone_number_callback_override(phone_number_id)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 36
+    text: 'Rails.logger.info "[WHATSAPP] Phone-level webhook override cleared for
+      channel #{@channel.id}"'
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 38
+    text: 'Rails.logger.error "[WHATSAPP] Phone-level webhook clear failed for
+      channel #{@channel.id}: #{e.message}"'
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 43
+    text: def deregister_phone_number(api_client)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 46
+    text: phone_number_id = provider_config['phone_number_id']
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 47
+    text: return if phone_number_id.blank?
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 49
+    text: api_client.deregister_phone_number(phone_number_id)
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 50
+    text: 'Rails.logger.info "[WHATSAPP] Phone number deregistered for channel
+      #{@channel.id}"'
+  - file: app/services/whatsapp/webhook_teardown_service.rb
+    line: 52
+    text: 'Rails.logger.error "[WHATSAPP] Phone deregistration failed for channel
+      #{@channel.id}: #{e.message}"'
+  - file: app/views/api/v1/accounts/csat_survey_responses/download.csv.erb
+    line: 8
+    text: I18n.t('reports.csat.headers.contact_phone_number'),
+  - file: app/views/api/v1/accounts/csat_survey_responses/download.csv.erb
+    line: 26
+    text: contact&.phone_number.presence,
+  - file: app/views/api/v1/accounts/search/_contact.json.jbuilder
+    line: 4
+    text: json.phone_number contact.phone_number
+  - file: app/views/api/v1/models/_contact.json.jbuilder
+    line: 6
+    text: json.phone_number resource.phone_number
+  - file: app/views/api/v1/models/_inbox.json.jbuilder
+    line: 78
+    text: json.phone_number resource.channel.try(:phone_number)
+  - file: app/views/api/v1/widget/configs/create.json.jbuilder
+    line: 32
+    text: json.phone_number @contact.phone_number
+  - file: app/views/api/v1/widget/contacts/set_user.json.jbuilder
+    line: 4
+    text: json.has_phone_number @contact.phone_number.present?
+  - file: app/views/api/v1/widget/contacts/show.json.jbuilder
+    line: 4
+    text: json.has_phone_number @contact.phone_number.present?
+  - file: app/views/api/v1/widget/contacts/update.json.jbuilder
+    line: 4
+    text: json.has_phone_number @contact.phone_number.present?
+  - file: app/views/fields/secret_field/_index.html.erb
+    line: 5
+    text: <div data-secret-text="<%= field.data %>" class="cell-data__secret-field">
+  - file: app/views/fields/secret_field/_show.html.erb
+    line: 6
+    text: <div data-secret-text="<%= field.data %>" class="cell-data__secret-field">
+  - file: app/views/public/api/v1/models/_contact.json.jbuilder
+    line: 4
+    text: json.phone_number resource.phone_number
+  - file: app/views/public/api/v1/portals/_header.html.erb
+    line: 103
+    text: <nav class="flex sm:hidden max-w-5xl px-4 mx-auto" aria-label="Mobile Top">
+  - file: app/views/public/api/v1/portals/_header.html.erb
+    line: 112
+    text: <!-- Mobile Menu Component -->
+  - file: app/views/public/api/v1/portals/_header.html.erb
+    line: 113
+    text: "<%= render partial: 'public/api/v1/portals/mobile_menu', locals: {"
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 3
+    text: <input type="checkbox" id="mobile-menu-toggle" class="peer/menu hidden" />
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 5
+    text: <label for="mobile-menu-toggle" class="relative p-2 text-slate-700
+      dark:text-slate-200 cursor-pointer z-[60] hover:bg-slate-100
+      dark:hover:bg-slate-800 rounded-lg transition-colors" aria-label="Toggle
+      menu">
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 13
+    text: <label for="mobile-menu-toggle" class="p-2 text-slate-700
+      dark:text-slate-200 cursor-pointer hover:bg-slate-100
+      dark:hover:bg-slate-800 rounded-lg transition-colors" aria-label="Close
+      menu">
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 25
+    text: <div id="mobile-appearance-dropdown" data-current-theme="<%=
+      @theme_from_params %>" class="appearance-menu space-y-1">
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 26
+    text: <button class="mobile-theme-button group flex items-center gap-3
+      justify-start w-full py-2 hover:text-slate-700 dark:hover:text-slate-200
+      text-slate-800 dark:text-slate-100 transition-colors stroke-slate-800
+      dark:stroke-slate-100" data-theme="system">
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 33
+    text: <button class="mobile-theme-button group flex items-center gap-3
+      justify-start w-full py-2 hover:text-slate-700 dark:hover:text-slate-200
+      text-slate-800 dark:text-slate-100 transition-colors stroke-slate-800
+      dark:stroke-slate-100" data-theme="light">
+  - file: app/views/public/api/v1/portals/_mobile_menu.html.erb
+    line: 40
+    text: <button class="mobile-theme-button group flex items-center gap-3
+      justify-start py-2 hover:text-slate-700 dark:hover:text-slate-200
+      text-slate-800 dark:text-slate-100 transition-colors stroke-slate-800
+      dark:stroke-slate-100" data-theme="dark">
+  - file: app/views/super_admin/application/_collection.html.erb
+    line: 25
+    text: <th class="cell-label
+  - file: app/views/super_admin/application/_collection.html.erb
+    line: 26
+    text: cell-label--<%= attr_type.html_class %>
+  - file: app/views/super_admin/application/_collection.html.erb
+    line: 27
+    text: cell-label--<%= collection_presenter.ordered_html_class(attr_name) %>"
+  - file: app/views/super_admin/application/_collection.html.erb
+    line: 39
+    text: <span class="cell-label__sort-indicator cell-label__sort-indicator--<%=
+      collection_presenter.ordered_html_class(attr_name) %>">
+  - file: app/views/super_admin/application/_collection.html.erb
+    line: 64
+    text: <td class="cell-data cell-data--<%= attribute.html_class %>">
+  - file: app/views/super_admin/settings/show.html.erb
+    line: 28
+    text: <div data-secret-text="<%= ChatwootHub.installation_identifier %>"
+      class="cell-data__secret-field text-sm leading-5 h-5 text-n-slate-11">
+  - file: app/views/super_admin/users/_collection.html.erb
+    line: 25
+    text: <th class="cell-label
+  - file: app/views/super_admin/users/_collection.html.erb
+    line: 26
+    text: cell-label--<%= attr_type.html_class %>
+  - file: app/views/super_admin/users/_collection.html.erb
+    line: 27
+    text: cell-label--<%= collection_presenter.ordered_html_class(attr_name) %>"
+  - file: app/views/super_admin/users/_collection.html.erb
+    line: 39
+    text: <span class="cell-label__sort-indicator cell-label__sort-indicator--<%=
+      collection_presenter.ordered_html_class(attr_name) %>">
+  - file: app/views/super_admin/users/_collection.html.erb
+    line: 64
+    text: <td class="cell-data cell-data--<%= attribute.html_class %>">
+  - file: app/views/widget_tests/index.html.erb
+    line: 50
+    text: "phone_number: ''"
+  - file: config/initializers/devise.rb
+    line: 238
+    text: "# If you have any extra navigational formats, like :iphone or :mobile,
+      you"
+  - file: config/initializers/rack_attack.rb
+    line: 42
+    text: "# (the SPA and mobile clients post JSON). nil for blank/non-string values
+      so a"
+  - file: config/llm_models.json
+    line: 33245
+    text: '"description": "UI-TARS-1.5 is a multimodal vision-language agent
+      optimized for GUI-based environments, including desktop interfaces, web
+      browsers, mobile systems, and games. Built by ByteDance, it builds upon
+      the UI-TARS framework with reinforcement...",'
+  - file: config/llm_models.json
+    line: 36865
+    text: '"description": "Gemma 3n E4B-it is optimized for efficient execution on
+      mobile and low-resource devices, such as phones, laptops, and tablets. It
+      supports multimodal inputs—including text, visual data, and audio—enabling
+      diverse tasks...",'
+  - file: config/markdown_embeds.yml
+    line: 58
+    text: "regex:
+      'https?://(?:www\\.)?app\\.arcade\\.software/share/(?<video_id>[^&/?]+)\\\
+      ?(?:[^&#]*&)*embed_mobile=tab(?:[&#?][^ ]*)?'"
+  - file: config/markdown_embeds.yml
+    line: 62
+    text: src="https://app.arcade.software/embed/%{video_id}?embed&embed_mobile=tab"
+  - file: config/routes.rb
+    line: 703
+    text: "post 'webhooks/sms/:phone_number', to: 'webhooks/sms#process_payload'"
+  - file: config/routes.rb
+    line: 704
+    text: "get 'webhooks/whatsapp/:phone_number', to: 'webhooks/whatsapp#verify'"
+  - file: config/routes.rb
+    line: 705
+    text: "post 'webhooks/whatsapp/:phone_number', to:
+      'webhooks/whatsapp#process_payload'"
+  - file: config/routes.rb
+    line: 728
+    text: "post 'voice/call/:phone', to: 'voice#call_twiml', as: :voice_call"
+  - file: config/routes.rb
+    line: 729
+    text: "post 'voice/status/:phone', to: 'voice#status', as: :voice_status"
+  - file: config/routes.rb
+    line: 730
+    text: "post 'voice/conference_status/:phone', to: 'voice#conference_status', as:
+      :voice_conference_status"
+  - file: config/routes.rb
+    line: 731
+    text: "post 'voice/recording_status/:phone', to: 'voice#recording_status', as:
+      :voice_recording_status"
+  - file: db/schema.rb
+    line: 664
+    text: 't.string "phone_number", null: false'
+  - file: db/schema.rb
+    line: 669
+    text: 't.index ["phone_number"], name: "index_channel_sms_on_phone_number",
+      unique: true'
+  - file: db/schema.rb
+    line: 695
+    text: t.string "phone_number"
+  - file: db/schema.rb
+    line: 710
+    text: 't.index ["account_sid", "phone_number"], name:
+      "index_channel_twilio_sms_on_account_sid_and_phone_number", unique: true'
+  - file: db/schema.rb
+    line: 712
+    text: 't.index ["phone_number"], name:
+      "index_channel_twilio_sms_on_phone_number", unique: true'
+  - file: db/schema.rb
+    line: 750
+    text: 't.string "phone_number", null: false'
+  - file: db/schema.rb
+    line: 757
+    text: 't.jsonb "phone_number_health", default: {}, null: false'
+  - file: db/schema.rb
+    line: 758
+    text: t.datetime "phone_number_health_checked_at"
+  - file: db/schema.rb
+    line: 759
+    text: 't.string "phone_number_health_error", limit: 500'
+  - file: db/schema.rb
+    line: 760
+    text: 't.index ["phone_number_health_checked_at"], name:
+      "index_channel_whatsapp_on_phone_number_health_checked_at"'
+  - file: db/schema.rb
+    line: 761
+    text: 't.index ["phone_number"], name: "index_channel_whatsapp_on_phone_number",
+      unique: true'
+  - file: db/schema.rb
+    line: 798
+    text: t.string "phone_number"
+  - file: db/schema.rb
+    line: 815
+    text: "t.index [\"account_id\", \"email\", \"phone_number\", \"identifier\"],
+      name: \"index_contacts_on_nonempty_fields\", where: \"(((email)::text <>
+      ''::text) OR ((phone_number)::text <> ''::text) OR ((identifier)::text <>
+      ''::text))\""
+  - file: db/schema.rb
+    line: 818
+    text: "t.index [\"account_id\"], name: \"index_resolved_contact_account_id\",
+      where: \"(((email)::text <> ''::text) OR ((phone_number)::text <>
+      ''::text) OR ((identifier)::text <> ''::text))\""
+  - file: db/schema.rb
+    line: 823
+    text: 't.index ["name", "email", "phone_number", "identifier"], name:
+      "index_contacts_on_name_email_phone_number_identifier", opclass:
+      :gin_trgm_ops, using: :gin'
+  - file: db/schema.rb
+    line: 824
+    text: 't.index ["phone_number", "account_id"], name:
+      "index_contacts_on_phone_number_and_account_id"'
+  - file: lib/base_markdown_renderer.rb
+    line: 7
+    text: "TABLE_CELL_STYLE = 'border: 1px solid #d1d5db; border-color: rgba(127,
+      127, 127, 0.35); padding: 6px 12px; vertical-align: top;'.freeze"
+  - file: lib/base_markdown_renderer.rb
+    line: 8
+    text: 'TABLE_HEADER_STYLE = "#{TABLE_CELL_STYLE} background-color: rgba(127,
+      127, 127, 0.12); font-weight: 600;".freeze'
+  - file: lib/base_markdown_renderer.rb
+    line: 26
+    text: "# Unaligned cells follow the text direction (browsers center <th>); an
+      empty cell"
+  - file: lib/base_markdown_renderer.rb
+    line: 28
+    text: def table_cell(node)
+  - file: lib/base_markdown_renderer.rb
+    line: 30
+    text: "style = @in_header ? TABLE_HEADER_STYLE : TABLE_CELL_STYLE"
+  - file: lib/custom_markdown_renderer.rb
+    line: 14
+    text: "# Matches columnResizing({ cellMinWidth: 50 }) in
+      @chatwoot/prosemirror-schema"
+  - file: lib/custom_markdown_renderer.rb
+    line: 15
+    text: "# so cells without an explicit colwidth render the same minimum here as
+      in the editor."
+  - file: lib/custom_markdown_renderer.rb
+    line: 16
+    text: TABLE_CELL_MIN_WIDTH_PX = 50
+  - file: lib/custom_markdown_renderer.rb
+    line: 92
+    text: "# into the opening <table> tag. Delegating the row/cell/tbody/alignment
+      markup to"
+  - file: lib/custom_markdown_renderer.rb
+    line: 110
+    text: "# Total table width: each column's saved width, or the cell min for
+      unsized ones."
+  - file: lib/custom_markdown_renderer.rb
+    line: 112
+    text: "widths.sum { |w| w.to_i.positive? ? w.to_i : TABLE_CELL_MIN_WIDTH_PX }"
+  - file: lib/filters/filter_keys.yml
+    line: 139
+    text: "phone_number:"
+  - file: lib/integrations/facebook/message_creator.rb
+    line: 28
+    text: "# replied from the fb page directly (mobile / web messenger), so handle
+      it as an agent message"
+  - file: lib/integrations/slack/link_unfurl_formatter.rb
+    line: 24
+    text: preview_field(I18n.t('slack_unfurl.fields.phone_number'),
+      user_info[:phone_number]),
+  - file: lib/integrations/slack/slack_link_unfurl_service.rb
+    line: 29
+    text: "phone_number: contact.phone_number.presence || '---',"
+  - file: lib/tasks/bulk_conversations.rake
+    line: 22
+    text: "#   - Unique contacts with fake names, emails, phone numbers"
+  - file: lib/tasks/bulk_conversations.rake
+    line: 110
+    text: "phone_number: generate_e164_phone_number,"
+  - file: lib/tasks/bulk_conversations.rake
+    line: 119
+    text: def generate_e164_phone_number
