@@ -1486,8 +1486,10 @@ export class AnalyzedFile {
 
     let scope: Scope;
     if (kind === "function" || kind === "class") {
-      // The name of a function or class belongs to the scope around it.
-      const own = node.parent ? this.scopes.get(node.parent.id) : undefined;
+      // The name of a function or class belongs to the scope around it; a namespaced Ruby
+      // class (`class Account::SignUpService`) names it through the scope resolution.
+      const holder = node.parent?.type === "scope_resolution" ? node.parent.parent : node.parent;
+      const own = holder ? this.scopes.get(holder.id) : undefined;
       if (own) {
         if (own.name === undefined) own.name = name;
         scope = own.parent ?? this.rootScope;

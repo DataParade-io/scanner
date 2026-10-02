@@ -16,6 +16,8 @@
 (singleton_method name: (_) @definition.function)
 (class name: (constant) @definition.class)
 (module name: (constant) @definition.class)
+(class name: (scope_resolution name: (constant) @definition.class))
+(module name: (scope_resolution name: (constant) @definition.class))
 (method_parameters (_) @definition.parameter)
 (lambda_parameters (_) @definition.parameter)
 (block_parameters (_) @definition.parameter)

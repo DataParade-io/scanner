@@ -147,6 +147,28 @@ describe("code navigator", () => {
     });
   });
 
+  describe("Ruby callers", () => {
+    it("finds a Ruby constructor's callers as Class.new, in Ruby files only, for namespaced classes too", () => {
+      const ruby = new CodeNavigator([
+        file("app/services/companies/detector_service.rb", "ruby", [
+          "class Companies::DetectorService", // 1
+          "  def initialize(email)", //         2
+          "    @email = email", //               3
+          "  end", //                           4
+          "end", //                             5
+        ]),
+        file("app/jobs/batch_job.rb", "ruby", ["class BatchJob", "  def perform(contact)", "    Companies::DetectorService.new(contact.email).perform", "  end", "end"]),
+        file("app/javascript/session.js", "javascript", ["function start() {", "  initialize(email);", "}"]),
+      ]);
+      const found = ruby.handle({ op: "callers", file: "app/services/companies/detector_service.rb", line: 3 }) as unknown as {
+        ownerClass: string;
+        callers: Array<{ file: string; line: number }>;
+      };
+      expect(found.ownerClass).toBe("DetectorService");
+      expect(found.callers.map((c) => `${c.file}:${c.line}`)).toEqual(["app/jobs/batch_job.rb:3"]);
+    });
+  });
+
   describe("callers", () => {
     it("finds deferred, keyword and zero-argument calls", () => {
       const response = nav.handle({ op: "callers", name: "send_email_task" }) as any;

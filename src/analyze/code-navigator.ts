@@ -151,8 +151,17 @@ interface CallRecord {
   caller?: string;
   callerOwner?: string;
   receiverClass?: string;
+  /** A class named directly as the receiver (`WebsiteBrandingService.new`). */
+  receiverConstant?: string;
   deferred: boolean;
   arguments: InvocationArgument[];
+}
+
+/** Files whose functions can call each other: one language family per extension. */
+function languageFamily(file: string): string {
+  const ext = file.slice(file.lastIndexOf(".") + 1).toLowerCase();
+  if (["ts", "tsx", "js", "jsx", "mjs", "cjs", "mts", "cts"].includes(ext)) return "js";
+  return ext;
 }
 
 /** Position of the first non-blank character of a 1-based line, for scope lookups. */
@@ -269,6 +278,7 @@ export class CodeNavigator {
           ...(caller ? { caller } : {}),
           ...(callerOwner ? { callerOwner } : {}),
           ...(call.receiverClass ? { receiverClass: call.receiverClass } : {}),
+          ...(call.receiverConstant ? { receiverConstant: call.receiverConstant } : {}),
         });
       }
     } finally {
@@ -480,8 +490,16 @@ export class CodeNavigator {
         ?.find((record) => record.file === request.file && record.line >= fn.startLine && record.line <= fn.endLine);
       ownerClass = owned?.owner;
     }
-    const all = this.callsByCallee.get(name) ?? [];
-    const kept = ownerClass ? all.filter((call) => !call.receiverClass || call.receiverClass === ownerClass) : all;
+    // A Ruby constructor is called as `Class.new(...)` (KDATAP-e35652).
+    const family = request.file ? languageFamily(request.file) : undefined;
+    const rubyConstructor = family === "rb" && name === "initialize" && ownerClass !== undefined;
+    const sameFamily = (call: CallRecord): boolean => family === undefined || languageFamily(call.file) === family;
+    const all = (this.callsByCallee.get(rubyConstructor ? "new" : name) ?? []).filter(sameFamily);
+    const kept = rubyConstructor
+      ? all.filter((call) => [call.receiverConstant, call.receiverClass].some((k) => k !== undefined && (k === ownerClass || k.endsWith(ownerClass as string))))
+      : ownerClass
+        ? all.filter((call) => !call.receiverClass || call.receiverClass === ownerClass)
+        : all;
     const ranked = [...kept].sort(
       (a, b) =>
         Number(b.receiverClass === ownerClass && ownerClass !== undefined) - Number(a.receiverClass === ownerClass && ownerClass !== undefined) ||
