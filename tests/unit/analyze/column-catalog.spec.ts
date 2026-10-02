@@ -409,6 +409,10 @@ describe("record types", () => {
     expect(summary(declaredColumns([file("auth/src/lib/types.ts", "typescript", RECORD_TS)], "phone_number"))).toEqual(["User.phone (record-type)"]);
   });
 
+  it("does not read record types from generated API client files", () => {
+    expect(declaredColumns([file("src/graphql/types.generated.ts", "typescript", RECORD_TS)], "email")).toEqual([]);
+  });
+
   it("uses record types only where the repository declares no storage for the concept", () => {
     const files = [file("auth/src/lib/types.ts", "typescript", RECORD_TS), file("db/models.ts", "typescript", TYPEORM)];
     expect(summary(declaredColumns(files, "email"))).toEqual(["people.email (orm-field)", "people.mail_address (orm-field)"]);
@@ -518,6 +522,84 @@ describe("storage schema files", () => {
   it("drops the record-type fallback when a schema file declares storage", () => {
     const files = [file("auth/src/lib/types.ts", "typescript", RECORD_TS)];
     expect(summary(declaredColumns(files, "email", {}, [schema("db/schema.sql", "sql", SQL)]))).toEqual(["subscribers.email (sql-ddl)", "User.backupEmail (sql-ddl)"]);
+  });
+});
+
+describe("entity and struct declarations in Java, Go, SQLAlchemy and Drizzle", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("reads JPA @Entity String fields with @Column and @Table names, not @Transient", () => {
+    const java = [
+      "@Entity", //                                1
+      "@Table(name = \"USER_ENTITY\")", //           2
+      "public class UserEntity {", //              3
+      "  @Column(name = \"EMAIL\")", //             4
+      "  protected String email;", //              5
+      "  protected String telephone;", //          6
+      "  @Transient private String emailDraft;", // 7
+      "  protected int emailCount;", //            8
+      "}", //                                      9
+      "class EmailDto { String email; }", //       10
+    ];
+    const files = [file("model/UserEntity.java", "java", java)];
+    expect(summary(declaredColumns(files, "email"))).toEqual(["USER_ENTITY.EMAIL (orm-field)"]);
+    expect(declaredColumns(files, "email")[0]).toMatchObject({ model: "UserEntity", line: 5 });
+  });
+
+  it("reads Go structs with ORM tags: tag column names, else snake case; string fields only", () => {
+    const go = [
+      "package user", //                                           1
+      "type User struct {", //                                     2
+      "\tID int64 `xorm:\"pk autoincr\"`", //                       3
+      "\tEmail string `xorm:\"NOT NULL\"`", //                      4
+      "\tPhoneNumber *string `gorm:\"column:phone_no\"`", //        5
+      "\tNotifyEmail string `db:\"notify_email\"`", //               6
+      "\tEmailCount int `db:\"email_count\"`", //                   7
+      "}", //                                                      8
+      "type Payload struct { Email string `json:\"email\"` }", //   9
+    ];
+    const files = [file("models/user.go", "go", go)];
+    expect(summary(declaredColumns(files, "email"))).toEqual(["User.email (orm-field)", "User.notify_email (orm-field)"]);
+    expect(summary(declaredColumns(files, "phone_number"))).toEqual(["User.phone_no (orm-field)"]);
+  });
+
+  it("reads SQLAlchemy mapped_column and Column fields, and not pydantic models", () => {
+    const py = [
+      "class User(SqlAlchemyBase):", //                                         1
+      "    email: Mapped[str | None] = mapped_column(String, unique=True)", //   2
+      "    email_count: Mapped[int] = mapped_column(Integer)", //                3
+      "    phone = Column(\"phone_no\", String(20))", //                         4
+      "", //                                                                    5
+      "class UserInfo(BaseModel):", //                                          6
+      "    email: str = Field(None)", //                                        7
+    ];
+    const files = [file("db/models/users.py", "python", py)];
+    expect(summary(declaredColumns(files, "email"))).toEqual(["User.email (orm-field)"]);
+    expect(summary(declaredColumns(files, "phone_number"))).toEqual(["User.phone_no (orm-field)"]);
+  });
+
+  it("reads Drizzle table objects: text columns, with the builder's column name", () => {
+    const ts = [
+      "export const users = pgTable('users', {", //       1
+      "  id: text('id').primaryKey(),", //                 2
+      "  email: text('email').unique(),", //               3
+      "  phoneNumber: varchar('phone_number'),", //        4
+      "  emailVerifiedAt: timestamp('email_verified_at'),", // 5
+      "});", //                                            6
+    ];
+    const files = [file("db/schema/user.ts", "typescript", ts)];
+    expect(summary(declaredColumns(files, "email"))).toEqual(["users.email (orm-field)"]);
+    expect(summary(declaredColumns(files, "phone_number"))).toEqual(["users.phone_number (orm-field)"]);
+  });
+
+  it("reads a configured role word only when it ends the key or the key ends in an address word", () => {
+    const config = ["module.exports = { from_city: 'x', fromPackage: 'y', mailFrom: 'a@b', support_address: 'c@d' }"];
+    expect(summary(declaredColumns([file("app/config.js", "javascript", config)], "email", { include: "configured" }))).toEqual([
+      "config.mailFrom (config)",
+      "config.support_address (config)",
+    ]);
   });
 });
 

@@ -196,8 +196,10 @@ export class CodeNavigator {
     // Prisma schemas and SQL DDL declare columns without being source (KDATAP-fded10).
     for (const file of schemaFiles) this.columnCandidates.push(...schemaFileCandidates(file));
     for (const file of files) {
-      // Content-type `schema.json` is read directly: it has no language pack.
-      if (file.language === "json") this.columnCandidates.push(...candidatesForFile(file, undefined));
+      // Content-type `schema.json`, JPA entities and Go structs are read without a pack.
+      if (file.language === "json" || file.language === "java" || file.language === "go") {
+        this.columnCandidates.push(...candidatesForFile(file, undefined));
+      }
       if (!packForFile(file.language, file.path)) continue;
       this.sources.set(file.path, file);
       // Every class declared anywhere, found by keyword so it is complete before the first parse.
