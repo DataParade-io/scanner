@@ -3,9 +3,9 @@
   "title": "Wire Grok Bot dedup, incremental rescan, and doctor",
   "description": "Wire the shared frameworks into the Grok Bot adapter: dedup rules appropriate to its storage, incremental rescan, doctor checks, and meter integration so Grok Bot sessions appear in counts alongside the other sources. Privacy rules apply identically: local only, counts only.\n\nDone when: Grok Bot appears in per-source meter output; golden tests pass; doctor reports on a real Mac with the app installed.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 3,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-24729463-e7e3-4b82-bc57-935f3c9803df",
   "labels": [],
@@ -19,29 +19,37 @@
     {
       "id": "e20ba8b1-f158-4522-b445-9a16d3c2d1d7",
       "author": "ubuntu",
-      "text": "BLOCKED on KDATAP-f37d2e (which is blocked on real-Mac research/capture). When the adapter exists: choose dedup keys from the researched storage semantics (buildDedupKey supports source+recordId with content-tuple fallback), wire incremental rescan via scan-state watermarks appropriate to the format (JSONL linesSeen vs SQLite createdAt floor), add Grok Bot to doctor output and to the --sources flag/config in src/sentiment/config.ts, and extend meter per-source breakdown. Privacy rules apply identically: local only, counts only \u2014 verified by privacy.spec.ts scanning src/sentiment/**.",
+      "text": "BLOCKED on KDATAP-f37d2e (which is blocked on real-Mac research/capture). When the adapter exists: choose dedup keys from the researched storage semantics (buildDedupKey supports source+recordId with content-tuple fallback), wire incremental rescan via scan-state watermarks appropriate to the format (JSONL linesSeen vs SQLite createdAt floor), add Grok Bot to doctor output and to the --sources flag/config in src/sentiment/config.ts, and extend meter per-source breakdown. Privacy rules apply identically: local only, counts only — verified by privacy.spec.ts scanning src/sentiment/**.",
       "created_at": "2026-10-02T03:30:28.000154Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "29ef6cde-7e59-4020-a089-fea54d9e8ba9",
+      "author": "home",
+      "text": "Done (commit after 9daf7b3). Wiring complete:\n- CLI: --grok-data-dir root override; --doctor reports '<transcriptBlobCount> conversation blobs of <blobCount> total' (real Mac: 9 of 20 — one blob is a replica pair of the same conversation, deduped by conversation-uuid-embedded record ids).\n- src/index.ts exports createGrokBotAdapter, extractGrokBotRecords, doctorGrokBot, defaultGrokBotDataDir, decodeBlobKeyName, conversationIdFromKeyName + option/report types.\n- runSentimentMeter default sources now include grok-bot; root override key grok-bot.\n- Gold-label eval scans the grok-bot fixtures (5 synthetic grok-bot rows added, 100% exact match).\n- README sources bullet + wiki source-table row and status line updated.\n- Real-data meter (counts only): all-time grok-bot 240 human messages / 9 sessions, 2 thanks tokens, 17 f-bomb tokens; last 24h 34 msgs / 2 sessions / 12 f-bomb tokens; today 5 msgs / 0 tokens. Privacy respected: no content read into outputs.\n- Tests: sentiment 15/15 suites (146), full suite 193 suites / 1577 passed / 2 skipped; lint shows only the pre-existing benchmark require() error.",
+      "created_at": "2026-10-02T08:56:30.762751Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:59.708594Z",
-  "updated_at": "2026-10-02T03:30:28.000290Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:56:30.847472Z",
+  "closed_at": "2026-10-02T08:56:30.847433Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }

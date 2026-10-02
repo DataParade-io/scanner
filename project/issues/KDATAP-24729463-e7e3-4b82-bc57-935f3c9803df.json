@@ -1,9 +1,9 @@
 {
   "id": "KDATAP-24729463-e7e3-4b82-bc57-935f3c9803df",
   "title": "Grok Bot adapter (later source)",
-  "description": "Purpose: add Grok Bot (a desktop AI assistant app) conversations as a required later source, via its own adapter conforming to the shared normalized record.\n\nScope: research Grok Bot's conversation storage on macOS (app container paths, database or file formats, session and authorship semantics) \u2014 nothing is assumed from the other adapters; capture fixture data from a real Mac locally; implement discovery and human-message extraction per the adapter contract; dedup, incremental re-scan, and doctor checks consistent with the other sources.\n\nDone when: the research is recorded (with citations or clearly marked assumptions); golden extraction tests pass on synthetic fixtures; Grok Bot sessions appear in the meter counts alongside the other sources; privacy rules apply identically.",
+  "description": "Purpose: add Grok Bot (a desktop AI assistant app) conversations as a required later source, via its own adapter conforming to the shared normalized record.\n\nScope: research Grok Bot's conversation storage on macOS (app container paths, database or file formats, session and authorship semantics) — nothing is assumed from the other adapters; capture fixture data from a real Mac locally; implement discovery and human-message extraction per the adapter contract; dedup, incremental re-scan, and doctor checks consistent with the other sources.\n\nDone when: the research is recorded (with citations or clearly marked assumptions); golden extraction tests pass on synthetic fixtures; Grok Bot sessions appear in the meter counts alongside the other sources; privacy rules apply identically.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 3,
   "assignee": null,
   "creator": null,
@@ -19,29 +19,37 @@
     {
       "id": "f6cf1c40-bd42-46fa-aa82-84a40ed9308d",
       "author": "ubuntu",
-      "text": "Epic I status: all four tasks (f66d10 research, a1a9d4 fixture capture, f37d2e adapter, 9c7841 dedup/doctor wiring) are intentionally left open \u2014 they require research and fixture capture on Ryan's real Mac with Grok Bot installed, which cannot be done from this VM. Each task carries a comment spelling out exactly what to check locally. Everything downstream of the research (fixtures, adapter, dedup/doctor wiring) is scaffolded in the comments and the shared adapter contract, record schema, dedup, and scan-state frameworks from Epics A\u2013G are source-agnostic and ready.",
+      "text": "Epic I status: all four tasks (f66d10 research, a1a9d4 fixture capture, f37d2e adapter, 9c7841 dedup/doctor wiring) are intentionally left open — they require research and fixture capture on Ryan's real Mac with Grok Bot installed, which cannot be done from this VM. Each task carries a comment spelling out exactly what to check locally. Everything downstream of the research (fixtures, adapter, dedup/doctor wiring) is scaffolded in the comments and the shared adapter contract, record schema, dedup, and scan-state frameworks from Epics A–G are source-agnostic and ready.",
       "created_at": "2026-10-02T03:30:28.634375Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "e36d03a0-7a00-47fc-aec5-939e1f9ed3bf",
+      "author": "home",
+      "text": "Epic I complete. f66d10 (format research, pinned on real corpus with the authorship rule and one marked assumption), a1a9d4 (synthetic fixtures), f37d2e (adapter + doctor), 9c7841 (CLI/doctor/exports/gold-eval/docs wiring) all closed. Meter includes grok-bot as a fifth source; live reading verified on BlackbookM1.",
+      "created_at": "2026-10-02T08:56:30.875852Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:41:58.904165Z",
-  "updated_at": "2026-10-02T03:30:28.634542Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:56:30.926785Z",
+  "closed_at": "2026-10-02T08:56:30.926748Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
