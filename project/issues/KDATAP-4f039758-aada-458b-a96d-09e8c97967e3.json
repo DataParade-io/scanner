@@ -3,17 +3,30 @@
   "title": "Meter aggregation and CLI output for sentiment scores",
   "description": "Aggregate per-message sentiment into the meter report per window and per source: mean compound score and pos/neu/neg message counts, counts only. Wire into CLI text and JSON output and the config surface (backend selection flag/key). Done when: meter tests cover the new aggregates; CLI text/JSON show them; nothing text-bearing is persisted.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-85c99751-3005-4486-aeb7-8c78a099bb80",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "93b21208-5dff-4375-9ce9-d1957bbcae35",
+      "author": "home",
+      "text": "Meter aggregation wired: SentimentAggregate (backend, scoredMessages, meanCompound, pos/neu/neg) on MeterReport and perSource, populated by computeMeter when a backend is configured; runSentimentMeter defaults to the local vader backend (empty string disables); CLI gains --sentiment-backend flag (config key sentimentBackend), text output gains Sentiment and Sentiment per source lines, JSON gains sentiment plus per-source aggregates; 12 new meter/CLI tests; full suite 1604 passing.",
+      "created_at": "2026-10-02T11:49:53.680169Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T11:41:00.304329Z",
-  "updated_at": "2026-10-02T11:41:00.304361Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T11:49:53.765533Z",
+  "closed_at": "2026-10-02T11:49:53.765488Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
