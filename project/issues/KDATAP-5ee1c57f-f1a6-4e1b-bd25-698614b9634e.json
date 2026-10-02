@@ -3,7 +3,7 @@
   "title": "Codex adapter",
   "description": "Purpose: extract human-authored messages from OpenAI Codex CLI rollout files at ~/.codex/sessions/YYYY/MM/DD/rollout-<timestamp>-<uuid>.jsonl (CODEX_HOME honored; archived_sessions covered).\n\nScope: discovery walk of sessions and archived rollouts; extraction of user-role response_item messages (input_text blocks) with rejection of harness-injected user content (instruction/environment wrappers); never double-count event_msg user_message mirrors of response_item messages; session and project attribution from session_meta (id, cwd); dedup of forked/resumed rollouts using forked_from_id and forked_from_ordinal_exclusive (inherited messages count once) and of the same rollout in sessions plus archived_sessions by session_meta id; incremental watermarks. The codex CLI is open source, so format claims cite the openai/codex rollout source.\n\nDone when: golden extraction tests pass on fixtures including mirrors, forks, archives, and malformed lines; a resumed rollout counts inherited human messages exactly once; doctor reports on a real Mac's roots.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "80509a56-98ef-4195-8e66-125cc112bf9e",
+      "author": "ubuntu",
+      "text": "Epic complete locally: golden extraction passes on fixtures including mirrors, forks, archives, and malformed lines; inherited messages count once. Real-Mac semantics (injected markers, mirror kinds, fork ordinals, compressed rollouts) remain open in KDATAP-f662b6.",
+      "created_at": "2026-10-02T03:15:05.371368Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:41:43.386870Z",
-  "updated_at": "2026-10-02T02:45:07.601150Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:15:05.947680Z",
+  "closed_at": "2026-10-02T03:15:05.947511Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
