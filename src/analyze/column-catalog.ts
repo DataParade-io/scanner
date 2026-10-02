@@ -430,14 +430,14 @@ export function prismaCandidates(file: SchemaFile): ColumnCandidate[] {
       model = undefined;
       return;
     }
-    const mapped = /^@@map\(\s*["']([^"']+)["']/.exec(line);
+    const mapped = /^@@map\(\s*(?:name\s*:\s*)?["']([^"']+)["']/.exec(line);
     if (mapped) {
       table = mapped[1];
       return;
     }
     const field = /^([A-Za-z_][A-Za-z0-9_]*)\s+([A-Za-z_][A-Za-z0-9_]*\??(?:\[\])?)(.*)$/.exec(line);
     if (!field || !PRISMA_TEXT.test(field[2]) || field[3].includes("@relation")) return;
-    const column = /@map\(\s*["']([^"']+)["']/.exec(field[3])?.[1] ?? field[1];
+    const column = /@map\(\s*(?:name\s*:\s*)?["']([^"']+)["']/.exec(field[3])?.[1] ?? field[1];
     fields.push({ name: field[1], column, line: index + 1 });
   });
   return out;
@@ -820,7 +820,8 @@ export function collapseColumns(candidates: readonly ColumnCandidate[], concept:
   const entries = [...byKey.values()];
   const declaresStorage = entries.some((entry) => entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence));
   // SQL DDL fills in columns no model declares; a model and its generated SQL are one column.
-  const fold = (entry: ColumnEntry): string => `${(entry.table ?? "").toLowerCase()}.${entry.column.toLowerCase()}`;
+  // Tables compare as entities: a Prisma model `User` and its SQL table `users` are one.
+  const fold = (entry: ColumnEntry): string => `${ownerEntity(entry.table ?? "") ?? ""}.${entry.column.toLowerCase()}`;
   const modelled = new Set(
     entries.filter((entry) => entry.evidence !== "sql-ddl" && entry.evidence !== "record-type" && !CONFIGURED_EVIDENCE.has(entry.evidence)).map(fold),
   );

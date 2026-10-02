@@ -513,6 +513,13 @@ describe("storage schema files", () => {
     expect(summary(declaredColumns([], "email", {}, [laravel]))).toEqual(["users.email (migration)"]);
   });
 
+  it("reads named @@map and @map arguments, and folds a model's SQL table into it", () => {
+    const prisma = schema("prisma/schema.prisma", "prisma", 'model User {\n  email String\n  phone String? @map(name: "phone_number")\n  @@map(name: "users")\n}');
+    const migration = schema("prisma/migrations/1/migration.sql", "sql", 'CREATE TABLE "users" (\n  "email" TEXT NOT NULL\n);');
+    expect(summary(declaredColumns([], "email", {}, [prisma, migration]))).toEqual(["users.email (prisma-model)"]);
+    expect(summary(declaredColumns([], "phone_number", {}, [prisma]))).toEqual(["users.phone_number (prisma-model)"]);
+  });
+
   it("uses SQL DDL only for columns no model declares", () => {
     const prisma = schema("prisma/schema.prisma", "prisma", "model User {\n  email String\n}");
     const migration = schema("prisma/migrations/1/migration.sql", "sql", 'CREATE TABLE "User" (\n  "email" TEXT NOT NULL,\n  "alt_email" TEXT\n);');
