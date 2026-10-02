@@ -3,7 +3,7 @@
   "title": "Time windows, timezone, and configurable day start",
   "description": "Purpose: parameterize the meter's time period with correct timezone and DST behavior.\n\nScope: a pure resolveWindow(spec, now, timezone, dayStart) function supporting rolling windows (last-24h, N hours, N days), calendar windows (today, yesterday) where the day starts at a configurable day-start time defaulting to local midnight, and absolute since/until bounds; wall-clock to UTC conversion via Intl timezone offsets with no new runtime dependencies; explicit DST rules (23h/25h days, spring-forward gap clamps forward, fall-back ambiguity resolves earlier).\n\nDone when: window resolution is deterministic and pure; a message at 03:59 with day-start 04:00 falls in yesterday's window and one at 04:00:00 falls in today's; the pinned test matrix (UTC, America/Los_Angeles incl. DST transition dates, Asia/Tokyo, Australia/Lord_Howe, day-start 00:00/04:00/23:30) passes; per-source timestamp parsing (ISO-Z, epoch milliseconds, RFC3339) is normalized and tested.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "ffbb9440-fc10-4790-85b4-238755ecd7cf",
+      "author": "ubuntu",
+      "text": "Epic complete: window resolution is deterministic and pure, the pinned matrix passes in Jest, and per-source timestamp normalization (from epic A) feeds the filter.",
+      "created_at": "2026-10-02T03:04:26.018069Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:41:27.312618Z",
-  "updated_at": "2026-10-02T02:45:06.192874Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:04:26.237114Z",
+  "closed_at": "2026-10-02T03:04:26.236980Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
