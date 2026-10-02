@@ -67,6 +67,11 @@ export interface PackConfig {
   deferredCallMethods?: string[];
   /** ORM reference-field classes whose first argument names the target model. */
   referenceFieldClasses?: string[];
+  /**
+   * Ruby: `self` and a receiverless method call (`email`, `validates :email`) mean an
+   * instance of the enclosing class, and instance variables (`@user`) are its fields.
+   */
+  implicitSelf?: boolean;
 }
 
 /** One argument of a call, as written at the call site. */

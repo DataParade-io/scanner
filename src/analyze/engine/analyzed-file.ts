@@ -98,9 +98,22 @@ export interface CompiledPack {
   query: Query;
 }
 
+/** ActiveRecord class methods that query or build a model's rows. */
+const ACTIVE_RECORD_METHODS = new Set([
+  "new", "create", "create!", "find", "find_by", "find_by!", "where", "find_or_create_by", "find_or_create_by!",
+  "find_or_initialize_by", "find_each", "all", "first", "last", "exists?", "select", "pluck", "order", "joins",
+  "includes", "update_all", "insert_all", "upsert_all", "unscoped", "build",
+]);
+
+/** Ruby classes that act on data rather than store it. */
+const RUBY_SERVICE_CLASS = /(?:Service|Job|Builder|Worker|Helper|Controller|Mailer|Listener|Finder|Presenter|Policy|Action|Handler|Client|Api|Rails)$/;
+
 function unquote(text: string): string {
   const m = /^[A-Za-z]{0,2}("""|'''|"|'|`)([\s\S]*)\1$/.exec(text);
-  return m ? m[2] : text;
+  if (m) return m[2];
+  // A Ruby symbol names a key the way a string does: `:email` -> email.
+  const symbol = /^:([A-Za-z_]\w*[?!]?)$/.exec(text);
+  return symbol ? symbol[1] : text;
 }
 
 /**
@@ -114,6 +127,8 @@ export class AnalyzedFile {
   private readonly rootScope: Scope;
   private readonly sitesByLine = new Map<number, Site[]>();
   private readonly memberByNode = new Map<number, { object: Node; property: Node }>();
+  /** The member access whose property is this node (a Ruby call's `method`). */
+  private readonly memberByProperty = new Map<number, { object: Node; property: Node }>();
   private readonly callByNode = new Map<number, Node>();
   private readonly callSitesByRow = new Map<number, Array<CallSite & { argument: Node; receiver?: Node }>>();
   private readonly nodeToScopeName = new Map<number, string>();
@@ -867,6 +882,51 @@ export class AnalyzedFile {
 
   // ---- class resolution ------------------------------------------------------------
 
+  /** The name of the class whose body contains a node. */
+  private enclosingClassOf(node: Node): string | undefined {
+    return this.enclosing(node.startPosition.row + 1, node.startPosition.column, "class")?.name;
+  }
+
+  /**
+   * The enclosing class when it is a stored model (`class User < ApplicationRecord`): only
+   * a model's own attributes are its columns. In a service, job or controller, `self.x` and
+   * a bare `x` are that object's helpers, not stored data.
+   */
+  private enclosingModelOf(node: Node): string | undefined {
+    for (let current: Node | null = node.parent; current; current = current.parent) {
+      if (this.scopes.get(current.id)?.kind !== "class") continue;
+      const superclass = current.childForFieldName("superclass")?.text ?? "";
+      if (!/(?:ApplicationRecord|ActiveRecord::Base|Record)\s*$/.test(superclass)) return undefined;
+      return this.enclosingClassOf(node);
+    }
+    return undefined;
+  }
+
+  /**
+   * Ruby implicit self (KDATAP-e35652): a concept site that is a receiverless method call
+   * (`email` with no local binding inside a model method) or a symbol argument of a
+   * receiverless call (`validates :email`) belongs to the enclosing class.
+   */
+  implicitSelfClass(line: number, isConcept: (token: string) => boolean): string | undefined {
+    if (!this.config.implicitSelf) return undefined;
+    for (const site of this.sitesOnLine(line)) {
+      if (site.role !== "reference" || !isConcept(site.name)) continue;
+      if (this.definitionsOf(site.name, site.node)?.length) continue;
+      const cls = this.enclosingModelOf(site.node);
+      if (cls) return cls;
+    }
+    for (const call of this.invocationNodes) {
+      if (call.call.startPosition.row !== line - 1 || call.call.childForFieldName("receiver")) continue;
+      const args = call.call.childForFieldName("arguments");
+      const symbols = (args?.namedChildren ?? []).filter((arg): arg is Node => !!arg && arg.type === "simple_symbol");
+      if (symbols.some((symbol) => isConcept(unquote(symbol.text)))) {
+        const cls = this.enclosingModelOf(call.call);
+        if (cls) return cls;
+      }
+    }
+    return undefined;
+  }
+
   private isSelfNode(node: Node): boolean {
     return this.config.selfNodeTypes.includes(node.type) || this.config.selfNames.includes(node.text);
   }
@@ -875,6 +935,11 @@ export class AnalyzedFile {
     if (depth > 4) return undefined;
     if (node.type === "identifier") {
       return this.classOfBinding(node.text, node, depth) ?? this.staticClass(node);
+    }
+    if (this.config.implicitSelf) {
+      if (this.isSelfNode(node)) return this.enclosingModelOf(node);
+      if (node.type === "instance_variable") return this.classOfField(node.text, node, depth);
+      if (node.type === "constant" || node.type === "scope_resolution") return this.staticClass(node);
     }
     const member = this.memberByNode.get(node.id);
     if (member) {
@@ -886,6 +951,12 @@ export class AnalyzedFile {
 
   /** A class named in the expression itself: `User`, `User.objects`, `models.User`. */
   private staticClass(node: Node): string | undefined {
+    // Ruby constants: `User`; a namespaced model keeps its namespace, as its table does
+    // (`Channel::Email` -> `ChannelEmail`, table channel_email).
+    if (node.type === "constant" || node.type === "scope_resolution") {
+      const name = node.text.replace(/^::/, "").split("::").join("");
+      return isClassName(name) ? name : undefined;
+    }
     if (node.type === "identifier") {
       if (!isClassName(node.text)) return undefined;
       const defs = this.definitionsOf(node.text, node);
@@ -896,6 +967,13 @@ export class AnalyzedFile {
     if (member) {
       const property = unquote(member.property.text);
       if (isClassName(property) && !this.isSelfNode(member.object)) return property;
+      // Ruby: a constant is a stored model only when queried or built through ActiveRecord
+      // (`Contact.find_by(...)`, `User.new(...)`), and not a service-style class;
+      // `Rails.logger`, `IdentifierSyncService.new(...).perform` are not data owners.
+      if (this.config.implicitSelf && (member.object.type === "constant" || member.object.type === "scope_resolution")) {
+        const model = this.staticClass(member.object);
+        return model && ACTIVE_RECORD_METHODS.has(property) && !RUBY_SERVICE_CLASS.test(model) ? model : undefined;
+      }
       return this.staticClass(member.object);
     }
     const callee = this.callByNode.get(node.id);
@@ -1278,6 +1356,7 @@ export class AnalyzedFile {
 
     for (const m of members) {
       this.memberByNode.set(m.node.id, { object: m.object, property: m.property });
+      this.memberByProperty.set(m.property.id, { object: m.object, property: m.property });
     }
     for (const m of members) this.addMemberSite(m.property, m.object, m.property.text);
     for (const { callee, argument } of callArguments) this.addCallSite(callee, argument);
@@ -1303,7 +1382,8 @@ export class AnalyzedFile {
   }
 
   private addCallSite(callee: Node, argument: Node): void {
-    const member = this.memberByNode.get(callee.id);
+    // In Ruby the callee is the call's method name; its member access is the call itself.
+    const member = this.memberByNode.get(callee.id) ?? this.memberByProperty.get(callee.id);
     const { nameNode } = this.calleeNameNode(callee, member);
     if (!member && callee.type !== "identifier") return;
     const list = argument.parent;
@@ -1311,8 +1391,9 @@ export class AnalyzedFile {
     const siblings = list.namedChildren.filter((c): c is Node => !!c && c.type !== "comment");
     const position = siblings.findIndex((c) => c.id === argument.id);
     if (position < 0) return;
-    const keywordNode = argument.childForFieldName("name");
-    const keyword = keywordNode && argument.childForFieldName("value") ? keywordNode.text : undefined;
+    // A keyword argument: `name=value` (Python), or a hash pair `email: value` (Ruby).
+    const keywordNode = argument.childForFieldName("name") ?? (argument.type === "pair" ? argument.childForFieldName("key") : null);
+    const keyword = keywordNode && argument.childForFieldName("value") ? unquote(keywordNode.text.replace(/:$/, "")) : undefined;
     const row = argument.startPosition.row;
     const sites = this.callSitesByRow.get(row) ?? [];
     const site = {

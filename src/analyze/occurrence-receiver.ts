@@ -51,6 +51,8 @@ export function occurrenceReceiver(
     if (found?.className) return { className: found.className, names, via: "direct" };
     if (found?.name) names.push(found.name);
   }
+  const implicit = file.implicitSelfClass(line, isConceptToken);
+  if (implicit) return { className: implicit, names, via: "direct" };
   const payload = file.payloadReceivers(line, isConceptToken);
   if (payload.className) return { ...payload, via: "payload" };
   const all = [...names, ...payload.names];
