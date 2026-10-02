@@ -3,9 +3,9 @@
   "title": "Implement timezone and DST handling without new dependencies",
   "description": "Implement wall-clock to UTC conversion using Intl DateTimeFormat timezone offsets (the standard offset-probing technique) \u2014 no new runtime dependencies (the repo keeps zod, yaml, tree-sitter only) and no Temporal (not in the supported Node). DST rules: calendar windows on transition days are naturally 23h or 25h; a day-start inside the spring-forward gap resolves to the first valid instant after the gap; a day-start inside the fall-back ambiguity resolves to the earlier occurrence. Invalid IANA timezone names fail fast.\n\nDone when: the DST gap and ambiguity rules are implemented as documented and the function is pure and deterministic.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-5219e258-d02c-4075-885e-1882d394d67f",
   "labels": [],
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "2d855004-2033-45a7-bd3a-f16858aae520",
+      "author": "ubuntu",
+      "text": "Timezone/DST via Intl offsets only \u2014 no new runtime dependencies. zonedWallTimeToUtcMs detects gap vs ambiguity by checking which candidate offsets reproduce the requested wall time: spring-forward gaps clamp forward to the transition instant (binary-searched), fall-back ambiguity resolves earlier. Verified: 23h day on 2026-03-08, 25h on 2026-11-01 in America/Los_Angeles. Outcome: green.",
+      "created_at": "2026-10-02T03:04:24.132896Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:30.741727Z",
-  "updated_at": "2026-10-02T02:45:19.988478Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:04:24.469116Z",
+  "closed_at": "2026-10-02T03:04:24.468916Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
