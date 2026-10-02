@@ -3,9 +3,9 @@
   "title": "Implement Claude Code discovery",
   "description": "Implement discovery of Claude Code transcripts: ~/.claude/projects/<encoded-cwd>/<session-id>.jsonl where the encoded cwd replaces non-alphanumeric characters with dashes (over 200 chars: truncated plus a path hash \u2014 per the official docs); honor CLAUDE_CONFIG_DIR and configured archive roots; exclude subagent transcripts; attribute session and project from sessionId and cwd per record.\n\nDone when: discovery finds synthetic fixture sessions under a fake home, decodes the project path, skips subagent files, and tolerates a missing root.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
   "labels": [],
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "f76c7029-face-4e37-89c2-cd892a0fc1ff",
+      "author": "ubuntu",
+      "text": "Implemented discovery in src/sentiment/adapters/claude-code.ts: ~/.claude/projects/<encoded-cwd>/<session>.jsonl walk honoring CLAUDE_CONFIG_DIR (via claudeConfigDir/homeDir overrides) plus optional archive roots; excludes subagent transcripts (subagents directories and agent- prefixed files); missing root = absent source tracked in skipCounter.missingRoots, not an error; project path decoded best-effort from the encoded dir name with per-record cwd as the authoritative source. Tests: fixture discovery, subagent exclusion, missing root, decoding. Outcome: green.",
+      "created_at": "2026-10-02T03:08:10.472756Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:43:49.564974Z",
-  "updated_at": "2026-10-02T02:45:20.974147Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:08:11.064903Z",
+  "closed_at": "2026-10-02T03:08:11.064748Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},

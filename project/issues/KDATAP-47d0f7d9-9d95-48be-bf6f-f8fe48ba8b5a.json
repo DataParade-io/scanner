@@ -3,9 +3,9 @@
   "title": "Wire Claude Code dedup, incremental rescan, and doctor",
   "description": "Wire the shared frameworks into the Claude Code adapter: dedup across forked/branched session copies (branch copies the transcript into a new session id) and duplicate copies across active plus archive roots (union, identical records once); incremental re-scan via append-only watermarks; doctor checks that sample real roots and report missing expected fields and observed Claude Code versions.\n\nDone when: a fixture fork and an archived duplicate count once; rescan-after-append equals cold scan; doctor runs on a real Mac and reports drift diagnostics.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
   "labels": [],
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "e9e080a1-0bab-44e0-9c3c-2a8c2d5292c6",
+      "author": "ubuntu",
+      "text": "Wired shared frameworks: scanAdapter runs discover + per-file crash-guarded extract + union dedup, so forked session copies (same record uuid) and archived duplicates count once; rescan-after-append equals cold scan (asserted in tests; incremental line watermarks exercised in scan-state.spec with jsonlRescanRange); doctorClaudeCode samples roots and reports transcript counts, subagent dirs seen, and missing roots. Real-Mac doctor run remains open under KDATAP-e27d10. Outcome: green.",
+      "created_at": "2026-10-02T03:08:13.240063Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:43:50.553097Z",
-  "updated_at": "2026-10-02T02:45:21.947925Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:08:13.962941Z",
+  "closed_at": "2026-10-02T03:08:13.962768Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},

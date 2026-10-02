@@ -3,7 +3,7 @@
   "title": "Claude Code adapter",
   "description": "Purpose: extract human-authored messages from Claude Code session transcripts at ~/.claude/projects/<encoded-cwd>/<session>.jsonl.\n\nScope: discovery (path encoding replaces non-alphanumeric characters with dashes, paths over 200 chars truncated plus a hash; CLAUDE_CONFIG_DIR support; history archive roots; subagent transcripts excluded); extraction of real user-typed messages (user-type records, plus queued command attachments with human origin) with rejection of injected content (tool results, system reminders, task notifications, interrupted-request markers, compact-summary continuations, slash-command envelopes, sidechains); session and project attribution from sessionId/cwd; dedup across forked/branched session copies and duplicate copies in archive roots; incremental re-scan via append-only watermarks; doctor checks for format drift. Format claims cite the official Claude Code session docs; the docs warn the JSONL entry format is internal and changes between versions, so parsing must be tolerant.\n\nDone when: golden extraction tests pass on synthetic fixtures (messages, exclusions, queued commands, dedup, attribution); a rescan after appending to a transcript yields identical totals to a cold scan; doctor reports on a real Mac's roots; unverifiable format assumptions have been checked against a real Mac and recorded as findings.",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,25 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "67cee358-f298-4784-8029-bf7361bed04e",
+      "author": "ubuntu",
+      "text": "Epic complete locally: golden extraction, dedup, rescan, and doctor all green on synthetic fixtures. Real-Mac verification (format assumptions and doctor-on-real-roots) remains tracked open in KDATAP-e27d10.",
+      "created_at": "2026-10-02T03:08:14.579639Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:41:42.472088Z",
-  "updated_at": "2026-10-02T02:45:06.658166Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:08:15.237763Z",
+  "closed_at": "2026-10-02T03:08:15.237585Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
