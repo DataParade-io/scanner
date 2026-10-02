@@ -1,0 +1,32 @@
+{
+  "id": "KDATAP-9567f85e-3208-4f86-8a77-c95040193c74",
+  "title": "Define the adapter contract and skip-with-counter failure policy",
+  "description": "Define the source-agnostic adapter contract: discover(roots) for session discovery and extract(session) streaming an AsyncIterable of HumanMessageRecords, never loading whole transcripts into memory (files can exceed 100 MB). Codify the shared failure policy: a missing root means the source is absent (not an error); a malformed line or unknown record type is skipped and counted, never fatal; a parse crash inside an adapter is caught per file and reported while the scan continues.\n\nDone when: the contract types exist and are exported; unit tests demonstrate skip-and-count behavior on malformed input and unknown record types; a missing root exits successfully.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-7299f867-88f0-4997-99ca-3ffef6e32e38",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-ed972734-6e82-4bf0-a59b-a1a4e3f79ef3",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-10-02T02:42:08.809797Z",
+  "updated_at": "2026-10-02T02:45:16.527116Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}

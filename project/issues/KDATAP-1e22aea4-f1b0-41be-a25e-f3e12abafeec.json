@@ -1,0 +1,32 @@
+{
+  "id": "KDATAP-1e22aea4-f1b0-41be-a25e-f3e12abafeec",
+  "title": "Build the incremental scan-state store",
+  "description": "Build the incremental re-scan state store at the cache dir (default XDG cache, overridable via --cache-dir): per JSONL file watermarks (path, size, mtime, linesSeen) so appended lines are read only once; per SQLite DB watermarks (dbPath, mtime, size, max seen createdAt) with a small overlap margin; full rescan when a file shrinks or its identity changes. The store persists watermarks, fingerprints, and counts only \u2014 never message text.\n\nDone when: append-then-rescan produces totals identical to a cold scan (idempotence property test); rewritten files trigger a full rescan; state contents are verified text-free by test.",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-7299f867-88f0-4997-99ca-3ffef6e32e38",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-9567f85e-3208-4f86-8a77-c95040193c74",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-10-02T02:42:09.798120Z",
+  "updated_at": "2026-10-02T02:45:17.473485Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}

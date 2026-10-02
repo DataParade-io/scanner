@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "c1f716f0-13ee-4384-a5fa-43d1226599fb",
+  "issue_id": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:42.472Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Claude Code adapter",
+    "description": "Purpose: extract human-authored messages from Claude Code session transcripts at ~/.claude/projects/<encoded-cwd>/<session>.jsonl.\n\nScope: discovery (path encoding replaces non-alphanumeric characters with dashes, paths over 200 chars truncated plus a hash; CLAUDE_CONFIG_DIR support; history archive roots; subagent transcripts excluded); extraction of real user-typed messages (user-type records, plus queued command attachments with human origin) with rejection of injected content (tool results, system reminders, task notifications, interrupted-request markers, compact-summary continuations, slash-command envelopes, sidechains); session and project attribution from sessionId/cwd; dedup across forked/branched session copies and duplicate copies in archive roots; incremental re-scan via append-only watermarks; doctor checks for format drift. Format claims cite the official Claude Code session docs; the docs warn the JSONL entry format is internal and changes between versions, so parsing must be tolerant.\n\nDone when: golden extraction tests pass on synthetic fixtures (messages, exclusions, queued commands, dedup, attribution); a rescan after appending to a transcript yields identical totals to a cold scan; doctor reports on a real Mac's roots; unverifiable format assumptions have been checked against a real Mac and recorded as findings.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
