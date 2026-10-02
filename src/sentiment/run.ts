@@ -17,7 +17,8 @@ import { loadSentimentWordList } from "./word-lists";
 import type { SentimentWordList } from "./word-lists";
 import { isInWindow, resolveWindow } from "./windows";
 import type { AbsoluteBounds } from "./windows";
-import { createSentimentBackend } from "./sentiment-classifier";
+import { createSentimentBackendAsync } from "./sentiment-classifier";
+import type { SentimentScore } from "./sentiment-classifier";
 
 /** Root overrides keyed at the adapter level; a missing key uses the defaults. */
 export type SentimentRoots = Partial<Record<"claude-code" | "cursor" | "codex" | "grok-bot" | "antigravity", string[]>>;
@@ -98,14 +99,24 @@ export async function runSentimentMeter(options: RunSentimentOptions): Promise<S
     inWindow.push(...result.records.filter((r) => isInWindow(new Date(r.timestamp).getTime(), window)));
   }
 
+  // Pre-score sentiment for the window before aggregation: backends may be
+  // async (transformer), and computeMeter stays synchronous and deterministic.
+  let sentiment: { backendName: string; scoresByDedupKey: Map<string, SentimentScore> } | undefined;
+  const sentimentBackendName = options.sentimentBackend === "" ? null : options.sentimentBackend ?? "vader";
+  if (sentimentBackendName) {
+    const backend = await createSentimentBackendAsync(sentimentBackendName);
+    const scores = new Map<string, SentimentScore>();
+    for (const record of inWindow) {
+      const score = await backend.scoreMessage(record.text);
+      if (score) scores.set(record.dedupKey, score);
+    }
+    sentiment = { backendName: backend.name, scoresByDedupKey: scores };
+  }
+
   const report = computeMeter(inWindow, window, {
     bands: options.bands,
     wordList,
-    // undefined selects the default backend ("vader"); "" explicitly disables sentiment.
-    sentimentBackend:
-      options.sentimentBackend === ""
-        ? undefined
-        : createSentimentBackend(options.sentimentBackend),
+    sentiment,
   });
   return { report, scanResults };
 }

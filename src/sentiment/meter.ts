@@ -2,7 +2,7 @@ import { countMessage } from "./counting";
 import type { SentimentFamily } from "./counting";
 import { loadSentimentWordList } from "./word-lists";
 import type { SentimentWordList } from "./word-lists";
-import type { SentimentBackend } from "./sentiment-classifier";
+import type { SentimentBackend, SentimentScore } from "./sentiment-classifier";
 import { createSentimentBackend } from "./sentiment-classifier";
 import type { HumanMessageRecord } from "./record";
 import { isInWindow, resolveWindow } from "./windows";
@@ -99,12 +99,13 @@ export function computeMeter(
   options: {
     bands?: MeterBands;
     wordList?: SentimentWordList;
-    sentimentBackend?: SentimentBackend;
+    /** Pre-scored sentiment for the records, keyed by record dedupKey. */
+    sentiment?: { backendName: string; scoresByDedupKey: Map<string, SentimentScore> };
   } = {},
 ): MeterReport {
   const bands = options.bands ?? DEFAULT_METER_BANDS;
   const wordList = options.wordList ?? loadSentimentWordList();
-  const sentimentBackend = options.sentimentBackend;
+  const sentiment = options.sentiment;
   const perSource: Record<string, SourceBreakdown> = {};
   const report: MeterReport = {
     window,
@@ -122,7 +123,7 @@ export function computeMeter(
   };
   const sessions = new Set<string>();
   const familyOfSource: Record<string, Set<string>> = {};
-  const sentimentOverall: Accumulator | null = sentimentBackend ? emptyAccumulator() : null;
+  const sentimentOverall: Accumulator | null = sentiment ? emptyAccumulator() : null;
   const sentimentBySource: Record<string, Accumulator> = {};
 
   for (const record of records) {
@@ -133,8 +134,8 @@ export function computeMeter(
     perSource[source].messages += 1;
     const counted = countMessage(record.text, wordList);
     if (counted.excluded) report.excludedMessages += 1;
-    if (sentimentBackend) {
-      const score = sentimentBackend.scoreMessage(record.text);
+    if (sentiment) {
+      const score = sentiment.scoresByDedupKey.get(record.dedupKey);
       if (score) {
         sentimentOverall![score.label] += 1;
         sentimentOverall!.compoundSum += score.compound;
@@ -168,10 +169,10 @@ export function computeMeter(
     ).size;
   }
 
-  if (sentimentBackend) {
-    report.sentiment = finalizeAggregate(sentimentBackend.name, sentimentOverall!);
+  if (sentiment) {
+    report.sentiment = finalizeAggregate(sentiment.backendName, sentimentOverall!);
     for (const key of Object.keys(sentimentBySource)) {
-      perSource[key].sentiment = finalizeAggregate(sentimentBackend.name, sentimentBySource[key]);
+      perSource[key].sentiment = finalizeAggregate(sentiment.backendName, sentimentBySource[key]);
     }
   }
 
@@ -219,12 +220,24 @@ export function meterOverRecords(
   const bounds: AbsoluteBounds = { since: options.since, until: options.until };
   const window = resolveWindow(options.window, now, timezone, options.dayStart ?? "00:00", bounds);
   const filtered = records.filter((r) => isInWindow(new Date(r.timestamp).getTime(), window));
-  const sentimentBackend = options.sentimentBackend
-    ? createSentimentBackend(options.sentimentBackend)
-    : undefined;
+  let sentiment: { backendName: string; scoresByDedupKey: Map<string, SentimentScore> } | undefined;
+  if (options.sentimentBackend !== undefined && options.sentimentBackend !== "") {
+    if (options.sentimentBackend !== "vader") {
+      throw new Error(
+        `meterOverRecords supports only the sync "vader" backend; use runSentimentMeter for ${options.sentimentBackend}`,
+      );
+    }
+    const backend = createSentimentBackend(options.sentimentBackend);
+    const scores = new Map<string, SentimentScore>();
+    for (const record of filtered) {
+      const score = backend.scoreMessage(record.text);
+      if (score) scores.set(record.dedupKey, score);
+    }
+    sentiment = { backendName: backend.name, scoresByDedupKey: scores };
+  }
   return computeMeter(filtered, window, {
     bands: options.bands,
     wordList: options.wordList,
-    sentimentBackend,
+    sentiment,
   });
 }
