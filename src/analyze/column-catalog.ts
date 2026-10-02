@@ -3,8 +3,9 @@ import type { FileInfo } from "../core/types/file";
 import { loadPiiSignalRules } from "../pii-signals/pii-signal-rules";
 import { signalTokenMatcher } from "../pii-signals/signal-token";
 import { conceptProfile, normalizeTypeName } from "./concept-profile";
+import type { Node } from "web-tree-sitter";
 import type { AnalyzedFile } from "./engine/analyzed-file";
-import { analyzeSource } from "./engine/engine";
+import { analyzeSource, withParseTree } from "./engine/engine";
 import type { FieldDeclaration, KeyDeclaration } from "./engine/types";
 import { packForFile } from "./languages";
 import { recordFacts, type RecordFacts } from "./json-record-keys";
@@ -109,6 +110,9 @@ const COLUMN_HELPER = /(?:column|totype)/i;
 const DESTRUCTIVE_HELPER = /^(?:drop|remove|delete|rename)/i;
 const SQL_IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
+/** Drizzle column builders that hold text. */
+const DRIZZLE_TEXT = /^(?:text|varchar|char|citext)$/;
+
 /** ORM field class names that point at another model rather than store a value. */
 const DJANGO_RELATION = /^(?:ForeignKey|OneToOneField|ManyToManyField|GenericForeignKey)$/;
 
@@ -202,7 +206,11 @@ export function isConfiguredAddressKey(key: string, concept: string, filePath: s
   const namesConcept = words.slice(0, -1).some((word) => isConcept(word));
   if (namesConcept && profile.tailWords.has(last)) return true;
   if (profile.negativeWords.has(last)) return false;
-  const hasRole = words.some((word) => profile.roleWords.has(word)) || profile.roleRuns.some((run) => words.join("").includes(run));
+  // A role word names the address when it ends the key (`mail:from`) or the key ends in an
+  // address word (`members_support_address`); `from_city`, `fromPackage` and
+  // `hide_user_profiles_from_public` are not addresses.
+  const roleEnds = profile.roleWords.has(last) || (profile.tailWords.has(last) && words.some((word) => profile.roleWords.has(word)));
+  const hasRole = roleEnds || profile.roleRuns.some((run) => words.join("").includes(run));
   return hasRole && (profile.roleWordsSuffice || namesConcept);
 }
 
@@ -272,6 +280,16 @@ export function defaultSettingsCandidates(file: FileInfo): ColumnCandidate[] {
 function ormFieldCandidates(field: FieldDeclaration, filePath: string): ColumnCandidate[] {
   const where = { file: filePath, line: field.line, evidence: "orm-field" as const };
   const init = field.initializer;
+  // Pydantic `Field(...)` on a `BaseModel` is a message schema, not storage.
+  if (init?.callee === "Field" || field.ownerBases.some((base) => /(?:^|\.)BaseModel$/.test(base))) return [];
+  // SQLAlchemy: `email: Mapped[str] = mapped_column(String)`, `phone = Column("phone_no", String)`.
+  if (init && /^(?:mapped_column|Column)$/.test(init.callee) && field.owner && field.ownerBases.length > 0) {
+    const mapped = /^Mapped\[(.*)\]$/.exec(field.typeAnnotation ?? "")?.[1];
+    if (mapped !== undefined && (isNonText(mapped.replace(/Optional\[(.*)\]/, "$1")) || !/\bstr\b/.test(mapped))) return [];
+    const named = init.strings[0];
+    const column = named && SQL_IDENTIFIER.test(named) ? named : field.name;
+    return [{ table: field.owner, model: field.owner, column, ...(mapped ? { type: mapped } : {}), ...where }];
+  }
   if (init && /Field$/.test(init.callee) && !DJANGO_RELATION.test(init.callee)) {
     // A model's field is `models.X`, or a bare imported field class (`PhoneNumberField`) on a
     // class with a base; `forms.X` and `serializers.X` are not columns.
@@ -316,6 +334,14 @@ function keyCandidates(key: KeyDeclaration, filePath: string): ColumnCandidate[]
     const model = container.assignedTo ?? table;
     return [{ ...(table ? { table } : {}), ...(model ? { model } : {}), type, evidence: "orm-field", ...base }];
   }
+  // Drizzle: `pgTable('users', { email: text('email').unique() })`, the call's first string is the column.
+  if (container && key.path.length === 0 && /^(?:pg|sqlite|mysql)Table$/.test(container.callee) && container.position === 1) {
+    const type = key.value.callRoot?.method;
+    if (!type || !DRIZZLE_TEXT.test(type) || key.value.callRoot?.receiver) return [];
+    const column = /^[A-Za-z_]+\(\s*["'`]([A-Za-z0-9_]+)["'`]/.exec(key.value.text)?.[1] ?? key.name;
+    const table = container.strings[0] ?? container.assignedTo;
+    return [{ ...(table ? { table } : {}), ...(container.assignedTo ? { model: container.assignedTo } : {}), type, evidence: "orm-field", ...base, column }];
+  }
   if (container && key.path.length === 0) {
     const sequelizeDefine = container.callee === "define" && container.position === 1 && container.strings.length > 0;
     const sequelizeInit = container.callee === "init" && container.position === 0 && !container.constructed;
@@ -348,8 +374,12 @@ function keyCandidates(key: KeyDeclaration, filePath: string): ColumnCandidate[]
 const ROW_TIMESTAMP = /^(?:created|updated|inserted)(?:_at|At)$/;
 
 /** Members of TypeScript record types: named object types with an `id` and a row timestamp. */
+/** Generated API client types (`*.generated.ts`, `generated/types.gen.ts`) describe a server's API, not storage. */
+const GENERATED_FILE = /(?:^|\/)(?:__generated__|generated)\/|\.(?:generated|gen)\.[cm]?[jt]sx?$/;
+
 function recordTypeCandidates(file: AnalyzedFile, filePath: string): ColumnCandidate[] {
   const out: ColumnCandidate[] = [];
+  if (GENERATED_FILE.test(filePath)) return out;
   for (const record of file.recordTypes()) {
     const names = new Set(record.members.map((member) => member.name));
     if (!names.has("id") || ![...names].some((name) => ROW_TIMESTAMP.test(name))) continue;
@@ -453,6 +483,100 @@ export function sqlCandidates(file: SchemaFile): ColumnCandidate[] {
     if (depth <= 0 && /\)/.test(line)) table = undefined;
   });
   return out;
+}
+
+// ---- JPA entities and Go structs, read from parse-only trees (KDATAP-fded10) ---------
+
+function annotationsOf(modifiers: Node | null | undefined): Array<{ name: string; args: Record<string, string> }> {
+  const out: Array<{ name: string; args: Record<string, string> }> = [];
+  for (const child of modifiers?.namedChildren ?? []) {
+    if (!child || (child.type !== "annotation" && child.type !== "marker_annotation")) continue;
+    const name = child.childForFieldName("name")?.text.split(".").pop() ?? "";
+    const args: Record<string, string> = {};
+    for (const pair of child.childForFieldName("arguments")?.namedChildren ?? []) {
+      if (pair?.type !== "element_value_pair") continue;
+      const key = pair.childForFieldName("key")?.text;
+      const value = pair.childForFieldName("value");
+      if (key && value?.type === "string_literal") args[key] = value.text.replace(/^"|"$/g, "");
+    }
+    out.push({ name, args });
+  }
+  return out;
+}
+
+/** JPA `@Entity` classes: `String` fields, the column from `@Column(name)`, the table from `@Table(name)`. */
+export function jpaCandidates(file: FileInfo): ColumnCandidate[] {
+  if (!file.content.includes("@Entity")) return [];
+  return (
+    withParseTree("java", file.content, (root) => {
+      const out: ColumnCandidate[] = [];
+      for (const cls of root.descendantsOfType("class_declaration")) {
+        if (!cls) continue;
+        const classAnnotations = annotationsOf(cls.namedChildren.find((c) => c?.type === "modifiers"));
+        if (!classAnnotations.some((a) => a.name === "Entity")) continue;
+        const model = cls.childForFieldName("name")?.text;
+        if (!model) continue;
+        const table = classAnnotations.find((a) => a.name === "Table")?.args["name"] ?? model;
+        for (const field of cls.childForFieldName("body")?.namedChildren ?? []) {
+          if (field?.type !== "field_declaration" || field.childForFieldName("type")?.text !== "String") continue;
+          const annotations = annotationsOf(field.namedChildren.find((c) => c?.type === "modifiers"));
+          if (annotations.some((a) => a.name === "Transient")) continue;
+          const name = field.childForFieldName("declarator")?.childForFieldName("name");
+          if (!name) continue;
+          const column = annotations.find((a) => a.name === "Column")?.args["name"] ?? name.text;
+          out.push({ table, model, column, type: "String", file: file.path, line: name.startPosition.row + 1, evidence: "orm-field" });
+        }
+      }
+      return out;
+    }) ?? []
+  );
+}
+
+/** Struct tag keys of Go ORMs and SQL mappers. */
+const GO_ORM_TAG = /\b(?:gorm|xorm|db|bun|sql|pg)\s*:\s*"([^"]*)"/g;
+
+function snakeCase(name: string): string {
+  return name.replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/([A-Z])([A-Z][a-z])/g, "$1_$2").toLowerCase();
+}
+
+/** The column a Go struct tag names: `gorm:"column:x"`, `db:"x"`, `bun:"x"`, `xorm:"'x'"`; else the field in snake case. */
+function goTagColumn(tag: string, field: string): string | undefined {
+  for (const [, body] of tag.matchAll(GO_ORM_TAG)) {
+    if (body === "-" || body.startsWith("-;")) return undefined;
+    const explicit = /(?:^|;)\s*column:([A-Za-z0-9_]+)/.exec(body)?.[1] ?? /'([A-Za-z0-9_]+)'/.exec(body)?.[1];
+    if (explicit) return explicit;
+    const first = body.split(",")[0];
+    if (/^[a-z][a-z0-9_]*$/.test(first) && !/^(?:pk|notnull|not|null|unique|index|autoincr|default|type|size)$/.test(first)) return first;
+  }
+  return snakeCase(field);
+}
+
+/** Go structs mapped by an ORM or SQL mapper tag: string fields, one column each. */
+export function goStructCandidates(file: FileInfo): ColumnCandidate[] {
+  if (!/`[^`]*\b(?:gorm|xorm|db|bun|sql|pg)\s*:"/.test(file.content)) return [];
+  return (
+    withParseTree("go", file.content, (root) => {
+      const out: ColumnCandidate[] = [];
+      for (const spec of root.descendantsOfType("type_spec")) {
+        const model = spec?.childForFieldName("name")?.text;
+        const struct = spec?.childForFieldName("type");
+        if (!model || struct?.type !== "struct_type") continue;
+        const fields = struct.namedChildren.find((c) => c?.type === "field_declaration_list")?.namedChildren ?? [];
+        if (!fields.some((f) => f?.childForFieldName("tag") && GO_ORM_TAG.test(f.childForFieldName("tag")?.text ?? ""))) continue;
+        for (const field of fields) {
+          GO_ORM_TAG.lastIndex = 0;
+          const name = field?.childForFieldName("name");
+          const type = field?.childForFieldName("type")?.text.replace(/^\*/, "");
+          if (!field || !name || !type || !/^(?:string|sql\.NullString|null\.String)$/.test(type)) continue;
+          const column = goTagColumn(field.childForFieldName("tag")?.text ?? "", name.text);
+          if (!column) continue;
+          out.push({ table: model, model, column, type, file: file.path, line: name.startPosition.row + 1, evidence: "orm-field" });
+        }
+        GO_ORM_TAG.lastIndex = 0;
+      }
+      return out;
+    }) ?? []
+  );
 }
 
 /** Rails and Laravel column types that hold text. */
@@ -564,6 +688,8 @@ export function contentTypeCandidates(file: FileInfo): ColumnCandidate[] {
 
 /** Candidates of one file, whatever its language: parsed source, or a `schema.json`. */
 export function candidatesForFile(file: FileInfo, analyzed: AnalyzedFile | undefined): ColumnCandidate[] {
+  if (file.language === "java") return jpaCandidates(file);
+  if (file.language === "go") return goStructCandidates(file);
   if (file.language === "json") {
     return path.basename(file.path) === "schema.json" ? contentTypeCandidates(file) : defaultSettingsCandidates(file);
   }
@@ -582,7 +708,7 @@ export function matchesConcept(candidate: ColumnCandidate, concept: string): boo
   // before an address word (`contact_email`, `phone_number`; not `mobile_footer`,
   // `phone_number_health_error`).
   if (schemaFileKind(candidate.file)) return namesConceptValue(candidate.column, concept, candidate.file);
-  if (conceptNameMatcher(concept, candidate.file)(candidate.column)) return true;
+  if (namesConceptValue(candidate.column, concept, candidate.file)) return true;
   return candidate.type !== undefined && conceptProfile(concept).typeHints.has(normalizeTypeName(candidate.type));
 }
 
