@@ -3,9 +3,9 @@
   "title": "Verify Claude Code format assumptions on a real Mac",
   "description": "Before writing the adapter, pin the unverifiable format assumptions against a real Mac (Ryan's): userType values distinguishing external/human from internal; promptSource values (typed vs system vs sdk); exact spellings of system-reminder, task-notification, interrupted-request, and compact-continuation markers; the queued-command attachment shape (attachment.prompt, attachment.origin.kind == human); the subagent transcript layout (subagents folders vs agent- prefixed files); whether branched/forked session copies preserve record uuids; the history-sources.json archive registry shape. Record findings in Kanbus (findings for contested observations).\n\nDone when: every assumption is confirmed or corrected with real examples captured into synthetic fixtures; findings/comments record the evidence.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
-  "assignee": null,
+  "assignee": "cursor-agent",
   "creator": null,
   "parent": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
   "labels": [],
@@ -14,29 +14,49 @@
     {
       "id": "461847e3-d1e8-43c8-bae2-5cf6c79552af",
       "author": "ubuntu",
-      "text": "Blocked from remote verification \u2014 needs Ryan's real Mac. The adapter (KDATAP-11c4f0, KDATAP-bc0702, KDATAP-47d0f7) is implemented against the officially documented format plus community-verified shapes, with synthetic fixtures. Before or during local verification, check on the Mac and record findings here:\n\n1. `userType` values distinguishing external/human from internal records in current Claude Code versions.\n2. `promptSource` values (typed vs system vs sdk) and any new values.\n3. Exact spellings of system-reminder, task-notification, interrupted-request, and compact-continuation markers in current releases.\n4. The queued-command attachment shape (`attachment.prompt`, `attachment.origin.kind == human`).\n5. Subagent transcript layout: `subagents` folders vs `agent-`-prefixed files under the project dir.\n6. Whether branched/forked session copies preserve record uuids (dedup depends on it).\n7. The history-sources.json archive registry shape.\n\nEverything local-only; record findings as Kanbus findings if contested. Until verified, extraction tolerates unknown record types by skip-and-count.",
+      "text": "Blocked from remote verification — needs Ryan's real Mac. The adapter (KDATAP-11c4f0, KDATAP-bc0702, KDATAP-47d0f7) is implemented against the officially documented format plus community-verified shapes, with synthetic fixtures. Before or during local verification, check on the Mac and record findings here:\n\n1. `userType` values distinguishing external/human from internal records in current Claude Code versions.\n2. `promptSource` values (typed vs system vs sdk) and any new values.\n3. Exact spellings of system-reminder, task-notification, interrupted-request, and compact-continuation markers in current releases.\n4. The queued-command attachment shape (`attachment.prompt`, `attachment.origin.kind == human`).\n5. Subagent transcript layout: `subagents` folders vs `agent-`-prefixed files under the project dir.\n6. Whether branched/forked session copies preserve record uuids (dedup depends on it).\n7. The history-sources.json archive registry shape.\n\nEverything local-only; record findings as Kanbus findings if contested. Until verified, extraction tolerates unknown record types by skip-and-count.",
       "created_at": "2026-10-02T03:04:33.822280Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "1be7e0ef-32e7-462f-b645-b384f74afc99",
+      "author": "home",
+      "text": "Verified all seven assumptions against the real ~/.claude/projects corpus on this Mac (722 JSONL files, 92022 user-role records; scanned locally with a throwaway script in /tmp, counts and field names only — no message text read into any artifact).\n\n1. userType: every user record has userType=external (92022/92022). No internal value exists in current releases; internal/injected content is distinguished by isMeta, isSidechain, promptSource, and origin fields instead.\n2. promptSource: observed values typed (2), sdk (2502), system (1632), absent (87886). Genuinely typed messages mostly have promptSource absent, so the adapter's skip-only-system/sdk logic is correct; typed/sdk/system spellings confirmed.\n3. Markers: <system-reminder> (307 records), <task-notification> (1884), and the compact continuation 'This session is being continued from a previous conversation' (102) confirmed verbatim. <interrupted-request> NEVER appears in the current release — interruptions surface via an interruptedByShutdown field on user records; the regex stays as defensive tolerance.\n4. Queued commands: confirmed, but as standalone records, not fields on user records — type:'attachment' with attachment:{type:'queued_command', prompt, origin:{kind:'human'}, commandMode:'prompt', source_uuid, timestamp} (738 human-origin queued commands in corpus, all with non-empty string prompt and ISO timestamps). The adapter previously skipped these entirely (recall gap); it now absorbs them as human messages with queued: record ids. Other attachment types (total_tokens_reminder, environment, instructions, etc.) are injected context and stay excluded. No material double-count risk: only 6 of 634 distinct queued prompts also appear as user-record text, and cross-file copies (85) collapse via uuid dedup.\n5. Subagent layout: agent-*.jsonl files live under <project>/<session-id>/subagents/ (session subdirectories), never at project top level; <project>/<session-id>/ session dirs are already skipped by discovery. The top-level agent- prefix filter remains defensive only.\n6. Forked/branched copies preserve record uuids: 15 of 102 yielded uuids and 85 of 634 queued prompts appear in multiple files — dedup by uuid is correct as implemented.\n7. history-sources.json: absent on this Mac — the archive registry is optional; missing roots handled as absent source.\n\nCorrections implemented + synthetic fixtures added (tests/fixtures/sentiment/claude-code):\n- Standalone queued_command attachment records are now extracted (new fixture lines; gold label 'queued attachment prompt, thanks' added to the da54f5 gold set).\n- NEW false-positive class found and fixed: <local-command-stdout>/<local-command-stderr> echoes ride as user records (82 in corpus; they were 82 of the 117 records the old logic yielded). isInjectedText now filters them.\n- User records with origin.kind present and != human (task-notification 1600, peer 278 in corpus) are now excluded.\n- Test isolation fix: CLI unit tests now point claude/codex roots at nonexistent dirs instead of silently scanning the real Mac HOME (they passed on CI only because the VM had no real corpora).\n- Unrelated meter bug fixed en route: computeMeter counted distinct dedupKeys as sessionsScanned (59 messages reported as 59 sessions on the real corpus); it now counts distinct sessionIds. Meter spec strengthened.\n\nReal-corpus sanity after fixes: last 24h window = 59 human messages, 10 sessions, 5 fbomb tokens / 4 messages, 0 thanks (band 'cursing at the machine'), all claude-code; today = quiet. All 128 sentiment unit tests green; lint back to the single pre-existing benchmark error.",
+      "created_at": "2026-10-02T07:48:09.159161Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "bb324bfe-be41-4ff7-a79a-5d70be2ce4af",
+      "author": "home",
+      "text": "Closed: all seven format assumptions verified against the real Mac corpus; corrections (standalone queued_command attachment extraction, local-command-stdout/origin.kind filters) implemented with synthetic fixtures and a new gold label; CLI test isolation and the sessionsScanned meter bug fixed. 128 sentiment tests green. Evidence in the progress comment above.",
+      "created_at": "2026-10-02T07:48:44.958448Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:43:49.075239Z",
-  "updated_at": "2026-10-02T03:04:50.979860Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T07:48:45.043840Z",
+  "closed_at": "2026-10-02T07:48:45.043796Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
