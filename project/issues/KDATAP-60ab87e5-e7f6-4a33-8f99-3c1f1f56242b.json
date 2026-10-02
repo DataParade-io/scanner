@@ -3,17 +3,32 @@
   "title": "Guard fixtures against real transcript commits",
   "description": "Add a lint guard (path allowlist or content heuristics) preventing real transcripts from being committed under tests/fixtures/sentiment/: fixtures must stay synthetic and hand-authored. Real transcripts from Ryan's Macs are used for verification locally only, and only aggregate numbers are recorded.\n\nDone when: the guard runs in CI and rejects fixture files that look like real session dumps; the fixture README rule is enforced.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "642502d8-e1db-4a0d-9045-0a20e75682e1",
+      "author": "ubuntu",
+      "text": "Done. scripts/guard-sentiment-fixtures.ts rejects files >1MB, >5000 lines, lines >100KB, or binary/db extensions under tests/fixtures/sentiment; fixture-guard.spec.ts verifies committed corpus passes and synthetic dumps are rejected. Removed the CLI script shebang so ts-jest can import runCli. Lint back to the single pre-existing benchmark error.",
+      "created_at": "2026-10-02T03:29:08.273521Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:49.646978Z",
-  "updated_at": "2026-10-02T02:44:49.647110Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:29:09.930005Z",
+  "closed_at": "2026-10-02T03:29:09.929859Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},

@@ -3,17 +3,32 @@
   "title": "Enforce no-network and no-text privacy tests",
   "description": "Add privacy enforcement tests mirroring the existing no-source-code-leakage spec pattern: a static test asserting no network-capable imports (net, http, https, dgram, fetch, undici, axios) appear under src/sentiment/**; tests asserting all output builders (text and json) and the scan-state store contain no verbatim message text \u2014 counts, hashes, and watermarks only. Local-only is a product guarantee, not a convention.\n\nDone when: the tests are green in CI and fail if any network import or text leak is introduced.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
-  "assignee": null,
+  "assignee": "ubuntu",
   "creator": null,
   "parent": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "a311d818-a145-417a-aa88-9dc8e5f1a1a0",
+      "author": "ubuntu",
+      "text": "Done. privacy.spec.ts statically scans src/sentiment/** and rejects network imports (node:net/http/https/dgram, undici, axios, fetch calls) and asserts the text output, --json report, and scan-state cache contain no verbatim message text (secret-marker fixture). 127 sentiment unit tests green; tsc clean. Outcome: privacy invariants enforced by CI-runnable test.",
+      "created_at": "2026-10-02T03:29:07.710948Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent",
+        "settings": {}
+      }
+    }
+  ],
   "created_at": "2026-10-02T02:44:49.158976Z",
-  "updated_at": "2026-10-02T02:44:49.159115Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T03:29:09.352223Z",
+  "closed_at": "2026-10-02T03:29:09.352034Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
