@@ -69,11 +69,32 @@ describe("exclusion strippers", () => {
     expect(stripExcludedRegions("```\nfuck\n```")).toBe("");
   });
 
-  it("treats a long ASCII multi-line blob as a paste and excludes it", () => {
-    const filler = "x".repeat(180);
-    const paste = Array.from({ length: 12 }, (_, i) => `error at line ${i}: ${filler} something happened`).join("\n");
+  it("treats a long message dense with citation markers as a pasted region and excludes it", () => {
+    const paste = [
+      "Here were our original ideas for animations:",
+      "",
+      "Yes—this is a strong fit. See the references.[1]",
+      ...Array.from({ length: 40 }, (_, i) => `- **Reference ${i}** explains the approach in substantial detail and is worth reading end to end before we decide how to proceed here.[${i + 1}][${i + 2}]`),
+    ].join("\n");
     expect(isPastedRegion(paste)).toBe(true);
-    expect(countMessage(paste.replace(/error/g, "fuck"), wordList).excluded).toBe(true);
+    expect(countMessage(paste.replace(/strong fit/g, "fuck"), wordList).excluded).toBe(true);
+  });
+
+  it("keeps the operator's own long orchestration briefs (no citation density)", () => {
+    const brief = [
+      "AUTHORIZED. Plan accepted with amendments. Implement Phase A0 only.",
+      "",
+      "## Worktree first (mandatory)",
+      "",
+      "```bash",
+      "git fetch origin",
+      "git worktree add -b spike/x /tmp/spike origin/develop",
+      "```",
+      "",
+      ...Array.from({ length: 40 }, (_, i) => `${i + 1}. Do not run kbs from this worktree; keep numbers in results/. Amendment ${i}.`),
+    ].join("\n");
+    expect(isPastedRegion(brief)).toBe(false);
+    expect(countMessage(brief, wordList).excluded).toBe(false);
   });
 
   it("keeps short messages even if they look dense", () => {
@@ -81,11 +102,10 @@ describe("exclusion strippers", () => {
   });
 
   it("honors configured thresholds", () => {
-    const filler = "x".repeat(200);
-    const blob = Array.from({ length: 8 }, (_, i) => `line ${i} ${filler}`).join("\n");
-    expect(isPastedRegion(blob, DEFAULT_EXCLUSION_THRESHOLDS)).toBe(false);
+    const paste = Array.from({ length: 4 }, (_, i) => `see reference ${i}[${i + 1}] for the details of the cited method`).join("\n");
+    expect(isPastedRegion(paste, DEFAULT_EXCLUSION_THRESHOLDS)).toBe(false);
     expect(
-      isPastedRegion(blob, { ...DEFAULT_EXCLUSION_THRESHOLDS, pasteMinLength: 1000, pasteMinNonBlankLines: 5 }),
+      isPastedRegion(paste, { ...DEFAULT_EXCLUSION_THRESHOLDS, pasteMinLength: 100, pasteMinCitationMarkers: 2 }),
     ).toBe(true);
   });
 });

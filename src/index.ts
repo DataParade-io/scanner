@@ -187,11 +187,14 @@ export type { ClaudeCodeAdapterOptions, ClaudeCodeDoctorReport } from "./sentime
 export type { DiscoveredSession } from "./sentiment/adapter";
 export {
   createCursorAdapter,
+  CURSOR_AGENT_TEMPLATE_PROMPTS,
   decodeSanitizedProject,
   discoverComposers,
   doctorCursor,
   extractCursorRecords,
   isSubagentComposerId,
+  parseCursorTimestampHeaderMs,
+  unwrapUserQuery,
   workspaceFolderFromUri,
 } from "./sentiment/adapters/cursor";
 export type {
