@@ -37,6 +37,7 @@ describe("sentiment-meter CLI", () => {
         claudeConfigDir: "/nonexistent/claude",
         codexHome: "/nonexistent/codex",
         grokDataDir: "/nonexistent/grok",
+        antigravityHome: "/nonexistent/gemini",
       }),
     );
     expect(output).toContain("Thanks: 2");
@@ -60,6 +61,7 @@ describe("sentiment-meter CLI", () => {
         claudeConfigDir: "/nonexistent/claude",
         codexHome: "/nonexistent/codex",
         grokDataDir: "/nonexistent/grok",
+        antigravityHome: "/nonexistent/gemini",
       }),
     );
     const payload = JSON.parse(output);

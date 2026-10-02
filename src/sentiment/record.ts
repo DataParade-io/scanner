@@ -6,6 +6,7 @@ export const SENTIMENT_SOURCES = [
   "cursor-agent",
   "codex",
   "grok-bot",
+  "antigravity",
 ] as const;
 
 export type SentimentSource = (typeof SENTIMENT_SOURCES)[number];

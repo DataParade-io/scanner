@@ -27,7 +27,29 @@ export interface OpenOptions {
 
 export class SqliteUnavailableError extends Error {}
 
-export function openVscDb(file: string, options: OpenOptions = {}): SqliteKVDatabase {
+interface NodeSqliteStatement {
+  iterate(...params: unknown[]): Iterable<{ key: string; value: unknown }>;
+  get(...params: unknown[]): { key: string; value: unknown } | undefined;
+  all(...params: unknown[]): unknown[];
+}
+
+interface NodeSqliteDb {
+  exec(sql: string): void;
+  prepare(sql: string): NodeSqliteStatement;
+  close(): void;
+}
+
+export interface RawSqliteDatabase extends NodeSqliteDb {
+  /** Call when done: closes the handle and removes any snapshot copy. */
+  dispose(): void;
+}
+
+/**
+ * Open a read-only SQLite file. When a -wal sidecar is present and
+ * copyThenRead is set, the db plus sidecars are copied to a temp dir first so
+ * reads see a consistent snapshot even while a writer holds the original.
+ */
+export function openSqliteFile(file: string, options: OpenOptions = {}): RawSqliteDatabase {
   // Lazy require so importing this module never crashes on Node <22.5.
   let DatabaseSync: unknown;
   try {
@@ -48,39 +70,43 @@ export function openVscDb(file: string, options: OpenOptions = {}): SqliteKVData
     if (options.busyTimeoutMs) {
       db.exec(`PRAGMA busy_timeout = ${options.busyTimeoutMs}`);
     }
-    return new NodeSqliteKVAdapter(db, copyDir);
+    return wrapRaw(db, copyDir);
   } catch (err) {
     if (copyDir) throw err;
     // A writer may hold the DB; retry on a consistent snapshot copy.
-    const retryDir = path.dirname(copyDbWithWal(file));
-    const copy = path.join(retryDir, path.basename(file));
+    const retryCopy = copyDbWithWal(file);
     const db = new (DatabaseSync as new (
       path: string,
       opts: Record<string, unknown>,
-    ) => NodeSqliteDb)(copy, { readOnly: true, enableForeignKeyConstraints: false });
-    return new NodeSqliteKVAdapter(db, retryDir);
+    ) => NodeSqliteDb)(retryCopy, { readOnly: true, enableForeignKeyConstraints: false });
+    return wrapRaw(db, path.dirname(retryCopy));
   }
 }
 
-interface NodeSqliteDb {
-  exec(sql: string): void;
-  prepare(sql: string): {
-    iterate(...params: unknown[]): Iterable<{ key: string; value: unknown }>;
-    get(...params: unknown[]): { key: string; value: unknown } | undefined;
+function wrapRaw(db: NodeSqliteDb, copyDir?: string): RawSqliteDatabase {
+  return {
+    exec: (sql: string) => db.exec(sql),
+    prepare: (sql: string) => db.prepare(sql),
+    close: () => db.close(),
+    dispose: () => {
+      db.close();
+      if (copyDir) fs.rmSync(copyDir, { recursive: true, force: true });
+    },
   };
-  close(): void;
+}
+
+export function openVscDb(file: string, options: OpenOptions = {}): SqliteKVDatabase {
+  const raw = openSqliteFile(file, options);
+  return new NodeSqliteKVAdapter(raw);
 }
 
 class NodeSqliteKVAdapter implements SqliteKVDatabase {
-  constructor(
-    private readonly db: NodeSqliteDb,
-    private readonly copyDir?: string,
-  ) {}
+  constructor(private readonly raw: RawSqliteDatabase) {}
 
   *iterateByPrefix(prefix: string): Iterable<KVRow> {
     const escaped = prefix.replace(/\*/g, "**");
     const pattern = `${escaped}%`;
-    const iterator = this.db
+    const iterator = this.raw
       .prepare("SELECT key, value FROM cursorDiskKV WHERE key LIKE ? ESCAPE '*' ORDER BY key")
       .iterate(pattern);
     for (const row of iterator) {
@@ -92,7 +118,7 @@ class NodeSqliteKVAdapter implements SqliteKVDatabase {
   }
 
   get(key: string): KVRow | undefined {
-    const row = this.db.prepare("SELECT key, value FROM cursorDiskKV WHERE key = ?").get(key);
+    const row = this.raw.prepare("SELECT key, value FROM cursorDiskKV WHERE key = ?").get(key);
     if (!row) return undefined;
     return {
       key: row.key,
@@ -101,14 +127,11 @@ class NodeSqliteKVAdapter implements SqliteKVDatabase {
   }
 
   close(): void {
-    this.db.close();
-    if (this.copyDir) {
-      fs.rmSync(this.copyDir, { recursive: true, force: true });
-    }
+    this.raw.dispose();
   }
 }
 
-function copyDbWithWal(file: string): string {
+export function copyDbWithWal(file: string): string {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "sentiment-vscdb-"));
   const target = path.join(tmpDir, path.basename(file));
   for (const suffix of ["", "-wal", "-shm"]) {
