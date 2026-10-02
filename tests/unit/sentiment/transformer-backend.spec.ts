@@ -38,6 +38,18 @@ const modelCached = fs.existsSync(modelDir);
     expect(TRANSFORMER_MODELS["transformer-cardiff"].labels).toEqual(["negative", "neutral", "positive"]);
   });
 
+  it("defaults every transformer spec to coding filter off (KDATAP-d278a8 study)", () => {
+    // The study showed the filter is redundant on gold sets and hides genuine
+    // frustration for GoEmotions ("this crash is killing me" -> neu), so the
+    // transformer family defaults to raw text; only VADER filters by default.
+    for (const [name, spec] of Object.entries(TRANSFORMER_MODELS)) {
+      expect({ model: name, defaultCodingFilter: spec.defaultCodingFilter }).toEqual({
+        model: name,
+        defaultCodingFilter: false,
+      });
+    }
+  });
+
   it("scores empty text as neutral zero without running the model", async () => {
     const backend = await createTransformerBackend();
     const empty = await backend.scoreMessage("");

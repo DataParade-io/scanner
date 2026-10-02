@@ -1,5 +1,6 @@
 import {
   CODING_DOMAIN_OVERRIDES,
+  codingFilterFor,
   createSentimentBackend,
   createVaderBackend,
   labelForCompound,
@@ -99,5 +100,23 @@ describe("sentiment classifier: backend registry", () => {
 
   it("rejects unknown backends", () => {
     expect(() => createSentimentBackend("nope")).toThrow(/unknown sentiment backend/);
+  });
+});
+
+describe("sentiment classifier: per-backend coding filter (KDATAP-d278a8)", () => {
+  it("vader default applies the filter; codingFilter false scores raw text", () => {
+    const text = "kill the stale worker and retry";
+    expect(vader.scoreMessage(text)!.label).toBe("neu");
+    const raw = createVaderBackend({ codingFilter: false });
+    expect(raw.scoreMessage(text)!.label).toBe("neg");
+  });
+
+  it("codingFilterFor resolves on/off over the backend default, auto passes it through", () => {
+    expect(codingFilterFor(undefined, true)).toBe(true);
+    expect(codingFilterFor(undefined, false)).toBe(false);
+    expect(codingFilterFor("auto", true)).toBe(true);
+    expect(codingFilterFor("auto", false)).toBe(false);
+    expect(codingFilterFor("on", false)).toBe(true);
+    expect(codingFilterFor("off", true)).toBe(false);
   });
 });

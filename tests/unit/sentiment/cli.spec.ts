@@ -148,6 +148,58 @@ describe("sentiment-meter CLI", () => {
     expect(output).not.toContain("Sentiment");
     cleanupCursorProfile(profile);
   }, 30000);
+
+  it("applies the coding-domain filter by default and can turn it off (KDATAP-d278a8)", async () => {
+    const profile = generateCursorProfile({
+      globalComposers: [composer("c1", ["kill the stale worker and retry"])],
+    });
+    const jsonText = await captureStdout(() =>
+      runCli({
+        window: "all",
+        json: true,
+        sentimentBackend: "vader",
+        cursorUserDir: profile.userDir,
+        cursorHomeDir: profile.cursorHome,
+        claudeConfigDir: "/nonexistent/claude",
+        codexHome: "/nonexistent/codex",
+        grokDataDir: "/nonexistent/grok",
+        antigravityHome: "/nonexistent/gemini",
+      }),
+    );
+    const filtered = JSON.parse(jsonText).sentiment;
+    expect(filtered.neg).toBe(0);
+
+    const rawText = await captureStdout(() =>
+      runCli({
+        window: "all",
+        json: true,
+        sentimentBackend: "vader",
+        sentimentCodingFilter: "off",
+        cursorUserDir: profile.userDir,
+        cursorHomeDir: profile.cursorHome,
+        claudeConfigDir: "/nonexistent/claude",
+        codexHome: "/nonexistent/codex",
+        grokDataDir: "/nonexistent/grok",
+        antigravityHome: "/nonexistent/gemini",
+      }),
+    );
+    const raw = JSON.parse(rawText).sentiment;
+    expect(raw.neg).toBe(1);
+    cleanupCursorProfile(profile);
+  }, 30000);
+
+  it("rejects an invalid --sentiment-coding-filter value", async () => {
+    await expect(
+      captureStdout(() =>
+        runCli({
+          window: "all",
+          sentimentCodingFilter: "bogus" as never,
+          claudeConfigDir: "/nonexistent/claude",
+          codexHome: "/nonexistent/codex",
+        }),
+      ),
+    ).rejects.toThrow(/invalid --sentiment-coding-filter/);
+  }, 30000);
 });
 
 describe("sentiment-meter via ts-node", () => {
