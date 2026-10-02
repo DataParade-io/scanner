@@ -4,6 +4,7 @@ import { conceptProfile, normalizeTypeName } from "../../../src/analyze/concept-
 import { initAnalysisEngine } from "../../../src/analyze/engine/engine";
 import { LANGUAGE_PACKS } from "../../../src/analyze/languages";
 import type { FileInfo } from "../../../src/core/types/file";
+import type { SchemaFile } from "../../../src/ingest/schema-files";
 
 function file(path: string, language: FileInfo["language"], lines: string[]): FileInfo {
   const content = lines.join("\n");
@@ -428,6 +429,95 @@ describe("record types", () => {
   it("does not read test-tool configs as configured addresses", () => {
     const jest = ["module.exports = { collectCoverageFrom: ['src/**'] }"];
     expect(declaredColumns([file("pkg/jest.config.js", "javascript", jest)], "email", { include: "configured" })).toEqual([]);
+  });
+});
+
+const PRISMA = [
+  "model User {", //                                         1
+  "  id        String   @id @default(cuid())", //           2
+  "  email     String   @unique", //                        3
+  "  phoneNumber String? @map(\"phone_number\")", //         4
+  "  emailVerified DateTime?", //                           5
+  "  manager   User?    @relation(fields: [managerId], references: [id])", // 6
+  "  createdAt DateTime @default(now())", //                7
+  "  @@map(\"users\")", //                                  8
+  "}", //                                                   9
+  "model Invite { inviteEmail String }", //                 10 (one-line blocks are not parsed)
+].join("\n");
+
+const SQL = [
+  "CREATE TABLE IF NOT EXISTS public.subscribers (", //    1
+  "  id SERIAL PRIMARY KEY,", //                            2
+  "  \"email\" TEXT NOT NULL UNIQUE,", //                    3
+  "  email_count INTEGER DEFAULT 0,", //                    4
+  "  attribs JSONB,", //                                    5
+  "  CONSTRAINT email_unique UNIQUE (email)", //            6
+  ");", //                                                  7
+  "ALTER TABLE \"User\" ADD COLUMN \"backupEmail\" TEXT;", // 8
+  "CREATE TABLE \"User\" (\"email\" TEXT, \"phone\" varchar(20));", // 9 (columns on the create line are not read)
+].join("\n");
+
+function schema(path: string, kind: SchemaFile["kind"], content: string): SchemaFile {
+  return { path, kind, content };
+}
+
+describe("storage schema files", () => {
+  beforeAll(async () => {
+    await initAnalysisEngine(LANGUAGE_PACKS);
+  });
+
+  it("reads Prisma String fields with @map and @@map names, not relations or non-text fields", () => {
+    const files = [schema("prisma/schema.prisma", "prisma", PRISMA)];
+    expect(summary(declaredColumns([], "email", {}, files))).toEqual(["users.email (prisma-model)"]);
+    expect(declaredColumns([], "email", {}, files)[0]).toMatchObject({ model: "User", line: 3 });
+    expect(summary(declaredColumns([], "phone_number", {}, files))).toEqual(["users.phone_number (prisma-model)"]);
+  });
+
+  it("reads CREATE TABLE column definitions and ALTER TABLE ADD COLUMN, skipping constraints and non-text types", () => {
+    const files = [schema("db/schema.sql", "sql", SQL)];
+    expect(summary(declaredColumns([], "email", {}, files))).toEqual(["subscribers.email (sql-ddl)", "User.backupEmail (sql-ddl)"]);
+  });
+
+  it("keeps only schema columns that name the value: the concept last, or before an address word", () => {
+    const sql = schema(
+      "db/schema.sql",
+      "sql",
+      "CREATE TABLE users (\n  email TEXT,\n  email_change_token TEXT,\n  emailHash TEXT,\n  email_type TEXT,\n  customEmailSubject TEXT,\n  auth_email_domains TEXT,\n  reply_to_email TEXT,\n  email_address TEXT,\n  mobile_footer TEXT\n);\nCREATE TABLE __new_users (\n  email TEXT\n);",
+    );
+    expect(summary(declaredColumns([], "email", {}, [sql]))).toEqual(["users.email (sql-ddl)", "users.email_address (sql-ddl)", "users.reply_to_email (sql-ddl)"]);
+    expect(declaredColumns([], "phone_number", {}, [sql])).toEqual([]);
+  });
+
+  it("reads Rails schema.rb, Rails migrations and Laravel migrations", () => {
+    const rails = schema(
+      "db/schema.rb",
+      "rails",
+      'ActiveRecord::Schema.define do\n  create_table "users", force: :cascade do |t|\n    t.string "email", default: ""\n    t.integer "email_count"\n    t.string "phone_number"\n  end\nend',
+    );
+    const migration = schema("db/migrate/2017_create_user_emails.rb", "rails", "create_table :user_emails do |t|\n  t.string :email, limit: 513\nend\nadd_column :invites, :invitee_email, :string");
+    const laravel = schema(
+      "database/migrations/2014_create_users_table.php",
+      "laravel",
+      "Schema::create('users', function (Blueprint $table) {\n    $table->id();\n    $table->string('email')->unique();\n    $table->timestamp('email_verified_at');\n});",
+    );
+    expect(summary(declaredColumns([], "email", {}, [rails, migration]))).toEqual([
+      "invites.invitee_email (migration)",
+      "user_emails.email (migration)",
+      "users.email (migration)",
+    ]);
+    expect(summary(declaredColumns([], "phone_number", {}, [rails]))).toEqual(["users.phone_number (migration)"]);
+    expect(summary(declaredColumns([], "email", {}, [laravel]))).toEqual(["users.email (migration)"]);
+  });
+
+  it("uses SQL DDL only for columns no model declares", () => {
+    const prisma = schema("prisma/schema.prisma", "prisma", "model User {\n  email String\n}");
+    const migration = schema("prisma/migrations/1/migration.sql", "sql", 'CREATE TABLE "User" (\n  "email" TEXT NOT NULL,\n  "alt_email" TEXT\n);');
+    expect(summary(declaredColumns([], "email", {}, [prisma, migration]))).toEqual(["User.alt_email (sql-ddl)", "User.email (prisma-model)"]);
+  });
+
+  it("drops the record-type fallback when a schema file declares storage", () => {
+    const files = [file("auth/src/lib/types.ts", "typescript", RECORD_TS)];
+    expect(summary(declaredColumns(files, "email", {}, [schema("db/schema.sql", "sql", SQL)]))).toEqual(["subscribers.email (sql-ddl)", "User.backupEmail (sql-ddl)"]);
   });
 });
 

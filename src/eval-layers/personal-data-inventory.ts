@@ -9,6 +9,7 @@ import { LANGUAGE_PACKS, packForFile } from "../analyze/languages";
 import { resolveOccurrenceDeclaration } from "../analyze/occurrence-declaration";
 import { occurrenceReceiver, type ReceiverVia } from "../analyze/occurrence-receiver";
 import { collapseColumns, collectColumnFacts } from "../analyze/column-catalog";
+import { readSchemaFiles, type SchemaFile } from "../ingest/schema-files";
 import { recordKeyColumns } from "../analyze/json-record-keys";
 import { hasConceptProfile } from "../analyze/concept-profile";
 import { columnIndex, isDeclaredColumn, isRecordColumn, occurrenceColumn } from "../analyze/column-identity";
@@ -270,10 +271,10 @@ function withCallLinks(hits: PendingHit[], functions: ConceptFunctionIndex, clas
  * catalog is per signal: the email and phone signals of one scan each use their own
  * columns. Nothing happens for signals without a concept profile or when the engine is off.
  */
-function withColumns(hits: PiiSignalHit[], files: FileInfo[]): PiiSignalHit[] {
+function withColumns(hits: PiiSignalHit[], files: FileInfo[], schemaFiles: readonly SchemaFile[]): PiiSignalHit[] {
   const ids = new Set(hits.filter((hit) => hit.location !== "comment" && hasConceptProfile(hit.id)).map((hit) => hit.id));
   if (ids.size === 0 || !isAnalysisEngineReady()) return hits;
-  const { candidates, facts } = collectColumnFacts(files);
+  const { candidates, facts } = collectColumnFacts(files, schemaFiles);
   const recordKeys = recordKeyColumns(facts, candidates);
   const indexes = new Map([...ids].map((id) => [id, columnIndex(collapseColumns(candidates, id), recordKeys)]));
   return hits.map((hit) => {
@@ -349,6 +350,7 @@ export async function ensureDeclarationEngine(): Promise<void> {
 export function buildPersonalDataInventoryFromIngest(
   files: FileInfo[],
   ingestOutcomes: PathEligibilityOutcome[],
+  schemaFiles: readonly SchemaFile[] = [],
 ): PersonalDataInventory {
   const functions: ConceptFunctionIndex = new Map();
   const classes: ClassIndex = new Map();
@@ -359,7 +361,7 @@ export function buildPersonalDataInventoryFromIngest(
     for (const match of file.content.matchAll(/\b(?:class|interface)\s+([A-Z][A-Za-z0-9_]*)/g)) declared.add(match[1]);
   }
   const pending = files.flatMap((file) => annotatedHitsForFile(file, functions, classes, declared));
-  const grouped = assignDeclarationGroups(withColumns(withCallLinks(pending, functions, classes), files));
+  const grouped = assignDeclarationGroups(withColumns(withCallLinks(pending, functions, classes), files, schemaFiles));
   // Optional data-item labels from a classifier: DATAPARADE_GROUP_LABELS names a JSON file
   // mapping group names to data-item keys.
   const labelsPath = process.env.DATAPARADE_GROUP_LABELS;
@@ -386,5 +388,6 @@ export async function buildPersonalDataInventory(
   return buildPersonalDataInventoryFromIngest(
     ingestResult.files,
     ingestResult.outcomes,
+    await readSchemaFiles(rootPath),
   );
 }

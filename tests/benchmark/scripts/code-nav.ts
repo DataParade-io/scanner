@@ -16,6 +16,7 @@ import { CodeNavigator, type NavRequest } from "../../../src/analyze/code-naviga
 import { initAnalysisEngine } from "../../../src/analyze/engine/engine";
 import { LANGUAGE_PACKS } from "../../../src/analyze/languages";
 import { ingestFileSystem } from "../../../src/ingest/file-system";
+import { readSchemaFiles } from "../../../src/ingest/schema-files";
 
 async function main(): Promise<void> {
   const root = process.argv[2];
@@ -26,7 +27,7 @@ async function main(): Promise<void> {
   const started = Date.now();
   await initAnalysisEngine(LANGUAGE_PACKS);
   const files = await ingestFileSystem(path.resolve(root));
-  const navigator = new CodeNavigator(files);
+  const navigator = new CodeNavigator(files, await readSchemaFiles(path.resolve(root)));
   console.error(`indexed ${navigator.fileCount} files in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 
   const lines = readline.createInterface({ input: process.stdin, crlfDelay: Infinity });
