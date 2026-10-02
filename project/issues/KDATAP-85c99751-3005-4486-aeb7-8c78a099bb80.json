@@ -3,7 +3,7 @@
   "title": "K. Local sentiment classifier",
   "description": "Purpose: add a LOCAL (no cloud APIs) sentiment classifier for human user messages as a second packaged metric alongside thanks vs. F-bombs. Per-message compound score (-1..+1) plus pos/neu/neg labels, aggregated per window and per source in the meter report.\n\nScope: (a) VADER backend via the vader-sentiment npm package (offline port) run on the same code/quote/paste-stripped text the counter uses; (b) coding-domain lexicon overrides so technical usage of kill/error/fail/bug/crash/abort/exception is not negative; (c) meter aggregation (mean compound, pos/neu/neg counts) wired into CLI text and JSON; (d) a synthetic gold set modeled on coding-chat patterns plus an accuracy eval; (e) an optional Transformers.js backend behind a flag with a small local ONNX model, cached locally, compared against VADER on the gold set and a real-corpus agreement check (aggregate numbers only); (f) docs and tests.\n\nDone when: VADER and transformer backends both run locally on BlackbookM1 with throughput measured; gold accuracy reported; meter output carries the new counts only; privacy rules apply identically (no message text persisted anywhere).",
   "type": "epic",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,23 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "e45e5bac-b3e1-4401-8039-5e7420dc923a",
+      "author": "home",
+      "text": "Epic K complete on BlackbookM1. Implemented: VADER backend with 57 documented coding-domain lexicon overrides (KDATAP-40977f); meter/CLI aggregation of mean compound and pos/neu/neg counts per window and per source in text and JSON (KDATAP-4f0397); synthetic gold set of 36 labeled coding-chat-style messages plus accuracy eval gated at 0.85 (KDATAP-fe4c1d); optional Transformers.js local ONNX backend (distilbert SST-2 q8, cached locally after one-time 66 MB download) behind --sentiment-backend flag (KDATAP-2ca1f0); docs (KDATAP-181c2f). Results: gold accuracy vader 34/34 (1.000), transformer 22/34 (0.647, binary head with no neutral); real-corpus label agreement 33.7% over 3009 messages (aggregate only); throughput on this M1: vader ~23,123 msgs/sec, transformer ~494 msgs/sec sequential q8. Recommendation: keep vader as the default backend. Tests: 197 suites, 1611 passing, build clean, lint only pre-existing error.",
+      "created_at": "2026-10-02T12:02:20.021876Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T11:40:52.416810Z",
-  "updated_at": "2026-10-02T11:41:00.182404Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T12:02:20.076838Z",
+  "closed_at": "2026-10-02T12:02:20.076803Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
