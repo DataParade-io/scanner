@@ -1,3 +1,6 @@
+import fs from "fs";
+import os from "os";
+import path from "path";
 import {
   createCursorAdapter,
   decodeSanitizedProject,
@@ -170,6 +173,78 @@ describe("Cursor agent transcripts", () => {
     expect(records.map((r) => r.text)).toEqual(["thanks, saved me"]);
     expect(records[0].source).toBe("cursor-agent");
     cleanupCursorProfile(profile);
+  });
+
+  it("extracts the real transcript schema: user_query wraps, tags are injected, session timestamp from meta.json", async () => {
+    const adapter = createCursorAdapter({
+      cursorUserDir: "/nonexistent",
+      cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home"),
+    });
+    const discovery = adapter.discover();
+    const session = discovery.sessions.find((s) => s.sessionId === "session-def456");
+    expect(session).toBeDefined();
+    const { records } = await extractCursorRecords(session!, { cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home") });
+    const texts = records.map((r) => r.text);
+    // Real-shape lines: fully wrapped typed input, untagged typed line, plus
+    // the old tolerant shape; injected tags and turn_ended lines excluded.
+    // (Ordering is by timestamp after dedup, so assert on membership.)
+    expect(new Set(texts)).toEqual(new Set([
+      "thanks that worked",
+      "thanks, the queue fix worked",
+      "second typed message that cursed fuck",
+      "typed without wrapper, thanks again",
+    ]));
+    expect(texts).toHaveLength(4);
+    // Lines carry no timestamps: session-level timestamp from chats meta.json.
+    for (const r of records.slice(1)) {
+      expect(r.timestamp).toBe("2024-10-01T12:00:10Z");
+    }
+    expect(new Date(records[0].timestamp).getTime()).toBe(1727784000000);
+  });
+
+  it("unwraps user_query text and never emits the wrapper itself", async () => {
+    const adapter = createCursorAdapter({
+      cursorUserDir: "/nonexistent",
+      cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home"),
+    });
+    const discovery = adapter.discover();
+    const { records } = await extractCursorRecords(discovery.sessions[0], { cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home") });
+    expect(records.every((r) => !r.text.includes("<user_query>"))).toBe(true);
+    expect(records.every((r) => !r.text.includes("<timestamp>"))).toBe(true);
+  });
+
+  it("falls back to transcript mtime when chats meta.json is absent", async () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "sentiment-cursor-mtime-"));
+    const transcriptDir = path.join(root, "projects", "-tmp-p", "agent-transcripts", "sid-1");
+    fs.mkdirSync(transcriptDir, { recursive: true });
+    const transcript = path.join(transcriptDir, "sid-1.jsonl");
+    fs.writeFileSync(
+      transcript,
+      `${JSON.stringify({ role: "user", message: { content: [{ type: "text", text: "<user_query>thanks again</user_query>" }] } })}\n`,
+    );
+    const mtimeMs = 1727784000000;
+    fs.utimesSync(transcript, new Date(mtimeMs), new Date(mtimeMs));
+    const adapter = createCursorAdapter({
+      cursorUserDir: "/nonexistent",
+      cursorHomeDir: root,
+    });
+    const discovery = adapter.discover();
+    expect(discovery.sessions).toHaveLength(1);
+    const { records } = await extractCursorRecords(discovery.sessions[0]);
+    expect(records.map((r) => r.text)).toEqual(["thanks again"]);
+    expect(new Date(records[0].timestamp).getTime()).toBe(mtimeMs);
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+
+  it("skips subagent transcripts under the session dir", async () => {
+    const adapter = createCursorAdapter({
+      cursorUserDir: "/nonexistent",
+      cursorHomeDir: path.join(__dirname, "../../fixtures/sentiment/cursor-home"),
+    });
+    const discovery = adapter.discover();
+    expect(discovery.sessions.map((s) => s.sessionId)).toEqual(["session-def456"]);
+    const { records } = await extractCursorRecords(discovery.sessions[0]);
+    expect(records.every((r) => r.text !== "delegation prompt from the parent agent")).toBe(true);
   });
 });
 

@@ -13,7 +13,8 @@ Per-source subtrees:
 - `claude-code/` — Claude Code session JSONL shapes (`~/.claude/projects`)
 - `cursor-home/` — Cursor agent-transcript JSONL shapes
   (`~/.cursor/projects/<sanitized>/agent-transcripts/<sid>/<sid>.jsonl`;
-  IDE `state.vscdb` fixtures are generated at test time, not committed)
+  IDE `state.vscdb` fixtures are generated at test time, not committed;
+  chats metadata fixtures at `chats/<hash>/<sid>/meta.json`)
 - `codex/` — Codex CLI rollout JSONL shapes (`~/.codex/sessions`)
 
 A CI lint guard rejects files in this tree that look like real session dumps.
