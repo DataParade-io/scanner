@@ -3,7 +3,7 @@
   "title": "Define the adapter contract and skip-with-counter failure policy",
   "description": "Define the source-agnostic adapter contract: discover(roots) for session discovery and extract(session) streaming an AsyncIterable of HumanMessageRecords, never loading whole transcripts into memory (files can exceed 100 MB). Codify the shared failure policy: a missing root means the source is absent (not an error); a malformed line or unknown record type is skipped and counted, never fatal; a parse crash inside an adapter is caught per file and reported while the scan continues.\n\nDone when: the contract types exist and are exported; unit tests demonstrate skip-and-count behavior on malformed input and unknown record types; a missing root exits successfully.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "5ae8ca91-6100-4a85-a989-97bae8a49fbc",
+      "author": "ubuntu",
+      "text": "Implemented `src/sentiment/adapter.ts`: SentimentAdapter contract (discover(roots) + extract(session) AsyncIterable for streaming), SkipCounter with missingRoots/malformedLines/unknownRecords/failedFiles, and parseRecordOrSkip helper codifying skip-and-count policy. Unit tested. Outcome: green.",
+      "created_at": "2026-10-02T02:58:40.280395Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:08.809797Z",
-  "updated_at": "2026-10-02T02:45:16.527116Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T02:58:40.465456Z",
+  "closed_at": "2026-10-02T02:58:40.465342Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
