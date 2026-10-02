@@ -3,7 +3,7 @@
   "title": "Build the incremental scan-state store",
   "description": "Build the incremental re-scan state store at the cache dir (default XDG cache, overridable via --cache-dir): per JSONL file watermarks (path, size, mtime, linesSeen) so appended lines are read only once; per SQLite DB watermarks (dbPath, mtime, size, max seen createdAt) with a small overlap margin; full rescan when a file shrinks or its identity changes. The store persists watermarks, fingerprints, and counts only \u2014 never message text.\n\nDone when: append-then-rescan produces totals identical to a cold scan (idempotence property test); rewritten files trigger a full rescan; state contents are verified text-free by test.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "4adf364b-76b4-4159-a167-e78e122ed474",
+      "author": "ubuntu",
+      "text": "Implemented `src/sentiment/scan-state.ts`: per-JSONL watermarks (size/mtime/linesSeen, append resume, full rescan on shrink), per-DB watermarks with 60s createdAt overlap margin, XDG default cache dir (DATAPARADE_CACHE_DIR/--cache-dir override later at CLI). State file holds watermarks/fingerprints only; test asserts no message text persists. Outcome: green.",
+      "created_at": "2026-10-02T02:58:41.638483Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:09.798120Z",
-  "updated_at": "2026-10-02T02:45:17.473485Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T02:58:41.822555Z",
+  "closed_at": "2026-10-02T02:58:41.822426Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},

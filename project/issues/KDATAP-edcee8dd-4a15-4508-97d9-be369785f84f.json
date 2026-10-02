@@ -3,7 +3,7 @@
   "title": "Build the dedup-key and union framework",
   "description": "Build the cross-copy deduplication framework: dedupKey = sha256(source + recordId) when a stable native id exists, else sha256(source + sessionId + timestamp + text hash). When the same session exists in multiple physical copies (active root plus archives, forks, mirrored sessions), union all copies and count identical records once, following the record timestamps rather than file order or mtimes (line order is not guaranteed chronological). The dedup set holds hashes only, never text.\n\nDone when: unit tests show duplicated records across two roots counting once, with both copies visible as provenance; dedup is idempotent across repeated scans.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -15,10 +15,20 @@
       "type": "blocked-by"
     }
   ],
-  "comments": [],
+  "comments": [
+    {
+      "id": "89b04230-cd81-429f-bd9d-4f897b459ae5",
+      "author": "ubuntu",
+      "text": "Implemented `src/sentiment/dedup.ts`: buildDedupKey (sha256(source+recordId) with content-tuple fallback) and dedupeRecords union collapse ordered by timestamp, hashes only. Tests cover cross-copy collapse, content fallback, and source separation. Outcome: green.",
+      "created_at": "2026-10-02T02:58:40.954232Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": null
+    }
+  ],
   "created_at": "2026-10-02T02:42:09.312365Z",
-  "updated_at": "2026-10-02T02:45:17.004092Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T02:58:41.149132Z",
+  "closed_at": "2026-10-02T02:58:41.149019Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {},
