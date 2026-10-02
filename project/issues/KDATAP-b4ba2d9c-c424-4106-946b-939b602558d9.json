@@ -3,7 +3,7 @@
   "title": "Finish docs and release readiness",
   "description": "Finish release readiness: README section for the meter; a wiki page under project/wiki/ summarizing the feature (wiki Markdown is directly editable per The Way); note the engines bump if the SQLite decision required one; ensure conventional commits map story/bug/chore work to feat/fix/chore release categories per the semantic-release flow.\n\nDone when: docs are merged, the wiki page exists, lint and coverage pass, and the feature is shippable from develop.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 3,
   "assignee": null,
   "creator": null,
@@ -19,29 +19,37 @@
     {
       "id": "89c1a8ab-8d55-4032-9883-de73214e139c",
       "author": "ubuntu",
-      "text": "Docs work DONE: README 'Sentiment meter' section (usage, sources, rolling/calendar windows, privacy invariants, config precedence, engines note: node:sqlite reader requires Node >= 22.5) and wiki page project/wiki/coding-session-sentiment-meter.md indexed from index.md. Build clean, lint back to the single pre-existing benchmark error. LEAVING OPEN: the task's 'Done when' includes the accuracy gate KDATAP-713a0f (real-corpus recall on Ryan's Macs) and the semantic-release flow runs on merge \u2014 closing this before the gate has evidence would be premature. Remaining after gate passes: confirm conventional-commit mapping (feat for the meter itself, test/chore for guards and Kanbus bookkeeping) in the release merge.",
+      "text": "Docs work DONE: README 'Sentiment meter' section (usage, sources, rolling/calendar windows, privacy invariants, config precedence, engines note: node:sqlite reader requires Node >= 22.5) and wiki page project/wiki/coding-session-sentiment-meter.md indexed from index.md. Build clean, lint back to the single pre-existing benchmark error. LEAVING OPEN: the task's 'Done when' includes the accuracy gate KDATAP-713a0f (real-corpus recall on Ryan's Macs) and the semantic-release flow runs on merge — closing this before the gate has evidence would be premature. Remaining after gate passes: confirm conventional-commit mapping (feat for the meter itself, test/chore for guards and Kanbus bookkeeping) in the release merge.",
       "created_at": "2026-10-02T03:30:08.379985Z",
       "comment_type": "default",
-      "data": {},
       "agent": {
         "platform": "cursor",
         "model": "GLM 5.3 Flash",
-        "name": "Cloud Agent",
-        "settings": {}
+        "name": "Cloud Agent"
+      }
+    },
+    {
+      "id": "1a773f1d-fc34-4ad0-be76-77136c6fa434",
+      "author": "home",
+      "text": "Docs finalized now that the accuracy gate KDATAP-713a0f has passed.\n\n- README 'Sentiment meter' section: exclusions bullet updated to the tuned paste heuristic (>= 4000 chars AND >= 3 [n] citation markers, tuned so genuine long orchestration briefs count); accuracy paragraph now records the gate result (2315 real messages yielded, 2310 counted, 5 verified AI-research pastes excluded, 0 injected false positives).\n- Wiki page project/wiki/coding-session-sentiment-meter.md: source table updated with the corpus-pinned semantics (Cursor trailing <user_query> blocks + <timestamp> header parsing + harness follow-up template exclusion; Codex content_item_kinds and AGENTS.md-dump exclusion), privacy section updated, status section records the passed gate with all-time aggregates (2315 messages / 216 sessions, 25 thanks / 127 f-bomb tokens).\n- Conventional-commit mapping verified on this branch: the meter is feat(sentiment), corpus-pinned corrections are fix(sentiment), board bookkeeping is chore(kanbus), docs are docs(...) — mapping cleanly onto the semantic-release feat/fix categories.\n- Engines note stands: node:sqlite reader requires Node >= 22.5 (README + wiki).\n- Verification: full unit suite green (192 suites, 1566 passed, 2 skipped); lint has only the single pre-existing benchmark error (tests/unit/benchmark/packet-validation.spec.ts require() import), unchanged from before this initiative; sentiment coverage ~93-94% lines.\n\nNo PR opened; work rides on sentiment-meter-m1 -> origin/cursor/sentiment-meter-impl-5f84 per the initiative's flow.",
+      "created_at": "2026-10-02T08:30:26.194333Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "GLM 5.3 Flash",
+        "name": "Cloud Agent"
       }
     }
   ],
   "created_at": "2026-10-02T02:44:51.087571Z",
-  "updated_at": "2026-10-02T03:30:08.380124Z",
-  "closed_at": null,
-  "right_now_summary": null,
-  "right_now_updated_at": null,
-  "custom": {},
+  "updated_at": "2026-10-02T08:30:26.274715Z",
+  "closed_at": "2026-10-02T08:30:26.274672Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
-    "name": "cloud-agent",
-    "settings": {}
+    "name": "cloud-agent"
   },
-  "agent_assignment": null
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
 }
