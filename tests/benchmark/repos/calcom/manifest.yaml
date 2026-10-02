@@ -1,0 +1,30 @@
+repository: calcom/cal.com
+commit: 54343aa685ae8f33159d2f485ec4a57bad5c574a
+license: MIT
+scope:
+  include:
+    - packages/prisma/
+    - packages/features/
+    - packages/lib/
+    - apps/web/lib/
+    - apps/web/server/
+  exclude:
+    - path: packages/prisma/migrations/
+      reason: generated SQL migration history; packages/prisma/schema.prisma is the labeled schema (held-out email and phone gold KDATAP-b8e4a8)
+    - path: "**/*.test.ts, **/*.test.tsx, **/*.spec.ts, **/*.integration-test.ts, **/__tests__/, **/__mocks__/, **/test/, **/tests/, **/testUtils.ts, **/*.mock.ts"
+      reason: unit and integration tests, mocks and test helpers; not labeled (KDATAP-b8e4a8)
+    - path: packages/lib/testEmails.ts, packages/lib/testSMS.ts, packages/prisma/seed-pbac-only.ts
+      reason: test-mode capture of sent emails and SMS, and a seed script; test and seed fixtures, not labeled (KDATAP-b8e4a8)
+    - path: packages/features/embed/
+      reason: embed snippet and preview UI; embed code is out of scope (KDATAP-b8e4a8)
+coverage:
+  layers:
+    - occurrences
+  languages:
+    - typescript
+  domains:
+    - scheduling
+    - identity
+    - notifications
+selection_rationale: Held-out TypeScript and Prisma scheduling platform (KDATAP-b8e4a8) whose users, booking attendees, team and organization members, verified addresses and phone numbers, workflow reminders and webhooks store email addresses and phone numbers in separate tables.
+annotation_version: 4

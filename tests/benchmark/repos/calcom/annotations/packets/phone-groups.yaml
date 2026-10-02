@@ -1,0 +1,231 @@
+repo: calcom
+concept: phone
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: '2026-10-02'
+  review_state: proposed
+groups:
+- id: attendee-phone
+  name: Booking attendee phone number
+  subject: a booking attendee (the booker, Attendee table)
+  subject_kind: other_person
+  purpose: SMS notifications, phone-only bookings, seat and existing booking matching
+  rationale: Attendee.phoneNumber column (schema.prisma:831) and its selects, creates and where clauses;
+    the booker phone number in flight at booking time (bookerPhoneNumber from the request's attendeePhoneNumber,
+    invitee and seat attendee entries, payment app arguments, existing booking and pending request lookups)
+    and calendar event attendee phone numbers built from Attendee rows.
+  clusters:
+  - c001
+  - c002
+  - c003
+  - c004
+  - c015
+  - c022
+  - c023
+  - c024
+  - c025
+  - c026
+  - c027
+  - c029
+  - c030
+  - c031
+  - c032
+  - c033
+  - c034
+  - c035
+  - c036
+  - c037
+  - c038
+  - c039
+  - c040
+  - c041
+  - c042
+  - c043
+  - c044
+  - c045
+  - c046
+  - c047
+  - c048
+  - c049
+  - c050
+  - c051
+  - c052
+  - c053
+  - c054
+  - c055
+  - c056
+  - c057
+  - c058
+  - c059
+  - c060
+  - c062
+  - c076
+  - c077
+  - c078
+  - c083
+  - c092
+- id: auditactor-guest-phone
+  name: Audit guest actor phone number
+  subject: a guest acting on a booking (AuditActor of type GUEST)
+  subject_kind: other_person
+  purpose: booking audit trail
+  rationale: 'AuditActor.phone for GUEST actors: createIfNotExistsGuestActor lookups and writes, the guest
+    actor row type and the guest branch of the audit tasker producer.'
+  clusters:
+  - c006
+  - c007
+  - c008
+  - c009
+  - c010
+  - c011
+  - c012
+  - c013
+  - c014
+- id: hostlocation-phone
+  name: Host location phone number
+  subject: a round robin or team host (a Cal.com user) with a per-host phone location
+  subject_kind: end_user
+  purpose: per-host phone call location
+  rationale: HostLocation.phoneNumber column (schema.prisma:110) with its type members, selects in the
+    host and event type repositories and the host location upsert.
+  clusters:
+  - c028
+  - c066
+  - c069
+  - c070
+  - c071
+  - c072
+  - c073
+  - c074
+  - c075
+  - c090
+- id: booking-responses-attendee-phone
+  name: Booking responses attendee phone number
+  subject: the booker, as recorded in the booking responses
+  subject_kind: other_person
+  purpose: stored booking form answers
+  rationale: 'The attendeePhoneNumber key of the Booking.responses JSON column: the bookingResponses schema
+    key (zod-utils:206), the system field names and constants naming it, the system booking field definition,
+    and stored responses read when matching seats.'
+  clusters:
+  - c018
+  - c019
+  - c061
+  - c079
+  - c082
+  - c096
+- id: eventtype-location-host-phone
+  name: Event type host phone location
+  subject: the event type owner or host who takes phone calls
+  subject_kind: end_user
+  purpose: organizer phone call location
+  rationale: hostPhoneNumber of EventType.locations entries (zod/eventType.ts schema and types, the event
+    type location types).
+  clusters:
+  - c065
+  - c067
+  - c088
+  - c089
+- id: auditactor-phone
+  name: Audit actor phone number
+  subject: a booking audit actor of any stored type
+  subject_kind: other_person
+  purpose: booking audit trail
+  rationale: AuditActor.phone column (schema.prisma:2467, unique 2478) and the untyped actor row type
+    in the audit actor repository interface.
+  clusters:
+  - c005
+  - c094
+- id: booking-responses-phone-field
+  name: Booking responses phone value
+  subject: the booker, as recorded in a "phone" booking response
+  subject_kind: other_person
+  purpose: success redirect parameters
+  rationale: The phone key of a stored booking's responses read for the success redirect parameters (bookingSuccessRedirect).
+  clusters:
+  - c016
+  - c017
+- id: booking-responses-ai-agent-phone
+  name: Cal AI agent call phone number response
+  subject: the booker whose number the Cal AI agent calls
+  subject_kind: other_person
+  purpose: Cal AI phone call booking field
+  rationale: 'The aiAgentCallPhoneNumber key of Booking.responses: the system field name and the constant
+    naming it.'
+  clusters:
+  - c080
+  - c081
+- id: creditexpenselog-phone
+  name: Credit expense log phone number
+  subject: the recipient of a charged SMS or call, as logged
+  subject_kind: other_person
+  purpose: credit usage accounting
+  rationale: CreditExpenseLog.phoneNumber column (schema.prisma:690) and its select in the credits repository.
+  clusters:
+  - c063
+  - c091
+- id: crm-contact-phone
+  name: CRM contact phone number
+  subject: a contact in the connected CRM (created from booking attendees)
+  subject_kind: other_person
+  purpose: CRM sync of booking attendees
+  rationale: The phone field of CRM contacts to create, written from the attendee's phone number (crmManager).
+  clusters:
+  - c064
+- id: eventtype-location-phone
+  name: Event type location phone
+  subject: the phone value of an event type location entry
+  subject_kind: other_person
+  purpose: phone call location
+  rationale: The phone key of an EventType.locations entry (eventtypes/lib/types.ts), the defaultValueVariable
+    of the attendee phone location type.
+  clusters:
+  - c068
+- id: verified-number
+  name: Verified workflow phone number
+  subject: a number a user or team verified for SMS workflow sends
+  subject_kind: other_person
+  purpose: workflow SMS recipients
+  rationale: VerifiedNumber.phoneNumber column (schema.prisma:1351).
+  clusters:
+  - c093
+- id: calai-phone-number
+  name: Cal AI provisioned phone number
+  subject: the provisioned number of a user's or team's Cal AI voice agent
+  subject_kind: machine_identity
+  purpose: Cal AI inbound and outbound calls
+  rationale: CalAiPhoneNumber.phoneNumber column (schema.prisma:2582).
+  clusters:
+  - c095
+needs_adjudication:
+- cluster: c020
+  candidate_groups: &id001
+  - attendee-phone
+  - booking-responses-attendee-phone
+  reason: getCalEventResponses and the placeholder address builder it calls read the attendeePhoneNumber
+    of the booking request's responses at booking time (the booker phone in flight) or of a stored booking's
+    Booking.responses.
+- cluster: c021
+  candidate_groups: *id001
+  reason: getCalEventResponses and the placeholder address builder it calls read the attendeePhoneNumber
+    of the booking request's responses at booking time (the booker phone in flight) or of a stored booking's
+    Booking.responses.
+- cluster: c084
+  candidate_groups: *id001
+  reason: getCalEventResponses and the placeholder address builder it calls read the attendeePhoneNumber
+    of the booking request's responses at booking time (the booker phone in flight) or of a stored booking's
+    Booking.responses.
+- cluster: c085
+  candidate_groups: *id001
+  reason: getCalEventResponses and the placeholder address builder it calls read the attendeePhoneNumber
+    of the booking request's responses at booking time (the booker phone in flight) or of a stored booking's
+    Booking.responses.
+- cluster: c086
+  candidate_groups: &id002
+  - attendee-phone
+  - hostlocation-phone
+  - eventtype-location-host-phone
+  reason: formatPhoneNumber has no caller in the repository, so nothing settles whose number it formats.
+- cluster: c087
+  candidate_groups: *id002
+  reason: formatPhoneNumber has no caller in the repository, so nothing settles whose number it formats.

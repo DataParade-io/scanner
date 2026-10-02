@@ -1,0 +1,909 @@
+{
+  "calcom": {
+    "cases": 294,
+    "emailFindings": 199,
+    "scores": {
+      "recall": 1,
+      "precision": 0.5631578947368421,
+      "negativeCasePassRate": 0.5059523809523809,
+      "denominators": {
+        "evaluablePositives": 107,
+        "matchedPositives": 107,
+        "matchedWithCorrectLabels": 107,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 168,
+        "negativeCasesPassed": 85,
+        "exhaustiveScopedFindings": 190,
+        "exhaustiveScopedMatches": 107
+      },
+      "occurrenceAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 107
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.59,
+          "numerator": 59,
+          "denominator": 100
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 107
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 0.6516245487364621,
+          "numerator": 361,
+          "denominator": 554
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.20854997111496246,
+          "numerator": 361,
+          "denominator": 1731
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "property_key": {
+        "total": 76,
+        "hit": 70
+      },
+      "identifier": {
+        "total": 31,
+        "hit": 30
+      },
+      "string_literal": {
+        "total": 7,
+        "hit": 7
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "property_key": {
+        "total": 18,
+        "hit": 13
+      },
+      "identifier": {
+        "total": 91,
+        "hit": 44
+      },
+      "type_name": {
+        "total": 13,
+        "hit": 3
+      },
+      "comment": {
+        "total": 22,
+        "hit": 1
+      },
+      "string_literal": {
+        "total": 31,
+        "hit": 29
+      },
+      "import_specifier": {
+        "total": 5,
+        "hit": 5
+      }
+    },
+    "recallByGroup": {
+      "hostlocation-phone": {
+        "total": 10,
+        "hit": 9
+      },
+      "creditexpenselog-phone": {
+        "total": 2,
+        "hit": 1
+      },
+      "attendee-phone": {
+        "total": 58,
+        "hit": 57
+      },
+      "verified-number": {
+        "total": 1,
+        "hit": 0
+      },
+      "auditactor-phone": {
+        "total": 3,
+        "hit": 1
+      },
+      "calai-phone-number": {
+        "total": 1,
+        "hit": 0
+      },
+      "booking-responses-attendee-phone": {
+        "total": 7,
+        "hit": 7
+      },
+      "booking-responses-ai-agent-phone": {
+        "total": 3,
+        "hit": 3
+      },
+      "(no group)": {
+        "total": 8,
+        "hit": 8
+      },
+      "eventtype-location-host-phone": {
+        "total": 4,
+        "hit": 4
+      },
+      "booking-responses-phone-field": {
+        "total": 3,
+        "hit": 3
+      },
+      "auditactor-guest-phone": {
+        "total": 12,
+        "hit": 12
+      },
+      "crm-contact-phone": {
+        "total": 1,
+        "hit": 1
+      },
+      "eventtype-location-phone": {
+        "total": 1,
+        "hit": 1
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "calcom-phone-prisma-schema-L110",
+        "location": "packages/prisma/schema.prisma:110",
+        "goldGroup": "hostlocation-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L690",
+        "location": "packages/prisma/schema.prisma:690",
+        "goldGroup": "creditexpenselog-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L831",
+        "location": "packages/prisma/schema.prisma:831",
+        "goldGroup": "attendee-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L1351",
+        "location": "packages/prisma/schema.prisma:1351",
+        "goldGroup": "verified-number",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L2467",
+        "location": "packages/prisma/schema.prisma:2467",
+        "goldGroup": "auditactor-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L2478",
+        "location": "packages/prisma/schema.prisma:2478",
+        "goldGroup": "auditactor-phone",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-schema-L2582",
+        "location": "packages/prisma/schema.prisma:2582",
+        "goldGroup": "calai-phone-number",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "calcom-phone-prisma-zod-utils-L206",
+        "location": "packages/prisma/zod-utils.ts:206",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-lib-caleventparser-L71",
+        "location": "packages/lib/CalEventParser.ts:71",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L12",
+        "location": "packages/lib/bookings/SystemField.ts:12",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L13",
+        "location": "packages/lib/bookings/SystemField.ts:13",
+        "goldGroup": "booking-responses-ai-agent-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:ai_agent_call"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L17",
+        "location": "packages/lib/bookings/SystemField.ts:17",
+        "goldGroup": "booking-responses-ai-agent-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:cal_ai_agent"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L19",
+        "location": "packages/lib/bookings/SystemField.ts:19",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L22",
+        "location": "packages/lib/bookings/SystemField.ts:22",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-lib-bookings-systemfield-L24",
+        "location": "packages/lib/bookings/SystemField.ts:24",
+        "goldGroup": "booking-responses-ai-agent-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:cal_ai_agent"
+      },
+      {
+        "id": "calcom-phone-lib-zod-eventtype-L14",
+        "location": "packages/lib/zod/eventType.ts:14",
+        "goldGroup": "eventtype-location-host-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-lib-zod-eventtype-L32",
+        "location": "packages/lib/zod/eventType.ts:32",
+        "goldGroup": "eventtype-location-host-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-apps-web-lib-booking-L146",
+        "location": "apps/web/lib/booking.ts:146",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@apps/web/lib/booking.ts:146#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-apps-web-lib-booking-L168",
+        "location": "apps/web/lib/booking.ts:168",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@apps/web/lib/booking.ts:168#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-apps-web-lib-booking-L187",
+        "location": "apps/web/lib/booking.ts:187",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@apps/web/lib/booking.ts:187#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-apps-web-lib-booking-L207",
+        "location": "apps/web/lib/booking.ts:207",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@apps/web/lib/booking.ts:204#a"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L560",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:560",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L687",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:687",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L1211",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:1211",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L1531",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:1531",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/service/RegularBookingService.ts:1531#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L1596",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:1596",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L1771",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:1771",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L1772",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:1772",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-service-regularbookingservice-L2306",
+        "location": "packages/features/bookings/lib/service/RegularBookingService.ts:2306",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L194",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:194",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:select"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L459",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:459",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booking"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L883",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:883",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booking"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1185",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1185",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booking"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1726",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1726",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booking"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L42",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:42",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booking"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L325",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:325",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:select"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1332",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1332",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1338",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1338",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1348",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1348",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingrepository-L1971",
+        "location": "packages/features/bookings/repositories/BookingRepository.ts:1971",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-bookingemailsmshandler-L166",
+        "location": "packages/features/bookings/lib/BookingEmailSmsHandler.ts:166",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:user"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-getbookingresponsesschema-L440",
+        "location": "packages/features/bookings/lib/getBookingResponsesSchema.ts:440",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-getbookingfields-L126",
+        "location": "packages/features/bookings/lib/getBookingFields.ts:126",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-bookingsuccessredirect-L72",
+        "location": "packages/features/bookings/lib/bookingSuccessRedirect.ts:72",
+        "goldGroup": "booking-responses-phone-field",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/bookingSuccessRedirect.ts:72#phone"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-bookingsuccessredirect-L92",
+        "location": "packages/features/bookings/lib/bookingSuccessRedirect.ts:92",
+        "goldGroup": "booking-responses-phone-field",
+        "matched": true,
+        "predictedGroup": "phone_number:result_type"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-bookingsuccessredirect-L97",
+        "location": "packages/features/bookings/lib/bookingSuccessRedirect.ts:97",
+        "goldGroup": "booking-responses-phone-field",
+        "matched": true,
+        "predictedGroup": "phone_number:result_type"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-getuserbooking-L44",
+        "location": "packages/features/bookings/lib/getUserBooking.ts:44",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/getUserBooking.ts:44#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlecancelbooking-L225",
+        "location": "packages/features/bookings/lib/handleCancelBooking.ts:225",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleconfirmation-L128",
+        "location": "packages/features/bookings/lib/handleConfirmation.ts:128",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/handleConfirmation.ts:128#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlenewbooking-createbooking-L164",
+        "location": "packages/features/bookings/lib/handleNewBooking/createBooking.ts:164",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlenewbooking-getbookingdata-L54",
+        "location": "packages/features/bookings/lib/handleNewBooking/getBookingData.ts:54",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlenewbooking-getbookingdata-L83",
+        "location": "packages/features/bookings/lib/handleNewBooking/getBookingData.ts:83",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlenewbooking-geteventtypesfromdb-L147",
+        "location": "packages/features/bookings/lib/handleNewBooking/getEventTypesFromDB.ts:147",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:select"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlenewbooking-types-L20",
+        "location": "packages/features/bookings/lib/handleNewBooking/types.ts:20",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/handleNewBooking/types.ts:20#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlepayment-L23",
+        "location": "packages/features/bookings/lib/handlePayment.ts:23",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlepayment-L47",
+        "location": "packages/features/bookings/lib/handlePayment.ts:47",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlepayment-L176",
+        "location": "packages/features/bookings/lib/handlePayment.ts:176",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handlepayment-L187",
+        "location": "packages/features/bookings/lib/handlePayment.ts:187",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-create-createnewseat-L24",
+        "location": "packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:24",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:24#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-create-createnewseat-L85",
+        "location": "packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:85",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-create-createnewseat-L134",
+        "location": "packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:134",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-create-createnewseat-L167",
+        "location": "packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:167",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:add"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-create-createnewseat-L277",
+        "location": "packages/features/bookings/lib/handleSeats/create/createNewSeat.ts:277",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-handleseats-handleseats-L126",
+        "location": "packages/features/bookings/lib/handleSeats/handleSeats.ts:126",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/bookings/lib/handleSeats/handleSeats.ts:21#invitee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-requiresconfirmation-getbookingrequest-L6",
+        "location": "packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts:6",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-requiresconfirmation-getbookingrequest-L11",
+        "location": "packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts:11",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-lib-requiresconfirmation-getbookingrequest-L23",
+        "location": "packages/features/bookings/lib/requiresConfirmation/getBookingRequest.ts:23",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:booker"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-attendeerepository-L10",
+        "location": "packages/features/bookings/repositories/AttendeeRepository.ts:10",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-attendeerepository-L101",
+        "location": "packages/features/bookings/repositories/AttendeeRepository.ts:101",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-repositories-bookingseatrepository-L33",
+        "location": "packages/features/bookings/repositories/BookingSeatRepository.ts:33",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:seat"
+      },
+      {
+        "id": "calcom-phone-features-bookings-services-bookingattendeesservice-L39",
+        "location": "packages/features/bookings/services/BookingAttendeesService.ts:39",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-services-bookingattendeesservice-L110",
+        "location": "packages/features/bookings/services/BookingAttendeesService.ts:110",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-bookings-services-bookingattendeesservice-L147",
+        "location": "packages/features/bookings/services/BookingAttendeesService.ts:147",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-credits-repositories-creditsrepository-L151",
+        "location": "packages/features/credits/repositories/CreditsRepository.ts:151",
+        "goldGroup": "creditexpenselog-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:credit"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-iauditactorrepository-L10",
+        "location": "packages/features/booking-audit/lib/repository/IAuditActorRepository.ts:10",
+        "goldGroup": "auditactor-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/IAuditActorRepository.ts:10#phone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-iauditactorrepository-L21",
+        "location": "packages/features/booking-audit/lib/repository/IAuditActorRepository.ts:21",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:iaudit_actor_repository"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L29",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:29",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:29#phone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L31",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:31",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:31#phone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L34",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L37",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:37",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L43",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:43",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:43#phone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L61",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:61",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L68",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:68",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L70",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:70",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L77",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:77",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-repository-prismaauditactorrepository-L92",
+        "location": "packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:92",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/repository/PrismaAuditActorRepository.ts:34#normalizedPhone"
+      },
+      {
+        "id": "calcom-phone-features-booking-audit-lib-service-bookingaudittaskerproducerservice-L80",
+        "location": "packages/features/booking-audit/lib/service/BookingAuditTaskerProducerService.ts:80",
+        "goldGroup": "auditactor-guest-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/booking-audit/lib/service/BookingAuditTaskerProducerService.ts:80#phone"
+      },
+      {
+        "id": "calcom-phone-features-calendareventbuilder-L52",
+        "location": "packages/features/CalendarEventBuilder.ts:52",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number~packages/features/CalendarEventBuilder.ts:52"
+      },
+      {
+        "id": "calcom-phone-features-calendareventbuilder-L66",
+        "location": "packages/features/CalendarEventBuilder.ts:66",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-calendareventbuilder-L238",
+        "location": "packages/features/CalendarEventBuilder.ts:238",
+        "goldGroup": "booking-responses-attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-calendareventbuilder-L239",
+        "location": "packages/features/CalendarEventBuilder.ts:239",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-crmmanager-crmmanager-L49",
+        "location": "packages/features/crmManager/crmManager.ts:49",
+        "goldGroup": "crm-contact-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-lib-schemas-L40",
+        "location": "packages/features/eventtypes/lib/schemas.ts:40",
+        "goldGroup": "eventtype-location-host-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-lib-types-L46",
+        "location": "packages/features/eventtypes/lib/types.ts:46",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/eventtypes/lib/types.ts:46#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-lib-types-L73",
+        "location": "packages/features/eventtypes/lib/types.ts:73",
+        "goldGroup": "eventtype-location-host-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-lib-types-L75",
+        "location": "packages/features/eventtypes/lib/types.ts:75",
+        "goldGroup": "eventtype-location-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/eventtypes/lib/types.ts:75#phone"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-lib-types-L244",
+        "location": "packages/features/eventtypes/lib/types.ts:244",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/eventtypes/lib/types.ts:244#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-repositories-eventtyperepository-L732",
+        "location": "packages/features/eventtypes/repositories/eventTypeRepository.ts:732",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:type"
+      },
+      {
+        "id": "calcom-phone-features-eventtypes-repositories-eventtyperepository-L1012",
+        "location": "packages/features/eventtypes/repositories/eventTypeRepository.ts:1012",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:type"
+      },
+      {
+        "id": "calcom-phone-features-host-repositories-hostlocationrepository-L35",
+        "location": "packages/features/host/repositories/HostLocationRepository.ts:35",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:location"
+      },
+      {
+        "id": "calcom-phone-features-host-repositories-hostlocationrepository-L53",
+        "location": "packages/features/host/repositories/HostLocationRepository.ts:53",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:location"
+      },
+      {
+        "id": "calcom-phone-features-host-repositories-hostrepository-L59",
+        "location": "packages/features/host/repositories/HostRepository.ts:59",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-features-host-repositories-hostrepository-L112",
+        "location": "packages/features/host/repositories/HostRepository.ts:112",
+        "goldGroup": "hostlocation-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:host"
+      },
+      {
+        "id": "calcom-phone-features-tasker-tasks-crm-lib-buildcalendarevent-L43",
+        "location": "packages/features/tasker/tasks/crm/lib/buildCalendarEvent.ts:43",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/tasker/tasks/crm/lib/buildCalendarEvent.ts:43#phoneNumber"
+      },
+      {
+        "id": "calcom-phone-features-tasker-tasks-crm-lib-buildcalendarevent-L73",
+        "location": "packages/features/tasker/tasks/crm/lib/buildCalendarEvent.ts:73",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number:attendee"
+      },
+      {
+        "id": "calcom-phone-features-tasker-tasks-triggernoshow-triggerguestnoshow-L18",
+        "location": "packages/features/tasker/tasks/triggerNoShow/triggerGuestNoShow.ts:18",
+        "goldGroup": "attendee-phone",
+        "matched": true,
+        "predictedGroup": "phone_number@packages/features/tasker/tasks/triggerNoShow/triggerGuestNoShow.ts:18#phoneNumber"
+      }
+    ]
+  }
+}
