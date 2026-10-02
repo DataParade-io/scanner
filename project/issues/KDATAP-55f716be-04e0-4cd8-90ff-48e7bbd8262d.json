@@ -3,17 +3,30 @@
   "title": "Backend comparison, winner wiring, tests and docs",
   "description": "Compare backends on held-out accuracy, confusion matrix, throughput, model size, and aggregate-only real-corpus agreement vs VADER; wire the winning ML backend into --sentiment-backend keeping vader as fallback; update tests and docs.",
   "type": "task",
-  "status": "open",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-be490990-2d8b-42ed-84b2-1786cf7e934f",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "2e23a6c2-6a44-4d47-9d05-8140cf5dfd3a",
+      "author": "home",
+      "text": "Winner wired: --sentiment-backend transformer now selects the go_emotions-mapped 3-class backend (held-out 0.731, never mislabels neutral, 50.4% agreement with VADER); vader stays the meter default and fallback; comparison candidates remain selectable as transformer-cardiff, transformer-xlmr, transformer-sst2. Real per-source sentiment with the winner (aggregate counts only): 24h 92 scored mean +0.004 (10 pos / 70 neu / 12 neg); today 25 scored mean +0.121 (4/21/0); all-time 3012 scored mean +0.056 (435/2307/270) with per-source claude-code 680 (+0.069), cursor-agent 934 (+0.045), codex 712 (+0.061), grok-bot 240 (+0.056), antigravity 446 (+0.048). Tests: 197 suites, 1612 passing, build clean, lint only the pre-existing packet-validation.spec.ts error. Recommendation: keep vader as the meter default; go_emotions-mapped is the default ML backend; do not install Ollama/llama.cpp for this (1-2 GB runtime, far slower).",
+      "created_at": "2026-10-02T15:03:29.935823Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "Cloud Agent"
+      }
+    }
+  ],
   "created_at": "2026-10-02T14:42:48.512228Z",
-  "updated_at": "2026-10-02T14:42:48.512261Z",
-  "closed_at": null,
+  "updated_at": "2026-10-02T15:03:29.997864Z",
+  "closed_at": "2026-10-02T15:03:29.997827Z",
   "agent": {
     "platform": "cursor",
     "model": "glm-5.3",
