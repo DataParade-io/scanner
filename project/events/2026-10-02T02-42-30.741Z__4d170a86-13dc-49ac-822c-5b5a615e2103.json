@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "4d170a86-13dc-49ac-822c-5b5a615e2103",
+  "issue_id": "KDATAP-1c2bfc68-7d78-4b68-ba80-8ba3c508951e",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:42:30.741Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement timezone and DST handling without new dependencies",
+    "description": "Implement wall-clock to UTC conversion using Intl DateTimeFormat timezone offsets (the standard offset-probing technique) — no new runtime dependencies (the repo keeps zod, yaml, tree-sitter only) and no Temporal (not in the supported Node). DST rules: calendar windows on transition days are naturally 23h or 25h; a day-start inside the spring-forward gap resolves to the first valid instant after the gap; a day-start inside the fall-back ambiguity resolves to the earlier occurrence. Invalid IANA timezone names fail fast.\n\nDone when: the DST gap and ambiguity rules are implemented as documented and the function is pure and deterministic.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-5219e258-d02c-4075-885e-1882d394d67f",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
