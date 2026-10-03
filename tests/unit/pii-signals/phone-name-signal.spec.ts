@@ -16,3 +16,12 @@ describe("phone words inside longer names", () => {
     ).toEqual([false, false, false, false, false]);
   });
 });
+
+describe("phone checks and country or schema names", () => {
+  it("are not phone values", () => {
+    expect(["const isMobile = x", "isValidPhoneNumber(p)", "ensureValidPhoneNumber(p)", "defaultPhoneCountry", "phoneSchema"].map((l) => isPhone(l))).toEqual([
+      false, false, false, false, false,
+    ]);
+    expect(isPhone("attendeePhoneNumber = y")).toBe(true);
+  });
+});
