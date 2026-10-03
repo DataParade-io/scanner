@@ -33,3 +33,10 @@ describe("Email and Mail class references", () => {
     expect(ids("user.email")).toEqual(["email"]);
   });
 });
+
+describe("Ruby email predicates", () => {
+  it("are yes/no checks in Ruby, and optional fields in TypeScript", () => {
+    expect(ids("reply_to = if inbox.email?")).toEqual([]);
+    expect(matchPiiSignalsInFile({ filePath: "lib/user.ts", content: "  email?: string" }).map((hit) => hit.id)).toEqual(["email"]);
+  });
+});
