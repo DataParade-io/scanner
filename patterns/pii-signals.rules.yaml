@@ -105,7 +105,10 @@ pii_signal_rules:
     labels:
       - user_email
     patterns:
-      - "\\b(email|email[_-]?address|mail)\\b"
+      - "\\b(email|email[_-]?address)\\b"
+      # A bare `mail` is an address unless it is used as a constant, a call, or an object
+      # whose member is not an address list (`Mail::Field`, `mail.subject`, `mail(`).
+      - "\\bmail\\b(?!\\s*(?:::|\\(|\\.(?!(?:to|from|cc|bcc|reply_to|sender|recipients)\\b)))"
 
   - id: password
     category: credentials

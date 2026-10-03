@@ -1,3 +1,4 @@
+import { appendFileSync } from "fs";
 import {
   assignDataFlowsOneToOne,
   assignDataItemsOneToOne,
@@ -117,6 +118,13 @@ function computePrecisionFromAssignment(
     exhaustiveScopedFindings += 1;
     if (matchedFindingIds.has(finding.id)) {
       exhaustiveScopedMatches += 1;
+    } else if (process.env.DATAPARADE_UNMATCHED_FINDINGS_LOG) {
+      // In-scope findings that pair with no gold record (precision misses), for review.
+      const location = finding.evidenceLocations[0];
+      appendFileSync(
+        process.env.DATAPARADE_UNMATCHED_FINDINGS_LOG,
+        `${JSON.stringify({ key: finding.identity.identityKey, file: location.file_path, line: location.start_line })}\n`,
+      );
     }
   }
 

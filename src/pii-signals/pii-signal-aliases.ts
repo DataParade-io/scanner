@@ -199,6 +199,9 @@ function emailSuffixRuleId(token: string): string | undefined {
     : undefined;
 }
 
+/** `mail` used as a constant, a call, or an object whose member is not an address list. */
+const MAIL_OBJECT_USE = /^\s*(?:::|\(|\.(?!(?:to|from|cc|bcc|reply_to|sender|recipients)\b))/;
+
 export function resolveAliasRuleIdsForToken(
   token: string,
   line: string,
@@ -223,6 +226,11 @@ export function resolveAliasRuleIdsForToken(
       CONTEXT_GATED_PASSWORD_TOKENS.has(key) &&
       !isPlainPasswordFieldDeclaration(line, filePath)
     ) {
+      continue;
+    }
+    // A bare `mail` used as an object or constant (`Mail::Field`, `mail.to`, `mail(`) is
+    // a mail message or mailer, not an address.
+    if (key === "mail" && MAIL_OBJECT_USE.test(line.slice(tokenStartIndex + token.length))) {
       continue;
     }
     ruleIds.add(ruleId);
