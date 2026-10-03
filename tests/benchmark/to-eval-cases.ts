@@ -1,11 +1,18 @@
-import type { EvalCase, EvalLayer } from "../eval/types";
-import type { AnnotationRecord, BenchmarkLayer, LayerScopeRecord, ReviewState } from "./schema";
+import type { EvalCase, EvalConceptScope, EvalLayer } from "../eval/types";
+import type {
+  AnnotationRecord,
+  BenchmarkLayer,
+  ConceptScopeRecord,
+  LayerScopeRecord,
+  ReviewState,
+} from "./schema";
 import { normalizeBenchmarkLayer } from "./schema";
 
 export interface ToEvalCasesOptions {
   includeProposed?: boolean;
   reviewStates?: ReviewState[];
   layerScopes?: Map<BenchmarkLayer, LayerScopeRecord>;
+  conceptScopes?: Map<BenchmarkLayer, ConceptScopeRecord[]>;
 }
 
 const DEFAULT_REVIEW_STATES: ReviewState[] = ["accepted"];
@@ -62,6 +69,20 @@ function acceptedLayerScopeFiles(
   return [...record.exhaustive_scope_files];
 }
 
+/** Concept scopes whose review state is included in this run (provisional runs include proposed). */
+function includedConceptScopes(
+  layer: BenchmarkLayer,
+  conceptScopes: Map<BenchmarkLayer, ConceptScopeRecord[]> | undefined,
+  allowedStates: ReviewState[],
+): EvalConceptScope[] | undefined {
+  const records = conceptScopes?.get(normalizeBenchmarkLayer(layer)) ?? [];
+  const included = records
+    .filter((record) => allowedStates.includes(record.provenance.review_state))
+    .filter((record) => record.exhaustive_scope_files.length > 0)
+    .map((record) => ({ subjectKeys: [...record.subject_keys], files: [...record.exhaustive_scope_files] }));
+  return included.length > 0 ? included : undefined;
+}
+
 export function annotationToEvalCase(
   annotation: AnnotationRecord,
   fixture: string,
@@ -73,6 +94,7 @@ export function annotationToEvalCase(
   }
 
   const scopeFiles = acceptedLayerScopeFiles(annotation.layer, options.layerScopes);
+  const conceptScopes = includedConceptScopes(annotation.layer, options.conceptScopes, allowedStates);
 
   return {
     id: annotation.id,
@@ -93,6 +115,7 @@ export function annotationToEvalCase(
     },
     rationale: annotation.rationale,
     ...(scopeFiles !== undefined ? { exhaustiveScopeFiles: scopeFiles } : {}),
+    ...(conceptScopes !== undefined ? { conceptScopes } : {}),
     ...(annotation.flow_canonical !== undefined
       ? { flow_canonical: annotation.flow_canonical }
       : {}),
@@ -101,6 +124,9 @@ export function annotationToEvalCase(
       : {}),
     ...(annotation.candidate?.kind === "data_item"
       ? { dataItemCandidate: annotation.candidate }
+      : {}),
+    ...(annotation.mention_attributes !== undefined
+      ? { mentionAttributes: annotation.mention_attributes }
       : {}),
   };
 }

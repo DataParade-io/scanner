@@ -10,6 +10,7 @@ import {
   type AnnotationRecord,
   type BenchmarkLayer,
   type BenchmarkManifest,
+  type ConceptScopeRecord,
   BENCHMARK_LAYERS,
   type DataItemAnnotationCandidate,
   type DataItemEvidenceValidation,
@@ -682,6 +683,44 @@ function validateLayerScopeRecord(
     exhaustive_scope_files: deduped,
     provenance: validateLayerScopeProvenance(provenanceRaw, `${field}.provenance`),
   };
+}
+
+/** Concept-scoped closed worlds from layer-scopes.yaml `concept_scopes` (KDATAP-ec05ea). */
+export function loadConceptScopes(repoDir: string): Map<BenchmarkLayer, ConceptScopeRecord[]> {
+  const scopesPath = path.join(repoDir, "layer-scopes.yaml");
+  const result = new Map<BenchmarkLayer, ConceptScopeRecord[]>();
+  if (!fs.existsSync(scopesPath)) {
+    return result;
+  }
+  const parsed = YAML.parse(fs.readFileSync(scopesPath, "utf8")) as Record<string, unknown> | null;
+  const raw = parsed?.concept_scopes;
+  if (raw === undefined || raw === null) {
+    return result;
+  }
+  const byLayer = isRecord(raw, `${scopesPath}:concept_scopes`);
+  for (const [layerKey, entries] of Object.entries(byLayer)) {
+    if (!BENCHMARK_LAYERS.includes(layerKey as BenchmarkLayer)) {
+      throw new Error(`Unknown layer '${layerKey}' in ${scopesPath}:concept_scopes`);
+    }
+    if (!Array.isArray(entries)) {
+      throw new Error(`Expected list for ${scopesPath}:concept_scopes.${layerKey}`);
+    }
+    const layer = normalizeBenchmarkLayer(layerKey);
+    const records = entries.map((entry, index) => {
+      const field = `${scopesPath}:concept_scopes.${layerKey}[${index}]`;
+      const row = isRecord(entry, field);
+      const base = validateLayerScopeRecord(row, field);
+      const subjectKeys = isStringArray(row.subject_keys, `${field}.subject_keys`)
+        .map((key) => key.trim())
+        .filter(Boolean);
+      if (subjectKeys.length === 0) {
+        throw new Error(`Expected at least one subject key in ${field}.subject_keys`);
+      }
+      return { ...base, subject_keys: subjectKeys };
+    });
+    result.set(layer, [...(result.get(layer) ?? []), ...records]);
+  }
+  return result;
 }
 
 export function loadLayerScopes(repoDir: string): Map<BenchmarkLayer, LayerScopeRecord> {

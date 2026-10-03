@@ -30,6 +30,11 @@ import {
   type PacketCanonicalRecordWithDiagnostics,
 } from "./layer-report-accounting";
 import { isDataFlowsLayerScoreable } from "./baseline/evaluate-readiness";
+import {
+  SCORED_MENTION_ATTRIBUTES,
+  type AttributeMetricScore,
+  type ScoredMentionAttribute,
+} from "../../src/eval/canonical/mention-attribute-metrics";
 import type { GoldPopulationStats } from "./baseline/types";
 
 export type { LayerReportAccounting } from "./layer-report-accounting";
@@ -396,7 +401,51 @@ function aggregateLayerScores(
     unreadCount,
     denominators,
     metricComputability,
+    ...aggregateMentionExtras(reports),
   };
+}
+
+/** Sum attribute and grouping numerators and denominators across packets (mentions layer). */
+export function mergeAttributeScores(scores: AttributeMetricScore[]): AttributeMetricScore {
+  const numerator = scores.reduce((sum, score) => sum + score.numerator, 0);
+  const denominator = scores.reduce((sum, score) => sum + score.denominator, 0);
+  const computable = scores.filter((score) => score.state === "computable");
+  if (computable.length > 0) {
+    const n = computable.reduce((sum, score) => sum + score.numerator, 0);
+    const d = computable.reduce((sum, score) => sum + score.denominator, 0);
+    return { state: "computable", value: d === 0 ? null : n / d, numerator: n, denominator: d };
+  }
+  const state = scores.some((score) => score.state === "scanner_capability_not_declared")
+    ? "scanner_capability_not_declared"
+    : "not_asserted_by_gold";
+  return { state, value: null, numerator, denominator };
+}
+
+function aggregateMentionExtras(reports: EvalScoreReport[]): Pick<EvalScores, "mentionAttributes" | "grouping"> {
+  const withAttributes = reports.filter((report) => report.scores.mentionAttributes !== undefined);
+  const withGrouping = reports.filter((report) => report.scores.grouping !== undefined);
+  const extras: Pick<EvalScores, "mentionAttributes" | "grouping"> = {};
+  if (withAttributes.length > 0) {
+    extras.mentionAttributes = Object.fromEntries(
+      SCORED_MENTION_ATTRIBUTES.map((attribute) => [
+        attribute,
+        mergeAttributeScores(withAttributes.map((report) => report.scores.mentionAttributes![attribute])),
+      ]),
+    ) as Record<ScoredMentionAttribute, AttributeMetricScore>;
+  }
+  if (withGrouping.length > 0) {
+    extras.grouping = {
+      precision: mergeAttributeScores(withGrouping.map((report) => report.scores.grouping!.precision)),
+      recall: mergeAttributeScores(withGrouping.map((report) => report.scores.grouping!.recall)),
+    };
+  }
+  return extras;
+}
+
+function formatAttributeScore(score: AttributeMetricScore): string {
+  return score.state === "computable"
+    ? `${formatRate(score.value)} (${score.numerator}/${score.denominator})`
+    : `${score.state} (denominator ${score.denominator})`;
 }
 
 export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
@@ -579,6 +628,15 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
     );
     if (entry.accounting.migrationIncomplete.total > 0) {
       lines.push(`- Migration incomplete: ${entry.accounting.migrationIncomplete.total}`);
+    }
+    if (entry.scores.mentionAttributes) {
+      for (const attribute of SCORED_MENTION_ATTRIBUTES) {
+        lines.push(`- Attribute ${attribute}: ${formatAttributeScore(entry.scores.mentionAttributes[attribute])}`);
+      }
+    }
+    if (entry.scores.grouping) {
+      lines.push(`- Grouping pairwise precision: ${formatAttributeScore(entry.scores.grouping.precision)}`);
+      lines.push(`- Grouping pairwise recall: ${formatAttributeScore(entry.scores.grouping.recall)}`);
     }
     lines.push("");
   }
