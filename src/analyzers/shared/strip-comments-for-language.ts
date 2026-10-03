@@ -19,6 +19,7 @@ const OPTIONS: Partial<Record<FileLanguage, StripCommentsOptions>> = {
   ruby: { hashComments: true },
   rust: { nestedBlockComments: true },
   swift: { nestedBlockComments: true },
+  prisma: {},
 };
 
 const DOCSTRING_OPEN = /^[ \t]*[rRuU]?("""|''')/;
