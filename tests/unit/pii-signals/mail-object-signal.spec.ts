@@ -15,3 +15,12 @@ describe("bare mail as an email signal", () => {
     expect(ids("mail(to: recipients)")).toEqual([]);
   });
 });
+
+describe("mail inside a longer name", () => {
+  it("is a mail message unless an address word goes with it", () => {
+    expect(ids("html_mail_body = render(x)")).toEqual([]);
+    expect(ids("mail_subject = x")).toEqual([]);
+    expect(ids("mail_from = sender")).toEqual(["email"]);
+    expect(ids("const from: SendMailOptions['from'] = options.from")).toEqual(["email"]);
+  });
+});
