@@ -210,6 +210,14 @@ const TRANSLATION_KEY = /(\b(?:I18n\.t|i18n\.t|translate|t|__|\$t)\(\s*)(['"`])[
 const PATH_OR_PROSE_STRING =
   /(['"`])(?:[\w.@-]*\/[\w./@-]*|[A-Z](?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*[.!?])\1/g;
 
+/**
+ * A capitalized Email or Mail class reference (`Channel::Email`, `models.Email.findOne`,
+ * `Email::Cleaner`): a model or module, not an address. Lowercase members (`user.email`)
+ * are untouched.
+ */
+const EMAIL_CLASS_REFERENCE = /(::|\.)(?:Email|Mail)\b/g;
+const EMAIL_NAMESPACE = /\b(?:Email|Mail)(?=::)/g;
+
 export function matchPiiSignalsInFile(
   input: MatchPiiSignalsFileInput,
   rules: PiiSignalRule[] = loadPiiSignalRules(),
@@ -220,7 +228,11 @@ export function matchPiiSignalsInFile(
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     // A translation key names a message, not a value: it is blanked before matching.
-    const line = (lines[lineIndex] ?? "").replace(TRANSLATION_KEY, '$1""').replace(PATH_OR_PROSE_STRING, '""');
+    const line = (lines[lineIndex] ?? "")
+      .replace(TRANSLATION_KEY, '$1""')
+      .replace(PATH_OR_PROSE_STRING, '""')
+      .replace(EMAIL_CLASS_REFERENCE, "$1Klass")
+      .replace(EMAIL_NAMESPACE, "Klass");
     const regexMatchedRuleIds = new Set<string>();
 
     for (const rule of rules) {

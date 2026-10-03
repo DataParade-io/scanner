@@ -24,3 +24,12 @@ describe("mail inside a longer name", () => {
     expect(ids("const from: SendMailOptions['from'] = options.from")).toEqual(["email"]);
   });
 });
+
+describe("Email and Mail class references", () => {
+  it("are models or modules, not addresses", () => {
+    expect(ids("when 'Channel::Email'")).toEqual([]);
+    expect(ids("models.Email.findOne(x)")).toEqual([]);
+    expect(ids("Email::Cleaner.new(raw)")).toEqual([]);
+    expect(ids("user.email")).toEqual(["email"]);
+  });
+});
