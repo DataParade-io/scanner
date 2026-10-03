@@ -11,6 +11,7 @@ Build a durable benchmark whose labels are independent of the scanner version be
 
 - For repository discovery or corpus expansion, follow **Select repositories**.
 - For first-time labeling, follow **Prepare an annotation packet** and **Adjudicate annotations**.
+- For a labeling batch issue (an `annotation` issue that lists files and a candidate inventory), follow [references/mention-attribute-labeling.md](references/mention-attribute-labeling.md) exactly and write a packet; do not use the other workflows.
 - For a disputed or changed label, follow **Correct ground truth**.
 - For an evaluation run, follow **Protect metric integrity**.
 
