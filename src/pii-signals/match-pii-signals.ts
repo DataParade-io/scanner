@@ -201,6 +201,15 @@ function matchAliasHitsOnLine(
  */
 const TRANSLATION_KEY = /(\b(?:I18n\.t|i18n\.t|translate|t|__|\$t)\(\s*)(['"`])[a-z][a-z0-9_]*(?:\.[a-z0-9_]+){2,}\2/g;
 
+/**
+ * A module path or URL path (`'../../services/email-service'`) or a prose message
+ * (`'Email not found.'`): it names a file or tells a person something, not a value.
+ * SQL, other strings and messages that interpolate a value (`"Logout failed for
+ * #{channel.email}."`) keep matching.
+ */
+const PATH_OR_PROSE_STRING =
+  /(['"`])(?:[\w.@-]*\/[\w./@-]*|[A-Z](?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*[.!?])\1/g;
+
 export function matchPiiSignalsInFile(
   input: MatchPiiSignalsFileInput,
   rules: PiiSignalRule[] = loadPiiSignalRules(),
@@ -211,7 +220,7 @@ export function matchPiiSignalsInFile(
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     // A translation key names a message, not a value: it is blanked before matching.
-    const line = (lines[lineIndex] ?? "").replace(TRANSLATION_KEY, '$1""');
+    const line = (lines[lineIndex] ?? "").replace(TRANSLATION_KEY, '$1""').replace(PATH_OR_PROSE_STRING, '""');
     const regexMatchedRuleIds = new Set<string>();
 
     for (const rule of rules) {

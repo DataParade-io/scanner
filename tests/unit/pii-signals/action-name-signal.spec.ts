@@ -22,3 +22,13 @@ describe("translation keys", () => {
     expect(hits("config('mail.from.address')")).toContain("email");
   });
 });
+
+describe("paths and prose messages", () => {
+  it("ignores module paths and prose messages, keeps SQL, labels and interpolated messages", () => {
+    expect(hits("require('../../services/email-service')")).not.toContain("email");
+    expect(hits("x = 'Email not found.'")).not.toContain("email");
+    expect(hits("db.raw('select email from users')")).toContain("email");
+    expect(hits("label: 'Email address'")).toContain("email");
+    expect(hits("logger.info(`Logout failed for ${channel.email}.`)")).toContain("email");
+  });
+});
