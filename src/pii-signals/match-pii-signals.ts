@@ -194,6 +194,13 @@ function matchAliasHitsOnLine(
   return hits;
 }
 
+/**
+ * A dotted key passed to a translation call (`I18n.t('conversations.reply.email.header')`,
+ * `t("errors.contacts.phone_number.invalid")`): a message, not a value. Other dotted keys
+ * (`config('mail.from.address')`) can name a configured address and are kept.
+ */
+const TRANSLATION_KEY = /(\b(?:I18n\.t|i18n\.t|translate|t|__|\$t)\(\s*)(['"`])[a-z][a-z0-9_]*(?:\.[a-z0-9_]+){2,}\2/g;
+
 export function matchPiiSignalsInFile(
   input: MatchPiiSignalsFileInput,
   rules: PiiSignalRule[] = loadPiiSignalRules(),
@@ -203,7 +210,8 @@ export function matchPiiSignalsInFile(
   const rulesById = ruleById(rules);
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
-    const line = lines[lineIndex] ?? "";
+    // A translation key names a message, not a value: it is blanked before matching.
+    const line = (lines[lineIndex] ?? "").replace(TRANSLATION_KEY, '$1""');
     const regexMatchedRuleIds = new Set<string>();
 
     for (const rule of rules) {

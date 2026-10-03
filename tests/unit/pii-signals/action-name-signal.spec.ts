@@ -15,3 +15,10 @@ describe("flag and action names around a concept", () => {
     }
   });
 });
+
+describe("translation keys", () => {
+  it("ignores keys passed to translation calls and keeps other dotted keys", () => {
+    expect(hits("I18n.t('conversations.reply.email.header')")).not.toContain("email");
+    expect(hits("config('mail.from.address')")).toContain("email");
+  });
+});
