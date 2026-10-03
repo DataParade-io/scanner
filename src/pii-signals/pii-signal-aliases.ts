@@ -209,15 +209,19 @@ const ACTION_OR_FLAG_FIRST_WORD = new Set([
   "format", "extract", "fetch", "create", "update", "delete", "build", "handle", "mask", "sanitize", "allow", "skip", "resend",
 ]);
 
-function namesActionOrType(token: string): boolean {
+/** For phone, checks name a test too (`isMobile`, `isValidPhoneNumber`, `ensureValidPhoneNumber`). */
+const PHONE_CHECK_FIRST_WORD = new Set(["is", "ensure", "validate"]);
+
+function namesActionOrType(token: string, ruleId?: string): boolean {
   const parts = splitCamelCaseParts(token);
+  if (ruleId === "phone_number" && parts.length > 1 && PHONE_CHECK_FIRST_WORD.has(parts[0])) return true;
   // A bare `mail` (`sendMail`) is governed by the mail-object rule below.
   const conceptWord = parts.some((part) => /^(?:emails?|phones?|mobile)$/.test(part));
   return parts.length > 1 && conceptWord && ACTION_OR_FLAG_FIRST_WORD.has(parts[0]);
 }
 
 /** Last words that make a phone-word identifier name something other than a phone number. */
-const NOT_PHONE_LAST_WORD = new Set(["contact", "contacts", "format", "at", "webview", "sdk", "base", "view", "step"]);
+const NOT_PHONE_LAST_WORD = new Set(["contact", "contacts", "format", "at", "webview", "sdk", "base", "view", "step", "country", "schema"]);
 
 /** A single `mail`, or a `mail` compound naming an address (`mail_from`, `reply_to_mail`). */
 function MAIL_ADDRESS_COMPOUND(token: string): boolean {
@@ -239,7 +243,7 @@ export function resolveAliasRuleIdsForToken(
 ): string[] {
   const ruleIds = new Set<string>();
   const suffixRule = emailSuffixRuleId(token);
-  if (suffixRule && !namesActionOrType(token)) ruleIds.add(suffixRule);
+  if (suffixRule && !namesActionOrType(token, suffixRule)) ruleIds.add(suffixRule);
   for (const key of identifierLookupKeys(token)) {
     const ruleId = lookupAliasRuleId(key) ?? suffixAliasRuleId(key);
     if (!ruleId) {
@@ -272,7 +276,7 @@ export function resolveAliasRuleIdsForToken(
     }
     // A multi-word name that starts with a flag or action word names a flag or a function
     // (`hideOrganizerEmail`, `noEmail`, `normalizeEmail`, `sendSmsToPhone`), not a value.
-    if ((ruleId === "email" || ruleId === "phone_number") && namesActionOrType(token)) {
+    if ((ruleId === "email" || ruleId === "phone_number") && namesActionOrType(token, ruleId)) {
       continue;
     }
     // `mail` inside a longer name is a mail message (`inbound_mail`, `mail_subject`,
