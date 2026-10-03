@@ -199,6 +199,9 @@ function emailSuffixRuleId(token: string): string | undefined {
     : undefined;
 }
 
+/** Last words that make a phone-word identifier name something other than a phone number. */
+const NOT_PHONE_LAST_WORD = new Set(["contact", "contacts", "format", "at", "webview", "sdk", "base", "view", "step"]);
+
 /** `mail` used as a constant, a call, or an object whose member is not an address list. */
 const MAIL_OBJECT_USE = /^\s*(?:::|\(|\.(?!(?:to|from|cc|bcc|reply_to|sender|recipients)\b))/;
 
@@ -225,6 +228,19 @@ export function resolveAliasRuleIdsForToken(
     if (
       CONTEXT_GATED_PASSWORD_TOKENS.has(key) &&
       !isPlainPasswordFieldDeclaration(line, filePath)
+    ) {
+      continue;
+    }
+    // A phone word inside a longer name that ends in something else names that thing
+    // (`existing_phone_number_contact`, `phone_number_format`, `allow_mobile_webview`), not a
+    // phone number. Names ending in a holder of the value (`phone_source_id`, `phone_info`,
+    // `PHONE_NUMBER_FIELD`) still count.
+    // A multi-word PascalCase name (`MFAEnrollPhoneParams`, `MobileOtpType`) is a type or
+    // class, never a phone value; ALL_CAPS constants (`ATTENDEE_PHONE_NUMBER_FIELD`) still count.
+    if (
+      ruleId === "phone_number" &&
+      (NOT_PHONE_LAST_WORD.has(splitCamelCaseParts(token).slice(-1)[0] ?? "") ||
+        (/^[A-Z][A-Za-z0-9]*[a-z][A-Za-z0-9]*$/.test(token) && splitCamelCaseParts(token).length > 1))
     ) {
       continue;
     }
