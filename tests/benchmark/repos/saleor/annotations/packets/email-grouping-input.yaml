@@ -1,0 +1,2051 @@
+repo: saleor
+concept: email
+positive_mentions: 217
+clusters:
+  c001:
+    declaration: saleor/account/events.py:93
+    mentions:
+    - id: saleor-events-L93
+      batch: KDATAP-3a9fb5
+      file: saleor/account/events.py
+      line: 93
+      name: new_email
+      syntax_kind: identifier
+      text: '*, staff_user: User | None, app: App | None, new_email: str'
+    - id: saleor-events-L100
+      batch: KDATAP-3a9fb5
+      file: saleor/account/events.py
+      line: 100
+      name: new_email
+      syntax_kind: identifier
+      text: 'parameters={"message": new_email},'
+  c002:
+    declaration: saleor/account/models.py:172
+    mentions:
+    - id: saleor-models-L172
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 172
+      name: email
+      syntax_kind: property_key
+      text: email = models.EmailField(unique=True)
+    - id: saleor-models-L345
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 345
+      name: email
+      syntax_kind: identifier
+      text: return self.email
+    - id: saleor-models-L348
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 348
+      name: email
+      syntax_kind: identifier
+      text: return self.email
+    - id: saleor-models-L426
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 426
+      name: email
+      syntax_kind: identifier
+      text: return cast("User", self.user).email
+  c003:
+    declaration: saleor/account/models.py:220 (no shared declaration)
+    mentions:
+    - id: saleor-models-L220
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 220
+      name: email
+      syntax_kind: string_literal
+      text: USERNAME_FIELD = "email"
+  c004:
+    declaration: saleor/account/models.py:226 (no shared declaration)
+    mentions:
+    - id: saleor-models-L226
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 226
+      name: email
+      syntax_kind: string_literal
+      text: ordering = ("email",)
+  c005:
+    declaration: saleor/account/models.py:238 (no shared declaration)
+    mentions:
+    - id: saleor-models-L238
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 238
+      name: email
+      syntax_kind: string_literal
+      text: fields=["email", "first_name", "last_name"],
+  c006:
+    declaration: saleor/account/models.py:276 (no shared declaration)
+    mentions:
+    - id: saleor-models-L276
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 276
+      name: email
+      syntax_kind: string_literal
+      text: fields=["email"],
+  c007:
+    declaration: saleor/account/models.py:417
+    mentions:
+    - id: saleor-models-L431
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 431
+      name: email
+      syntax_kind: identifier
+      text: return self.user.email if self.user else self.staff_email
+  c008:
+    declaration: saleor/account/models.py:424
+    mentions:
+    - id: saleor-models-L424
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 424
+      name: staff_email
+      syntax_kind: property_key
+      text: staff_email = models.EmailField(unique=True, blank=True, null=True)
+  c009:
+    declaration: saleor/account/models.py:428 (no shared declaration)
+    mentions:
+    - id: saleor-models-L428
+      batch: KDATAP-3a9fb5
+      file: saleor/account/models.py
+      line: 428
+      name: staff_email
+      syntax_kind: string_literal
+      text: ordering = ("staff_email",)
+  c010:
+    declaration: saleor/account/notifications.py:101
+    mentions:
+    - id: saleor-notifications-L101
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 101
+      name: new_email
+      syntax_kind: identifier
+      text: redirect_url, user, new_email, token, manager, channel_slug
+  c011:
+    declaration: saleor/account/notifications.py:110
+    mentions:
+    - id: saleor-notifications-L110
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 110
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": new_email,'
+  c012:
+    declaration: saleor/account/notifications.py:111
+    mentions:
+    - id: saleor-notifications-L111
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 111
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": user.email,'
+  c013:
+    declaration: saleor/account/notifications.py:112
+    mentions:
+    - id: saleor-notifications-L112
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 112
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": new_email,'
+  c014:
+    declaration: saleor/account/notifications.py:134
+    mentions:
+    - id: saleor-notifications-L134
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 134
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": recipient_email,'
+  c015:
+    declaration: saleor/account/notifications.py:136
+    mentions:
+    - id: saleor-notifications-L136
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 136
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": recipient_email,'
+  c016:
+    declaration: saleor/account/notifications.py:137
+    mentions:
+    - id: saleor-notifications-L137
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 137
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": user.email,'
+  c017:
+    declaration: saleor/account/notifications.py:164
+    mentions:
+    - id: saleor-notifications-L164
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 164
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": user.email,'
+  c018:
+    declaration: saleor/account/notifications.py:18
+    mentions:
+    - id: saleor-notifications-L18
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 18
+      name: email
+      syntax_kind: property_key
+      text: '"email": user.email,'
+  c019:
+    declaration: saleor/account/notifications.py:187
+    mentions:
+    - id: saleor-notifications-L187
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 187
+      name: email
+      syntax_kind: property_key
+      text: 'params = urlencode({"email": user.email, "token": token})'
+  c020:
+    declaration: saleor/account/notifications.py:192
+    mentions:
+    - id: saleor-notifications-L192
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 192
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": user.email,'
+  c021:
+    declaration: saleor/account/notifications.py:36
+    mentions:
+    - id: saleor-notifications-L36
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 36
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": user.email,'
+  c022:
+    declaration: saleor/account/notifications.py:49
+    mentions:
+    - id: saleor-notifications-L49
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 49
+      name: email
+      syntax_kind: property_key
+      text: 'params = urlencode({"email": user.email, "token": token})'
+  c023:
+    declaration: saleor/account/notifications.py:54
+    mentions:
+    - id: saleor-notifications-L54
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 54
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": user.email,'
+  c024:
+    declaration: saleor/account/notifications.py:80
+    mentions:
+    - id: saleor-notifications-L80
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 80
+      name: email
+      syntax_kind: property_key
+      text: 'params = urlencode({"email": user.email, "token": user_token})'
+  c025:
+    declaration: saleor/account/notifications.py:84
+    mentions:
+    - id: saleor-notifications-L84
+      batch: KDATAP-3a9fb5
+      file: saleor/account/notifications.py
+      line: 84
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": user.email,'
+  c026:
+    declaration: saleor/account/search.py:11 (no shared declaration)
+    mentions:
+    - id: saleor-search-L11
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 11
+      name: email
+      syntax_kind: string_literal
+      text: '"email",'
+  c027:
+    declaration: saleor/account/search.py:39
+    mentions:
+    - id: saleor-search-L56
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 56
+      name: email
+      syntax_kind: identifier
+      text: search_vectors.extend(generate_email_vector(user.email))
+  c028:
+    declaration: saleor/account/search.py:70
+    mentions:
+    - id: saleor-search-L70
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 70
+      name: email
+      syntax_kind: identifier
+      text: 'def generate_email_vector(email: str) -> list[NoValidationSearchVector]:'
+    - id: saleor-search-L77
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 77
+      name: email
+      syntax_kind: identifier
+      text: vectors = [NoValidationSearchVector(Value(email), config="simple", weight="A")]
+    - id: saleor-search-L78
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 78
+      name: email
+      syntax_kind: identifier
+      text: 'if email and "@" in email:'
+    - id: saleor-search-L79
+      batch: KDATAP-3a9fb5
+      file: saleor/account/search.py
+      line: 79
+      name: email
+      syntax_kind: identifier
+      text: domain = email.split("@")[-1]
+  c029:
+    declaration: saleor/account/throttling.py:21
+    mentions:
+    - id: saleor-throttling-L21
+      batch: KDATAP-0c422e
+      file: saleor/account/throttling.py
+      line: 21
+      name: email
+      syntax_kind: identifier
+      text: 'def authenticate_with_throttling(request, email, password) -> models.User | None:'
+    - id: saleor-throttling-L48
+      batch: KDATAP-0c422e
+      file: saleor/account/throttling.py
+      line: 48
+      name: email
+      syntax_kind: identifier
+      text: user = retrieve_user_by_email(email)
+  c030:
+    declaration: saleor/account/utils.py:150
+    mentions:
+    - id: saleor-utils-L150
+      batch: KDATAP-3a9fb5
+      file: saleor/account/utils.py
+      line: 150
+      name: email
+      syntax_kind: identifier
+      text: 'def retrieve_user_by_email(email):'
+    - id: saleor-utils-L156
+      batch: KDATAP-3a9fb5
+      file: saleor/account/utils.py
+      line: 156
+      name: email
+      syntax_kind: identifier
+      text: users = list(User.objects.filter(email__iexact=email))
+  c031:
+    declaration: saleor/account/utils.py:159
+    mentions:
+    - id: saleor-utils-L159
+      batch: KDATAP-3a9fb5
+      file: saleor/account/utils.py
+      line: 159
+      name: email
+      syntax_kind: identifier
+      text: users_exact = [user for user in users if user.email == email]
+  c032:
+    declaration: saleor/account/utils.py:160
+    mentions:
+    - id: saleor-utils-L160
+      batch: KDATAP-3a9fb5
+      file: saleor/account/utils.py
+      line: 160
+      name: email
+      syntax_kind: identifier
+      text: users_iexact = [user for user in users if user.email == email.lower()]
+  c033:
+    declaration: saleor/checkout/checkout_cleaner.py:135 (no shared declaration)
+    mentions:
+    - id: saleor-checkout_cleaner-L135
+      batch: KDATAP-ef6345
+      file: saleor/checkout/checkout_cleaner.py
+      line: 135
+      name: assigned_to_email
+      syntax_kind: string_literal
+      text: checkouts=checkout.token, assigned_to_email__isnull=False
+  c034:
+    declaration: saleor/checkout/complete_checkout.py:1163
+    mentions:
+    - id: saleor-complete_checkout-L1163
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1163
+      name: user_email
+      syntax_kind: identifier
+      text: user_email = get_customer_email_for_voucher_usage(checkout_info)
+    - id: saleor-complete_checkout-L1168
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1168
+      name: user_email
+      syntax_kind: identifier
+      text: user_email,
+  c035:
+    declaration: saleor/checkout/complete_checkout.py:1229
+    mentions:
+    - id: saleor-complete_checkout-L1229
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1229
+      name: customer_email
+      syntax_kind: identifier
+      text: customer_email = cast(str, get_customer_email_for_voucher_usage(checkout_info))
+    - id: saleor-complete_checkout-L1232
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1232
+      name: customer_email
+      syntax_kind: identifier
+      text: _increase_checkout_voucher_usage(checkout, code, voucher, customer_email)
+  c036:
+    declaration: saleor/checkout/complete_checkout.py:128
+    mentions:
+    - id: saleor-complete_checkout-L128
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 128
+      name: customer_email
+      syntax_kind: identifier
+      text: customer_email = cast(str, get_customer_email_for_voucher_usage(checkout_info))
+    - id: saleor-complete_checkout-L130
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 130
+      name: customer_email
+      syntax_kind: identifier
+      text: _increase_checkout_voucher_usage(checkout, voucher_code, voucher, customer_email)
+    - id: saleor-complete_checkout-L150
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 150
+      name: customer_email
+      syntax_kind: identifier
+      text: increase_voucher_usage(voucher, voucher_code, customer_email)
+  c037:
+    declaration: saleor/checkout/complete_checkout.py:1353
+    mentions:
+    - id: saleor-complete_checkout-L1353
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1353
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=order.user_email,
+  c038:
+    declaration: saleor/checkout/complete_checkout.py:142
+    mentions:
+    - id: saleor-complete_checkout-L142
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 142
+      name: customer_email
+      syntax_kind: identifier
+      text: 'customer_email: str,'
+  c039:
+    declaration: saleor/checkout/complete_checkout.py:160
+    mentions:
+    - id: saleor-complete_checkout-L160
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 160
+      name: user_email
+      syntax_kind: identifier
+      text: 'user_email: str | None,'
+    - id: saleor-complete_checkout-L176
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 176
+      name: user_email
+      syntax_kind: identifier
+      text: user_email,
+  c040:
+    declaration: saleor/checkout/complete_checkout.py:2024 (no shared declaration)
+    mentions:
+    - id: saleor-complete_checkout-L2024
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 2024
+      name: email
+      syntax_kind: identifier
+      text: get_customer_email_for_voucher_usage(checkout_info),
+  c041:
+    declaration: saleor/checkout/complete_checkout.py:286
+    mentions:
+    - id: saleor-complete_checkout-L286
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 286
+      name: user_email
+      syntax_kind: property_key
+      text: '"user_email": checkout_info.get_customer_email(),'
+  c042:
+    declaration: saleor/checkout/complete_checkout.py:753
+    mentions:
+    - id: saleor-complete_checkout-L753
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 753
+      name: user_email
+      syntax_kind: identifier
+      text: user_email = get_customer_email_for_voucher_usage(checkout_info)
+    - id: saleor-complete_checkout-L758
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 758
+      name: user_email
+      syntax_kind: identifier
+      text: user_email,
+  c043:
+    declaration: saleor/checkout/complete_checkout.py:888
+    mentions:
+    - id: saleor-complete_checkout-L888
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 888
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=order_data["user_email"],
+  c044:
+    declaration: saleor/checkout/models.py:132
+    mentions:
+    - id: saleor-checkout_cleaner-L106
+      batch: KDATAP-ef6345
+      file: saleor/checkout/checkout_cleaner.py
+      line: 106
+      name: email
+      syntax_kind: identifier
+      text: 'if not checkout.email:'
+    - id: saleor-complete_checkout-L1693
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1693
+      name: email
+      syntax_kind: identifier
+      text: 'if user is None and not checkout_info.user and checkout_info.checkout.email:'
+    - id: saleor-complete_checkout-L1694
+      batch: KDATAP-ef6345
+      file: saleor/checkout/complete_checkout.py
+      line: 1694
+      name: email
+      syntax_kind: identifier
+      text: existing_user = retrieve_user_by_email(checkout_info.checkout.email)
+    - id: saleor-models-L132
+      batch: KDATAP-ef6345
+      file: saleor/checkout/models.py
+      line: 132
+      name: email
+      syntax_kind: property_key
+      text: email = models.EmailField(blank=True, null=True)
+    - id: saleor-models-L369
+      batch: KDATAP-ef6345
+      file: saleor/checkout/models.py
+      line: 369
+      name: email
+      syntax_kind: identifier
+      text: 'if self.email:'
+    - id: saleor-models-L370
+      batch: KDATAP-ef6345
+      file: saleor/checkout/models.py
+      line: 370
+      name: email
+      syntax_kind: identifier
+      text: return self.email
+  c045:
+    declaration: saleor/checkout/models.py:372 (no shared declaration)
+    mentions:
+    - id: saleor-models-L372
+      batch: KDATAP-ef6345
+      file: saleor/checkout/models.py
+      line: 372
+      name: email
+      syntax_kind: identifier
+      text: return self.user.email
+  c046:
+    declaration: saleor/giftcard/events.py:122
+    mentions:
+    - id: saleor-events-L122
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 122
+      name: email
+      syntax_kind: identifier
+      text: 'gift_card_id: int, user_id: int | None, app_id: int | None, email: str'
+  c047:
+    declaration: saleor/giftcard/events.py:129
+    mentions:
+    - id: saleor-events-L129
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 129
+      name: email
+      syntax_kind: property_key
+      text: 'parameters={"email": email},'
+  c048:
+    declaration: saleor/giftcard/events.py:134
+    mentions:
+    - id: saleor-events-L134
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 134
+      name: email
+      syntax_kind: identifier
+      text: 'gift_card_id: int, user_id: int | None, app_id: int | None, email: str'
+  c049:
+    declaration: saleor/giftcard/events.py:141
+    mentions:
+    - id: saleor-events-L141
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 141
+      name: email
+      syntax_kind: property_key
+      text: 'parameters={"email": email},'
+  c050:
+    declaration: saleor/giftcard/events.py:60
+    mentions:
+    - id: saleor-events-L60
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 60
+      name: previous_email
+      syntax_kind: identifier
+      text: 'previous_email: str | None,'
+  c051:
+    declaration: saleor/giftcard/events.py:71
+    mentions:
+    - id: saleor-events-L71
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 71
+      name: previous_assigned_to_email
+      syntax_kind: property_key
+      text: '"previous_assigned_to_email": previous_email,'
+  c052:
+    declaration: saleor/giftcard/events.py:73
+    mentions:
+    - id: saleor-events-L73
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 73
+      name: assigned_to_email
+      syntax_kind: property_key
+      text: '"assigned_to_email": gift_card.assigned_to_email,'
+  c053:
+    declaration: saleor/giftcard/events.py:81
+    mentions:
+    - id: saleor-events-L81
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 81
+      name: previous_email
+      syntax_kind: identifier
+      text: 'previous_email: str | None,'
+  c054:
+    declaration: saleor/giftcard/events.py:92
+    mentions:
+    - id: saleor-events-L92
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/events.py
+      line: 92
+      name: previous_assigned_to_email
+      syntax_kind: property_key
+      text: '"previous_assigned_to_email": previous_email,'
+  c055:
+    declaration: saleor/giftcard/models.py:64
+    mentions:
+    - id: saleor-models-L64
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/models.py
+      line: 64
+      name: created_by_email
+      syntax_kind: property_key
+      text: created_by_email = models.EmailField(null=True, blank=True)
+  c056:
+    declaration: saleor/giftcard/models.py:65
+    mentions:
+    - id: saleor-models-L65
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/models.py
+      line: 65
+      name: used_by_email
+      syntax_kind: property_key
+      text: used_by_email = models.EmailField(null=True, blank=True)
+  c057:
+    declaration: saleor/giftcard/models.py:77
+    mentions:
+    - id: saleor-models-L77
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/models.py
+      line: 77
+      name: assigned_to_email
+      syntax_kind: property_key
+      text: assigned_to_email = models.EmailField(null=True, blank=True)
+    - id: saleor-models-L164
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/models.py
+      line: 164
+      name: assigned_to_email
+      syntax_kind: identifier
+      text: 'if self.assigned_to_email and not self.assigned_to_id:'
+  c058:
+    declaration: saleor/giftcard/utils.py:145 (no shared declaration)
+    mentions:
+    - id: saleor-utils-L145
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 145
+      name: assigned_to_email
+      syntax_kind: string_literal
+      text: locked.save(update_fields=["assigned_to", "assigned_to_email"])
+  c059:
+    declaration: saleor/giftcard/utils.py:281
+    mentions:
+    - id: saleor-utils-L290
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 290
+      name: user_email
+      syntax_kind: identifier
+      text: user_email = order.user_email
+  c060:
+    declaration: saleor/giftcard/utils.py:290
+    mentions:
+    - id: saleor-utils-L325
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 325
+      name: user_email
+      syntax_kind: identifier
+      text: user_email,
+  c061:
+    declaration: saleor/giftcard/utils.py:303
+    mentions:
+    - id: saleor-utils-L303
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 303
+      name: created_by_email
+      syntax_kind: property_key
+      text: created_by_email=user_email,
+  c062:
+    declaration: saleor/giftcard/utils.py:349
+    mentions:
+    - id: saleor-utils-L349
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 349
+      name: user_email
+      syntax_kind: identifier
+      text: 'user_email: str,'
+    - id: saleor-utils-L361
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 361
+      name: user_email
+      syntax_kind: identifier
+      text: user_email,
+  c063:
+    declaration: saleor/giftcard/utils.py:389
+    mentions:
+    - id: saleor-utils-L389
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 389
+      name: used_by_email
+      syntax_kind: property_key
+      text: GiftCard.objects.filter(used_by_email=user.email).update(used_by=user)
+  c064:
+    declaration: saleor/giftcard/utils.py:390
+    mentions:
+    - id: saleor-utils-L390
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 390
+      name: created_by_email
+      syntax_kind: property_key
+      text: GiftCard.objects.filter(created_by_email=user.email).update(created_by=user)
+  c065:
+    declaration: saleor/giftcard/utils.py:403
+    mentions:
+    - id: saleor-utils-L403
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 403
+      name: used_by_email
+      syntax_kind: property_key
+      text: Q(used_by_email=user.email)
+  c066:
+    declaration: saleor/giftcard/utils.py:404
+    mentions:
+    - id: saleor-utils-L404
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 404
+      name: created_by_email
+      syntax_kind: property_key
+      text: '| Q(created_by_email=user.email)'
+  c067:
+    declaration: saleor/giftcard/utils.py:44
+    mentions:
+    - id: saleor-utils-L44
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 44
+      name: email
+      syntax_kind: identifier
+      text: 'checkout: Checkout, email: str | None, promo_code: str, currency: str'
+  c068:
+    declaration: saleor/giftcard/utils.py:94
+    mentions:
+    - id: saleor-utils-L144
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 144
+      name: email
+      syntax_kind: identifier
+      text: locked.assigned_to_email = user.email
+    - id: saleor-utils-L148
+      batch: KDATAP-7dc1e3
+      file: saleor/giftcard/utils.py
+      line: 148
+      name: email
+      syntax_kind: identifier
+      text: gift_card.assigned_to_email = user.email
+  c069:
+    declaration: saleor/order/actions.py:1008
+    mentions:
+    - id: saleor-actions-L1008
+      batch: KDATAP-ef6345
+      file: saleor/order/actions.py
+      line: 1008
+      name: email
+      syntax_kind: property_key
+      text: email=order.user_email,
+  c070:
+    declaration: saleor/order/actions.py:1601 (no shared declaration)
+    mentions:
+    - id: saleor-actions-L1601
+      batch: KDATAP-ef6345
+      file: saleor/order/actions.py
+      line: 1601
+      name: user_email
+      syntax_kind: identifier
+      text: replace_order.user_email = original_order.user_email
+  c071:
+    declaration: saleor/order/actions.py:396 (no shared declaration)
+    mentions:
+    - id: saleor-actions-L396
+      batch: KDATAP-ef6345
+      file: saleor/order/actions.py
+      line: 396
+      name: customer_email
+      syntax_kind: identifier
+      text: 'if order_info.customer_email:'
+  c072:
+    declaration: saleor/order/events.py:105
+    mentions:
+    - id: saleor-events-L105
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 105
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+  c073:
+    declaration: saleor/order/events.py:111
+    mentions:
+    - id: saleor-events-L111
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 111
+      name: email
+      syntax_kind: property_key
+      text: '"email": customer_email,'
+  c074:
+    declaration: saleor/order/events.py:120
+    mentions:
+    - id: saleor-events-L120
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 120
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+  c075:
+    declaration: saleor/order/events.py:126
+    mentions:
+    - id: saleor-events-L126
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 126
+      name: email
+      syntax_kind: property_key
+      text: '"email": customer_email,'
+  c076:
+    declaration: saleor/order/events.py:135
+    mentions:
+    - id: saleor-events-L135
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 135
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, customer_email: str'
+  c077:
+    declaration: saleor/order/events.py:141
+    mentions:
+    - id: saleor-events-L141
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 141
+      name: email
+      syntax_kind: property_key
+      text: '"email": customer_email,'
+  c078:
+    declaration: saleor/order/events.py:149
+    mentions:
+    - id: saleor-events-L149
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 149
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+  c079:
+    declaration: saleor/order/events.py:155
+    mentions:
+    - id: saleor-events-L155
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 155
+      name: email
+      syntax_kind: property_key
+      text: '"email": customer_email,'
+  c080:
+    declaration: saleor/order/events.py:164
+    mentions:
+    - id: saleor-events-L164
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 164
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, customer_email: str'
+  c081:
+    declaration: saleor/order/events.py:169
+    mentions:
+    - id: saleor-events-L169
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 169
+      name: email
+      syntax_kind: property_key
+      text: 'parameters={"email": customer_email, "email_type": OrderEventsEmails.PAYMENT},'
+  c082:
+    declaration: saleor/order/events.py:220
+    mentions:
+    - id: saleor-events-L220
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 220
+      name: email
+      syntax_kind: identifier
+      text: '*, order_id: "UUID", user_id: int | None, app_id: int | None, email: str'
+  c083:
+    declaration: saleor/order/events.py:227
+    mentions:
+    - id: saleor-events-L227
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 227
+      name: email
+      syntax_kind: property_key
+      text: 'parameters={"email": email},'
+  c084:
+    declaration: saleor/order/events.py:90
+    mentions:
+    - id: saleor-events-L90
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 90
+      name: customer_email
+      syntax_kind: identifier
+      text: 'order_id: "UUID", user_id: int | None, app_id: int | None, customer_email: str'
+  c085:
+    declaration: saleor/order/events.py:96
+    mentions:
+    - id: saleor-events-L96
+      batch: KDATAP-0c422e
+      file: saleor/order/events.py
+      line: 96
+      name: email
+      syntax_kind: property_key
+      text: '"email": customer_email,'
+  c086:
+    declaration: saleor/order/models.py:161
+    mentions:
+    - id: saleor-models-L161
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 161
+      name: user_email
+      syntax_kind: property_key
+      text: user_email = models.EmailField(blank=True, default="")
+    - id: saleor-models-L423
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 423
+      name: user_email
+      syntax_kind: identifier
+      text: 'if self.user_email:'
+    - id: saleor-models-L424
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 424
+      name: user_email
+      syntax_kind: identifier
+      text: return self.user_email
+  c087:
+    declaration: saleor/order/models.py:394 (no shared declaration)
+    mentions:
+    - id: saleor-models-L394
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 394
+      name: user_email
+      syntax_kind: string_literal
+      text: fields=["user_email"],
+  c088:
+    declaration: saleor/order/models.py:400 (no shared declaration)
+    mentions:
+    - id: saleor-models-L400
+      batch: KDATAP-0c422e
+      file: saleor/order/models.py
+      line: 400
+      name: user_email
+      syntax_kind: string_literal
+      text: fields=["user_email", "user_id"],
+  c089:
+    declaration: saleor/order/notifications.py:308
+    mentions:
+    - id: saleor-notifications-L308
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 308
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order.get_customer_email(),'
+  c090:
+    declaration: saleor/order/notifications.py:348
+    mentions:
+    - id: saleor-notifications-L348
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 348
+      name: email
+      syntax_kind: property_key
+      text: '"email": order.get_customer_email(),'
+  c091:
+    declaration: saleor/order/notifications.py:397
+    mentions:
+    - id: saleor-notifications-L397
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 397
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order.get_customer_email(),'
+  c092:
+    declaration: saleor/order/notifications.py:414
+    mentions:
+    - id: saleor-notifications-L414
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 414
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order_info.customer_email,'
+  c093:
+    declaration: saleor/order/notifications.py:430
+    mentions:
+    - id: saleor-notifications-L430
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 430
+      name: recipient_emails
+      syntax_kind: identifier
+      text: recipient_emails = [
+    - id: saleor-notifications-L433
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 433
+      name: recipient_emails
+      syntax_kind: identifier
+      text: 'if recipient_emails:'
+  c094:
+    declaration: saleor/order/notifications.py:439
+    mentions:
+    - id: saleor-notifications-L439
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 439
+      name: recipient_list
+      syntax_kind: property_key
+      text: '"recipient_list": recipient_emails,'
+  c095:
+    declaration: saleor/order/notifications.py:456
+    mentions:
+    - id: saleor-notifications-L456
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 456
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order.get_customer_email(),'
+  c096:
+    declaration: saleor/order/notifications.py:503
+    mentions:
+    - id: saleor-notifications-L503
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 503
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order_info.customer_email,'
+  c097:
+    declaration: saleor/order/notifications.py:538
+    mentions:
+    - id: saleor-notifications-L538
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 538
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order.get_customer_email(),'
+  c098:
+    declaration: saleor/order/notifications.py:563
+    mentions:
+    - id: saleor-notifications-L563
+      batch: KDATAP-0c422e
+      file: saleor/order/notifications.py
+      line: 563
+      name: recipient_email
+      syntax_kind: property_key
+      text: '"recipient_email": order.get_customer_email(),'
+  c099:
+    declaration: saleor/order/utils.py:455
+    mentions:
+    - id: saleor-utils-L455
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 455
+      name: used_by_email
+      syntax_kind: identifier
+      text: used_by_email = cast(str, checkout_info.get_customer_email())
+    - id: saleor-utils-L464
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 464
+      name: used_by_email
+      syntax_kind: identifier
+      text: set_gift_card_user(gift_card, used_by_user, used_by_email)
+  c100:
+    declaration: saleor/order/utils.py:517
+    mentions:
+    - id: saleor-utils-L517
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 517
+      name: used_by_email
+      syntax_kind: identifier
+      text: 'used_by_email: str,'
+    - id: saleor-utils-L525
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 525
+      name: used_by_email
+      syntax_kind: identifier
+      text: gift_card.used_by_email = used_by_email
+  c101:
+    declaration: saleor/order/utils.py:523 (no shared declaration)
+    mentions:
+    - id: saleor-utils-L523
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 523
+      name: email
+      syntax_kind: identifier
+      text: else User.objects.filter(email=used_by_email).first()
+  c102:
+    declaration: saleor/order/utils.py:714 (no shared declaration)
+    mentions:
+    - id: saleor-utils-L714
+      batch: KDATAP-ef6345
+      file: saleor/order/utils.py
+      line: 714
+      name: user_email
+      syntax_kind: identifier
+      text: Order.objects.confirmed().filter(user_email=user.email, user=None).update(user=user)
+  c103:
+    declaration: saleor/plugins/admin_email/notify_events.py:105
+    mentions:
+    - id: saleor-notify_events-L105
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 105
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email = payload.get("recipient_email")
+    - id: saleor-notify_events-L106
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 106
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'if not recipient_email:'
+    - id: saleor-notify_events-L114
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 114
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c104:
+    declaration: saleor/plugins/admin_email/notify_events.py:131
+    mentions:
+    - id: saleor-notify_events-L131
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 131
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email = payload.get("recipient_email")
+    - id: saleor-notify_events-L132
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 132
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'if not recipient_email:'
+    - id: saleor-notify_events-L140
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 140
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c105:
+    declaration: saleor/plugins/admin_email/notify_events.py:31
+    mentions:
+    - id: saleor-notify_events-L31
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 31
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email = payload["recipient_email"]
+    - id: saleor-notify_events-L38
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 38
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c106:
+    declaration: saleor/plugins/admin_email/notify_events.py:55
+    mentions:
+    - id: saleor-notify_events-L55
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 55
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email = payload.get("recipient_email")
+    - id: saleor-notify_events-L56
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 56
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'if not recipient_email:'
+    - id: saleor-notify_events-L64
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 64
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c107:
+    declaration: saleor/plugins/admin_email/notify_events.py:81
+    mentions:
+    - id: saleor-notify_events-L81
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 81
+      name: recipient_list
+      syntax_kind: identifier
+      text: recipient_list = payload.get("recipient_list")
+    - id: saleor-notify_events-L88
+      batch: KDATAP-857b04
+      file: saleor/plugins/admin_email/notify_events.py
+      line: 88
+      name: recipient_list
+      syntax_kind: identifier
+      text: recipient_list, payload, config, subject, template
+  c108:
+    declaration: saleor/plugins/admin_email/plugin.py:178
+    mentions:
+    - id: saleor-plugin-L178
+      batch: KDATAP-f510f1
+      file: saleor/plugins/admin_email/plugin.py
+      line: 178
+      name: sender_address
+      syntax_kind: property_key
+      text: sender_address=configuration["sender_address"],
+  c109:
+    declaration: saleor/plugins/admin_email/plugin.py:200 (no shared declaration)
+    mentions:
+    - id: saleor-plugin-L200
+      batch: KDATAP-f510f1
+      file: saleor/plugins/admin_email/plugin.py
+      line: 200
+      name: DEFAULT_FROM_EMAIL
+      syntax_kind: string_literal
+      text: configuration["sender_address"] = settings.DEFAULT_FROM_EMAIL
+  c110:
+    declaration: saleor/plugins/admin_email/tasks.py:10
+    mentions:
+    - id: saleor-tasks-L10
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 10
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'recipient_email, payload, config: dict, subject, template'
+    - id: saleor-tasks-L15
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 15
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_list=[recipient_email],
+  c111:
+    declaration: saleor/plugins/admin_email/tasks.py:24
+    mentions:
+    - id: saleor-tasks-L24
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 24
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'recipient_email: str, payload, config: dict, subject, template'
+    - id: saleor-tasks-L29
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 29
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_list=[recipient_email],
+  c112:
+    declaration: saleor/plugins/admin_email/tasks.py:43
+    mentions:
+    - id: saleor-tasks-L43
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 43
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'recipient_email: str, payload: dict, config: dict, subject, template'
+    - id: saleor-tasks-L48
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 48
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_list=[recipient_email],
+  c113:
+    declaration: saleor/plugins/admin_email/tasks.py:62
+    mentions:
+    - id: saleor-tasks-L62
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 62
+      name: recipient_list
+      syntax_kind: identifier
+      text: 'recipient_list: str, payload: dict, config: dict, subject, template'
+    - id: saleor-tasks-L67
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 67
+      name: recipient_list
+      syntax_kind: identifier
+      text: recipient_list=recipient_list,
+  c114:
+    declaration: saleor/plugins/admin_email/tasks.py:76
+    mentions:
+    - id: saleor-tasks-L76
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 76
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+    - id: saleor-tasks-L81
+      batch: KDATAP-9f9810
+      file: saleor/plugins/admin_email/tasks.py
+      line: 81
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_list=[recipient_email],
+  c115:
+    declaration: saleor/plugins/sendgrid/plugin.py:113 (no shared declaration)
+    mentions:
+    - id: saleor-plugin-L113
+      batch: KDATAP-832b8c
+      file: saleor/plugins/sendgrid/plugin.py
+      line: 113
+      name: sender_address
+      syntax_kind: string_literal
+      text: '{"name": "sender_address", "value": ""},'
+  c116:
+    declaration: saleor/plugins/sendgrid/plugin.py:137
+    mentions:
+    - id: saleor-plugin-L137
+      batch: KDATAP-832b8c
+      file: saleor/plugins/sendgrid/plugin.py
+      line: 137
+      name: sender_address
+      syntax_kind: property_key
+      text: '"sender_address": {'
+  c117:
+    declaration: saleor/plugins/sendgrid/tasks.py:109
+    mentions:
+    - id: saleor-tasks-L109
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 109
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": payload["old_email"],'
+  c118:
+    declaration: saleor/plugins/sendgrid/tasks.py:110
+    mentions:
+    - id: saleor-tasks-L110
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 110
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": payload["new_email"],'
+  c119:
+    declaration: saleor/plugins/sendgrid/tasks.py:167
+    mentions:
+    - id: saleor-tasks-L167
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 167
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c120:
+    declaration: saleor/plugins/sendgrid/tasks.py:173
+    mentions:
+    - id: saleor-tasks-L173
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 173
+      name: email
+      syntax_kind: property_key
+      text: email=payload["recipient_email"],
+  c121:
+    declaration: saleor/plugins/sendgrid/tasks.py:195
+    mentions:
+    - id: saleor-tasks-L195
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 195
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c122:
+    declaration: saleor/plugins/sendgrid/tasks.py:217
+    mentions:
+    - id: saleor-tasks-L217
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 217
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c123:
+    declaration: saleor/plugins/sendgrid/tasks.py:23
+    mentions:
+    - id: saleor-tasks-L23
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 23
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email = payload["recipient_email"]
+  c124:
+    declaration: saleor/plugins/sendgrid/tasks.py:25
+    mentions:
+    - id: saleor-tasks-L25
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 25
+      name: from_email
+      syntax_kind: identifier
+      text: from_email = (configuration.sender_address, configuration.sender_name)
+  c125:
+    declaration: saleor/plugins/sendgrid/tasks.py:253
+    mentions:
+    - id: saleor-tasks-L253
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 253
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c126:
+    declaration: saleor/plugins/sendgrid/tasks.py:26
+    mentions:
+    - id: saleor-tasks-L26
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 26
+      name: to_emails
+      syntax_kind: property_key
+      text: message = Mail(from_email=from_email, to_emails=recipient_email)
+  c127:
+    declaration: saleor/plugins/sendgrid/tasks.py:275
+    mentions:
+    - id: saleor-tasks-L275
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 275
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c128:
+    declaration: saleor/plugins/sendgrid/tasks.py:297
+    mentions:
+    - id: saleor-tasks-L297
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 297
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c129:
+    declaration: saleor/plugins/sendgrid/tasks.py:318
+    mentions:
+    - id: saleor-tasks-L318
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 318
+      name: email
+      syntax_kind: property_key
+      text: '"email": payload["recipient_email"],'
+  c130:
+    declaration: saleor/plugins/sendgrid/tasks.py:345
+    mentions:
+    - id: saleor-tasks-L345
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 345
+      name: customer_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c131:
+    declaration: saleor/plugins/sendgrid/tasks.py:88
+    mentions:
+    - id: saleor-tasks-L88
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 88
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": payload.get("old_email"),'
+  c132:
+    declaration: saleor/plugins/sendgrid/tasks.py:89
+    mentions:
+    - id: saleor-tasks-L89
+      batch: KDATAP-7e5cf2
+      file: saleor/plugins/sendgrid/tasks.py
+      line: 89
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": payload["recipient_email"],'
+  c133:
+    declaration: saleor/plugins/user_email/plugin.py:354
+    mentions:
+    - id: saleor-user_email-plugin-L354
+      batch: KDATAP-e746d2
+      file: saleor/plugins/user_email/plugin.py
+      line: 354
+      name: sender_address
+      syntax_kind: property_key
+      text: sender_address=configuration["sender_address"],
+  c134:
+    declaration: saleor/plugins/user_email/tasks.py:108
+    mentions:
+    - id: saleor-tasks-L108
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 108
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c135:
+    declaration: saleor/plugins/user_email/tasks.py:113
+    mentions:
+    - id: saleor-tasks-L113
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 113
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c136:
+    declaration: saleor/plugins/user_email/tasks.py:121
+    mentions:
+    - id: saleor-tasks-L121
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 121
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'def send_gift_card_email_task(recipient_email, payload, config, subject, template):'
+  c137:
+    declaration: saleor/plugins/user_email/tasks.py:125
+    mentions:
+    - id: saleor-tasks-L125
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 125
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c138:
+    declaration: saleor/plugins/user_email/tasks.py:13
+    mentions:
+    - id: saleor-tasks-L13
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 13
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c139:
+    declaration: saleor/plugins/user_email/tasks.py:134
+    mentions:
+    - id: saleor-tasks-L134
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 134
+      name: email
+      syntax_kind: property_key
+      text: '"email": payload["recipient_email"],'
+  c140:
+    declaration: saleor/plugins/user_email/tasks.py:144
+    mentions:
+    - id: saleor-tasks-L144
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 144
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'def send_invoice_email_task(recipient_email, payload, config, subject, template):'
+  c141:
+    declaration: saleor/plugins/user_email/tasks.py:149
+    mentions:
+    - id: saleor-tasks-L149
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 149
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c142:
+    declaration: saleor/plugins/user_email/tasks.py:159
+    mentions:
+    - id: saleor-tasks-L159
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 159
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=payload["recipient_email"],
+  c143:
+    declaration: saleor/plugins/user_email/tasks.py:165
+    mentions:
+    - id: saleor-tasks-L165
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 165
+      name: recipient_email
+      syntax_kind: property_key
+      text: email=payload["recipient_email"],
+  c144:
+    declaration: saleor/plugins/user_email/tasks.py:171
+    mentions:
+    - id: saleor-tasks-L171
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 171
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c145:
+    declaration: saleor/plugins/user_email/tasks.py:177
+    mentions:
+    - id: saleor-tasks-L177
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 177
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c146:
+    declaration: saleor/plugins/user_email/tasks.py:186
+    mentions:
+    - id: saleor-tasks-L186
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 186
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c147:
+    declaration: saleor/plugins/user_email/tasks.py:19
+    mentions:
+    - id: saleor-tasks-L19
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 19
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c148:
+    declaration: saleor/plugins/user_email/tasks.py:192
+    mentions:
+    - id: saleor-tasks-L192
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 192
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c149:
+    declaration: saleor/plugins/user_email/tasks.py:197
+    mentions:
+    - id: saleor-tasks-L197
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 197
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c150:
+    declaration: saleor/plugins/user_email/tasks.py:207
+    mentions:
+    - id: saleor-tasks-L207
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 207
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c151:
+    declaration: saleor/plugins/user_email/tasks.py:213
+    mentions:
+    - id: saleor-tasks-L213
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 213
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c152:
+    declaration: saleor/plugins/user_email/tasks.py:218
+    mentions:
+    - id: saleor-tasks-L218
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 218
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c153:
+    declaration: saleor/plugins/user_email/tasks.py:227
+    mentions:
+    - id: saleor-tasks-L227
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 227
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c154:
+    declaration: saleor/plugins/user_email/tasks.py:232
+    mentions:
+    - id: saleor-tasks-L232
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 232
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c155:
+    declaration: saleor/plugins/user_email/tasks.py:241
+    mentions:
+    - id: saleor-tasks-L241
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 241
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c156:
+    declaration: saleor/plugins/user_email/tasks.py:246
+    mentions:
+    - id: saleor-tasks-L246
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 246
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'def send_order_canceled_email_task(recipient_email, payload, config, subject, template):'
+  c157:
+    declaration: saleor/plugins/user_email/tasks.py:250
+    mentions:
+    - id: saleor-tasks-L250
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 250
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c158:
+    declaration: saleor/plugins/user_email/tasks.py:260
+    mentions:
+    - id: saleor-tasks-L260
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 260
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c159:
+    declaration: saleor/plugins/user_email/tasks.py:265
+    mentions:
+    - id: saleor-tasks-L265
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 265
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'def send_order_refund_email_task(recipient_email, payload, config, subject, template):'
+  c160:
+    declaration: saleor/plugins/user_email/tasks.py:269
+    mentions:
+    - id: saleor-tasks-L269
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 269
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c161:
+    declaration: saleor/plugins/user_email/tasks.py:27
+    mentions:
+    - id: saleor-tasks-L27
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 27
+      name: recipient_email
+      syntax_kind: identifier
+      text: 'def send_password_reset_email_task(recipient_email, payload, config, subject, template):'
+  c162:
+    declaration: saleor/plugins/user_email/tasks.py:279
+    mentions:
+    - id: saleor-tasks-L279
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 279
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c163:
+    declaration: saleor/plugins/user_email/tasks.py:285
+    mentions:
+    - id: saleor-tasks-L285
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 285
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c164:
+    declaration: saleor/plugins/user_email/tasks.py:290
+    mentions:
+    - id: saleor-tasks-L290
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 290
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c165:
+    declaration: saleor/plugins/user_email/tasks.py:300
+    mentions:
+    - id: saleor-tasks-L300
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 300
+      name: recipient_email
+      syntax_kind: property_key
+      text: customer_email=recipient_email,
+  c166:
+    declaration: saleor/plugins/user_email/tasks.py:33
+    mentions:
+    - id: saleor-tasks-L33
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 33
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c167:
+    declaration: saleor/plugins/user_email/tasks.py:46
+    mentions:
+    - id: saleor-tasks-L46
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 46
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c168:
+    declaration: saleor/plugins/user_email/tasks.py:53
+    mentions:
+    - id: saleor-tasks-L53
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 53
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c169:
+    declaration: saleor/plugins/user_email/tasks.py:62
+    mentions:
+    - id: saleor-tasks-L62
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 62
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": payload.get("old_email"),'
+  c170:
+    declaration: saleor/plugins/user_email/tasks.py:63
+    mentions:
+    - id: saleor-tasks-L63
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 63
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": recipient_email,'
+  c171:
+    declaration: saleor/plugins/user_email/tasks.py:70
+    mentions:
+    - id: saleor-tasks-L70
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 70
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c172:
+    declaration: saleor/plugins/user_email/tasks.py:77
+    mentions:
+    - id: saleor-tasks-L77
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 77
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],
+  c173:
+    declaration: saleor/plugins/user_email/tasks.py:83
+    mentions:
+    - id: saleor-tasks-L83
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 83
+      name: old_email
+      syntax_kind: property_key
+      text: '"old_email": payload.get("old_email"),'
+  c174:
+    declaration: saleor/plugins/user_email/tasks.py:84
+    mentions:
+    - id: saleor-tasks-L84
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 84
+      name: new_email
+      syntax_kind: property_key
+      text: '"new_email": payload.get("new_email"),'
+  c175:
+    declaration: saleor/plugins/user_email/tasks.py:94
+    mentions:
+    - id: saleor-tasks-L94
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 94
+      name: recipient_email
+      syntax_kind: identifier
+      text: recipient_email, payload, config, subject, template
+  c176:
+    declaration: saleor/plugins/user_email/tasks.py:99
+    mentions:
+    - id: saleor-tasks-L99
+      batch: KDATAP-93b2a0
+      file: saleor/plugins/user_email/tasks.py
+      line: 99
+      name: recipient_email
+      syntax_kind: property_key
+      text: recipient_list=[recipient_email],

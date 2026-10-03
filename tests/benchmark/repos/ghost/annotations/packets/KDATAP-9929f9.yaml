@@ -1,0 +1,1785 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-9929f9
+  files:
+  - ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+annotations:
+- id: ghost-member-repository-L22
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MEMBER_WELCOME_EMAIL_SLUGS
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of a module constant defining welcome email slugs; a handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-member-repository-L40
+  layer: mentions
+  subject:
+    key: mention:email
+    name: invalidEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message key and prose text about invalid email; no address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-repository-L57
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WELCOME_EMAIL_SOURCES
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constant array of welcome email feature sources; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L72
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MemberEmailChangeEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 72
+    end_line: 72
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter describing a model dependency; a class name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L86
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 86
+    end_line: 86
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter describing a model dependency; a class name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L93
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MemberEmailChangeEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor parameter receiving a model class; the model is about email changes, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L107
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 107
+    end_line: 107
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor parameter receiving a model class; a feature model name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L113
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MemberEmailChangeEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Stores the model class in an instance variable; a feature model, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L127
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Stores the model class in an instance variable; a feature model, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L196
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 196
+    end_line: 196
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter documentation; a comment, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L202
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 202
+    end_line: 202
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that receives and passes the member's email address to automation trigger.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 202
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 207
+    end_line: 207
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the member's email address to the automations API trigger.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 202
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L225
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 225
+    end_line: 225
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about welcome email automation; prose documentation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L226
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 226
+    end_line: 226
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about welcome email automation feature; prose documentation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L235
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 235
+    end_line: 235
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks if the model is available; refers to a feature model, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L244
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MEMBER_WELCOME_EMAIL_SLUGS
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 244
+    end_line: 244
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Looks up a slug in a constant for welcome email automation; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L245
+  layer: mentions
+  subject:
+    key: mention:email
+    name: welcomeEmailAutomatedEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 245
+    end_line: 245
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Specifies a relation to load for the welcome email automation feature; a relation name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-repository-L247
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 247
+    end_line: 247
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Gets the related welcome email automation model; the variable name is misleading, the value is a model object, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L249
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 249
+    end_line: 249
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks conditions on the automation model; refers to the model object, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L256
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 256
+    end_line: 256
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls add on the welcome email automation model; a model method, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L258
+  layer: mentions
+  subject:
+    key: mention:email
+    name: welcome_email_automation_id
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 258
+    end_line: 258
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sets an ID field on the automation model; a feature model field, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-repository-L260
+  layer: mentions
+  subject:
+    key: mention:email
+    name: next_welcome_email_automated_email_id
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 260
+    end_line: 260
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sets an ID field on the automation model; refers to an email object ID, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-repository-L279
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 279
+    end_line: 279
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter documentation; a comment, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L284
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 284
+    end_line: 284
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that receives and passes the member's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 284
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L286
+  layer: mentions
+  subject:
+    key: mention:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 286
+    end_line: 286
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the member's email address to the internal signup automation trigger.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 284
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L386
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 386
+    end_line: 386
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the email address value from decoded token.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 386
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L396
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 396
+    end_line: 396
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that receives the member's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 396
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L401
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 401
+    end_line: 401
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address in an object used for member lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 401
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L408
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 408
+    end_line: 408
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter documentation; a comment, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L421
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 421
+    end_line: 421
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc about an email-disabled flag; a feature flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L446
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 446
+    end_line: 446
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: String literal selecting the email address field from the data object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L454
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 454
+    end_line: 454
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Selects the email-disabled flag field; a feature flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-repository-L461
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 461
+    end_line: 461
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining the validation check; prose documentation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L462
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 462
+    end_line: 462
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the member's email address to validate it against email format rules.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 445
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L464
+  layer: mentions
+  subject:
+    key: mention:email
+    name: invalidEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 464
+    end_line: 464
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message template key; prose context, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L465
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 465
+    end_line: 465
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property name in error object; a string literal for error reporting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-repository-L469
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 469
+    end_line: 469
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigns the email-disabled flag value; a feature flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L524
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WELCOME_EMAIL_SOURCES
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 524
+    end_line: 524
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks if source is in the welcome email sources array; a feature gate, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L534
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 534
+    end_line: 534
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the new member's email address to trigger signup automation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 526
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L616
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 616
+    end_line: 616
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the Stripe customer's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 616
+      kind: field
+    owner: ghost/core
+    group: stripe-customer-email
+- id: ghost-member-repository-L682
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 682
+    end_line: 682
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: String literal selecting the email address field in _.pick for update data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L695
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 695
+    end_line: 695
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Selects the email-disabled flag field; a feature flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-repository-L732
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 732
+    end_line: 732
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about validation check; prose documentation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L734
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 734
+    end_line: 734
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the initial member's email address to check if it has been changed.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 720
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L735
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 735
+    end_line: 735
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the updated member's email address to check if it has been changed.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 681
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L736
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 736
+    end_line: 736
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares initial and updated member email addresses to detect changes.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 720
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L737
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 737
+    end_line: 737
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validates the updated member's email address against email format rules.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 681
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L740
+  layer: mentions
+  subject:
+    key: mention:email
+    name: invalidEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 740
+    end_line: 740
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message template key; prose context, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L741
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 741
+    end_line: 741
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property name in error object; a string literal for error reporting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-repository-L960
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 960
+    end_line: 960
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares member's current and previous email addresses to detect changes.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 889
+      kind: local
+    group: member-account-email
+- id: ghost-member-repository-L961
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MemberEmailChangeEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 961
+    end_line: 961
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls add on the email change event model; a model method, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L964
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from_email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 964
+    end_line: 964
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the previous member email address in change event record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 964
+      kind: field
+    owner: ghost/core
+    group: member-email-change-from
+- id: ghost-member-repository-L965
+  layer: mentions
+  subject:
+    key: mention:email
+    name: to_email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 965
+    end_line: 965
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the new member email address in change event record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 965
+      kind: field
+    owner: ghost/core
+    group: member-email-change-to
+- id: ghost-member-repository-L983
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 983
+    end_line: 983
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if the member's email address has changed to trigger Stripe update.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 889
+      kind: local
+    group: member-account-email
+- id: ghost-member-repository-L987
+  layer: mentions
+  subject:
+    key: mention:email
+    name: updateCustomerEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 987
+    end_line: 987
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for updating Stripe customer email; a function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L989
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 989
+    end_line: 989
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the member's email address to update the Stripe customer record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 889
+      kind: local
+    group: member-account-email
+- id: ghost-member-repository-L1160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1160
+    end_line: 1160
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the email address for upserting a Stripe customer record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 1160
+      kind: field
+    owner: ghost/core
+    group: stripe-customer-email
+- id: ghost-member-repository-L1182
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1182
+    end_line: 1182
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the Stripe customer's email address for adding to member.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 1182
+      kind: field
+    owner: ghost/core
+    group: stripe-customer-email
+- id: ghost-member-repository-L1198
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1198
+    end_line: 1198
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that receives an email address to look up Stripe customer ID.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 1198
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L1199
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1199
+    end_line: 1199
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address to the Stripe API service to look up customer ID.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 1198
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L1917
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1917
+    end_line: 1917
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about welcome email feature logic; prose documentation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L1919
+  layer: mentions
+  subject:
+    key: mention:email
+    name: WELCOME_EMAIL_SOURCES
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1919
+    end_line: 1919
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks if source is in the welcome email sources array; a feature gate, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-repository-L1925
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 1925
+    end_line: 1925
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the member's email address to trigger paid signup automation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 1244
+      kind: local
+    group: member-account-email
+- id: ghost-member-repository-L2001
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2001
+    end_line: 2001
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key for looking up a member by email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2001
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2035
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2035
+    end_line: 2035
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email address is provided to build a lookup query.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2022
+      kind: parameter
+    group: member-account-email
+- id: ghost-member-repository-L2036
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2036
+    end_line: 2036
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key for looking up a member by email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2036
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2094
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2094
+    end_line: 2094
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email address is provided to build a lookup query.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2081
+      kind: parameter
+    group: member-account-email
+- id: ghost-member-repository-L2095
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2095
+    end_line: 2095
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key for looking up a member by email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2095
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2180
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2180
+    end_line: 2180
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter documentation; a comment, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-repository-L2207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2207
+    end_line: 2207
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email address is provided to build a lookup query.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2187
+      kind: parameter
+    group: member-account-email
+- id: ghost-member-repository-L2208
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2208
+    end_line: 2208
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key for looking up a member by email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2208
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2220
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2220
+    end_line: 2220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads and passes the email address value into an error message template.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2187
+      kind: parameter
+    group: member-account-email
+- id: ghost-member-repository-L2385
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2385
+    end_line: 2385
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the member's email address for creating a Stripe customer.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2385
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2392
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2392
+    end_line: 2392
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the Stripe customer's email address for adding customer record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2392
+      kind: field
+    owner: ghost/core
+    group: stripe-customer-email
+- id: ghost-member-repository-L2531
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2531
+    end_line: 2531
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the member's email address for creating a Stripe customer.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2531
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-repository-L2538
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+    start_line: 2538
+    end_line: 2538
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding the Stripe customer's email address for upserting customer record.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/members-api/repositories/member-repository.js
+      line: 2538
+      kind: field
+    owner: ghost/core
+    group: stripe-customer-email

@@ -1,0 +1,1251 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-ef6345
+  files:
+  - saleor/checkout/checkout_cleaner.py
+  - saleor/checkout/complete_checkout.py
+  - saleor/checkout/error_codes.py
+  - saleor/checkout/models.py
+  - saleor/order/actions.py
+  - saleor/order/utils.py
+annotations:
+- id: saleor-checkout_cleaner-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: validate_checkout_email
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for validating checkout email; not reading or passing an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-checkout_cleaner-L106
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 106
+    end_line: 106
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads checkout.email to check if the email field is set.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-checkout_cleaner-L108
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about requiring checkout email; no address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-checkout_cleaner-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_NOT_SET
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error code enum value; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-checkout_cleaner-L135
+  layer: mentions
+  subject:
+    key: mention:email
+    name: assigned_to_email
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 135
+    end_line: 135
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Filters gift cards by assigned_to_email field presence in query.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+    group: gift-card-assigned-to-email
+- id: saleor-checkout_cleaner-L196
+  layer: mentions
+  subject:
+    key: mention:email
+    name: validate_checkout_email
+  evidence:
+    file_path: saleor/checkout/checkout_cleaner.py
+    start_line: 196
+    end_line: 196
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls the validate_checkout_email function; function name-based call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-complete_checkout-L19
+  layer: mentions
+  subject:
+    key: mention:email
+    name: retrieve_user_by_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for retrieve_user_by_email function; module import.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-complete_checkout-L34
+  layer: mentions
+  subject:
+    key: mention:email
+    name: get_customer_email_for_voucher_usage
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 34
+    end_line: 34
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for get_customer_email_for_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-complete_checkout-L128
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 128
+    end_line: 128
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns customer_email from get_customer_email_for_voucher_usage call result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 128
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L130
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 130
+    end_line: 130
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes customer_email as parameter to increase_checkout_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 128
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L142
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 142
+    end_line: 142
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter for email address in _increase_checkout_voucher_usage.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 142
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 150
+    end_line: 150
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes customer_email parameter to increase_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 128
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 160
+    end_line: 160
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter for optional email address in _release_checkout_voucher_usage.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 160
+      kind: parameter
+    owner: saleor
+    type_annotation: str | None
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L176
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 176
+    end_line: 176
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user_email parameter to release_voucher_code_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 160
+      kind: parameter
+    owner: saleor
+    type_annotation: str | None
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L286
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 286
+    end_line: 286
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key for user email in order data dictionary.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 286
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-complete_checkout-L753
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 753
+    end_line: 753
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns user_email from get_customer_email_for_voucher_usage call result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 753
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L758
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 758
+    end_line: 758
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user_email parameter to _release_checkout_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 753
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L788
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 788
+    end_line: 788
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring comment about language for sending email; prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-complete_checkout-L888
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 888
+    end_line: 888
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user_email value as keyword argument in function call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 888
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-complete_checkout-L905
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 905
+    end_line: 905
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending order confirmation email; prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-complete_checkout-L1163
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1163
+    end_line: 1163
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns user_email from get_customer_email_for_voucher_usage call result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 1163
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L1168
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1168
+    end_line: 1168
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user_email parameter to _release_checkout_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 1163
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L1229
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1229
+    end_line: 1229
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns customer_email from get_customer_email_for_voucher_usage call result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 1229
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L1232
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1232
+    end_line: 1232
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes customer_email parameter to _increase_checkout_voucher_usage function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 1229
+      kind: local
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-complete_checkout-L1353
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1353
+    end_line: 1353
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes order.user_email as customer_email parameter in function call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/checkout/complete_checkout.py
+      line: 1353
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-complete_checkout-L1370
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1370
+    end_line: 1370
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending order confirmation email; prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-complete_checkout-L1583
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1583
+    end_line: 1583
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring comment about language for sending email; prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-complete_checkout-L1691
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1691
+    end_line: 1691
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about checkout email matching; prose.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-complete_checkout-L1693
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1693
+    end_line: 1693
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks checkout_info.checkout.email to determine if checkout has email set.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-complete_checkout-L1694
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 1694
+    end_line: 1694
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes checkout email to retrieve_user_by_email function to find matching user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-complete_checkout-L2024
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/complete_checkout.py
+    start_line: 2024
+    end_line: 2024
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Gets customer email from checkout_info for use in function call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: voucher-usage-customer-email
+- id: saleor-error_codes-L31
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_NOT_SET
+  evidence:
+    file_path: saleor/checkout/error_codes.py
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Enum member for error code; not an email address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-error_codes-L53
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_NOT_SET
+  evidence:
+    file_path: saleor/checkout/error_codes.py
+    start_line: 53
+    end_line: 53
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Enum member for error code in OrderCreateFromCheckoutErrorCode; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L132
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/models.py
+    start_line: 132
+    end_line: 132
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Model field definition for email address in Checkout model.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-models-L368
+  layer: mentions
+  subject:
+    key: mention:email
+    name: get_customer_email
+  evidence:
+    file_path: saleor/checkout/models.py
+    start_line: 368
+    end_line: 368
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method declaration that returns email; function name declaration is negative.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L369
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/models.py
+    start_line: 369
+    end_line: 369
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads self.email field to check if email is set.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-models-L370
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/models.py
+    start_line: 370
+    end_line: 370
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns self.email address value from the method.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/checkout/models.py
+      line: 132
+      kind: field
+    owner: saleor
+    group: checkout-email
+- id: saleor-checkout-models-L372
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/checkout/models.py
+    start_line: 372
+    end_line: 372
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns user.email address from the user object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: customer-account-email
+- id: saleor-actions-L361
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_confirmation_email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 361
+    end_line: 361
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function parameter for boolean flag controlling email sending; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-actions-L366
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 366
+    end_line: 366
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose about triggering email; no address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-actions-L375
+  layer: mentions
+  subject:
+    key: mention:email
+    name: send_confirmation_email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 375
+    end_line: 375
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks send_confirmation_email flag; not reading an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-actions-L396
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 396
+    end_line: 396
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads order_info.customer_email to check if it has a value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: order-customer-email
+- id: saleor-actions-L1008
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 1008
+    end_line: 1008
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads order.user_email and assigns to replacement order.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/actions.py
+      line: 1008
+      kind: field
+    owner: saleor
+- id: saleor-actions-L1258
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 1258
+    end_line: 1258
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring parameter about notification flag; prose describing feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: saleor
+- id: saleor-actions-L1601
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/actions.py
+    start_line: 1601
+    end_line: 1601
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads original_order.user_email and assigns to replacement order.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: order-customer-email
+- id: saleor-utils-L455
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 455
+    end_line: 455
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns customer email from get_customer_email() method call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/utils.py
+      line: 455
+      kind: local
+    owner: saleor
+    group: gift-card-used-by-email
+- id: saleor-utils-L464
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 464
+    end_line: 464
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes used_by_email parameter to set_gift_card_user function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/utils.py
+      line: 455
+      kind: local
+    owner: saleor
+    group: gift-card-used-by-email
+- id: saleor-utils-L474
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 474
+    end_line: 474
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field name string in update_fields list; specifies which fields to update.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-utils-L517
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 517
+    end_line: 517
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding email address for set_gift_card_user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/utils.py
+      line: 517
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: gift-card-used-by-email
+- id: saleor-utils-L523
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 523
+    end_line: 523
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Filters User objects by email field to find matching user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: customer-account-email
+- id: saleor-utils-L525
+  layer: mentions
+  subject:
+    key: mention:email
+    name: used_by_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 525
+    end_line: 525
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Assigns used_by_email parameter value to gift_card.used_by_email field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/utils.py
+      line: 517
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: gift-card-used-by-email
+- id: saleor-utils-L714
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/utils.py
+    start_line: 714
+    end_line: 714
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Filters orders by user_email field to match with user email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2025-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: saleor
+    group: order-customer-email

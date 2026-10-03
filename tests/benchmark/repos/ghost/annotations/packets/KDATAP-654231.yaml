@@ -1,0 +1,1105 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-654231
+  files:
+  - ghost/core/core/server/services/email-service/mailgun-email-provider.js
+  - ghost/core/core/server/models/email-recipient.js
+annotations:
+- id: ghost-email-recipient-L3
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRecipient
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model class name for email-recipient relation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-recipient-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name for the email recipients relation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L9
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property key for the email relation in filter relations.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-recipient-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name for the newsletter emails table, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table alias for the emails table in the relation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Join table name for the many-to-many relation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L16
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key column name, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L21
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 21
+    end_line: 21
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for the email relation getter, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-recipient-L22
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name in belongsTo relation, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailBatch
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for the emailBatch relation getter, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-recipient-L25
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailBatch
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name in belongsTo relation, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L32
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRecipients
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Collection class name, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-recipient-L33
+  layer: mentions
+  subject:
+    key: mention:email
+    name: model
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property key for the model reference in collection definition.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-recipient-L37
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRecipient
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 37
+    end_line: 37
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model export name, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-recipient-L38
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailRecipients
+  evidence:
+    file_path: ghost/core/core/server/models/email-recipient.js
+    start_line: 38
+    end_line: 38
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Collection export name, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L3
+  layer: mentions
+  subject:
+    key: mention:email
+    name: debug
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module import for debug utility, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Recipient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef comment defining the Recipient type.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc property comment for Recipient type definition.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailSendingOptions
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef comment for EmailSendingOptions type.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L31
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailProviderSuccessResponse
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef comment for EmailProviderSuccessResponse type.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L35
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MailgunEmailProvider
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 35
+    end_line: 35
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name for the email provider implementation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L41
+  layer: mentions
+  subject:
+    key: mention:email
+    name: mailgunClient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment for mailgun client dependency.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: createRecipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private method name for creating recipient data structure.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L50
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 50
+    end_line: 50
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable declaration for recipient data structure, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L52
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 52
+    end_line: 52
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assignment using reduce method, not about addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L58
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 58
+    end_line: 58
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Return statement of recipient data structure, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L61
+  layer: mentions
+  subject:
+    key: mention:email
+    name: updateRecipientVariables
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 61
+    end_line: 61
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private method name for updating template variables, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L63
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template string using id placeholder, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L82
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing the send method.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L83
+  layer: mentions
+  subject:
+    key: mention:email
+    name: data
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 83
+    end_line: 83
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment for the data parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L84
+  layer: mentions
+  subject:
+    key: mention:email
+    name: options
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 84
+    end_line: 84
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment for the options parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L85
+  layer: mentions
+  subject:
+    key: mention:email
+    name: Promise
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 85
+    end_line: 85
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return type comment, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L95
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailId
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 95
+    end_line: 95
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Destructured identifier for email ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L96
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 96
+    end_line: 96
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Destructured array of recipients, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L100
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 100
+    end_line: 100
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Log message with recipient count, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L102
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 102
+    end_line: 102
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Debug message with recipient count, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L111
+  layer: mentions
+  subject:
+    key: mention:email
+    name: bulk-email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 111
+    end_line: 111
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: String literal tag for email categorization, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L113
+  layer: mentions
+  subject:
+    key: mention:email
+    name: id
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Property key for email ID in message data, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L118
+  layer: mentions
+  subject:
+    key: mention:email
+    name: mailgunTagFromConfig
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 118
+    end_line: 118
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assignment getting config value, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L127
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Inline comment, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L128
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipientData
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 128
+    end_line: 128
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assignment with reduce over recipients, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L129
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 129
+    end_line: 129
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the recipient's email address to use as a key in the accumulator.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+      line: 128
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-mailgun-email-provider-L136
+  layer: mentions
+  subject:
+    key: mention:email
+    name: updateRecipientVariables
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 136
+    end_line: 136
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to update message variables, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L143
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 143
+    end_line: 143
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Inline comment about sending email, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L145
+  layer: mentions
+  subject:
+    key: mention:email
+    name: mailgunClient
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 145
+    end_line: 145
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to Mailgun client, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailError
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 160
+    end_line: 160
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error class constructor, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L165
+  layer: mentions
+  subject:
+    key: mention:email
+    name: bulk-email-configuration
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 165
+    end_line: 165
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Help URL string literal, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L166
+  layer: mentions
+  subject:
+    key: mention:email
+    name: BULK_EMAIL_SEND_FAILED
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 166
+    end_line: 166
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error code string literal, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L169
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailError
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 169
+    end_line: 169
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error class constructor, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L174
+  layer: mentions
+  subject:
+    key: mention:email
+    name: BULK_EMAIL_SEND_FAILED
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 174
+    end_line: 174
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error code string literal, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L184
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getMaximumRecipients
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 184
+    end_line: 184
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for getting maximum recipient limit, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-mailgun-email-provider-L198
+  layer: mentions
+  subject:
+    key: mention:email
+    name: MailgunEmailProvider
+  evidence:
+    file_path: ghost/core/core/server/services/email-service/mailgun-email-provider.js
+    start_line: 198
+    end_line: 198
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of the provider class, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core

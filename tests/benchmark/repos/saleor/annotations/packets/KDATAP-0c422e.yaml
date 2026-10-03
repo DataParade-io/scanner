@@ -1,0 +1,1346 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-0c422e
+  files:
+  - saleor/account/throttling.py
+  - saleor/account/error_codes.py
+  - saleor/order/events.py
+  - saleor/order/notifications.py
+  - saleor/order/models.py
+annotations:
+- id: saleor-error_codes-L111
+  layer: mentions
+  subject:
+    key: mention:email
+    name: SendConfirmationEmailErrorCode
+  evidence:
+    file_path: saleor/account/error_codes.py
+    start_line: 111
+    end_line: 111
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name for an error code related to confirmation emails; names a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-throttling-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: retrieve_user_by_email
+  evidence:
+    file_path: saleor/account/throttling.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for a module function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-throttling-L21
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/throttling.py
+    start_line: 21
+    end_line: 21
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the user's email address for authentication.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/account/throttling.py
+      line: 21
+      kind: parameter
+    owner: saleor
+- id: saleor-throttling-L48
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/account/throttling.py
+    start_line: 48
+    end_line: 48
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address parameter to retrieve the user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/account/throttling.py
+      line: 21
+      kind: parameter
+    owner: saleor
+- id: saleor-events-L10
+  layer: mentions
+  subject:
+    key: mention:email
+    name: OrderEventsEmails
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for email event type constants.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-events-L90
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 90
+    end_line: 90
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the order refund event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 90
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L94
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 94
+    end_line: 94
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event type enum constant indicating an email notification event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L96
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 96
+    end_line: 96
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address in event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/events.py
+      line: 96
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-events-L97
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event (refund), not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-events-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the order confirmed event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 105
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L111
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/order/events.py
+      line: 111
+      kind: field
+    group: order-customer-email
+- id: saleor-events-L112
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 112
+    end_line: 112
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event (confirmed), not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-events-L120
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 120
+    end_line: 120
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the cancelled order event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 120
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L124
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 124
+    end_line: 124
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L126
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 126
+    end_line: 126
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/order/events.py
+      line: 126
+      kind: field
+    group: order-customer-email
+- id: saleor-events-L127
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event (cancelled), not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-events-L135
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 135
+    end_line: 135
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the order confirmation event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 135
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L139
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 139
+    end_line: 139
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-order-events-L141
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 141
+    end_line: 141
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/order/events.py
+      line: 141
+      kind: field
+    group: order-customer-email
+- id: saleor-events-L142
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 142
+    end_line: 142
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event (order confirmation), not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-events-L149
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 149
+    end_line: 149
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the fulfillment confirmed event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 149
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L153
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 153
+    end_line: 153
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L155
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 155
+    end_line: 155
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/order/events.py
+      line: 155
+      kind: field
+    group: order-customer-email
+- id: saleor-events-L156
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 156
+    end_line: 156
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event (fulfillment), not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-events-L164
+  layer: mentions
+  subject:
+    key: mention:email
+    name: customer_email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 164
+    end_line: 164
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding the customer's email address for the payment confirmed event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 164
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+    group: order-customer-email
+- id: saleor-events-L168
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EMAIL_SENT
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 168
+    end_line: 168
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Order event type constant for a sent email; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L169
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 169
+    end_line: 169
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Event parameter key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: saleor
+    declaration:
+      file_path: saleor/order/events.py
+      line: 169
+      kind: field
+    group: order-customer-email
+- id: saleor-events-L220
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 220
+    end_line: 220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter holding an email address for the invoice sent notification event.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/events.py
+      line: 220
+      kind: parameter
+    owner: saleor
+    type_annotation: str
+- id: saleor-events-L227
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 227
+    end_line: 227
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the email address in event parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/events.py
+      line: 227
+      kind: field
+    owner: saleor
+- id: saleor-events-L231
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_resent_event
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 231
+    end_line: 231
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name indicates an email notification event type, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-events-L232
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_type
+  evidence:
+    file_path: saleor/order/events.py
+    start_line: 232
+    end_line: 232
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter specifying the type of email event, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L161
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 161
+    end_line: 161
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Field definition for storing the user's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/models.py
+      line: 161
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-models-L392
+  layer: mentions
+  subject:
+    key: mention:email
+    name: order_email_search_gin
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 392
+    end_line: 392
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index name that includes the word email, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L394
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 394
+    end_line: 394
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: String literal selecting the user_email field in query.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+    group: order-customer-email
+- id: saleor-models-L400
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 400
+    end_line: 400
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: String literal selecting the user_email field in index.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+    group: order-customer-email
+- id: saleor-models-L401
+  layer: mentions
+  subject:
+    key: mention:email
+    name: order_user_email_user_id_idx
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 401
+    end_line: 401
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index name that includes the word email, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-models-L422
+  layer: mentions
+  subject:
+    key: mention:email
+    name: get_customer_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 422
+    end_line: 422
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name that returns an email address, but the name itself refers to the function, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-models-L423
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 423
+    end_line: 423
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the user_email field to return it.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/models.py
+      line: 161
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-order-models-L424
+  layer: mentions
+  subject:
+    key: mention:email
+    name: user_email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 424
+    end_line: 424
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the user_email field value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/models.py
+      line: 161
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-models-L426
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/models.py
+    start_line: 426
+    end_line: 426
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Accesses and returns the user's email field from the related User object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/account/models.py
+      line: 172
+      kind: field
+    owner: saleor
+- id: saleor-notifications-L12
+  layer: mentions
+  subject:
+    key: mention:email
+    name: StaffNotificationRecipient
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import statement for a model representing staff notification recipients.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notifications-L308
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 308
+    end_line: 308
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the recipient email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 308
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L348
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 348
+    end_line: 348
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 348
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L397
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 397
+    end_line: 397
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the recipient email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 397
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L414
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 414
+    end_line: 414
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 414
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L427
+  layer: mentions
+  subject:
+    key: mention:email
+    name: StaffNotificationRecipient
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 427
+    end_line: 427
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name for staff notification recipients, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L430
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_emails
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 430
+    end_line: 430
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Variable collecting email addresses from staff notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 430
+      kind: local
+    owner: saleor
+    group: staff-notification-recipient-email
+- id: saleor-notifications-L431
+  layer: mentions
+  subject:
+    key: mention:email
+    name: get_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 431
+    end_line: 431
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to retrieve email, function name context, not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notifications-L433
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_emails
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 433
+    end_line: 433
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if the recipient_emails list contains email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 430
+      kind: local
+    owner: saleor
+    group: staff-notification-recipient-email
+- id: saleor-notifications-L439
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 439
+    end_line: 439
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the list of recipient email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 439
+      kind: field
+    owner: saleor
+    group: staff-notification-recipient-email
+- id: saleor-notifications-L451
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 451
+    end_line: 451
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring text about sending email notification, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L456
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 456
+    end_line: 456
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 456
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L503
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 503
+    end_line: 503
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 503
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L538
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 538
+    end_line: 538
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 538
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-notifications-L563
+  layer: mentions
+  subject:
+    key: mention:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 563
+    end_line: 563
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key storing the customer email address from order.get_customer_email().
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/order/notifications.py
+      line: 563
+      kind: field
+    owner: saleor
+    group: order-customer-email

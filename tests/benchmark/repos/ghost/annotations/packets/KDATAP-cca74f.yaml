@@ -1,0 +1,1592 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-cca74f
+  files:
+  - ghost/core/core/server/services/newsletters/newsletters-service.js
+annotations:
+- id: ghost-newsletters-service-L3
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verifyEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports the verify email template module; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L14
+  layer: mentions
+  subject:
+    key: mention:email
+    name: senderEmailNotAllowed
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose with email placeholder {email}; prose text template, not address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L15
+  layer: mentions
+  subject:
+    key: mention:email
+    name: replyToNotAllowed
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose with email placeholder {email}; prose text template, not address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment about the email service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L39
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 39
+    end_line: 39
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor parameter receiving the email address service object, not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L49
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigns the email address service to a field; the service itself, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L51
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 51
+    end_line: 51
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment marking email verification setup section.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L58
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 58
+    end_line: 58
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about the sendEmailVerificationMagicLink method override.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L62
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 62
+    end_line: 62
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment noting this is overridden in sendEmailVerificationMagicLink.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L63
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Returns subject text for email; prose template, not address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 65
+    end_line: 65
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter getText receives an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 65
+      kind: parameter
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L69
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 69
+    end_line: 69
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text in template; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email address interpolated into verification message text.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L78
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 78
+    end_line: 78
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose text mentioning email address field; not holding a value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L81
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter getHTML receives an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 81
+      kind: parameter
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L82
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 82
+    end_line: 82
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to verifyEmailTemplate.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 81
+      kind: parameter
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L87
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verifyEmail
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 87
+    end_line: 87
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: URL parameter name in a string; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L158
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing email properties requiring verification.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L159
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailsToVerify
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 159
+    end_line: 159
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable holding collection of email records to verify; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L167
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 167
+    end_line: 167
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about adding model for sending verification emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L209
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 209
+    end_line: 209
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending verification emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L210
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailsToVerify
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 210
+    end_line: 210
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes email records collection to respondWithEmailVerification; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L224
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 224
+    end_line: 224
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about comparing changed emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L230
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailsToVerify
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 230
+    end_line: 230
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable destructured from prepAttrsForEmailVerification result; email records collection.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L260
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailsToVerify
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 260
+    end_line: 260
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes email records to respondWithEmailVerification.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L279
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email_verified
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 279
+    end_line: 279
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sets a boolean flag indicating email was verified; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-newsletters-service-L284
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 284
+    end_line: 284
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Section comment for Email verification internals.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L289
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 289
+    end_line: 289
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name about email verification; not holding an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L291
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailsToVerify
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 291
+    end_line: 291
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares array to collect email records; not individual addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L292
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailProperties
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 292
+    end_line: 292
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares array of email property definitions; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L294
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 294
+    end_line: 294
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Object key naming the email property to check; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-newsletters-service-L297
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 297
+    end_line: 297
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Object key referencing an error message; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-newsletters-service-L301
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 301
+    end_line: 301
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_reply_to email address field from cleanedAttrs.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 290
+      kind: local
+- id: ghost-newsletters-service-L302
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 302
+    end_line: 302
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if sender_reply_to email address is in allowed list.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 290
+      kind: local
+- id: ghost-newsletters-service-L303
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 303
+    end_line: 303
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Pushes an object to emailProperties array.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L304
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 304
+    end_line: 304
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Object key naming the email property; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-newsletters-service-L312
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 312
+    end_line: 312
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Destructures property name from emailProperties; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L313
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 313
+    end_line: 313
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Local variable assigned from cleanedAttrs[property] containing email address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L314
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 314
+    end_line: 314
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads email address to check if it changed.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L316
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 316
+    end_line: 316
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email address is defined.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L317
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 317
+    end_line: 317
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if email address is null or empty string.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L321
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 321
+    end_line: 321
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email address to validation service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L325
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 325
+    end_line: 325
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email address to template placeholder in error message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L329
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 329
+    end_line: 329
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks validation result flag; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L330
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 330
+    end_line: 330
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares email address to sender_email; reads address for comparison.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L331
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 331
+    end_line: 331
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about custom behavior when swapping sender emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L335
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 335
+    end_line: 335
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Pushes email address object to emailsToVerify collection for storage.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 313
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L340
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 340
+    end_line: 340
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about resetting sender_email when invalid.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-newsletters-service-L344
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 344
+    end_line: 344
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_reply_to email address from attrs parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 289
+      kind: parameter
+- id: ghost-newsletters-service-L345
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 345
+    end_line: 345
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_reply_to email address field name from newsletter for comparison.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: newsletter-reply-to-address
+- id: ghost-newsletters-service-L346
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 346
+    end_line: 346
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag variable; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L348
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 348
+    end_line: 348
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_email address from attrs parameter for comparison.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 289
+      kind: parameter
+- id: ghost-newsletters-service-L349
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 349
+    end_line: 349
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_email address field for comparison.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: newsletter-sender-email
+- id: ghost-newsletters-service-L350
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 350
+    end_line: 350
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_email address field from newsletter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: newsletter-sender-email
+- id: ghost-newsletters-service-L351
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 351
+    end_line: 351
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Opens a validate call on the email address service; the address argument is on the next line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L352
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 352
+    end_line: 352
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender_email address from newsletter for validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: newsletter-sender-email
+- id: ghost-newsletters-service-L357
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 357
+    end_line: 357
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Log message mentioning field name; no address value interpolated.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L359
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 359
+    end_line: 359
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Writes email address field (set to null) on cleanedAttrs.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 290
+      kind: local
+- id: ghost-newsletters-service-L363
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 363
+    end_line: 363
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Returns emailsToVerify collection; not individual addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L369
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 369
+    end_line: 369
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method handling email verification response; not holding address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L370
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 370
+    end_line: 370
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks collection length; not address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L371
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 371
+    end_line: 371
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructures email address from emailsToVerify collection items.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 371
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L372
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 372
+    end_line: 372
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email address to sendEmailVerificationMagicLink method.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 371
+      kind: local
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L376
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 376
+    end_line: 376
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Maps emailsToVerify to extract property names; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-newsletters-service-L385
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 385
+    end_line: 385
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter sendEmailVerificationMagicLink receives email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 385
+      kind: parameter
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L386
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 386
+    end_line: 386
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads email address from emailAddressService for use as sender.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 49
+      kind: field
+    group: site-default-from-address
+- id: ghost-newsletters-service-L396
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 396
+    end_line: 396
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes sender email address to mail message object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 386
+      kind: local
+    group: site-default-from-address
+- id: ghost-newsletters-service-L397
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 397
+    end_line: 397
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line text; prose, not address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-newsletters-service-L408
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 408
+    end_line: 408
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email address to sendMagicLink call.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 385
+      kind: parameter
+    group: newsletter-address-verification
+- id: ghost-newsletters-service-L409
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+    start_line: 409
+    end_line: 409
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key holding email address value in tokenData.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/newsletters/newsletters-service.js
+      line: 385
+      kind: parameter
+    group: newsletter-address-verification

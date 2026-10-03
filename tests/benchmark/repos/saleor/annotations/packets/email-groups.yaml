@@ -1,0 +1,459 @@
+repo: saleor
+concept: email
+provenance:
+  proposed_by: claude-sonnet-5
+  proposed_at: '2026-09-29'
+  review_state: proposed
+groups:
+- id: staff-user-email
+  name: Staff user email
+  subject: staff user
+  subject_kind: workforce
+  purpose: sign-in and admin notifications for staff accounts
+  rationale: 'User.email of staff users, evidenced by the admin_email plugin, which only handles staff events: send_set_staff_password (notify_events.py:31, tasks.py:10) and send_staff_reset_password (notify_events.py:131, tasks.py:76) read payload recipient_email, which account/notifications.py fills with user.email when called with staff=True (ACCOUNT_SET_STAFF_PASSWORD / ACCOUNT_STAFF_RESET_PASSWORD events).'
+  clusters:
+  - c104
+  - c105
+  - c110
+  - c114
+- id: customer-account-email
+  name: Customer account email
+  subject: customer
+  subject_kind: end_user
+  purpose: customer sign-in, account confirmation, deletion, and email change
+  rationale: 'User.email of customers, evidenced by customer-only flows: account confirmation, account delete confirmation and customer password reset/set-password tasks in the user_email plugin (recipient_email from payload built in account/notifications.py from user.email; templates named account_set_customer_password / customer_email_* events), the customer_email_changed_event / customer_email_change_request_event records that consume old_email/new_email payload keys, Checkout.get_customer_email fallback (checkout/models.py:372), and the gift card flows that assign a card to a customer (giftcard/utils.py:144/148, docstring ''Restrict a gift card to a customer'') and look up the used_by User (order/utils.py:523).'
+  clusters:
+  - c012
+  - c016
+  - c017
+  - c045
+  - c068
+  - c101
+  - c118
+  - c131
+  - c134
+  - c135
+  - c138
+  - c147
+  - c161
+  - c166
+  - c169
+  - c174
+  - c175
+  - c176
+- id: account-change-email-new-address
+  name: Requested new account email (change-email request)
+  subject: user changing their email (proposed new address)
+  subject_kind: end_user
+  purpose: address the confirmation link is sent to when a user requests an email change
+  rationale: send_request_user_change_email_notification takes new_email (notifications.py:101) and puts it in recipient_email and new_email of the payload. The user_email and sendgrid request-change tasks send to recipient_email and record it as new_email in the customer_email_change_request_event. This is a proposed address, not yet User.email.
+  clusters:
+  - c010
+  - c011
+  - c013
+  - c132
+  - c167
+  - c168
+  - c170
+- id: account-change-email-old-address
+  name: Previous account email (change-email confirmation)
+  subject: user who changed their email (previous address)
+  subject_kind: end_user
+  purpose: address notified after the account email has been changed
+  rationale: send_user_change_email_notification(recipient_email, user, ...) (notifications.py:128) sends to recipient_email and puts the same value in payload old_email, while new_email is user.email. Tasks read payload old_email and record it in customer_email_changed_event. After the change this is no longer User.email.
+  clusters:
+  - c014
+  - c015
+  - c117
+  - c171
+  - c172
+  - c173
+- id: order-customer-email
+  name: Order customer email
+  subject: customer of an order (Order.user_email and derived notification recipient)
+  subject_kind: end_user
+  purpose: address used to contact the customer about an order
+  rationale: Order.user_email column (order/models.py:161) with its index fields and filters, writes (replace_order.user_email, order_data['user_email'] filled from checkout_info.get_customer_email(), so this is a stored copy of the checkout email or user account email), reads in Order.get_customer_email, OrderInfo.customer_email (built from order.user_email / order_data['user_email']), payload recipient_email/email built from order.get_customer_email() or order_info.customer_email in order/notifications.py, order event customer_email/email params, and the user_email/sendgrid order task recipient_email values that consume those payloads.
+  clusters:
+  - c037
+  - c041
+  - c043
+  - c070
+  - c071
+  - c072
+  - c073
+  - c074
+  - c075
+  - c076
+  - c077
+  - c078
+  - c079
+  - c080
+  - c081
+  - c084
+  - c085
+  - c086
+  - c087
+  - c088
+  - c089
+  - c090
+  - c091
+  - c092
+  - c095
+  - c096
+  - c097
+  - c098
+  - c102
+  - c121
+  - c122
+  - c125
+  - c127
+  - c128
+  - c130
+  - c144
+  - c145
+  - c146
+  - c148
+  - c149
+  - c150
+  - c151
+  - c152
+  - c153
+  - c154
+  - c155
+  - c156
+  - c157
+  - c158
+  - c159
+  - c160
+  - c162
+  - c163
+  - c164
+  - c165
+- id: checkout-email
+  name: Checkout email
+  subject: customer of a checkout
+  subject_kind: end_user
+  purpose: email entered on a checkout before it becomes an order
+  rationale: Checkout.email column (checkout/models.py:132), read in Checkout.get_customer_email, validate_checkout_email and the checkout completion user lookup.
+  clusters:
+  - c044
+- id: voucher-usage-customer-email
+  name: Voucher usage customer email
+  subject: customer using a voucher
+  subject_kind: end_user
+  purpose: tracking per-customer voucher usage
+  rationale: get_customer_email_for_voucher_usage(checkout_info) result is stored in local variables and passed to increase_voucher_usage / release_voucher_code_usage through customer_email and user_email parameters (complete_checkout.py 128-176, 753-758, 1163-1168, 1229-1232, 2024).
+  clusters:
+  - c034
+  - c035
+  - c036
+  - c038
+  - c039
+  - c040
+  - c042
+- id: gift-card-used-by-email
+  name: Gift card used_by email
+  subject: customer who used a gift card
+  subject_kind: end_user
+  purpose: record of who used a gift card
+  rationale: GiftCard.used_by_email column (giftcard/models.py:65), written in set_gift_card_user (order/utils.py:525) from used_by_email = checkout_info.get_customer_email() (a copy of the checkout or user email), and filtered on by used_by_email=user.email in giftcard/utils.py.
+  clusters:
+  - c056
+  - c063
+  - c065
+  - c099
+  - c100
+- id: gift-card-created-by-email
+  name: Gift card created_by email
+  subject: purchaser who created a gift card
+  subject_kind: end_user
+  purpose: record of who bought or created a gift card
+  rationale: GiftCard.created_by_email column (giftcard/models.py:64), set in gift_cards_create from the order's user_email (a copy), and filtered on by created_by_email=user.email in giftcard/utils.py.
+  clusters:
+  - c055
+  - c061
+  - c064
+  - c066
+- id: gift-card-assigned-to-email
+  name: Gift card assigned_to email
+  subject: customer a gift card is assigned to
+  subject_kind: end_user
+  purpose: restricting a gift card to one customer
+  rationale: GiftCard.assigned_to_email column (giftcard/models.py:77) with its update_fields save, isnull filter in checkout_cleaner, and the assigned event payload (assigned_to_email, previous_assigned_to_email built from gift_card.assigned_to_email or the previous value).
+  clusters:
+  - c033
+  - c050
+  - c051
+  - c052
+  - c053
+  - c054
+  - c057
+  - c058
+- id: gift-card-notification-recipient-email
+  name: Gift card notification recipient email
+  subject: recipient of a gift card email
+  subject_kind: other_person
+  purpose: address a gift card is sent to
+  rationale: send_gift_cards_to_customer(user_email) passes user_email to send_gift_card_notification(email), which puts it in payload recipient_email. send_gift_card_email_task in user_email and sendgrid reads payload['recipient_email'] and passes it as email to gift_card_sent_event / gift_card_resent_event (parameters email).
+  clusters:
+  - c046
+  - c047
+  - c048
+  - c049
+  - c062
+  - c129
+  - c136
+  - c137
+  - c139
+- id: staff-notification-recipient-email
+  name: Staff notification recipient email
+  subject: staff notification recipient
+  subject_kind: workforce
+  purpose: staff order-confirmation notification recipients
+  rationale: StaffNotificationRecipient.staff_email column and get_email() (returns linked user.email or staff_email) (account/models.py:417-431); send_order_confirmation builds recipient_emails from get_email() and sends them as payload recipient_list, which admin_email notify_events and tasks read.
+  clusters:
+  - c007
+  - c008
+  - c009
+  - c093
+  - c094
+  - c107
+  - c113
+- id: admin-email-plugin-sender-address
+  name: Admin email plugin sender address
+  subject: site (configured sender)
+  subject_kind: organization
+  purpose: from address of admin plugin emails
+  rationale: admin_email plugin config sender_address is defaulted from settings.DEFAULT_FROM_EMAIL (plugin.py:200) and passed to EmailConfig (plugin.py:178).
+  clusters:
+  - c108
+  - c109
+- id: user-email-plugin-sender-address
+  name: User email plugin sender address
+  subject: site (configured sender)
+  subject_kind: organization
+  purpose: from address of customer plugin emails
+  rationale: user_email plugin config sender_address is passed to EmailConfig (plugin.py:354).
+  clusters:
+  - c133
+- id: sendgrid-plugin-sender-address
+  name: Sendgrid plugin sender address
+  subject: site (configured sender)
+  subject_kind: organization
+  purpose: from address of Sendgrid emails
+  rationale: sender_address config field declared in sendgrid plugin DEFAULT_CONFIGURATION and CONFIG_STRUCTURE, read as configuration.sender_address for from_email in sendgrid/tasks.py:25.
+  clusters:
+  - c115
+  - c116
+  - c124
+needs_adjudication:
+- cluster: c002
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: User.email column and its reads (models.py:172, 345, 348, order/models.py:426) are defined on the shared User model for staff and customers alike
+- cluster: c003
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: USERNAME_FIELD='email' is the login field of the shared User model, staff and customers
+- cluster: c004
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: User Meta ordering by email applies to all User rows
+- cluster: c005
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: user search GIN index on email covers all User rows
+- cluster: c006
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: user_email_idx BTree index covers all User rows
+- cluster: c018
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: get_default_user_payload is the generic user payload used for staff and customer notifications alike
+- cluster: c021
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: get_user_custom_payload recipient_email is a generic payload helper, not specific to staff or customer
+- cluster: c019
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: send_set_password_notification(staff=False) serves both customers and staff (staff selects ACCOUNT_SET_STAFF_PASSWORD)
+- cluster: c020
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: recipient_email in send_set_password_notification, which takes a staff flag and serves both
+- cluster: c022
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: send_password_reset_notification(staff=False) serves both customers and staff
+- cluster: c023
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: recipient_email in send_password_reset_notification, which takes a staff flag and serves both
+- cluster: c024
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: send_set_password_notification builds the confirm URL for both staff and customers
+- cluster: c025
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: recipient_email in send_set_password_notification, which serves both staff and customers
+- cluster: c026
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: USER_SEARCH_FIELDS applies to all User rows
+- cluster: c027
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: user.email fed to the search vector for every User, staff or customer
+- cluster: c001
+  candidate_groups:
+  - customer-account-email
+  - account-change-email-new-address
+  reason: assigned_email_to_a_customer_event(new_email) is defined here; its callers (GraphQL mutations) are outside the sparse scope, so whether it is the new User.email or a requested address is not visible
+- cluster: c028
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - order-customer-email
+  - checkout-email
+  reason: generate_email_vector(email) is called with user.email (account/search.py), order.user_email / order.user.email (order/search.py) and checkout.email (checkout/search/indexing.py); the parameter is shared by different subjects
+- cluster: c029
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - checkout-email
+  reason: login email input to authenticate_with_throttling; the caller is outside scope and the value flows into retrieve_user_by_email, which is shared with the checkout email
+- cluster: c030
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - checkout-email
+  reason: retrieve_user_by_email(email) parameter is called with checkout.email in complete_checkout.py:1694 and with login input elsewhere, then filtered against User.email
+- cluster: c031
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - checkout-email
+  reason: local comparison user.email == email inside retrieve_user_by_email; the compared value comes from callers with different subjects
+- cluster: c032
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - checkout-email
+  reason: local comparison user.email == email.lower() inside retrieve_user_by_email; the compared value comes from callers with different subjects
+- cluster: c059
+  candidate_groups:
+  - order-customer-email
+  - gift-card-created-by-email
+  - gift-card-notification-recipient-email
+  reason: local user_email = order.user_email in gift_cards_create flows both into created_by_email and into send_gift_cards_to_customer
+- cluster: c060
+  candidate_groups:
+  - gift-card-created-by-email
+  - gift-card-notification-recipient-email
+  reason: user_email passed to send_gift_cards_to_customer; same local as c059 that also feeds created_by_email
+- cluster: c067
+  candidate_groups:
+  - checkout-email
+  - customer-account-email
+  reason: email parameter of add_gift_card_code_to_checkout is never used in the function body and its callers (GraphQL mutations) are outside the sparse scope
+- cluster: c069
+  candidate_groups:
+  - order-customer-email
+  reason: email=order.user_email is passed to create_payment; the payment model that stores it is outside the sparse scope, so it may be a separate stored copy
+- cluster: c082
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: event_invoice_sent_notification email is called with payload['recipient_email'] of the invoice notification; the invoice payload builder is outside the sparse scope
+- cluster: c083
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: parameters email in event_invoice_sent_notification; same invoice recipient of unseen origin as c082
+- cluster: c119
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: customer_email for notification_invoice_sent_event read from payload['recipient_email'] of the invoice notification, built outside the sparse scope
+- cluster: c120
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: email for event_invoice_sent_notification read from payload['recipient_email'] of the invoice notification, built outside the sparse scope
+- cluster: c140
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: send_invoice_email_task recipient_email; docstring says invoice goes to the user of the related order but the payload builder is outside the sparse scope
+- cluster: c141
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: recipient_list=[recipient_email] in send_invoice_email_task; same unseen origin as c140
+- cluster: c142
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: customer_email=payload['recipient_email'] in send_invoice_email_task; same unseen origin as c140
+- cluster: c143
+  candidate_groups:
+  - order-customer-email
+  - customer-account-email
+  reason: email=payload['recipient_email'] in send_invoice_email_task; same unseen origin as c140
+- cluster: c103
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: CSV export failed recipient_email payload; built in the csv notification code outside the sparse scope, presumably the exporting staff user's email
+- cluster: c106
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: CSV export success recipient_email payload; built outside the sparse scope, presumably the exporting staff user's email
+- cluster: c111
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: send_email_with_link_to_download_file_task recipient_email for CSV export success; payload origin outside the sparse scope
+- cluster: c112
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  reason: send_export_failed_email_task recipient_email for CSV export failure; payload origin outside the sparse scope
+- cluster: c123
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - order-customer-email
+  - gift-card-notification-recipient-email
+  - account-change-email-new-address
+  - account-change-email-old-address
+  reason: sendgrid send_email reads payload['recipient_email'] for every event type, so the subject depends on the caller
+- cluster: c126
+  candidate_groups:
+  - staff-user-email
+  - customer-account-email
+  - order-customer-email
+  - gift-card-notification-recipient-email
+  - account-change-email-new-address
+  - account-change-email-old-address
+  reason: sendgrid Mail to_emails=recipient_email from the generic payload['recipient_email'], shared across event types

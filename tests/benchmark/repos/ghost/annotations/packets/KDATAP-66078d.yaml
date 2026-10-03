@@ -1,0 +1,1986 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-66078d
+  files:
+  - ghost/core/core/server/services/email-address/email-address-service.ts
+annotations:
+- id: ghost-email-address-service-L2
+  layer: mentions
+  subject:
+    key: mention:email
+    name: emailAddressParser
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of email address parser module
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-email-address-service-L4
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type alias for EmailAddress
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L6
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddresses
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type definition for email address pairs
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L7
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type field holding the from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+    group: outbound-message-from-address
+- id: ghost-email-address-service-L8
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type field holding the reply-to email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+    group: outbound-message-reply-to-address
+- id: ghost-email-address-service-L11
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddressesValidation
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type definition for email validation results
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L13
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag, not an address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-address-service-L17
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddressType
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 17
+    end_line: 17
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type union for email address types
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L23
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class definition
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L24
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method for checking managed email feature
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-address-service-L26
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private method that provides the default email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L28
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private method that provides fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L30
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isValidEmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Private method that validates email addresses
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L33
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor dependency type
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L36
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 36
+    end_line: 36
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor dependency type
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L37
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 37
+    end_line: 37
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor dependency type
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L39
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isValidEmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 39
+    end_line: 39
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructor dependency for email validation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L41
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assignment of managed email check function
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L44
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 44
+    end_line: 44
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assignment storing the function that provides default email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L46
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assignment storing arrow function that provides fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L47
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 47
+    end_line: 47
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Stores result of getting fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 47
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L51
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 51
+    end_line: 51
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parsing fallback email address string
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 47
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L53
+  layer: mentions
+  subject:
+    key: mention:email
+    name: isValidEmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 53
+    end_line: 53
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assignment storing the email validation function
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L64
+  layer: mentions
+  subject:
+    key: mention:email
+    name: managedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 64
+    end_line: 64
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Getter for managed email feature flag
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L65
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getManagedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calling managed email check function
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L68
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 68
+    end_line: 68
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getter that returns the default from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: function
+    type_annotation: EmailAddress
+    group: site-default-from-address
+- id: ghost-email-address-service-L69
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getDefaultEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 69
+    end_line: 69
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getting the default email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 26
+      kind: field
+    type_annotation: () => EmailAddress
+    group: site-default-from-address
+- id: ghost-email-address-service-L72
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 72
+    end_line: 72
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getter that returns the fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 72
+      kind: function
+    type_annotation: EmailAddress | null
+    group: fallback-sender-address
+- id: ghost-email-address-service-L73
+  layer: mentions
+  subject:
+    key: mention:email
+    name: getFallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 73
+    end_line: 73
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getting the fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 28
+      kind: field
+    type_annotation: () => EmailAddress | null
+    group: fallback-sender-address
+- id: ghost-email-address-service-L77
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 77
+    end_line: 77
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing sender address transformation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L83
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 83
+    end_line: 83
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading the sender address from transformed email
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 82
+      kind: local
+    group: members-support-address
+- id: ghost-email-address-service-L86
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 86
+    end_line: 86
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method parameter holding from email address string
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 86
+      kind: parameter
+    type_annotation: string
+    group: outbound-message-from-address
+- id: ghost-email-address-service-L87
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 87
+    end_line: 87
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parsing from email address string
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 87
+      kind: local
+    group: outbound-message-from-address
+- id: ghost-email-address-service-L88
+  layer: mentions
+  subject:
+    key: mention:email
+    name: replyTo
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 88
+    end_line: 88
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parsing reply-to email address string
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 88
+      kind: local
+    group: outbound-message-reply-to-address
+- id: ghost-email-address-service-L91
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 91
+    end_line: 91
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using parsed from email in object
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: function
+    group: site-default-from-address
+- id: ghost-email-address-service-L97
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about DMARC alignment
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L98
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email address restrictions
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L99
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 99
+    end_line: 99
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about configured email domain
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L101
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 101
+    end_line: 101
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about fallback to default email
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L102
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 102
+    end_line: 102
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about reply-to email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L105
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddresses
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 105
+    end_line: 105
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method parameter holding email addresses
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L107
+  layer: mentions
+  subject:
+    key: mention:email
+    name: EmailAddresses
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 107
+    end_line: 107
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Return type annotation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-service-L108
+  layer: mentions
+  subject:
+    key: mention:email
+    name: replyTo
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 108
+    end_line: 108
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading and validating reply-to email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L109
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about from-address validation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L116
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 116
+    end_line: 116
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing email addresses for equality
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L117
+  layer: mentions
+  subject:
+    key: mention:email
+    name: replyTo
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 117
+    end_line: 117
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Error message logging invalid reply-to address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: outbound-message-reply-to-address
+- id: ghost-email-address-service-L120
+  layer: mentions
+  subject:
+    key: mention:email
+    name: replyTo
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 120
+    end_line: 120
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Warning message about reply-to address validation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: outbound-message-reply-to-address
+- id: ghost-email-address-service-L127
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about validating from address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L128
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 128
+    end_line: 128
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading and validating from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L129
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 129
+    end_line: 129
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email validation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L131
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 131
+    end_line: 131
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using default from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: function
+    group: site-default-from-address
+- id: ghost-email-address-service-L136
+  layer: mentions
+  subject:
+    key: mention:email
+    name: managedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 136
+    end_line: 136
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checking managed email feature flag
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L143
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 143
+    end_line: 143
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L144
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 144
+    end_line: 144
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checking if fallback email exists
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L145
+  layer: mentions
+  subject:
+    key: mention:email
+    name: name
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 145
+    end_line: 145
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading email name from fallback address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L146
+  layer: mentions
+  subject:
+    key: mention:email
+    name: name
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 146
+    end_line: 146
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Setting email name on fallback address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L150
+  layer: mentions
+  subject:
+    key: mention:email
+    name: fallbackEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 150
+    end_line: 150
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using fallback email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 143
+      kind: local
+    group: fallback-sender-address
+- id: ghost-email-address-service-L151
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 151
+    end_line: 151
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using reply-to or from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: function
+    group: site-default-from-address
+- id: ghost-email-address-service-L155
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 155
+    end_line: 155
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message about missing fallback email
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-address-service-L160
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 160
+    end_line: 160
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about allowing default from address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L161
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 161
+    end_line: 161
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing from email addresses
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L163
+  layer: mentions
+  subject:
+    key: mention:email
+    name: name
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 163
+    end_line: 163
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about setting sender name
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L164
+  layer: mentions
+  subject:
+    key: mention:email
+    name: name
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 164
+    end_line: 164
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Setting email sender name
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L171
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sendingDomain
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 171
+    end_line: 171
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checking if sending domain is configured
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L172
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 172
+    end_line: 172
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading from email address to check domain
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 105
+      kind: parameter
+    type_annotation: EmailAddresses
+- id: ghost-email-address-service-L176
+  layer: mentions
+  subject:
+    key: mention:email
+    name: sender
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 176
+    end_line: 176
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining fallback behavior
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L177
+  layer: mentions
+  subject:
+    key: mention:email
+    name: senders
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 177
+    end_line: 177
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending domain mismatch
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L178
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from-address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 178
+    end_line: 178
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about fallback behavior
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L180
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 180
+    end_line: 180
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Warning message about sending from different domain
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: outbound-message-from-address
+- id: ghost-email-address-service-L184
+  layer: mentions
+  subject:
+    key: mention:email
+    name: from
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 184
+    end_line: 184
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about from address restrictions
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L186
+  layer: mentions
+  subject:
+    key: mention:email
+    name: defaultFromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 186
+    end_line: 186
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using default from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 68
+      kind: function
+    group: site-default-from-address
+- id: ghost-email-address-service-L190
+  layer: mentions
+  subject:
+    key: mention:email
+    name: name
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 190
+    end_line: 190
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment allowing name changes
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L195
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 195
+    end_line: 195
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing reply-to and from email addresses
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 185
+      kind: local
+- id: ghost-email-address-service-L197
+  layer: mentions
+  subject:
+    key: mention:email
+    name: address
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 197
+    end_line: 197
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Using from email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 185
+      kind: local
+- id: ghost-email-address-service-L207
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 207
+    end_line: 207
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method that validates email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L208
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 208
+    end_line: 208
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validating email address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L209
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 209
+    end_line: 209
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email validation
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-service-L211
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 211
+    end_line: 211
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing email to default address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L212
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 212
+    end_line: 212
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag, not an address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-address-service-L217
+  layer: mentions
+  subject:
+    key: mention:email
+    name: managedEmailEnabled
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 217
+    end_line: 217
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checking managed email feature flag
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-service-L221
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 221
+    end_line: 221
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag, not an address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-address-service-L227
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 227
+    end_line: 227
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reading email to check sending domain
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L230
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 230
+    end_line: 230
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag, not an address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-address-service-L241
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 241
+    end_line: 241
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing email to default address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L247
+  layer: mentions
+  subject:
+    key: mention:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 247
+    end_line: 247
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Comparing email to default address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+      line: 207
+      kind: parameter
+    type_annotation: string
+- id: ghost-email-address-service-L248
+  layer: mentions
+  subject:
+    key: mention:email
+    name: verificationEmailRequired
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-service.ts
+    start_line: 248
+    end_line: 248
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag, not an address
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  mention_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
