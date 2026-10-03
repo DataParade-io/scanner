@@ -219,6 +219,15 @@ function namesActionOrType(token: string): boolean {
 /** Last words that make a phone-word identifier name something other than a phone number. */
 const NOT_PHONE_LAST_WORD = new Set(["contact", "contacts", "format", "at", "webview", "sdk", "base", "view", "step"]);
 
+/** A single `mail`, or a `mail` compound naming an address (`mail_from`, `reply_to_mail`). */
+function MAIL_ADDRESS_COMPOUND(token: string): boolean {
+  const parts = splitCamelCaseParts(token);
+  return parts.length === 1 || parts.some((part) => MAIL_ADDRESS_WORD.has(part));
+}
+const MAIL_ADDRESS_WORD = new Set(["from", "to", "address", "addresses", "sender", "recipient", "recipients", "cc", "bcc", "reply"]);
+/** A line that reads or sets an address field (`emailOptions.from`, `to:`) next to a mail compound. */
+const MAIL_ADDRESS_ON_LINE = /(?:\.|\[\s*['"]|\b)(?:from|to|cc|bcc|reply_?to|sender)\b(?:['"]\s*\])?(?!\s*\()/i;
+
 /** `mail` used as a constant, a call, or an object whose member is not an address list. */
 const MAIL_OBJECT_USE = /^\s*(?:::|\(|\.(?!(?:to|from|cc|bcc|reply_to|sender|recipients)\b))/;
 
@@ -264,6 +273,12 @@ export function resolveAliasRuleIdsForToken(
     // A multi-word name that starts with a flag or action word names a flag or a function
     // (`hideOrganizerEmail`, `noEmail`, `normalizeEmail`, `sendSmsToPhone`), not a value.
     if ((ruleId === "email" || ruleId === "phone_number") && namesActionOrType(token)) {
+      continue;
+    }
+    // `mail` inside a longer name is a mail message (`inbound_mail`, `mail_subject`,
+    // `html_mail_body`) unless an address word goes with it (`mail_from`, `sender_mail`) or
+    // the line reads an address field (`SendMailOptions['from']`).
+    if (key === "mail" && !MAIL_ADDRESS_COMPOUND(token) && !MAIL_ADDRESS_ON_LINE.test(line)) {
       continue;
     }
     // A bare `mail` used as an object or constant (`Mail::Field`, `mail.to`, `mail(`) is
