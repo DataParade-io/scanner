@@ -15,7 +15,8 @@ export type FileLanguage =
   | "dockerfile"
   | "rust"
   | "ruby"
-  | "swift";
+  | "swift"
+  | "prisma";
 
 export interface FileInfo {
   path: string;
