@@ -217,6 +217,13 @@ const PATH_OR_PROSE_STRING =
  */
 const EMAIL_CLASS_REFERENCE = /(::|\.)(?:Email|Mail)\b/g;
 const EMAIL_NAMESPACE = /\b(?:Email|Mail)(?=::)/g;
+/**
+ * A whole import statement (`const mail = require('../mail');`, `import { isEmail } from
+ * 'validator';`, `from email.mime.text import MIMEText`, `require 'mail'`): its names are
+ * modules and bindings, not values.
+ */
+const IMPORT_LINE =
+  /^\s*(?:(?:const|let|var)\s+[^=]+=\s*require\(\s*(['"`])[^'"`]*\1\s*\)(?:\(\s*(['"`])[^'"`]*\2\s*\))?(?:\.\w+)*\s*;?|import\b[^'"`]*\bfrom\s*(['"`])[^'"`]*\3\s*;?|import\s*(['"`])[^'"`]*\4\s*;?|from\s+[\w.]+\s+import\s+[\w\s,()*]+|import\s+[\w.]+(?:\s+as\s+\w+)?|require(?:_relative)?\s+(['"])[^'"]*\5)\s*$/;
 const NEVER = /(?!)/g;
 /** A Ruby predicate (`inbox.email?`, `mail?`) asks a yes/no question; it is not an address. */
 const EMAIL_PREDICATE = /(\.|\b)e?mails?\?(?!\?)/g;
@@ -233,7 +240,8 @@ export function matchPiiSignalsInFile(
   const rubyFile = /\.rb$/.test(input.filePath);
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     // A translation key names a message, not a value: it is blanked before matching.
-    const line = (lines[lineIndex] ?? "")
+    const raw = lines[lineIndex] ?? "";
+    const line = (IMPORT_LINE.test(raw) ? "" : raw)
       .replace(TRANSLATION_KEY, '$1""')
       .replace(PATH_OR_PROSE_STRING, '""')
       .replace(EMAIL_CLASS_REFERENCE, "$1Klass")
