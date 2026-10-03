@@ -217,6 +217,9 @@ const PATH_OR_PROSE_STRING =
  */
 const EMAIL_CLASS_REFERENCE = /(::|\.)(?:Email|Mail)\b/g;
 const EMAIL_NAMESPACE = /\b(?:Email|Mail)(?=::)/g;
+const NEVER = /(?!)/g;
+/** A Ruby predicate (`inbox.email?`, `mail?`) asks a yes/no question; it is not an address. */
+const EMAIL_PREDICATE = /(\.|\b)e?mails?\?(?!\?)/g;
 
 export function matchPiiSignalsInFile(
   input: MatchPiiSignalsFileInput,
@@ -226,13 +229,16 @@ export function matchPiiSignalsInFile(
   const hits: PiiSignalHit[] = [];
   const rulesById = ruleById(rules);
 
+  // `email?` is a predicate only in Ruby; in TypeScript it is an optional field (`email?: string`).
+  const rubyFile = /\.rb$/.test(input.filePath);
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     // A translation key names a message, not a value: it is blanked before matching.
     const line = (lines[lineIndex] ?? "")
       .replace(TRANSLATION_KEY, '$1""')
       .replace(PATH_OR_PROSE_STRING, '""')
       .replace(EMAIL_CLASS_REFERENCE, "$1Klass")
-      .replace(EMAIL_NAMESPACE, "Klass");
+      .replace(EMAIL_NAMESPACE, "Klass")
+      .replace(rubyFile ? EMAIL_PREDICATE : NEVER, "$1kind?");
     const regexMatchedRuleIds = new Set<string>();
 
     for (const rule of rules) {
