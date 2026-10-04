@@ -19,9 +19,9 @@ import {
 
 import type { PersonalDataEvalLayer } from "../../src/eval-layers/collect-personal-data-findings";
 import {
-  isPlexusScoreClassAvailable,
-  resolvePythonForPlexus,
-} from "./plexus-runtime";
+  isPrimusScoreClassAvailable,
+  resolvePythonForPrimus,
+} from "./primus-runtime";
 
 setDefaultTimeout(120_000);
 
@@ -173,7 +173,7 @@ function skipUnlessScoreAvailable(scoreName: string): "skipped" | undefined {
   if (!score) {
     return "skipped";
   }
-  if (!isPlexusScoreClassAvailable(score.scoreClass)) {
+  if (!isPrimusScoreClassAvailable(score.scoreClass)) {
     return "skipped";
   }
   return undefined;
@@ -187,7 +187,7 @@ function runLayerScoreEval(w: ScannerLayerWorld): void {
   const score = LAYER_SCORES[w.activeScoreName];
   assert.ok(score, `unknown layer score: ${w.activeScoreName}`);
 
-  const python = resolvePythonForPlexus();
+  const python = resolvePythonForPrimus();
   const findingsCommand = buildFindingsCommand(score);
   const result = spawnSync(
     python,
@@ -251,11 +251,11 @@ function assertScoreOnScorecard(w: ScannerLayerWorld, scoreName: string): void {
 
 Before({ tags: "@layer-eval" }, function (this: ScannerLayerWorld) {
   try {
-    resolvePythonForPlexus();
+    resolvePythonForPrimus();
   } catch {
     return "skipped";
   }
-  if (!isPlexusScoreClassAvailable("SubjectIdentityScore")) {
+  if (!isPrimusScoreClassAvailable("SubjectIdentityScore")) {
     return "skipped";
   }
 
@@ -480,7 +480,7 @@ Given(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Subject Identity score",
+  "I run primus evaluate accuracy for the Subject Identity score",
   function (this: ScannerLayerWorld) {
     const skip = skipUnlessScoreAvailable("Subject Identity");
     if (skip) {
@@ -494,7 +494,7 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Raw Hit Identity score",
+  "I run primus evaluate accuracy for the Raw Hit Identity score",
   function (this: ScannerLayerWorld) {
     const skip = skipUnlessScoreAvailable("Raw Hit Identity");
     if (skip) {
@@ -508,7 +508,7 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Occurrence Identity score",
+  "I run primus evaluate accuracy for the Occurrence Identity score",
   function (this: ScannerLayerWorld) {
     const skip = skipUnlessScoreAvailable("Occurrence Identity");
     if (skip) {
@@ -522,7 +522,7 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Raw Hit Span score",
+  "I run primus evaluate accuracy for the Raw Hit Span score",
   function (this: ScannerLayerWorld) {
     const skip = skipUnlessScoreAvailable("Raw Hit Span");
     if (skip) {
@@ -536,7 +536,7 @@ When(
 );
 
 When(
-  "I run plexus evaluate accuracy for the Occurrence Span score",
+  "I run primus evaluate accuracy for the Occurrence Span score",
   function (this: ScannerLayerWorld) {
     const skip = skipUnlessScoreAvailable("Occurrence Span");
     if (skip) {

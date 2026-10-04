@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Import positive gold YAML annotations as Plexus Items via local GraphQL.
+ * Import positive gold YAML annotations as Primus Items via local GraphQL.
  *
  * Usage:
  *   npx ts-node scripts/import-gold-annotations.ts \
@@ -39,7 +39,7 @@ interface GraphQlItemRef {
 }
 
 function resolveAccountId(): string {
-  return process.env.PLEXUS_ACCOUNT_ID?.trim() || DEFAULT_ACCOUNT_ID;
+  return process.env.PRIMUS_ACCOUNT_ID?.trim() || DEFAULT_ACCOUNT_ID;
 }
 
 function buildItemText(annotation: AnnotationRecord): string {

@@ -2,7 +2,7 @@
 Feature: Local GraphQL is a process
 
   Scenario: Start without a database server
-    Given Plexus and Virtuus installed in the Python environment
+    Given Primus and Virtuus installed in the Python environment
     And a data directory on the workspace disk
     When I start the local GraphQL process
     Then GraphQL answers on the local URL

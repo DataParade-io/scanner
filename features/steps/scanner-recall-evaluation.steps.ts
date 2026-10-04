@@ -22,8 +22,8 @@ import {
 import {
   buildLocalGraphqlChildEnv,
   isGraphqlProxyAvailable,
-  resolvePlexusCli,
-} from "./plexus-runtime";
+  resolvePrimusCli,
+} from "./primus-runtime";
 
 setDefaultTimeout(120_000);
 
@@ -408,27 +408,27 @@ async function loadEvaluationAfterRun(w: ScannerRecallWorld): Promise<void> {
   }
 }
 
-async function runPlexusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
+async function runPrimusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
   assert.ok(w.baseUrl, "GraphQL base URL must be set");
   assert.ok(w.datasetFile, "dataset file must be set");
   assert.ok(w.evalWorkDir, "evaluation work directory must be set");
 
-  const plexusCli = resolvePlexusCli();
+  const primusCli = resolvePrimusCli();
   const findingsCommand =
     `cd ${repoRoot} && node -r ts-node/register scripts/scan-findings.ts --root {root}`;
 
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    PLEXUS_API_URL: `${w.baseUrl}/graphql`,
-    PLEXUS_GRAPHQL_AUTH_MODE: "api_key",
-    PLEXUS_API_KEY: "local-eval-key",
-    PLEXUS_ACCOUNT_ID: ACCOUNT_ID,
-    PLEXUS_ACCOUNT_KEY: ACCOUNT_KEY,
-    PLEXUS_SOURCE_FINDINGS_COMMAND: findingsCommand,
+    PRIMUS_API_URL: `${w.baseUrl}/graphql`,
+    PRIMUS_GRAPHQL_AUTH_MODE: "api_key",
+    PRIMUS_API_KEY: "local-eval-key",
+    PRIMUS_ACCOUNT_ID: ACCOUNT_ID,
+    PRIMUS_ACCOUNT_KEY: ACCOUNT_KEY,
+    PRIMUS_SOURCE_FINDINGS_COMMAND: findingsCommand,
   };
 
   const result = spawnSync(
-    plexusCli,
+    primusCli,
     [
       "evaluate",
       "accuracy",
@@ -454,7 +454,7 @@ async function runPlexusEvaluateAccuracy(w: ScannerRecallWorld): Promise<void> {
   assert.strictEqual(
     w.evaluateExitCode,
     0,
-    `plexus evaluate accuracy failed:\n${w.evaluateOutput}`,
+    `primus evaluate accuracy failed:\n${w.evaluateOutput}`,
   );
   assert.ok(w.evaluationId, "evaluate output must include an Evaluation id");
 
@@ -474,12 +474,12 @@ async function bootstrapRecallScenario(
   await seedLocalGraphqlMetadata(w.baseUrl!);
 }
 
-Before({ tags: "@requires-plexus" }, function (this: ScannerRecallWorld) {
+Before({ tags: "@requires-primus" }, function (this: ScannerRecallWorld) {
   if (!isGraphqlProxyAvailable()) {
     return "skipped";
   }
   try {
-    resolvePlexusCli();
+    resolvePrimusCli();
   } catch {
     return "skipped";
   }
@@ -507,7 +507,7 @@ After(async function (this: ScannerRecallWorld) {
   }
 });
 
-Given("a local Plexus GraphQL process with file storage", async function () {
+Given("a local Primus GraphQL process with file storage", async function () {
   const w = getWorld(this);
   w.dataDir = mkdtempSync(join(tmpdir(), "dataparade-recall-graphql-"));
   w.port = await findFreePort();
@@ -534,9 +534,9 @@ Given("the detector Score is on the scorecard", function () {
   assert.match(yaml, /class:\s*SourceSpanOverlapScore/);
 });
 
-When("I run plexus evaluate accuracy for that score", async function () {
+When("I run primus evaluate accuracy for that score", async function () {
   const w = getWorld(this);
-  await runPlexusEvaluateAccuracy(w);
+  await runPrimusEvaluateAccuracy(w);
 });
 
 Then("an Evaluation record is stored", function () {
@@ -588,9 +588,9 @@ Given("no overlapping finding", function () {
   assert.match(dataset, /app\.py/);
 });
 
-When("I run plexus evaluate accuracy", async function () {
+When("I run primus evaluate accuracy", async function () {
   const w = getWorld(this);
-  await runPlexusEvaluateAccuracy(w);
+  await runPrimusEvaluateAccuracy(w);
 });
 
 Then("that Item is not counted as a No", function () {
