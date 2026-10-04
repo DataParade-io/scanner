@@ -492,7 +492,7 @@ export class CodeNavigator {
     }
     // A Ruby constructor is called as `Class.new(...)` (KDATAP-e35652).
     const family = request.file ? languageFamily(request.file) : undefined;
-    const rubyConstructor = family === "rb" && name === "initialize" && ownerClass !== undefined;
+    const rubyConstructor = process.env.DATAPARADE_NO_RUBY_CTOR !== "1" && family === "rb" && name === "initialize" && ownerClass !== undefined; // EXPERIMENT
     const sameFamily = (call: CallRecord): boolean => family === undefined || languageFamily(call.file) === family;
     const all = (this.callsByCallee.get(rubyConstructor ? "new" : name) ?? []).filter(sameFamily);
     const kept = rubyConstructor
