@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Emit personal-data layer findings as JSON for Plexus SubjectIdentityScore evaluation.
+ * Emit personal-data layer findings as JSON for Primus SubjectIdentityScore evaluation.
  *
  * Usage:
  *   npx ts-node scripts/scan-layer-findings.ts --root <dir> --layer raw-hits|occurrences|data-items

@@ -1,9 +1,9 @@
-Feature: Executable Gherkin for Plexus-backed evaluation
+Feature: Executable Gherkin for Primus-backed evaluation
 
   Scenario: Feature files are the eval specs
-    Given Gherkin files for local Plexus evaluation
+    Given Gherkin files for local Primus evaluation
     When the feature runner loads those files
-    Then the discovered files include plexus-eval.feature
+    Then the discovered files include primus-eval.feature
     And the discovered files include canonical-evaluation-representation.feature
     And the discovered files include ground-truth-repo-evaluation.feature
 

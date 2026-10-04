@@ -10,7 +10,7 @@ const featuresDir = join(repoRoot, "features");
 let featureFileNames: string[] = [];
 let jestTestMatch: string[] = [];
 
-Given("Gherkin files for local Plexus evaluation", function () {
+Given("Gherkin files for local Primus evaluation", function () {
   featureFileNames = readdirSync(featuresDir).filter((name) =>
     name.endsWith(".feature"),
   );
@@ -27,10 +27,10 @@ When("the feature runner loads those files", function () {
   );
 });
 
-Then("the discovered files include plexus-eval.feature", function () {
+Then("the discovered files include primus-eval.feature", function () {
   assert.ok(
-    featureFileNames.includes("plexus-eval.feature"),
-    `Expected plexus-eval.feature among: ${featureFileNames.join(", ")}`,
+    featureFileNames.includes("primus-eval.feature"),
+    `Expected primus-eval.feature among: ${featureFileNames.join(", ")}`,
   );
 });
 
