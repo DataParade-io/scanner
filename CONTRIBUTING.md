@@ -51,7 +51,7 @@ Node.js 20+ is required.
 
 ## Behavior specs and evaluation
 
-Gherkin feature specs live under `features/` and are the source of truth for Plexus-backed evaluation scenarios. Jest fixture eval layers live under `tests/eval/`.
+Gherkin feature specs live under `features/` and are the source of truth for Primus-backed evaluation scenarios. Jest fixture eval layers live under `tests/eval/`.
 
 | Command | Purpose |
 | --- | --- |
@@ -63,7 +63,7 @@ Gherkin feature specs live under `features/` and are the source of truth for Ple
 | `pnpm run eval:mentions` | Personal-data mention layer ground-truth eval |
 | `pnpm run eval:data-items` | Rolled-up data-item layer ground-truth eval |
 
-Layer findings for Plexus SubjectIdentityScore:
+Layer findings for Primus SubjectIdentityScore:
 
 ```bash
 node -r ts-node/register scripts/scan-layer-findings.ts --root <fixture-dir> --layer raw-hits|mentions|data-items
@@ -71,20 +71,20 @@ node -r ts-node/register scripts/scan-layer-findings.ts --root <fixture-dir> --l
 
 See `features/README.md` and `tests/eval/README.md` for layout and metrics.
 
-### Plexus evaluation
+### Primus evaluation
 
-Feature specs and corpus eval use the installed **`plexus` CLI on PATH** (not `python -m plexus` and not `PLEXUS_ROOT`).
+Feature specs and corpus eval use the installed **`primus` CLI on PATH** (not `python -m primus` and not `PRIMUS_ROOT`).
 
-Local Virtuus / GraphQL settings are declared in **`.plexus/config.yaml`**. Do not configure store, backend mode, or proxy behavior with `PLEXUS_STORE`, `PLEXUS_BACKEND_MODE`, or `PLEXUS_PROXY_*` env vars. Per-run **data directories** and **ports** may still be overridden at runtime (for example `PLEXUS_DATA_DIR` for a temp dir).
+Local Virtuus / GraphQL settings are declared in **`.primus/config.yaml`**. Do not configure store, backend mode, or proxy behavior with `PRIMUS_STORE`, `PRIMUS_BACKEND_MODE`, or `PRIMUS_PROXY_*` env vars. Per-run **data directories** and **ports** may still be overridden at runtime (for example `PRIMUS_DATA_DIR` for a temp dir).
 
 ```bash
-command -v plexus   # must resolve
+command -v primus   # must resolve
 pnpm run test:features
 ```
 
-Scenarios that start a local GraphQL host require a **Virtuus-capable** `private-graphql-proxy` (`proxy/virtuus_store.py` + `proxy/store_factory.py`). Auto-discovery prefers `~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy`. Override with `PLEXUS_GRAPHQL_PROXY_DIR`.
+Scenarios that start a local GraphQL host require a **Virtuus-capable** `private-graphql-proxy` (`proxy/virtuus_store.py` + `proxy/store_factory.py`). Auto-discovery prefers `~/Projects/Primus_worktrees/virtuus-store/services/private-graphql-proxy`. Override with `PRIMUS_GRAPHQL_PROXY_DIR`.
 
-Start GraphQL manually (config from `.plexus/config.yaml`):
+Start GraphQL manually (config from `.primus/config.yaml`):
 
 ```bash
 ./scripts/start-local-graphql.sh
@@ -93,7 +93,7 @@ Start GraphQL manually (config from `.plexus/config.yaml`):
 Optional runtime data-dir override:
 
 ```bash
-PLEXUS_DATA_DIR=/tmp/plexus-data ./scripts/start-local-graphql.sh
+PRIMUS_DATA_DIR=/tmp/primus-data ./scripts/start-local-graphql.sh
 ```
 
 Corpus recall against materialized benchmark repos:

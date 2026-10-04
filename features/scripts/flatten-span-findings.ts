@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Emit span-level findings for Plexus SubjectSpanOverlapScore evaluation.
+ * Emit span-level findings for Primus SubjectSpanOverlapScore evaluation.
  *
  * SubjectSpanOverlapScore expects filePath, startLine, and endLine on each
  * finding. scan-layer-findings nests those fields under evidenceLocations;

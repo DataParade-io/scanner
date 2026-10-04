@@ -1,6 +1,6 @@
 # Gherkin feature specs
 
-Executable behavior specs for Plexus-backed evaluation. Gherkin files here are the spec source of truth.
+Executable behavior specs for Primus-backed evaluation. Gherkin files here are the spec source of truth.
 
 ## Commands
 
@@ -11,24 +11,24 @@ Add new scenarios under `features/` and matching step definitions under `feature
 
 ## Prerequisites
 
-1. **`plexus` on PATH** — the installed Plexus CLI (for example via conda: `command -v plexus`)
-2. **Virtuus-capable private-graphql-proxy** — for scenarios that start a local GraphQL host. The proxy must include `proxy/virtuus_store.py` and `proxy/store_factory.py` (Plexus PR #612). Discovery order: `PLEXUS_GRAPHQL_PROXY_DIR`, then `~/Projects/Plexus_worktrees/virtuus-store/services/private-graphql-proxy`, then other Plexus checkouts only when that working tree has Virtuus store files.
+1. **`primus` on PATH** — the installed Primus CLI (for example via conda: `command -v primus`)
+2. **Virtuus-capable private-graphql-proxy** — for scenarios that start a local GraphQL host. The proxy must include `proxy/virtuus_store.py` and `proxy/store_factory.py` (Primus PR #612). Discovery order: `PRIMUS_GRAPHQL_PROXY_DIR`, then `~/Projects/Primus_worktrees/virtuus-store/services/private-graphql-proxy`, then other Primus checkouts only when that working tree has Virtuus store files.
 
-`PLEXUS_ROOT` is not required. Eval scenarios invoke:
+`PRIMUS_ROOT` is not required. Eval scenarios invoke:
 
 ```bash
-plexus evaluate accuracy --yaml --scorecard "Local Eval" --score "Span Overlap" --dataset-file ...
+primus evaluate accuracy --yaml --scorecard "Local Eval" --score "Span Overlap" --dataset-file ...
 ```
 
-## Plexus configuration
+## Primus configuration
 
-Local evaluation settings live in **`.plexus/config.yaml`** (Virtuus store, local backend mode, proxy auth). Do not drive those via `PLEXUS_STORE`, `PLEXUS_BACKEND_MODE`, or `PLEXUS_PROXY_*` environment variables.
+Local evaluation settings live in **`.primus/config.yaml`** (Virtuus store, local backend mode, proxy auth). Do not drive those via `PRIMUS_STORE`, `PRIMUS_BACKEND_MODE`, or `PRIMUS_PROXY_*` environment variables.
 
-Per-test **data directories** and **ports** are runtime overrides only (for example `PLEXUS_DATA_DIR` for a temp dir, or `PLEXUS_GRAPHQL_PORT` when binding an ephemeral port).
+Per-test **data directories** and **ports** are runtime overrides only (for example `PRIMUS_DATA_DIR` for a temp dir, or `PRIMUS_GRAPHQL_PORT` when binding an ephemeral port).
 
 ## Local GraphQL host process
 
-Start Plexus GraphQL as a single uvicorn worker with Virtuus file storage (no Docker or Postgres). Static config is read from `.plexus/config.yaml`:
+Start Primus GraphQL as a single uvicorn worker with Virtuus file storage (no Docker or Postgres). Static config is read from `.primus/config.yaml`:
 
 ```bash
 ./scripts/start-local-graphql.sh
@@ -37,7 +37,7 @@ Start Plexus GraphQL as a single uvicorn worker with Virtuus file storage (no Do
 Use a temp data directory when you need an isolated store:
 
 ```bash
-PLEXUS_DATA_DIR=/tmp/plexus-data ./scripts/start-local-graphql.sh
+PRIMUS_DATA_DIR=/tmp/primus-data ./scripts/start-local-graphql.sh
 ```
 
 Then check readiness and create an Item:
@@ -54,24 +54,24 @@ The `local-graphql-process` feature is skipped automatically when no Virtuus-cap
 
 ## Layer evaluation scenarios
 
-Gherkin specs exercise Plexus-backed recall; Jest fixture eval under `tests/eval/layers/` covers the same layers deterministically. See [project/wiki/four-layer-evaluation.md](../project/wiki/four-layer-evaluation.md) and [tests/eval/ground-truth-schema.md](../tests/eval/ground-truth-schema.md).
+Gherkin specs exercise Primus-backed recall; Jest fixture eval under `tests/eval/layers/` covers the same layers deterministically. See [project/wiki/four-layer-evaluation.md](../project/wiki/four-layer-evaluation.md) and [tests/eval/ground-truth-schema.md](../tests/eval/ground-truth-schema.md).
 
 | Scenario file | Layer(s) | What it proves |
 |---------------|----------|----------------|
 | `scanner-recall-evaluation.feature` | Mentions (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
 | `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Identity, Mention Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Mention Span (`SubjectSpanOverlapScore`) via layer findings commands; unread skip and ingested miss behavior |
-| `plexus-eval.feature` | Harness separation | Gherkin is the Plexus spec source; Jest patterns stay under `tests/` |
+| `primus-eval.feature` | Harness separation | Gherkin is the Primus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
-`scanner-layer-evaluation` scenarios are skipped automatically when a required Plexus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
+`scanner-layer-evaluation` scenarios are skipped automatically when a required Primus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
 
 ### Layer evaluation scores and findings bridge
 
-Layer evaluation invokes Plexus scores **directly as Python modules** (no GraphQL server, no `plexus evaluate accuracy` CLI). Step definitions call `features/scripts/run-layer-score-eval.py` via the Plexus venv Python (`PYTHON` env).
+Layer evaluation invokes Primus scores **directly as Python modules** (no GraphQL server, no `primus evaluate accuracy` CLI). Step definitions call `features/scripts/run-layer-score-eval.py` via the Primus venv Python (`PYTHON` env).
 
-| Score | Plexus class | Identity prefix | Findings command |
+| Score | Primus class | Identity prefix | Findings command |
 |-------|--------------|-----------------|------------------|
 | Subject Identity | SubjectIdentityScore | `data_item:` | `scripts/scan-layer-findings.ts` |
 | Raw Hit Identity | SubjectIdentityScore | `raw_hit:` | `scripts/scan-layer-findings.ts` |
