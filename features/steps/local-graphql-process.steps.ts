@@ -19,9 +19,9 @@ import {
   buildLocalGraphqlChildEnv,
   isGraphqlProxyAvailable,
   requireGraphqlProxyDir,
-  resolvePlexusCli,
-  resolvePythonForPlexus,
-} from "./plexus-runtime";
+  resolvePrimusCli,
+  resolvePythonForPrimus,
+} from "./primus-runtime";
 
 setDefaultTimeout(60_000);
 
@@ -191,7 +191,7 @@ Before({ tags: "@local-graphql" }, function (this: LocalGraphqlWorld) {
     return "skipped";
   }
   try {
-    resolvePlexusCli();
+    resolvePrimusCli();
   } catch {
     return "skipped";
   }
@@ -216,9 +216,9 @@ After({ tags: "@local-graphql" }, async function (this: LocalGraphqlWorld) {
   }
 });
 
-Given("Plexus and Virtuus installed in the Python environment", async function () {
-  resolvePlexusCli();
-  const python = resolvePythonForPlexus();
+Given("Primus and Virtuus installed in the Python environment", async function () {
+  resolvePrimusCli();
+  const python = resolvePythonForPrimus();
   const proxyDir = requireGraphqlProxyDir();
 
   const virtuusCheck = spawn(python, [
@@ -311,34 +311,34 @@ Then(
     assert.ok(w.childCommand, "child command must be recorded");
     assert.ok(w.childEnv, "child environment must be recorded");
 
-    const configPath = join(repoRoot, ".plexus", "config.yaml");
-    assert.ok(existsSync(configPath), ".plexus/config.yaml must exist");
+    const configPath = join(repoRoot, ".primus", "config.yaml");
+    assert.ok(existsSync(configPath), ".primus/config.yaml must exist");
     const config = YAML.parse(readFileSync(configPath, "utf8")) as {
-      plexus?: {
+      primus?: {
         store?: string;
         backend_mode?: string;
         proxy?: { auth_mode?: string; upstream_disabled?: boolean };
       };
     };
-    assert.strictEqual(config.plexus?.store, "virtuus");
-    assert.strictEqual(config.plexus?.backend_mode, "local");
-    assert.strictEqual(config.plexus?.proxy?.auth_mode, "trusted_open");
-    assert.strictEqual(config.plexus?.proxy?.upstream_disabled, true);
+    assert.strictEqual(config.primus?.store, "virtuus");
+    assert.strictEqual(config.primus?.backend_mode, "local");
+    assert.strictEqual(config.primus?.proxy?.auth_mode, "trusted_open");
+    assert.strictEqual(config.primus?.proxy?.upstream_disabled, true);
 
     assert.strictEqual(
-      w.childEnv.PLEXUS_STORE,
+      w.childEnv.PRIMUS_STORE,
       undefined,
-      "PLEXUS_STORE must not be set on the child process",
+      "PRIMUS_STORE must not be set on the child process",
     );
     assert.strictEqual(
-      w.childEnv.PLEXUS_BACKEND_MODE,
+      w.childEnv.PRIMUS_BACKEND_MODE,
       undefined,
-      "PLEXUS_BACKEND_MODE must not be set on the child process",
+      "PRIMUS_BACKEND_MODE must not be set on the child process",
     );
     assert.strictEqual(
-      w.childEnv.PLEXUS_PROXY_DATABASE_URL,
+      w.childEnv.PRIMUS_PROXY_DATABASE_URL,
       undefined,
-      "PLEXUS_PROXY_DATABASE_URL must be unset for the child process",
+      "PRIMUS_PROXY_DATABASE_URL must be unset for the child process",
     );
     assert.ok(
       !/\bdocker\b/i.test(w.childCommand),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate a layer score CSV dataset without GraphQL or the Plexus CLI."""
+"""Evaluate a layer score CSV dataset without GraphQL or the Primus CLI."""
 
 from __future__ import annotations
 
@@ -14,9 +14,9 @@ from pathlib import Path
 import pandas as pd
 from ruamel.yaml import YAML
 
-from plexus.cli.shared import get_score_yaml_path
-from plexus.scores import resolve_score_class
-from plexus.scores.Score import Score
+from primus.cli.shared import get_score_yaml_path
+from primus.scores import resolve_score_class
+from primus.scores.Score import Score
 
 
 def _load_score(scorecard_dir: str, scorecard_name: str, score_name: str, findings_command: str):

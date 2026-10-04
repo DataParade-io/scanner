@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Run a real scanner recall evaluation against the curated corpus and
- * persist an Evaluation record in local Plexus GraphQL (Virtuus).
+ * persist an Evaluation record in local Primus GraphQL (Virtuus).
  *
  * Usage:
  *   pnpm exec ts-node scripts/run-corpus-eval.ts \
@@ -27,8 +27,8 @@ import {
 import {
   buildLocalGraphqlChildEnv,
   requireGraphqlProxyDir,
-  resolvePlexusCli,
-} from "../features/steps/plexus-runtime";
+  resolvePrimusCli,
+} from "../features/steps/primus-runtime";
 import {
   loadAnnotations,
   loadBenchmarkManifest,
@@ -261,7 +261,7 @@ function findingToScoringRecord(finding: LayerFinding): Record<string, unknown> 
   };
 }
 
-function scoreRecallViaPlexus(
+function scoreRecallViaPrimus(
   annotations: AnnotationRecord[],
   findings: LayerFinding[],
 ): Record<string, unknown> {
@@ -270,11 +270,11 @@ function scoreRecallViaPlexus(
     findings: findings.map(findingToScoringRecord),
   });
   const scriptPath = join(repoRoot, "scripts", "score-corpus-recall.py");
-  const plexusRoot = process.env.PLEXUS_ROOT || join(repoRoot, "..", "Plexus");
+  const primusRoot = process.env.PRIMUS_ROOT || join(repoRoot, "..", "Primus");
   const result = spawnSync("python3", [scriptPath], {
     input: payload,
     encoding: "utf8",
-    env: { ...process.env, PYTHONPATH: plexusRoot },
+    env: { ...process.env, PYTHONPATH: primusRoot },
   });
   if (result.status !== 0) {
     throw new Error(`score-corpus-recall.py failed: ${result.stderr}`);
@@ -351,7 +351,7 @@ async function computeCorpusRecallProgrammatic(
       }
     }
 
-    const report = scoreRecallViaPlexus(allAnnotations, findings);
+    const report = scoreRecallViaPrimus(allAnnotations, findings);
     perRepo[repoKey] = report;
     totalTp += report.true_positives as number;
     totalFp += report.false_positives as number;
@@ -610,7 +610,7 @@ async function main(): Promise<void> {
   }
 
   const workDir =
-    values["work-dir"]?.trim() || join(repoRoot, ".plexus-corpus-eval");
+    values["work-dir"]?.trim() || join(repoRoot, ".primus-corpus-eval");
   mkdirSync(workDir, { recursive: true });
 
   const programmaticRecall = values["programmatic-recall"] === true;
@@ -619,10 +619,10 @@ async function main(): Promise<void> {
   if (!programmaticRecall) {
     const proxyDir =
       values["graphql-proxy-dir"]?.trim() ||
-      process.env.PLEXUS_GRAPHQL_PROXY_DIR?.trim() ||
+      process.env.PRIMUS_GRAPHQL_PROXY_DIR?.trim() ||
       requireGraphqlProxyDir();
 
-    const port = Number(values.port || process.env.PLEXUS_GRAPHQL_PORT || "8000");
+    const port = Number(values.port || process.env.PRIMUS_GRAPHQL_PORT || "8000");
     graphqlUrl =
       values["graphql-url"]?.trim().replace(/\/$/, "") ||
       `http://127.0.0.1:${port}`;
@@ -657,7 +657,7 @@ async function main(): Promise<void> {
   console.log(`Corpus precision: ${JSON.stringify(precisionReport.aggregate)}`);
 
   if (programmaticRecall) {
-    console.log("Computing corpus recall via plexus.scoring (no GraphQL server)...");
+    console.log("Computing corpus recall via primus.scoring (no GraphQL server)...");
     const recallReport = await computeCorpusRecallProgrammatic(corpusDir, stagedByKey);
     writeFileSync(
       join(workDir, "recall.json"),
@@ -681,10 +681,10 @@ async function main(): Promise<void> {
   const itemCount = await countItems(graphqlUrl);
   console.log(`Imported gold Items: ${imported}; GraphQL evaluation Items: ${itemCount}`);
 
-  const plexusCli = resolvePlexusCli();
+  const primusCli = resolvePrimusCli();
   const findingsCommand = `cd ${repoRoot} && node -r ts-node/register scripts/scan-findings.ts --root {root}`;
   const result = spawnSync(
-    plexusCli,
+    primusCli,
     [
       "evaluate",
       "accuracy",
@@ -702,12 +702,12 @@ async function main(): Promise<void> {
       cwd: workDir,
       env: {
         ...process.env,
-        PLEXUS_API_URL: `${graphqlUrl}/graphql`,
-        PLEXUS_GRAPHQL_AUTH_MODE: "api_key",
-        PLEXUS_API_KEY: "local-eval-key",
-        PLEXUS_ACCOUNT_ID: ACCOUNT_ID,
-        PLEXUS_ACCOUNT_KEY: ACCOUNT_KEY,
-        PLEXUS_SOURCE_FINDINGS_COMMAND: findingsCommand,
+        PRIMUS_API_URL: `${graphqlUrl}/graphql`,
+        PRIMUS_GRAPHQL_AUTH_MODE: "api_key",
+        PRIMUS_API_KEY: "local-eval-key",
+        PRIMUS_ACCOUNT_ID: ACCOUNT_ID,
+        PRIMUS_ACCOUNT_KEY: ACCOUNT_KEY,
+        PRIMUS_SOURCE_FINDINGS_COMMAND: findingsCommand,
       },
       encoding: "utf8",
       maxBuffer: 32 * 1024 * 1024,
@@ -718,7 +718,7 @@ async function main(): Promise<void> {
   writeFileSync(join(workDir, "evaluate.log"), output, "utf8");
   if (result.status !== 0) {
     throw new Error(
-      `plexus evaluate accuracy failed (exit ${result.status}). See ${join(workDir, "evaluate.log")}\n${output.slice(-8000)}`,
+      `primus evaluate accuracy failed (exit ${result.status}). See ${join(workDir, "evaluate.log")}\n${output.slice(-8000)}`,
     );
   }
 

@@ -29,7 +29,7 @@ import type {
   BenchmarkManifest,
 } from "../../tests/benchmark/schema";
 import { resolveAccountId } from "../../scripts/import-gold-annotations";
-import { buildLocalGraphqlChildEnv } from "./plexus-runtime";
+import { buildLocalGraphqlChildEnv } from "./primus-runtime";
 
 setDefaultTimeout(60_000);
 
@@ -257,7 +257,7 @@ function runImport(fixtureDir: string, baseUrl: string): void {
       cwd: repoRoot,
       env: {
         ...process.env,
-        PLEXUS_ACCOUNT_ID: resolveAccountId(),
+        PRIMUS_ACCOUNT_ID: resolveAccountId(),
       },
       encoding: "utf8",
     },
@@ -401,7 +401,7 @@ Given("a canonical gold annotation in git YAML", function () {
   w.annotationFilePath = loaded.annotationFilePath;
 });
 
-Given("a local Plexus GraphQL server", async function () {
+Given("a local Primus GraphQL server", async function () {
   const w = getWorld(this);
   w.dataDir = mkdtempSync(join(tmpdir(), "dataparade-gold-import-graphql-"));
   w.port = await findFreePort();
@@ -449,7 +449,7 @@ When("I import again", function () {
   runImport(w.fixtureDir, w.baseUrl);
 });
 
-Then("a Plexus Item exists with ground truth Yes", async function () {
+Then("a Primus Item exists with ground truth Yes", async function () {
   const w = getWorld(this);
   assert.ok(w.baseUrl, "GraphQL base URL must be set");
   assert.ok(w.annotation, "annotation must be set");
@@ -507,7 +507,7 @@ Then(
   },
 );
 
-Then("the Plexus Item matches the git annotation", async function () {
+Then("the Primus Item matches the git annotation", async function () {
   const w = getWorld(this);
   assert.ok(w.baseUrl, "GraphQL base URL must be set");
   assert.ok(w.annotation, "annotation must be set");
