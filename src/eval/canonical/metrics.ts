@@ -1,4 +1,9 @@
-import { assignOneToOne } from "./assignment";
+import {
+  assignDataFlowsOneToOne,
+  assignDataItemsOneToOne,
+  assignOccurrencesOneToOne,
+  assignOneToOne,
+} from "./assignment";
 import type { AssignmentResult } from "./assignment";
 import type {
   AcceptedCanonicalGoldExpectation,
@@ -47,7 +52,16 @@ export function computeStrictRecall(
   findings: Array<CanonicalScannerFinding & { id: string }>,
 ): StrictRecallResult {
   const positives = expectations.filter(isAccepted);
-  return computeStrictRecallFromAssignment(positives, assignOneToOne(positives, findings));
+  const layer = positives[0]?.identity.layer;
+  const assignment =
+    layer === "data-items"
+      ? assignDataItemsOneToOne(positives, findings)
+      : layer === "occurrences"
+        ? assignOccurrencesOneToOne(positives, findings)
+      : layer === "data-flows"
+        ? assignDataFlowsOneToOne(positives, findings)
+      : assignOneToOne(positives, findings);
+  return computeStrictRecallFromAssignment(positives, assignment);
 }
 
 export function computeStrictRecallFromAssignment(

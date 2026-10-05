@@ -1,0 +1,36 @@
+import type { PiiSignalHit } from "../../../../src/pii-signals/match-pii-signals";
+import { occurrenceIdentity } from "../../../../src/eval-layers/identities";
+import type { LayerFinding } from "../../types";
+import {
+  personalDataFindingToLayerFinding,
+  scanCanonicalPersonalDataLayer,
+  scanFixturePersonalDataLayer,
+} from "../personal-data-adapter";
+
+export { personalDataFindingToLayerFinding };
+
+export function occurrenceHitToLayerFinding(hit: PiiSignalHit): LayerFinding {
+  return personalDataFindingToLayerFinding({
+    subjectKey: occurrenceIdentity(
+      hit.id,
+      hit.evidence.filePath,
+      hit.evidence.startLine,
+    ),
+    labels: [...hit.labels],
+    evidenceLocations: [
+      {
+        filePath: hit.evidence.filePath,
+        startLine: hit.evidence.startLine,
+        endLine: hit.evidence.endLine,
+      },
+    ],
+  });
+}
+
+export async function scanFixtureOccurrences(fixture: string) {
+  return scanFixturePersonalDataLayer(fixture, "occurrences");
+}
+
+export async function scanCanonicalOccurrences(fixture: string) {
+  return scanCanonicalPersonalDataLayer(fixture, "occurrences");
+}

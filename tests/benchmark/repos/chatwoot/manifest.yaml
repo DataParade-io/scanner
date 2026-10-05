@@ -1,0 +1,31 @@
+repository: chatwoot/chatwoot
+commit: 80086e5afabc15c9b3803ffbc5e2f25f9469af11
+license: MIT
+scope:
+  include:
+    - app/
+    - lib/
+    - config/
+    - db/schema.rb
+  exclude:
+    - path: app/javascript/
+      reason: Vue dashboard, widget, portal and SDK frontend bundle; not the Rails app (held-out email and phone gold KDATAP-973b69)
+    - path: app/assets/
+      reason: administrate stylesheets and admin script assets; not labeled (KDATAP-973b69)
+    - path: config/locales/
+      reason: translation catalogs (en.yml plus Crowdin-synced locales); not labeled (KDATAP-973b69)
+    - path: lib/seeders/
+      reason: sample data generators for demo accounts (seed fixtures); not labeled (KDATAP-973b69)
+    - path: lib/test_data/
+      reason: load-test data generators (test fixtures); not labeled (KDATAP-973b69)
+coverage:
+  layers:
+    - occurrences
+  languages:
+    - ruby
+  domains:
+    - customer_support
+    - messaging
+    - identity
+selection_rationale: Held-out Rails customer-support platform (KDATAP-973b69) whose agents, contacts, email channels and SMS/WhatsApp channels store email addresses and phone numbers in separate tables.
+annotation_version: 4

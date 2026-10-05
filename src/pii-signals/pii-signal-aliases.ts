@@ -59,6 +59,12 @@ export const PII_SIGNAL_ALIASES: Readonly<Record<string, string>> = {
   // Go / framework-specific compound tokens
   fieldnameemail: "email",
 
+  // Accessor methods that imply stored personal-data fields
+  getemail: "email",
+  get_email: "email",
+  getpassword: "password",
+  get_password: "password",
+
   // Bare field name — matched only with declaration context (see CONTEXT_GATED_ADDRESS_TOKENS)
   address: "address",
 };
@@ -124,7 +130,8 @@ export function isBareAddressFieldDeclaration(
     /\baddress\s*[=:;]/.test(line) ||
     /\b(?:String|CharField|TextField|varchar|text)\s+address\b/i.test(line) ||
     /\baddress\s*=\s*models\./i.test(line) ||
-    /\bprivate\s+\w+\s+address\s*;/.test(line)
+    /\bprivate\s+\w+\s+address\s*;/.test(line) ||
+    /\bvalidates(?:_\w+)*\s+:\w*address\b/i.test(line)
   );
 }
 
@@ -177,6 +184,57 @@ function suffixAliasRuleId(normalizedToken: string): string | undefined {
   return undefined;
 }
 
+/**
+ * Compound names that end in the email concept hold an address: `recipient_email`,
+ * `customerEmail`, `to_emails`, `billing_email_address`. The line regex misses them
+ * because `_` is a word character (KDATAP-c8a46a).
+ */
+function emailSuffixRuleId(token: string): string | undefined {
+  const parts = splitCamelCaseParts(token);
+  if (parts.length < 2) return undefined;
+  const last = parts[parts.length - 1];
+  const lastTwo = parts.slice(-2).join("_");
+  return last === "email" || last === "emails" || lastTwo === "email_address" || lastTwo === "email_addresses"
+    ? "email"
+    : undefined;
+}
+
+/**
+ * First words of flag and action names (`hideOrganizerEmail`, `noEmail`, `sendAwaitingPaymentEmail`,
+ * `normalizeEmail`). Getters (`getDefaultEmail()`) and checks (`isEmail`, `validateEmail`) are
+ * left out: in the labeled corpus they return or declare the address.
+ */
+const ACTION_OR_FLAG_FIRST_WORD = new Set([
+  "has", "can", "should", "no", "hide", "show", "send", "set", "normalize", "disable", "enable", "use",
+  "format", "extract", "fetch", "create", "update", "delete", "build", "handle", "mask", "sanitize", "allow", "skip", "resend",
+]);
+
+/** For phone, checks name a test too (`isMobile`, `isValidPhoneNumber`, `ensureValidPhoneNumber`). */
+const PHONE_CHECK_FIRST_WORD = new Set(["is", "ensure", "validate"]);
+
+function namesActionOrType(token: string, ruleId?: string): boolean {
+  const parts = splitCamelCaseParts(token);
+  if (ruleId === "phone_number" && parts.length > 1 && PHONE_CHECK_FIRST_WORD.has(parts[0])) return true;
+  // A bare `mail` (`sendMail`) is governed by the mail-object rule below.
+  const conceptWord = parts.some((part) => /^(?:emails?|phones?|mobile)$/.test(part));
+  return parts.length > 1 && conceptWord && ACTION_OR_FLAG_FIRST_WORD.has(parts[0]);
+}
+
+/** Last words that make a phone-word identifier name something other than a phone number. */
+const NOT_PHONE_LAST_WORD = new Set(["contact", "contacts", "format", "at", "webview", "sdk", "base", "view", "step", "country", "schema"]);
+
+/** A single `mail`, or a `mail` compound naming an address (`mail_from`, `reply_to_mail`). */
+function MAIL_ADDRESS_COMPOUND(token: string): boolean {
+  const parts = splitCamelCaseParts(token);
+  return parts.length === 1 || parts.some((part) => MAIL_ADDRESS_WORD.has(part));
+}
+const MAIL_ADDRESS_WORD = new Set(["from", "to", "address", "addresses", "sender", "recipient", "recipients", "cc", "bcc", "reply"]);
+/** A line that reads or sets an address field (`emailOptions.from`, `to:`) next to a mail compound. */
+const MAIL_ADDRESS_ON_LINE = /(?:\.|\[\s*['"]|\b)(?:from|to|cc|bcc|reply_?to|sender)\b(?:['"]\s*\])?(?!\s*\()/i;
+
+/** `mail` used as a constant, a call, or an object whose member is not an address list. */
+const MAIL_OBJECT_USE = /^\s*(?:::|\(|\.(?!(?:to|from|cc|bcc|reply_to|sender|recipients)\b))/;
+
 export function resolveAliasRuleIdsForToken(
   token: string,
   line: string,
@@ -184,6 +242,8 @@ export function resolveAliasRuleIdsForToken(
   filePath: string,
 ): string[] {
   const ruleIds = new Set<string>();
+  const suffixRule = emailSuffixRuleId(token);
+  if (suffixRule && !namesActionOrType(token, suffixRule)) ruleIds.add(suffixRule);
   for (const key of identifierLookupKeys(token)) {
     const ruleId = lookupAliasRuleId(key) ?? suffixAliasRuleId(key);
     if (!ruleId) {
@@ -199,6 +259,35 @@ export function resolveAliasRuleIdsForToken(
       CONTEXT_GATED_PASSWORD_TOKENS.has(key) &&
       !isPlainPasswordFieldDeclaration(line, filePath)
     ) {
+      continue;
+    }
+    // A phone word inside a longer name that ends in something else names that thing
+    // (`existing_phone_number_contact`, `phone_number_format`, `allow_mobile_webview`), not a
+    // phone number. Names ending in a holder of the value (`phone_source_id`, `phone_info`,
+    // `PHONE_NUMBER_FIELD`) still count.
+    // A multi-word PascalCase name (`MFAEnrollPhoneParams`, `MobileOtpType`) is a type or
+    // class, never a phone value; ALL_CAPS constants (`ATTENDEE_PHONE_NUMBER_FIELD`) still count.
+    if (
+      ruleId === "phone_number" &&
+      (NOT_PHONE_LAST_WORD.has(splitCamelCaseParts(token).slice(-1)[0] ?? "") ||
+        (/^[A-Z][A-Za-z0-9]*[a-z][A-Za-z0-9]*$/.test(token) && splitCamelCaseParts(token).length > 1))
+    ) {
+      continue;
+    }
+    // A multi-word name that starts with a flag or action word names a flag or a function
+    // (`hideOrganizerEmail`, `noEmail`, `normalizeEmail`, `sendSmsToPhone`), not a value.
+    if ((ruleId === "email" || ruleId === "phone_number") && namesActionOrType(token, ruleId)) {
+      continue;
+    }
+    // `mail` inside a longer name is a mail message (`inbound_mail`, `mail_subject`,
+    // `html_mail_body`) unless an address word goes with it (`mail_from`, `sender_mail`) or
+    // the line reads an address field (`SendMailOptions['from']`).
+    if (key === "mail" && !MAIL_ADDRESS_COMPOUND(token) && !MAIL_ADDRESS_ON_LINE.test(line)) {
+      continue;
+    }
+    // A bare `mail` used as an object or constant (`Mail::Field`, `mail.to`, `mail(`) is
+    // a mail message or mailer, not an address.
+    if (key === "mail" && MAIL_OBJECT_USE.test(line.slice(tokenStartIndex + token.length))) {
       continue;
     }
     ruleIds.add(ruleId);

@@ -58,14 +58,17 @@ Gherkin specs exercise Primus-backed recall; Jest fixture eval under `tests/eval
 
 | Scenario file | Layer(s) | What it proves |
 |---------------|----------|----------------|
-| `scanner-recall-evaluation.feature` | Mentions (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
-| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / mentions / data items | Gold Items evaluated with Raw Hit Identity, Mention Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Mention Span (`SubjectSpanOverlapScore`) via layer findings commands; unread skip and ingested miss behavior |
+| `scanner-recall-evaluation.feature` | Occurrences (headline) | Gold Items evaluated with Span Overlap; unread files omitted from denominator; ingested misses count |
+| `scanner-layer-evaluation.feature` | Raw hits (diagnostic) / occurrences / data items | Gold Items evaluated with Raw Hit Identity, Occurrence Identity, Subject Identity (`SubjectIdentityScore`), Raw Hit Span, and Occurrence Span (`SubjectSpanOverlapScore`) via layer findings commands; unread skip and ingested miss behavior |
 | `primus-eval.feature` | Harness separation | Gherkin is the Primus spec source; Jest patterns stay under `tests/` |
 | `scan-findings.feature` | Components / pipeline | Scanner output shape for local fixtures |
 | `gold-import.feature` | Gold corpus | Annotations import as labeled Items |
+| `ground-truth-repo-evaluation.feature` | Data items (headline) | Pinned GitHub corpus packets (easy-school, vgs-django) yield an SSN data item; live scans skip unless materialized |
 | `canonical-evaluation-representation.feature` | Canonical IR contract | Versioned representation behaviour spec (KDATAP-b18135); scenarios pending until KDATAP-06634c |
 
 `scanner-layer-evaluation` scenarios are skipped automatically when a required Primus score class (SubjectIdentityScore, SubjectSpanOverlapScore, or SourceSpanOverlapScore) is not installed.
+
+`ground-truth-repo-evaluation` live-scan scenarios are tagged `@requires-materialized-corpus` and skip when `tests/benchmark/.cache/repos/<key>@<commit>/` is missing. Run `pnpm run benchmark:materialize easy-school` (or `vgs-django`) to execute them. Corpus-declaration scenarios always run.
 
 ### Layer evaluation scores and findings bridge
 
@@ -75,9 +78,9 @@ Layer evaluation invokes Primus scores **directly as Python modules** (no GraphQ
 |-------|--------------|-----------------|------------------|
 | Subject Identity | SubjectIdentityScore | `data_item:` | `scripts/scan-layer-findings.ts` |
 | Raw Hit Identity | SubjectIdentityScore | `raw_hit:` | `scripts/scan-layer-findings.ts` |
-| Mention Identity | SubjectIdentityScore | `mention:` | `scripts/scan-layer-findings.ts` |
+| Occurrence Identity | SubjectIdentityScore | `occurrence:` | `scripts/scan-layer-findings.ts` |
 | Raw Hit Span | SubjectSpanOverlapScore | `raw_hit:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
-| Mention Span | SubjectSpanOverlapScore | `mention:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
+| Occurrence Span | SubjectSpanOverlapScore | `occurrence:` (span overlap) | `features/scripts/flatten-span-findings.ts` |
 
 Identity scores match on `subjectKey` only. Span scores require flattened `filePath` / `startLine` / `endLine` on each finding; `flatten-span-findings.ts` expands `evidenceLocations` from the layer scanner payload.
 
@@ -92,7 +95,7 @@ Representative parity (not one scenario per Jest case):
 | Identity-only evidence | `data-item-jvm-username-identity-only` | `data-item-identity-only.csv` (evidence line ≠ hit span) |
 | Multi-file rollup | `data-item-jvm-username-multi-file` | `data-item-multi-file.csv` on `repos/jvm-manifests-basic` |
 | Unread skip | unread detection in eval harness | `raw-hit-identity-unread.csv`, `raw-hit-unread.csv` |
-| Span overlap hit | mention/raw span positives | `raw-hit-hit.csv`, `mention-hit.csv` |
+| Span overlap hit | occurrence/raw span positives | `raw-hit-hit.csv`, `occurrence-hit.csv` |
 | Span ingested miss | non-overlapping gold span | `raw-hit-miss.csv` |
 
 Fixtures live under `features/fixtures/scanner-recall-eval/` (datasets, scorecards, and `repos/` for Jest-parity source trees).
@@ -104,7 +107,7 @@ Fixtures live under `features/fixtures/scanner-recall-eval/` (datasets, scorecar
 | Layer | Role | Test path |
 |-------|------|-----------|
 | Raw hits | Diagnostic | `tests/eval/layers/raw-hits/eval.test.ts` |
-| Mentions | Headline | `tests/eval/layers/mentions/eval.test.ts` |
+| Occurrences | Headline | `tests/eval/layers/occurrences/eval.test.ts` |
 | Data items | Headline | `tests/eval/layers/data-items/eval.test.ts` |
 | Components | Headline | `tests/eval/layers/components/eval.test.ts` |
 | Data flows | Headline | `tests/eval/layers/data-flows/eval.test.ts` |

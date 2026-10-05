@@ -1,0 +1,42 @@
+{
+  "id": "KDATAP-90ef14cd-8e7b-4924-95c2-5993fc91724a",
+  "title": "Tighten intra-component flow detection precision (47 FPs at 1 TP)",
+  "description": "PR #66 landed the intra-component lineage detector: data-flows recall 0->1/158, precision 1/48 (47 false positives). Tighten emission to reduce FPs while keeping the 1 TP (pocketbase-password-to-bcrypt-hash) and not regressing other layers. Investigate the 47 FPs by repo (ghost 10, pocketbase 7, directus/keycloak/posthog-user/saleor/strapi 4 each, etc.). Likely candidates: pattern specificity, dedupe, disposition gating. Measure against the pinned baseline; recall must not drop below 1/158, precision should rise. Do not change gold.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-fad94ad0-1440-440d-93e7-409970b098eb",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "a938d08f-cb73-474a-9bd5-db23dfc68426",
+      "author": "home",
+      "text": "Scope expanded per manager plan: widen intra-component detection to all 158 gold flows + tighten the 47 FPs in one slice. Two levers: (1) add 8 pattern groups + 2 systemic regex fixes, (2) teach component resolution for webapi.xml, routes.rb, modules/*.ts, Rails models. Target recall 1/158 -> 40+, precision holds. Dispatching implementer.",
+      "created_at": "2026-09-03T15:36:17.526771Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "4860f014-0bf0-41a4-bae0-613032f25819",
+      "author": "home",
+      "text": "PR #67 opened. Recall 0->4/158 (good) but precision cratered: 246 findings, 242 FPs. Send-back: keep the 4 TPs, cut the 246 denominator dramatically. Big gain (40+) blocked on components layer (next slice). Tighten to mergeable precision, then merge the small gain.",
+      "created_at": "2026-09-03T18:11:30.571033Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "196e748e-0389-4392-8ca0-eea5e9cb9272",
+      "author": "home",
+      "text": "Merged PR #67 to develop. Data-flows recall 0->4/158 (2.5%), precision 4/107 (3.74%, beats PR #66). 4 genuine TPs (ghost, nopcommerce x2, pocketbase). Other layers unchanged. 103 FPs are technical debt (ghost 25 heaviest). Big jump (40+) blocked on components slice (next). Closing.",
+      "created_at": "2026-09-03T20:34:47.472948Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-03T13:43:36.081133Z",
+  "updated_at": "2026-09-03T20:34:47.492108Z",
+  "closed_at": "2026-09-03T20:34:47.492108Z",
+  "right_now_summary": "PR #67 raised recall to 4/158, but 103 false positives remain and the larger component-resolution slice is next.",
+  "right_now_updated_at": "2026-09-09T13:02:48.317047Z",
+  "custom": {}
+}

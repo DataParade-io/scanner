@@ -2,19 +2,43 @@ export {
   createDefaultScanConfiguration,
   scan,
 } from "./core/pipeline/orchestrator";
-export type { OrchestratorScanResult } from "./core/pipeline/orchestrator-result";
+export type {
+  OrchestratorScanResult,
+  ScanDataItem,
+  ScanOccurrence,
+} from "./core/pipeline/orchestrator-result";
 
 export {
   emitScanProgress,
   finalizeDeterministicScanResult,
   runDeterministicScanPhases,
 } from "./core/pipeline/deterministic-scan";
+export { enrichOrchestratorResultWithPersonalDataLayers } from "./core/pipeline/enrich-personal-data-layers";
+export { buildScanPersonalDataLayers } from "./core/pipeline/build-scan-personal-data-layers";
 export type {
   DeterministicScanWork,
   FinalizeDeterministicScanInput,
 } from "./core/pipeline/deterministic-scan";
 
 export { buildDiagramGraphFromScanResult, selectPrimaryDataAction } from "./core/pipeline/graph-mapping";
+export {
+  runGraphify,
+  loadGraphifyGraph,
+  type GraphifyGraph,
+  type GraphifyNode,
+  type GraphifyLink,
+  type StructureGraphConfig,
+  type StructureGraphInfo,
+} from "./structure/graphify";
+export {
+  buildDataParadeGraph,
+  writeKnowledgeGraph,
+  DATAPARADE_GRAPH_FILE,
+  DATAPARADE_GRAPH_SCHEMA,
+  type DataParadeGraph,
+  type DataParadeNode,
+  type DataParadeLink,
+} from "./graph/build-dataparade-graph";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
 export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";

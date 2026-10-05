@@ -1,0 +1,415 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-3ae9a1
+  files:
+  - ghost/core/core/server/services/email-address/email-address-parser.ts
+annotations:
+- id: ghost-email-address-parser-L3
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type definition named after the concept; declares structure but does not handle an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-email-address-parser-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing a type field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L6
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing an optional name field associated with email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc docstring describing what the parse function does.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter tag describing the email input parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L13
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return tag describing what the parse function returns.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L15
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter declaration that holds an email address string; the parameter outranks the function name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 15
+      kind: parameter
+    type_annotation: string
+    owner: ghost/core
+- id: ghost-email-address-parser-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validates the email parameter to ensure it is a non-empty string.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 15
+      kind: parameter
+    owner: ghost/core
+    type_annotation: string
+- id: ghost-email-address-parser-L20
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 20
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email parameter to the addressparser function for parsing.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 15
+      kind: parameter
+    owner: ghost/core
+    type_annotation: string
+- id: ghost-email-address-parser-L40
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc docstring describing what the stringify function does.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L41
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter tag describing the email input parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L42
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 42
+    end_line: 42
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return tag describing what the stringify function returns.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L44
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 44
+    end_line: 44
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter declaration that holds an EmailAddress object; the parameter outranks the function name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 44
+      kind: parameter
+    type_annotation: Readonly<EmailAddress>
+    owner: ghost/core
+- id: ghost-email-address-parser-L45
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 45
+    end_line: 45
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the name field of the email parameter; not reading the address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-parser-L46
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 46
+    end_line: 46
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the address field from the EmailAddress parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 44
+      kind: parameter
+    owner: ghost/core
+    type_annotation: Readonly<EmailAddress>
+- id: ghost-email-address-parser-L49
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads and processes the name field; not the address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-address-parser-L54
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment explaining an issue with certain email addresses in Gmail.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-address-parser-L70
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+    start_line: 70
+    end_line: 70
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address field into the formatted string template.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-address/email-address-parser.ts
+      line: 44
+      kind: parameter
+    owner: ghost/core
+    type_annotation: Readonly<EmailAddress>

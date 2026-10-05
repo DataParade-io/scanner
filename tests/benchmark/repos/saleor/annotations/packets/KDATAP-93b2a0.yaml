@@ -1,0 +1,2423 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-93b2a0
+  files:
+  - saleor/plugins/user_email/tasks.py
+annotations:
+- id: saleor-tasks-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports the send_email function from the email_common module; a module import, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-user_email-tasks-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name that mentions email sending, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L13
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 13
+    end_line: 13
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address to send to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 13
+      kind: parameter
+    owner: saleor
+    group: customer-account-email
+- id: saleor-user_email-tasks-L15
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig is a class name for configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L17
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 17
+    end_line: 17
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email; the function name itself doesn't hold an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L18
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 18
+    end_line: 18
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument name for configuration parameter, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 19
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address list.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 19
+      kind: field
+    owner: saleor
+    group: customer-account-email
+- id: saleor-user_email-tasks-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 27
+      kind: parameter
+    owner: saleor
+    group: customer-account-email
+- id: saleor-user_email-tasks-L29
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig is a class name for configuration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument name for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 33
+    end_line: 33
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 33
+      kind: field
+    owner: saleor
+    group: customer-account-email
+- id: saleor-user_email-tasks-L45
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 45
+    end_line: 45
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email change request task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L46
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 46
+    end_line: 46
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 46
+      kind: parameter
+    owner: saleor
+    group: account-change-email-new-address
+- id: saleor-tasks-L49
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L51
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 51
+    end_line: 51
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L52
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 52
+    end_line: 52
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L53
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 53
+    end_line: 53
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 53
+      kind: field
+    owner: saleor
+    group: account-change-email-new-address
+- id: saleor-tasks-L59
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 59
+    end_line: 59
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function/method name for customer email change event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L62
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 62
+    end_line: 62
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key old_email holds the previous email address value.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 62
+      kind: field
+    owner: saleor
+    group: customer-email-change-event-old-email
+- id: saleor-tasks-L63
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: new_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 63
+    end_line: 63
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key new_email holds the new email address being requested.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 63
+      kind: field
+    owner: saleor
+    group: customer-email-change-event-new-email
+- id: saleor-tasks-L69
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 69
+    end_line: 69
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for email change notification task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L70
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 70
+    end_line: 70
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address to notify.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 70
+      kind: parameter
+    owner: saleor
+    group: account-change-email-old-address
+- id: saleor-tasks-L73
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 73
+    end_line: 73
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L75
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 75
+    end_line: 75
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L76
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 76
+    end_line: 76
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L77
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 77
+      kind: field
+    owner: saleor
+    group: account-change-email-old-address
+- id: saleor-tasks-L83
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: old_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 83
+    end_line: 83
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key old_email holds the previous email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 83
+      kind: field
+    owner: saleor
+    group: customer-email-change-event-old-email
+- id: saleor-tasks-L84
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: new_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 84
+    end_line: 84
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key new_email holds the new email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 84
+      kind: field
+    owner: saleor
+    group: customer-email-change-event-new-email
+- id: saleor-tasks-L87
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: customer_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 87
+    end_line: 87
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for customer email changed event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L93
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for account deletion email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L94
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 94
+    end_line: 94
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address for confirmation.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 94
+      kind: parameter
+    owner: saleor
+    group: customer-account-email
+- id: saleor-tasks-L96
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 96
+    end_line: 96
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L97
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L98
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L99
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 99
+    end_line: 99
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 99
+      kind: field
+    owner: saleor
+    group: customer-account-email
+- id: saleor-tasks-L107
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 107
+    end_line: 107
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for password setting email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 108
+    end_line: 108
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 108
+      kind: parameter
+    owner: saleor
+    group: customer-account-email
+- id: saleor-user_email-tasks-L110
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 110
+    end_line: 110
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L111
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 111
+    end_line: 111
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L112
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 112
+    end_line: 112
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-user_email-tasks-L113
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 113
+    end_line: 113
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 113
+      kind: field
+    owner: saleor
+    group: customer-account-email
+- id: saleor-tasks-L121
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 121
+    end_line: 121
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 121
+      kind: parameter
+    owner: saleor
+    group: gift-card-notification-recipient-email
+- id: saleor-tasks-L122
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 122
+    end_line: 122
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L123
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 123
+    end_line: 123
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L124
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 124
+    end_line: 124
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L125
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 125
+    end_line: 125
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 125
+      kind: field
+    owner: saleor
+    group: gift-card-notification-recipient-email
+- id: saleor-tasks-L130
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 130
+    end_line: 130
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable assignment for email data dictionary, not directly an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L134
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key email holds the recipient's email address from payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 134
+      kind: field
+    owner: saleor
+    group: gift-card-notification-recipient-email
+- id: saleor-tasks-L138
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 138
+    end_line: 138
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for gift card resent event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L140
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_data
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 140
+    end_line: 140
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for gift card sent event.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L144
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 144
+    end_line: 144
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 144
+      kind: parameter
+    owner: saleor
+- id: saleor-tasks-L146
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 146
+    end_line: 146
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L147
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 147
+    end_line: 147
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L148
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 148
+    end_line: 148
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L149
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 149
+    end_line: 149
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 149
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L159
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 159
+    end_line: 159
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 159
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L165
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 165
+    end_line: 165
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument email passes the recipient's email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 165
+      kind: field
+    owner: saleor
+- id: saleor-tasks-L170
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 170
+    end_line: 170
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for order confirmation email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L171
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 171
+    end_line: 171
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 171
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L173
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 173
+    end_line: 173
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Docstring prose about sending email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-tasks-L174
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 174
+    end_line: 174
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L175
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 175
+    end_line: 175
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L176
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 176
+    end_line: 176
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L177
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 177
+    end_line: 177
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 177
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L186
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 186
+    end_line: 186
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 186
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L191
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 191
+    end_line: 191
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for fulfillment confirmation email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L192
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 192
+    end_line: 192
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 192
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L194
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 194
+    end_line: 194
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L195
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 195
+    end_line: 195
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L196
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 196
+    end_line: 196
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L197
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 197
+    end_line: 197
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 197
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L207
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 207
+    end_line: 207
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 207
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L212
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 212
+    end_line: 212
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for fulfillment update email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L213
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 213
+    end_line: 213
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 213
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L215
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 215
+    end_line: 215
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L216
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 216
+    end_line: 216
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L217
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 217
+    end_line: 217
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L218
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 218
+    end_line: 218
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 218
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L226
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 226
+    end_line: 226
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for payment confirmation email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L227
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 227
+    end_line: 227
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 227
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L229
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 229
+    end_line: 229
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L230
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 230
+    end_line: 230
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L231
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 231
+    end_line: 231
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L232
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 232
+    end_line: 232
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 232
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L241
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 241
+    end_line: 241
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 241
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L246
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 246
+    end_line: 246
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 246
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L247
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 247
+    end_line: 247
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L248
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 248
+    end_line: 248
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L249
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 249
+    end_line: 249
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L250
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 250
+    end_line: 250
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 250
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L260
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 260
+    end_line: 260
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 260
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L265
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 265
+    end_line: 265
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The task's recipient_email parameter holds the customer's address the email is sent to.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 265
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L266
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 266
+    end_line: 266
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L267
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 267
+    end_line: 267
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L268
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 268
+    end_line: 268
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L269
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 269
+    end_line: 269
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 269
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L279
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 279
+    end_line: 279
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 279
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L284
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 284
+    end_line: 284
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for order confirmed email task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-user_email-tasks-L285
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 285
+    end_line: 285
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Parameter recipient_email holds the email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 285
+      kind: parameter
+    owner: saleor
+    group: order-customer-email
+- id: saleor-user_email-tasks-L287
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 287
+    end_line: 287
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailConfig class.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L288
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 288
+    end_line: 288
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to send_email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-tasks-L289
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_config
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 289
+    end_line: 289
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Keyword argument for configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: saleor
+- id: saleor-tasks-L290
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 290
+    end_line: 290
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument recipient_list passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 290
+      kind: field
+    owner: saleor
+    group: order-customer-email
+- id: saleor-tasks-L300
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/user_email/tasks.py
+    start_line: 300
+    end_line: 300
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Keyword argument customer_email passes the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: saleor/plugins/user_email/tasks.py
+      line: 300
+      kind: field
+    owner: saleor
+    group: order-customer-email

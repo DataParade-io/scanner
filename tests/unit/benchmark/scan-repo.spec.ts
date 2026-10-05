@@ -2,6 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
+import * as fileSystem from "../../../src/ingest/file-system";
 import * as personalDataInventory from "../../../src/eval-layers/personal-data-inventory";
 import * as matchPiiSignals from "../../../src/pii-signals/match-pii-signals";
 import { scanRepoByManifestLayers } from "../../benchmark/scan-repo";
@@ -22,22 +23,23 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
 
   it("matches personal-data signals once and projects all requested layers", async () => {
     const inventorySpy = jest.spyOn(personalDataInventory, "buildPersonalDataInventory");
-    const matchSpy = jest.spyOn(matchPiiSignals, "matchPiiSignalsInFiles");
+    const matchSpy = jest.spyOn(matchPiiSignals, "matchPiiSignalsInFile");
 
     const result = await scanRepoByManifestLayers("fixture", tempDir, [
-      "mentions",
+      "occurrences",
       "raw_hits",
       "data_items",
     ]);
 
     expect(inventorySpy).toHaveBeenCalledTimes(1);
-    expect(matchSpy).toHaveBeenCalledTimes(1);
+    // Once per file, not once per layer; YAML has no comment-stripped second pass.
+    expect(matchSpy).toHaveBeenCalledTimes(2);
 
-    const mentions = result.findings.filter((finding) => finding.layer === "mentions");
+    const occurrences = result.findings.filter((finding) => finding.layer === "occurrences");
     const rawHits = result.findings.filter((finding) => finding.layer === "raw-hits");
     const dataItems = result.findings.filter((finding) => finding.layer === "data-items");
 
-    expect(mentions.length).toBeGreaterThan(0);
+    expect(occurrences.length).toBeGreaterThan(0);
     expect(rawHits.length).toBeGreaterThan(0);
     expect(dataItems.length).toBeGreaterThan(0);
 
@@ -47,5 +49,19 @@ describe("benchmark/scanRepoByManifestLayers personal-data inventory", () => {
         expect.objectContaining({ file_path: "a.yml", start_line: 1, end_line: 1 }),
       ]),
     );
+  });
+
+  it("reuses orchestrator ingest when structural and personal-data layers run together", async () => {
+    fs.writeFileSync(
+      path.join(tempDir, "app.ts"),
+      "export const userEmail = 'user@example.com';\n",
+    );
+    const ingestSpy = jest.spyOn(fileSystem, "ingestFileSystemWithOutcomes");
+    const inventorySpy = jest.spyOn(personalDataInventory, "buildPersonalDataInventory");
+
+    await scanRepoByManifestLayers("fixture", tempDir, ["components", "occurrences"]);
+
+    expect(ingestSpy).toHaveBeenCalledTimes(1);
+    expect(inventorySpy).not.toHaveBeenCalled();
   });
 });

@@ -1,0 +1,1172 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-582087
+  files:
+  - ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+  - ghost/core/core/server/models/email.js
+annotations:
+- id: ghost-email-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name declaration for the Email model; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L6
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name identifying the newsletter emails table, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter query string defining recipient eligibility, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-L26
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing filter update logic, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Conditional checking filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L30
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 30
+    end_line: 30
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Conditional checking filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L38
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 38
+    end_line: 38
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing filter update logic, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-L39
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 39
+    end_line: 39
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Conditional checking filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L40
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L42
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 42
+    end_line: 42
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Conditional checking filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L43
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigning filter value; filter is a flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L53
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailBatches
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 53
+    end_line: 53
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for email batches relationship; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L54
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key ID referencing emails table; an ID is not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for email recipients relationship; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L58
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 58
+    end_line: 58
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Foreign key ID referencing emails table; an ID is not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-L66
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 66
+    end_line: 66
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Constructs event name string; prose for event naming, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-L97
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Emails
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Collection class name declaration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L98
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 98
+    end_line: 98
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model class reference in collection definition; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-L102
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 102
+    end_line: 102
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model registration string literal; class name reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-L103
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Emails
+  evidence:
+    file_path: ghost/core/core/server/models/email.js
+    start_line: 103
+    end_line: 103
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Collection registration string literal; class name reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-email-suppression-list-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionInfo
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef for type annotation; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L10
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressedData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef for type annotation; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionInfo
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc property type annotation; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailNotSuppressedData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef for type annotation; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L22
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: IEmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef union type; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L26
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: IEmailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc typedef for interface; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L29
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: IEmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc implements annotation for interface; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L35
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 35
+    end_line: 35
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name declaration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-suppression-list-L38
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionInfo
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 38
+    end_line: 38
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc type annotation for class field; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L59
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: IEmailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 59
+    end_line: 59
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc implements annotation for interface; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L61
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: AbstractEmailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 61
+    end_line: 61
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Abstract class name declaration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-suppression-list-L63
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L67
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 67
+    end_line: 67
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method parameter holds an email address to be removed from suppression list.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 67
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L72
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 72
+    end_line: 72
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L73
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 73
+    end_line: 73
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L76
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 76
+    end_line: 76
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method parameter holds an email address whose suppression status is queried.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 76
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L81
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 81
+    end_line: 81
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L82
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc return type annotation; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L84
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 84
+    end_line: 84
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Method parameter holds array of email addresses to query suppression status.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 84
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L85
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 85
+    end_line: 85
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Arrow function parameter receives each address from array to query suppression.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 85
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L89
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressedEvent
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 89
+    end_line: 89
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class name declaration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-suppression-list-L92
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 92
+    end_line: 92
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc type annotation for readonly data property; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-email-suppression-list-L105
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 105
+    end_line: 105
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Constructor parameter holds email address extracted from event data object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 105
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L107
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAddress
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 107
+    end_line: 107
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object property key writing the email address value from constructor parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+      line: 105
+      kind: parameter
+    owner: ghost/core
+    group: suppressed-email-address
+- id: ghost-email-suppression-list-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailId
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Object property storing email record ID; IDs are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-suppression-list-L115
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressedEvent
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 115
+    end_line: 115
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Creating instance of EmailSuppressedEvent class; class name reference only.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-email-suppression-list-L123
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: AbstractEmailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 123
+    end_line: 123
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of class name; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-suppression-list-L124
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressionData
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 124
+    end_line: 124
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of class name; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-email-suppression-list-L125
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSuppressedEvent
+  evidence:
+    file_path: ghost/core/core/server/services/email-suppression-list/email-suppression-list.js
+    start_line: 125
+    end_line: 125
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of class name; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core

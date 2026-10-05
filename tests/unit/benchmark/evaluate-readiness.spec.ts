@@ -23,7 +23,7 @@ describe("baseline readiness policy", () => {
       minAcceptedCanonicalCount: 450,
       minDistinctPackets: 25,
     });
-    expect(BASELINE_READINESS_POLICY.layerFloors.mentions).toEqual({
+    expect(BASELINE_READINESS_POLICY.layerFloors.occurrences).toEqual({
       minAcceptedCanonicalCount: 50,
       minDistinctPackets: 15,
     });
@@ -44,7 +44,7 @@ describe("toHeadlineLayer", () => {
   it("maps corpus layer names to headline layers", () => {
     expect(toHeadlineLayer("data_items")).toBe("data-items");
     expect(toHeadlineLayer("data_flows")).toBe("data-flows");
-    expect(toHeadlineLayer("pii_signals")).toBe("mentions");
+    expect(toHeadlineLayer("pii_signals")).toBe("occurrences");
     expect(toHeadlineLayer("components")).toBe("components");
     expect(toHeadlineLayer("raw_hits")).toBeNull();
   });
@@ -53,19 +53,15 @@ describe("toHeadlineLayer", () => {
 describe("collectGoldPopulation layer mapping", () => {
   it("counts accepted canonical data-items and components on develop", () => {
     const population = collectGoldPopulation(BENCHMARK_ROOT);
-    expect(
-      population.byLayer["data-items"].acceptedCanonicalCount,
-    ).toBeGreaterThanOrEqual(100);
-    expect(
-      population.byLayer["data-items"].packetDiversity.distinctPackets,
-    ).toBeGreaterThanOrEqual(12);
-    expect(population.byLayer.components.acceptedCanonicalCount).toBe(390);
-    expect(
-      population.byLayer.components.packetDiversity.distinctPackets,
-    ).toBeGreaterThanOrEqual(25);
-    expect(
-      population.byLayer.mentions.acceptedCanonicalCount,
-    ).toBeGreaterThanOrEqual(50);
+    expect(population.byLayer["data-items"].acceptedCanonicalCount).toBeGreaterThanOrEqual(100);
+    expect(population.byLayer["data-items"].packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
+      12,
+    );
+    expect(population.byLayer.components.acceptedCanonicalCount).toBeGreaterThanOrEqual(390);
+    expect(population.byLayer.components.packetDiversity.distinctPackets).toBeGreaterThanOrEqual(
+      25,
+    );
+    expect(population.byLayer.occurrences.acceptedCanonicalCount).toBeGreaterThanOrEqual(50);
   });
 
   it("counts promoted accepted canonical data-flows", () => {
@@ -83,7 +79,7 @@ describe("checkLayerPopulationFloors", () => {
   it("passes when all floors are met", () => {
     const goldPopulation: GoldPopulationStats = {
       byLayer: {
-        mentions: {
+        occurrences: {
           acceptedCanonicalCount: 79,
           evaluablePositiveCount: 79,
           packetDiversity: { distinctPackets: 22, packetKeys: ["a"] },
@@ -116,7 +112,7 @@ describe("checkLayerPopulationFloors", () => {
   it("reports FLOW_NO_CANONICAL_ACCEPTS when flow subset floor is unmet", () => {
     const goldPopulation: GoldPopulationStats = {
       byLayer: {
-        mentions: {
+        occurrences: {
           acceptedCanonicalCount: 79,
           evaluablePositiveCount: 79,
           packetDiversity: { distinctPackets: 22, packetKeys: [] },

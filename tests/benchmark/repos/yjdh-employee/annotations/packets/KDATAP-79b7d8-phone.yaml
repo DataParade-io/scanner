@@ -1,0 +1,748 @@
+packet:
+  repo: yjdh-employee
+  concept: phone
+  kanbus_issue: KDATAP-79b7d8
+  files:
+    - backend/benefit/applications/api/v1/serializers/application.py
+    - backend/benefit/applications/models.py
+    - backend/benefit/applications/services/application_alteration_csv_report.py
+    - backend/benefit/applications/services/applications_csv_report.py
+    - backend/benefit/applications/services/clone_application.py
+    - backend/benefit/applications/templates/application.html
+    - backend/benefit/applications/templates/application_handler.html
+    - backend/benefit/common/utils.py
+    - backend/benefit/helsinkibenefit/settings.py
+annotations:
+  - id: yjdh-phone-applications-application-L76
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PhoneNumberField
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 76
+      end_line: 76
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phone serializer field class; a type, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L203
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 203
+      end_line: 203
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Application serializer field list exposes and accepts company_contact_person_phone_number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L350
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 350
+      end_line: 350
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: extra_kwargs key configuring the company_contact_person_phone_number serializer field.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L352
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: help_text
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 352
+      end_line: 352
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Help text describing the field; prose, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L498
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 498
+      end_line: 498
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Serializer field declaration for company_contact_person_phone_number (normalised national format), read from and written to Application.company_contact_person_phone_number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/api/v1/serializers/application.py
+        line: 498
+        kind: field
+  - id: yjdh-phone-applications-application-L501
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: help_text
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 501
+      end_line: 501
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Help text describing the field; prose, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L944
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/api/v1/serializers/application.py
+      start_line: 944
+      end_line: 944
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Names company_contact_person_phone_number as a field required before submission; the validation reads that column's value.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-models-L13
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PhoneNumberField
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 13
+      end_line: 13
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phone model field class; a type, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-models-L445
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 445
+      end_line: 445
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Model column definition: the stored Application.company_contact_person_phone_number of the applicant company's contact person."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 445
+        kind: field
+  - id: yjdh-phone-applications-models-L446
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: verbose_name
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 446
+      end_line: 446
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Verbose label of the column defined on the line above; a label, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-models-L1102
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: phone_number
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 1102
+      end_line: 1102
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Model column definition: the stored Employee.phone_number of the employee the application is for."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 1102
+        kind: field
+  - id: yjdh-phone-applications-models-L1103
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: verbose_name
+    evidence:
+      file_path: backend/benefit/applications/models.py
+      start_line: 1103
+      end_line: 1103
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Verbose label of the column defined on the line above; a label, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application_alteration_csv_report-L66
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 66
+      end_line: 66
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Reads application.company_contact_person_phone_number into the billing contact person column of the recovery CSV.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 445
+        kind: field
+  - id: yjdh-phone-applications-application_alteration_csv_report-L101
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: get_csv_cell_list_lines_generator
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 101
+      end_line: 101
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: CSV generator method name ('cell'); not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application_alteration_csv_report-L103
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: get_csv_cell_list_lines_generator
+    evidence:
+      file_path: backend/benefit/applications/services/application_alteration_csv_report.py
+      start_line: 103
+      end_line: 103
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: CSV generator call ('cell'); not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-applications_csv_report-L238
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 238
+      end_line: 238
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: CSV column source selecting Application.company_contact_person_phone_number by name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-applications_csv_report-L265
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: phone_number
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 265
+      end_line: 265
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: CSV column source selecting Employee.phone_number by dotted name.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-applications_csv_report-L505
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: get_csv_cell_list_lines_generator
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 505
+      end_line: 505
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: CSV generator method name ('cell'); not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-applications_csv_report-L507
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: get_csv_cell_list_lines_generator
+    evidence:
+      file_path: backend/benefit/applications/services/applications_csv_report.py
+      start_line: 507
+      end_line: 507
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: CSV generator call ('cell'); not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-clone_application-L69
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/services/clone_application.py
+      start_line: 69
+      end_line: 69
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Clone writes the base application's company_contact_person_phone_number into the new Application row's same column: rows copied within one column are the same item."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 445
+        kind: field
+  - id: yjdh-phone-applications-application_handler-L90
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: Telephone
+    evidence:
+      file_path: backend/benefit/applications/templates/application_handler.html
+      start_line: 90
+      end_line: 90
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Translated field label; not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application_handler-L91
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/templates/application_handler.html
+      start_line: 91
+      end_line: 91
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Handler PDF template renders application.company_contact_person_phone_number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 445
+        kind: field
+  - id: yjdh-phone-applications-application-L86
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: Telephone
+    evidence:
+      file_path: backend/benefit/applications/templates/application.html
+      start_line: 86
+      end_line: 86
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Translated field label; not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/applications
+  - id: yjdh-phone-applications-application-L87
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: company_contact_person_phone_number
+    evidence:
+      file_path: backend/benefit/applications/templates/application.html
+      start_line: 87
+      end_line: 87
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: Application PDF template renders application.company_contact_person_phone_number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/applications
+      declaration:
+        file_path: backend/benefit/applications/models.py
+        line: 445
+        kind: field
+  - id: yjdh-phone-common-utils-L11
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: phonenumber_field
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 11
+      end_line: 11
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the phonenumber_field library module; not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/common
+  - id: yjdh-phone-common-utils-L12
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PhoneNumberField
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 12
+      end_line: 12
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Imports the library phone serializer field class; a type, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: import_specifier
+      owner: backend/benefit/common
+  - id: yjdh-phone-common-utils-L209
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PhoneNumberField
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 209
+      end_line: 209
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Class declaration of the project's phone serializer field; a type name, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: type_name
+      owner: backend/benefit/common
+  - id: yjdh-phone-common-utils-L210
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: value
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 210
+      end_line: 210
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Added beyond the token candidates: to_representation parameter value is the phone number being serialized; the class is used only by the company_contact_person_phone_number serializer field (serializers/application.py:498)."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/common
+      declaration:
+        file_path: backend/benefit/common/utils.py
+        line: 210
+        kind: parameter
+  - id: yjdh-phone-common-utils-L211
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: value
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 211
+      end_line: 211
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Added beyond the token candidates: tests the contact person phone value for emptiness."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/common
+      declaration:
+        file_path: backend/benefit/common/utils.py
+        line: 210
+        kind: parameter
+  - id: yjdh-phone-common-utils-L213
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: value
+    evidence:
+      file_path: backend/benefit/common/utils.py
+      start_line: 213
+      end_line: 213
+    expected:
+      status: positive
+      labels:
+        - phone_number
+    rationale: "Added beyond the token candidates: returns the contact person phone in national format (0 + national_number)."
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/common
+      declaration:
+        file_path: backend/benefit/common/utils.py
+        line: 210
+        kind: parameter
+  - id: yjdh-phone-helsinkibenefit-settings-L325
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: phonenumber_field
+    evidence:
+      file_path: backend/benefit/helsinkibenefit/settings.py
+      start_line: 325
+      end_line: 325
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Django app name in INSTALLED_APPS; not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: backend/benefit/helsinkibenefit
+  - id: yjdh-phone-helsinkibenefit-settings-L486
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PHONENUMBER_DB_FORMAT
+    evidence:
+      file_path: backend/benefit/helsinkibenefit/settings.py
+      start_line: 486
+      end_line: 486
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Storage format setting for phone fields; configuration, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/helsinkibenefit
+  - id: yjdh-phone-helsinkibenefit-settings-L487
+    layer: occurrences
+    subject:
+      key: occurrence:phone_number
+      name: PHONENUMBER_DEFAULT_REGION
+    evidence:
+      file_path: backend/benefit/helsinkibenefit/settings.py
+      start_line: 487
+      end_line: 487
+    expected:
+      status: negative
+      labels:
+        - phone_number
+    rationale: Default region setting for phone parsing; configuration, not a phone number.
+    provenance:
+      proposed_by: claude-opus-5-5
+      proposed_at: 2026-10-01
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: backend/benefit/helsinkibenefit

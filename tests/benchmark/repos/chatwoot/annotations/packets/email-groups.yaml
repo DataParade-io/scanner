@@ -1,0 +1,637 @@
+repo: chatwoot
+concept: email
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+groups:
+  - id: user-email
+    name: Agent user email
+    subject: an agent, administrator or super admin user (users table; SuperAdmin is an STI subtype of User whose rows are also account agents)
+    subject_kind: workforce
+    purpose: sign-in, notifications and account administration
+    rationale: "users.email column (schema.rb:1670, index 1685, validated in user.rb:79) and its reads and writes on User records: downcasing and User.from_email (user.rb:127/173/174), agent notification and admin mails (conversation_notifications_mailer, base_mailer admin_emails, automation team mailer), sign-up through AccountBuilder, AgentBuilder, the onboarding, OAuth (omniauth_callbacks_controller) and platform user APIs, sign-in and password lookups (sessions, passwords, resend confirmations, rack_attack throttles, super admin sessions), SSO links, MFA rake tasks and provisioning label, SES suppression and test mails in the super admin users page, the user-facing jbuilder payloads, Devise mail greetings, exports and reports, and logs or external sends (Sentry, Chatwoot Hub registration, branding enrichment of the sign-up address). Sign-up and invite inputs are written to users.email of new records, so they are this item. The User table's SuperAdmin subtype is not split: super admins are account agents too and most code handles both through the same User reads."
+    clusters:
+      - c007
+      - c008
+      - c029
+      - c030
+      - c031
+      - c032
+      - c033
+      - c034
+      - c035
+      - c036
+      - c055
+      - c056
+      - c057
+      - c058
+      - c059
+      - c060
+      - c061
+      - c062
+      - c063
+      - c064
+      - c065
+      - c066
+      - c067
+      - c068
+      - c070
+      - c071
+      - c080
+      - c081
+      - c082
+      - c084
+      - c085
+      - c086
+      - c087
+      - c089
+      - c094
+      - c095
+      - c103
+      - c109
+      - c121
+      - c124
+      - c125
+      - c126
+      - c147
+      - c149
+      - c166
+      - c167
+      - c177
+      - c179
+      - c180
+      - c181
+      - c192
+      - c193
+      - c194
+      - c228
+      - c229
+      - c230
+      - c231
+      - c236
+      - c237
+      - c239
+      - c242
+      - c243
+      - c252
+      - c255
+      - c256
+      - c257
+      - c258
+      - c274
+      - c275
+      - c276
+      - c277
+      - c280
+      - c282
+      - c283
+      - c284
+      - c285
+      - c286
+      - c287
+      - c288
+      - c289
+      - c290
+      - c291
+  - id: user-unconfirmed-email
+    name: Agent pending new email
+    subject: an agent user changing their address
+    subject_kind: workforce
+    purpose: email change awaiting confirmation (Devise reconfirmable)
+    rationale: "users.unconfirmed_email column (schema.rb:1667) with the super admin dashboard fields (user_dashboard.rb:30/66) and the confirmation mail branches (confirmation_instructions.html.erb:7/19/21). The profile update's :email param (profiles_controller.rb:67) is this item: with config.reconfirmable = true (devise.rb:136) a changed address assigned to a confirmed user is stored in unconfirmed_email until confirmed."
+    clusters:
+      - c049
+      - c088
+      - c273
+  - id: user-uid
+    name: Agent auth uid (copy of email)
+    subject: an agent user
+    subject_kind: workforce
+    purpose: devise_token_auth login uid
+    rationale: set_password_and_uid copies users.email into users.uid on create (user.rb:135); the line names users.uid as its write target, a separate stored copy.
+    clusters:
+      - c178
+  - id: contact-email
+    name: Contact email
+    subject: a contact (the account's customer or visitor)
+    subject_kind: end_user
+    purpose: contact identity, conversation continuity and outreach
+    rationale: "contacts.email column (schema.rb:797 and its indexes, validated in contact.rb:51) and every read, write and lookup of it: Contact.from_email and the normalization callbacks (contact.rb), ContactIdentifyAction and ContactMergeAction, ContactInboxBuilder email source ids, widget and public API params and payloads, the mailboxes that look up or create the contact from the inbound sender (MailPresenter#original_sender, mailbox_helper.rb:93/101, imap_mailbox, new_conversation_strategy), data imports (Freshdesk/Intercom importer and CSV ContactManager) that write the imported address, company association by domain, search and filter attributes, exports, CRM, Slack unfurl and LLM context reads, and the jbuilder contact payloads. The inbound sender address and import payload emails are request inputs looked up against and written to contacts.email, so they are this item."
+    clusters:
+      - c001
+      - c002
+      - c003
+      - c004
+      - c005
+      - c006
+      - c009
+      - c010
+      - c011
+      - c037
+      - c038
+      - c039
+      - c040
+      - c050
+      - c051
+      - c052
+      - c053
+      - c054
+      - c083
+      - c090
+      - c091
+      - c110
+      - c112
+      - c113
+      - c116
+      - c117
+      - c155
+      - c159
+      - c168
+      - c169
+      - c170
+      - c171
+      - c172
+      - c173
+      - c174
+      - c182
+      - c183
+      - c184
+      - c191
+      - c197
+      - c198
+      - c199
+      - c201
+      - c202
+      - c203
+      - c204
+      - c210
+      - c212
+      - c213
+      - c215
+      - c218
+      - c219
+      - c220
+      - c221
+      - c222
+      - c224
+      - c232
+      - c234
+      - c235
+      - c253
+      - c266
+      - c267
+      - c268
+      - c269
+      - c270
+      - c271
+      - c279
+  - id: contact-inbox-source-id
+    name: Contact inbox source id (email copy)
+    subject: a contact of an email inbox
+    subject_kind: end_user
+    purpose: per-inbox contact session key
+    rationale: mailbox_helper.rb:97 passes the inbound sender address as source_id of the new ContactInbox; the keyword names contact_inboxes.source_id, a separate stored copy of the contact's address.
+    clusters:
+      - c118
+  - id: contact-name-email-copy
+    name: Contact name filled from email
+    subject: an imported contact
+    subject_kind: end_user
+    purpose: fallback display name
+    rationale: The Freshdesk normalizer sets the author contact payload 'name' to from_email (normalizer.rb:82/128) and the importer falls back to the payload email for name (importer.rb:352); the lines name the contact's name field as their target, so the address is copied into contacts.name.
+    clusters:
+      - c214
+      - c217
+      - c223
+  - id: contact-imported-other-emails
+    name: Imported contact other emails
+    subject: an imported Freshdesk contact
+    subject_kind: end_user
+    purpose: additional addresses kept as import metadata
+    rationale: Freshdesk contact other_emails (normalizer.rb:14, metadata.rb:14), stored in the contact's additional_attributes source block and the import mapping metadata; not written to contacts.email.
+    clusters:
+      - c205
+      - c211
+  - id: import-mapping-source-id
+    name: Import mapping source id (email fallback)
+    subject: an imported contact or conversation
+    subject_kind: end_user
+    purpose: data import mapping key
+    rationale: source_id_for falls back to the payload email after id and external_id (importer.rb:857, intercom/source.rb:179, message_batch_builder.rb:89); the result is the data import mapping's source object id, a separate stored copy.
+    clusters:
+      - c225
+      - c226
+      - c227
+  - id: imported-message-from-email
+    name: Imported message sender address
+    subject: the author of an imported Freshdesk conversation part
+    subject_kind: other_person
+    purpose: message metadata from the source helpdesk
+    rationale: Freshdesk part from_email kept in message source metadata (metadata.rb:43, sliced in normalizer.rb:120), stored in the imported message's additional_attributes and the import mapping metadata.
+    clusters:
+      - c206
+      - c216
+  - id: imported-message-to-emails
+    name: Imported message To addresses
+    subject: recipients of an imported Freshdesk conversation part
+    subject_kind: other_person
+    purpose: message metadata from the source helpdesk
+    rationale: Freshdesk part to_emails kept in message source metadata (metadata.rb:44).
+    clusters:
+      - c207
+  - id: imported-message-cc-emails
+    name: Imported message CC addresses
+    subject: CC recipients of an imported Freshdesk conversation part
+    subject_kind: other_person
+    purpose: message metadata from the source helpdesk
+    rationale: Freshdesk part cc_emails kept in message source metadata (metadata.rb:45).
+    clusters:
+      - c208
+  - id: imported-message-bcc-emails
+    name: Imported message BCC addresses
+    subject: BCC recipients of an imported Freshdesk conversation part
+    subject_kind: other_person
+    purpose: message metadata from the source helpdesk
+    rationale: Freshdesk part bcc_emails kept in message source metadata (metadata.rb:46).
+    clusters:
+      - c209
+  - id: message-submitted-email
+    name: Bot input submitted email
+    subject: a website visitor answering the email-collect prompt
+    subject_kind: end_user
+    purpose: address captured by an input_email bot message
+    rationale: messages.content_attributes submitted_email (store accessor message.rb:112), written by the widget messages controller (messages_controller.rb:18) and read for the Slack thread update (update_slack_message_service.rb:33/77-80). A copy stored on the message, separate from contacts.email which ContactIdentifyAction writes from the same request.
+    clusters:
+      - c175
+      - c176
+      - c281
+  - id: message-to-emails
+    name: Outgoing email To list
+    subject: recipients an agent addresses on an outgoing email or forward
+    subject_kind: other_person
+    purpose: per-message recipients
+    rationale: "messages.content_attributes to_emails written by MessageBuilder from the request (message_builder.rb:93/102/109), read by ConversationReplyMailer (to_emails_from_content_attributes, to_emails, mail to: in conversation_reply_mailer_helper.rb:6) and printed in transcripts. to_emails falls back to the contact's email, but reads the stored list first."
+    clusters:
+      - c019
+      - c022
+      - c026
+      - c143
+      - c144
+      - c145
+      - c146
+      - c246
+      - c247
+  - id: message-cc-emails
+    name: Outgoing email CC list
+    subject: CC recipients an agent adds to an outgoing email
+    subject_kind: other_person
+    purpose: per-message recipients
+    rationale: "messages.content_attributes cc_emails written by MessageBuilder (message_builder.rb:100/107), read by the reply mailer (cc_bcc_emails, mail cc: in conversation_reply_mailer_helper.rb:16) and transcripts; the CC-first concatenation validated in validate_email_addresses (email_helper.rb:14-16, message_builder.rb:104/105) reads this list first."
+    clusters:
+      - c020
+      - c023
+      - c024
+      - c104
+      - c105
+      - c140
+      - c141
+      - c142
+      - c248
+      - c249
+  - id: message-bcc-emails
+    name: Outgoing email BCC list
+    subject: BCC recipients an agent adds to an outgoing email
+    subject_kind: other_person
+    purpose: per-message recipients
+    rationale: messages.content_attributes bcc_emails written by MessageBuilder (message_builder.rb:101/108), set as the mail bcc (conversation_reply_mailer_helper.rb:17, split from the cc_bcc_emails pair getter) and printed in transcripts.
+    clusters:
+      - c021
+      - c025
+      - c128
+      - c250
+      - c251
+  - id: message-cc-email
+    name: Inbound email CC addresses
+    subject: people CC'd on an email the inbox received
+    subject_kind: other_person
+    purpose: stored inbound headers
+    rationale: mailbox_sanitizer.rb:22 stores the inbound mail's CC list in the message's content_attributes cc_email (singular key, distinct from the outgoing cc_emails).
+    clusters:
+      - c119
+  - id: message-bcc-email
+    name: Inbound email BCC addresses
+    subject: BCC recipients of an email the inbox received
+    subject_kind: other_person
+    purpose: stored inbound headers
+    rationale: mailbox_sanitizer.rb:23 stores the inbound mail's BCC list in the message's content_attributes bcc_email.
+    clusters:
+      - c120
+  - id: message-email-headers
+    name: Inbound X-Original-Sender header
+    subject: the original sender of a forwarded inbound email
+    subject_kind: end_user
+    purpose: stored inbound headers
+    rationale: MailPresenter#headers_data key 'x-original-sender' (mail_presenter.rb:148), stored on the message in content_attributes.email.headers.
+    clusters:
+      - c185
+  - id: bounce-failed-recipients
+    name: Bounce failed recipients
+    subject: the recipients an outgoing mail failed to reach
+    subject_kind: other_person
+    purpose: bounce detection
+    rationale: MailPresenter#bounced? reads the X-Failed-Recipients header of an inbound bounce (mail_presenter.rb:174); an inbound header value, not stored or looked up.
+    clusters:
+      - c189
+  - id: inbound-recipient-addresses
+    name: Inbound email recipient addresses
+    subject: the inbox addresses an inbound email was sent to
+    subject_kind: organization
+    purpose: routing inbound mail to an inbox or conversation
+    rationale: The To, CC, X-Original-To, BCC and X-Forwarded-For addresses of inbound mail as ApplicationMailbox (reply_uuid_mail?, malformed To log), MailPresenter#mail_receiver and email_forwarded_for, ReceiverUuidStrategy and EmailChannelFinder iterate them, normalize them (normalize_email_with_plus_addressing) and match them against reply+<uuid> addresses or the email channel. These header lists are matched against several of the organization's addresses (the channel address, the forwarding address and per-conversation reply addresses) and are not one stored column, so they are their own item; the lookup line itself (email_channel_finder.rb:46) names channel_email.email and is in channel-email.
+    clusters:
+      - c096
+      - c097
+      - c098
+      - c099
+      - c100
+      - c101
+      - c106
+      - c114
+      - c115
+      - c186
+      - c187
+      - c188
+      - c233
+  - id: channel-email
+    name: Email inbox address
+    subject: the account's email inbox (Channel::Email)
+    subject_kind: organization
+    purpose: the inbox's own mailbox address that customers write to and replies are sent from
+    rationale: channel_email.email column (schema.rb:600, unique index 624, validated and editable in channel/email.rb:51/55), the OAuth callbacks that look up and create channels by the id token email claim (oauth_callback_controller.rb:44/77/122, google/callbacks_controller.rb:10), the platform email channel migration (email_channel_migrations_controller.rb), its reads as From and Reply-To (from_builder.rb:12/15, reply_to_builder.rb:6, conversation_reply_mailer.rb:143, conversation_reply_mailer_helper.rb:110/119/120), the inbox display name, IMAP fetch logs, the inbox jbuilder payload and the channel lookup by inbound recipient (email_channel_finder.rb:46, which reads email first and falls back to forward_to_email).
+    clusters:
+      - c073
+      - c075
+      - c076
+      - c078
+      - c079
+      - c102
+      - c131
+      - c156
+      - c157
+      - c240
+      - c262
+      - c264
+  - id: channel-forward-to-email
+    name: Email inbox forwarding address
+    subject: the account's email inbox
+    subject_kind: organization
+    purpose: generated address that receives mail forwarded from the customer's mailbox
+    rationale: channel_email.forward_to_email column (schema.rb:601, unique index 625, validated in channel/email.rb:56), generated as <hex>@<inbound domain> (channel/email.rb:79) and rendered in the inbox payload (_inbox.json.jbuilder:93).
+    clusters:
+      - c158
+      - c241
+      - c263
+      - c265
+  - id: channel-imap-login
+    name: Email inbox IMAP login
+    subject: the email inbox's mailbox identity
+    subject_kind: machine_identity
+    purpose: IMAP/SMTP login (SASL XOAUTH2 user)
+    rationale: channel_email.imap_login written from the OAuth email claim (imap_login_identity, oauth_callback_controller.rb:64) or the migration entry email (email_channel_migrations_controller.rb:68), and the Google callback lookup by imap_login (google/callbacks_controller.rb:7). A separate stored copy of the mailbox address used as a credential identity.
+    clusters:
+      - c069
+      - c072
+      - c077
+  - id: account-support-email
+    name: Account support email
+    subject: the account
+    subject_kind: organization
+    purpose: support address used as the From and Reply-To of conversation emails
+    rationale: accounts.support_email column (schema.rb:68) with its reader override (account.rb:157/158, which reads the column first and falls back to the installation sender), format validation (account.rb:230/234/236), the account update and platform params, its parsed getter account_support_email (base_builder.rb:48/51) used by FromBuilder and ReplyToBuilder, the reply mailer reads (conversation_reply_mailer.rb:119/149/210) and the account payloads.
+    clusters:
+      - c013
+      - c028
+      - c074
+      - c150
+      - c151
+      - c152
+      - c153
+      - c154
+      - c261
+  - id: inbox-email-address
+    name: Inbox configured email address
+    subject: a non-email inbox (website or API)
+    subject_kind: organization
+    purpose: From and Reply-To address configured on the inbox
+    rationale: inboxes.email_address column (schema.rb:1266) read as the reply mail From and Reply-To (conversation_reply_mailer.rb:134/146/147) and exposed to Liquid templates by InboxDrop#email (inbox_drop.rb:14/17, which reads email_address first and falls back to the channel email).
+    clusters:
+      - c092
+      - c093
+      - c139
+      - c272
+  - id: mailer-sender-email
+    name: Installation default sender
+    subject: the Chatwoot installation
+    subject_kind: organization
+    purpose: default From of system mail
+    rationale: MAILER_SENDER_EMAIL environment setting read as the mailer default From (application_mailer.rb:4, conversation_reply_mailer.rb:9), Devise mailer_sender (devise.rb:15), the parse fallback default_sender_email_address (email_address_parseable.rb:9/12/13) and the notification-loop check (mail_presenter.rb:179).
+    clusters:
+      - c127
+      - c132
+      - c164
+      - c165
+      - c190
+      - c254
+  - id: installation-support-email
+    name: Installation support email
+    subject: the Chatwoot installation
+    subject_kind: organization
+    purpose: installation support address (fallback for account support email)
+    rationale: MAILER_SUPPORT_EMAIL installation config declaration (installation_config.yml:105). Account#support_email falls back to it after the stored column and MAILER_SENDER_EMAIL.
+    clusters:
+      - c259
+  - id: instance-admin-email
+    name: Instance administrator email
+    subject: the Chatwoot instance operator
+    subject_kind: organization
+    purpose: compliance notices
+    rationale: CHATWOOT_INSTANCE_ADMIN_EMAIL installation config (installation_config.yml:379) read by AccountComplianceMailer#instance_admin_email and used as the account deletion notice recipient (account_compliance_mailer.rb:3/8/45/46).
+    clusters:
+      - c122
+      - c123
+      - c260
+  - id: outbound-from-address
+    name: Conversation reply From address
+    subject: the inbox sending a conversation reply
+    subject_kind: organization
+    purpose: per-message outbound From
+    rationale: "The From selected for conversation reply and transcript mail: email_from (conversation_reply_mailer_helper.rb:7/101/104), from_email, from_email_with_name and channel_email_with_name (conversation_reply_mailer.rb:53/58/118/138/139/142) and FromBuilder's from_email (from_builder.rb:7/20). The selectors choose among the channel email, the account support email and the inbox email address; the lines that read those columns are in their own items."
+    clusters:
+      - c014
+      - c129
+      - c135
+      - c137
+      - c138
+  - id: outbound-reply-to-address
+    name: Conversation reply Reply-To address
+    subject: the inbox sending a conversation reply
+    subject_kind: organization
+    purpose: per-message outbound Reply-To
+    rationale: "The Reply-To selected for conversation reply mail: email_reply_to and reply_email (conversation_reply_mailer_helper.rb:8/107/112, conversation_reply_mailer.rb:130), choosing among the channel email, the per-conversation reply+<uuid> address and the inbox or account address."
+    clusters:
+      - c130
+      - c136
+  - id: transcript-recipient-email
+    name: Transcript recipient (agent entered)
+    subject: whoever the agent sends a conversation transcript to
+    subject_kind: other_person
+    purpose: one-off transcript delivery
+    rationale: params[:email] of the conversations#transcript endpoint (conversations_controller.rb:74/78), an address the agent enters; not stored.
+    clusters:
+      - c041
+      - c042
+  - id: automation-transcript-email
+    name: Automation transcript recipients
+    subject: recipients configured in an automation rule
+    subject_kind: other_person
+    purpose: send_email_transcript automation action
+    rationale: The addresses in an automation rule's send_email_transcript action params (stored in the rule's actions), split and liquid-resolved in ActionService#send_email_transcript (action_service.rb:84-93) and EmailHelper#parse_email_variables / modified_liquid_content (email_helper.rb:27-44).
+    clusters:
+      - c107
+      - c108
+      - c195
+      - c196
+  - id: portal-instructions-recipient-email
+    name: Portal CNAME instructions recipient
+    subject: whoever manages the help center domain
+    subject_kind: other_person
+    purpose: one-off DNS instructions mail
+    rationale: permitted_params[:email] of portals#send_instructions, validated and passed as recipient_email to PortalInstructionsMailer (portals_controller.rb:54-79/143/144, portal_instructions_mailer.rb:2/10); not stored.
+    clusters:
+      - c046
+      - c047
+      - c048
+      - c148
+  - id: shopify-customer-email
+    name: Shopify customer email
+    subject: the contact's matching Shopify customer
+    subject_kind: end_user
+    purpose: order lookup in the Shopify integration
+    rationale: The Shopify customers search query names Shopify's email field as its lookup key (shopify_controller.rb:81) and requests it back (88); a field of the external Shopify customer record.
+    clusters:
+      - c043
+      - c044
+  - id: shopify-order-email
+    name: Shopify order email
+    subject: the Shopify customer's orders
+    subject_kind: end_user
+    purpose: order lookup in the Shopify integration
+    rationale: Shopify orders fetch requests the order email field (shopify_controller.rb:99); a field of the external Shopify order record.
+    clusters:
+      - c045
+  - id: leadsquared-lead-email
+    name: LeadSquared lead email
+    subject: the contact's LeadSquared lead
+    subject_kind: end_user
+    purpose: CRM sync
+    rationale: ContactMapper writes contact.email into the LeadSquared lead's EmailAddress field (contact_mapper.rb:22); the line names the external lead field as its write target.
+    clusters:
+      - c200
+  - id: whatsapp-business-profile-email
+    name: WhatsApp Business profile email
+    subject: the account's WhatsApp Business profile
+    subject_kind: organization
+    purpose: business profile contact address
+    rationale: BusinessProfileService requests the email field of the WhatsApp Business profile from the Graph API (business_profile_service.rb:3).
+    clusters:
+      - c238
+  - id: chatwoot-hello-address
+    name: Chatwoot team contact address
+    subject: Chatwoot, the vendor
+    subject_kind: organization
+    purpose: contact address in the inactivity deletion notice
+    rationale: Hard-coded mailto:hello@chatwoot.com link in the account deletion for inactivity mail (account_deletion_for_inactivity.liquid:17).
+    clusters:
+      - c244
+  - id: captain-hook-account-email
+    name: Captain integration account email
+    subject: the Captain integration hook
+    subject_kind: machine_identity
+    purpose: API user identity for the Captain integration
+    rationale: The Captain hook's account_email setting (integrations hook settings) sent as the X-USER-EMAIL header (lib/integrations/captain/processor_service.rb:38).
+    clusters:
+      - c278
+needs_adjudication:
+  - cluster: c012
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c015
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c016
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c017
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c018
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c027
+    candidate_groups:
+      - message-cc-emails
+      - message-bcc-emails
+      - message-to-emails
+    reason: MessageBuilder#process_email_string(email_string) is called with the request's cc_emails, bcc_emails and to_emails in turn (message_builder.rb:93/100-102); the parameter holds each list in a different call.
+  - cluster: c111
+    candidate_groups:
+      - user-email
+      - contact-email
+    reason: Avatarable is included in User and Contact (the includers with an email column; AgentBot, Inbox and Company have none), so its saved_changes check, email reads and the AvatarFromGravatarJob email parameter carry a user's users.email or a contact's contacts.email depending on the record.
+  - cluster: c133
+    candidate_groups:
+      - contact-email
+      - transcript-recipient-email
+      - automation-transcript-email
+    reason: ConversationReplyMailer#conversation_transcript(conversation, to_email) is called with the contact's email (widget conversations_controller.rb:84), with an address the agent enters (conversations_controller.rb:78) and with each automation send_email_transcript address (action_service.rb:93).
+  - cluster: c134
+    candidate_groups:
+      - outbound-from-address
+      - outbound-reply-to-address
+    reason: "The address formatter is shared by the From and the Reply-To: ConversationReplyMailer#sender_name is called with from_email and @channel.email for the From and with the reply+<uuid> address for the Reply-To, Email::BaseBuilder#sender_name is called by FromBuilder (From) and ReplyToBuilder (Reply-To), and SenderNameBuilder receives both. The declaration holds both purposes."
+  - cluster: c160
+    candidate_groups:
+      - user-email
+      - contact-email
+    reason: Avatarable is included in User and Contact (the includers with an email column; AgentBot, Inbox and Company have none), so its saved_changes check, email reads and the AvatarFromGravatarJob email parameter carry a user's users.email or a contact's contacts.email depending on the record.
+  - cluster: c161
+    candidate_groups:
+      - user-email
+      - contact-email
+    reason: Avatarable is included in User and Contact (the includers with an email column; AgentBot, Inbox and Company have none), so its saved_changes check, email reads and the AvatarFromGravatarJob email parameter carry a user's users.email or a contact's contacts.email depending on the record.
+  - cluster: c162
+    candidate_groups:
+      - user-email
+      - contact-email
+    reason: Avatarable is included in User and Contact (the includers with an email column; AgentBot, Inbox and Company have none), so its saved_changes check, email reads and the AvatarFromGravatarJob email parameter carry a user's users.email or a contact's contacts.email depending on the record.
+  - cluster: c163
+    candidate_groups:
+      - account-support-email
+      - inbox-email-address
+    reason: EmailAddressParseable#parse_email(email_string) is called with account.support_email (base_builder.rb:51, conversation_reply_mailer.rb:119) and with inbox_from_email_address, which returns inboxes.email_address (conversation_reply_mailer.rb:119/146).
+  - cluster: c245
+    candidate_groups:
+      - contact-email
+      - user-email
+    reason: "message.sender is polymorphic: a Contact for incoming messages and a User for agent replies (and an AgentBot, which has no email). The transcript line prints whichever sender's email the message has."

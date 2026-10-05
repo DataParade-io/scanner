@@ -1,0 +1,1053 @@
+packet:
+  repo: directus
+  concept: email
+  kanbus_issue: KDATAP-3741cc
+  files:
+  - api/src/database/migrations/20240422A-public-registration.ts
+  - api/src/database/migrations/20210903A-add-auth-provider.ts
+  - api/src/controllers/users.ts
+  - api/src/controllers/auth.ts
+  - api/src/license/entitlements/lib/sso-enabled.ts
+  - api/src/auth/drivers/saml.ts
+  - api/src/auth/drivers/local.ts
+  - api/src/mailer.ts
+annotations:
+- id: directus-local-L21
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/local.ts
+    start_line: 21
+    end_line: 21
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if the payload contains an email address for login authentication.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/local.ts
+      line: 20
+      kind: parameter
+    owner: api
+- id: directus-local-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/local.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the lower-cased payload address into the user lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/local.ts
+      line: 20
+      kind: parameter
+    owner: api
+- id: directus-local-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/local.ts
+    start_line: 57
+    end_line: 57
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema validation rule requiring a valid email address for login.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/local.ts
+      line: 57
+      kind: field
+    owner: api
+- id: directus-saml-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailKey
+  evidence:
+    file_path: api/src/auth/drivers/saml.ts
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration key name specifying which SAML attribute holds the email address, not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-saml-L59
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/saml.ts
+    start_line: 59
+    end_line: 59
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads email address from SAML payload using the configured email attribute key.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/saml.ts
+      line: 59
+      kind: local
+    owner: api
+- id: directus-saml-L83
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/saml.ts
+    start_line: 83
+    end_line: 83
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the user's email address in the payload for new user creation from SAML attributes.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/saml.ts
+      line: 83
+      kind: field
+    owner: api
+- id: directus-auth-L199
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/auth.ts
+    start_line: 199
+    end_line: 199
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validates that the password reset request contains an email address string.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/controllers/auth.ts
+      line: 198
+      kind: parameter
+    owner: api
+- id: directus-auth-L200
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/auth.ts
+    start_line: 200
+    end_line: 200
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose stating that email field is required; not reading or writing an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-auth-L214
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/auth.ts
+    start_line: 214
+    end_line: 214
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address from request body to the password reset service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/controllers/auth.ts
+      line: 198
+      kind: parameter
+    owner: api
+- id: directus-auth-L220
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/auth.ts
+    start_line: 220
+    end_line: 220
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Log message mentioning email in error context; not reading or writing an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-users-L286
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/users.ts
+    start_line: 286
+    end_line: 286
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema validation requiring email address as a string or array of email addresses for user invite.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/controllers/users.ts
+      line: 286
+      kind: field
+    owner: api
+- id: directus-users-L303
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/users.ts
+    start_line: 303
+    end_line: 303
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email address from request body to the user invitation service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/controllers/users.ts
+      line: 293
+      kind: parameter
+    owner: api
+- id: directus-users-L458
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/controllers/users.ts
+    start_line: 458
+    end_line: 458
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema validation requiring a valid email address for user registration endpoint.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/controllers/users.ts
+      line: 458
+      kind: field
+    owner: api
+- id: directus-users-L483
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: verify-email
+  evidence:
+    file_path: api/src/controllers/users.ts
+    start_line: 483
+    end_line: 483
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: URL path for email verification endpoint; not reading or writing an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-add-auth-provider-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/database/migrations/20210903A-add-auth-provider.ts
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Drops unique constraint on the email column in the users table.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-add-auth-provider-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/database/migrations/20210903A-add-auth-provider.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Changes the type of the email column to make it nullable.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-add-auth-provider-L22
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/database/migrations/20210903A-add-auth-provider.ts
+    start_line: 22
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Recreates the unique constraint on the email column after schema changes.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-add-auth-provider-L38
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/database/migrations/20210903A-add-auth-provider.ts
+    start_line: 38
+    end_line: 38
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reverts email column type back to non-nullable in the down migration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-public-registration-L6
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: public_registration_verify_email
+  evidence:
+    file_path: api/src/database/migrations/20240422A-public-registration.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag setting whether email verification is required for public registration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-public-registration-L9
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: public_registration_email_filter
+  evidence:
+    file_path: api/src/database/migrations/20240422A-public-registration.ts
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSON column for email filtering rules; holds configuration, not email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-public-registration-L17
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: public_registration_verify_email
+  evidence:
+    file_path: api/src/database/migrations/20240422A-public-registration.ts
+    start_line: 17
+    end_line: 17
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dropping the email verification flag column; configuration setting, not address data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-public-registration-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: public_registration_email_filter
+  evidence:
+    file_path: api/src/database/migrations/20240422A-public-registration.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Dropping the email filter configuration column in down migration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-sso-enabled-L53
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/license/entitlements/lib/sso-enabled.ts
+    start_line: 53
+    end_line: 53
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type annotation declaring a payload field to hold email address for SSO admin resolution.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/license/entitlements/lib/sso-enabled.ts
+      line: 53
+      kind: field
+    owner: api
+- id: directus-sso-enabled-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/license/entitlements/lib/sso-enabled.ts
+    start_line: 57
+    end_line: 57
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if admin email is present and non-empty before assigning it.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/license/entitlements/lib/sso-enabled.ts
+      line: 35
+      kind: parameter
+    owner: api
+- id: directus-sso-enabled-L58
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/license/entitlements/lib/sso-enabled.ts
+    start_line: 58
+    end_line: 58
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the admin address from the resolution to copy into the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/license/entitlements/lib/sso-enabled.ts
+      line: 35
+      kind: parameter
+    owner: api
+- id: directus-mailer-L18
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_TRANSPORT
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 18
+    end_line: 18
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Environment variable name for email transport configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L23
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SENDMAIL_NEW_LINE
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sendmail transport configuration for line ending; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L24
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SENDMAIL_PATH
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sendmail executable path configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: SendEmailCommand
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of AWS SES email sending command module; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L29
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SES_
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prefix for SES email service configuration environment variables; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L34
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: SendEmailCommand
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 34
+    end_line: 34
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Transport configuration for AWS SES email sending; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L39
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_USER
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 39
+    end_line: 39
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP username configuration check; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L41
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_USER
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 41
+    end_line: 41
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP username configuration value; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L42
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_PASSWORD
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 42
+    end_line: 42
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP password configuration value; not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L46
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_TLS_
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prefix for SMTP TLS configuration environment variables; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L49
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_NAME
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP server name configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L50
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_POOL
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 50
+    end_line: 50
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP connection pool configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L51
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_HOST
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 51
+    end_line: 51
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP host configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L52
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_PORT
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 52
+    end_line: 52
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP port configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L53
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_SECURE
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 53
+    end_line: 53
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP SSL/TLS security configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L54
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_SMTP_IGNORE_TLS
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: SMTP TLS configuration flag; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L64
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_MAILGUN_API_KEY
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 64
+    end_line: 64
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Mailgun API key configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L65
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_MAILGUN_DOMAIN
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Mailgun domain configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L67
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_MAILGUN_HOST
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 67
+    end_line: 67
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Mailgun service host configuration; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L73
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_MAILTRAP_
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 73
+    end_line: 73
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prefix for Mailtrap email service configuration environment variables; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-mailer-L77
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_MAILTRAP_TOKEN
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 77
+    end_line: 77
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about missing Mailtrap configuration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-mailer-L82
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/mailer.ts
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Warning message prose about email transport configuration; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api

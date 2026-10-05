@@ -1,0 +1,1303 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-e07d03
+  files:
+  - ghost/core/core/server/services/members/api.js
+  - ghost/core/core/server/services/members/import-export/import/completion-email.ts
+annotations:
+- id: ghost-api-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: signinEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports an email template module for signin emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L9
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: signupEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports an email template module for signup emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L10
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: signupPaidEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports an email template module for paid signup emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subscribeEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports an email template module for subscription emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: updateEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports an email template module for email update confirmation emails.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L21
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 21
+    end_line: 21
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email suppression list service module.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L23
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email address service module.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-api-L81
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: getEmailSupportAddress
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the sender email address from the config email support address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 58
+      kind: parameter
+    owner: ghost/core
+    group: members-support-address
+- id: ghost-api-L100
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: updateEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 100
+    end_line: 100
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Case label for email update confirmation email type feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L101
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 101
+    end_line: 101
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose template string for email confirmation email subject line feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L111
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 111
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L118
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 118
+    end_line: 118
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose message about confirming email address; no address value interpolated.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L128
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 128
+    end_line: 128
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates email parameter value into message indicating sender of confirmation email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L145
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 145
+    end_line: 145
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates email parameter value into message indicating sender of signup confirmation email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L162
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 162
+    end_line: 162
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates email parameter value into message indicating sender of paid signup confirmation email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L165
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: updateEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 165
+    end_line: 165
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Case label for email update confirmation email type feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L169
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 169
+    end_line: 169
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose message about confirming email address; no address value interpolated.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L177
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 177
+    end_line: 177
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates email parameter value into message indicating sender of email update confirmation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L178
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 178
+    end_line: 178
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose message saying email address will not be used; no address value interpolated.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L199
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 199
+    end_line: 199
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates email parameter value into message indicating sender of signin email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L200
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 200
+    end_line: 200
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose message about ignoring email; refers to the email feature/message, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L204
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 204
+    end_line: 204
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding the recipient email address for generating HTML.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L214
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 214
+    end_line: 214
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to subscribe email template function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L216
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 216
+    end_line: 216
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to signup email template function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L218
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 218
+    end_line: 218
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to paid signup email template function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L219
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: updateEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 219
+    end_line: 219
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Case label for email update confirmation email type feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-api-L220
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 220
+    end_line: 220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to update email template function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L223
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 223
+    end_line: 223
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email parameter to signin email template function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/api.js
+      line: 204
+      kind: parameter
+    owner: ghost/core
+    group: member-magic-link-recipient
+- id: ghost-api-L229
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailRecipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 229
+    end_line: 229
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name for email recipients relation feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-api-L238
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: MemberEmailChangeEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 238
+    end_line: 238
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model/event name for email change events feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-api-L253
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailSpamComplaintEvent
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 253
+    end_line: 253
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model/event name for spam complaints feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-api-L255
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: WelcomeEmailAutomationRun
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 255
+    end_line: 255
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name for welcome email automation feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-api-L256
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: AutomatedEmailRecipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 256
+    end_line: 256
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name for automated email recipients relation feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-api-L264
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 264
+    end_line: 264
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes emailSuppressionList service reference; a service handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-api-L270
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAddressService
+  evidence:
+    file_path: ghost/core/core/server/services/members/api.js
+    start_line: 270
+    end_line: 270
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Passes emailAddressService reference to config; a service reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-completion-email-L2
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: renderImportEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports email template rendering function module.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-completion-email-L6
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing email as the completion message sent after import.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-completion-email-L14
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLinks
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 14
+    end_line: 14
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Interface type for email-related links feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L21
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: ImportEmailInput
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 21
+    end_line: 21
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Interface type for email import input structure feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L23
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interface field holding the recipient email address for import completion email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 23
+      kind: field
+    owner: ghost/core
+    type_annotation: string
+    group: staff-user-email
+- id: ghost-completion-email-L25
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLinks
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type field for email links feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailPayload
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Interface type for email payload structure feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L47
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 47
+    end_line: 47
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message string referencing members.email column; prose about missing email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-completion-email-L54
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message about subscription to emails feature; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-completion-email-L56
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 56
+    end_line: 56
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message about invalid email address validation; prose transforming error text.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-completion-email-L72
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 72
+    end_line: 72
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type field selecting email address from MemberImportRow.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 72
+      kind: field
+    owner: ghost/core
+    type_annotation: MemberImportRow['email']
+    group: member-account-email
+- id: ghost-completion-email-L75
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subscribed_to_emails
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 75
+    end_line: 75
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type field for subscription to emails feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-completion-email-L102
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 102
+    end_line: 102
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key mapping email address from imported row.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 102
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-completion-email-L105
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subscribed_to_emails
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 105
+    end_line: 105
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Object key for subscription to emails feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-completion-email-L117
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 117
+    end_line: 117
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email attachment; not directly about an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-completion-email-L132
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 132
+    end_line: 132
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email sent after import completion.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-completion-email-L136
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: buildImportEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 136
+    end_line: 136
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name indicating it builds import completion emails; declaration of email feature function.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-completion-email-L138
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 138
+    end_line: 138
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter holding recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 138
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-completion-email-L141
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: ImportEmailInput
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 141
+    end_line: 141
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type annotation for email import input structure feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L142
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: ImportEmailSummary
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 142
+    end_line: 142
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type annotation for email import summary feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-completion-email-L149
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 149
+    end_line: 149
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key setting the recipient email address for the completion email message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 138
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-completion-email-L151
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: renderImportEmail
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 151
+    end_line: 151
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function call to email template renderer; passes email configuration feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-completion-email-L157
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRecipient
+  evidence:
+    file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+    start_line: 157
+    end_line: 157
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key passing recipient email address to email template renderer.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/members/import-export/import/completion-email.ts
+      line: 157
+      kind: field
+    owner: ghost/core
+    group: staff-user-email

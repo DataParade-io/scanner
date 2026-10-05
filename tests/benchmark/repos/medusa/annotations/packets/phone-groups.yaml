@@ -1,0 +1,139 @@
+repo: medusa
+concept: phone
+provenance:
+  proposed_by: claude-sonnet-5-5
+  proposed_at: '2026-10-01'
+  review_state: proposed
+groups:
+- id: customer-phone
+  name: Customer phone
+  subject: customer
+  subject_kind: end_user
+  purpose: contact number of a customer account
+  rationale: The Customer.phone column (modules/customer/src/models/customer.ts:13) decides the item. Its type members (CustomerDTO, create/update DTOs, store and admin HTTP types), request validators (admin and store CreateCustomer/UpdateCustomer), field selectors (customer query-config field lists, create-payment-session customer fields, Order customer_display columns in settings), the rollback restore in update-customers, and the value passed on to the payment provider account holder (medusa-payments.ts, PaymentCustomerDTO) all belong to it; values passed between functions belong to their source.
+  clusters:
+  - c001
+  - c004
+  - c011
+  - c012
+  - c015
+  - c016
+  - c017
+  - c025
+  - c026
+  - c027
+  - c039
+  - c043
+  - c044
+  - c046
+  - c047
+  - c053
+  - c055
+  - c056
+  - c061
+  - c068
+  - c069
+  - c070
+  - c071
+- id: customer-address-phone
+  name: Customer address phone
+  subject: customer address holder
+  subject_kind: end_user
+  purpose: contact number stored on a customer address book entry
+  rationale: 'The CustomerAddress.phone column (modules/customer/src/models/address.ts:19) decides the item: customer address DTOs, create/update address DTOs, HTTP address types, the address filter, address validators and the address field lists. Distinct from the cart, order and fulfillment address tables that receive copies of the address.'
+  clusters:
+  - c009
+  - c010
+  - c013
+  - c014
+  - c024
+  - c028
+  - c029
+  - c045
+  - c048
+  - c054
+  - c060
+  - c062
+  - c063
+- id: cart-address-phone
+  name: Cart address phone
+  subject: cart shipping or billing contact
+  subject_kind: end_user
+  purpose: contact number on the shipping and billing address of a cart
+  rationale: 'The cart Address.phone column (modules/cart/src/models/address.ts:17) decides the item: cart address DTOs, store cart payloads and the store cart shipping_address.phone / billing_address.phone field lists. A cart address is stored in its own table, so it is a different item from the customer address it may be copied from.'
+  clusters:
+  - c006
+  - c007
+  - c008
+  - c022
+  - c023
+  - c051
+  - c052
+  - c058
+  - c059
+- id: order-address-phone
+  name: Order address phone
+  subject: order shipping or billing contact
+  subject_kind: end_user
+  purpose: contact number on the shipping and billing address of an order
+  rationale: The OrderAddress.phone column (modules/order/src/models/address.ts:16) decides the item, with its GraphQL type, order address DTOs, upsert DTO, admin and common HTTP order address types and the fulfillment module view of an order address (FulfillmentOrderAddressDTO). Stored in its own table, so a different item from the cart and customer addresses it is copied from at order creation.
+  clusters:
+  - c019
+  - c033
+  - c034
+  - c037
+  - c038
+  - c066
+  - c067
+- id: fulfillment-address-phone
+  name: Fulfillment address phone
+  subject: fulfillment delivery address
+  subject_kind: end_user
+  purpose: contact number on the delivery address of a fulfillment
+  rationale: The FulfillmentAddress.phone column (modules/fulfillment/src/models/address.ts:14) decides the item, with its GraphQL type, fulfillment address DTOs, create DTO, workflow DTO and admin and store HTTP types. Stored in its own table, so a different item from the order address it is created from. The same row also holds the stock location address for return fulfillments (create-return-fulfillment passes the location), so the subject is mixed; see report.
+  clusters:
+  - c018
+  - c020
+  - c030
+  - c031
+  - c032
+  - c042
+  - c064
+  - c065
+- id: stock-location-address-phone
+  name: Stock location address phone
+  subject: stock location (warehouse)
+  subject_kind: organization
+  purpose: contact number of a warehouse or stock location address
+  rationale: The StockLocationAddress.phone column (modules/stock-location/src/models/stock-location-address.ts:12) decides the item, with its GraphQL type, DTOs, admin validator and HTTP types, the admin stock-location address.phone field list, and the address.phone reads of the location in the create-fulfillment and create-return-fulfillment workflows.
+  clusters:
+  - c002
+  - c003
+  - c035
+  - c036
+  - c040
+  - c041
+  - c049
+  - c050
+  - c072
+  - c073
+needs_adjudication:
+- cluster: c005
+  candidate_groups:
+  - customer-address-phone
+  - cart-address-phone
+  - order-address-phone
+  - fulfillment-address-phone
+  - stock-location-address-phone
+  reason: AddressDTO is the generic address shape; the importers that say which table it describes are outside the scoped files, so the subject is not visible
+- cluster: c021
+  candidate_groups:
+  - customer-address-phone
+  - cart-address-phone
+  - order-address-phone
+  reason: BaseAddress is a generic HTTP address entity (it carries customer_id) that other address types extend or mirror; which address table it stands for is not settled by the file
+- cluster: c057
+  candidate_groups:
+  - order-address-phone
+  - fulfillment-address-phone
+  reason: AddressPayload is shared by the admin order, draft order and fulfillment validators (shipping, billing and delivery addresses), which write to different address tables

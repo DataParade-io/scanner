@@ -1,0 +1,1256 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-5a074c
+  files:
+  - ghost/core/core/server/services/staff/staff-service.js
+  - ghost/core/core/server/models/user.js
+  - ghost/core/core/server/services/auth/setup.js
+  - ghost/core/core/server/services/auth/passwordreset.js
+annotations:
+- id: ghost-staff-service-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the staff-service-emails module; an import, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-staff-service-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Assigns an Emails service instance; a feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L75
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 75
+    end_line: 75
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the member's email address into an object field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/staff/staff-service.js
+      line: 75
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-staff-service-L110
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 110
+    end_line: 110
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls a method on the emails service; the name refers to notifications, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L137
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 137
+    end_line: 137
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls a method on the emails service; the name refers to notifications, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L154
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 154
+    end_line: 154
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls a method on the emails service; the name refers to notifications, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L162
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 162
+    end_line: 162
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls a method on the emails service; the name refers to notifications, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-staff-service-L172
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 172
+    end_line: 172
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing when to trigger email notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-staff-service-L181
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 181
+    end_line: 181
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing when to trigger email notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-staff-service-L193
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 193
+    end_line: 193
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing when to trigger email notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-staff-service-L205
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/staff/staff-service.js
+    start_line: 205
+    end_line: 205
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing when to trigger email notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L40
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L220
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 220
+    end_line: 220
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing the onSaving method's behavior.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L246
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 246
+    end_line: 246
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing the condition being checked.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L247
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 247
+    end_line: 247
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if the email field has changed and reads its value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 247
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L254
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 254
+    end_line: 254
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address to gravatar lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 254
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L311
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 311
+    end_line: 311
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address to password validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration: unresolved
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L549
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 549
+    end_line: 549
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for getting users who should receive email alerts; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-user-L598
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 598
+    end_line: 598
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if the email field is provided in the input data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 588
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L599
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 599
+    end_line: 599
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address to find any existing user with that email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 588
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L602
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 602
+    end_line: 602
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L777
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 777
+    end_line: 777
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address to password validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 774
+      kind: local
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L1077
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1077
+    end_line: 1077
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing the check method's behavior.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L1082
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1082
+    end_line: 1082
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the object's email address to find a user by email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1079
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L1086
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1086
+    end_line: 1086
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L1116
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1116
+    end_line: 1116
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L1264
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1264
+    end_line: 1264
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing the getByEmail method.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L1265
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1265
+    end_line: 1265
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email address deduplication requirements.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L1267
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1267
+    end_line: 1267
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The function's email parameter holds the address it looks up or sends to; the parameter occurrence wins over the function name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1267
+      kind: parameter
+    group: staff-user-email
+- id: ghost-user-L1268
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: getByEmail
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1268
+    end_line: 1268
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name in string literal; refers to the method name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-user-L1272
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1272
+    end_line: 1272
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment discussing email validation limitations.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-user-L1279
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1279
+    end_line: 1279
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads and returns the user object with matching email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1267
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L1280
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1280
+    end_line: 1280
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares the user's email address with the parameter email in case-insensitive manner.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1279
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L1283
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1283
+    end_line: 1283
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the found user with matching email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1279
+      kind: local
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-user-L1284
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/user.js
+    start_line: 1284
+    end_line: 1284
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the user object with matching email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/user.js
+      line: 1279
+      kind: local
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-setup-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: welcome
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-setup-L22
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose content in JSON fixture describing email newsletters feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-setup-L24
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Prose content in JSON fixture describing email newsletters feature.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-setup-L183
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 183
+    end_line: 183
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The function's email parameter holds the address it looks up or sends to; the parameter occurrence wins over the function name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/auth/setup.js
+      line: 183
+      kind: parameter
+    group: staff-user-email
+- id: ghost-setup-L184
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 184
+    end_line: 184
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration flag controlling whether to send welcome email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-setup-L186
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 186
+    end_line: 186
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the owner's email address into the template data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/setup.js
+      line: 186
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-setup-L191
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 191
+    end_line: 191
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient email address for the welcome email message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/setup.js
+      line: 183
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-setup-L207
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 207
+    end_line: 207
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value is held.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-setup-L256
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/setup.js
+    start_line: 256
+    end_line: 256
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of the sendWelcomeEmail function; a feature reference.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-passwordreset-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 32
+    end_line: 32
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The function's email parameter holds the address it looks up or sends to; the parameter occurrence wins over the function name.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 32
+      kind: parameter
+    group: staff-user-email
+- id: ghost-passwordreset-L42
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 42
+    end_line: 42
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email parameter to find a user by email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 32
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-passwordreset-L51
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 51
+    end_line: 51
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Stores the email address in the token object.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 51
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-passwordreset-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 57
+    end_line: 57
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the email address as part of the token response.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 57
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-passwordreset-L98
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 98
+    end_line: 98
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email from token parts to find a user by email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 68
+      kind: local
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-passwordreset-L156
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 156
+    end_line: 156
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Variable naming a container object for email template data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-passwordreset-L158
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 158
+    end_line: 158
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient's email address in the email template data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 158
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-passwordreset-L162
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 162
+    end_line: 162
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template name reference; does not hold an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-passwordreset-L170
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/auth/passwordreset.js
+    start_line: 170
+    end_line: 170
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient email address for the password reset notification message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/auth/passwordreset.js
+      line: 152
+      kind: parameter
+    owner: ghost/core
+    group: staff-user-email

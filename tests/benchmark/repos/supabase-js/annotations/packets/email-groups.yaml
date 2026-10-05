@@ -1,0 +1,77 @@
+repo: supabase-js
+concept: email
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+groups:
+  - id: user-email
+    name: Auth user email
+    subject: the project's auth user (end user signing in, or the same user as the target of an admin call)
+    subject_kind: end_user
+    purpose: the user's account address, stored on the auth user record
+    rationale: "The auth user record's email decides the item: User.email as the server returns it (types.ts:503) and its read by the passkey display-name fallback (webauthn.ts:650); PasswordCredentialsBase.email (types.ts:676) with the signUp branch, destructure and /signup body (GoTrueClient.ts:1029/1030/1040: POST /signup creates the user and returns it with this address) and the signInWithPassword branch, destructure and password-grant body (1231/1232/1236: a sign-in input looked up against the stored email); resetPasswordForEmail's parameter and /recover body (4448/4472: documented as the email address of the user, the password-reset lookup the definition names as the column's item); the admin inviteUserByEmail parameter and /invite body (GoTrueAdminApi.ts:233/244: the invite creates the user and returns it); the generateLink signup, invite/magiclink, recovery and email-change current-address fields (types.ts:956/964/971/978: documented as the user's email; generateLink creates the user for signup, invite and magiclink and returns the user); the access token's email claim (types.ts:2004: a copy issued from the record, a value passed from its source); and the OAuth consent request's user email (types.ts:2566). The admin API's target users are rows of the same auth user record with the same User type and no flag telling them apart from signed-in users, so the end user and the admin target are one subject kind here."
+    clusters:
+      - c001
+      - c004
+      - c005
+      - c006
+      - c007
+      - c013
+      - c015
+      - c017
+      - c021
+      - c022
+      - c023
+      - c024
+      - c026
+      - c027
+  - id: pending-new-email
+    name: Requested new email (pending change)
+    subject: the auth user changing their address
+    subject_kind: end_user
+    purpose: an email change awaiting confirmation
+    rationale: "A requested new address that is not yet the stored email is its own item: User.new_email as returned (types.ts:499); the signed-in user's updateUser attributes.email read (GoTrueClient.ts:3426, through the _updateUser parameter at 3408; the docs say a confirmation goes to the new address and the change applies only after it is confirmed); and generateLink's email-change newEmail (types.ts:982) with its presence test, its copy into the body as new_email and the key removal (GoTrueAdminApi.ts:376/378/379)."
+    clusters:
+      - c002
+      - c003
+      - c012
+      - c014
+      - c025
+  - id: otp-sign-in-email
+    name: Passwordless sign-in address (OTP recipient)
+    subject: the person signing in without a password
+    subject_kind: end_user
+    purpose: the address a magic link or one-time code is requested for
+    rationale: "SignInWithPasswordlessCredentials.email (types.ts:688) and signInWithOtp's branch, destructure and /otp body (GoTrueClient.ts:2283/2284/2293). The address entered in a magic-link or OTP sign-in request is its own item under the definition (it is not yet a stored value: signInWithOtp returns no user, and the server may create the user from it when shouldCreateUser is left on)."
+    clusters:
+      - c008
+      - c009
+      - c018
+needs_adjudication:
+  - cluster: c016
+    candidate_groups:
+      - pending-new-email
+      - user-email
+    reason: "UserAttributes.email (types.ts:533) is one declaration with two uses: the signed-in user's updateUser parameter, where it is a requested change pending confirmation (GoTrueClient.ts:3390/3408), and, through AdminUserAttributes extends Omit<UserAttributes, 'data'>, the admin createUser and updateUserById attributes, which the server writes into the user record directly ('Changes are applied directly without confirmation flows'). The line cannot be given one item."
+  - cluster: c019
+    candidate_groups:
+      - user-email
+      - pending-new-email
+      - otp-sign-in-email
+    reason: "VerifyEmailOtpParams.email (types.ts:863) is the address an OTP was sent to for every EmailOtpType. Per the verifyOtp docs that is the user's address for signup, invite and recovery, the passwordless sign-in address for email/magiclink, and the new address for email_change. The type is chosen per call, so the field holds different items."
+  - cluster: c010
+    candidate_groups:
+      - user-email
+      - pending-new-email
+    reason: "ResendParams.email is used for type signup (the address of an existing unconfirmed sign-up, already written to the user by signUp) and type email_change, where the source does not say whether the address names the current email that locates the user or the pending new address the message goes to. The resend branch reads either."
+  - cluster: c011
+    candidate_groups:
+      - user-email
+      - pending-new-email
+    reason: "resend destructures and posts ResendParams.email (GoTrueClient.ts:2731/2740) for type signup or email_change; as for the declaration, the source does not settle whether an email_change resend carries the current or the pending new address."
+  - cluster: c020
+    candidate_groups:
+      - user-email
+      - pending-new-email
+    reason: "ResendParams.email declaration (types.ts:901), shared by the signup and email_change resend types; the source does not settle which address an email_change resend carries."

@@ -1,0 +1,159 @@
+concept: email
+layer: occurrences
+purpose: Exhaustive email mention scope for KDATAP-46d893 labeling. Merged into layer-scopes.yaml only after the batch labels are accepted, so precision never counts unlabeled files.
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: '2026-09-28'
+  reviewed_by: agent@example.com
+  reviewed_at: '2026-09-28'
+  review_state: accepted
+files:
+- path: saleor/plugins/user_email/plugin.py
+  theme: customer email plugin
+  candidates: 72
+- path: saleor/plugins/user_email/tasks.py
+  theme: customer email plugin
+  candidates: 105
+- path: saleor/plugins/user_email/constants.py
+  theme: customer email plugin
+  candidates: 15
+- path: saleor/plugins/user_email/default_email_templates/request_email_change.html
+  theme: customer email plugin
+  candidates: 3
+- path: saleor/plugins/admin_email/plugin.py
+  theme: staff email plugin
+  candidates: 62
+- path: saleor/plugins/admin_email/notify_events.py
+  theme: staff email plugin
+  candidates: 46
+- path: saleor/plugins/admin_email/tasks.py
+  theme: staff email plugin
+  candidates: 31
+- path: saleor/plugins/sendgrid/plugin.py
+  theme: sendgrid
+  candidates: 66
+- path: saleor/plugins/sendgrid/tasks.py
+  theme: sendgrid
+  candidates: 57
+- path: saleor/account/models.py
+  theme: account
+  candidates: 16
+- path: saleor/account/notifications.py
+  theme: account
+  candidates: 22
+- path: saleor/account/events.py
+  theme: account
+  candidates: 8
+- path: saleor/account/search.py
+  theme: account
+  candidates: 8
+- path: saleor/account/utils.py
+  theme: account
+  candidates: 6
+- path: saleor/account/throttling.py
+  theme: account
+  candidates: 3
+- path: saleor/account/error_codes.py
+  theme: account
+  candidates: 1
+- path: saleor/order/events.py
+  theme: order
+  candidates: 28
+- path: saleor/order/notifications.py
+  theme: order
+  candidates: 15
+- path: saleor/order/models.py
+  theme: order
+  candidates: 9
+- path: saleor/order/actions.py
+  theme: order
+  candidates: 7
+- path: saleor/order/utils.py
+  theme: order
+  candidates: 7
+- path: saleor/checkout/complete_checkout.py
+  theme: checkout
+  candidates: 25
+- path: saleor/checkout/models.py
+  theme: checkout
+  candidates: 5
+- path: saleor/checkout/checkout_cleaner.py
+  theme: checkout
+  candidates: 6
+- path: saleor/checkout/error_codes.py
+  theme: checkout
+  candidates: 2
+- path: saleor/giftcard/utils.py
+  theme: gift card
+  candidates: 15
+- path: saleor/giftcard/events.py
+  theme: gift card
+  candidates: 9
+- path: saleor/giftcard/models.py
+  theme: gift card
+  candidates: 6
+batches:
+- batch: 1
+  candidates: 72
+  files:
+  - saleor/plugins/user_email/plugin.py
+- batch: 2
+  candidates: 105
+  files:
+  - saleor/plugins/user_email/tasks.py
+- batch: 3
+  candidates: 18
+  files:
+  - saleor/plugins/user_email/constants.py
+  - saleor/plugins/user_email/default_email_templates/request_email_change.html
+- batch: 4
+  candidates: 62
+  files:
+  - saleor/plugins/admin_email/plugin.py
+- batch: 5
+  candidates: 46
+  files:
+  - saleor/plugins/admin_email/notify_events.py
+- batch: 6
+  candidates: 31
+  files:
+  - saleor/plugins/admin_email/tasks.py
+- batch: 7
+  candidates: 66
+  files:
+  - saleor/plugins/sendgrid/plugin.py
+- batch: 8
+  candidates: 57
+  files:
+  - saleor/plugins/sendgrid/tasks.py
+- batch: 9
+  candidates: 60
+  files:
+  - saleor/account/models.py
+  - saleor/account/notifications.py
+  - saleor/account/events.py
+  - saleor/account/search.py
+  - saleor/account/utils.py
+- batch: 10
+  candidates: 56
+  files:
+  - saleor/account/throttling.py
+  - saleor/account/error_codes.py
+  - saleor/order/events.py
+  - saleor/order/notifications.py
+  - saleor/order/models.py
+- batch: 11
+  candidates: 52
+  files:
+  - saleor/order/actions.py
+  - saleor/order/utils.py
+  - saleor/checkout/complete_checkout.py
+  - saleor/checkout/models.py
+  - saleor/checkout/checkout_cleaner.py
+  - saleor/checkout/error_codes.py
+- batch: 12
+  candidates: 30
+  files:
+  - saleor/giftcard/utils.py
+  - saleor/giftcard/events.py
+  - saleor/giftcard/models.py

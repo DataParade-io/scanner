@@ -1,0 +1,1575 @@
+packet:
+  repo: strapi
+  concept: email
+  kanbus_issue: KDATAP-faabdc
+  files:
+    - packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    - packages/core/strapi/src/cli/commands/admin/create-user.ts
+    - packages/core/strapi/src/cli/commands/admin/block-user.ts
+    - packages/core/strapi/src/cli/commands/admin/active-user.ts
+annotations:
+  - id: strapi-delete-user-L12
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 12
+      end_line: 12
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Field definition in interface for command options that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 12
+        kind: field
+      owner: packages/core
+  - id: strapi-delete-user-L15
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: emailValidator
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 15
+      end_line: 15
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Declares the emailValidator schema, a validator name rather than an address value.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: packages/core
+  - id: strapi-delete-user-L18
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 18
+      end_line: 18
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Schema field that validates the email address in command options.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 18
+        kind: field
+      owner: packages/core
+  - id: strapi-delete-user-L22
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 22
+      end_line: 22
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Type field in Answers interface that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 22
+        kind: field
+      owner: packages/core
+  - id: strapi-delete-user-L33
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 33
+      end_line: 33
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Prompt question name asking the user for their email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-delete-user-L34
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 34
+      end_line: 34
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Prose prompt message asking for user input; not holding an address value.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-delete-user-L36
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: validEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 36
+      end_line: 36
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Validates the email address input value using the validator.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 36
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L37
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: validEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 37
+      end_line: 37
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Returns the email validation result from the validator callback function.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 36
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L47
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 47
+      end_line: 47
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Function parameter that receives the user email address to delete.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 47
+        kind: parameter
+      owner: packages/core
+  - id: strapi-delete-user-L51
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 51
+      end_line: 51
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Passes the email parameter, an address, into findOneByEmail.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 47
+        kind: parameter
+      owner: packages/core
+  - id: strapi-delete-user-L54
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 54
+      end_line: 54
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Error message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 47
+        kind: parameter
+      owner: packages/core
+  - id: strapi-delete-user-L73
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 73
+      end_line: 73
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from command options to read the email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L75
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 75
+      end_line: 75
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to decide whether to prompt for it.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L83
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 83
+      end_line: 83
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from user inquiry response to read the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L86
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 86
+      end_line: 86
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to validate it was provided.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L87
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 87
+      end_line: 87
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Prose error message that mentions email as a required option, not an address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-delete-user-L92
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 92
+      end_line: 92
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L101
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 101
+      end_line: 101
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+        line: 73
+        kind: local
+      owner: packages/core
+  - id: strapi-delete-user-L111
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+      start_line: 111
+      end_line: 111
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CLI option description that accepts the admin email address as input.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-create-user-L12
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 12
+      end_line: 12
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Field in interface for command options that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 12
+        kind: field
+      owner: packages/core
+  - id: strapi-create-user-L18
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: emailValidator
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 18
+      end_line: 18
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Declares the emailValidator schema, a validator name rather than an address value.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      owner: packages/core
+  - id: strapi-create-user-L37
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 37
+      end_line: 37
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Schema field that validates the email address for admin creation.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 37
+        kind: field
+      owner: packages/core
+  - id: strapi-create-user-L44
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 44
+      end_line: 44
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Type field in Answers interface that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 44
+        kind: field
+      owner: packages/core
+  - id: strapi-create-user-L59
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 59
+      end_line: 59
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Prompt question name asking the user for their email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-create-user-L60
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 60
+      end_line: 60
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Prose prompt message asking for user input; not holding an address value.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-create-user-L62
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: validEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 62
+      end_line: 62
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Validates the email address input value using the validator.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 62
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L63
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: validEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 63
+      end_line: 63
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Returns the email validation result from the validator callback function.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 62
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L84
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 84
+      end_line: 84
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Function parameter that receives the email address to create the admin user.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 84
+        kind: parameter
+      owner: packages/core
+  - id: strapi-create-user-L88
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 88
+      end_line: 88
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email parameter that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 84
+        kind: parameter
+      owner: packages/core
+  - id: strapi-create-user-L91
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 91
+      end_line: 91
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Error message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 84
+        kind: parameter
+      owner: packages/core
+  - id: strapi-create-user-L98
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 98
+      end_line: 98
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Passes the email address to the create function for the new admin user.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 84
+        kind: parameter
+      owner: packages/core
+  - id: strapi-create-user-L114
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 114
+      end_line: 114
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from command options to read the email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 114
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L117
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 117
+      end_line: 117
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to decide whether to prompt for it.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 114
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L130
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 130
+      end_line: 130
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from user inquiry response to read the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 114
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L134
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 134
+      end_line: 134
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 114
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L143
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 143
+      end_line: 143
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+        line: 114
+        kind: local
+      owner: packages/core
+  - id: strapi-create-user-L153
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/create-user.ts
+      start_line: 153
+      end_line: 153
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CLI option description that accepts the new admin email address as input.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-block-user-L11
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 11
+      end_line: 11
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Field in interface for command options that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 11
+        kind: field
+      owner: packages/core
+  - id: strapi-block-user-L16
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Type field in Answers interface that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 16
+        kind: field
+      owner: packages/core
+  - id: strapi-block-user-L21
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 21
+      end_line: 21
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Prompt question asking the user for their email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-block-user-L25
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 25
+      end_line: 25
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Function parameter that receives the email address to set block status.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 25
+        kind: parameter
+      owner: packages/core
+  - id: strapi-block-user-L29
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 29
+      end_line: 29
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Variable that normalizes the email address to lowercase.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L39
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 39
+      end_line: 39
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Passes the cleaned email address into findOneByEmail.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L42
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 42
+      end_line: 42
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Error message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L53
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 53
+      end_line: 53
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Log message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L61
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 61
+      end_line: 61
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from command options to read the email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 61
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L63
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 63
+      end_line: 63
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to decide whether to prompt for it.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 61
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L70
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 70
+      end_line: 70
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to validate it was provided.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 61
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L71
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 71
+      end_line: 71
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Prose error message that mentions email as a required option, not an address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-block-user-L75
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 75
+      end_line: 75
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+        line: 61
+        kind: local
+      owner: packages/core
+  - id: strapi-block-user-L85
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/block-user.ts
+      start_line: 85
+      end_line: 85
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CLI option description that accepts the user email address as input.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-active-user-L11
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 11
+      end_line: 11
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Field in interface for command options that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 11
+        kind: field
+      owner: packages/core
+  - id: strapi-active-user-L16
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 16
+      end_line: 16
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Type field in Answers interface that holds an email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: property_key
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 16
+        kind: field
+      owner: packages/core
+  - id: strapi-active-user-L21
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 21
+      end_line: 21
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Prompt question asking the user for their email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-active-user-L25
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 25
+      end_line: 25
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Function parameter that receives the email address to set active status.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 25
+        kind: parameter
+      owner: packages/core
+  - id: strapi-active-user-L29
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 29
+      end_line: 29
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Variable that normalizes the email address to lowercase.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L39
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 39
+      end_line: 39
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Passes the cleaned email address into findOneByEmail.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L42
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 42
+      end_line: 42
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Error message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L55
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: cleanEmail
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 55
+      end_line: 55
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Log message that includes the user's email address in template string.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 29
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L63
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 63
+      end_line: 63
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Destructures email from command options to read the email address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 63
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L65
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 65
+      end_line: 65
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to decide whether to prompt for it.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 63
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L72
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 72
+      end_line: 72
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Condition checks if email is empty to validate it was provided.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 63
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L73
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 73
+      end_line: 73
+    expected:
+      status: negative
+      labels:
+        - email_address
+    rationale: Prose error message that mentions email as a required option, not an address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core
+  - id: strapi-active-user-L77
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 77
+      end_line: 77
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: Shorthand object property reads the email variable that holds the address.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: identifier
+      declaration:
+        file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+        line: 63
+        kind: local
+      owner: packages/core
+  - id: strapi-active-user-L87
+    layer: occurrences
+    subject:
+      key: occurrence:email
+      name: email
+    evidence:
+      file_path: packages/core/strapi/src/cli/commands/admin/active-user.ts
+      start_line: 87
+      end_line: 87
+    expected:
+      status: positive
+      labels:
+        - email_address
+    rationale: CLI option description that accepts the user email address as input.
+    provenance:
+      proposed_by: claude-haiku-4-5-20251001
+      proposed_at: '2026-09-30'
+      review_state: proposed
+    occurrence_attributes:
+      syntax_kind: string_literal
+      owner: packages/core

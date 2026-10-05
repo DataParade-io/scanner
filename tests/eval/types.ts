@@ -1,11 +1,18 @@
 /** Fixture evaluation types — aligns with tests/benchmark/schema.ts and ground-truth-schema.md */
 
 import type {
+  DataItemAnnotationCandidate,
   FlowAnnotationCanonical,
   FlowAnnotationCandidate,
 } from "../benchmark/schema";
 import type { AssertedFlowEndpoints } from "../../src/eval/canonical/graph/types";
 import type { FlowAssertion } from "../../src/eval/canonical/types";
+import type {
+  AttributeMetricScore,
+  OccurrenceAttributeValues,
+  PairwiseGroupingScores,
+  ScoredOccurrenceAttribute,
+} from "../../src/eval/canonical/occurrence-attribute-metrics";
 
 export type EvalCaseStatus = "positive" | "negative" | "ambiguous";
 
@@ -14,7 +21,7 @@ export type EvalLayer =
   | "data-flows"
   | "raw-hits"
   | "data-items"
-  | "mentions"
+  | "occurrences"
   | "data-actions";
 
 export interface EvalSubject {
@@ -54,10 +61,24 @@ export interface EvalCase {
    * recorded as a negative case.
    */
   exhaustiveScopeFiles?: string[];
+  /**
+   * Concept-scoped closed worlds for this fixture and layer: in `files`, findings
+   * whose subject key is in `subjectKeys` count toward precision (KDATAP-ec05ea).
+   */
+  conceptScopes?: EvalConceptScope[];
   /** Promoted flow identity for data-flows scoring (KDATAP-7e5b94). */
   flow_canonical?: FlowAnnotationCanonical;
   /** Non-scoring flow migration audit block when carried through eval cases. */
   flowCandidate?: FlowAnnotationCandidate;
+  /** Non-scoring data-item migration audit block when carried through eval cases. */
+  dataItemCandidate?: DataItemAnnotationCandidate;
+  /** Asserted occurrence attributes (occurrences layer only, KDATAP-8b2c8a). */
+  occurrenceAttributes?: OccurrenceAttributeValues;
+}
+
+export interface EvalConceptScope {
+  subjectKeys: string[];
+  files: string[];
 }
 
 export interface LayerFinding {
@@ -77,6 +98,8 @@ export interface LayerFinding {
   layer?: EvalLayer;
   flowEndpoints?: AssertedFlowEndpoints;
   flowAssertion?: FlowAssertion;
+  /** Attributes the scanner reports on a occurrence finding, when it emits them. */
+  occurrenceAttributes?: OccurrenceAttributeValues;
 }
 
 export interface FixtureScanResult {
@@ -146,6 +169,10 @@ export interface EvalScores {
   unreadCount: number;
   denominators: EvalScoreDenominators;
   metricComputability: MetricComputability;
+  /** Occurrences layer only: per-attribute accuracy over matched pairs whose gold asserts it. */
+  occurrenceAttributes?: Record<ScoredOccurrenceAttribute, AttributeMetricScore>;
+  /** Occurrences layer only: pairwise declaration-grouping precision and recall. */
+  grouping?: PairwiseGroupingScores;
 }
 
 export interface EvalCaseResult {

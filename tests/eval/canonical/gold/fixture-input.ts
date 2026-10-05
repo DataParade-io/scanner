@@ -6,7 +6,7 @@ const EVAL_LAYER_TO_BENCHMARK: Record<EvalLayer, BenchmarkLayer> = {
   "data-flows": "data_flows",
   "raw-hits": "raw_hits",
   "data-items": "data_items",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-actions": "data_actions",
 };
 
@@ -41,6 +41,9 @@ export function evalCaseToAnnotationRecord(caseRecord: EvalCase): AnnotationReco
       : {}),
     ...(caseRecord.flowCandidate !== undefined
       ? { candidate: caseRecord.flowCandidate }
+      : {}),
+    ...(caseRecord.dataItemCandidate !== undefined
+      ? { candidate: caseRecord.dataItemCandidate }
       : {}),
   };
 }

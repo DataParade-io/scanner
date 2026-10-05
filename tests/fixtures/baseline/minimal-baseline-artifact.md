@@ -13,7 +13,7 @@
 - scannerGitSha: fixture-sha-001
 - corpusGoldDigest: sha256:fixture-corpus-digest
 - evaluationContractVersion: 1.0.0
-- scorecardVectorContractVersion: scorecard-vector/2
+- scorecardVectorContractVersion: scorecard-vector/3
 - taxonomyDigest: sha256:fixture-taxonomy
 - conceptMapDigest: sha256:fixture-concept-map
 - adapterMapDigest: sha256:fixture-adapter-map
@@ -39,7 +39,7 @@
 - canonicalContractVersion: 1.0.0
 - eligibilityReasonSetVersion: eligibility-reasons/1
 - groundTruthSchemaVersion: ground-truth/1
-- scorecardVectorContractVersion: scorecard-vector/2
+- scorecardVectorContractVersion: scorecard-vector/3
 
 ## Readiness
 
@@ -49,7 +49,7 @@
 
 ## Gold population
 
-### mentions
+### occurrences
 - acceptedCanonicalCount: 2
 - evaluablePositiveCount: 2
 - distinctConceptLeaves: 1
@@ -80,14 +80,14 @@
 
 - data-flows: 1
 
-## Scorecard (scorecard-vector/2)
+## Scorecard (scorecard-vector/3)
 
-- contract: scorecard-vector/2
+- contract: scorecard-vector/3
 - scanner: fixture-sha-001
 - review states: accepted
 - packets: 1
 
-### mentions
+### occurrences
 - summary: empty
 - gate: skip (no_eval_cases)
 - Recall: 50.0% [computable; 1/2]
@@ -137,7 +137,7 @@
 
 ## Packet: fixture-packet
 
-### mentions
+### occurrences
 - acceptedCanonical=0, evaluable=2, matched=1
 - unread: 0 (n/a)
 - capability (diagnostic): 0.0% case-weighted
@@ -165,7 +165,7 @@
 ## Capability coverage (diagnostic only)
 
 - disclaimer: diagnostic_only_not_recall_denominator
-### mentions
+### occurrences
 - caseWeighted: 0.0%
 - distinctLeaf: 0.0%
 - supportedCount: 0

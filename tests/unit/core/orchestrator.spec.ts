@@ -408,6 +408,71 @@ describe("core/pipeline/orchestrator - DP-P0-CLI-401", () => {
     expect(statsByLanguage.has("python")).toBe(true);
   });
 
+  it("exposes personal-data occurrences and data items from the PII inventory layer", async () => {
+    const fixturesRoot = path.join(
+      __dirname,
+      "..",
+      "..",
+      "fixtures",
+      "pii-email-basic",
+    );
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { occurrences, dataItems } = await scan(fixturesRoot, config);
+
+    expect(occurrences.length).toBeGreaterThan(0);
+    expect(dataItems.length).toBeGreaterThan(0);
+
+    const loginOccurrence = occurrences.find(
+      (row) =>
+        row.id === "occurrence:email:src/auth/login.ts:13" &&
+        row.filePath === "src/auth/login.ts" &&
+        row.startLine === 13,
+    );
+    expect(loginOccurrence).toEqual(
+      expect.objectContaining({
+        id: "occurrence:email:src/auth/login.ts:13",
+        filePath: "src/auth/login.ts",
+        startLine: 13,
+        endLine: 13,
+        labels: ["user_email"],
+      }),
+    );
+
+    const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
+    expect(emailDataItem?.occurrenceIds).toContain("occurrence:email:src/auth/login.ts:13");
+    expect(emailDataItem).toEqual(
+      expect.objectContaining({
+        id: "data_item:email",
+        labels: ["user_email"],
+      }),
+    );
+  });
+
+  it("assigns distinct occurrence ids for the same rule on different lines", async () => {
+    const fixturesRoot = path.join(
+      __dirname,
+      "..",
+      "..",
+      "fixtures",
+      "pii-email-dual-line",
+    );
+
+    const config = createDefaultScanConfiguration({ enableAiInference: false });
+    const { occurrences, dataItems } = await scan(fixturesRoot, config);
+
+    const emailOccurrences = occurrences.filter((row) => row.id.startsWith("occurrence:email:"));
+    expect(emailOccurrences.length).toBe(2);
+    expect(new Set(emailOccurrences.map((row) => row.id)).size).toBe(2);
+
+    const emailDataItem = dataItems.find((row) => row.id === "data_item:email");
+    expect(emailDataItem).toEqual({
+      id: "data_item:email",
+      occurrenceIds: emailOccurrences.map((row) => row.id).sort((a, b) => a.localeCompare(b)),
+      labels: ["user_email"],
+    });
+  });
+
   it("keeps direct app -> postgres edges end-to-end when provider nodes are absent", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "dp-orch-provider-topology-"));
     try {

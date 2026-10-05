@@ -1,0 +1,226 @@
+concept: phone
+layer: occurrences
+purpose: Phone number mention scope for KDATAP-939370 labeling over the widened medusa checkout. Merged into layer-scopes.yaml with the labels.
+provenance:
+  proposed_by: claude-sonnet-5-5
+  proposed_at: '2026-10-01'
+  review_state: proposed
+materialized_scope:
+- packages/medusa/src/
+- packages/modules/{customer,cart,order,fulfillment,stock-location,settings,payment,notification}/
+- packages/core/core-flows/
+- packages/core/types/
+left_out:
+- path: packages/admin/dashboard/
+  reason: admin UI strings, forms and translations (47 files mention phone); a display layer over the same API fields, not materialized
+- path: packages/plugins/draft-order/
+  reason: admin draft-order UI plugin; address phone appears only as form fields over the order address API
+- path: packages/core/js-sdk/, packages/design-system/icons/
+  reason: client SDK typing and icon names, no phone data handled
+- path: packages/modules/providers/
+  reason: one match in a provider package outside the requested module list
+- path: tests, __tests__, __fixtures__, __mocks__, integration-tests, *.spec.*, *.test.*
+  reason: test code, as for saleor and the email scopes
+- path: migrations, dist, *.d.ts, CHANGELOG.md, package.json, tsconfig*
+  reason: generated or non-code files; package.json and tsconfig matched only on unrelated words
+- path: markdown and yaml files (docs, OpenAPI sources)
+  reason: documentation, not handling code
+files:
+- path: packages/core/core-flows/src/cart/workflows/update-cart.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/customer/steps/maybe-unset-default-billing-addresses.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/customer/steps/maybe-unset-default-shipping-addresses.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/customer/steps/update-customers.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/fulfillment/steps/create-fulfillment.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/fulfillment/steps/create-return-fulfillment.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts
+  theme: workflows
+  candidates: 2
+- path: packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts
+  theme: workflows
+  candidates: 2
+- path: packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts
+  theme: workflows
+  candidates: 1
+- path: packages/core/types/src/address/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/auth/common/verification.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/auth/service.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 4
+- path: packages/core/types/src/cart/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/cart/mutations.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/cart/workflows.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/common/config-module.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 3
+- path: packages/core/types/src/customer/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 8
+- path: packages/core/types/src/customer/mutations.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 10
+- path: packages/core/types/src/fulfillment/common/address.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/fulfillment/common/order.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/fulfillment/mutations/fulfillment-address.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/address/entities.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/http/cart/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/cart/store/payloads.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/customer/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 12
+- path: packages/core/types/src/http/fulfillment/admin/entitites.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/fulfillment/admin/payloads.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/fulfillment/store/index.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/notification/admin/entities.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/http/order/admin/payloads.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/order/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/stock-locations/admin/entities.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/http/stock-locations/admin/payloads.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/http/view-configuration/admin/columns.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/http/view-configuration/admin/property-descriptor.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 1
+- path: packages/core/types/src/notification/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/notification/mutations.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/notification/provider.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/order/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/order/mutations.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/payment/provider.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/core/types/src/stock-location/common.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 8
+- path: packages/core/types/src/workflow/fulfillment/create-fulfillment.ts
+  theme: type definitions (DTOs and HTTP types)
+  candidates: 2
+- path: packages/medusa/src/api/admin/customers/query-config.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 3
+- path: packages/medusa/src/api/admin/customers/validators.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 3
+- path: packages/medusa/src/api/admin/stock-locations/query-config.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 1
+- path: packages/medusa/src/api/admin/stock-locations/validators.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 1
+- path: packages/medusa/src/api/store/carts/query-config.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 2
+- path: packages/medusa/src/api/store/customers/query-config.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 2
+- path: packages/medusa/src/api/store/customers/validators.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 2
+- path: packages/medusa/src/api/utils/common-validators/common.ts
+  theme: 'API routes: validators and query fields'
+  candidates: 1
+- path: packages/modules/cart/src/models/address.ts
+  theme: cart module
+  candidates: 1
+- path: packages/modules/cart/src/types/address.ts
+  theme: cart module
+  candidates: 1
+- path: packages/modules/customer/src/models/address.ts
+  theme: customer module
+  candidates: 1
+- path: packages/modules/customer/src/models/customer.ts
+  theme: customer module
+  candidates: 1
+- path: packages/modules/customer/src/types/services/address.ts
+  theme: customer module
+  candidates: 2
+- path: packages/modules/fulfillment/src/models/address.ts
+  theme: fulfillment module
+  candidates: 1
+- path: packages/modules/fulfillment/src/schema/index.ts
+  theme: fulfillment module
+  candidates: 1
+- path: packages/modules/notification/src/models/notification.ts
+  theme: notification module
+  candidates: 2
+- path: packages/modules/order/src/models/address.ts
+  theme: order module
+  candidates: 1
+- path: packages/modules/order/src/schema/index.ts
+  theme: order module
+  candidates: 1
+- path: packages/modules/payment/src/providers/payment-medusa/services/medusa-payments.ts
+  theme: payment module
+  candidates: 2
+- path: packages/modules/settings/src/utils/computed-columns.ts
+  theme: settings view configuration
+  candidates: 2
+- path: packages/modules/settings/src/utils/render-mode-mapper.ts
+  theme: settings view configuration
+  candidates: 3
+- path: packages/modules/stock-location/src/models/stock-location-address.ts
+  theme: stock location module
+  candidates: 1
+- path: packages/modules/stock-location/src/schema/index.ts
+  theme: stock location module
+  candidates: 1

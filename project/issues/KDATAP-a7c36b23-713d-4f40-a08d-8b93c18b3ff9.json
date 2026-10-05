@@ -1,0 +1,70 @@
+{
+  "id": "KDATAP-a7c36b23-713d-4f40-a08d-8b93c18b3ff9",
+  "title": "Adjudicate remaining proposed data-flow findings",
+  "description": "Adjudicate the 273 Proposed data-flow findings from pinned source + `patterns/personal-data-concept-map.yaml`.\n\nDisposition per row: accept, reject, or leave unresolved. Do not use scanner output as gold. Do not rewrite labels to match the scanner.\n\nOutput: adjudication ledger + packet for human accept. Finding issues stay Proposed until the packet is accepted; then `--apply` and board statuses follow YAML (accepted / rejected / proposed).\n\nOut of scope: scanner changes, data-item rows (slice-2 already applied), new repositories, mention YAML without findings.",
+  "type": "task",
+  "status": "closed",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-182788f4-5749-4d39-a333-bd0e1d002ffd",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "e88ffa1a-0f62-4397-8277-697159fff257",
+      "author": "home",
+      "text": "Starting: plan-only pass for adjudicating 273 Proposed data-flow findings. Follow corpus skill. No scanner alignment. Worktree to create: /tmp/scanner-a7c36b-data-flows on cursor/adjudicate-data-flows-a7c36b from origin/develop.",
+      "created_at": "2026-09-02T22:24:33.484021Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "73eb28bb-4481-470c-a971-6f0bcc7de392",
+      "author": "home",
+      "text": "Plan review: worktree verified at `/tmp/scanner-a7c36b-data-flows` on `cursor/adjudicate-data-flows-a7c36b` @ 5417484 (= origin/develop). Implementation authorized.\n\nAmendment: `--apply` must write `flow_canonical` on every new accept via existing `buildFlowAnnotationCanonicalBlock`. YAML `accepted` without that block still loads as `needs_adjudication` (KDATAP-7e5b94 is closed; this is not a follow-up task). No accept ceiling. No `scan()`. Packet accept before `--apply`. Findings stay proposed until apply, then sync board in the same slice.",
+      "created_at": "2026-09-02T22:27:04.562759Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "622ef7e7-4d22-4935-b450-368e93dbb0b3",
+      "author": "home",
+      "text": "Packet send-back (not ready for Ryan).\n\n25 of 40 accepts have empty `data_categories` (session/token/CSRF/OpenID app/scope/ticket-cache). Authorized lock: no closed-map leaf → unresolved. Do not add an empty-category accept hatch. Same lesson as data-item tokens: do not invent a workaround for missing leaves.\n\nAlso: `posthog-user-email-persisted` and `redmine-email-normalize-address` must not pick up postal `address` from email-address wording. `--apply` must run real `kbs update <id>` finding sync, not print fake `--title` commands.\n\nYAML still unchanged. Re-run ledger + pass.md. Still no --apply.",
+      "created_at": "2026-09-02T22:34:59.403400Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "55be1363-0b1f-4a5e-8778-b52845dd6ebb",
+      "author": "home",
+      "text": "Packet ready for Ryan: 12 accept / 0 reject / 261 unresolved. Every accept has a closed-map data category. YAML and findings unchanged. Manager notes for review: directus-login-email-to-users-table and directus-local-get-user-id share the same evidence span; drupal-reset-password-to-notification may have picked up password from sendPasswordReset rather than a password value moving.",
+      "created_at": "2026-09-02T22:42:46.032970Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "5caf856d-6c77-4ec1-883f-4f027de1fca6",
+      "author": "home",
+      "text": "Ryan accepted the slice-2 data-flow packet (12 accept / 0 reject / 261 unresolved). Apply authorized: YAML + flow_canonical + digest + Kanbus finding sync.",
+      "created_at": "2026-09-02T23:11:48.414930Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "2b867586-b116-4f55-adab-150b859640e9",
+      "author": "home",
+      "text": "Apply landed on PR #62. YAML 158/17/261. Send-back: wiki still 146/17/273; drop project/events; bump acceptedEvalCases if needed.",
+      "created_at": "2026-09-02T23:16:58.836617Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "41278daa-a51f-4d28-b778-45fca7c54bf8",
+      "author": "home",
+      "text": "Merged PR #62 to develop. Data flows 158 accepted / 17 rejected / 261 proposed. Closing.",
+      "created_at": "2026-09-02T23:23:48.217736Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-02T22:24:22.074953Z",
+  "updated_at": "2026-09-02T23:23:48.243220Z",
+  "closed_at": "2026-09-02T23:23:48.243220Z",
+  "right_now_summary": "PR #62 merged; the ledger now has 158 accepted, 17 rejected, and 261 unresolved findings.",
+  "right_now_updated_at": "2026-09-09T02:07:02.772801Z",
+  "custom": {}
+}

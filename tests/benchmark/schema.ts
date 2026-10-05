@@ -12,11 +12,13 @@ export type BenchmarkLayer =
   | "components"
   | "data_flows"
   | "raw_hits"
-  | "mentions"
+  | "occurrences"
   | "data_items"
   | "data_actions"
-  /** @deprecated Use `mentions` — kept for corpus manifests and annotation files. */
-  | "pii_signals";
+  /** @deprecated Use `occurrences` — kept for corpus manifests and annotation files. */
+  | "pii_signals"
+  /** @deprecated Renamed to `occurrences` (KDATAP-3f9029); still read from older files. */
+  | "mentions";
 
 export interface ScopeExclude {
   path: string;
@@ -62,8 +64,20 @@ export interface LayerScopeRecord {
   provenance: AnnotationProvenance;
 }
 
+/**
+ * Closed-world scope for one concept (KDATAP-ec05ea): in these files, every scanner
+ * finding whose subject key is listed counts toward precision. Findings for other
+ * concepts in the same files are ignored unless a layer-wide scope also covers them.
+ */
+export interface ConceptScopeRecord {
+  subject_keys: string[];
+  exhaustive_scope_files: string[];
+  provenance: AnnotationProvenance;
+}
+
 export interface PacketLayerScopes {
   layer_scopes: Partial<Record<BenchmarkLayer, LayerScopeRecord>>;
+  concept_scopes?: Partial<Record<BenchmarkLayer, ConceptScopeRecord[]>>;
 }
 
 export interface AnnotationProvenance {
@@ -149,6 +163,48 @@ export interface DataItemAnnotationCandidate {
 
 export type AnnotationCandidate = FlowAnnotationCandidate | DataItemAnnotationCandidate;
 
+export type OccurrencesyntaxKind =
+  | "identifier"
+  | "property_key"
+  | "string_literal"
+  | "import_specifier"
+  | "comment"
+  | "type_name";
+
+export type OccurrenceDeclarationKind =
+  | "local"
+  | "parameter"
+  | "field"
+  | "function"
+  | "class"
+  | "export";
+
+export interface ResolvedOccurrenceDeclaration {
+  file_path: string;
+  line: number;
+  kind: OccurrenceDeclarationKind;
+}
+
+/** `unresolved` when the declaration is outside the repo or more than one import hop away. */
+export type OccurrenceDeclaration = ResolvedOccurrenceDeclaration | "unresolved";
+
+/**
+ * Optional asserted attributes on occurrence gold (KDATAP-8b2c8a). A record asserts only
+ * the attributes it labels; each is scored over the gold that asserts it.
+ */
+export interface OccurrenceAttributes {
+  syntax_kind?: OccurrencesyntaxKind;
+  declaration?: OccurrenceDeclaration;
+  /** Written type name on the declaration, when one is written. */
+  type_annotation?: string;
+  /** Repo-local name of the owning code unit. */
+  owner?: string;
+  /** Component identity keys the line touches. */
+  touches?: string[];
+  /** Repo-local declaration-group id for the grouping layer. */
+  group?: string;
+}
+
 export interface AnnotationRecord {
   id: string;
   layer: BenchmarkLayer;
@@ -160,6 +216,7 @@ export interface AnnotationRecord {
   canonical?: AnnotationCanonical;
   flow_canonical?: FlowAnnotationCanonical;
   candidate?: AnnotationCandidate;
+  occurrence_attributes?: OccurrenceAttributes;
 }
 
 export interface AnnotationFile {
@@ -179,20 +236,39 @@ export const ANNOTATION_STATUSES: readonly AnnotationStatus[] = [
   "ambiguous",
 ];
 
+export const OCCURRENCE_SYNTAX_KINDS: readonly OccurrencesyntaxKind[] = [
+  "identifier",
+  "property_key",
+  "string_literal",
+  "import_specifier",
+  "comment",
+  "type_name",
+];
+
+export const OCCURRENCE_DECLARATION_KINDS: readonly OccurrenceDeclarationKind[] = [
+  "local",
+  "parameter",
+  "field",
+  "function",
+  "class",
+  "export",
+];
+
 export const BENCHMARK_LAYERS: readonly BenchmarkLayer[] = [
   "components",
   "data_flows",
   "raw_hits",
-  "mentions",
+  "occurrences",
   "data_items",
   "data_actions",
   "pii_signals",
+  "mentions",
 ];
 
-/** Canonical layer for deprecated `pii_signals` corpus entries. */
+/** Canonical layer for deprecated `pii_signals` and `mentions` corpus entries. */
 export function normalizeBenchmarkLayer(layer: string): BenchmarkLayer {
-  if (layer === "pii_signals") {
-    return "mentions";
+  if (layer === "pii_signals" || layer === "mentions") {
+    return "occurrences";
   }
   if (!BENCHMARK_LAYERS.includes(layer as BenchmarkLayer)) {
     throw new Error(`Unknown benchmark layer '${layer}'`);

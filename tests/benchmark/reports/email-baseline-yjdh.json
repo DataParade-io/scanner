@@ -1,0 +1,458 @@
+{
+  "yjdh-employee": {
+    "cases": 147,
+    "emailFindings": 106,
+    "scores": {
+      "recall": 1,
+      "precision": 0.6428571428571429,
+      "negativeCasePassRate": 0.9072164948453608,
+      "denominators": {
+        "evaluablePositives": 45,
+        "matchedPositives": 45,
+        "matchedWithCorrectLabels": 45,
+        "matchedAncestorCategory": 0,
+        "negativeCases": 97,
+        "negativeCasesPassed": 88,
+        "exhaustiveScopedFindings": 70,
+        "exhaustiveScopedMatches": 45
+      },
+      "mentionAttributes": {
+        "syntax_kind": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 45
+        },
+        "declaration": {
+          "state": "computable",
+          "value": 0.4782608695652174,
+          "numerator": 11,
+          "denominator": 23
+        },
+        "type_annotation": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        },
+        "owner": {
+          "state": "scanner_capability_not_declared",
+          "value": null,
+          "numerator": 0,
+          "denominator": 45
+        },
+        "touches": {
+          "state": "not_asserted_by_gold",
+          "value": null,
+          "numerator": 0,
+          "denominator": 0
+        }
+      },
+      "grouping": {
+        "precision": {
+          "state": "computable",
+          "value": 1,
+          "numerator": 95,
+          "denominator": 95
+        },
+        "recall": {
+          "state": "computable",
+          "value": 0.5428571428571428,
+          "numerator": 95,
+          "denominator": 175
+        }
+      }
+    },
+    "recallBySyntaxKind": {
+      "string_literal": {
+        "total": 22,
+        "hit": 22
+      },
+      "identifier": {
+        "total": 23,
+        "hit": 20
+      },
+      "property_key": {
+        "total": 3,
+        "hit": 3
+      }
+    },
+    "negativesFlaggedBySyntaxKind": {
+      "string_literal": {
+        "total": 17,
+        "hit": 10
+      },
+      "import_specifier": {
+        "total": 13,
+        "hit": 0
+      },
+      "identifier": {
+        "total": 53,
+        "hit": 1
+      },
+      "comment": {
+        "total": 9,
+        "hit": 0
+      },
+      "property_key": {
+        "total": 7,
+        "hit": 0
+      }
+    },
+    "recallByGroup": {
+      "contact-person-email": {
+        "total": 19,
+        "hit": 17
+      },
+      "expert-inspector-email": {
+        "total": 3,
+        "hit": 3
+      },
+      "p2p-inspector-email": {
+        "total": 7,
+        "hit": 6
+      },
+      "employee-email": {
+        "total": 4,
+        "hit": 4
+      },
+      "system-contact-email": {
+        "total": 4,
+        "hit": 4
+      },
+      "default-from-email": {
+        "total": 3,
+        "hit": 3
+      },
+      "handler-user-email": {
+        "total": 1,
+        "hit": 1
+      },
+      "(no group)": {
+        "total": 3,
+        "hit": 3
+      },
+      "applicant-user-email": {
+        "total": 4,
+        "hit": 4
+      }
+    },
+    "groupingDetail": [
+      {
+        "id": "yjdh-email-applications-admin-L115",
+        "location": "backend/benefit/applications/admin.py:115",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-admin-L132",
+        "location": "backend/benefit/applications/admin.py:132",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application_batch_views-L83",
+        "location": "backend/benefit/applications/api/v1/application_batch_views.py:83",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:applications_company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application_views-L234",
+        "location": "backend/benefit/applications/api/v1/application_views.py:234",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application-L204",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:204",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application-L355",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:355",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:meta_company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application-L945",
+        "location": "backend/benefit/applications/api/v1/serializers/application.py:945",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-batch-L59",
+        "location": "backend/benefit/applications/api/v1/serializers/batch.py:59",
+        "goldGroup": "expert-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:expert_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-batch-L62",
+        "location": "backend/benefit/applications/api/v1/serializers/batch.py:62",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-batch-L89",
+        "location": "backend/benefit/applications/api/v1/serializers/batch.py:89",
+        "goldGroup": "expert-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:meta_expert_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-employee-L22",
+        "location": "backend/benefit/applications/api/v1/serializers/employee.py:22",
+        "goldGroup": "employee-email",
+        "matched": true,
+        "predictedGroup": "email~backend/benefit/applications/api/v1/serializers/employee.py:22"
+      },
+      {
+        "id": "yjdh-email-applications-models-L449",
+        "location": "backend/benefit/applications/models.py:449",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:application_company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-models-L860",
+        "location": "backend/benefit/applications/models.py:860",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:application_batch_p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-models-L870",
+        "location": "backend/benefit/applications/models.py:870",
+        "goldGroup": "expert-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:application_batch_expert_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-models-L936",
+        "location": "backend/benefit/applications/models.py:936",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:application_batch_p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-models-L979",
+        "location": "backend/benefit/applications/models.py:979",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:application_batch_p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-models-L1106",
+        "location": "backend/benefit/applications/models.py:1106",
+        "goldGroup": "employee-email",
+        "matched": true,
+        "predictedGroup": "email:employee"
+      },
+      {
+        "id": "yjdh-email-applications-models-L1177",
+        "location": "backend/benefit/applications/models.py:1177",
+        "goldGroup": "employee-email",
+        "matched": true,
+        "predictedGroup": "email:employee"
+      },
+      {
+        "id": "yjdh-email-applications-ahjo_payload-L269",
+        "location": "backend/benefit/applications/services/ahjo_payload.py:269",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-application_alteration_csv_report-L53",
+        "location": "backend/benefit/applications/services/application_alteration_csv_report.py:53",
+        "goldGroup": "system-contact-email",
+        "matched": true,
+        "predictedGroup": "email:system"
+      },
+      {
+        "id": "yjdh-email-applications-application_alteration_csv_report-L55",
+        "location": "backend/benefit/applications/services/application_alteration_csv_report.py:55",
+        "goldGroup": "system-contact-email",
+        "matched": true,
+        "predictedGroup": "email:system"
+      },
+      {
+        "id": "yjdh-email-applications-application_alteration_csv_report-L65",
+        "location": "backend/benefit/applications/services/application_alteration_csv_report.py:65",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-applications_csv_report-L234",
+        "location": "backend/benefit/applications/services/applications_csv_report.py:234",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-applications_csv_report-L266",
+        "location": "backend/benefit/applications/services/applications_csv_report.py:266",
+        "goldGroup": "employee-email",
+        "matched": true,
+        "predictedGroup": "email:employee"
+      },
+      {
+        "id": "yjdh-email-applications-applications_csv_report-L333",
+        "location": "backend/benefit/applications/services/applications_csv_report.py:333",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-clone_application-L66",
+        "location": "backend/benefit/applications/services/clone_application.py:66",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-applications-talpa_csv_service-L73",
+        "location": "backend/benefit/applications/services/talpa_csv_service.py:73",
+        "goldGroup": "p2p-inspector-email",
+        "matched": true,
+        "predictedGroup": "email:p2p_inspector"
+      },
+      {
+        "id": "yjdh-email-applications-application_handler-L95",
+        "location": "backend/benefit/applications/templates/application_handler.html:95",
+        "goldGroup": "contact-person-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-email-applications-application_handler-L377",
+        "location": "backend/benefit/applications/templates/application_handler.html:377",
+        "goldGroup": "p2p-inspector-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-email-applications-application-L91",
+        "location": "backend/benefit/applications/templates/application.html:91",
+        "goldGroup": "contact-person-email",
+        "matched": false,
+        "predictedGroup": null
+      },
+      {
+        "id": "yjdh-email-calculator-admin-L72",
+        "location": "backend/benefit/calculator/admin.py:72",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:application_company_contact_person"
+      },
+      {
+        "id": "yjdh-email-helsinkibenefit-settings-L141",
+        "location": "backend/benefit/helsinkibenefit/settings.py:141",
+        "goldGroup": "default-from-email",
+        "matched": true,
+        "predictedGroup": "email@backend/benefit/helsinkibenefit/settings.py:141#DEFAULT_FROM_EMAIL"
+      },
+      {
+        "id": "yjdh-email-helsinkibenefit-settings-L142",
+        "location": "backend/benefit/helsinkibenefit/settings.py:142",
+        "goldGroup": "system-contact-email",
+        "matched": true,
+        "predictedGroup": "email:system"
+      },
+      {
+        "id": "yjdh-email-helsinkibenefit-settings-L380",
+        "location": "backend/benefit/helsinkibenefit/settings.py:380",
+        "goldGroup": "default-from-email",
+        "matched": true,
+        "predictedGroup": "email:env"
+      },
+      {
+        "id": "yjdh-email-helsinkibenefit-settings-L582",
+        "location": "backend/benefit/helsinkibenefit/settings.py:582",
+        "goldGroup": "handler-user-email",
+        "matched": true,
+        "predictedGroup": "email:claim_mapping"
+      },
+      {
+        "id": "yjdh-email-helsinkibenefit-settings-L679",
+        "location": "backend/benefit/helsinkibenefit/settings.py:679",
+        "goldGroup": "system-contact-email",
+        "matched": true,
+        "predictedGroup": "email:system"
+      },
+      {
+        "id": "yjdh-email-messages-automatic_messages-L99",
+        "location": "backend/benefit/messages/automatic_messages.py:99",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-messages-automatic_messages-L119",
+        "location": "backend/benefit/messages/automatic_messages.py:119",
+        "goldGroup": "default-from-email",
+        "matched": true,
+        "predictedGroup": "email@backend/benefit/messages/automatic_messages.py:119#from_email"
+      },
+      {
+        "id": "yjdh-email-messages-automatic_messages-L120",
+        "location": "backend/benefit/messages/automatic_messages.py:120",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-messages-automatic_messages-L125",
+        "location": "backend/benefit/messages/automatic_messages.py:125",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-messages-automatic_messages-L126",
+        "location": "backend/benefit/messages/automatic_messages.py:126",
+        "goldGroup": "contact-person-email",
+        "matched": true,
+        "predictedGroup": "email:company_contact_person"
+      },
+      {
+        "id": "yjdh-email-terms-admin-L79",
+        "location": "backend/benefit/terms/admin.py:79",
+        "goldGroup": "applicant-user-email",
+        "matched": true,
+        "predictedGroup": "email:approved_by"
+      },
+      {
+        "id": "yjdh-email-terms-admin-L86",
+        "location": "backend/benefit/terms/admin.py:86",
+        "goldGroup": "applicant-user-email",
+        "matched": true,
+        "predictedGroup": "email:approved_by"
+      },
+      {
+        "id": "yjdh-email-terms-models-L293",
+        "location": "backend/benefit/terms/models.py:293",
+        "goldGroup": "applicant-user-email",
+        "matched": true,
+        "predictedGroup": "email:by"
+      },
+      {
+        "id": "yjdh-email-users-models-L26",
+        "location": "backend/benefit/users/models.py:26",
+        "goldGroup": "applicant-user-email",
+        "matched": true,
+        "predictedGroup": "email~backend/benefit/users/models.py:26"
+      }
+    ]
+  }
+}

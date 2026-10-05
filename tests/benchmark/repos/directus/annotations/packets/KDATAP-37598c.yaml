@@ -1,0 +1,1297 @@
+packet:
+  repo: directus
+  concept: email
+  kanbus_issue: KDATAP-37598c
+  files:
+  - api/src/services/mail/index.ts
+  - api/src/services/mail/rate-limiter.ts
+  - api/src/operations/mail/rate-limiter.ts
+  - api/src/services/notifications.ts
+  - api/src/services/comments.ts
+  - api/src/services/shares.ts
+annotations:
+# api/src/services/mail/index.ts
+- id: directus-index-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: useEmailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports the email rate limiter module; module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: directus
+- id: directus-index-L24
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration variable for template path; setting flag, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-index-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type name for email options object; function/feature name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: directus
+- id: directus-index-L54
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_VERIFY_SETUP
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration flag to verify email setup; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-index-L57
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 57
+    end_line: 57
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message text about email connection failure; prose, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-index-L64
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 64
+    end_line: 64
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for sending email; function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: directus
+- id: directus-index-L65
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: useEmailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 65
+    end_line: 65
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls email rate limiter function; function call, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-index-L67
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 67
+    end_line: 67
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Event name for email sending feature; feature/event name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-index-L71
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 71
+    end_line: 71
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Destructures options object; variable, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-index-L78
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 78
+    end_line: 78
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validates that from field has required name and address properties for email sender.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mail/index.ts
+      line: 71
+      kind: local
+    owner: directus
+- id: directus-index-L82
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 82
+    end_line: 82
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Declares variable to hold email sender address information.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mail/index.ts
+      line: 71
+      kind: local
+    owner: directus
+- id: directus-index-L83
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 83
+    end_line: 83
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads sender email address from options when already in object form.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mail/index.ts
+      line: 71
+      kind: local
+    owner: directus
+- id: directus-index-L86
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 86
+    end_line: 86
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets sender address field from email options or environment default address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mail/index.ts
+      line: 71
+      kind: local
+    owner: directus
+- id: directus-index-L101
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 101
+    end_line: 101
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about email client line length behavior; prose comment.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: directus
+- id: directus-index-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailOptions
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 108
+    end_line: 108
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes email options containing sender and recipient email addresses to sendMail.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mail/index.ts
+      line: 71
+      kind: local
+    owner: directus
+- id: directus-index-L113
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: api/src/services/mail/index.ts
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration variable for custom email templates directory path; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+# api/src/services/mail/rate-limiter.ts
+- id: directus-rate-limiter-L2
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLimitExceededError
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports error class; import statement, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: directus
+- id: directus-rate-limiter-L7
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module-level rate limiter variable; rate limiter tool, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_ENABLED
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration flag to enable email rate limiting; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-rate-limiter-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Initializes rate limiter for email; rate limiting tool, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L13
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_QUEUE_SIZE
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limiter queue size; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-rate-limiter-L17
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: useEmailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 17
+    end_line: 17
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for rate limiter; function/tool name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L18
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 18
+    end_line: 18
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Null check on rate limiter variable; rate limiter check, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L21
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiterQueue
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 21
+    end_line: 21
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls rate limiter to consume tokens; rate limiting operation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L24
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLimitExceededError
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Throws rate limit exceeded error; error handling, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-rate-limiter-L25
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_POINTS
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limit points; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-rate-limiter-L26
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_DURATION
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limit duration; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-rate-limiter-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_ERROR_MESSAGE
+  evidence:
+    file_path: api/src/services/mail/rate-limiter.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limit error message; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+# api/src/operations/mail/rate-limiter.ts
+- id: directus-mail-rate-limiter-L2
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLimitExceededError
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Imports error class; import statement, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: directus
+- id: directus-mail-rate-limiter-L7
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiter
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module-level rate limiter variable for flows; rate limiter tool, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_FLOWS_ENABLED
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration flag to enable email flow rate limiting; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-mail-rate-limiter-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiter
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Initializes rate limiter for email flows; rate limiting tool, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L15
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: useFlowsEmailRateLimiter
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name for flow rate limiter; function/tool name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiter
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Null check on rate limiter; rate limiter check, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailRateLimiter
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls rate limiter consume method; rate limiting operation, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L22
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailLimitExceededError
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 22
+    end_line: 22
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Throws rate limit exceeded error; error handling, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-mail-rate-limiter-L23
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_FLOWS_POINTS
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limit points; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-mail-rate-limiter-L25
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_FLOWS_DURATION
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration for rate limit duration; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-mail-rate-limiter-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_FLOWS_ERROR_MESSAGE
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration check for error message; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-mail-rate-limiter-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: RATE_LIMITER_EMAIL_FLOWS_ERROR_MESSAGE
+  evidence:
+    file_path: api/src/operations/mail/rate-limiter.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration value for error message; setting, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+# api/src/services/notifications.ts
+- id: directus-notifications-L23
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sendEmail
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Calls sendEmail method; function call, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-notifications-L28
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sendEmail
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 28
+    end_line: 28
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Defines sendEmail method; function declaration, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-notifications-L29
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Checks if recipient exists; recipient here is a user ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-notifications-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads user by recipient ID; recipient is user ID, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-notifications-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 33
+    end_line: 33
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field from user record for reading recipient address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-notifications-L36
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 36
+    end_line: 36
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if user has email address and email notifications enabled before sending.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/notifications.ts
+      line: 32
+      kind: local
+    owner: directus
+- id: directus-notifications-L66
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/notifications.ts
+    start_line: 66
+    end_line: 66
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email address as destination for sending notification email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/notifications.ts
+      line: 32
+      kind: local
+    owner: directus
+# api/src/services/comments.ts
+- id: directus-comments-L69
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 69
+    end_line: 69
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads sender user record; the following line selects specific fields including email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-comments-L70
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 70
+    end_line: 70
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field from sender user record for reading address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-comments-L77
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 77
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field from user record for reading address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-comments-L111
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field from user records for reading address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-comments-L141
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 141
+    end_line: 141
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template placeholder rendering the sender as a name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: directus
+- id: directus-comments-L149
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 149
+    end_line: 149
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sets recipient field to user ID; recipient is person ID, not email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: directus
+- id: directus-comments-L150
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender
+  evidence:
+    file_path: api/src/services/comments.ts
+    start_line: 150
+    end_line: 150
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sets sender field to user ID; sender is person ID, not email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: directus
+# api/src/services/shares.ts
+- id: directus-shares-L179
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/shares.ts
+    start_line: 179
+    end_line: 179
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about sending share link to email addresses; prose documentation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: directus
+- id: directus-shares-L182
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: api/src/services/shares.ts
+    start_line: 182
+    end_line: 182
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Inline type member emails holding the recipient addresses, defined on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/shares.ts
+      line: 182
+      kind: field
+    owner: directus
+- id: directus-shares-L195
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/shares.ts
+    start_line: 195
+    end_line: 195
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field from user record for sending share invitation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: directus
+- id: directus-shares-L206
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/shares.ts
+    start_line: 206
+    end_line: 206
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Iterates over array of recipient email addresses to send share invites.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/shares.ts
+      line: 206
+      kind: local
+    owner: directus
+- id: directus-shares-L215
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/shares.ts
+    start_line: 215
+    end_line: 215
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes recipient email address as destination for sending share invitation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/shares.ts
+      line: 206
+      kind: local
+    owner: directus

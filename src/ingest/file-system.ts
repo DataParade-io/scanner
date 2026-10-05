@@ -120,6 +120,17 @@ function getFileLanguage(filePath: string): FileLanguage | undefined {
     return "ruby";
   }
 
+  if (ext === ".swift") {
+    return "swift";
+  }
+
+  // Prisma schemas declare stored columns (`email String`): occurrences of personal data
+  // in their own right (KDATAP-fded10). No analyzer reads them; detection and the column
+  // catalog do.
+  if (ext === ".prisma") {
+    return "prisma";
+  }
+
   if (ext === ".java") {
     return "java";
   }

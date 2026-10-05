@@ -5,6 +5,7 @@ Feature: Executable Gherkin for Primus-backed evaluation
     When the feature runner loads those files
     Then the discovered files include primus-eval.feature
     And the discovered files include canonical-evaluation-representation.feature
+    And the discovered files include ground-truth-repo-evaluation.feature
 
   Scenario: Jest remains separate from Gherkin specs
     Given the Jest configuration for this repository

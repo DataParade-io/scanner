@@ -1,0 +1,132 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "id": "src_users_users",
+      "label": "Users",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "file_type": "code",
+      "norm_label": "users",
+      "source_file": "src/users.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_users_send",
+      "label": "send()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "file_type": "code",
+      "norm_label": "send()",
+      "source_file": "src/users.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_users_users_find",
+      "label": ".find()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "file_type": "code",
+      "norm_label": ".find()",
+      "source_file": "src/users.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_users",
+      "label": "users.ts",
+      "_origin": "ast",
+      "community": 1,
+      "file_type": "code",
+      "norm_label": "users.ts",
+      "source_file": "src/users.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_users_admin_email",
+      "label": "ADMIN_EMAIL",
+      "_origin": "ast",
+      "community": 1,
+      "file_type": "code",
+      "norm_label": "admin_email",
+      "source_file": "src/users.ts",
+      "source_location": "L5"
+    }
+  ],
+  "hyperedges": [],
+  "edges": [
+    {
+      "source": "src_users_send",
+      "target": "src_users_users",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/users.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_users_send",
+      "target": "src_users_users_find",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/users.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_users",
+      "target": "src_users_users",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/users.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_users",
+      "target": "src_users_admin_email",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/users.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_users",
+      "target": "src_users_send",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/users.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_users_users",
+      "target": "src_users_users_find",
+      "relation": "method",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/users.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

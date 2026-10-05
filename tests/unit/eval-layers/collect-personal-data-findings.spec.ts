@@ -20,7 +20,7 @@ describe("eval-layers/personal-data inventory", () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
-  it("projects raw-hits and mentions with one evidence location per hit", async () => {
+  it("projects raw-hits and occurrences with one evidence location per hit", async () => {
     fs.writeFileSync(
       path.join(tempDir, "application.yml"),
       ["spring:", "  datasource:", "    username: billing_app"].join("\n"),
@@ -28,7 +28,7 @@ describe("eval-layers/personal-data inventory", () => {
 
     const inventory = await buildPersonalDataInventory(tempDir);
     const rawHits = projectPersonalDataFindings(inventory, "raw-hits");
-    const mentions = projectPersonalDataFindings(inventory, "mentions");
+    const occurrences = projectPersonalDataFindings(inventory, "occurrences");
 
     expect(rawHits).toEqual([
       expect.objectContaining({
@@ -43,9 +43,9 @@ describe("eval-layers/personal-data inventory", () => {
         ],
       }),
     ]);
-    expect(mentions).toEqual([
+    expect(occurrences).toEqual([
       expect.objectContaining({
-        subjectKey: "mention:username",
+        subjectKey: "occurrence:username:application.yml:3",
         labels: ["username"],
         evidenceLocations: [
           {
@@ -124,17 +124,17 @@ describe("eval-layers/collectPersonalDataFindings", () => {
     expect(result.filesScanned).toEqual(["application.yml"]);
   });
 
-  it("emits mention identities per line hit", async () => {
+  it("emits occurrence identities per line hit", async () => {
     fs.writeFileSync(
       path.join(tempDir, "application.yml"),
       ["spring:", "  datasource:", "    username: billing_app"].join("\n"),
     );
 
-    const result = await collectPersonalDataFindings(tempDir, "mentions");
+    const result = await collectPersonalDataFindings(tempDir, "occurrences");
 
     expect(result.findings).toEqual([
       expect.objectContaining({
-        subjectKey: "mention:username",
+        subjectKey: "occurrence:username:application.yml:3",
         labels: ["username"],
       }),
     ]);

@@ -29,6 +29,15 @@ db_clients:
       usesObjectsAttribute: true
     confidence: 0.85
 
+  - id: django_model_class
+    patternId: database_connection
+    databaseType: sql
+    importModules:
+      - django.db
+    contentRegexes:
+      - 'class\s+\w+\s*\(\s*models\.Model\s*\)'
+    confidence: 0.85
+
   - id: pymysql
     patternId: database_connection
     databaseType: mysql
@@ -153,6 +162,16 @@ auth:
       callNames:
         - login_required
       confidence: 0.8
+    - id: flask_login
+      patternId: auth_middleware
+      importModules:
+        - flask_login
+      contentRegexes:
+        - "\\blogin_user\\b"
+        - "\\bcurrent_user\\b"
+        - "\\bLoginManager\\b"
+      strategy: session
+      confidence: 0.85
     - id: is_authenticated
       patternId: auth_middleware
       callNames:

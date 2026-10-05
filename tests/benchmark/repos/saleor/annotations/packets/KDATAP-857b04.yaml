@@ -1,0 +1,1032 @@
+packet:
+  repo: saleor
+  concept: email
+  kanbus_issue: KDATAP-857b04
+  files:
+  - saleor/plugins/admin_email/notify_events.py
+annotations:
+- id: saleor-notify_events-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_common
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Import of email handling module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L7
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email_with_link_to_download_file_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function import; the function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_export_failed_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function import; the function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L9
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_set_staff_password_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function import; the function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L10
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_staff_order_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 10
+    end_line: 10
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function import; the function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_staff_password_reset_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task function import; the function name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L15
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: AdminEmailPlugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Type import for plugin class; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: saleor
+- id: saleor-notify_events-L18
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_set_staff_password_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 18
+    end_line: 18
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Function name declaration; function that sends email feature, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: plugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 19
+    end_line: 19
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter list with plugin type; no email address parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-notify_events-L21
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: template
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 21
+    end_line: 21
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template variable assignment; templates are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L25
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template path constant; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 31
+    end_line: 31
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts the recipient email address from the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 31
+      kind: local
+    group: staff-user-email
+- id: saleor-notify_events-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subject
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Subject variable assignment; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L37
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_set_staff_password_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 37
+    end_line: 37
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task invocation; function call name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L38
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 38
+    end_line: 38
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 31
+      kind: local
+    group: staff-user-email
+- id: saleor-notify_events-L43
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: plugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter list; no email address parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-notify_events-L45
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: template
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 45
+    end_line: 45
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template variable assignment; templates are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L49
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 49
+    end_line: 49
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template path constant; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L55
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 55
+    end_line: 55
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts the recipient email address from the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 55
+      kind: local
+- id: saleor-notify_events-L56
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 56
+    end_line: 56
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the recipient email address to check if it is set.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 55
+      kind: local
+- id: saleor-notify_events-L58
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subject
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 58
+    end_line: 58
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Subject variable assignment; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L63
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email_with_link_to_download_file_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 63
+    end_line: 63
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task invocation; function call name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L64
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 64
+    end_line: 64
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 55
+      kind: local
+- id: saleor-notify_events-L69
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: plugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 69
+    end_line: 69
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter list; no email address parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-notify_events-L71
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: template
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 71
+    end_line: 71
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template variable assignment; templates are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L75
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 75
+    end_line: 75
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template path constant; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L81
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts the list of recipient email addresses from the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 81
+      kind: local
+    group: staff-notification-recipient-email
+- id: saleor-notify_events-L82
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subject
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 82
+    end_line: 82
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Subject variable assignment; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L87
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_staff_order_confirmation_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 87
+    end_line: 87
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task invocation; function call name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L88
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_list
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 88
+    end_line: 88
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the list of recipient email addresses to the task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 81
+      kind: local
+    group: staff-notification-recipient-email
+- id: saleor-notify_events-L93
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: plugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter list; no email address parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-notify_events-L95
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: template
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 95
+    end_line: 95
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template variable assignment; templates are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L99
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 99
+    end_line: 99
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template path constant; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L105
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 105
+    end_line: 105
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts the recipient email address from the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 105
+      kind: local
+- id: saleor-notify_events-L106
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 106
+    end_line: 106
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the recipient email address to check if it is set.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 105
+      kind: local
+- id: saleor-notify_events-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subject
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Subject variable assignment; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L113
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_export_failed_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 113
+    end_line: 113
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task invocation; function call name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L114
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 114
+    end_line: 114
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 105
+      kind: local
+- id: saleor-notify_events-L119
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: plugin
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 119
+    end_line: 119
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Parameter list; no email address parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: saleor
+- id: saleor-notify_events-L121
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: template
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 121
+    end_line: 121
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template variable assignment; templates are not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L125
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: DEFAULT_EMAIL_TEMPLATES_PATH
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 125
+    end_line: 125
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Template path constant; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L131
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 131
+    end_line: 131
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts the recipient email address from the payload.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 131
+      kind: local
+    group: staff-user-email
+- id: saleor-notify_events-L132
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 132
+    end_line: 132
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the recipient email address to check if it is set.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 131
+      kind: local
+    group: staff-user-email
+- id: saleor-notify_events-L134
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: subject
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Subject variable assignment; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L139
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_staff_password_reset_email_task
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 139
+    end_line: 139
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Task invocation; function call name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-notify_events-L140
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: saleor/plugins/admin_email/notify_events.py
+    start_line: 140
+    end_line: 140
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the recipient email address to the task.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/admin_email/notify_events.py
+      line: 131
+      kind: local
+    group: staff-user-email

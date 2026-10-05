@@ -1,0 +1,94 @@
+candidates:
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 76
+    text: PhoneNumberField,
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 203
+    text: '"company_contact_person_phone_number",'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 350
+    text: '"company_contact_person_phone_number": {'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 352
+    text: '"Phone number of the contact person, must a Finnish phone number"'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 498
+    text: company_contact_person_phone_number = PhoneNumberField(
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 501
+    text: '"Company contact person phone number normalized (start with zero,
+      without"'
+  - file: backend/benefit/applications/api/v1/serializers/application.py
+    line: 944
+    text: '"company_contact_person_phone_number",'
+  - file: backend/benefit/applications/models.py
+    line: 13
+    text: from phonenumber_field.modelfields import PhoneNumberField
+  - file: backend/benefit/applications/models.py
+    line: 445
+    text: company_contact_person_phone_number = PhoneNumberField(
+  - file: backend/benefit/applications/models.py
+    line: 446
+    text: verbose_name=_("company contact person's phone number"),
+  - file: backend/benefit/applications/models.py
+    line: 1102
+    text: phone_number = PhoneNumberField(
+  - file: backend/benefit/applications/models.py
+    line: 1103
+    text: verbose_name=_("phone number"),
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 66
+    text: f" {application.company_contact_person_phone_number}"
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 101
+    text: "def get_csv_cell_list_lines_generator(self):"
+  - file: backend/benefit/applications/services/application_alteration_csv_report.py
+    line: 103
+    text: yield from super().get_csv_cell_list_lines_generator()
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 238
+    text: '"company_contact_person_phone_number",'
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 265
+    text: CsvColumn("Työntekijän puhelinnumero", "employee.phone_number", str),
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 505
+    text: "def get_csv_cell_list_lines_generator(self):"
+  - file: backend/benefit/applications/services/applications_csv_report.py
+    line: 507
+    text: yield from super().get_csv_cell_list_lines_generator()
+  - file: backend/benefit/applications/services/clone_application.py
+    line: 69
+    text: company_contact_person_phone_number=application_base.company_contact_person_phone_number,
+  - file: backend/benefit/applications/templates/application_handler.html
+    line: 90
+    text: <div class="label">{{ _("Telephone") }}</div>
+  - file: backend/benefit/applications/templates/application_handler.html
+    line: 91
+    text: <div class="value">{{ application.company_contact_person_phone_number
+      }}</div>
+  - file: backend/benefit/applications/templates/application.html
+    line: 86
+    text: <div class="label">{{ _("Telephone") }}</div>
+  - file: backend/benefit/applications/templates/application.html
+    line: 87
+    text: <div class="value">{{ application.company_contact_person_phone_number
+      }}</div>
+  - file: backend/benefit/common/utils.py
+    line: 11
+    text: from phonenumber_field.serializerfields import (
+  - file: backend/benefit/common/utils.py
+    line: 12
+    text: PhoneNumberField as DefaultPhoneNumberField,
+  - file: backend/benefit/common/utils.py
+    line: 209
+    text: "class PhoneNumberField(DefaultPhoneNumberField):"
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 325
+    text: '"phonenumber_field",'
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 486
+    text: PHONENUMBER_DB_FORMAT = "NATIONAL"
+  - file: backend/benefit/helsinkibenefit/settings.py
+    line: 487
+    text: PHONENUMBER_DEFAULT_REGION = "FI"

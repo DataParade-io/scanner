@@ -24,7 +24,7 @@ export interface CanonicalFixtureScanResult {
 
 const PERSONAL_DATA_EVAL_LAYER: Record<PersonalDataEvalLayer, EvalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
@@ -53,6 +53,25 @@ export function personalDataFindingToLayerFinding(
     labels: [...finding.labels],
     sourceFilePaths: [...new Set(sourceLines.map((line) => line.file_path))].sort(),
     sourceLines,
+    ...(finding.group || finding.declaration
+      ? {
+          occurrenceAttributes: {
+            ...(finding.group ? { group: finding.group } : {}),
+            ...(finding.declaration
+              ? {
+                  declaration:
+                    finding.declaration === "unresolved"
+                      ? "unresolved"
+                      : {
+                          file_path: sourceLines[0]?.file_path ?? "",
+                          line: finding.declaration.line,
+                          kind: finding.declaration.kind,
+                        },
+                }
+              : {}),
+          },
+        }
+      : {}),
   };
 }
 

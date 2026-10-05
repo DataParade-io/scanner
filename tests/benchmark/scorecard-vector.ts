@@ -30,13 +30,18 @@ import {
   type PacketCanonicalRecordWithDiagnostics,
 } from "./layer-report-accounting";
 import { isDataFlowsLayerScoreable } from "./baseline/evaluate-readiness";
+import {
+  SCORED_OCCURRENCE_ATTRIBUTES,
+  type AttributeMetricScore,
+  type ScoredOccurrenceAttribute,
+} from "../../src/eval/canonical/occurrence-attribute-metrics";
 import type { GoldPopulationStats } from "./baseline/types";
 
 export type { LayerReportAccounting } from "./layer-report-accounting";
 
 export { HEADLINE_LAYERS, DIAGNOSTIC_LAYERS, type HeadlineLayer };
 
-export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/2";
+export const SCORECARD_VECTOR_CONTRACT_VERSION = "scorecard-vector/3";
 
 export type LayerGateStatus = "scorable" | "pending" | "skip" | "provisional";
 
@@ -396,14 +401,58 @@ function aggregateLayerScores(
     unreadCount,
     denominators,
     metricComputability,
+    ...aggregateOccurrenceExtras(reports),
   };
+}
+
+/** Sum attribute and grouping numerators and denominators across packets (occurrences layer). */
+export function mergeAttributeScores(scores: AttributeMetricScore[]): AttributeMetricScore {
+  const numerator = scores.reduce((sum, score) => sum + score.numerator, 0);
+  const denominator = scores.reduce((sum, score) => sum + score.denominator, 0);
+  const computable = scores.filter((score) => score.state === "computable");
+  if (computable.length > 0) {
+    const n = computable.reduce((sum, score) => sum + score.numerator, 0);
+    const d = computable.reduce((sum, score) => sum + score.denominator, 0);
+    return { state: "computable", value: d === 0 ? null : n / d, numerator: n, denominator: d };
+  }
+  const state = scores.some((score) => score.state === "scanner_capability_not_declared")
+    ? "scanner_capability_not_declared"
+    : "not_asserted_by_gold";
+  return { state, value: null, numerator, denominator };
+}
+
+function aggregateOccurrenceExtras(reports: EvalScoreReport[]): Pick<EvalScores, "occurrenceAttributes" | "grouping"> {
+  const withAttributes = reports.filter((report) => report.scores.occurrenceAttributes !== undefined);
+  const withGrouping = reports.filter((report) => report.scores.grouping !== undefined);
+  const extras: Pick<EvalScores, "occurrenceAttributes" | "grouping"> = {};
+  if (withAttributes.length > 0) {
+    extras.occurrenceAttributes = Object.fromEntries(
+      SCORED_OCCURRENCE_ATTRIBUTES.map((attribute) => [
+        attribute,
+        mergeAttributeScores(withAttributes.map((report) => report.scores.occurrenceAttributes![attribute])),
+      ]),
+    ) as Record<ScoredOccurrenceAttribute, AttributeMetricScore>;
+  }
+  if (withGrouping.length > 0) {
+    extras.grouping = {
+      precision: mergeAttributeScores(withGrouping.map((report) => report.scores.grouping!.precision)),
+      recall: mergeAttributeScores(withGrouping.map((report) => report.scores.grouping!.recall)),
+    };
+  }
+  return extras;
+}
+
+function formatAttributeScore(score: AttributeMetricScore): string {
+  return score.state === "computable"
+    ? `${formatRate(score.value)} (${score.numerator}/${score.denominator})`
+    : `${score.state} (denominator ${score.denominator})`;
 }
 
 export function aggregateEvalScores(reports: EvalScoreReport[]): EvalScores {
   if (reports.length === 0) {
     return emptyScores();
   }
-  return aggregateLayerScores(reports, "mentions", []);
+  return aggregateLayerScores(reports, "occurrences", []);
 }
 
 function buildPacketLayers(
@@ -579,6 +628,15 @@ export function formatScorecardVectorMarkdown(vector: ScorecardVector): string {
     );
     if (entry.accounting.migrationIncomplete.total > 0) {
       lines.push(`- Migration incomplete: ${entry.accounting.migrationIncomplete.total}`);
+    }
+    if (entry.scores.occurrenceAttributes) {
+      for (const attribute of SCORED_OCCURRENCE_ATTRIBUTES) {
+        lines.push(`- Attribute ${attribute}: ${formatAttributeScore(entry.scores.occurrenceAttributes[attribute])}`);
+      }
+    }
+    if (entry.scores.grouping) {
+      lines.push(`- Grouping pairwise precision: ${formatAttributeScore(entry.scores.grouping.precision)}`);
+      lines.push(`- Grouping pairwise recall: ${formatAttributeScore(entry.scores.grouping.recall)}`);
     }
     lines.push("");
   }

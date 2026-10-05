@@ -1,0 +1,2235 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-0254c6
+  files:
+  - ghost/core/core/server/data/schema/schema.js
+annotations:
+- id: ghost-schema-L25
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_name
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 25
+    end_line: 25
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender display name field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L26
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 26
+      kind: field
+    group: newsletter-sender-email
+- id: ghost-schema-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender reply-to address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 27
+      kind: field
+    group: newsletter-reply-to-address
+- id: ghost-schema-L172
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 172
+    end_line: 172
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter for selecting email recipients, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L223
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_subject
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 223
+    end_line: 223
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L232
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_only
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 232
+    end_line: 232
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag for email-only content, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L274
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 274
+    end_line: 274
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 274
+      kind: field
+    group: staff-user-email
+- id: ghost-schema-L279
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 279
+    end_line: 279
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 279
+      kind: field
+    group: staff-user-email
+- id: ghost-schema-L404
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 404
+    end_line: 404
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Value in the settings group enum naming the email settings group; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L500
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 500
+    end_line: 500
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 500
+      kind: field
+    group: staff-invite-email
+- id: ghost-schema-L505
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 505
+    end_line: 505
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 505
+      kind: field
+    group: staff-invite-email
+- id: ghost-schema-L649
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 649
+    end_line: 649
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 649
+      kind: field
+    group: member-account-email
+- id: ghost-schema-L654
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 654
+    end_line: 654
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 654
+      kind: field
+    group: member-account-email
+- id: ghost-schema-L676
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 676
+    end_line: 676
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of emails sent, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L677
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_opened_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 677
+    end_line: 677
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of opened emails, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L678
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_open_rate
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 678
+    end_line: 678
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email open rate metric, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L679
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 679
+    end_line: 679
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Boolean flag for disabling email, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L685
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 685
+    end_line: 685
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Database index on email disabled flag.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L905
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: members_email_change_events
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 905
+    end_line: 905
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: members_email_change_events is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L914
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: to_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 914
+    end_line: 914
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 914
+      kind: field
+    group: member-email-change-to
+- id: ghost-schema-L919
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 919
+    end_line: 919
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 919
+      kind: field
+    group: member-email-change-to
+- id: ghost-schema-L921
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: from_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 921
+    end_line: 921
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 921
+      kind: field
+    group: member-email-change-from
+- id: ghost-schema-L926
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 926
+    end_line: 926
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 926
+      kind: field
+    group: member-email-change-from
+- id: ghost-schema-L1220
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1220
+    end_line: 1220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1220
+      kind: field
+    group: stripe-customer-email
+- id: ghost-schema-L1478
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1478
+    end_line: 1478
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1478
+      kind: field
+    group: donation-payer-email
+- id: ghost-schema-L1483
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1483
+    end_line: 1483
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1483
+      kind: field
+    group: donation-payer-email
+- id: ghost-schema-L1573
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1573
+    end_line: 1573
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: emails is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1584
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_filter
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1584
+    end_line: 1584
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter for selecting email recipients, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1591
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1591
+    end_line: 1591
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of emails sent, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1592
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: csd_email_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1592
+    end_line: 1592
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Cumulative email count metric, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1617
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_batches
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1617
+    end_line: 1617
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_batches is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1619
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1619
+    end_line: 1619
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1636
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1636
+    end_line: 1636
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_recipients is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1638
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1638
+    end_line: 1638
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1640
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: batch_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1640
+    end_line: 1640
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1646
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: member_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1646
+    end_line: 1646
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition storing member email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1646
+      kind: field
+    group: email-recipient-member-email-copy
+- id: ghost-schema-L1649
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1649
+    end_line: 1649
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index or column reference for email foreign key, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1650
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1650
+    end_line: 1650
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index or column reference for email foreign key, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1651
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1651
+    end_line: 1651
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index or column reference for email foreign key, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1652
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1652
+    end_line: 1652
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Index or column reference for email foreign key, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1655
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipient_failures
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1655
+    end_line: 1655
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1657
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1657
+    end_line: 1657
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1659
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipient_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1659
+    end_line: 1659
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_recipient_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1663
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1663
+    end_line: 1663
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1871
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1871
+    end_line: 1871
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1871
+      kind: field
+    group: suppressed-email-address
+- id: ghost-schema-L1876
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1876
+    end_line: 1876
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1876
+      kind: field
+    group: suppressed-email-address
+- id: ghost-schema-L1878
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1878
+    end_line: 1878
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1889
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_spam_complaint_events
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1889
+    end_line: 1889
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_spam_complaint_events is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1898
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1898
+    end_line: 1898
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L1899
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_address
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1899
+    end_line: 1899
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1899
+      kind: field
+    group: spam-complaint-email
+- id: ghost-schema-L1904
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1904
+    end_line: 1904
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 1904
+      kind: field
+    group: spam-complaint-email
+- id: ghost-schema-L1907
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1907
+    end_line: 1907
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Database constraint on email ID, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L1933
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_sent_at
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 1933
+    end_line: 1933
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Timestamp for email sent event, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2034
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_design_settings
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2034
+    end_line: 2034
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_design_settings is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2103
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_name
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2103
+    end_line: 2103
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender display name field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2104
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2104
+    end_line: 2104
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2104
+      kind: field
+    group: email-design-sender-email
+- id: ghost-schema-L2108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2108
+    end_line: 2108
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2108
+      kind: field
+    group: email-design-sender-email
+- id: ghost-schema-L2110
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2110
+    end_line: 2110
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender reply-to address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2110
+      kind: field
+    group: email-design-reply-to
+- id: ghost-schema-L2114
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2114
+    end_line: 2114
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2114
+      kind: field
+    group: email-design-reply-to
+- id: ghost-schema-L2149
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: validations
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2149
+    end_line: 2149
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2163
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_subject
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2163
+    end_line: 2163
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email subject line field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2164
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_lexical
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2164
+    end_line: 2164
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email content in lexical format, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2165
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_design_setting_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2165
+    end_line: 2165
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_design_setting_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2169
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2169
+    end_line: 2169
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2172
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_sent_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2172
+    end_line: 2172
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of emails sent, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2173
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_opened_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2173
+    end_line: 2173
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of opened emails, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2174
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_clicked_count
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2174
+    end_line: 2174
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Count of email link clicks, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2255
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: member_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2255
+    end_line: 2255
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition storing member email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2255
+      kind: field
+    group: automation-run-member-email-copy
+- id: ghost-schema-L2259
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2259
+    end_line: 2259
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2259
+      kind: field
+    group: automation-run-member-email-copy
+- id: ghost-schema-L2307
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: welcome_email_automated_emails
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2307
+    end_line: 2307
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: welcome_email_automated_emails is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2309
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: welcome_email_automation_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2309
+    end_line: 2309
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: welcome_email_automation_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2317
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: next_welcome_email_automated_email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2317
+    end_line: 2317
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2321
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2321
+    end_line: 2321
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2322
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: constraintName
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2322
+    end_line: 2322
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2328
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_name
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2328
+    end_line: 2328
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sender display name field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2329
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2329
+    end_line: 2329
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2329
+      kind: field
+    group: automated-email-sender-email
+- id: ghost-schema-L2333
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2333
+    end_line: 2333
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2333
+      kind: field
+    group: automated-email-sender-email
+- id: ghost-schema-L2335
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sender_reply_to
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2335
+    end_line: 2335
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for sender reply-to address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2335
+      kind: field
+    group: automated-email-reply-to
+- id: ghost-schema-L2339
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2339
+    end_line: 2339
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2339
+      kind: field
+    group: automated-email-reply-to
+- id: ghost-schema-L2341
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_design_setting_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2341
+    end_line: 2341
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_design_setting_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2345
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2345
+    end_line: 2345
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2350
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: welcome_email_automation_runs
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2350
+    end_line: 2350
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2352
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: welcome_email_automation_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2352
+    end_line: 2352
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: welcome_email_automation_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2368
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: next_welcome_email_automated_email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2368
+    end_line: 2368
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: next_welcome_email_automated_email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2372
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2372
+    end_line: 2372
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2373
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: constraintName
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2373
+    end_line: 2373
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2386
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2386
+    end_line: 2386
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message about email sending, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-schema-L2399
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: automated_email_recipients
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2399
+    end_line: 2399
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: automated_email_recipients is a table/relation name or reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2401
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: automated_email_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2401
+    end_line: 2401
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: automated_email_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2405
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: references
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2405
+    end_line: 2405
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2421
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: member_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2421
+    end_line: 2421
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition storing member email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2421
+      kind: field
+    group: automated-email-recipient-member-email-copy
+- id: ghost-schema-L2453
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: buyer_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2453
+    end_line: 2453
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2453
+      kind: field
+    group: gift-buyer-email
+- id: ghost-schema-L2463
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_name
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2463
+    end_line: 2463
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Recipient display name field, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2532
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient_email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2532
+    end_line: 2532
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Schema field definition for recipient email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2532
+      kind: field
+    group: gift-recipient-email
+- id: ghost-schema-L2536
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmail
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2536
+    end_line: 2536
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation rule specifying an email address field.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/data/schema/schema.js
+      line: 2536
+      kind: field
+    group: gift-recipient-email
+- id: ghost-schema-L2549
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_sent_at
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2549
+    end_line: 2549
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Timestamp for email sent event, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2550
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_provider_message_id
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2550
+    end_line: 2550
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: email_provider_message_id is a foreign key ID, not an email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-schema-L2565
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/data/schema/schema.js
+    start_line: 2565
+    end_line: 2565
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field related to emails but not an address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core

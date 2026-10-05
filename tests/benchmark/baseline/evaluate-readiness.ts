@@ -283,10 +283,10 @@ function legacyIdentityBlockersForAnnotation(
     return blockers;
   }
 
-  if (headlineLayer === "mentions" && annotation.subject.key.startsWith("pii:")) {
+  if (headlineLayer === "occurrences" && annotation.subject.key.startsWith("pii:")) {
     blockers.push({
       code: "LEGACY_KEY_ON_ACCEPTED",
-      message: `${annotation.id}: accepted mention uses legacy pii: key prefix`,
+      message: `${annotation.id}: accepted occurrence uses legacy pii: key prefix`,
       layer: headlineLayer,
       repoKey,
     });
@@ -362,7 +362,7 @@ export function checkLayerPopulationFloors(
 ): ReadinessBlocker[] {
   const blockers: ReadinessBlocker[] = [];
 
-  for (const layer of ["components", "mentions", "data-items"] as const) {
+  for (const layer of ["components", "occurrences", "data-items"] as const) {
     const stats = goldPopulation.byLayer[layer];
     const floor = policy.layerFloors[layer];
 
@@ -436,6 +436,15 @@ export function checkLayerScopeProvenance(benchmarkRoot: string): ReadinessBlock
 
       const scopeKey = normalizeBenchmarkLayer(layer);
       const scopeRecord = scopes.get(scopeKey);
+      // A held-out packet whose gold on this layer is all proposed (chatwoot, KDATAP-973b69)
+      // adds nothing to accepted-only headline scores, so its missing reviewed scope cannot
+      // make them unsound. It blocks again once any of its gold is accepted.
+      if (
+        !scopeRecord &&
+        !loadAnnotations(repoDir, layer).some((annotation) => annotation.provenance.review_state === "accepted")
+      ) {
+        continue;
+      }
       if (!scopeRecord) {
         blockers.push({
           code: "SCOPE_MISSING_OR_UNREVIEWED",

@@ -1,0 +1,1395 @@
+packet:
+  repo: strapi
+  concept: email
+  kanbus_issue: KDATAP-fc825a
+  files:
+  - packages/core/admin/server/src/services/user.ts
+  - packages/core/admin/server/src/services/auth.ts
+  - packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+  - packages/core/admin/server/src/controllers/user.ts
+  - packages/core/admin/ee/server/src/services/auth.ts
+annotations:
+# packages/core/admin/server/src/services/user.ts (14 lines)
+- id: strapi-user-L191
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 191
+    end_line: 191
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment in docstring describing the parameter; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-user-L192
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 192
+    end_line: 192
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-user-L195
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 195
+    end_line: 195
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds a user email address for password reset lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 195
+      kind: parameter
+- id: strapi-user-L198
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 198
+    end_line: 198
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Shorthand property in the query reads the email parameter that holds the address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 195
+      kind: parameter
+    owner: packages/core/admin
+- id: strapi-user-L201
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 201
+    end_line: 201
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates the email parameter, an address, into the error message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 195
+      kind: parameter
+    owner: packages/core/admin
+- id: strapi-user-L264
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 264
+    end_line: 264
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing return type; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-user-L268
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 268
+    end_line: 268
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Return type annotation selecting email as part of user fields to return.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-user-L275
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 275
+    end_line: 275
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email address field is selected from user object to return.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-user-L316
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 316
+    end_line: 316
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing a method; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-user-L317
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 317
+    end_line: 317
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-user-L321
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 321
+    end_line: 321
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter that holds user email address for database lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 321
+      kind: parameter
+- id: strapi-user-L323
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 323
+    end_line: 323
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Query key selecting the email column, filtered by the email parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: packages/core/admin/server/src/services/user.ts
+      line: 323
+      kind: field
+    owner: packages/core/admin
+- id: strapi-user-L484
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: findOneByEmail
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 484
+    end_line: 484
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: 'Lists findOneByEmail in the exported service object; a function name, not an address value.'
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-user-L492
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: resetPasswordByEmail
+  evidence:
+    file_path: packages/core/admin/server/src/services/user.ts
+    start_line: 492
+    end_line: 492
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: 'Lists resetPasswordByEmail in the exported service object; a function name, not an address value.'
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+# packages/core/admin/server/src/services/auth.ts (14 lines)
+- id: strapi-auth-L84
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 84
+    end_line: 84
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-L87
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 87
+    end_line: 87
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter with type annotation holding user email address for credential checking.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 87
+      kind: parameter
+    type_annotation: string
+- id: strapi-auth-L88
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 88
+    end_line: 88
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Shorthand property in the query reads the email parameter that holds the address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 87
+      kind: parameter
+    owner: packages/core/admin
+- id: strapi-auth-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing behavior; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-L109
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 109
+    end_line: 109
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-L111
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter destructuring that holds user email address for password reset lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 111
+      kind: parameter
+    type_annotation: string
+- id: strapi-auth-L114
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 114
+    end_line: 114
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Query field selection to find active user by email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 111
+      kind: parameter
+- id: strapi-auth-L121
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 121
+    end_line: 121
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining the action of sending email; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-L127
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin service method call for the email plugin; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-L128
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 128
+    end_line: 128
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Service name for email plugin; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-L129
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sendTemplatedEmail
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 129
+    end_line: 129
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for sending templated email; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-auth-L131
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 131
+    end_line: 131
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: User email address is passed as the "to" recipient for the email message.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/services/auth.ts
+      line: 112
+      kind: local
+- id: strapi-auth-L135
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailTemplate
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 135
+    end_line: 135
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration key for email template; refers to email feature setting not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-L138
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/services/auth.ts
+    start_line: 138
+    end_line: 138
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: User email field is selected from user object for inclusion in email template data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+# packages/core/admin/server/src/controllers/user.ts (11 lines)
+- id: strapi-controllers-user-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: normalizeEmail
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: 'Imports normalizeEmail; an import is never a mention.'
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: packages/core/admin
+- id: strapi-controllers-user-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Object key email whose value is the lowercased address from the request body.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: packages/core/admin/server/src/controllers/user.ts
+      line: 27
+      kind: field
+    owner: packages/core/admin
+- id: strapi-controllers-user-L34
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 34
+    end_line: 34
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email field is selected from cleaned data for user creation attributes.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-controllers-user-L40
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 40
+    end_line: 40
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email address field is passed to user.exists check for duplicate validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/controllers/user.ts
+      line: 40
+      kind: field
+- id: strapi-controllers-user-L44
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 44
+    end_line: 44
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-controllers-user-L97
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: normalizeEmail
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: 'Calls the normalizeEmail function on the request body; a function name and a payload object, not an address value.'
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-controllers-user-L101
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 101
+    end_line: 101
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Check whether email field is present in update data before uniqueness validation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-controllers-user-L102
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: uniqueEmailCheck
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 102
+    end_line: 102
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Declares uniqueEmailCheck, the name of a uniqueness check result, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-controllers-user-L104
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 104
+    end_line: 104
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email field is queried for uniqueness check, excluding the current user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/server/src/controllers/user.ts
+      line: 104
+      kind: field
+- id: strapi-controllers-user-L107
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: uniqueEmailCheck
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 107
+    end_line: 107
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Reads the uniqueEmailCheck result, a boolean check name, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-controllers-user-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/server/src/controllers/user.ts
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose indicating email conflict; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+# packages/core/strapi/src/cli/commands/admin/reset-user-password.ts (11 lines)
+- id: strapi-reset-user-password-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interface field declaration for optional email parameter that holds user email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 11
+      kind: field
+- id: strapi-reset-user-password-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interface field for email response holding user email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 16
+      kind: field
+- id: strapi-reset-user-password-L22
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 22
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Prompt question field name for collecting user email address input.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/strapi
+- id: strapi-reset-user-password-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 31
+    end_line: 31
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter destructuring that holds the user email for password reset.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 31
+      kind: parameter
+- id: strapi-reset-user-password-L35
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 35
+    end_line: 35
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email address is passed to service method that performs password reset by email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 31
+      kind: parameter
+- id: strapi-reset-user-password-L45
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 45
+    end_line: 45
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email is destructured from command options and holds user email for processing.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 45
+      kind: local
+- id: strapi-reset-user-password-L47
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 47
+    end_line: 47
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Check whether email option is empty before prompting interactively.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 45
+      kind: local
+- id: strapi-reset-user-password-L58
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 58
+    end_line: 58
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Validation check that email option is provided and not empty.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 45
+      kind: local
+- id: strapi-reset-user-password-L59
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 59
+    end_line: 59
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about missing email option; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/strapi
+- id: strapi-reset-user-password-L63
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 63
+    end_line: 63
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Email parameter is passed to changePassword function for user password reset.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/strapi
+    declaration:
+      file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+      line: 45
+      kind: local
+- id: strapi-reset-user-password-L73
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    start_line: 73
+    end_line: 73
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Command-line option flag for accepting user email address as parameter.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/strapi
+# packages/core/admin/ee/server/src/services/auth.ts (11 lines)
+- id: strapi-auth-ee-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing behavior; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-ee-L16
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 16
+    end_line: 16
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc parameter comment; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-ee-L18
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 18
+    end_line: 18
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Function parameter destructuring that holds user email for SSO-protected password reset.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/ee/server/src/services/auth.ts
+      line: 18
+      kind: parameter
+- id: strapi-auth-ee-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Query field selection to find active user by email address for SSO check.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/ee/server/src/services/auth.ts
+      line: 18
+      kind: parameter
+- id: strapi-auth-ee-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining action of sending email; no address value on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/admin
+- id: strapi-auth-ee-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Plugin service method call for email plugin; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-ee-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 33
+    end_line: 33
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Service name for email plugin; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-ee-L34
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: sendTemplatedEmail
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 34
+    end_line: 34
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for sending templated email; refers to email feature not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+- id: strapi-auth-ee-L36
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 36
+    end_line: 36
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: User email address is passed as the recipient for the password reset email.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: packages/core/admin
+    declaration:
+      file_path: packages/core/admin/ee/server/src/services/auth.ts
+      line: 19
+      kind: local
+- id: strapi-auth-ee-L40
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailTemplate
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 40
+    end_line: 40
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration key for email template; refers to email feature setting not address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin
+- id: strapi-auth-ee-L43
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: packages/core/admin/ee/server/src/services/auth.ts
+    start_line: 43
+    end_line: 43
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: User email field is selected from user object for inclusion in email template data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/admin

@@ -1,0 +1,1104 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-deb342
+  files:
+  - ghost/core/core/server/api/endpoints/emails.js
+  - ghost/core/core/server/services/comments/comments-service-emails.js
+annotations:
+- id: ghost-emails-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailService
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email service module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-emails-L5
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email analytics module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-emails-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailNotFound
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message key and text saying email not found; no address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-emails-L9
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: retryNotAllowed
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message about failed emails; not about an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-emails-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipients
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Include name for email recipient count relation; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-emails-L13
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipient
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 13
+    end_line: 13
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Include name for email recipient relation; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-emails-L17
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: docName
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 17
+    end_line: 17
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Document name for the emails endpoint resource; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-emails-L26
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 26
+    end_line: 26
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email model representing email campaigns/newsletters, not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-emails-L43
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email model for finding email campaign records; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-emails-L46
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: message
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 46
+    end_line: 46
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error object message property with template call; no address value.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-emails-L61
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: retryFailedEmail
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 61
+    end_line: 61
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method name for retrying failed email sends; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-emails-L83
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 83
+    end_line: 83
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email ID in query filter; an id field, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-emails-L84
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailBatch
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 84
+    end_line: 84
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailBatch model for email campaign batches; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-emails-L106
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 106
+    end_line: 106
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email ID in query filter; an id field, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-emails-L107
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailRecipientFailure
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 107
+    end_line: 107
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: EmailRecipientFailure model for email delivery failures; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-emails-L119
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 119
+    end_line: 119
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email analytics service call for status; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-emails-L134
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 134
+    end_line: 134
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email model for finding email campaign; not addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-emails-L146
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 146
+    end_line: 146
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email analytics service call to schedule; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-emails-L158
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailAnalytics
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/emails.js
+    start_line: 158
+    end_line: 158
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email analytics service call to cancel; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L3
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailService
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email service module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L4
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: CommentsServiceEmailRenderer
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 4
+    end_line: 4
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email renderer module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: import_specifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: CommentsServiceEmails
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 8
+    end_line: 8
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Class for handling comment email notifications; not about addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: type_name
+    owner: ghost/core
+- id: ghost-comments-service-emails-L27
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: commentsServiceEmailRenderer
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 27
+    end_line: 27
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Field initialized with email renderer service; a service reference, not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing email links in the function; documentation text.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-comments-service-emails-L65
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 65
+    end_line: 65
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Compares the author's email address with the member's to skip self-notifications.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-comments-service-emails-L69
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 69
+    end_line: 69
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads and stores the author's email address for sending the notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-comments-service-emails-L88
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: fromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 88
+    end_line: 88
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the sender email address for the notification email.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 88
+      kind: field
+    owner: ghost/core
+    group: members-support-address
+- id: ghost-comments-service-emails-L89
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: toEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 89
+    end_line: 89
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient email address for the notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 89
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-comments-service-emails-L93
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email-notifications
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 93
+    end_line: 93
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: URL path segment for email notification settings page; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-comments-service-emails-L97
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 97
+    end_line: 97
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to render email template; not about email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L112
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 112
+    end_line: 112
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: JSDoc comment describing function return value; documentation text.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-comments-service-emails-L136
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: parentMemberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 136
+    end_line: 136
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads and stores the parent member's email address for reply notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 136
+      kind: local
+    group: member-account-email
+- id: ghost-comments-service-emails-L166
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: fromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 166
+    end_line: 166
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the sender email address for the reply notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 166
+      kind: field
+    owner: ghost/core
+    group: members-support-address
+- id: ghost-comments-service-emails-L167
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: toEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 167
+    end_line: 167
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient email address (parent member) for the reply notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 167
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-comments-service-emails-L168
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailService
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 168
+    end_line: 168
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Email service method call to create unsubscribe URL; not reading address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L173
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 173
+    end_line: 173
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to render email template; not about email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L179
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: parentMemberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 179
+    end_line: 179
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient field to send reply notification to the parent member.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 136
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-comments-service-emails-L189
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 189
+    end_line: 189
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing email notification; documentation text.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-comments-service-emails-L202
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 202
+    end_line: 202
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the site owner's email address to send the report notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-comments-service-emails-L220
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: reporterEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 220
+    end_line: 220
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Stores the reporter's email address in the template data.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 220
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-comments-service-emails-L221
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 221
+    end_line: 221
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Interpolates the reporter's email address into the display string.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 193
+      kind: parameter
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-comments-service-emails-L224
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: memberEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 224
+    end_line: 224
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Stores the member's email address in the template data for the report.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 224
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-comments-service-emails-L228
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: fromEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 228
+    end_line: 228
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the sender email address for the report notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 228
+      kind: field
+    owner: ghost/core
+    group: members-support-address
+- id: ghost-comments-service-emails-L229
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: toEmail
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 229
+    end_line: 229
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the recipient email address (site owner) for the report notification.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 229
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-comments-service-emails-L233
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email-notifications
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 233
+    end_line: 233
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: URL path segment for email notification settings; not an address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-comments-service-emails-L242
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: renderEmailTemplate
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 242
+    end_line: 242
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method call to render email template; not about email addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-comments-service-emails-L265
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: notificationFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 265
+    end_line: 265
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Getter that exposes the site notification sender address.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 265
+      kind: function
+    group: members-support-address
+- id: ghost-comments-service-emails-L282
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: notificationFromAddress
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 282
+    end_line: 282
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Sets the sender address in the email message being sent.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+      line: 265
+      kind: function
+    owner: ghost/core
+    group: members-support-address
+- id: ghost-comments-service-emails-L292
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: CommentsServiceEmails
+  evidence:
+    file_path: ghost/core/core/server/services/comments/comments-service-emails.js
+    start_line: 292
+    end_line: 292
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Module export of the email service class; not about addresses.
+  provenance:
+    proposed_by: claude-haiku-4-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core

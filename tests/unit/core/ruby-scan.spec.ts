@@ -53,7 +53,10 @@ describe("structural scan - Ruby on Rails", () => {
 
     expect(
       scanResult.dataFlows.some(
-        (flow) => flow.sourceComponentId === flow.targetComponentId,
+        // Intra-component lineage self-loops are intended (#70); no other flow is a self-loop.
+        (flow) =>
+          flow.sourceComponentId === flow.targetComponentId &&
+          flow.targetScopeReason !== "intra-component-lineage",
       ),
     ).toBe(false);
     expect(

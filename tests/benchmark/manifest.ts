@@ -10,6 +10,7 @@ import {
   type AnnotationRecord,
   type BenchmarkLayer,
   type BenchmarkManifest,
+  type ConceptScopeRecord,
   BENCHMARK_LAYERS,
   type DataItemAnnotationCandidate,
   type DataItemEvidenceValidation,
@@ -18,6 +19,12 @@ import {
   type FlowCandidateEndpoint,
   type FlowDispositionCandidate,
   type LayerScopeRecord,
+  OCCURRENCE_DECLARATION_KINDS,
+  OCCURRENCE_SYNTAX_KINDS,
+  type OccurrenceAttributes,
+  type OccurrenceDeclaration,
+  type OccurrenceDeclarationKind,
+  type OccurrencesyntaxKind,
   normalizeBenchmarkLayer,
   REVIEW_STATES,
   type ReviewState,
@@ -25,7 +32,7 @@ import {
 
 const LAYER_SUBJECT_PREFIX: Partial<Record<BenchmarkLayer, string>> = {
   raw_hits: "raw_hit:",
-  mentions: "mention:",
+  occurrences: "occurrence:",
   data_items: "data_item:",
 };
 
@@ -151,7 +158,7 @@ function validateManifest(raw: Record<string, unknown>, manifestPath: string): B
   };
 }
 
-function validateAnnotation(
+export function validateAnnotation(
   raw: Record<string, unknown>,
   filePath: string,
   index: number,
@@ -289,7 +296,91 @@ function validateAnnotation(
     );
   }
 
+  if (raw.occurrence_attributes !== undefined) {
+    if (normalizedLayer !== "occurrences") {
+      throw new Error(`${prefix}:occurrence_attributes is only supported on occurrences layer`);
+    }
+    record.occurrence_attributes = validateOccurrenceAttributes(raw.occurrence_attributes, prefix);
+  }
+
   return record;
+}
+
+const OCCURRENCE_ATTRIBUTE_KEYS = [
+  "syntax_kind",
+  "declaration",
+  "type_annotation",
+  "owner",
+  "touches",
+  "group",
+] as const;
+
+function validateOccurrenceAttributes(raw: unknown, prefix: string): OccurrenceAttributes {
+  const field = `${prefix}:occurrence_attributes`;
+  const block = isRecord(raw, field);
+  for (const key of Object.keys(block)) {
+    if (!(OCCURRENCE_ATTRIBUTE_KEYS as readonly string[]).includes(key)) {
+      throw new Error(`Unknown field '${key}' in ${field}`);
+    }
+  }
+
+  const parsed: OccurrenceAttributes = {};
+  if (block.syntax_kind !== undefined) {
+    const kind = isNonEmptyString(block.syntax_kind, `${field}.syntax_kind`);
+    if (!OCCURRENCE_SYNTAX_KINDS.includes(kind as OccurrencesyntaxKind)) {
+      throw new Error(`Unknown ${field}.syntax_kind '${kind}'`);
+    }
+    parsed.syntax_kind = kind as OccurrencesyntaxKind;
+  }
+  if (block.declaration !== undefined) {
+    parsed.declaration = validateOccurrenceDeclaration(block.declaration, `${field}.declaration`);
+  }
+  if (block.type_annotation !== undefined) {
+    parsed.type_annotation = isNonEmptyString(
+      block.type_annotation,
+      `${field}.type_annotation`,
+    );
+  }
+  if (block.owner !== undefined) {
+    parsed.owner = isNonEmptyString(block.owner, `${field}.owner`);
+  }
+  if (block.touches !== undefined) {
+    parsed.touches = isStringArray(block.touches, `${field}.touches`).map((key) =>
+      isNonEmptyString(key, `${field}.touches[]`),
+    );
+  }
+  if (block.group !== undefined) {
+    parsed.group = isNonEmptyString(block.group, `${field}.group`);
+  }
+  return parsed;
+}
+
+function validateOccurrenceDeclaration(raw: unknown, field: string): OccurrenceDeclaration {
+  if (raw === "unresolved") {
+    return "unresolved";
+  }
+  if (typeof raw === "string") {
+    throw new Error(`${field} must be 'unresolved' or an object, got '${raw}'`);
+  }
+  const block = isRecord(raw, field);
+  for (const key of Object.keys(block)) {
+    if (!["file_path", "line", "kind"].includes(key)) {
+      throw new Error(`Unknown field '${key}' in ${field}`);
+    }
+  }
+  const line = block.line;
+  if (typeof line !== "number" || !Number.isInteger(line) || line < 1) {
+    throw new Error(`Expected positive integer ${field}.line`);
+  }
+  const kind = isNonEmptyString(block.kind, `${field}.kind`);
+  if (!OCCURRENCE_DECLARATION_KINDS.includes(kind as OccurrenceDeclarationKind)) {
+    throw new Error(`Unknown ${field}.kind '${kind}'`);
+  }
+  return {
+    file_path: isNonEmptyString(block.file_path, `${field}.file_path`),
+    line,
+    kind: kind as OccurrenceDeclarationKind,
+  };
 }
 
 const FLOW_DISPOSITION_CANDIDATES: readonly FlowDispositionCandidate[] = [
@@ -527,7 +618,12 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
   }
 
   const canonicalLayer = normalizeBenchmarkLayer(layer);
-  const filePath = path.join(repoDir, "annotations", `${canonicalLayer}.yaml`);
+  let filePath = path.join(repoDir, "annotations", `${canonicalLayer}.yaml`);
+  // Gold written before the rename (ground-truth/2) is named mentions.yaml.
+  const legacyPath = path.join(repoDir, "annotations", "mentions.yaml");
+  if (canonicalLayer === "occurrences" && !fs.existsSync(filePath) && fs.existsSync(legacyPath)) {
+    filePath = legacyPath;
+  }
 
   if (!fs.existsSync(filePath)) {
     throw new Error(
@@ -535,6 +631,11 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
     );
   }
 
+  return parseAnnotationRecords(filePath);
+}
+
+/** Parse and validate the `annotations` array of one annotation or packet YAML file. */
+export function parseAnnotationRecords(filePath: string): AnnotationRecord[] {
   const text = fs.readFileSync(filePath, "utf8");
   const parsed = YAML.parse(text);
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
@@ -548,8 +649,35 @@ export function loadAnnotations(repoDir: string, layer: string): AnnotationRecor
   }
 
   return annotationsRaw.map((entry, index) =>
-    validateAnnotation(isRecord(entry, `${filePath}:annotations[${index}]`), filePath, index),
+    validateAnnotation(
+      normalizeLegacyOccurrenceRecord(isRecord(entry, `${filePath}:annotations[${index}]`)),
+      filePath,
+      index,
+    ),
   );
+}
+
+/**
+ * Read ground-truth/2 occurrence gold written before the mention -> occurrence rename
+ * (KDATAP-3f9029): layer `mentions`, subject keys `mention:<concept>`, and
+ * `mention_attributes`.
+ */
+export function normalizeLegacyOccurrenceRecord(raw: Record<string, unknown>): Record<string, unknown> {
+  if (raw.layer !== "mentions" && raw.mention_attributes === undefined) return raw;
+  const out: Record<string, unknown> = { ...raw };
+  if (out.layer === "mentions") out.layer = "occurrences";
+  const subject = out.subject;
+  if (typeof subject === "object" && subject !== null && !Array.isArray(subject)) {
+    const key = (subject as Record<string, unknown>).key;
+    if (typeof key === "string" && key.startsWith("mention:")) {
+      out.subject = { ...(subject as Record<string, unknown>), key: `occurrence:${key.slice("mention:".length)}` };
+    }
+  }
+  if (out.mention_attributes !== undefined && out.occurrence_attributes === undefined) {
+    out.occurrence_attributes = out.mention_attributes;
+  }
+  delete out.mention_attributes;
+  return out;
 }
 
 function validateLayerScopeProvenance(
@@ -587,6 +715,44 @@ function validateLayerScopeRecord(
     exhaustive_scope_files: deduped,
     provenance: validateLayerScopeProvenance(provenanceRaw, `${field}.provenance`),
   };
+}
+
+/** Concept-scoped closed worlds from layer-scopes.yaml `concept_scopes` (KDATAP-ec05ea). */
+export function loadConceptScopes(repoDir: string): Map<BenchmarkLayer, ConceptScopeRecord[]> {
+  const scopesPath = path.join(repoDir, "layer-scopes.yaml");
+  const result = new Map<BenchmarkLayer, ConceptScopeRecord[]>();
+  if (!fs.existsSync(scopesPath)) {
+    return result;
+  }
+  const parsed = YAML.parse(fs.readFileSync(scopesPath, "utf8")) as Record<string, unknown> | null;
+  const raw = parsed?.concept_scopes;
+  if (raw === undefined || raw === null) {
+    return result;
+  }
+  const byLayer = isRecord(raw, `${scopesPath}:concept_scopes`);
+  for (const [layerKey, entries] of Object.entries(byLayer)) {
+    if (!BENCHMARK_LAYERS.includes(layerKey as BenchmarkLayer)) {
+      throw new Error(`Unknown layer '${layerKey}' in ${scopesPath}:concept_scopes`);
+    }
+    if (!Array.isArray(entries)) {
+      throw new Error(`Expected list for ${scopesPath}:concept_scopes.${layerKey}`);
+    }
+    const layer = normalizeBenchmarkLayer(layerKey);
+    const records = entries.map((entry, index) => {
+      const field = `${scopesPath}:concept_scopes.${layerKey}[${index}]`;
+      const row = isRecord(entry, field);
+      const base = validateLayerScopeRecord(row, field);
+      const subjectKeys = isStringArray(row.subject_keys, `${field}.subject_keys`)
+        .map((key) => key.trim())
+        .filter(Boolean);
+      if (subjectKeys.length === 0) {
+        throw new Error(`Expected at least one subject key in ${field}.subject_keys`);
+      }
+      return { ...base, subject_keys: subjectKeys };
+    });
+    result.set(layer, [...(result.get(layer) ?? []), ...records]);
+  }
+  return result;
 }
 
 export function loadLayerScopes(repoDir: string): Map<BenchmarkLayer, LayerScopeRecord> {

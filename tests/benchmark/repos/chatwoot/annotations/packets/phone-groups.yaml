@@ -1,0 +1,344 @@
+repo: chatwoot
+concept: phone
+provenance:
+  proposed_by: claude-opus-5-5
+  proposed_at: 2026-10-01
+  review_state: proposed
+groups:
+  - id: contact-phone
+    name: Contact phone number
+    subject: a contact (the account's customer or visitor)
+    subject_kind: end_user
+    purpose: contact identity and SMS/WhatsApp reachability
+    rationale: "contacts.phone_number column (schema.rb:798 and its indexes, validated E.164 in contact.rb:54) with every read, write and lookup of it: the model callbacks and payloads, ContactIdentifyAction and ContactMergeAction, ContactInboxBuilder (which reads it to derive source ids), the widget, public and dashboard params, search and filter attributes, exports, CRM, LLM, Slack unfurl and campaign sends, data imports (importer, CSV ContactManager, Freshdesk normalizer), and the inbound SMS, Twilio and WhatsApp flows that turn the sender's number into contact attributes (incoming_message_service phone_number getters, contact_attributes_for_identifier, IdentifierSyncService, UserIdRotationService and ContactInfoResponseService). The sender numbers of inbound messages are request inputs written to and looked up against contacts.phone_number, so they are this item; the lines that turn them into contact inbox source ids are in contact-inbox-source-id."
+    clusters:
+      - c001
+      - c002
+      - c003
+      - c004
+      - c005
+      - c006
+      - c007
+      - c008
+      - c013
+      - c014
+      - c015
+      - c016
+      - c020
+      - c021
+      - c022
+      - c023
+      - c024
+      - c027
+      - c028
+      - c029
+      - c030
+      - c032
+      - c038
+      - c041
+      - c042
+      - c043
+      - c044
+      - c045
+      - c046
+      - c047
+      - c053
+      - c056
+      - c057
+      - c058
+      - c059
+      - c060
+      - c062
+      - c063
+      - c064
+      - c065
+      - c066
+      - c068
+      - c069
+      - c070
+      - c071
+      - c076
+      - c078
+      - c079
+      - c081
+      - c082
+      - c086
+      - c090
+      - c091
+      - c092
+      - c093
+      - c094
+      - c095
+      - c096
+      - c097
+      - c099
+      - c100
+      - c108
+      - c109
+      - c110
+      - c114
+      - c115
+      - c116
+      - c120
+      - c122
+      - c123
+      - c124
+      - c126
+      - c127
+      - c169
+      - c170
+      - c171
+      - c173
+      - c174
+      - c175
+      - c177
+      - c182
+      - c198
+      - c199
+      - c200
+      - c201
+      - c202
+      - c203
+  - id: contact-inbox-source-id
+    name: Contact inbox source id (phone-based)
+    subject: a contact's WhatsApp or SMS identity in one inbox
+    subject_kind: end_user
+    purpose: per-inbox contact address used to route and reply
+    rationale: "contact_inboxes.source_id holds the contact's phone-based WhatsApp id (wa_id digits, or whatsapp:+number for Twilio) or SMS number: the phone_source_id locals and getters that build it (incoming_message_identifier_helper.rb:54-83, IdentitySourceIdOrderer, UserIdRotationService, twilio_whatsapp_phone_source_id, normalized_phone_number), the lookups by source_id (user_id_rotation_service.rb:131, contact_info_response_service.rb:103/119), and the recipients read from conversation.contact_inbox.source_id: the WhatsApp provider send_message methods (SendOnWhatsappService passes the source id), the CSAT template sends and Twilio send_csat_template_message. A separate stored copy of the contact's number (it can also hold a BSUID)."
+    clusters:
+      - c054
+      - c055
+      - c077
+      - c083
+      - c085
+      - c098
+      - c101
+      - c111
+      - c117
+      - c118
+      - c119
+      - c151
+      - c153
+      - c155
+      - c156
+      - c157
+      - c158
+      - c159
+      - c161
+      - c162
+      - c163
+      - c167
+      - c168
+      - c176
+  - id: contact-name-phone-copy
+    name: Contact name filled from phone number
+    subject: a contact created from an inbound SMS or WhatsApp message
+    subject_kind: end_user
+    purpose: fallback display name
+    rationale: "The inbound flows name a new contact after its number when no profile name exists: the WhatsApp name fallback (incoming_message_identifier_helper.rb:92/103), the rotation rename (user_id_rotation_service.rb:115), the Twilio contact_name fallback (twilio/incoming_message_service.rb:127) and the SMS contact name (sms/incoming_message_service.rb:74). The lines name the contact's name as their target, so the number is copied into contacts.name."
+    clusters:
+      - c072
+      - c080
+      - c121
+      - c125
+      - c172
+  - id: contact-imported-raw-phone
+    name: Imported contact raw phone
+    subject: an imported Freshdesk or Intercom contact
+    subject_kind: end_user
+    purpose: source phone kept as import metadata
+    rationale: Contact source metadata raw_phone (freshdesk/metadata.rb:13, intercom/source.rb:134), stored in the contact's additional_attributes source block and the import mapping metadata, separate from the normalized contacts.phone_number.
+    clusters:
+      - c061
+      - c067
+  - id: shared-contact-card-phone
+    name: Shared contact card phone
+    subject: a person whose contact card a customer shares in a message
+    subject_kind: other_person
+    purpose: contact attachment shown in the conversation
+    rationale: Phone numbers of contact cards shared in WhatsApp (incoming_contact_message_handler.rb:26/35/39) and Telegram (telegram/incoming_message_service.rb:186) messages, written into the contact attachment's fallback_title (attachments.fallback_title, schema.rb:257).
+    clusters:
+      - c112
+      - c113
+      - c190
+  - id: user-phone
+    name: Agent profile phone
+    subject: an agent user
+    subject_kind: workforce
+    purpose: profile contact number
+    rationale: profiles_controller.rb:78 permits the profile :phone_number, merged into the signed-in user's users.custom_attributes.
+    clusters:
+      - c019
+  - id: whatsapp-channel-phone
+    name: WhatsApp inbox number
+    subject: the account's WhatsApp Business inbox
+    subject_kind: organization
+    purpose: the inbox's own WhatsApp number
+    rationale: channel_whatsapp.phone_number column (schema.rb:750, unique index 761, validated in channel/whatsapp.rb:38) with its webhook route param and lookups (routes.rb:704/705, webhooks/whatsapp_controller.rb, whatsapp_events_job.rb), the display_phone_number channel finder, webhook URLs, logs, and the Meta business phone number records and phone info that ChannelCreationService, ManualSetupService and ReauthorizationService write or match against the column (PhoneInfoService, ManualSetupValidationService, FacebookApiClient#fetch_all_phone_numbers, EmbeddedSignupService).
+    clusters:
+      - c025
+      - c026
+      - c031
+      - c039
+      - c040
+      - c088
+      - c089
+      - c102
+      - c103
+      - c104
+      - c128
+      - c129
+      - c130
+      - c131
+      - c132
+      - c133
+      - c134
+      - c135
+      - c136
+      - c137
+      - c139
+      - c140
+      - c141
+      - c142
+      - c143
+      - c144
+      - c145
+      - c146
+      - c147
+      - c148
+      - c149
+      - c150
+      - c164
+      - c165
+      - c178
+      - c179
+      - c180
+      - c184
+      - c185
+      - c196
+      - c197
+  - id: whatsapp-health-display-number
+    name: WhatsApp health display number
+    subject: the account's WhatsApp Business inbox
+    subject_kind: organization
+    purpose: number health snapshot
+    rationale: display_phone_number fetched with the number's health from Meta (health_service.rb:111/148) and kept in PERSISTED_FIELDS (health_service.rb:22), so a copy of the business number is stored in channel_whatsapp.phone_number_health.
+    clusters:
+      - c105
+      - c106
+      - c107
+  - id: inbox-name-phone-copy
+    name: WhatsApp inbox name filled from number
+    subject: the account's WhatsApp inbox
+    subject_kind: organization
+    purpose: fallback inbox name
+    rationale: ManualSetupValidationService#build_preview's suggested_inbox_name falls back to the business number (manual_setup_validation_service.rb:96); ManualSetupService uses it as inboxes.name.
+    clusters:
+      - c138
+  - id: twilio-channel-phone
+    name: Twilio inbox number
+    subject: the account's Twilio SMS or WhatsApp inbox
+    subject_kind: organization
+    purpose: the inbox's own Twilio number
+    rationale: channel_twilio_sms.phone_number column (schema.rb:695 and indexes 710/712, validated in channel/twilio_sms.rb:48-50) with the send from (twilio_sms.rb:88), the Twilio channel creation params (twilio_channels_controller.rb), the inbound and status-callback lookups by To/From (incoming_message_service.rb:33, delivery_status_service.rb:52), webhook setup and health logs, and the enterprise voice route param :phone (routes.rb:728-731).
+    clusters:
+      - c009
+      - c010
+      - c011
+      - c012
+      - c035
+      - c036
+      - c037
+      - c186
+      - c187
+      - c188
+      - c189
+      - c193
+      - c194
+      - c195
+  - id: twilio-incoming-number
+    name: Twilio IncomingPhoneNumber record
+    subject: the account's Twilio number as registered at Twilio
+    subject_kind: organization
+    purpose: webhook and capability configuration at Twilio
+    rationale: Twilio API incoming_phone_numbers looked up by phone_number with the channel number (twilio/health_service.rb:88, twilio/webhook_setup_service.rb:29/31) and its phone_number read for the health label (health_service.rb:70); the lines name Twilio's record of the number.
+    clusters:
+      - c074
+      - c075
+      - c084
+  - id: sms-channel-phone
+    name: SMS (Bandwidth) inbox number
+    subject: the account's SMS inbox
+    subject_kind: organization
+    purpose: the inbox's own SMS number
+    rationale: channel_sms.phone_number column (schema.rb:664, unique index 669, validated in channel/sms.rb:24) with the Bandwidth send from (sms.rb:53), the webhook route param and callback URL (routes.rb:703, inbox.rb:194) and the events job lookup (sms_events_job.rb:9).
+    clusters:
+      - c033
+      - c034
+      - c183
+      - c191
+      - c192
+  - id: account-brand-phone
+    name: Account brand phone
+    subject: the account's company
+    subject_kind: organization
+    purpose: brand info gathered at sign-up
+    rationale: WebsiteBrandingService DATA_DEFAULTS phone field (website_branding_service.rb:8), saved with the brand info in accounts.custom_attributes['brand_info'] by BrandingEnrichmentJob.
+    clusters:
+      - c087
+  - id: account-brand-whatsapp-phone
+    name: Account brand WhatsApp number
+    subject: the account's company
+    subject_kind: organization
+    purpose: WhatsApp social handle gathered at sign-up
+    rationale: SocialLinkParser#extract_whatsapp_phone takes the number from wa.me or api.whatsapp.com links on the company website (social_link_parser.rb:61-63); WebsiteBrandingService stores it as the WhatsApp social handle in the account's brand_info.
+    clusters:
+      - c073
+  - id: leadsquared-lead-phone
+    name: LeadSquared lead phone
+    subject: the contact's LeadSquared lead
+    subject_kind: end_user
+    purpose: CRM sync
+    rationale: The LeadSquared lead's Mobile field written by ContactMapper (contact_mapper.rb:23) and read or searched by LeadFinderService and LeadClient (lead_finder_service.rb:36/38, lead_client.rb:26/29 SearchBy=Phone); fields of the external lead record.
+    clusters:
+      - c048
+      - c049
+      - c050
+      - c051
+      - c052
+  - id: shopify-customer-phone
+    name: Shopify customer phone
+    subject: the contact's matching Shopify customer
+    subject_kind: end_user
+    purpose: order lookup in the Shopify integration
+    rationale: The Shopify customers search query names Shopify's phone field as its lookup key (shopify_controller.rb:82) and requests it back (88).
+    clusters:
+      - c017
+      - c018
+needs_adjudication:
+  - cluster: c152
+    candidate_groups:
+      - contact-inbox-source-id
+      - contact-phone
+    reason: send_template(phone_number, ...) is called with the conversation's contact_inbox.source_id (SendOnWhatsappService, CsatSurveyService) and with contact.phone_number for one-off campaign recipients (oneoff_campaign_service.rb:106/129); the parameter holds either item.
+  - cluster: c154
+    candidate_groups:
+      - contact-inbox-source-id
+      - contact-phone
+    reason: send_template(phone_number, ...) is called with the conversation's contact_inbox.source_id (SendOnWhatsappService, CsatSurveyService) and with contact.phone_number for one-off campaign recipients (oneoff_campaign_service.rb:106/129); the parameter holds either item.
+  - cluster: c160
+    candidate_groups:
+      - contact-inbox-source-id
+      - contact-phone
+    reason: send_template(phone_number, ...) is called with the conversation's contact_inbox.source_id (SendOnWhatsappService, CsatSurveyService) and with contact.phone_number for one-off campaign recipients (oneoff_campaign_service.rb:106/129); the parameter holds either item.
+  - cluster: c166
+    candidate_groups:
+      - contact-phone
+      - contact-inbox-source-id
+    reason: "raw_phone_source_id holds the contact's new wa_id from a user_changed_number event and feeds both stored places: it is normalized into the phone contact inbox source id (line 30) and written as +number into contacts.phone_number (record_phone_identity, line 92)."
+  - cluster: c181
+    candidate_groups:
+      - twilio-channel-phone
+      - sms-channel-phone
+      - whatsapp-channel-phone
+    reason: The inbox payload renders resource.channel.try(:phone_number) for every inbox type; Twilio, SMS (Bandwidth) and WhatsApp channels each store their own number in a different table.

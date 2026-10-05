@@ -1,0 +1,56 @@
+# Per-concept hints for the declared-column catalog (src/analyze/column-catalog.ts,
+# KDATAP-0df343). A column's name is matched to a concept by the signal rules in
+# pii-signals.rules.yaml; this file adds what those patterns cannot say. A new concept is
+# a new entry here, not code. Every list is optional; a concept without an entry still
+# matches by name and by a type named like the concept.
+#
+#   type_hints            declared column types that settle the concept whatever the column
+#                         is called; compared lower-cased, without punctuation or a module
+#                         prefix (`phonenumber_field.modelfields.PhoneNumberField` ->
+#                         phonenumberfield)
+#   role_words            words that, with no other evidence, make a configured key one of
+#                         this concept's values (`members_support_address`) when
+#                         role_words_suffice is true; otherwise the key must also name the
+#                         concept (`SUPPORT_PHONE`, `TWILIO_PHONE_NUMBER`)
+#   role_runs             the same, as separator-free runs (`replyto`, `mailfrom`)
+#   tail_words            last words that make a key naming the concept earlier a value of
+#                         it (`EMAIL_FROM`, `PHONE_NUMBER`)
+#   role_words_suffice    configured keys may qualify by role words alone
+#
+# `negative_words` apply to every concept: a configured key ending in one is a flag, count,
+# id or similar, not a value.
+negative_words:
+  - name
+  - names
+  - count
+  - id
+  - ids
+  - url
+  - uri
+  - domain
+  - enabled
+  - verified
+  - subject
+  - body
+  - template
+  - label
+  - title
+  - type
+  - at
+  - time
+  - date
+  - flag
+
+concept_profiles:
+  - id: email
+    type_hints: [email, emailfield]
+    role_words: [from, sender, support, noreply]
+    role_runs: [replyto, mailfrom, defaultfrom, noreply]
+    tail_words: [from, to, reply, address, addresses, sender, recipient, recipients, cc, bcc]
+    role_words_suffice: true
+
+  - id: phone_number
+    type_hints: [phonenumberfield, possiblephonenumberfield, phonenumber, phone, telephone]
+    role_words: [sender, from, support, contact, sms, twilio]
+    tail_words: [number, no, num, from, to, sender, support, contact, sms]
+    role_words_suffice: false

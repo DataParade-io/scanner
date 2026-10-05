@@ -194,14 +194,14 @@ const scoreScenarios: ScoreScenario[] = [
     },
   },
   {
-    name: "does not pair mentions when identity keys differ",
+    name: "does not pair occurrences when identity keys differ",
     cases: [
-      positiveCase("label-mismatch", "mentions", "mention:email", "src/app.yml", 4, 4, [
+      positiveCase("label-mismatch", "occurrences", "occurrence:email", "src/app.yml", 4, 4, [
         "user_email",
       ]),
     ],
     scanResults: [
-      scanResult([finding("mention:username", "src/app.yml", 4, 4, ["username"])], "mentions"),
+      scanResult([finding("occurrence:username", "src/app.yml", 4, 4, ["username"])], "occurrences"),
     ],
     expect: {
       evaluablePositives: 1,
@@ -323,7 +323,7 @@ const scoreScenarios: ScoreScenario[] = [
   {
     name: "does not confer cross-layer eligibility from another layer ledger",
     cases: [
-      positiveCase("mentions-positive", "mentions", "mention:email", "src/pii.yml", 1, 1, [
+      positiveCase("occurrences-positive", "occurrences", "occurrence:email", "src/pii.yml", 1, 1, [
         "user_email",
       ]),
     ],
@@ -337,7 +337,7 @@ const scoreScenarios: ScoreScenario[] = [
             "components",
             [layerOutcome("src/orch.ts", "successfully_processed")],
           ),
-          mentions: createLayerLedger("mentions", []),
+          occurrences: createLayerLedger("occurrences", []),
         },
       },
     ],
@@ -345,7 +345,7 @@ const scoreScenarios: ScoreScenario[] = [
       evaluablePositives: 0,
       unreadCount: 1,
       recall: null,
-      caseChecks: [{ caseId: "mentions-positive", unread: true, matched: false }],
+      caseChecks: [{ caseId: "occurrences-positive", unread: true, matched: false }],
     },
   },
 ];

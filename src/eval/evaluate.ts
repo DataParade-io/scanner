@@ -1,4 +1,11 @@
-import { assignOneToOne, type AssignmentResult } from "./canonical/assignment";
+import { appendFileSync } from "fs";
+import {
+  assignDataFlowsOneToOne,
+  assignDataItemsOneToOne,
+  assignOccurrencesOneToOne,
+  assignOneToOne,
+  type AssignmentResult,
+} from "./canonical/assignment";
 import { computeMetricComputability } from "./canonical/computability";
 import { conceptCorrectness, negativeObservationCandidate } from "./canonical/match";
 import type {
@@ -17,7 +24,7 @@ import type {
 const LAYER_GENERIC_LABELS: Record<CanonicalLayer, ReadonlySet<string>> = {
   components: new Set(["component"]),
   "data-flows": new Set(["data_flow", "dataflow"]),
-  mentions: new Set(["pii", "pii_signal", "mention"]),
+  occurrences: new Set(["pii", "pii_signal", "occurrence"]),
   "raw-hits": new Set(["pii", "pii_signal", "raw_hit"]),
   "data-items": new Set(["data_item", "dataitem"]),
   "data-actions": new Set(["data_action"]),
@@ -76,12 +83,24 @@ function findingInScope(
   );
 }
 
+function inConceptScope(
+  finding: CanonicalScannerFinding,
+  conceptScopes: ReadonlyArray<{ subjectKeys: readonly string[]; files: readonly string[] }>,
+): boolean {
+  return conceptScopes.some(
+    (scope) =>
+      scope.subjectKeys.includes(finding.identity.identityKey) &&
+      findingInScope(finding, scope.files),
+  );
+}
+
 function computePrecisionFromAssignment(
   findings: ReadonlyArray<CanonicalScannerFinding & { id: string }>,
   assignment: AssignmentResult,
   scopeFiles: readonly string[],
+  conceptScopes: ReadonlyArray<{ subjectKeys: readonly string[]; files: readonly string[] }> = [],
 ): { exhaustiveScopedFindings: number; exhaustiveScopedMatches: number } {
-  if (scopeFiles.length === 0) {
+  if (scopeFiles.length === 0 && conceptScopes.length === 0) {
     return { exhaustiveScopedFindings: 0, exhaustiveScopedMatches: 0 };
   }
 
@@ -90,12 +109,22 @@ function computePrecisionFromAssignment(
   let exhaustiveScopedMatches = 0;
 
   for (const finding of findings) {
-    if (!findingHasLocations(finding) || !findingInScope(finding, scopeFiles)) {
+    if (
+      !findingHasLocations(finding) ||
+      !(findingInScope(finding, scopeFiles) || inConceptScope(finding, conceptScopes))
+    ) {
       continue;
     }
     exhaustiveScopedFindings += 1;
     if (matchedFindingIds.has(finding.id)) {
       exhaustiveScopedMatches += 1;
+    } else if (process.env.DATAPARADE_UNMATCHED_FINDINGS_LOG) {
+      // In-scope findings that pair with no gold record (precision misses), for review.
+      const location = finding.evidenceLocations[0];
+      appendFileSync(
+        process.env.DATAPARADE_UNMATCHED_FINDINGS_LOG,
+        `${JSON.stringify({ key: finding.identity.identityKey, file: location.file_path, line: location.start_line })}\n`,
+      );
     }
   }
 
@@ -109,6 +138,7 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
     findings,
     expectationMeta,
     exhaustiveScopeFiles = [],
+    conceptScopes = [],
     eligibility,
   } = input;
 
@@ -118,7 +148,14 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
     return meta?.isRecallEvaluable && !meta.unread;
   });
 
-  const assignment = assignOneToOne([...evaluableExpectations], [...findings]);
+  const assignment =
+    layer === "data-items"
+      ? assignDataItemsOneToOne([...evaluableExpectations], [...findings])
+      : layer === "occurrences"
+        ? assignOccurrencesOneToOne([...evaluableExpectations], [...findings])
+      : layer === "data-flows"
+        ? assignDataFlowsOneToOne([...evaluableExpectations], [...findings])
+      : assignOneToOne([...evaluableExpectations], [...findings]);
   const pairByExpectationId = new Map(
     assignment.pairs.map((pair) => [pair.expectationId, pair.findingId]),
   );
@@ -215,7 +252,16 @@ export function evaluateLayerBucket(input: LayerEvaluationInput): LayerEvaluatio
   const normalizedScope = exhaustiveScopeFiles
     .filter(isEvalPathContractValid)
     .map(normalizeEvalPath);
-  const bucketPrecision = computePrecisionFromAssignment(findings, assignment, normalizedScope);
+  const normalizedConceptScopes = conceptScopes.map((scope) => ({
+    subjectKeys: scope.subjectKeys,
+    files: scope.files.filter(isEvalPathContractValid).map(normalizeEvalPath),
+  }));
+  const bucketPrecision = computePrecisionFromAssignment(
+    findings,
+    assignment,
+    normalizedScope,
+    normalizedConceptScopes,
+  );
   const precision =
     bucketPrecision.exhaustiveScopedFindings === 0
       ? null

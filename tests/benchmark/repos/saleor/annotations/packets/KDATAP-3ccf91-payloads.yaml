@@ -1,0 +1,280 @@
+packet:
+  repo: saleor
+  concept: phone
+  kanbus_issue: KDATAP-3ccf91
+  files:
+  - saleor/checkout/webhooks/calculate_taxes.py
+  - saleor/core/anonymize.py
+  - saleor/order/notifications.py
+  - saleor/order/webhooks/order_calculate_taxes.py
+  - saleor/plugins/email_common.py
+  - saleor/settings.py
+annotations:
+- id: saleor-calculate_taxes-L40
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/checkout/webhooks/calculate_taxes.py
+    start_line: 40
+    end_line: 40
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Selects the address phone field by name for the tax calculation webhook payload of a checkout address.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-anonymize-L9
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/core/anonymize.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Boolean flag parameter selecting a longer cutoff; carries no number.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-anonymize-L15
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/core/anonymize.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Reads the boolean flag to choose the obfuscation cutoff; carries no number.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-anonymize-L27
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/core/anonymize.py
+    start_line: 27
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Overwrites address.phone, the stored Address.phone column, with an obfuscated value (phone=True is the flag).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/account/models.py
+      line: 74
+      kind: field
+- id: saleor-notifications-L243
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 243
+    end_line: 243
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Selects the address phone field by name for the order notification address payload.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-notifications-L252
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/order/notifications.py
+    start_line: 252
+    end_line: 252
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Converts the phone value of the notification address payload to a string by key.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-order_calculate_taxes-L119
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/order/webhooks/order_calculate_taxes.py
+    start_line: 119
+    end_line: 119
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Selects the address phone field by name for the order tax calculation webhook payload.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor
+- id: saleor-email_common-L127
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: include_phone
+  evidence:
+    file_path: saleor/plugins/email_common.py
+    start_line: 127
+    end_line: 127
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Boolean flag parameter controlling whether the phone is printed; carries no number.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+- id: saleor-email_common-L134
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/plugins/email_common.py
+    start_line: 134
+    end_line: 134
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Local holding the phone read from the address dict of the email payload.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/email_common.py
+      line: 134
+      kind: local
+- id: saleor-email_common-L135
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/plugins/email_common.py
+    start_line: 135
+    end_line: 135
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Tests whether the address has a phone to print (include_phone is the flag).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/email_common.py
+      line: 134
+      kind: local
+- id: saleor-email_common-L136
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: saleor/plugins/email_common.py
+    start_line: 136
+    end_line: 136
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Appends the phone to the formatted address lines.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: saleor
+    declaration:
+      file_path: saleor/plugins/email_common.py
+      line: 134
+      kind: local
+- id: saleor-settings-L338
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phonenumber_field
+  evidence:
+    file_path: saleor/settings.py
+    start_line: 338
+    end_line: 338
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Django app name in INSTALLED_APPS; not a phone number.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: saleor

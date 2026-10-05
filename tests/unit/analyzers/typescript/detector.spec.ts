@@ -344,6 +344,52 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
     );
   });
 
+  it("detects AuthDriver subclasses as auth_middleware findings", () => {
+    const file = makeFile(
+      `
+        export class LocalAuthDriver extends AuthDriver {
+          async verify() {}
+        }
+      `,
+      { path: "api/src/auth/drivers/local.ts" },
+    );
+
+    const findings = detectPatterns(file);
+    const authFindings = findings.filter((f) => f.pattern === "auth_middleware");
+
+    expect(authFindings.length).toBeGreaterThan(0);
+    expect(
+      authFindings.some(
+        (f) =>
+          f.name === "auth_driver" &&
+          f.properties.strategy === "local" &&
+          f.location?.startLine === 2,
+      ),
+    ).toBe(true);
+  });
+
+  it("detects exported Service classes in services/ as service components", () => {
+    const file = makeFile(
+      `
+        export class UsersService extends ItemsService {
+          constructor() {
+            super('directus_users', options);
+          }
+        }
+      `,
+      { path: "api/src/services/users.ts" },
+    );
+
+    const findings = detectPatterns(file);
+    const serviceFindings = findings.filter(
+      (f) => f.pattern === "auth_middleware" && f.name === "UsersService",
+    );
+
+    expect(serviceFindings.length).toBeGreaterThan(0);
+    expect(serviceFindings[0]?.properties.componentSubType).toBe("service");
+    expect(serviceFindings[0]?.location?.startLine).toBe(2);
+  });
+
   it("detects dotenv.config as config_file findings", () => {
     const file = makeFile(
       `

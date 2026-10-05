@@ -13,8 +13,8 @@ describe("published eval boundary", () => {
     const evidence = sampleEvidence("src/app.ts", 5, 5);
     const expectation = withId(
       buildAcceptedGoldExpectation({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: [evidence],
       }),
@@ -22,8 +22,8 @@ describe("published eval boundary", () => {
     );
     const finding = withId(
       buildScannerFinding({
-        layer: "mentions",
-        identityKey: "mention:email",
+        layer: "occurrences",
+        identityKey: "occurrence:email",
         conceptLeaf: "email_address",
         evidenceLocations: [evidence],
       }),
@@ -31,7 +31,7 @@ describe("published eval boundary", () => {
     );
 
     const report = evaluateLayerBucket({
-      layer: "mentions",
+      layer: "occurrences",
       expectations: [expectation],
       findings: [finding],
       expectationMeta: [

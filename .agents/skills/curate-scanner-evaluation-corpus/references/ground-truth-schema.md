@@ -50,6 +50,8 @@ provenance:
 
 `unread` is evaluation-run state, not annotation truth. Store it in results with the exact scanned-file inventory.
 
+Occurrence records may also assert structural attributes of the matched line in an optional `occurrence_attributes` block (`syntax_kind`, `declaration`, `type_annotation`, `owner`, `touches`, `group`). Assert only what you labeled. Agents write proposed records to a labeling packet under `annotations/packets/`, not to `annotations/occurrences.yaml`, and run `pnpm run benchmark:validate-packet <packet.yaml>` until it passes. Field definitions and the packet format are in `tests/eval/ground-truth-schema.md` (Occurrence attributes, Labeling packets).
+
 ## Exhaustive scope requirements
 
 To calculate true precision, declare a scope in which every relevant scanner finding can be judged. A list of selected positive and negative lines is not exhaustive.

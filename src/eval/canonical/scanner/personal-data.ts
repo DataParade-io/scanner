@@ -6,20 +6,42 @@ import { resolveScannerAdapterMapVersion } from "./manifest";
 
 const LAYER_BY_EVAL: Record<PersonalDataEvalLayer, CanonicalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
-const RULE_ID_PREFIXES = ["raw_hit:", "mention:", "data_item:"] as const;
+const RULE_ID_PREFIXES = ["raw_hit:", "occurrence:", "data_item:"] as const;
 
 export function extractPersonalDataRuleId(subjectKey: string): string {
   const normalized = subjectKey.trim().toLowerCase();
   for (const prefix of RULE_ID_PREFIXES) {
     if (normalized.startsWith(prefix)) {
-      return normalized.slice(prefix.length);
+      const rest = normalized.slice(prefix.length);
+      if (prefix === "occurrence:") {
+        const ruleEnd = rest.indexOf(":");
+        return ruleEnd === -1 ? rest : rest.slice(0, ruleEnd);
+      }
+      return rest;
     }
   }
   throw new Error(`Personal data subject key missing known prefix: '${subjectKey}'`);
+}
+
+/** Gold and eval pairing use concept identity; scanner subject keys may include file+line. */
+export function personalDataConceptIdentityKey(
+  layer: PersonalDataEvalLayer,
+  ruleId: string,
+): string {
+  switch (layer) {
+    case "occurrences":
+      return `occurrence:${ruleId}`;
+    case "raw-hits":
+      return `raw_hit:${ruleId}`;
+    case "data-items":
+      return `data_item:${ruleId}`;
+    default:
+      throw new Error(`Unsupported personal-data eval layer: ${layer}`);
+  }
 }
 
 function labelObservedTokens(labels: readonly string[]): ObservedTokenCandidate[] {
@@ -46,7 +68,7 @@ export function adaptPersonalDataFinding(
 
   return buildScannerFinding({
     layer: LAYER_BY_EVAL[layer],
-    identityKey: finding.subjectKey,
+    identityKey: personalDataConceptIdentityKey(layer, ruleId),
     conceptLeaf,
     conceptAncestry,
     evidenceLocations: finding.evidenceLocations.map((location) => ({

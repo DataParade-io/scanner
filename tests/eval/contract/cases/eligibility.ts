@@ -12,10 +12,10 @@ function eligibilityScenario(
   return {
     name: `eligibility reason ${reason} ${readable ? "is readable" : "excludes case from recall"}`,
     cases: [
-      positiveCase(id, "mentions", "mention:email", EVIDENCE_PATH, 1, 1, ["user_email"]),
+      positiveCase(id, "occurrences", "occurrence:email", EVIDENCE_PATH, 1, 1, ["user_email"]),
     ],
     scanResults: [
-      scanResult([], "mentions", [{ path: EVIDENCE_PATH, reason }]),
+      scanResult([], "occurrences", [{ path: EVIDENCE_PATH, reason }]),
     ],
     expect: {
       evaluablePositives: readable ? 1 : 0,

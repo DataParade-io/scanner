@@ -1,7 +1,7 @@
 import {
   dataItemConceptId,
   dataItemIdentity,
-  mentionIdentity,
+  occurrenceIdentity,
   piiSignalIdentity,
   rawHitIdentity,
 } from "../../../src/eval-layers/identities";
@@ -10,7 +10,9 @@ describe("eval-layers/identities", () => {
   it("maps rule ids to stable personal-data identity keys", () => {
     expect(dataItemConceptId("email")).toBe("email");
     expect(rawHitIdentity("email")).toBe("raw_hit:email");
-    expect(mentionIdentity("email")).toBe("mention:email");
+    expect(occurrenceIdentity("email", "src/auth/login.ts", 13)).toBe(
+      "occurrence:email:src/auth/login.ts:13",
+    );
     expect(dataItemIdentity("email")).toBe("data_item:email");
   });
 

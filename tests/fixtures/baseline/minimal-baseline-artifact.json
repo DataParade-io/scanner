@@ -11,7 +11,7 @@
     "scannerGitSha": "fixture-sha-001",
     "corpusGoldDigest": "sha256:fixture-corpus-digest",
     "evaluationContractVersion": "1.0.0",
-    "scorecardVectorContractVersion": "scorecard-vector/2",
+    "scorecardVectorContractVersion": "scorecard-vector/3",
     "taxonomyDigest": "sha256:fixture-taxonomy",
     "conceptMapDigest": "sha256:fixture-concept-map",
     "adapterMapDigest": "sha256:fixture-adapter-map",
@@ -28,7 +28,7 @@
     "reviewStateCounts": {
       "provenance": "corpus-annotations",
       "byLayer": {
-        "mentions": {
+        "occurrences": {
           "accepted": 2,
           "proposed": 0,
           "rejected": 0,
@@ -45,7 +45,7 @@
     "annotationStatusCounts": {
       "provenance": "corpus-annotations",
       "byLayer": {
-        "mentions": {
+        "occurrences": {
           "positive": 2,
           "negative": 0,
           "ambiguous": 0
@@ -92,12 +92,12 @@
       },
       "perLayer": [
         {
-          "layer": "mentions",
+          "layer": "occurrences",
           "orchestratorLanguages": [],
           "personalDataLanguages": [
             "typescript"
           ],
-          "profileDigest": "sha256:fixture-layer-mentions"
+          "profileDigest": "sha256:fixture-layer-occurrences"
         },
         {
           "layer": "data-items",
@@ -129,7 +129,7 @@
   },
   "invariants": {
     "canonicalContractVersion": "1.0.0",
-    "scorecardVectorContractVersion": "scorecard-vector/2",
+    "scorecardVectorContractVersion": "scorecard-vector/3",
     "baselineArtifactSchemaVersion": "baseline-artifact/1",
     "eligibilityReasonSetVersion": "eligibility-reasons/1",
     "groundTruthSchemaVersion": "ground-truth/1"
@@ -140,7 +140,7 @@
     "blockers": [],
     "invariantVersions": {
       "canonicalContractVersion": "1.0.0",
-      "scorecardVectorContractVersion": "scorecard-vector/2",
+      "scorecardVectorContractVersion": "scorecard-vector/3",
       "baselineArtifactSchemaVersion": "baseline-artifact/1",
       "eligibilityReasonSetVersion": "eligibility-reasons/1",
       "groundTruthSchemaVersion": "ground-truth/1"
@@ -148,7 +148,7 @@
   },
   "goldPopulation": {
     "byLayer": {
-      "mentions": {
+      "occurrences": {
         "acceptedCanonicalCount": 2,
         "evaluablePositiveCount": 2,
         "packetDiversity": {
@@ -198,15 +198,15 @@
     }
   },
   "scorecard": {
-    "contractVersion": "scorecard-vector/2",
+    "contractVersion": "scorecard-vector/3",
     "scannerGitSha": "fixture-sha-001",
     "generatedAt": "2026-08-31T12:00:00.000Z",
     "reviewStates": [
       "accepted"
     ],
     "layers": {
-      "mentions": {
-        "layer": "mentions",
+      "occurrences": {
+        "layer": "occurrences",
         "computability": {
           "summary": "empty",
           "metrics": {
@@ -892,8 +892,8 @@
       {
         "repoKey": "fixture-packet",
         "layers": {
-          "mentions": {
-            "layer": "mentions",
+          "occurrences": {
+            "layer": "occurrences",
             "computability": {
               "summary": "empty",
               "metrics": {
@@ -1581,7 +1581,7 @@
   "capabilityCoverage": {
     "disclaimer": "diagnostic_only_not_recall_denominator",
     "byLayer": {
-      "mentions": {
+      "occurrences": {
         "caseWeighted": 0,
         "distinctLeaf": 0,
         "supportedCount": 0,

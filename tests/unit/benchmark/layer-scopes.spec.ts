@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import path from "path";
 
-import { loadAnnotations, loadLayerScopes } from "../../benchmark/manifest";
+import { loadAnnotations, loadConceptScopes, loadLayerScopes } from "../../benchmark/manifest";
 import { listBenchmarkRepoKeys } from "../../benchmark/run-benchmark";
 
 describe("layer-scopes loader", () => {
@@ -18,14 +18,14 @@ describe("layer-scopes loader", () => {
     expect(scopes.get("components")?.provenance.review_state).toBe("accepted");
   });
 
-  it("merges pii_signals into mentions on load", () => {
+  it("merges pii_signals into occurrences on load", () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "layer-scopes-"));
     try {
       fs.writeFileSync(
         path.join(tempDir, "layer-scopes.yaml"),
         [
           "layer_scopes:",
-          "  mentions:",
+          "  occurrences:",
           "    exhaustive_scope_files: [a.rb]",
           "    provenance:",
           "      proposed_by: test",
@@ -42,7 +42,7 @@ describe("layer-scopes loader", () => {
       );
 
       const scopes = loadLayerScopes(tempDir);
-      expect(scopes.get("mentions")?.exhaustive_scope_files).toEqual(["a.rb", "b.rb"]);
+      expect(scopes.get("occurrences")?.exhaustive_scope_files).toEqual(["a.rb", "b.rb"]);
       expect(scopes.has("pii_signals")).toBe(false);
     } finally {
       fs.rmSync(tempDir, { recursive: true, force: true });
@@ -94,7 +94,11 @@ describe("layer-scopes loader", () => {
         continue;
       }
       const scopes = loadLayerScopes(repoDir);
-      expect(scopes.size).toBeGreaterThan(0);
+      if (scopes.size === 0) {
+        // KDATAP-973b69: a held-out packet may ship only proposed concept scopes (chatwoot).
+        expect(loadConceptScopes(repoDir).size).toBeGreaterThan(0);
+        continue;
+      }
       for (const [, record] of scopes) {
         expect(record.provenance.proposed_by.length).toBeGreaterThan(0);
         expect(record.provenance.review_state).toBeDefined();

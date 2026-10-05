@@ -45,7 +45,7 @@ layer_scopes:
       reviewed_by: agent@example.com
       reviewed_at: 2026-08-31T00:00:00Z
       review_state: accepted
-  mentions:
+  occurrences:
     exhaustive_scope_files:
       - api/src/auth/auth.ts
       - api/src/auth/drivers/local.ts
@@ -59,3 +59,47 @@ layer_scopes:
       reviewed_by: agent@example.com
       reviewed_at: 2026-08-31T00:00:00Z
       review_state: accepted
+concept_scopes:
+  occurrences:
+    - subject_keys:
+        - occurrence:email
+      exhaustive_scope_files:
+        - api/src/auth/drivers/ldap.ts
+        - api/src/auth/drivers/local.ts
+        - api/src/auth/drivers/oauth2.ts
+        - api/src/auth/drivers/openid.ts
+        - api/src/auth/drivers/saml.ts
+        - api/src/cli/commands/init/index.ts
+        - api/src/cli/commands/users/create.ts
+        - api/src/cli/commands/users/passwd.ts
+        - api/src/controllers/auth.ts
+        - api/src/controllers/users.ts
+        - api/src/database/migrations/20210903A-add-auth-provider.ts
+        - api/src/database/migrations/20211118A-add-notifications.ts
+        - api/src/database/migrations/20240422A-public-registration.ts
+        - api/src/license/entitlements/lib/sso-enabled.ts
+        - api/src/license/manager.ts
+        - api/src/mailer.ts
+        - api/src/operations/mail/index.ts
+        - api/src/operations/mail/rate-limiter.ts
+        - api/src/operations/notification/index.ts
+        - api/src/services/authentication.ts
+        - api/src/services/comments.ts
+        - api/src/services/export.ts
+        - api/src/services/graphql/resolvers/system-global.ts
+        - api/src/services/graphql/resolvers/system.ts
+        - api/src/services/import/import.ts
+        - api/src/services/mail/index.ts
+        - api/src/services/mail/rate-limiter.ts
+        - api/src/services/mcp-oauth/index.ts
+        - api/src/services/notifications.ts
+        - api/src/services/server.ts
+        - api/src/services/shares.ts
+        - api/src/services/tfa.ts
+        - api/src/services/users.ts
+        - api/src/utils/create-admin.ts
+        - api/src/websocket/collab/room.ts
+      provenance:
+        proposed_by: claude-opus-5-5
+        proposed_at: '2026-09-30'
+        review_state: proposed

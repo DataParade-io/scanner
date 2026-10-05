@@ -3,7 +3,7 @@
  * Emit personal-data layer findings as JSON for Primus SubjectIdentityScore evaluation.
  *
  * Usage:
- *   npx ts-node scripts/scan-layer-findings.ts --root <dir> --layer raw-hits|mentions|data-items
+ *   npx ts-node scripts/scan-layer-findings.ts --root <dir> --layer raw-hits|occurrences|data-items
  */
 
 import { parseArgs } from "node:util";
@@ -16,7 +16,7 @@ import {
 
 const LAYER_ALIASES: Record<string, PersonalDataEvalLayer> = {
   "raw-hits": "raw-hits",
-  mentions: "mentions",
+  occurrences: "occurrences",
   "data-items": "data-items",
 };
 
@@ -24,7 +24,7 @@ function parseLayer(value: string | undefined): PersonalDataEvalLayer {
   const layer = value?.trim();
   if (!layer || !(layer in LAYER_ALIASES)) {
     throw new Error(
-      "--layer is required and must be one of: raw-hits, mentions, data-items",
+      "--layer is required and must be one of: raw-hits, occurrences, data-items",
     );
   }
   return LAYER_ALIASES[layer];

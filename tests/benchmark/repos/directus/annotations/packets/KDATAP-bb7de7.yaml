@@ -1,0 +1,1406 @@
+packet:
+  repo: directus
+  concept: email
+  kanbus_issue: KDATAP-bb7de7
+  files:
+  - api/src/services/mcp-oauth/index.ts
+  - api/src/auth/drivers/openid.ts
+  - api/src/auth/drivers/oauth2.ts
+  - api/src/services/tfa.ts
+  - api/src/services/authentication.ts
+  - api/src/cli/commands/users/passwd.ts
+  - api/src/cli/commands/users/create.ts
+  - api/src/auth/drivers/ldap.ts
+  - api/src/utils/create-admin.ts
+annotations:
+- id: directus-ldap-L41
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/ldap.ts
+    start_line: 41
+    end_line: 41
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type definition for a field that holds a user's email address in the UserInfo interface.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/ldap.ts
+      line: 41
+      kind: field
+    owner: api
+- id: directus-ldap-L148
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/ldap.ts
+    start_line: 148
+    end_line: 148
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the email address from an LDAP directory entry using the mailAttribute configuration.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/ldap.ts
+      line: 148
+      kind: local
+    owner: api
+- id: directus-ldap-L149
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/ldap.ts
+    start_line: 149
+    end_line: 149
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Writes the email address to the user object if it exists in the LDAP entry.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/ldap.ts
+      line: 148
+      kind: local
+    owner: api
+- id: directus-ldap-L264
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/ldap.ts
+    start_line: 264
+    end_line: 264
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address as a field when synchronizing user information during update.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/ldap.ts
+      line: 264
+      kind: field
+    owner: api
+- id: directus-ldap-L292
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/ldap.ts
+    start_line: 292
+    end_line: 292
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address when creating a new user account from LDAP information.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/ldap.ts
+      line: 292
+      kind: field
+    owner: api
+- id: directus-oauth2-L114
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 114
+    end_line: 114
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: OAuth scope string literal requesting email profile data from the provider; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-oauth2-L187
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailKey
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 187
+    end_line: 187
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration parameter destructured from config; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-oauth2-L189
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 189
+    end_line: 189
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the user's email address from OAuth provider data using configurable key or default 'email'.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/oauth2.ts
+      line: 189
+      kind: local
+    owner: api
+- id: directus-oauth2-L190
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 190
+    end_line: 190
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining fallback logic; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: api
+- id: directus-oauth2-L191
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 191
+    end_line: 191
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Falls back to the email address when no identifier key value exists.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/oauth2.ts
+      line: 189
+      kind: local
+    owner: api
+- id: directus-oauth2-L202
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 202
+    end_line: 202
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address when creating or updating user data from OAuth provider.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/oauth2.ts
+      line: 202
+      kind: field
+    owner: api
+- id: directus-oauth2-L227
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/oauth2.ts
+    start_line: 227
+    end_line: 227
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the OAuth payload's email address when syncing user information.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/oauth2.ts
+      line: 227
+      kind: field
+    owner: api
+- id: directus-openid-L185
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 185
+    end_line: 185
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: OpenID Connect scope string requesting email profile; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-openid-L268
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: requireVerifiedEmail
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 268
+    end_line: 268
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Configuration parameter destructured from config; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-openid-L270
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 270
+    end_line: 270
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the user's email address from OpenID Connect provider data.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/openid.ts
+      line: 270
+      kind: local
+    owner: api
+- id: directus-openid-L271
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 271
+    end_line: 271
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining fallback logic; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: api
+- id: directus-openid-L272
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 272
+    end_line: 272
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Falls back to the email address when no identifier key value exists.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/auth/drivers/openid.ts
+      line: 270
+      kind: local
+    owner: api
+- id: directus-openid-L283
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 283
+    end_line: 283
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the user's email address when creating user data from OpenID provider information.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/openid.ts
+      line: 283
+      kind: field
+    owner: api
+- id: directus-openid-L308
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 308
+    end_line: 308
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the OpenID payload's email address when syncing user information.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/auth/drivers/openid.ts
+      line: 308
+      kind: field
+    owner: api
+- id: directus-openid-L334
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmailVerified
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 334
+    end_line: 334
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: OpenID claim 'email_verified' is a boolean flag, not the address itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-openid-L337
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: isEmailVerified
+  evidence:
+    file_path: api/src/auth/drivers/openid.ts
+    start_line: 337
+    end_line: 337
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Conditional check of email verification status; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: api
+- id: directus-create-L8
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/create.ts
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructured parameter receiving the email address for user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/create.ts
+      line: 8
+      kind: parameter
+    owner: api
+- id: directus-create-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/create.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type definition for optional email field in command parameters.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/cli/commands/users/create.ts
+      line: 12
+      kind: field
+    owner: api
+- id: directus-create-L19
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/create.ts
+    start_line: 19
+    end_line: 19
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks that email address is provided for user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/create.ts
+      line: 8
+      kind: parameter
+    owner: api
+- id: directus-create-L20
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: api/src/cli/commands/users/create.ts
+    start_line: 20
+    end_line: 20
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose listing required fields; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-create-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/create.ts
+    start_line: 31
+    end_line: 31
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the email address to the user creation service.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/create.ts
+      line: 8
+      kind: parameter
+    owner: api
+- id: directus-passwd-L7
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/passwd.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructured parameter email holds the address for the password reset.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/passwd.ts
+      line: 7
+      kind: parameter
+    owner: api
+- id: directus-passwd-L11
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/passwd.ts
+    start_line: 11
+    end_line: 11
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks that email is provided for password change command.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/passwd.ts
+      line: 7
+      kind: parameter
+    owner: api
+- id: directus-passwd-L12
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: Email
+  evidence:
+    file_path: api/src/cli/commands/users/passwd.ts
+    start_line: 12
+    end_line: 12
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose listing required fields; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-passwd-L24
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/passwd.ts
+    start_line: 24
+    end_line: 24
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the lower-cased address into the user lookup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/cli/commands/users/passwd.ts
+      line: 7
+      kind: parameter
+    owner: api
+- id: directus-passwd-L31
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/cli/commands/users/passwd.ts
+    start_line: 31
+    end_line: 31
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about not finding a user; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-authentication-L53
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 53
+    end_line: 53
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining method purpose; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: api
+- id: directus-authentication-L109
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 109
+    end_line: 109
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field when retrieving user record for authentication.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-authentication-L348
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: user_email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 348
+    end_line: 348
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Select alias key user_email for the address column, defined on this line.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/authentication.ts
+      line: 348
+      kind: field
+    owner: api
+- id: directus-authentication-L409
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 409
+    end_line: 409
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Includes email address in authentication response payload.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/authentication.ts
+      line: 409
+      kind: field
+    owner: api
+- id: directus-authentication-L562
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 562
+    end_line: 562
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field in query for user authentication data retrieval.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-authentication-L597
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/authentication.ts
+    start_line: 597
+    end_line: 597
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Specifies email field for database query selection.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-tfa-L34
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 34
+    end_line: 34
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field when retrieving user TFA settings.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-tfa-L43
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining requirement for email; not an address value itself.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: api
+- id: directus-tfa-L44
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 44
+    end_line: 44
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if user has an email address for TFA setup.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/tfa.ts
+      line: 33
+      kind: local
+    owner: api
+- id: directus-tfa-L45
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 45
+    end_line: 45
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about TFA requirement; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-tfa-L55
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 55
+    end_line: 55
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment explaining fallback logic; not an address value.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: api
+- id: directus-tfa-L56
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/tfa.ts
+    start_line: 56
+    end_line: 56
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Uses user's email as account name for TFA when available.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/tfa.ts
+      line: 33
+      kind: local
+    owner: api
+- id: directus-create-admin-L33
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/utils/create-admin.ts
+    start_line: 33
+    end_line: 33
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type definition for optional email parameter in admin user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/utils/create-admin.ts
+      line: 33
+      kind: field
+    owner: api
+- id: directus-create-admin-L42
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: adminEmail
+  evidence:
+    file_path: api/src/utils/create-admin.ts
+    start_line: 42
+    end_line: 42
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Defines a local that holds the admin address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/utils/create-admin.ts
+      line: 42
+      kind: local
+    owner: api
+- id: directus-create-admin-L46
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: adminEmail
+  evidence:
+    file_path: api/src/utils/create-admin.ts
+    start_line: 46
+    end_line: 46
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Checks if admin email is provided before proceeding with user creation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/utils/create-admin.ts
+      line: 42
+      kind: local
+    owner: api
+- id: directus-create-admin-L68
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/utils/create-admin.ts
+    start_line: 68
+    end_line: 68
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the admin email address when creating the admin user.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/utils/create-admin.ts
+      line: 68
+      kind: field
+    owner: api
+- id: directus-mcp-oauth-L963
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: txUserEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 963
+    end_line: 963
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructures the user address into the local txUserEmail.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 963
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1009
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: userEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1009
+    end_line: 1009
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes user email to OAuth token exchange result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1009
+      kind: field
+    owner: api
+- id: directus-mcp-oauth-L1021
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: userEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1021
+    end_line: 1021
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructured user email from OAuth token exchange result.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1021
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1038
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: userEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1038
+    end_line: 1038
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Includes user email in OAuth grant audit comment for logging.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1021
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1160
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1160
+    end_line: 1160
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Destructured email field when retrieving active user for token refresh.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1160
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1262
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1262
+    end_line: 1262
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Includes user email in OAuth token refresh audit comment for logging.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1160
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1343
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1343
+    end_line: 1343
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field when querying user record for OAuth token revocation.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-mcp-oauth-L1344
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: userEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1344
+    end_line: 1344
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Extracts user email for OAuth token revocation audit logging.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1344
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1350
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: userEmail
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1350
+    end_line: 1350
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Includes user email in OAuth token revocation audit comment.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1344
+      kind: local
+    owner: api
+- id: directus-mcp-oauth-L1962
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1962
+    end_line: 1962
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Type annotation for return value containing email address.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1962
+      kind: field
+    owner: api
+- id: directus-mcp-oauth-L1963
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1963
+    end_line: 1963
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Selects email field when querying user record to check if user is active.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: api
+- id: directus-mcp-oauth-L1969
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: api/src/services/mcp-oauth/index.ts
+    start_line: 1969
+    end_line: 1969
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Returns the user's email address from query result or falls back to 'unknown'.
+  provenance:
+    proposed_by: claude-haiku-4-5-20251001
+    proposed_at: '2026-09-30'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: api/src/services/mcp-oauth/index.ts
+      line: 1969
+      kind: field
+    owner: api

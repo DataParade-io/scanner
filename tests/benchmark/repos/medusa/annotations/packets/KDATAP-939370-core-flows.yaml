@@ -1,0 +1,250 @@
+packet:
+  repo: medusa
+  concept: phone
+  kanbus_issue: KDATAP-939370
+  files:
+  - packages/core/core-flows/src/cart/workflows/update-cart.ts
+  - packages/core/core-flows/src/customer/steps/maybe-unset-default-billing-addresses.ts
+  - packages/core/core-flows/src/customer/steps/maybe-unset-default-shipping-addresses.ts
+  - packages/core/core-flows/src/customer/steps/update-customers.ts
+  - packages/core/core-flows/src/fulfillment/steps/create-fulfillment.ts
+  - packages/core/core-flows/src/fulfillment/steps/create-return-fulfillment.ts
+  - packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts
+  - packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts
+  - packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts
+annotations:
+- id: medusa-update-cart-L151
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/cart/workflows/update-cart.ts
+    start_line: 151
+    end_line: 151
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-maybe-unset-default-billing-addresses-L54
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/customer/steps/maybe-unset-default-billing-addresses.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-maybe-unset-default-shipping-addresses-L54
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/customer/steps/maybe-unset-default-shipping-addresses.ts
+    start_line: 54
+    end_line: 54
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-update-customers-L71
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/customer/steps/update-customers.ts
+    start_line: 71
+    end_line: 71
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Restores the previous customer phone on workflow rollback.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: packages/core/core-flows
+    declaration:
+      file_path: packages/core/core-flows/src/customer/steps/update-customers.ts
+      line: 71
+      kind: field
+- id: medusa-create-fulfillment-L23
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/steps/create-fulfillment.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-create-return-fulfillment-L23
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/steps/create-return-fulfillment.ts
+    start_line: 23
+    end_line: 23
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-create-fulfillment-L43
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts
+    start_line: 43
+    end_line: 43
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-create-fulfillment-L82
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/workflows/create-fulfillment.ts
+    start_line: 82
+    end_line: 82
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Names the stored phone column in a field selector or query field list for the stock location address phone (StockLocationAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/core-flows
+- id: medusa-create-return-fulfillment-L44
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts
+    start_line: 44
+    end_line: 44
+  expected:
+    status: negative
+    labels:
+    - phone_number
+  rationale: Phone value inside a JSDoc example comment; documentation, not handled data.
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: packages/core/core-flows
+- id: medusa-create-return-fulfillment-L83
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/fulfillment/workflows/create-return-fulfillment.ts
+    start_line: 83
+    end_line: 83
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Names the stored phone column in a field selector or query field list for the stock location address phone (StockLocationAddress.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/core-flows
+- id: medusa-create-payment-session-L101
+  layer: occurrences
+  subject:
+    key: occurrence:phone_number
+    name: phone
+  evidence:
+    file_path: packages/core/core-flows/src/payment-collection/workflows/create-payment-session.ts
+    start_line: 101
+    end_line: 101
+  expected:
+    status: positive
+    labels:
+    - phone_number
+  rationale: Names the stored phone column in a field selector or query field list for the customer phone (Customer.phone).
+  provenance:
+    proposed_by: claude-sonnet-5-5
+    proposed_at: '2026-10-01'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: packages/core/core-flows

@@ -1,0 +1,1446 @@
+candidates:
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 169
+    text: "* Sends an invite link to an email address."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 170
+    text: "* @param email The email address of the user."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 177
+    text: "* - Sends an invite link to the user's email address."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 178
+    text: "* - The `inviteUserByEmail()` method is typically used by administrators
+      to invite users to join the application."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 179
+    text: "* - Note that PKCE is not supported when using `inviteUserByEmail`. This
+      is because the browser initiating the invite is often different from the
+      browser accepting the invite which makes it difficult to provide the
+      security guarantees required of the PKCE flow."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 183
+    text: "* const { data, error } = await
+      supabase.auth.admin.inviteUserByEmail('email@example.com')"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 194
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 199
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 201
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 211
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 212
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 216
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 220
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 232
+    text: async inviteUserByEmail(
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 233
+    text: "email: string,"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 238
+    text: /** The URL which will be appended to the email link sent to the user's
+      email address. Once clicked the user will end up on this URL. */
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 244
+    text: "body: { email, data: options.data },"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 259
+    text: "* Generates email links and OTPs to be sent via a custom email provider."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 260
+    text: "* @param params The parameters for generating the link, including the
+      link `type`, the user's `email`, and type-specific options such as
+      `password`, `data`, and `redirectTo`."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 266
+    text: "* - The following types can be passed into `generateLink()`: `signup`,
+      `magiclink`, `invite`, `recovery`, `email_change_current`,
+      `email_change_new`, `phone_change`."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 267
+    text: "* - `generateLink()` only generates the email link for
+      `email_change_email` if the **Secure email change** is enabled in your
+      project's [email auth provider
+      settings](/dashboard/project/_/auth/providers)."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 274
+    text: "*   email: 'email@example.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 285
+    text: '*       "email_otp": "999999",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 294
+    text: '*       "email": "email@example.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 298
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 300
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 310
+    text: '*             "email": "email@example.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 311
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 315
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 319
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 335
+    text: "*   email: 'email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 343
+    text: "*   email: 'email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 351
+    text: "*   email: 'email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 355
+    text: "* @example Generate links to change current email address"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 357
+    text: "* // generate an email change link to be sent to the current email
+      address"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 359
+    text: "*   type: 'email_change_current',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 360
+    text: "*   email: 'current.email@example.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 361
+    text: "*   newEmail: 'new.email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 364
+    text: "* // generate an email change link to be sent to the new email address"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 366
+    text: "*   type: 'email_change_new',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 367
+    text: "*   email: 'current.email@example.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 368
+    text: "*   newEmail: 'new.email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 376
+    text: if ('newEmail' in rest) {
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 377
+    text: // replace newEmail with new_email in request body
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 378
+    text: body.new_email = rest?.newEmail
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 379
+    text: delete body['newEmail']
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 410
+    text: "* - To confirm the user's email address or phone number, set
+      `email_confirm` or `phone_confirm` to true. Both arguments default to
+      false."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 411
+    text: "* - `createUser()` will not send a confirmation email to the user. You
+      can use
+      [`inviteUserByEmail()`](/docs/reference/javascript/auth-admin-inviteuserb\
+      yemail) if you want to send them an email invite instead."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 412
+    text: "* - If you are sure that the created user's email or phone number is
+      legitimate and verified, you can set the `email_confirm` or
+      `phone_confirm` param to `true`."
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 417
+    text: "*   email: 'user@email.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 431
+    text: "*       email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 432
+    text: "*       email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 445
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 446
+    text: '*             "email_verified": true,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 450
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 454
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 466
+    text: "* @example Auto-confirm the user's email"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 469
+    text: "*   email: 'user@email.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 470
+    text: "*   email_confirm: true"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 590
+    text: "*       email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 591
+    text: "*       email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 604
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 605
+    text: '*             "email_verified": true,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 609
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 613
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 677
+    text: "* @example Updates a user's email"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 681
+    text: "*   { email: 'new@email.com' }"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 685
+    text: "* @exampleResponse Updates a user's email"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 693
+    text: '*       "email": "new@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 694
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 700
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 702
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 706
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 707
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 717
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 718
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 722
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 726
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 762
+    text: "* @example Confirms a user's email address"
+  - file: packages/core/auth-js/src/GoTrueAdminApi.ts
+    line: 766
+    text: "*   { email_confirm: true }"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 770
+    text: '*       "email": "",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 790
+    text: '*         "email": "",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 853
+    text: "* This method has support for PKCE via email signups. The PKCE flow
+      cannot be used when autoconfirm is enabled."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 861
+    text: "* - By default, the user needs to verify their email address before
+      logging in. To turn this off, disable **Confirm email** in [your
+      project](/dashboard/project/_/auth/providers)."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 862
+    text: "* - **Confirm email** determines if users need to confirm their email
+      address after signing up."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 863
+    text: "*   - If **Confirm email** is enabled, a `user` is returned but `session`
+      is null."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 864
+    text: "*   - If **Confirm email** is disabled, both a `user` and a `session` are
+      returned."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 865
+    text: "* - When the user confirms their email address, they are redirected to
+      the
+      [`SITE_URL`](/docs/guides/auth/redirect-urls#use-wildcards-in-redirect-ur\
+      ls) by default. You can modify your `SITE_URL` or add additional redirect
+      URLs in [your project](/dashboard/project/_/auth/url-configuration)."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 867
+    text: "*   - When both **Confirm email** and **Confirm phone** (even when phone
+      provider is disabled) are enabled in [your
+      project](/dashboard/project/_/auth/providers), an obfuscated/fake user
+      object is returned."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 868
+    text: "*   - When either **Confirm email** or **Confirm phone** (even when phone
+      provider is disabled) is disabled, the error message, `User already
+      registered` is returned."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 871
+    text: "* @example Sign up with an email and password"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 874
+    text: "*   email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 879
+    text: "* @exampleResponse Sign up with an email and password"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 881
+    text: '* // Some fields may be null if "confirm email" is enabled.'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 888
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 889
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 893
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 895
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 905
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 906
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 910
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 914
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 930
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 931
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 935
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 937
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 947
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 948
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 952
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 956
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 997
+    text: "*     email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1016
+    text: "*     email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1019
+    text: "*       emailRedirectTo: 'https://example.com/welcome'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1029
+    text: if ('email' in credentials) {
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1030
+    text: const { email, password, options } = credentials
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1038
+    text: "redirectTo: this._maybeAppendFlowIdToRedirect(options?.emailRedirectTo,
+      flowId),"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1040
+    text: email,
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1064
+    text: "'You must provide either an email or phone number and a password'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1095
+    text: "* Log in an existing user with an email and password or phone and
+      password."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1099
+    text: "* email/phone and password combination is wrong or that the account can
+      only"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1105
+    text: "* - Requires either an email and password or a phone number and password."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1107
+    text: "* @example Sign in with email and password"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1110
+    text: "*   email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1115
+    text: "* @exampleResponse Sign in with email and password"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1123
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1124
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1128
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1130
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1140
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1141
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1145
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1149
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1165
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1166
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1170
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1172
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1182
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1183
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1187
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1191
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1212
+    text: "* Log the full `error` object so fields like `code`, `status`, and `name`
+      aren't hidden. The `error.code` (e.g. `'invalid_credentials'`,
+      `'email_not_confirmed'`) is often more useful for branching than
+      `error.message`, and the full object surfaces both."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1217
+    text: "*   email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1231
+    text: if ('email' in credentials) {
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1232
+    text: const { email, password, options } = credentials
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1236
+    text: email,
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1255
+    text: "'You must provide either an email or phone number and a password'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1419
+    text: "*         email: 'example@email.com'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1420
+    text: "*         email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1426
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1428
+    text: '*             "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1433
+    text: "*           email: 'email@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1434
+    text: "*           email_verified: true,"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1448
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1449
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1453
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1457
+    text: '*             "email": "email@example.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1464
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1465
+    text: '*               "email_verified": true,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1477
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1491
+    text: "*       email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1492
+    text: "*       email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1498
+    text: "*         provider: 'email',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1500
+    text: '*           "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1505
+    text: "*         email: 'email@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1506
+    text: "*         email_verified: true,"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1520
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1521
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1525
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1529
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1536
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1537
+    text: '*             "email_verified": true,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 1549
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2206
+    text: "* If the `{{ .ConfirmationURL }}` variable is specified in the email
+      template, a magiclink will be sent."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2207
+    text: "* If the `{{ .Token }}` variable is specified in the email template, an
+      OTP will be sent."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2214
+    text: "* Do note that you will need to configure a Whatsapp sender on Twilio"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2218
+    text: "* This method supports PKCE when an email is passed."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2223
+    text: "* - Requires either an email or phone number."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2224
+    text: "* - This method is used for passwordless sign-ins where a OTP is sent to
+      the user's email or phone number."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2226
+    text: "* - If you're using an email, you can configure whether you want the user
+      to receive a magiclink or a OTP."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2230
+    text: "* - Magic links and OTPs share the same implementation. To send users a
+      one-time code instead of a magic link, [modify the magic link email
+      template](/dashboard/project/_/auth/templates) to include `{{ .Token }}`
+      instead of `{{ .ConfirmationURL }}`."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2233
+    text: "* @exampleDescription Sign in with email"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2234
+    text: "* The user will be sent an email which contains either a magiclink or a
+      OTP or both. By default, a given user can only request a OTP once every 60
+      seconds."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2236
+    text: "* @example Sign in with email"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2239
+    text: "*   email: 'example@email.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2241
+    text: "*     emailRedirectTo: 'https://example.com/welcome'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2246
+    text: "* @exampleResponse Sign in with email"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2283
+    text: if ('email' in credentials) {
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2284
+    text: const { email, options } = credentials
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2293
+    text: email,
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2300
+    text: "redirectTo: this._maybeAppendFlowIdToRedirect(options?.emailRedirectTo,
+      flowId),"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2321
+    text: throw new AuthInvalidCredentialsError('You must provide either an email or
+      phone number.')
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2333
+    text: "* Log in a user given a User supplied OTP or TokenHash received through
+      mobile or email."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2342
+    text: "* - If an email address is used, the type can be one of the following
+      (note: `signup` and `magiclink` types are deprecated):"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2343
+    text: "*   1. `email` – Used when verifying an OTP sent to the user's email
+      during sign-up or sign-in."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2346
+    text: "*   4. `email_change` – Used when verifying an OTP sent to a new email
+      address during an email update process."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2348
+    text: "* - The `TokenHash` is contained in the [email
+      templates](/docs/guides/auth/auth-email-templates) and can be used to sign
+      in.  You may wish to use the hash for the PKCE flow for Server Side Auth.
+      Read [the Password-based Auth guide](/docs/guides/auth/passwords) for more
+      details."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2352
+    text: "* const { data, error } = await supabase.auth.verifyOtp({ email, token,
+      type: 'email'})"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2363
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2364
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2370
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2372
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2376
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2377
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2387
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2388
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2392
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2396
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2413
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2414
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2420
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2422
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2426
+    text: '*           "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2427
+    text: '*           "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2437
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2438
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2442
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2446
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2464
+    text: "* @example Verify Email Auth (Token Hash)"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2466
+    text: "* const { data, error } = await supabase.auth.verifyOtp({ token_hash:
+      tokenHash, type: 'email'})"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2523
+    text: "* domain by asking users for their email address. If this domain is"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2534
+    text: "* - If you've associated an email domain to the identity provider, you
+      can use the `domain` property to start a sign-in flow."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2536
+    text: "*     - Mapping specific user email addresses with an identity provider."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2539
+    text: "* @example Sign in with email domain"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2541
+    text: "*   // You can extract the user's email domain and use it to trigger the"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2557
+    text: "*   // to different rules that can't use email domains."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2610
+    text: "* Sends a reauthentication OTP to the user's email or phone number."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2617
+    text: "* - If you require your user to reauthenticate before updating their
+      password, you need to enable the **Secure password change** option in your
+      [project's email provider settings](/dashboard/project/_/auth/providers)."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2619
+    text: "* - This method will send a nonce to the user's email. If the user
+      doesn't have a confirmed email address, the method will send the nonce to
+      the user's confirmed phone number instead."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2623
+    text: "* Sends a reauthentication nonce to the user's email or phone number."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2668
+    text: "* Resends an existing signup confirmation email, email change email, SMS
+      OTP or phone change OTP."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2673
+    text: "* - Resends a signup confirmation, email change or phone change email to
+      the user."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2675
+    text: "* - Password recovery emails can be resent by calling the
+      `resetPasswordForEmail()` method again."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2676
+    text: "* - This method will only resend an email or phone OTP to the user if
+      there was an initial signup, email change or phone change request being
+      made(note: For existing users signing in with OTP, you should use
+      `signInWithOtp()` again to resend the OTP)."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2677
+    text: "* - You can specify a redirect url when you resend an email link using
+      the `emailRedirectTo` option."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2679
+    text: "* @exampleDescription Resend an email signup confirmation"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2680
+    text: "* Resends the email signup confirmation to the user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2682
+    text: "* @example Resend an email signup confirmation"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2686
+    text: "*   email: 'email@example.com',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2688
+    text: "*     emailRedirectTo: 'https://example.com/welcome'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2694
+    text: "* Resends the phone signup confirmation email to the user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2704
+    text: "* @exampleDescription Resend email change email"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2705
+    text: "* Resends the email change email to the user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2707
+    text: "* @example Resend email change email"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2710
+    text: "*   type: 'email_change',"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2711
+    text: "*   email: 'email@example.com'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2730
+    text: if ('email' in credentials) {
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2731
+    text: const { email, type, options } = credentials
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2740
+    text: email,
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2746
+    text: "redirectTo: this._maybeAppendFlowIdToRedirect(options?.emailRedirectTo,
+      flowId),"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2768
+    text: "'You must provide either an email or phone number and a type'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2820
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2821
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2825
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2827
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2831
+    text: '*           "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2832
+    text: '*           "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2842
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2843
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2847
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 2851
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3159
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3160
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3165
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3167
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3171
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3172
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3182
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3183
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3187
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3191
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3282
+    text: "* - By default, email updates sends a confirmation link to both the
+      user's current and new email."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3283
+    text: "* To only send a confirmation link to the user's new email, disable
+      **Secure email change** in your project's [email auth provider
+      settings](/dashboard/project/_/auth/providers)."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3285
+    text: "* @exampleDescription Update the email for an authenticated user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3286
+    text: '* Sends a "Confirm Email Change" email to the new address. If **Secure
+      Email Change** is enabled (default), confirmation is also required from
+      the **old email** before the change is applied. To skip dual confirmation
+      and apply the change after only the new email is verified, disable
+      **Secure Email Change** in the [Email Auth Provider
+      settings](/dashboard/project/_/auth/providers?provider=Email).'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3288
+    text: "* @example Update the email for an authenticated user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3291
+    text: "*   email: 'new@email.com'"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3295
+    text: "* @exampleResponse Update the email for an authenticated user"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3303
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3304
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3307
+    text: '*       "new_email": "new@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3308
+    text: '*       "email_change_sent_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3311
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3313
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3317
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3318
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3328
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3329
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3333
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3337
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3379
+    text: "* If **Secure password change** is enabled in your [project's email
+      provider settings](/dashboard/project/_/auth/providers), updating the
+      user's password would require a nonce if the user **hasn't recently signed
+      in**. The nonce is sent to the user's email or phone number. A user is
+      deemed recently signed in if the session was created in the last 24
+      hours."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3392
+    text: "emailRedirectTo?: string | undefined"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3410
+    text: "emailRedirectTo?: string | undefined"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3426
+    text: if (this.flowType === 'pkce' && attributes.email != null) {
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3432
+    text: "redirectTo: this._maybeAppendFlowIdToRedirect(options?.emailRedirectTo,
+      flowId),"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3489
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3490
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3495
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3497
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3501
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3502
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3512
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3513
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3517
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3521
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3535
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3536
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3541
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3543
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3547
+    text: '*           "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3548
+    text: '*           "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3558
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3559
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3563
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3567
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3682
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3683
+    text: '*       "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3688
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3690
+    text: '*           "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3694
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3695
+    text: '*         "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3705
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3706
+    text: '*             "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3710
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3714
+    text: '*           "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3731
+    text: '*         "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3732
+    text: '*         "email_confirmed_at": "2024-01-01T00:00:00Z",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3737
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3739
+    text: '*             "email"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3743
+    text: '*           "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3744
+    text: '*           "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3754
+    text: '*               "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3755
+    text: '*               "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3759
+    text: '*             "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 3763
+    text: '*             "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4381
+    text: "* Sends a password reset request to an email address. This method
+      supports the PKCE flow."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4383
+    text: "* @param email The email address of the user."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4391
+    text: "* - The `resetPasswordForEmail()` only sends a password reset link to the
+      user's email."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4395
+    text: "* - When the user clicks the reset link in the email they are redirected
+      back to your application."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4407
+    text: "* const { data, error } = await
+      supabase.auth.resetPasswordForEmail(email, {"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4423
+    text: "*  * Step 1: Send the user an email to get a password reset token."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4424
+    text: "*  * This email contains a link which sends the user back to your
+      application."
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4427
+    text: "*   .resetPasswordForEmail('user@email.com')"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4447
+    text: async resetPasswordForEmail(
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4448
+    text: "email: string,"
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4472
+    text: email,
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4513
+    text: '*           "email": "example@email.com",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4514
+    text: '*           "email_verified": false,'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4518
+    text: '*         "provider": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 4522
+    text: '*         "email": "example@email.com"'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 6442
+    text: '*         "method": "email",'
+  - file: packages/core/auth-js/src/GoTrueClient.ts
+    line: 6447
+    text: '*       "email": "example@email.com",'
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 10
+    text: "| 'email_exists'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 24
+    text: "| 'provider_email_needs_verification'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 31
+    text: "| 'email_conflict_identity_not_deletable'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 33
+    text: "| 'email_provider_disabled'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 47
+    text: "| 'email_not_confirmed'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 54
+    text: "| 'saml_assertion_no_email'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 72
+    text: "| 'over_email_send_rate_limit'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 89
+    text: "| 'email_address_not_authorized'"
+  - file: packages/core/auth-js/src/lib/error-codes.ts
+    line: 90
+    text: "| 'email_address_invalid'"
+  - file: packages/core/auth-js/src/lib/errors.ts
+    line: 161
+    text: "* Error thrown when email/password credentials are invalid."
+  - file: packages/core/auth-js/src/lib/errors.ts
+    line: 167
+    text: "* throw new AuthInvalidCredentialsError('Email or password is incorrect')"
+  - file: packages/core/auth-js/src/lib/fetch.ts
+    line: 263
+    text: // Some /verify responses (e.g. secure email_change first-confirmation)
+      return
+  - file: packages/core/auth-js/src/lib/fetch.ts
+    line: 298
+    text: const { action_link, email_otp, hashed_token, redirect_to,
+      verification_type, ...rest } = data
+  - file: packages/core/auth-js/src/lib/fetch.ts
+    line: 302
+    text: email_otp,
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 213
+    text: "* flow id (email OTP, password recovery, sign-up confirmation) can only
+      be"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 498
+    text: "email_change_sent_at?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 499
+    text: "new_email?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 503
+    text: "email?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 507
+    text: "email_confirmed_at?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 531
+    text: "* The user's email."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 533
+    text: "email?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 585
+    text: "* Sets the user's email as confirmed when true, or unconfirmed when
+      false."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 589
+    text: "email_confirm?: boolean"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 668
+    text: "emailRedirectTo?: string // only for email"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 676
+    text: "| { email: string; password: string }"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 687
+    text: /** The user's email address. */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 688
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 690
+    text: /** The redirect url embedded in the email link */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 691
+    text: "emailRedirectTo?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 841
+    text: export type VerifyOtpParams = VerifyMobileOtpParams | VerifyEmailOtpParams
+      | VerifyTokenHashParams
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 861
+    text: export interface VerifyEmailOtpParams {
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 862
+    text: /** The user's email address. */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 863
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 864
+    text: /** The otp sent to the user's email address. */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 867
+    text: "type: EmailOtpType"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 881
+    text: /** The token hash used in an email link */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 885
+    text: "type: EmailOtpType"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 889
+    text: export type EmailOtpType =
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 894
+    text: "| 'email_change'"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 895
+    text: "| 'email'"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 900
+    text: "type: Extract<EmailOtpType, 'signup' | 'email_change'>"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 901
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 904
+    text: "emailRedirectTo?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 956
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 963
+    text: /** The user's email */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 964
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 970
+    text: /** The user's email */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 971
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 975
+    text: export type GenerateEmailChangeLinkParams = {
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 976
+    text: "type: 'email_change_current' | 'email_change_new'"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 977
+    text: /** The user's email */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 978
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 980
+    text: "* The user's new email. Only required if type is 'email_change_current'
+      or 'email_change_new'."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 982
+    text: "newEmail: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 993
+    text: /** The URL which will be appended to the email link generated. */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1001
+    text: "| GenerateEmailChangeLinkParams"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1008
+    text: /** The properties related to the email link generated  */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1011
+    text: "* The email link to send to the user."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1016
+    text: "* The raw email OTP."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1017
+    text: "* You should send this in the email if you want your users to verify
+      using an OTP instead of the action link."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1019
+    text: "email_otp: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1026
+    text: /** The verification type that the email link is associated to. */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1035
+    text: "| 'email_change_current'"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1036
+    text: "| 'email_change_new'"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1497
+    text: "*       email: 'example@email.com',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1498
+    text: "*       email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1504
+    text: "*         provider: 'email',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1506
+    text: '*           "email",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1516
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1517
+    text: '*             "email_verified": true,'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1521
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1525
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1608
+    text: "*       email: 'example@email.com',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1609
+    text: "*       email_confirmed_at: '2024-01-01T00:00:00Z',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1615
+    text: "*         provider: 'email',"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1617
+    text: '*           "email",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1627
+    text: '*             "email": "example@email.com",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1628
+    text: '*             "email_verified": true,'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1632
+    text: '*           "provider": "email",'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1636
+    text: '*           "email": "email@example.com"'
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1675
+    text: "* with a conventional login (email+password, OTP, magic link, social
+      login,"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 1691
+    text: "* - In Supabase, having an AAL of `aal1` refers to having the 1st factor
+      of authentication such as an email and password or OAuth sign-in while
+      `aal2` refers to the 2nd factor of authentication such as a time-based,
+      one-time-password (TOTP) or Phone factor."
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2004
+    text: "email?: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2307
+    text: /** Whether email is optional for this provider */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2308
+    text: "email_optional?: boolean"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2365
+    text: /** Whether email is optional for this provider */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2366
+    text: "email_optional?: boolean"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2415
+    text: /** Whether email is optional for this provider */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2416
+    text: "email_optional?: boolean"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2565
+    text: /** User email */
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2566
+    text: "email: string"
+  - file: packages/core/auth-js/src/lib/types.ts
+    line: 2568
+    text: /** Space-separated list of requested scopes (e.g., "openid profile
+      email") */
+  - file: packages/core/auth-js/src/lib/webauthn.dom.ts
+    line: 154
+    text: "* A human-readable identifier for the account (e.g., email, username)."
+  - file: packages/core/auth-js/src/lib/webauthn.dom.ts
+    line: 182
+    text: "* Typically an email, username, or phone number."
+  - file: packages/core/auth-js/src/lib/webauthn.ts
+    line: 650
+    text: userData?.user_metadata?.name || userData?.email || userData?.id || 'User'

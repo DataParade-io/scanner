@@ -41,17 +41,17 @@ Feature: Scanner layer evaluation
     When I run primus evaluate accuracy for the Raw Hit Identity score
     Then that Item counts as a miss for layer evaluation
 
-  Scenario: Mention identity recall
-    Given the Mention Identity score is on the scorecard
-    And a mention gold dataset with a matching subjectKey
-    When I run primus evaluate accuracy for the Mention Identity score
+  Scenario: Occurrence identity recall
+    Given the Occurrence Identity score is on the scorecard
+    And a occurrence gold dataset with a matching subjectKey
+    When I run primus evaluate accuracy for the Occurrence Identity score
     Then an Evaluation record is stored for layer evaluation
     And the headline metric is recall of detections at 100 percent
 
-  Scenario: Mention identity miss
-    Given the Mention Identity score is on the scorecard
-    And a mention gold dataset with a missing subjectKey
-    When I run primus evaluate accuracy for the Mention Identity score
+  Scenario: Occurrence identity miss
+    Given the Occurrence Identity score is on the scorecard
+    And a occurrence gold dataset with a missing subjectKey
+    When I run primus evaluate accuracy for the Occurrence Identity score
     Then that Item counts as a miss for layer evaluation
 
   Scenario: Unread file is omitted from identity recall
@@ -68,10 +68,10 @@ Feature: Scanner layer evaluation
     Then an Evaluation record is stored for layer evaluation
     And the headline metric is recall of detections at 100 percent
 
-  Scenario: Mention span recall
-    Given the Mention Span score is on the scorecard
-    And a mention gold dataset with an overlapping span and subjectKey
-    When I run primus evaluate accuracy for the Mention Span score
+  Scenario: Occurrence span recall
+    Given the Occurrence Span score is on the scorecard
+    And a occurrence gold dataset with an overlapping span and subjectKey
+    When I run primus evaluate accuracy for the Occurrence Span score
     Then an Evaluation record is stored for layer evaluation
     And the headline metric is recall of detections at 100 percent
 

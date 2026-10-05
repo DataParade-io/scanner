@@ -1,0 +1,959 @@
+packet:
+  repo: ghost
+  concept: email
+  kanbus_issue: KDATAP-3ccc00
+  files:
+  - ghost/core/core/server/api/endpoints/members.js
+  - ghost/core/core/server/models/member.js
+annotations:
+- id: ghost-members-L29
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: notSendingWelcomeEmail
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 29
+    end_line: 29
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Message key and text saying the welcome email is disabled; no address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-members-L32
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 32
+    end_line: 32
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about an existing email address; holds no address value.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-members-L50
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 50
+    end_line: 50
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Include name for the member's newsletter email-recipient relation, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-members-L81
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 81
+    end_line: 81
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: The member read endpoint accepts the member's email address as a lookup field.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-members-L108
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 108
+    end_line: 108
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Option names for whether and which kind of email to send when adding a member.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-members-L111
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 111
+    end_line: 111
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Input validation requires the new member's email address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/api/endpoints/members.js
+      line: 111
+      kind: field
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-members-L114
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_type
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 114
+    end_line: 114
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Validation for the kind of email to send (signin, signup, subscribe), not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-members-L122
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: notSendingWelcomeEmail
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 122
+    end_line: 122
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Logs the message that the welcome email is not being sent.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-members-L123
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: send_email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 123
+    end_line: 123
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Turns off sending the welcome email; a flag, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-members-L399
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: recipient
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 399
+    end_line: 399
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment describing who receives the import result.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-members-L405
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: requestUserEmail
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 405
+    end_line: 405
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the requesting staff user's email address to the member import service.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    declaration:
+      file_path: ghost/core/core/server/api/endpoints/members.js
+      line: 405
+      kind: field
+    owner: ghost/core
+    group: staff-user-email
+- id: ghost-members-L483
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: deleteEmailSuppression
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 483
+    end_line: 483
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Endpoint name for removing a member from the email suppression list.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-members-L500
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emailSuppressionList
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 500
+    end_line: 500
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Requires the email suppression list module; a module handle, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-members-L502
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 502
+    end_line: 502
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about reading the member's email.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-members-L511
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 511
+    end_line: 511
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about removing the email from the suppression list.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-members-L512
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 512
+    end_line: 512
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Passes the member's email address to the suppression list to remove it.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/api/endpoints/members.js
+      line: 503
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-members-L516
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 516
+    end_line: 516
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Error message prose about email suppression.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-members-L520
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 520
+    end_line: 520
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about re-enabling email for the member.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-members-L522
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/api/endpoints/members.js
+    start_line: 522
+    end_line: 522
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Flag that turns email sending back on for the member; not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L94
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_count
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 94
+    end_line: 94
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default count of newsletter emails sent to the member.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L95
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_opened_count
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 95
+    end_line: 95
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Default count of newsletter emails the member opened.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L177
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: opened_emails
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 177
+    end_line: 177
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter key over opened newsletter emails (post ids), not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L178
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 178
+    end_line: 178
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter replacement on the newsletter emails table, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L180
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 180
+    end_line: 180
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about the email-recipient filter expansion.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-L181
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 181
+    end_line: 181
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Filter expansion on newsletter email-recipient open times, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L196
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 196
+    end_line: 196
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment listing code paths such as email send.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-L271
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 271
+    end_line: 271
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relation from members to newsletter emails they received.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L272
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 272
+    end_line: 272
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table name of newsletter emails.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L273
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: emails
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 273
+    end_line: 273
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Table alias of newsletter emails.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L275
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 275
+    end_line: 275
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Join table linking members to newsletter emails.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L277
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_id
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 277
+    end_line: 277
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Join column referencing a newsletter email id.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L313
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 313
+    end_line: 313
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relationship name for newsletter email recipients.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L315
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 315
+    end_line: 315
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about keeping email-recipient records.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-L324
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 324
+    end_line: 324
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relationship options for newsletter email recipients.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L334
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 334
+    end_line: 334
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Relationship name mapping for newsletter email recipients.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core
+- id: ghost-member-L426
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_recipients
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 426
+    end_line: 426
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Method returning the newsletter email-recipient relation.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    owner: ghost/core
+- id: ghost-member-L427
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: EmailRecipient
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 427
+    end_line: 427
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Model name of newsletter email recipients.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L628
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 628
+    end_line: 628
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Member search matches the query against the members.email address column.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-L636
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_open_rate
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 636
+    end_line: 636
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Sort field for newsletter email open rate.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L638
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_open_rate
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 638
+    end_line: 638
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Raw ordering on newsletter email open rate.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: string_literal
+    owner: ghost/core
+- id: ghost-member-L647
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 647
+    end_line: 647
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Comment about Gravatar lookups by the member's email.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: comment
+    owner: ghost/core
+- id: ghost-member-L650
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 650
+    end_line: 650
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Reads the member's email address to decide whether to build a Gravatar URL.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/member.js
+      line: 644
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-L652
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 652
+    end_line: 652
+  expected:
+    status: positive
+    labels:
+    - email_address
+  rationale: Builds the Gravatar URL from the member's email address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: identifier
+    declaration:
+      file_path: ghost/core/core/server/models/member.js
+      line: 644
+      kind: local
+    owner: ghost/core
+    group: member-account-email
+- id: ghost-member-L740
+  layer: occurrences
+  subject:
+    key: occurrence:email
+    name: email_disabled
+  evidence:
+    file_path: ghost/core/core/server/models/member.js
+    start_line: 740
+    end_line: 740
+  expected:
+    status: negative
+    labels:
+    - email_address
+  rationale: Query condition on the email-disabled flag, not an address.
+  provenance:
+    proposed_by: claude-opus-5-5
+    proposed_at: '2026-09-28'
+    review_state: proposed
+  occurrence_attributes:
+    syntax_kind: property_key
+    owner: ghost/core

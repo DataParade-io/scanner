@@ -10,7 +10,7 @@ export function scoreEvalCases(
 
 /** Headline scorecard layers — no cross-layer scalar is published across these. */
 export const HEADLINE_LAYERS = [
-  "mentions",
+  "occurrences",
   "data-items",
   "components",
   "data-flows",
@@ -27,7 +27,7 @@ const EVAL_LAYERS: EvalLayer[] = [
   "components",
   "data-flows",
   "raw-hits",
-  "mentions",
+  "occurrences",
   "data-items",
   "data-actions",
 ];

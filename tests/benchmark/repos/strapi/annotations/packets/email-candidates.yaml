@@ -1,0 +1,1064 @@
+candidates:
+  - file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+    line: 15
+    text: let displayName = user.email;
+  - file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+    line: 25
+    text: "email: user.email,"
+  - file: packages/core/admin/ee/server/src/audit-logs/services/audit-logs.ts
+    line: 102
+    text: "select: ['id', 'email', 'username', 'firstname', 'lastname'],"
+  - file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+    line: 26
+    text: if (error || !profile || !profile.email) {
+  - file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+    line: 39
+    text: const user = await getService('user').findOneByEmail(profile.email);
+  - file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+    line: 64
+    text: const { email, firstname, lastname, username } = profile;
+  - file: packages/core/admin/ee/server/src/controllers/authentication-utils/middlewares.ts
+    line: 87
+    text: email,
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 8
+    text: import { normalizeEmail } from
+      '../../../../server/src/utils/normalize-email';
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 14
+    text: const pickUserCreationAttributes = pick(['firstname', 'lastname', 'email',
+      'roles']);
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 40
+    text: "const cleanData = { ...body, email: _.get(body, `email`,
+      ``).toLowerCase() };"
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 47
+    text: "const userAlreadyExists = await getService('user').exists({ email:
+      attributes.email });"
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 50
+    text: throw new ApplicationError('Email already taken');
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 69
+    text: const data = normalizeEmail(ctx.request.body);
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 73
+    text: if (_.has(data, 'email')) {
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 74
+    text: const uniqueEmailCheck = await getService('user').exists({
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 76
+    text: "email: data.email,"
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 79
+    text: if (uniqueEmailCheck) {
+  - file: packages/core/admin/ee/server/src/controllers/user.ts
+    line: 80
+    text: throw new ApplicationError('A user with this email address already
+      exists');
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 12
+    text: "* Send an email to the user if it exists and is not locked to SSO"
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 16
+    text: "* @param {string} param.email user email for which to reset the password"
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 18
+    text: "const forgotPassword = async ({ email }: any = {}) => {"
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 19
+    text: "const user = await strapi.db.query('admin::user').findOne({ where: {
+      email, isActive: true } });"
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 27
+    text: // Send an email to the admin.
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 32
+    text: .plugin('email')
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 33
+    text: .service('email')
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 34
+    text: .sendTemplatedEmail(
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 36
+    text: "to: user.email,"
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 40
+    text: strapi.config.get('admin.forgotPassword.emailTemplate'),
+  - file: packages/core/admin/ee/server/src/services/auth.ts
+    line: 43
+    text: "user: _.pick(user, ['email', 'firstname', 'lastname', 'username']),"
+  - file: packages/core/admin/server/src/content-types/User.ts
+    line: 39
+    text: "email: {"
+  - file: packages/core/admin/server/src/content-types/User.ts
+    line: 40
+    text: "type: 'email',"
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 5
+    text: import { normalizeEmail } from '../utils/normalize-email';
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 20
+    text: const data = normalizeEmail(ctx.request.body as UpdateMe.Request['body']);
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 41
+    text: if (userInfo.email !== undefined) {
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 42
+    text: const emailAlreadyTaken = await userService.exists({
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 44
+    text: "email: userInfo.email,"
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 47
+    text: if (emailAlreadyTaken === true) {
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 49
+    text: "email: ['Email already taken'],"
+  - file: packages/core/admin/server/src/controllers/authenticated-user.ts
+    line: 55
+    text: // update is going to be persisted, so a rejected request (e.g. duplicate
+      email) does not log
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 11
+    text: import { normalizeEmail } from '../utils/normalize-email';
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 27
+    text: "const cleanData = { ...body, email: _.get(body, `email`,
+      ``).toLowerCase() };"
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 34
+    text: "'email',"
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 40
+    text: "email: attributes.email,"
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 44
+    text: throw new ApplicationError('Email already taken');
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 97
+    text: const data = normalizeEmail((ctx.request as Update.Request).body);
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 101
+    text: if (_.has(data, 'email')) {
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 102
+    text: const uniqueEmailCheck = await getService('user').exists({
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 104
+    text: "email: data.email,"
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 107
+    text: if (uniqueEmailCheck) {
+  - file: packages/core/admin/server/src/controllers/user.ts
+    line: 108
+    text: throw new ApplicationError('A user with this email address already
+      exists');
+  - file: packages/core/admin/server/src/middlewares/rateLimit.ts
+    line: 28
+    text: const requestEmail = get('request.body.email')(ctx);
+  - file: packages/core/admin/server/src/middlewares/rateLimit.ts
+    line: 29
+    text: "const userEmail = isString(requestEmail) ? requestEmail.toLowerCase() :
+      'unknownEmail';"
+  - file: packages/core/admin/server/src/middlewares/rateLimit.ts
+    line: 38
+    text: "prefixKey: `${userEmail}:${requestPath}:${ctx.request.ip}`,"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 84
+    text: "* @param email the users email address"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 87
+    text: "const checkCredentials = async ({ email, password }: { email: string;
+      password: string }) => {"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 88
+    text: "const user: AdminUser = await strapi.db.query('admin::user').findOne({
+      where: { email } });"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 108
+    text: "* Send an email to the user if it exists or do nothing"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 109
+    text: "* @param email user email for which to reset the password"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 111
+    text: "const forgotPassword = async ({ email } = {} as { email: string }) => {"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 114
+    text: ".findOne({ where: { email, isActive: true } });"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 121
+    text: // Send an email to the admin.
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 127
+    text: .plugin('email')
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 128
+    text: .service('email')
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 129
+    text: .sendTemplatedEmail(
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 131
+    text: "to: user.email,"
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 135
+    text: strapi.config.get('admin.forgotPassword.emailTemplate'),
+  - file: packages/core/admin/server/src/services/auth.ts
+    line: 138
+    text: "user: _.pick(user, ['email', 'firstname', 'lastname', 'username']),"
+  - file: packages/core/admin/server/src/services/passport/local-strategy.ts
+    line: 9
+    text: "usernameField: 'email',"
+  - file: packages/core/admin/server/src/services/passport/local-strategy.ts
+    line: 13
+    text: "(email: string, password: string, done: any) => {"
+  - file: packages/core/admin/server/src/services/passport/local-strategy.ts
+    line: 15
+    text: ".checkCredentials({ email: toLower(email), password })"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 191
+    text: "* Reset a user password by email. (Used in admin:reset CLI)"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 192
+    text: "* @param email - user email"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 195
+    text: "const resetPasswordByEmail = async (email: string, password: string) => {"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 198
+    text: ".findOne({ where: { email }, populate: ['roles'] });"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 201
+    text: "throw new Error(`User not found for email: ${email}`);"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 264
+    text: "* @returns - Returns user email, firstname and lastname"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 268
+    text: "): Promise<Pick<AdminUser, 'email' | 'firstname' | 'lastname'> |
+      undefined> => {"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 275
+    text: return _.pick(user, ['email', 'firstname', 'lastname']);
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 316
+    text: "* Find one user by its email"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 317
+    text: "* @param email"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 321
+    text: "const findOneByEmail = async (email: string, populate = []) => {"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 323
+    text: "where: { email: { $eqi: email } },"
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 484
+    text: findOneByEmail,
+  - file: packages/core/admin/server/src/services/user.ts
+    line: 492
+    text: resetPasswordByEmail,
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 2
+    text: "* Returns a shallow copy of an admin user payload with `email`
+      lowercased."
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 4
+    text: "* Admin email uniqueness depends on values being stored canonically
+      lowercase: `admin_users.email`"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 6
+    text: "* and the strict Yup email validator rejects mixed-case input rather than
+      normalizing it. Controllers"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 7
+    text: "* must therefore lowercase the email before validation, the uniqueness
+      check, and persistence"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 8
+    text: "* (mirroring `user.create`). The `email` key is only rewritten when
+      present, so partial updates that"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 11
+    text: "export const normalizeEmail = <T extends object>(payload: T): T => {"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 12
+    text: "const { email } = payload as { email?: unknown };"
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 14
+    text: if (typeof email === 'string') {
+  - file: packages/core/admin/server/src/utils/normalize-email.ts
+    line: 15
+    text: "return { ...payload, email: email.toLowerCase() };"
+  - file: packages/core/admin/server/src/validation/user.ts
+    line: 8
+    text: "email: validators.email.required(),"
+  - file: packages/core/admin/server/src/validation/user.ts
+    line: 19
+    text: "email: validators.email.notNull(),"
+  - file: packages/core/admin/server/src/validation/user.ts
+    line: 37
+    text: "email: validators.email.notNull(),"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 10
+    text: "user: Pick<AdminUser, 'email' | 'password'>;"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 12
+    text: "body: Pick<AdminUser, 'email' | 'password'> & {"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 57
+    text: "email?: string;"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 72
+    text: "userInfo: Pick<AdminUser, 'firstname' | 'lastname' | 'email' |
+      'password'>;"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 93
+    text: "body: Pick<AdminUser, 'email' | 'firstname' | 'lastname' | 'password'> &
+      {"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 110
+    text: "* /forgot-password - Send a password reset email"
+  - file: packages/core/admin/shared/contracts/authentication.ts
+    line: 115
+    text: "email: string;"
+  - file: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    line: 88
+    text: "case 'email': {"
+  - file: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    line: 89
+    text: const { required } = attr as Schema.Attribute.Email;
+  - file: packages/core/content-manager/server/src/mcp/schemas/data-schema.ts
+    line: 90
+    text: const s = z.string().email();
+  - file: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    line: 249
+    text: "'email',"
+  - file: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    line: 482
+    text: const emailSchema = basePropertiesSchema.extend({
+  - file: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    line: 483
+    text: "type: z.literal('email'),"
+  - file: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    line: 487
+    text: "default: z.string().email().optional(),"
+  - file: packages/core/content-type-builder/server/src/controllers/validation/schema.ts
+    line: 620
+    text: emailSchema,
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 3
+    text: import type { EmailConfig, SendOptions } from './types';
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 5
+    text: interface EmailProvider {
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 13
+    text: interface EmailProviderModule {
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 15
+    text: "options: EmailConfig['providerOptions'],"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 16
+    text: "settings: EmailConfig['settings']"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 17
+    text: ) => EmailProvider;
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 22
+    text: "const createProvider = (emailConfig: EmailConfig) => {"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 23
+    text: const providerName = emailConfig.provider.toLowerCase();
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 24
+    text: "let provider: EmailProviderModule;"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 28
+    text: modulePath = require.resolve(`@strapi/provider-email-${providerName}`);
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 45
+    text: const newError = new Error(`Could not load email provider
+      "${providerName}".`);
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 52
+    text: return provider.init(emailConfig.providerOptions, emailConfig.settings);
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 56
+    text: "const emailConfig: EmailConfig = strapi.config.get('plugin::email');"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 58
+    text: const providerName = emailConfig.provider.toLowerCase();
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 62
+    text: "'[email]: The \"sendmail\" email provider is still supported, but for
+      most production setups that use a dedicated SMTP relay, consider switching
+      to @strapi/provider-email-nodemailer (set `provider` to `\"nodemailer\"`
+      in your email plugin config). This message is only shown in development.'"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 66
+    text: strapi.plugin('email').provider = createProvider(emailConfig);
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 72
+    text: "category: 'email',"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 73
+    text: "displayName: 'Access the Email Settings page',"
+  - file: packages/core/email/server/src/bootstrap.ts
+    line: 75
+    text: "pluginName: 'email',"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 6
+    text: import type { EmailConfig, SendOptions } from '../types';
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 11
+    text: "* Email.js controller"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 13
+    text: '* @description: A set of functions called "actions" of the `email`
+      plugin.'
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 15
+    text: const emailController = {
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 20
+    text: await strapi.plugin('email').service('email').send(options);
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 26
+    text: "throw new Error(`Couldn't send email: ${error.message}.`);"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 39
+    text: throw new ApplicationError('No recipient(s) are given');
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 42
+    text: "const email: SendOptions = {"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 44
+    text: "subject: `Strapi test mail to: ${to}`,"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 45
+    text: "text: `Great! You have correctly configured the Strapi email plugin with
+      the ${strapi.config.get("
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 46
+    text: "'plugin::email.provider'"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 47
+    text: ")} provider. \\r\\nFor documentation on how to use the email plugin
+      checkout:
+      https://docs.strapi.io/developer-docs/latest/plugins/email.html`,"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 51
+    text: await strapi.plugin('email').service('email').send(email);
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 57
+    text: "throw new Error(`Couldn't send test email: ${error.message}.`);"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 67
+    text: "const config: EmailConfig =
+      strapi.plugin('email').service('email').getProviderSettings();"
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 68
+    text: const provider = strapi.plugin('email').provider;
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 92
+    text: const provider = strapi.plugin('email').provider;
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 95
+    text: throw new ApplicationError('This email provider does not support
+      connection verification');
+  - file: packages/core/email/server/src/controllers/email.ts
+    line: 110
+    text: export default emailController;
+  - file: packages/core/email/server/src/middlewares/rateLimit.ts
+    line: 10
+    text: const pluginConfig = strapi.config.get('plugin::email') as any;
+  - file: packages/core/email/server/src/middlewares/rateLimit.ts
+    line: 21
+    text: const requestEmail = get('request.body.email')(ctx);
+  - file: packages/core/email/server/src/middlewares/rateLimit.ts
+    line: 22
+    text: "const userEmail = isString(requestEmail) ? requestEmail.toLowerCase() :
+      'unknownEmail';"
+  - file: packages/core/email/server/src/middlewares/rateLimit.ts
+    line: 27
+    text: "prefixKey: `${userEmail}`,"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 7
+    text: "handler: 'email.send',"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 15
+    text: "handler: 'email.test',"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 19
+    text: "{ name: 'admin::hasPermissions', config: { actions:
+      ['plugin::email.settings.read'] } },"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 26
+    text: "handler: 'email.getSettings',"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 30
+    text: "{ name: 'admin::hasPermissions', config: { actions:
+      ['plugin::email.settings.read'] } },"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 37
+    text: "handler: 'email.verify',"
+  - file: packages/core/email/server/src/routes/admin.ts
+    line: 41
+    text: "{ name: 'admin::hasPermissions', config: { actions:
+      ['plugin::email.settings.read'] } },"
+  - file: packages/core/email/server/src/routes/content-api.ts
+    line: 3
+    text: import { EmailRouteValidator } from './validation';
+  - file: packages/core/email/server/src/routes/content-api.ts
+    line: 6
+    text: const validator = new EmailRouteValidator(strapi);
+  - file: packages/core/email/server/src/routes/content-api.ts
+    line: 12
+    text: "handler: 'email.send',"
+  - file: packages/core/email/server/src/routes/content-api.ts
+    line: 14
+    text: "body: { 'application/json': validator.sendEmailInput },"
+  - file: packages/core/email/server/src/routes/content-api.ts
+    line: 16
+    text: "response: validator.emailResponse,"
+  - file: packages/core/email/server/src/routes/validation/email.ts
+    line: 4
+    text: export class EmailRouteValidator {
+  - file: packages/core/email/server/src/routes/validation/email.ts
+    line: 11
+    text: get sendEmailInput() {
+  - file: packages/core/email/server/src/routes/validation/email.ts
+    line: 26
+    text: get emailResponse() {
+  - file: packages/core/email/server/src/services/email.ts
+    line: 5
+    text: EmailConfig,
+  - file: packages/core/email/server/src/services/email.ts
+    line: 6
+    text: EmailOptions,
+  - file: packages/core/email/server/src/services/email.ts
+    line: 7
+    text: EmailTemplate,
+  - file: packages/core/email/server/src/services/email.ts
+    line: 8
+    text: EmailTemplateData,
+  - file: packages/core/email/server/src/services/email.ts
+    line: 14
+    text: "const getProviderSettings = (): EmailConfig =>
+      strapi.config.get('plugin::email');"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 16
+    text: "const send = async (options: SendOptions) =>
+      strapi.plugin('email').provider.send(options);"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 20
+    text: "* @param {object} emailOptions - to, from and replyto..."
+  - file: packages/core/email/server/src/services/email.ts
+    line: 21
+    text: "* @param {object} emailTemplate - object containing attributes to fill"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 25
+    text: const sendTemplatedEmail = (
+  - file: packages/core/email/server/src/services/email.ts
+    line: 26
+    text: "emailOptions: EmailOptions,"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 27
+    text: "emailTemplate: EmailTemplate,"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 28
+    text: "data: EmailTemplateData"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 31
+    text: const missingAttributes = _.difference(attributes,
+      Object.keys(emailTemplate));
+  - file: packages/core/email/server/src/services/email.ts
+    line: 35
+    text: "`Following attributes are missing from your email template :
+      ${missingAttributes.join(', ')}`"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 44
+    text: emailTemplate[attribute]
+  - file: packages/core/email/server/src/services/email.ts
+    line: 46
+    text: "[attribute]: _.template(emailTemplate[attribute], {"
+  - file: packages/core/email/server/src/services/email.ts
+    line: 54
+    text: return strapi.plugin('email').provider.send({ ...emailOptions,
+      ...templatedAttributes });
+  - file: packages/core/email/server/src/services/email.ts
+    line: 57
+    text: const emailService = () => ({
+  - file: packages/core/email/server/src/services/email.ts
+    line: 60
+    text: sendTemplatedEmail,
+  - file: packages/core/email/server/src/services/email.ts
+    line: 63
+    text: export default emailService;
+  - file: packages/core/email/server/src/types.ts
+    line: 3
+    text: export interface EmailConfig extends Record<string, unknown> {
+  - file: packages/core/email/server/src/types.ts
+    line: 14
+    text: "default: EmailConfig;"
+  - file: packages/core/email/server/src/types.ts
+    line: 17
+    text: export interface EmailTemplateData {
+  - file: packages/core/email/server/src/types.ts
+    line: 20
+    text: "email: string;"
+  - file: packages/core/email/server/src/types.ts
+    line: 27
+    text: export interface EmailOptions {
+  - file: packages/core/email/server/src/types.ts
+    line: 36
+    text: export interface EmailTemplate {
+  - file: packages/core/email/server/src/types.ts
+    line: 43
+    text: export type SendOptions = EmailOptions & EmailTemplate;
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 2
+    text: "* RFC-compliant Email Address Parser"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 5
+    text: "* - RFC 5322: Internet Message Format (basic name <email> format)"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 9
+    text: "* - RFC 6531: Internationalized email addresses (UTF-8)"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 12
+    text: export interface ParsedEmailAddress {
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 15
+    text: /** Email address */
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 16
+    text: "email: string;"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 91
+    text: "* Removes RFC 5322 comments from an email string"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 95
+    text: '* - "email@example.com (Support Team)" -> "email@example.com"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 96
+    text: '* - "(comment) Name <email@example.com>" -> "Name <email@example.com>"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 192
+    text: "* Parses an email address string according to RFC 5322 and related RFCs"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 195
+    text: '* 1. Simple email: "email@example.com"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 196
+    text: '* 2. Name with angle brackets: "Name <email@example.com>"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 197
+    text: '* 3. Quoted name: "\"Doe, John\" <email@example.com>"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 198
+    text: '* 4. RFC 2047 encoded: "=?UTF-8?B?...?= <email@example.com>"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 199
+    text: '* 5. With comment: "email@example.com (Display Name)"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 200
+    text: '* 6. Mixed: "\"Name\" <email@example.com> (comment)"'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 202
+    text: "* @param emailString - The email address string to parse"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 203
+    text: "* @returns Parsed email address with name, email, and original string"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 206
+    text: "* parseEmailAddress('Strapi <no-reply@strapi.io>')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 207
+    text: "* // { name: 'Strapi', email: 'no-reply@strapi.io', original: '...' }"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 210
+    text: "* parseEmailAddress('=?UTF-8?B?U3RyYXBp?= <no-reply@strapi.io>')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 211
+    text: "* // { name: 'Strapi', email: 'no-reply@strapi.io', original: '...' }"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 214
+    text: "* parseEmailAddress('no-reply@strapi.io (Strapi Support)')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 215
+    text: "* // { name: 'Strapi Support', email: 'no-reply@strapi.io', original:
+      '...' }"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 217
+    text: "export const parseEmailAddress = (emailString: string | undefined |
+      null): ParsedEmailAddress => {"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 218
+    text: if (!emailString || typeof emailString !== 'string') {
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 219
+    text: "return { name: null, email: '', original: emailString || '' };"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 222
+    text: const original = emailString;
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 225
+    text: let decoded = decodeRfc2047(emailString);
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 231
+    text: '// Step 3: Try to parse "Name <email>" format'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 237
+    text: const email = angleMatch[2].trim();
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 253
+    text: email,
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 258
+    text: '// Step 4: Try "email (comment)" format - use comment as name'
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 262
+    text: // Validate it looks like an email (basic check)
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 266
+    text: "email: trimmedDecoded,"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 271
+    text: "// Step 5: If nothing matched, treat the whole thing as email"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 274
+    text: "email: trimmedDecoded,"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 280
+    text: "* Formats an email address according to RFC 5322"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 283
+    text: "* @param email - Email address"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 284
+    text: "* @returns Formatted email address string"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 287
+    text: "* formatEmailAddress('Strapi', 'no-reply@strapi.io')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 291
+    text: "* formatEmailAddress('Doe, John', 'john@example.com')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 294
+    text: "export const formatEmailAddress = (name: string | null, email: string):
+      string => {"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 296
+    text: return email;
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 306
+    text: return `"${escaped}" <${email}>`;
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 309
+    text: return `${name} <${email}>`;
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 313
+    text: "* Validates an email address according to RFC 5322"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 316
+    text: "* @param email - Email address to validate"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 317
+    text: "* @returns true if the email appears valid"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 319
+    text: "export const isValidEmail = (email: string): boolean => {"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 320
+    text: if (!email || typeof email !== 'string') {
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 326
+    text: const emailPattern =
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 329
+    text: return emailPattern.test(email);
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 333
+    text: "* Parses multiple email addresses separated by commas"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 336
+    text: "* @param emailsString - Comma-separated email addresses"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 337
+    text: "* @returns Array of parsed email addresses"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 340
+    text: "* parseMultipleEmailAddresses('a@example.com, \"Doe, John\"
+      <b@example.com>')"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 341
+    text: "* // [{ name: null, email: 'a@example.com', ... }, { name: 'Doe, John',
+      email: 'b@example.com', ... }]"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 343
+    text: export const parseMultipleEmailAddresses = (
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 344
+    text: "emailsString: string | undefined | null"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 345
+    text: "): ParsedEmailAddress[] => {"
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 346
+    text: if (!emailsString || typeof emailsString !== 'string') {
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 356
+    text: for (const char of emailsString) {
+  - file: packages/core/email/shared/email-address-parser.ts
+    line: 392
+    text: return addresses.map(parseEmailAddress);
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 11
+    text: "email?: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 16
+    text: "email: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 21
+    text: "{ type: 'input', name: 'email', message: 'User email?' },"
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 25
+    text: "async function setActive({ email, active }: CmdOptions) {"
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 29
+    text: const cleanEmail = email?.trim().toLowerCase();
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 39
+    text: const user = await app.admin.services.user.findOneByEmail(cleanEmail);
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 42
+    text: console.error(`User with email "${cleanEmail}" does not exist`);
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 55
+    text: console.log(`Successfully set ${cleanEmail} active status to
+      ${cleanActive}`);
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 63
+    text: const { email, active } = cmdOptions;
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 65
+    text: if (_.isEmpty(email) && _.isEmpty(active) && process.stdin.isTTY) {
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 72
+    text: if (_.isEmpty(email) || _.isEmpty(active)) {
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 73
+    text: console.error('Missing required options `email` or `active`');
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 77
+    text: return setActive({ email, active });
+  - file: packages/core/strapi/src/cli/commands/admin/active-user.ts
+    line: 87
+    text: .option('-e, --email <email>', 'The user email')
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 11
+    text: "email?: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 16
+    text: "email: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 21
+    text: "{ type: 'input', name: 'email', message: 'User email?' },"
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 25
+    text: "async function setBlock({ email, block }: CmdOptions) {"
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 29
+    text: const cleanEmail = email?.trim().toLowerCase();
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 39
+    text: const user = await app.admin.services.user.findOneByEmail(cleanEmail);
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 42
+    text: console.error(`User with email "${cleanEmail}" does not exist`);
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 53
+    text: console.log(`Successfully set ${cleanEmail} block status to
+      ${cleanBlock}`);
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 61
+    text: const { email, block } = cmdOptions;
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 63
+    text: if (_.isEmpty(email) && _.isEmpty(block) && process.stdin.isTTY) {
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 70
+    text: if (_.isEmpty(email) || _.isEmpty(block)) {
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 71
+    text: console.error('Missing required options `email` or `block`');
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 75
+    text: return setBlock({ email, block });
+  - file: packages/core/strapi/src/cli/commands/admin/block-user.ts
+    line: 85
+    text: .option('-e, --email <email>', 'The user email')
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 12
+    text: "email?: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 18
+    text: const emailValidator = yup.string().email('Invalid email
+      address').lowercase();
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 37
+    text: "email: emailValidator,"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 44
+    text: "email: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 59
+    text: "name: 'email',"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 60
+    text: "message: 'Admin email?',"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 62
+    text: const validEmail = await emailValidator.validate(value);
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 63
+    text: return validEmail === value || validEmail;
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 84
+    text: "async function createAdmin({ email, password, firstname, lastname }:
+      CmdOptions) {"
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 88
+    text: const user = await app.admin!.services.user.exists({ email });
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 91
+    text: console.error(`User with email "${email}" already exists`);
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 98
+    text: email,
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 114
+    text: let { email, password, firstname, lastname } = cmdOptions;
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 117
+    text: _.isEmpty(email) &&
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 130
+    text: ({ email, password, firstname, lastname } = inquiry);
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 134
+    text: await adminCreateSchema.validate({ email, password, firstname, lastname });
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 143
+    text: return createAdmin({ email, password, firstname, lastname });
+  - file: packages/core/strapi/src/cli/commands/admin/create-user.ts
+    line: 153
+    text: .option('-e, --email <email>', 'Email of the new admin')
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 12
+    text: "email?: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 15
+    text: const emailValidator = yup.string().email('Invalid email
+      address').lowercase();
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 18
+    text: "email: emailValidator,"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 22
+    text: "email: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 33
+    text: "name: 'email',"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 34
+    text: "message: 'Admin email?',"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 36
+    text: const validEmail = await emailValidator.validate(value);
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 37
+    text: return validEmail === value || validEmail;
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 47
+    text: "async function deleteAdmin({ email }: CmdOptions) {"
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 51
+    text: const user = await app.admin.services.user.findOneByEmail(email);
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 54
+    text: console.error(`User with email "${email}" does not exist`);
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 73
+    text: let { email } = cmdOptions;
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 75
+    text: if (_.isEmpty(email) && process.stdin.isTTY) {
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 83
+    text: ({ email } = inquiry);
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 86
+    text: if (_.isEmpty(email)) {
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 87
+    text: console.error('Missing required option `email`');
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 92
+    text: await adminDeleteSchema.validate({ email });
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 101
+    text: return deleteAdmin({ email });
+  - file: packages/core/strapi/src/cli/commands/admin/delete-user.ts
+    line: 111
+    text: .option('-e, --email <email>', 'Email of the current admin')
+  - file: packages/core/strapi/src/cli/commands/admin/list-users.ts
+    line: 17
+    text: "select: ['id', 'firstname', 'lastname', 'email', 'isActive', 'blocked'],"
+  - file: packages/core/strapi/src/cli/commands/admin/list-users.ts
+    line: 25
+    text: chalk.blue('Email'),
+  - file: packages/core/strapi/src/cli/commands/admin/list-users.ts
+    line: 38
+    text: user.email,
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 11
+    text: "email?: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 16
+    text: "email: string;"
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 22
+    text: "{ type: 'input', name: 'email', message: 'User email?' },"
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 31
+    text: "async function changePassword({ email, password }: CmdOptions) {"
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 35
+    text: await app.admin!.services.user.resetPasswordByEmail(email, password);
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 45
+    text: const { email, password } = cmdOptions;
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 47
+    text: if (_.isEmpty(email) && _.isEmpty(password) && process.stdin.isTTY) {
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 58
+    text: if (_.isEmpty(email) || _.isEmpty(password)) {
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 59
+    text: console.error('Missing required options `email` or `password`');
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 63
+    text: return changePassword({ email, password });
+  - file: packages/core/strapi/src/cli/commands/admin/reset-user-password.ts
+    line: 73
+    text: .option('-e, --email <email>', 'The user email')

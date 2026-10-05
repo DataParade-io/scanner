@@ -4,9 +4,9 @@ Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release
 
 Versioned ground-truth data for deterministic scanner evaluation. Labels are curated independently of scanner output. Headline denominators use `review_state: accepted`.
 
-Canonical corpus layers are `components`, `data_flows`, `mentions`, and `data_items`. Gold subject keys use `mention:<rule_id>` when rule-aligned, or `mention:<taxonomy_suffix>` for adjudication bookmarks.
+Canonical corpus layers are `components`, `data_flows`, `occurrences`, and `data_items`. Gold subject keys use `occurrence:<rule_id>` when rule-aligned, or `occurrence:<taxonomy_suffix>` for adjudication bookmarks.
 
-As of 2026-08-30 accepted positives: components 519, data_flows 419, mentions 325, data_items 302. Original-ten packets still have leftover proposed non-positive or unaccepted records from earlier curation.
+As of 2026-08-30 accepted positives: components 519, data_flows 419, occurrences 325, data_items 302. Original-ten packets still have leftover proposed non-positive or unaccepted records from earlier curation.
 
 
 ## Layout
@@ -22,7 +22,7 @@ tests/benchmark/
       annotations/
         components.yaml
         data_flows.yaml
-        mentions.yaml
+        occurrences.yaml
         data_items.yaml
   scripts/
     materialize-repo.ts   # optional local clone helper (not run in CI)
@@ -31,7 +31,7 @@ tests/benchmark/
 
 ## Current corpus packets
 
-Twenty-nine pinned packets live under `repos/`: the original ten (gitea, saleor, keycloak, hyperswitch-vault, medusa-customer, posthog-user, yjdh-employee, vgs-django, easy-school, ory-kratos-password) plus 19 expansion repos (discourse, redmine, wordpress, magento, nopcommerce, orchard-core, spring-petclinic, pocketbase, ghost, directus, spree, strapi, flask-login, exposed, vapor, supabase-js, auth0-express, drupal, medusa).
+Thirty-one pinned packets live under `repos/`: the original ten (gitea, saleor, keycloak, hyperswitch-vault, medusa-customer, posthog-user, yjdh-employee, vgs-django, easy-school, ory-kratos-password) plus 19 expansion repos (discourse, redmine, wordpress, magento, nopcommerce, orchard-core, spring-petclinic, pocketbase, ghost, directus, spree, strapi, flask-login, exposed, vapor, supabase-js, auth0-express, drupal, medusa), plus the held-out chatwoot (KDATAP-973b69) and calcom (KDATAP-b8e4a8) packets, which carry proposed email and phone_number occurrence gold only.
 
 `vgs-django` and `easy-school` remain the starter packets for unit tests. License notes in those manifests are unchanged.
 
@@ -111,7 +111,7 @@ The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII reg
 
 ## Four-layer scorecard vector (opt-in)
 
-`benchmark:scorecard` emits the headline evaluation vector: `mentions`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates. Corpus and fixture `data-actions` remain diagnostic-only — scored by `benchmark:run` / `eval:data-actions`, excluded from `scorecard-vector/2` headlines, and not part of the `diagnostic.raw-hits` sidecar.
+`benchmark:scorecard` emits the headline evaluation vector: `occurrences`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates. Corpus and fixture `data-actions` remain diagnostic-only — scored by `benchmark:run` / `eval:data-actions`, excluded from `scorecard-vector/3` headlines, and not part of the `diagnostic.raw-hits` sidecar.
 
 ```bash
 pnpm run benchmark:materialize vgs-django
@@ -121,7 +121,7 @@ pnpm run benchmark:scorecard vgs-django
 pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard-vector.json
 ```
 
-### Contract (`scorecard-vector/2`)
+### Contract (`scorecard-vector/3`)
 
 | Field | Meaning |
 | --- | --- |
@@ -140,7 +140,7 @@ pnpm run benchmark:scorecard -- --write-report tests/benchmark/reports/scorecard
 
 | Layer | Typical gate |
 | --- | --- |
-| `mentions`, `data-items`, `components` | `scorable` when eval cases exist and the run is accepted-only |
+| `occurrences`, `data-items`, `components` | `scorable` when eval cases exist and the run is accepted-only |
 | `data-flows` | `pending` — canonical compat marks legacy flow gold `needs_adjudication`, so recall is honestly `null` until adjudication lands |
 | any layer, provisional run | `provisional` |
 | layer with no eval cases | `skip` |
@@ -161,7 +161,7 @@ The immutable corpus baseline is defined under `tests/benchmark/baseline/` as ve
 | Markdown renderer | `tests/benchmark/baseline/render-markdown.ts` |
 | Fixture round-trip | `tests/fixtures/baseline/minimal-baseline-artifact.{json,md}` |
 
-The artifact embeds a `scorecard-vector/2` payload verbatim (no second scorer, no cross-layer scalar), a fingerprint block (scanner commit, corpus/gold digest, contract and taxonomy digests, materialization status per packet, deterministic config with `enableAiInference: false`), gold-population and migration-incomplete accounting, capability coverage as diagnostic-only metadata, and a readiness stub (`not_evaluated`). Series 1 uses `predecessor: null`.
+The artifact embeds a `scorecard-vector/3` payload verbatim (no second scorer, no cross-layer scalar), a fingerprint block (scanner commit, corpus/gold digest, contract and taxonomy digests, materialization status per packet, deterministic config with `enableAiInference: false`), gold-population and migration-incomplete accounting, capability coverage as diagnostic-only metadata, and a readiness stub (`not_evaluated`). Series 1 uses `predecessor: null`.
 
 ## CI validation policy
 
@@ -170,18 +170,18 @@ Two lanes keep pull requests fast while still exercising the full pinned corpus 
 | Lane | Trigger | Clones upstream packets? | Commands |
 | --- | --- | --- | --- |
 | PR smoke | every pull request (`.github/workflows/ci.yml`) | **No** | `pnpm run ci:smoke` |
-| Full corpus | weekly schedule, manual dispatch, optional release hook (`.github/workflows/baseline-corpus.yml`) | **Yes** (all 29) | `benchmark:materialize -- --all` then `benchmark:validate-materializations` |
+| Full corpus | weekly schedule, manual dispatch, optional release hook (`.github/workflows/baseline-corpus.yml`) | **Yes** (all 31) | `benchmark:materialize -- --all` then `benchmark:validate-materializations` |
 
 **PR smoke** runs an allowlisted Jest subset only:
 
 - `tests/eval/contract/contract.spec.ts` — synthetic evaluator contract fixtures
 - `tests/unit/benchmark/baseline-artifact.spec.ts` — `baseline-artifact/1` schema + JSON↔MD round-trip
-- `tests/unit/benchmark/scorecard-vector.spec.ts` and `run-four-layer-scorecard.spec.ts` — `scorecard-vector/2`
+- `tests/unit/benchmark/scorecard-vector.spec.ts` and `run-four-layer-scorecard.spec.ts` — `scorecard-vector/3`
 - `tests/unit/eval/canonical-computability.spec.ts` — per-metric computability states
 - `tests/unit/benchmark/ci-smoke-digests.spec.ts` — pinned corpus/taxonomy/concept-map/adapter digests under `tests/fixtures/baseline/pins/`
 - `tests/unit/docs/evaluation-docs-contract.spec.ts` — evaluation prose aligned with layer constants and contract versions
 
-Corpus YAML for all 29 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
+Corpus YAML for all 31 packets is still validated offline via `tests/unit/benchmark/corpus-gold.spec.ts` inside the regular `pnpm test` job. Lockfile drift is enforced by `pnpm install --frozen-lockfile` in CI (no separate lock digest pin).
 
 **Full corpus** materializes every pinned packet, then requires `validationStatus: valid` and matching `validatedHeadSha` for each packet. Partial manual dispatches may skip validation when `repo_keys` is set.
 

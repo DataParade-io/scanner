@@ -62,7 +62,7 @@ const dataActionEvalCaseList: EvalCase[] = [
     id: "ruby-postgres-store",
     fixture: "ruby-basic",
     layer: "data-actions",
-    subject: { key: "asset:ruby basic", name: "Ruby Basic" },
+    subject: { key: "asset:database", name: "Database" },
     evidence: { file_path: "config/database.yml", start_line: 2, end_line: 2 },
     expected: { status: "positive", labels: ["store"] },
     rationale: "The Rails PostgreSQL datastore persists application data.",

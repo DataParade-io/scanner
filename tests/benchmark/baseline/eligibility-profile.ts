@@ -64,7 +64,7 @@ function languagesForLayer(layer: HeadlineLayer): {
     return { orchestratorLanguages, personalDataLanguages: [] };
   }
 
-  if (layer === "mentions" || layer === "data-items") {
+  if (layer === "occurrences" || layer === "data-items") {
     return { orchestratorLanguages: [], personalDataLanguages };
   }
 
