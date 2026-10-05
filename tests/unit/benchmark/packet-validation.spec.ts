@@ -3,7 +3,7 @@ import os from "os";
 import path from "path";
 import YAML from "yaml";
 
-import { validateAnnotation } from "../../benchmark/manifest";
+import { normalizeLegacyOccurrenceRecord, validateAnnotation } from "../../benchmark/manifest";
 import {
   type CandidateLine,
   loadCandidateLines,
@@ -267,8 +267,6 @@ describe("benchmark/manifest occurrence_attributes", () => {
 
 describe("legacy occurrence gold (ground-truth/2)", () => {
   it("reads mention layer, keys and attributes as occurrences", () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { normalizeLegacyOccurrenceRecord } = require("../../benchmark/manifest");
     const out = normalizeLegacyOccurrenceRecord({
       layer: "mentions",
       subject: { key: "mention:email", name: "email" },
