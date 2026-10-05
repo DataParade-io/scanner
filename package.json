@@ -40,8 +40,9 @@
     }
   },
   "scripts": {
-    "build": "pnpm exec tsc -p tsconfig.json",
-    "prepare": "pnpm run build",
+    "build": "tsc -p tsconfig.json",
+    "scan": "node dist/src/bin/scan.js",
+    "prepare": "npm run build",
     "prepublishOnly": "pnpm run build && pnpm run test",
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"features/**/*.ts\"",
     "pretest": "pnpm run build",

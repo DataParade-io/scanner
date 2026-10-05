@@ -2,6 +2,19 @@
 
 Deterministic DataParade scan engine: ingest → analyzers → YAML patterns → classifier → data-flow → `ScanResult`.
 
+## Quick start
+
+Scan a repository from a source checkout. The scan runs locally and needs no account, API key or network access.
+
+```sh
+git clone -b main https://github.com/DataParade-io/scanner.git
+cd scanner
+npm install            # Node 20+; builds dist/ (pnpm works too)
+npm run scan -- /path/to/repo --out scan.json
+```
+
+It prints the components, data flows and personal-data items it found (emails, phone numbers, names, …) and writes the full result to `scan.json`. Point it at a service directory of a large monorepo for a faster first look.
+
 ## Public API
 
 ```ts
