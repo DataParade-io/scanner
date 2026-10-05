@@ -12,6 +12,7 @@ import {
   extractDatasourceRefsFromProperties,
   extractDatasourceRefsFromYaml,
 } from "../../../../src/analyzers/jvm/manifest-parsers";
+import { manifestSpanNames } from "../../../../src/analyzers/shared/manifest-span";
 
 function fixturePath(name: string): string {
   return path.join(__dirname, "..", "..", "..", "fixtures", name);
@@ -39,7 +40,7 @@ describe("JVM manifest parsers - Maven", () => {
       "</project>",
     ].join("\n");
 
-    expect(extractCoordinatesFromPom(pom).sort()).toEqual([
+    expect(manifestSpanNames(extractCoordinatesFromPom(pom)).sort()).toEqual([
       "org.postgresql:postgresql",
       "org.springframework.boot:spring-boot-starter-parent",
     ]);
@@ -68,7 +69,7 @@ describe("JVM manifest parsers - Gradle", () => {
       "}",
     ].join("\n");
 
-    expect(extractCoordinatesFromGradle(gradle).sort()).toEqual([
+    expect(manifestSpanNames(extractCoordinatesFromGradle(gradle)).sort()).toEqual([
       "org.postgresql:postgresql",
       "org.springframework.boot:spring-boot-dependencies",
       "org.springframework.boot:spring-boot-starter-web",
@@ -90,7 +91,7 @@ describe("JVM manifest parsers - Gradle", () => {
       "}",
     ].join("\n");
 
-    expect(extractCoordinatesFromGradle(gradle)).toEqual([
+    expect(manifestSpanNames(extractCoordinatesFromGradle(gradle))).toEqual([
       "com.zaxxer:HikariCP",
     ]);
   });
@@ -108,7 +109,7 @@ describe("JVM manifest parsers - Gradle", () => {
       'spring = { id = "org.springframework.boot", version = "3.2.0" }',
     ].join("\n");
 
-    expect(extractCoordinatesFromVersionCatalog(toml).sort()).toEqual([
+    expect(manifestSpanNames(extractCoordinatesFromVersionCatalog(toml)).sort()).toEqual([
       "org.postgresql:postgresql",
       "redis.clients:jedis",
     ]);
@@ -135,8 +136,18 @@ describe("JVM manifest parsers - Spring datasource configuration", () => {
     ].join("\n");
 
     expect(extractDatasourceRefsFromProperties(properties)).toEqual([
-      { key: "spring.datasource.url", driver: "postgresql" },
-      { key: "spring.data.mongodb.uri", driver: "mongodb" },
+      {
+        key: "spring.datasource.url",
+        driver: "postgresql",
+        startLine: 2,
+        endLine: 2,
+      },
+      {
+        key: "spring.data.mongodb.uri",
+        driver: "mongodb",
+        startLine: 4,
+        endLine: 4,
+      },
     ]);
   });
 
@@ -155,8 +166,18 @@ describe("JVM manifest parsers - Spring datasource configuration", () => {
     ].join("\n");
 
     expect(extractDatasourceRefsFromYaml(yaml)).toEqual([
-      { key: "spring.datasource.url", driver: "postgresql" },
-      { key: "spring.datasource.url", driver: "h2" },
+      {
+        key: "spring.datasource.url",
+        driver: "postgresql",
+        startLine: 3,
+        endLine: 3,
+      },
+      {
+        key: "spring.datasource.url",
+        driver: "h2",
+        startLine: 10,
+        endLine: 10,
+      },
     ]);
   });
 });
@@ -168,7 +189,10 @@ describe("JVM dependency manifest scanning", () => {
     );
 
     const byPath = new Map(
-      manifests.map((m) => [m.manifestRelativePath, m.packages]),
+      manifests.map((m) => [
+        m.manifestRelativePath,
+        manifestSpanNames(m.packages),
+      ]),
     );
 
     expect(byPath.get("pom.xml")?.sort()).toEqual([

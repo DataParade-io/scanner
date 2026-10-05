@@ -1,0 +1,2667 @@
+change_id: 2026-09-21-ruby-component-taxonomy
+change_type: taxonomy_change
+title: Treat internal Ruby application classes as evidence, not architecture components
+approved_by: user
+approved_at: 2026-09-21
+before_policy: Rails models, concerns, and ordinary service classes could be labelled as database or
+  service architecture components based on their application role.
+after_policy: Rails models, controllers, concerns, jobs, mailers, serializers, and ordinary service
+  classes are evidence within an application component, not architecture components. Actual
+  datastores, caches, concrete authentication mechanisms, APIs, actors, and third parties remain
+  components.
+evidence_rationale: The pinned Ruby sources show these records point to application-owned class
+  declarations under app/models, app/models/concerns, or app/services. A class that persists rows or
+  orchestrates work is not itself the datastore or an independently deployable service.
+corpus_delta:
+  summary: 129 accepted positive component annotations changed to rejected negative records with empty
+    labels, matching the repository loader disposition for invalid component candidates.
+  total_changed: 129
+scanner_delta:
+  summary: None. This corpus-only change does not modify or evaluate production scanner behavior.
+  production_scanner_files_changed: 0
+repositories:
+  discourse:
+    manifest_annotation_version:
+      before: 4
+      after: 5
+    changed_count: 116
+    affected_annotation_ids:
+      - discourse-model-admin-dashboard-data
+      - discourse-model-admin-dashboard-general-data
+      - discourse-model-admin-dashboard-index-data
+      - discourse-model-admin-dashboard-report
+      - discourse-model-admin-dashboard-section
+      - discourse-model-admin-notice
+      - discourse-model-allowed-pm-user
+      - discourse-model-anonymous-user
+      - discourse-model-api-key
+      - discourse-model-api-key-scope
+      - discourse-model-associated-group
+      - discourse-model-backup-draft-post
+      - discourse-model-backup-draft-topic
+      - discourse-model-badge-grouping
+      - discourse-model-bookmark
+      - discourse-model-browser-pageview-session-engagement
+      - discourse-model-browser-pageview-session-engagement-daily-rollup
+      - discourse-model-category-group
+      - discourse-model-category-moderation-group
+      - discourse-model-category-posting-review-group
+      - discourse-model-category-required-tag-group
+      - discourse-model-category-tag-group
+      - discourse-model-category-user
+      - discourse-model-digest-email-site-setting
+      - discourse-model-dismissed-topic-user
+      - discourse-model-draft
+      - discourse-model-draft-sequence
+      - discourse-model-email-change-request
+      - discourse-model-email-level-site-setting
+      - discourse-model-email-log
+      - discourse-model-email-login-code
+      - discourse-model-email-style
+      - discourse-model-group
+      - discourse-model-group-archived-message
+      - discourse-model-group-associated-group
+      - discourse-model-group-category-notification-default
+      - discourse-model-group-custom-field
+      - discourse-model-group-history
+      - discourse-model-group-mention
+      - discourse-model-group-request
+      - discourse-model-group-tag-notification-default
+      - discourse-model-group-user
+      - discourse-model-ignored-user
+      - discourse-model-incoming-email
+      - discourse-model-invite
+      - discourse-model-invite-redeemer
+      - discourse-model-invited-group
+      - discourse-model-invited-user
+      - discourse-model-like-notification-frequency-site-setting
+      - discourse-model-muted-user
+      - discourse-model-notification
+      - discourse-model-notification-level-when-replying-site-setting
+      - discourse-model-reviewable-user
+      - discourse-model-screened-email
+      - discourse-model-shared-draft
+      - discourse-model-shelved-notification
+      - discourse-model-site-setting-group
+      - discourse-model-skipped-email-log
+      - discourse-model-tag-group
+      - discourse-model-tag-group-membership
+      - discourse-model-tag-group-permission
+      - discourse-model-tag-user
+      - discourse-model-topic-allowed-group
+      - discourse-model-topic-allowed-user
+      - discourse-model-topic-featured-users
+      - discourse-model-topic-group
+      - discourse-model-topic-invite
+      - discourse-model-topic-participant-groups-summary
+      - discourse-model-topic-user
+      - discourse-model-user-action
+      - discourse-model-user-api-key
+      - discourse-model-user-api-key-client
+      - discourse-model-user-api-key-client-scope
+      - discourse-model-user-api-key-scope
+      - discourse-model-user-archived-message
+      - discourse-model-user-associated-account
+      - discourse-model-user-associated-group
+      - discourse-model-user-avatar
+      - discourse-model-user-badge
+      - discourse-model-user-badges
+      - discourse-model-user-bookmark-list
+      - discourse-model-user-custom-field
+      - discourse-model-user-email
+      - discourse-model-user-export
+      - discourse-model-user-field
+      - discourse-model-user-field-option
+      - discourse-model-user-history
+      - discourse-model-user-ip-address-history
+      - discourse-model-user-notification-schedule
+      - discourse-model-user-open-id
+      - discourse-model-user-option
+      - discourse-model-user-profile
+      - discourse-model-user-profile-view
+      - discourse-model-user-required-fields-version
+      - discourse-model-user-search
+      - discourse-model-user-search-data
+      - discourse-model-user-second-factor
+      - discourse-model-user-security-key
+      - discourse-model-user-stat
+      - discourse-model-user-status
+      - discourse-model-user-summary
+      - discourse-model-user-upload
+      - discourse-model-user-visit
+      - discourse-model-user-visit-daily-rollup
+      - discourse-model-user-warning
+      - discourse-model-username-validator
+      - discourse-model-watched-word-group
+      - discourse-user-email-model
+      - discourse-user-password-model
+      - discourse-user-profile-model
+      - discourse-oauth2-user-info-model
+      - discourse-user-email-primary
+      - discourse-user-profile-bio
+      - discourse-oauth-email-column
+      - discourse-associated-account-provider
+      - discourse-ip-address-validation
+  spree:
+    manifest_annotation_version:
+      before: 4
+      after: 5
+    changed_count: 10
+    affected_annotation_ids:
+      - spree-customer-database
+      - spree-payment-processing-service
+      - spree-credit-card-source
+      - spree-payment-source-model
+      - spree-gateway-customer-model
+      - spree-payment-model
+      - spree-payment-method-model
+      - spree-address-model
+      - spree-order-model
+      - spree-create-user-account-service
+  redmine:
+    manifest_annotation_version:
+      before: 4
+      after: 5
+    changed_count: 3
+    affected_annotation_ids:
+      - redmine-email-address-model
+      - redmine-principal-identity-service
+      - redmine-application-record-orm
+corrections:
+  - annotation_id: discourse-model-admin-dashboard-data
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_dashboard_data.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: AdminDashboardData is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminDashboardData is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-admin-dashboard-general-data
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_dashboard_general_data.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: AdminDashboardGeneralData is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminDashboardGeneralData is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-admin-dashboard-index-data
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_dashboard_index_data.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: AdminDashboardIndexData is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminDashboardIndexData is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-admin-dashboard-report
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_dashboard_report.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: AdminDashboardReport is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminDashboardReport is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-admin-dashboard-section
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_dashboard_section.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: AdminDashboardSection is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminDashboardSection is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-admin-notice
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/admin_notice.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: AdminNotice is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AdminNotice is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-allowed-pm-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/allowed_pm_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: AllowedPmUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AllowedPmUser is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-anonymous-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/anonymous_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: AnonymousUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AnonymousUser is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-api-key
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/api_key.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: ApiKey is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: ApiKey is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-api-key-scope
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/api_key_scope.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: ApiKeyScope is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: ApiKeyScope is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-associated-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/associated_group.rb:2-2 points to an internal Ruby class in the pinned source.
+    prior_rationale: AssociatedGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: AssociatedGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-backup-draft-post
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/backup_draft_post.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: BackupDraftPost is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: BackupDraftPost is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-backup-draft-topic
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/backup_draft_topic.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: BackupDraftTopic is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: BackupDraftTopic is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-badge-grouping
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/badge_grouping.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: BadgeGrouping is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: BadgeGrouping is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-bookmark
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/bookmark.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Bookmark is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: Bookmark is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-browser-pageview-session-engagement
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/browser_pageview_session_engagement.rb:3-3 points to an internal Ruby class in
+      the pinned source.
+    prior_rationale: BrowserPageviewSessionEngagement is a pageview rollup table, not an authentication service.
+    rationale: BrowserPageviewSessionEngagement is an internal Ruby ActiveRecord model/class and is
+      evidence within the Rails application, not an independently deployable architecture component.
+      Concrete backing datastores and integrations require their own configuration or boundary
+      evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-browser-pageview-session-engagement-daily-rollup
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/browser_pageview_session_engagement_daily_rollup.rb:3-3 points to an internal
+      Ruby class in the pinned source.
+    prior_rationale: BrowserPageviewSessionEngagementDailyRollup is a pageview rollup table, not an
+      authentication service.
+    rationale: BrowserPageviewSessionEngagementDailyRollup is an internal Ruby ActiveRecord model/class
+      and is evidence within the Rails application, not an independently deployable architecture
+      component. Concrete backing datastores and integrations require their own configuration or
+      boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: CategoryGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-moderation-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_moderation_group.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: CategoryModerationGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryModerationGroup is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-posting-review-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_posting_review_group.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: CategoryPostingReviewGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryPostingReviewGroup is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-required-tag-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_required_tag_group.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: CategoryRequiredTagGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryRequiredTagGroup is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-tag-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_tag_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: CategoryTagGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryTagGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-category-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/category_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: CategoryUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: CategoryUser is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-digest-email-site-setting
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/digest_email_site_setting.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: DigestEmailSiteSetting is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: DigestEmailSiteSetting is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-dismissed-topic-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/dismissed_topic_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: DismissedTopicUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: DismissedTopicUser is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-draft
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/draft.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Draft is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: Draft is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-draft-sequence
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/draft_sequence.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: DraftSequence is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: DraftSequence is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-email-change-request
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_change_request.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: EmailChangeRequest is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: EmailChangeRequest is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-email-level-site-setting
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_level_site_setting.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: EmailLevelSiteSetting is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: EmailLevelSiteSetting is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-email-log
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_log.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: EmailLog is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: EmailLog is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-email-login-code
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_login_code.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: EmailLoginCode is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: EmailLoginCode is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-email-style
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_style.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: EmailStyle is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: EmailStyle is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Group is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: Group is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-archived-message
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_archived_message.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupArchivedMessage is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupArchivedMessage is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-associated-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_associated_group.rb:2-2 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupAssociatedGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupAssociatedGroup is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-category-notification-default
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_category_notification_default.rb:3-3 points to an internal Ruby class in
+      the pinned source.
+    prior_rationale: GroupCategoryNotificationDefault is an ActiveRecord model in the Discourse
+      identity/session surface.
+    rationale: GroupCategoryNotificationDefault is an internal Ruby ActiveRecord model/class and is
+      evidence within the Rails application, not an independently deployable architecture component.
+      Concrete backing datastores and integrations require their own configuration or boundary
+      evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-custom-field
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_custom_field.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupCustomField is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupCustomField is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-history
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_history.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupHistory is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupHistory is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-mention
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_mention.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupMention is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupMention is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-request
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_request.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupRequest is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupRequest is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-tag-notification-default
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_tag_notification_default.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: GroupTagNotificationDefault is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupTagNotificationDefault is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-group-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/group_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: GroupUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: GroupUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-ignored-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/ignored_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: IgnoredUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: IgnoredUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-incoming-email
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/incoming_email.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: IncomingEmail is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: IncomingEmail is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-invite
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/invite.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Invite is the invitation row stored for onboarding, not a live actor type.
+    rationale: Invite is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-invite-redeemer
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/invite_redeemer.rb:16-16 points to an internal Ruby class in the pinned source.
+    prior_rationale: InviteRedeemer is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: InviteRedeemer is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-invited-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/invited_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: InvitedGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: InvitedGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-invited-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/invited_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: InvitedUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: InvitedUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-like-notification-frequency-site-setting
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/like_notification_frequency_site_setting.rb:3-3 points to an internal Ruby
+      class in the pinned source.
+    prior_rationale: LikeNotificationFrequencySiteSetting is an ActiveRecord model in the Discourse
+      identity/session surface.
+    rationale: LikeNotificationFrequencySiteSetting is an internal Ruby ActiveRecord model/class and is
+      evidence within the Rails application, not an independently deployable architecture component.
+      Concrete backing datastores and integrations require their own configuration or boundary
+      evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-muted-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/muted_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: MutedUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: MutedUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-notification
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/notification.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Notification is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: Notification is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-notification-level-when-replying-site-setting
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/notification_level_when_replying_site_setting.rb:3-3 points to an internal Ruby
+      class in the pinned source.
+    prior_rationale: NotificationLevelWhenReplyingSiteSetting is an ActiveRecord model in the Discourse
+      identity/session surface.
+    rationale: NotificationLevelWhenReplyingSiteSetting is an internal Ruby ActiveRecord model/class and
+      is evidence within the Rails application, not an independently deployable architecture
+      component. Concrete backing datastores and integrations require their own configuration or
+      boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-reviewable-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/reviewable_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: ReviewableUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: ReviewableUser is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-screened-email
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/screened_email.rb:7-7 points to an internal Ruby class in the pinned source.
+    prior_rationale: ScreenedEmail is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: ScreenedEmail is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-shared-draft
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/shared_draft.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: SharedDraft is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: SharedDraft is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-shelved-notification
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/shelved_notification.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: ShelvedNotification is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: ShelvedNotification is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-site-setting-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/site_setting_group.rb:7-7 points to an internal Ruby class in the pinned source.
+    prior_rationale: SiteSettingGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: SiteSettingGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-skipped-email-log
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/skipped_email_log.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: SkippedEmailLog is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: SkippedEmailLog is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-tag-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/tag_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TagGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TagGroup is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-tag-group-membership
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/tag_group_membership.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TagGroupMembership is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TagGroupMembership is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-tag-group-permission
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/tag_group_permission.rb:4-4 points to an internal Ruby class in the pinned source.
+    prior_rationale: TagGroupPermission is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TagGroupPermission is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-tag-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/tag_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TagUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TagUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-allowed-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_allowed_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicAllowedGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicAllowedGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-allowed-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_allowed_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicAllowedUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicAllowedUser is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-featured-users
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_featured_users.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicFeaturedUsers is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicFeaturedUsers is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicGroup is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-invite
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_invite.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicInvite is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicInvite is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-participant-groups-summary
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_participant_groups_summary.rb:4-4 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: TopicParticipantGroupsSummary is an ActiveRecord model in the Discourse
+      identity/session surface.
+    rationale: TopicParticipantGroupsSummary is an internal Ruby ActiveRecord model/class and is
+      evidence within the Rails application, not an independently deployable architecture component.
+      Concrete backing datastores and integrations require their own configuration or boundary
+      evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-topic-user
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/topic_user.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: TopicUser is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: TopicUser is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-action
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_action.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserAction is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserAction is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-api-key
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_api_key.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserApiKey is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserApiKey is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-api-key-client
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_api_key_client.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserApiKeyClient is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserApiKeyClient is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-api-key-client-scope
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_api_key_client_scope.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: UserApiKeyClientScope is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserApiKeyClientScope is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-api-key-scope
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_api_key_scope.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserApiKeyScope is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserApiKeyScope is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-archived-message
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_archived_message.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserArchivedMessage is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserArchivedMessage is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-associated-account
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_associated_account.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: UserAssociatedAccount is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserAssociatedAccount is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-associated-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_associated_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserAssociatedGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserAssociatedGroup is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-avatar
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_avatar.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserAvatar is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserAvatar is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-badge
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_badge.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserBadge is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserBadge is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-badges
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_badges.rb:4-4 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserBadges is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserBadges is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-bookmark-list
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_bookmark_list.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserBookmarkList is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserBookmarkList is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-custom-field
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_custom_field.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserCustomField is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserCustomField is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-email
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_email.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserEmail is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: UserEmail is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-export
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_export.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserExport is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserExport is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-field
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_field.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserField is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserField is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-field-option
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_field_option.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserFieldOption is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserFieldOption is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-history
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_history.rb:6-6 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserHistory is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserHistory is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-ip-address-history
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_ip_address_history.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: UserIpAddressHistory is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserIpAddressHistory is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-notification-schedule
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_notification_schedule.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: UserNotificationSchedule is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserNotificationSchedule is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-open-id
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_open_id.rb:4-4 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserOpenId is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserOpenId is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-option
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_option.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserOption is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserOption is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-profile
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_profile.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserProfile is an ActiveRecord persistence model, not an end-user actor type.
+    rationale: UserProfile is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-profile-view
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_profile_view.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserProfileView is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserProfileView is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-required-fields-version
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_required_fields_version.rb:3-3 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: UserRequiredFieldsVersion is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserRequiredFieldsVersion is an internal Ruby ActiveRecord model/class and is evidence
+      within the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-search
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_search.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserSearch is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserSearch is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-search-data
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_search_data.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserSearchData is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserSearchData is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-second-factor
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_second_factor.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserSecondFactor is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserSecondFactor is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-security-key
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_security_key.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserSecurityKey is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserSecurityKey is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-stat
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_stat.rb:2-2 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserStat is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserStat is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-status
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_status.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserStatus is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserStatus is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-summary
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_summary.rb:5-5 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserSummary is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserSummary is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-upload
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_upload.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserUpload is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserUpload is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-visit
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_visit.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserVisit is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserVisit is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-visit-daily-rollup
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_visit_daily_rollup.rb:3-3 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: UserVisitDailyRollup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserVisitDailyRollup is an internal Ruby ActiveRecord model/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-user-warning
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_warning.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserWarning is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UserWarning is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-username-validator
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/username_validator.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UsernameValidator is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: UsernameValidator is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-model-watched-word-group
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/watched_word_group.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: WatchedWordGroup is an ActiveRecord model in the Discourse identity/session surface.
+    rationale: WatchedWordGroup is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-user-email-model
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_email.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserEmail persists primary and secondary email addresses for forum accounts.
+    rationale: UserEmail is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-user-password-model
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_password.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserPassword stores salted password hashes for local authentication.
+    rationale: UserPassword is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-user-profile-model
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_profile.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: UserProfile stores public profile fields linked to user accounts.
+    rationale: UserProfile is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-oauth2-user-info-model
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/oauth2_user_info.rb:3-3 points to an internal Ruby class in the pinned source.
+    prior_rationale: Oauth2UserInfo stores provider profile data for social logins.
+    rationale: Oauth2UserInfo is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-user-email-primary
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_email.rb:16-16 points to an internal Ruby class in the pinned source.
+    prior_rationale: primary validation enforces one primary email address per user account.
+    rationale: primary email is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-user-profile-bio
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_profile.rb:15-15 points to an internal Ruby class in the pinned source.
+    prior_rationale: bio_raw stores user-authored profile biography text.
+    rationale: bio_raw is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-oauth-email-column
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/oauth2_user_info.rb:20-20 points to an internal Ruby class in the pinned source.
+    prior_rationale: Oauth2UserInfo persists provider email addresses from social logins.
+    rationale: oauth email is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-associated-account-provider
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_associated_account.rb:23-23 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: UserAssociatedAccount stores external provider_uid values for linked logins.
+    rationale: provider_uid is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: discourse-ip-address-validation
+    repository: discourse
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/user_ip_address_history.rb:7-7 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: ip_address validation records unique client IPs per user history.
+    rationale: ip_address is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-customer-database
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/customer.rb:7-8 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: Customer maps to the spree_customers table, the persistent store for buyer accounts.
+    rationale: spree_customers is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-payment-processing-service
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - service
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/concerns/spree/purchase/payment_processing.rb:15-20 points to an
+      internal Ruby class in the pinned source.
+    prior_rationale: PaymentProcessing drives checkout payment workflows rather than exposing an HTTP API surface.
+    rationale: PaymentProcessing is an internal Ruby application service/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-credit-card-source
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/credit_card.rb:2-2 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: CreditCard stores tokenized card metadata and belongs to a customer payment profile.
+    rationale: CreditCard is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-payment-source-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/payment_source.rb:2-2 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: PaymentSource is the base class for saved payment instruments linked to customers.
+    rationale: PaymentSource is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-gateway-customer-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/gateway_customer.rb:2-2 points to an internal Ruby class in
+      the pinned source.
+    prior_rationale: GatewayCustomer maps a Spree customer to a payment gateway wallet profile_id.
+    rationale: GatewayCustomer is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-payment-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/payment.rb:4-4 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: Payment records checkout charges and links orders to payment sources.
+    rationale: Payment is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-payment-method-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - service
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/payment_method.rb:4-4 points to an internal Ruby class in the
+      pinned source.
+    prior_rationale: PaymentMethod configures gateway integrations used during checkout.
+    rationale: PaymentMethod is an internal Ruby application service/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-address-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/address.rb:4-4 points to an internal Ruby class in the pinned
+      source.
+    prior_rationale: Address stores customer shipping and billing contact fields used at checkout.
+    rationale: Address is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-order-model
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/models/spree/order.rb:4-4 points to an internal Ruby class in the pinned source.
+    prior_rationale: Order is the checkout aggregate that references the customer and payment records.
+    rationale: Order is an internal Ruby ActiveRecord model/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: spree-create-user-account-service
+    repository: spree
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - service
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: spree/core/app/services/spree/orders/create_user_account.rb:6-6 points to an internal Ruby
+      class in the pinned source.
+    prior_rationale: CreateUserAccount delegates guest checkout account creation to the customer workflow.
+    rationale: CreateUserAccount is an internal Ruby application service/class and is evidence within
+      the Rails application, not an independently deployable architecture component. Concrete
+      backing datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: redmine-email-address-model
+    repository: redmine
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/email_address.rb:20-23 points to an internal Ruby class in the pinned source.
+    prior_rationale: EmailAddress persists user email addresses in the email_addresses table.
+    rationale: EmailAddress is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: redmine-principal-identity-service
+    repository: redmine
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - auth_service
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/principal.rb:20-21 points to an internal Ruby class in the pinned source.
+    prior_rationale: Principal is the shared identity base class for users and groups stored in the users table.
+    rationale: Principal is an internal Ruby application service/class and is evidence within the Rails
+      application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+  - annotation_id: redmine-application-record-orm
+    repository: redmine
+    change_type: taxonomy_change
+    before:
+      status: positive
+      labels:
+        - database
+      review_state: accepted
+    after:
+      status: negative
+      labels: []
+      review_state: rejected
+    evidence: app/models/application_record.rb:19-20 points to an internal Ruby class in the pinned source.
+    prior_rationale: ApplicationRecord is the ActiveRecord base class backing all persisted auth models.
+    rationale: ApplicationRecord is an internal Ruby ActiveRecord model/class and is evidence within the
+      Rails application, not an independently deployable architecture component. Concrete backing
+      datastores and integrations require their own configuration or boundary evidence.
+    reviewed_by: user-approved-policy
+    reviewed_at: 2026-09-21
+repository_disposition: For this corpus loader, expected.status negative pairs with
+  provenance.review_state rejected. Reviewer identity and review date remain unchanged on every
+  annotation.

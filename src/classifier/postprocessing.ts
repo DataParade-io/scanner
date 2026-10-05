@@ -1,13 +1,12 @@
-import type { DetectedComponent, DetectedFromRef } from "../core/types/component";
+import type {
+  DetectedComponent,
+  DetectedFromRef,
+} from "../core/types/component";
 import type { SourceLocation } from "../core/types/file";
 import { loadClassifierConfig, type NameNormalizationConfig } from "./config";
-import {
-  normalizeComponentName,
-  toDisplayName,
-} from "./naming";
-import {
-  getSectionIdFromProperties,
-} from "./sectioning";
+import { normalizeComponentName, toDisplayName } from "./naming";
+import { getSectionIdFromProperties } from "./sectioning";
+import { mergePropertyEvidenceMaps } from "./property-evidence";
 
 function aggregateComponentConfidence(
   components: DetectedComponent[],
@@ -32,6 +31,12 @@ export function mergeProperties(
   source: Record<string, unknown>,
 ): void {
   for (const [key, value] of Object.entries(source)) {
+    if (key === "propertyEvidence") {
+      const merged = mergePropertyEvidenceMaps(target.propertyEvidence, value);
+      if (merged) target.propertyEvidence = merged;
+      else delete target.propertyEvidence;
+      continue;
+    }
     if (!(key in target)) {
       target[key] = value;
       continue;
@@ -72,7 +77,10 @@ export function dedupeSourceLocations(
   return result;
 }
 
-export function compareSourceLocations(a: SourceLocation, b: SourceLocation): number {
+export function compareSourceLocations(
+  a: SourceLocation,
+  b: SourceLocation,
+): number {
   const fileCmp = a.filePath.localeCompare(b.filePath);
   if (fileCmp !== 0) return fileCmp;
   if (a.startLine !== b.startLine) return a.startLine - b.startLine;
@@ -80,7 +88,10 @@ export function compareSourceLocations(a: SourceLocation, b: SourceLocation): nu
   return 0;
 }
 
-export function compareDetectedFromRefs(a: DetectedFromRef, b: DetectedFromRef): number {
+export function compareDetectedFromRefs(
+  a: DetectedFromRef,
+  b: DetectedFromRef,
+): number {
   const patternCmp = String(a.pattern).localeCompare(String(b.pattern));
   if (patternCmp !== 0) return patternCmp;
 
@@ -125,15 +136,23 @@ function buildComponentDedupeKey(
     return `asset:database:${sectionId}:${getDatabaseCanonicalKey(component)}`;
   }
 
-  if (
-    component.type === "asset" &&
-    component.subType === "auth_service" &&
-    component.sourceLocations[0]?.filePath
-  ) {
-    const primaryFile = component.sourceLocations[0].filePath
-      .replace(/\\/g, "/")
-      .toLowerCase();
-    return `asset:auth_service:${sectionId}:${primaryFile}`;
+  if (component.type === "asset" && component.subType === "auth_service") {
+    // Distinct auth services in one section stay separate (they carry distinct
+    // names); the same library detected across many files collapses to one node.
+    const normalized = normalizeComponentName(
+      component.name,
+      nameNormalization,
+    );
+    const keyName = normalized || component.name.trim().toLowerCase();
+    if (keyName) {
+      return `asset:auth_service:${sectionId}:${keyName}`;
+    }
+    const primaryFile = component.sourceLocations[0]?.filePath;
+    if (primaryFile) {
+      return `asset:auth_service:${sectionId}:${primaryFile
+        .replace(/\\/g, "/")
+        .toLowerCase()}`;
+    }
   }
 
   if (component.type === "third_party") {
@@ -143,7 +162,10 @@ function buildComponentDedupeKey(
       return `third_party:${sectionId}:${key}`;
     }
 
-    const normalized = normalizeComponentName(component.name, nameNormalization);
+    const normalized = normalizeComponentName(
+      component.name,
+      nameNormalization,
+    );
     const keyName =
       normalized || component.name.trim().toLowerCase() || "<unknown>";
     return `third_party:${sectionId}:${keyName}`;
@@ -188,10 +210,7 @@ export function dedupeComponents(
   const groups = new Map<string, DetectedComponent[]>();
 
   for (const component of components) {
-    const key = buildComponentDedupeKey(
-      component,
-      config.nameNormalization,
-    );
+    const key = buildComponentDedupeKey(component, config.nameNormalization);
     const list = groups.get(key);
     if (list) {
       list.push(component);
@@ -495,9 +514,7 @@ export function mergeDatabaseAssetsByType(
     const preferredName =
       base.properties.databaseType ?? base.properties.client ?? base.name;
     const displayName =
-      typeof preferredName === "string"
-        ? preferredName.trim()
-        : base.name;
+      typeof preferredName === "string" ? preferredName.trim() : base.name;
     const name =
       displayName.length > 0
         ? toDisplayName(displayName.toLowerCase(), displayName)
@@ -526,6 +543,27 @@ export function compactAuthServiceComponents(
   components: DetectedComponent[],
 ): DetectedComponent[] {
   if (!components?.length) return [];
-  return components;
-}
 
+  const canonicalized = components.map((component) => {
+    if (component.type !== "asset" || component.subType !== "auth_service") {
+      return component;
+    }
+
+    const framework = component.properties.framework;
+    const strategy = component.properties.strategy;
+    if (framework !== "rails" || typeof strategy !== "string") {
+      return component;
+    }
+
+    const canonicalStrategy =
+      strategy === "session_cookie" ? "session" : strategy.trim().toLowerCase();
+    if (!canonicalStrategy) return component;
+
+    return {
+      ...component,
+      name: toDisplayName(canonicalStrategy, canonicalStrategy),
+    };
+  });
+
+  return dedupeComponents(canonicalized);
+}

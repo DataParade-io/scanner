@@ -9,6 +9,7 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
 import { parseComposerJson } from "./manifest-parsers";
 
 function toPosixPath(p: string): string {
@@ -19,7 +20,7 @@ export interface PhpManifestPackages {
   manifestRelativePath: string;
   /** The package's own name from composer.json `name`. */
   packageName?: string;
-  packages: string[];
+  packages: ManifestPackageSpan[];
 }
 
 function createManifestFileInfo(manifestRelativePath: string): FileInfo {
@@ -74,7 +75,7 @@ export async function parsePhpDependencyManifests(
     byManifest.push({
       manifestRelativePath,
       packageName: parsed.name,
-      packages: Array.from(new Set(parsed.packages)),
+      packages: parsed.packages,
     });
   }
 
@@ -92,11 +93,13 @@ export async function detectPhpPatternsFromDependencyManifests(
 
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
-    const imports = manifest.packages.map((p) => {
-      const segments = p.split("/").filter(Boolean);
+    const imports = manifest.packages.map((pkg) => {
+      const segments = pkg.name.split("/").filter(Boolean);
       return {
-        module: p,
-        names: Array.from(new Set([p, ...segments])),
+        module: pkg.name,
+        names: Array.from(new Set([pkg.name, ...segments])),
+        startLine: pkg.startLine,
+        endLine: pkg.endLine,
       };
     });
 

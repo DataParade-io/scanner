@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "b88e484b-6dff-4233-be02-413005316541",
+  "issue_id": "KDATAP-110df604-3096-4991-afb4-2fa444bd9d76",
+  "event_type": "issue_created",
+  "occurred_at": "2026-09-28T17:52:48.750Z",
+  "actor_id": "os",
+  "payload": {
+    "assignee": null,
+    "description": "Detectors other than the catalog third-party import path still emit one finding at line 1 when a file imports a client, and manifest parsers drop the dependency line before matchPatterns runs. That collapses every evidence link for a component onto line 1.\n\nCite one finding per distinct source span (import, call, content line, declaring type or function, manifest dependency line). Dedupe only identical spans. Keep file-name matches and Terraform show JSON at line 1, because those have no statement to cite.\n\nThe classifier already unions those findings into one component and keeps every sourceLocation and propertyEvidence entry.\n\nOut of scope: terraform-flows.ts and terraform-show-json.ts.",
+    "issue_type": "task",
+    "labels": [],
+    "parent": "KDATAP-f9cd292e-d820-4536-8046-9ff834f9df97",
+    "priority": 2,
+    "status": "open",
+    "title": "Cite every evidence span in every language"
+  }
+}

@@ -29,6 +29,32 @@ describe("property-detection", () => {
       expect(out.mfa_required).toBe(true);
       expect(out.authentication_method).toBe("mfa");
       expect(out.audit_logging_enabled).toBe(true);
+      expect(out.propertyEvidence).toEqual({
+        mfa_required: [
+          {
+            filePath: "src/example.ts",
+            startLine: 1,
+            endLine: 1,
+            reason: "property.patterns.yaml:auth_middleware",
+          },
+        ],
+        authentication_method: [
+          {
+            filePath: "src/example.ts",
+            startLine: 1,
+            endLine: 1,
+            reason: "property.patterns.yaml:auth_middleware",
+          },
+        ],
+        audit_logging_enabled: [
+          {
+            filePath: "src/example.ts",
+            startLine: 1,
+            endLine: 1,
+            reason: "property.patterns.yaml:auth_middleware",
+          },
+        ],
+      });
     });
 
     it("sets mfa_required when file content contains webauthn", () => {

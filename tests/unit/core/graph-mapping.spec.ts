@@ -7,6 +7,10 @@ import {
 import { buildDiagramGraphFromScanResult } from "../../../src/core/pipeline/graph-mapping";
 import { diagramGraphJsonSchema } from "../../../src/core/schema";
 import type { ScanResult } from "../../../src/core/types";
+import {
+  isValuedUserProperty,
+  readPropertyEvidenceMap,
+} from "../../../src/classifier/property-evidence";
 import { testAsset as asset } from "../../helpers/scan-result-builders";
 
 describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
@@ -27,6 +31,17 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(graph.nodes.length).toBe(scanResult.components.length);
     expect(graph.edges.length).toBeGreaterThan(0);
 
+    for (const component of scanResult.components) {
+      const evidence = readPropertyEvidenceMap(
+        component.properties.propertyEvidence,
+      );
+      for (const [key, value] of Object.entries(component.properties)) {
+        if (!isValuedUserProperty(key, value)) continue;
+        expect(evidence[key]).toEqual(expect.any(Array));
+        expect(evidence[key]?.length).toBeGreaterThan(0);
+      }
+    }
+
     const validation = diagramGraphJsonSchema.safeParse(graph);
     expect(validation.success).toBe(true);
 
@@ -41,6 +56,30 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(properties.engineering).toBeDefined();
     expect(properties.privacy).toBeDefined();
     expect(properties.security).toBeDefined();
+  });
+
+  it("keeps intra-component lineage out of the diagram edge list", () => {
+    const scanResult: ScanResult = {
+      components: [asset("app", "Application", { section_id: "root" })],
+      dataFlows: [
+        {
+          id: "flow-self",
+          sourceComponentId: "app",
+          targetComponentId: "app",
+          type: "data_transfer",
+          confidence: 0.8,
+        },
+      ],
+      filesScanned: 1,
+      filesSkipped: 0,
+      totalLines: 1,
+      scanDurationMs: 1,
+      warnings: [],
+      errors: [],
+    };
+
+    const graph = buildDiagramGraphFromScanResult(scanResult);
+    expect(graph.edges).toHaveLength(0);
   });
 
   it("maps all DetectedComponent and DetectedDataFlow properties into node data and DataFlowProperties", () => {
@@ -68,14 +107,25 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
           properties: {
             technologyStack: ["node", "express"],
             cloudProvider: "AWS",
+            propertyEvidence: {
+              cloudProvider: [
+                {
+                  filePath: "src/app.ts",
+                  startLine: 10,
+                  endLine: 20,
+                  reason: "property.patterns.yaml:env_variable",
+                },
+              ],
+            },
           },
         },
+        asset("component-2", "Target Service", { section_id: "root" }),
       ],
       dataFlows: [
         {
           id: "flow-1",
           sourceComponentId: "component-1",
-          targetComponentId: "component-1",
+          targetComponentId: "component-2",
           type: "api_call",
           description: "Health check endpoint",
           confidence: 0.9,
@@ -108,10 +158,14 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
 
     const graph = buildDiagramGraphFromScanResult(scanResult);
 
-    expect(graph.nodes).toHaveLength(1);
+    expect(graph.nodes).toHaveLength(2);
     expect(graph.edges).toHaveLength(1);
 
-    const node = graph.nodes[0];
+    const node = graph.nodes.find(
+      (candidate) => candidate.id === "component-1",
+    );
+    expect(node).toBeDefined();
+    if (!node) return;
     const nodeData = node.data as any;
 
     expect(nodeData.label).toBe("Test Application");
@@ -133,6 +187,16 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     ]);
     expect(nodeData.technologyStack).toEqual(["node", "express"]);
     expect(nodeData.cloudProvider).toBe("AWS");
+    expect(nodeData.propertyEvidence).toEqual({
+      cloudProvider: [
+        {
+          filePath: "src/app.ts",
+          startLine: 10,
+          endLine: 20,
+          reason: "property.patterns.yaml:env_variable",
+        },
+      ],
+    });
 
     const edge = graph.edges[0];
     expect(edge.data).toBeDefined();
@@ -145,13 +209,9 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(properties.engineering.name).toContain("Test Application");
     expect(properties.engineering.actions).toEqual(["read"]);
 
-    expect(properties.privacy.dataCategories).toEqual([
-      "personal_identifiers",
-    ]);
+    expect(properties.privacy.dataCategories).toEqual(["personal_identifiers"]);
     expect(properties.privacy.dataSubjectCategories).toEqual(["customers"]);
-    expect(properties.privacy.processingPurpose).toEqual([
-      "service_provision",
-    ]);
+    expect(properties.privacy.processingPurpose).toEqual(["service_provision"]);
 
     expect(properties.security.transformation).toBe("encrypted");
     expect(properties.security.enrichmentConfidence).toBe(0.8);
@@ -275,8 +335,11 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     };
 
     const graph = buildDiagramGraphFromScanResult(scanResult);
-    const properties = (graph.edges[0]?.data as { properties?: { engineering?: { protocol?: string } } })
-      ?.properties;
+    const properties = (
+      graph.edges[0]?.data as {
+        properties?: { engineering?: { protocol?: string } };
+      }
+    )?.properties;
 
     expect(properties?.engineering?.protocol).toBe("graphql");
   });
@@ -327,11 +390,13 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
 
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const provider = graph.nodes.find((n) => n.id === "tp_supabase");
-    const managed = graph.nodes.find((n) => n.id === "cmp_managed_supabase_pg_1");
+    const managed = graph.nodes.find(
+      (n) => n.id === "cmp_managed_supabase_pg_1",
+    );
     expect(provider).toBeDefined();
     expect(managed).toBeDefined();
-    expect((managed?.position.x ?? 0)).toBeGreaterThan(provider?.position.x ?? 0);
-    expect((managed?.position.y ?? 0)).toBeGreaterThan(provider?.position.y ?? 0);
+    expect(managed?.position.x ?? 0).toBeGreaterThan(provider?.position.x ?? 0);
+    expect(managed?.position.y ?? 0).toBeGreaterThan(provider?.position.y ?? 0);
 
     const managedEdge = graph.edges.find((e) => e.id === "flow-1") as
       | (typeof graph.edges)[number]
@@ -489,8 +554,8 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const appsMain = graph.nodes.find((n) => n.id === "app_apps")?.position;
     const frontUser = graph.nodes.find((n) => n.id === "actor_front")?.position;
 
-    expect((appsUser?.x ?? -1)).toBeLessThan(appsMain?.x ?? 0);
-    expect((frontUser?.x ?? 0)).toBeGreaterThan((appsMain?.x ?? 0));
+    expect(appsUser?.x ?? -1).toBeLessThan(appsMain?.x ?? 0);
+    expect(frontUser?.x ?? 0).toBeGreaterThan(appsMain?.x ?? 0);
   });
 
   it("monorepo Terraform sections keep provider left of managed resources with vertical spacing", () => {
@@ -567,9 +632,9 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(provider).toBeDefined();
     expect(a).toBeDefined();
     expect(b).toBeDefined();
-    expect((provider?.x ?? 0)).toBeLessThan(a?.x ?? 0);
+    expect(provider?.x ?? 0).toBeLessThan(a?.x ?? 0);
     expect(Math.abs((a?.y ?? 0) - (b?.y ?? 0))).toBeGreaterThanOrEqual(200);
-    expect((provider?.x ?? 0)).toBeLessThan(b?.x ?? 0);
+    expect(provider?.x ?? 0).toBeLessThan(b?.x ?? 0);
   });
 
   it("orders single-section Terraform scans left-to-right: actor → main → module → provider → resource", () => {
@@ -667,11 +732,11 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const pos = (id: string) => graph.nodes.find((n) => n.id === id)?.position;
 
-    expect((pos("actor_user")?.x ?? -1)).toBeLessThan(pos("asset_main")?.x ?? 0);
-    expect((pos("asset_main")?.x ?? -1)).toBeLessThan(pos("mod_vpc")?.x ?? 0);
-    expect((pos("mod_vpc")?.x ?? -1)).toBeLessThan(pos("tp_aws")?.x ?? 0);
-    expect((pos("tp_aws")?.x ?? -1)).toBeLessThan(pos("vpc_main")?.x ?? 0);
-    expect((pos("tp_aws")?.x ?? -1)).toBeLessThan(pos("managed_s3")?.x ?? 0);
+    expect(pos("actor_user")?.x ?? -1).toBeLessThan(pos("asset_main")?.x ?? 0);
+    expect(pos("asset_main")?.x ?? -1).toBeLessThan(pos("mod_vpc")?.x ?? 0);
+    expect(pos("mod_vpc")?.x ?? -1).toBeLessThan(pos("tp_aws")?.x ?? 0);
+    expect(pos("tp_aws")?.x ?? -1).toBeLessThan(pos("vpc_main")?.x ?? 0);
+    expect(pos("tp_aws")?.x ?? -1).toBeLessThan(pos("managed_s3")?.x ?? 0);
   });
 
   it("aligns minimal Terraform like lane layout: actor, main+ECS column, provider, managed", () => {
@@ -762,11 +827,11 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const pos = (id: string) => graph.nodes.find((n) => n.id === id)?.position;
 
-    expect((pos("actor_u")?.x ?? -1)).toBeLessThan(pos("main_x")?.x ?? 0);
+    expect(pos("actor_u")?.x ?? -1).toBeLessThan(pos("main_x")?.x ?? 0);
     expect(pos("main_x")?.x).toBe(pos("cmp_ecs")?.x);
-    expect((pos("main_x")?.y ?? 999)).toBeLessThan(pos("cmp_ecs")?.y ?? 0);
-    expect((pos("cmp_ecs")?.x ?? -1)).toBeLessThan(pos("tp_aws")?.x ?? 0);
-    expect((pos("tp_aws")?.x ?? -1)).toBeLessThan(pos("cmp_s3")?.x ?? 0);
+    expect(pos("main_x")?.y ?? 999).toBeLessThan(pos("cmp_ecs")?.y ?? 0);
+    expect(pos("cmp_ecs")?.x ?? -1).toBeLessThan(pos("tp_aws")?.x ?? 0);
+    expect(pos("tp_aws")?.x ?? -1).toBeLessThan(pos("cmp_s3")?.x ?? 0);
   });
 
   it("keeps User left of main app in root when root has no TF but another section does", () => {
@@ -824,7 +889,7 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const pos = (id: string) => graph.nodes.find((n) => n.id === id)?.position;
 
-    expect((pos("cmp_8")?.x ?? -1)).toBeLessThan(pos("cmp_1")?.x ?? 0);
+    expect(pos("cmp_8")?.x ?? -1).toBeLessThan(pos("cmp_1")?.x ?? 0);
   });
 
   it("places app sections before root and provider→module edges left-to-right for mixed app+TF", () => {
@@ -883,9 +948,9 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const pos = (id: string) => graph.nodes.find((n) => n.id === id)?.position;
 
-    expect((pos("api_reedy")?.x ?? 9999)).toBeLessThan(pos("tp_aws")?.x ?? 0);
-    expect((pos("tp_aws")?.x ?? -1)).toBeLessThan(pos("mod_aurora")?.x ?? 0);
-    expect((pos("tp_aws")?.x ?? -1)).toBeLessThan(pos("mod_vpc")?.x ?? 0);
+    expect(pos("api_reedy")?.x ?? 9999).toBeLessThan(pos("tp_aws")?.x ?? 0);
+    expect(pos("tp_aws")?.x ?? -1).toBeLessThan(pos("mod_aurora")?.x ?? 0);
+    expect(pos("tp_aws")?.x ?? -1).toBeLessThan(pos("mod_vpc")?.x ?? 0);
 
     const edge = graph.edges.find((e) => e.id === "tf_link");
     expect(edge?.sourceHandle).toBe("right-source");
@@ -958,8 +1023,8 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const graph = buildDiagramGraphFromScanResult(scanResult);
     const pos = (id: string) => graph.nodes.find((n) => n.id === id)?.position;
 
-    expect((pos("api")?.x ?? -1)).toBeLessThan(pos("tp_auth")?.x ?? 0);
-    expect((pos("tp_sb")?.x ?? -1)).toBeLessThan(pos("pg")?.x ?? 0);
+    expect(pos("api")?.x ?? -1).toBeLessThan(pos("tp_auth")?.x ?? 0);
+    expect(pos("tp_sb")?.x ?? -1).toBeLessThan(pos("pg")?.x ?? 0);
     expect(pos("api")?.x).toBe(800);
     expect(pos("tp_auth")?.x).toBe(1200);
 

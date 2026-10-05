@@ -7,6 +7,10 @@
 
 import type { RawFinding } from "../../core/types/detection";
 import { loadPropertyDetectionConfig } from "../../config/property-detection-config";
+import {
+  appendPropertyEvidence,
+  evidenceRefFromLocation,
+} from "../../classifier/property-evidence";
 
 type ConditionSpec = unknown;
 type AssignmentSpec = unknown;
@@ -151,13 +155,22 @@ function applySet(
   ctx: InferenceContext,
   out: Record<string, unknown>,
   config: ReturnType<typeof loadPropertyDetectionConfig>,
+  finding: RawFinding,
 ): void {
   if (!setSpec || typeof setSpec !== "object") return;
+
+  const evidence = evidenceRefFromLocation(
+    finding.location,
+    `property.patterns.yaml:${finding.pattern}`,
+  );
 
   for (const [key, assignment] of Object.entries(setSpec)) {
     const resolved = resolveAssignment(assignment, ctx, out, config);
     if (resolved === undefined) continue;
     out[key] = resolved;
+    if (evidence) {
+      appendPropertyEvidence(out, key, [evidence]);
+    }
   }
 }
 
@@ -210,9 +223,8 @@ export function getPropertiesFromFinding(
     const ok = evalCondition(rule.when, context, out, regexes);
     if (!ok) continue;
 
-    applySet(rule.set, context, out, config);
+    applySet(rule.set, context, out, config, finding);
   }
 
   return out;
 }
-

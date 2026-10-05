@@ -31,6 +31,30 @@ describe("inferTerraformStackSectionPathDepth", () => {
   });
 });
 
+describe("discoverServiceSections — Ruby manifests", () => {
+  it("registers Gemfile and Gemfile.lock as one service section", async () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "dp-rubysec-"));
+    try {
+      write(path.join(root, "services", "billing", "Gemfile"), 'gem "stripe"\n');
+      write(
+        path.join(root, "services", "billing", "Gemfile.lock"),
+        "GEM\n  specs:\n    stripe (13.2.0)\n",
+      );
+
+      const { sections } = await discoverServiceSections(root);
+      const billing = sections.find((section) => section.id === "services/billing");
+
+      expect(billing?.role).toBe("service");
+      expect(billing?.manifestPaths).toEqual([
+        "services/billing/Gemfile",
+        "services/billing/Gemfile.lock",
+      ]);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
 describe("discoverServiceSections — terraformStackSectionPathDepth", () => {
   it("registers a section when dirname segment count equals N and a .tf config exists", async () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), "dp-tfsec-"));

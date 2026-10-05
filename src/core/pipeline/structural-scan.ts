@@ -29,6 +29,7 @@ import { parseGoSourceFile } from "../../analyzers/go/parser";
 import { parseJvmSourceFile } from "../../analyzers/jvm/parser";
 import { parseCppTranslationUnit } from "../../analyzers/cpp/parser";
 import { parseCSharpCompilationUnit } from "../../analyzers/csharp/parser";
+import { parseRubySourceFile } from "../../analyzers/ruby/parser";
 import {
   detectPythonPatternsFromDependencyManifests,
 } from "../../analyzers/python/dependency-manifests";
@@ -47,6 +48,9 @@ import {
 import {
   detectTypeScriptPatternsFromDependencyManifests,
 } from "../../analyzers/typescript/dependency-manifests";
+import {
+  detectRubyPatternsFromDependencyManifests,
+} from "../../analyzers/ruby/dependency-manifests";
 import {
   discoverServiceSections,
   tagFindingsWithServiceSections,
@@ -264,6 +268,21 @@ export async function runStructuralScanPhase(
   );
   if (cSharpStats) languageStats.push(cSharpStats);
 
+  const rubyStats = collectLanguageParserStats(
+    files,
+    "ruby",
+    (file) => {
+      const model = parseRubySourceFile(file);
+      return {
+        functionsIndexed: model.methods.length,
+        callsIndexed: model.calls.length,
+        warnings: model.warnings,
+      };
+    },
+    warn,
+  );
+  if (rubyStats) languageStats.push(rubyStats);
+
   const minimumConfidence = config.minimumConfidence;
   const tfFiles = files.filter((f) => f.language === "terraform");
   const terraformModuleManifest =
@@ -440,6 +459,22 @@ export async function runStructuralScanPhase(
           ? err.message
           : "Unknown error parsing package manifests.";
       warn(`package-manifests: ${message}`);
+    }
+  }
+
+  // Third-party service detection from Ruby Gemfile declarations and lock data.
+  if (!config.languages || config.languages.includes("ruby")) {
+    try {
+      findings.push(
+        ...(await detectRubyPatternsFromDependencyManifests(scanRootDir, {
+          onWarning: warn,
+          excludePaths: config.excludePaths,
+        })),
+      );
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Unknown error parsing manifests.";
+      warn(`ruby-manifests: ${message}`);
     }
   }
 

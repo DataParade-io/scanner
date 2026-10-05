@@ -9,6 +9,7 @@ import {
   extractPackagesFromConanfile,
   extractPackagesFromVcpkgJson,
 } from "../../../../src/analyzers/cpp/manifest-parsers";
+import { manifestSpanNames } from "../../../../src/analyzers/shared/manifest-span";
 
 const FIXTURE_ROOT = path.join(
   __dirname,
@@ -26,7 +27,7 @@ describe("C++ manifest parsers", () => {
       dependencies: ["libpqxx", { name: "hiredis", "version>=": "1.1.0" }],
     });
 
-    expect(extractPackagesFromVcpkgJson(content).sort()).toEqual([
+    expect(manifestSpanNames(extractPackagesFromVcpkgJson(content)).sort()).toEqual([
       "hiredis",
       "libpqxx",
     ]);
@@ -40,7 +41,7 @@ describe("C++ manifest parsers", () => {
     const txt = ["[requires]", "fmt/10.2.1", "", "[generators]", "CMakeDeps"].join(
       "\n",
     );
-    expect(extractPackagesFromConanfile(txt)).toEqual(["fmt"]);
+    expect(manifestSpanNames(extractPackagesFromConanfile(txt))).toEqual(["fmt"]);
 
     const py = [
       "class AppConan(ConanFile):",
@@ -48,7 +49,9 @@ describe("C++ manifest parsers", () => {
       '        self.requires("zlib/1.3")',
       "",
     ].join("\n");
-    expect(extractPackagesFromConanfile(py)).toEqual(["zlib"]);
+    expect(manifestSpanNames(extractPackagesFromConanfile(py))).toEqual([
+      "zlib",
+    ]);
   });
 
   it("extracts CMake find_package and FetchContent declarations", () => {
@@ -58,7 +61,7 @@ describe("C++ manifest parsers", () => {
       "",
     ].join("\n");
 
-    expect(extractPackagesFromCMakeLists(content).sort()).toEqual([
+    expect(manifestSpanNames(extractPackagesFromCMakeLists(content)).sort()).toEqual([
       "cpr",
       "sqlite3",
     ]);
@@ -69,7 +72,7 @@ describe("C++ dependency manifest scanning", () => {
   it("collects packages from every manifest kind in a repository", async () => {
     const manifests = await parseCppDependencyManifests(FIXTURE_ROOT);
     const byName = new Map(
-      manifests.map((m) => [m.manifestRelativePath, m.packages]),
+      manifests.map((m) => [m.manifestRelativePath, manifestSpanNames(m.packages)]),
     );
 
     expect(byName.get("vcpkg.json")).toEqual(

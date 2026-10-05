@@ -11,6 +11,7 @@ import {
   extractPackagesFromProjectFile,
   inferDatabaseTypeFromConnectionString,
 } from "../../../../src/analyzers/csharp/manifest-parsers";
+import { manifestSpanNames } from "../../../../src/analyzers/shared/manifest-span";
 
 const FIXTURE_ROOT = path.join(
   __dirname,
@@ -33,7 +34,7 @@ describe(".NET manifest parsers", () => {
       "</Project>",
     ].join("\n");
 
-    expect(extractPackagesFromProjectFile(content).sort()).toEqual([
+    expect(manifestSpanNames(extractPackagesFromProjectFile(content)).sort()).toEqual([
       "Serilog",
       "Stripe.net",
     ]);
@@ -41,15 +42,19 @@ describe(".NET manifest parsers", () => {
 
   it("extracts legacy packages.config and paket dependencies", () => {
     expect(
-      extractPackagesFromPackagesConfig(
-        '<packages><package id="Newtonsoft.Json" version="13.0.1" /></packages>',
+      manifestSpanNames(
+        extractPackagesFromPackagesConfig(
+          '<packages><package id="Newtonsoft.Json" version="13.0.1" /></packages>',
+        ),
       ),
     ).toEqual(["Newtonsoft.Json"]);
 
     expect(
-      extractPackagesFromPaketDependencies(
+      manifestSpanNames(
+        extractPackagesFromPaketDependencies(
         ["source https://api.nuget.org/v3/index.json", "nuget Stripe.net >= 43.0"].join(
           "\n",
+        ),
         ),
       ),
     ).toEqual(["Stripe.net"]);
@@ -82,7 +87,12 @@ describe(".NET manifest parsers", () => {
     const connections = extractConnectionStringsFromAppSettings(content);
 
     expect(connections).toEqual([
-      { name: "DefaultConnection", databaseType: "postgres" },
+      {
+        name: "DefaultConnection",
+        databaseType: "postgres",
+        startLine: 1,
+        endLine: 1,
+      },
     ]);
     expect(JSON.stringify(connections)).not.toContain("secret");
   });
@@ -94,7 +104,7 @@ describe(".NET manifest scanning", () => {
 
     expect(manifests.length).toBe(1);
     expect(manifests[0].manifestRelativePath).toBe("src/Api/Api.csproj");
-    expect(manifests[0].packages).toEqual(
+    expect(manifestSpanNames(manifests[0].packages)).toEqual(
       expect.arrayContaining([
         "Stripe.net",
         "Sentry.AspNetCore",

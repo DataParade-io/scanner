@@ -34,19 +34,41 @@ describe("eval-layers personal-data eligibility", () => {
     expect(eligibleProcessedPaths(componentsLedger)).toEqual([]);
   });
 
+  it("marks Ruby source with PII as processed by personal-data layers", async () => {
+    fs.writeFileSync(
+      path.join(tempDir, "users_controller.rb"),
+      "email = params.require(:user).permit(:email)[:email]\n",
+    );
+
+    for (const layer of ["occurrences", "raw-hits", "data-items"] as const) {
+      const findings = await collectPersonalDataFindings(tempDir, layer);
+      const ledger = createLayerLedger(layer, findings.layerOutcomes);
+      expect(eligibleProcessedPaths(ledger)).toContain("users_controller.rb");
+    }
+  });
+
   it("produces identical per-layer ledgers regardless of call order", async () => {
     fs.writeFileSync(path.join(tempDir, "a.yml"), "username: one\n");
     fs.writeFileSync(path.join(tempDir, "b.yml"), "password: two\n");
 
     const rawFirst = await collectPersonalDataFindings(tempDir, "raw-hits");
-    const itemsSecond = await collectPersonalDataFindings(tempDir, "data-items");
+    const itemsSecond = await collectPersonalDataFindings(
+      tempDir,
+      "data-items",
+    );
 
     const occurrencesOnly = await collectPersonalDataFindings(tempDir, "occurrences");
     const rawOnly = await collectPersonalDataFindings(tempDir, "raw-hits");
 
     expect(rawFirst.layerOutcomes).toEqual(rawOnly.layerOutcomes);
-    expect(eligibleProcessedPaths(createLayerLedger("raw-hits", rawFirst.layerOutcomes))).toEqual(
-      eligibleProcessedPaths(createLayerLedger("raw-hits", rawOnly.layerOutcomes)),
+    expect(
+      eligibleProcessedPaths(
+        createLayerLedger("raw-hits", rawFirst.layerOutcomes),
+      ),
+    ).toEqual(
+      eligibleProcessedPaths(
+        createLayerLedger("raw-hits", rawOnly.layerOutcomes),
+      ),
     );
     expect(itemsSecond.layerOutcomes.length).toBeGreaterThan(0);
     expect(occurrencesOnly.layerOutcomes).toEqual(

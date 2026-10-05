@@ -29,12 +29,16 @@ describe("data-action rule-loader", () => {
     const relayRule = catalog.rules.find((r) => r.assertRelayWithCorroboration);
     expect(relayRule?.action).toBe("relay");
 
-    const langScoped = catalog.rules.filter((r) => r.languages && r.languages.size > 0);
+    const langScoped = catalog.rules.filter(
+      (r) => r.languages && r.languages.size > 0,
+    );
     expect(langScoped.length).toBeGreaterThan(10);
     const goRules = catalog.rules.filter((r) => r.languages?.has("go"));
     const tfRules = catalog.rules.filter((r) => r.languages?.has("terraform"));
+    const rubyRules = catalog.rules.filter((r) => r.languages?.has("ruby"));
     expect(goRules.length).toBeGreaterThan(0);
     expect(tfRules.length).toBeGreaterThan(0);
+    expect(rubyRules.length).toBeGreaterThanOrEqual(6);
   });
 
   it("kill-switch: enabled false yields no rules from loadDataActionRules", () => {

@@ -44,6 +44,7 @@ import {
   detectRubyAuthFromConfig as detectRubyAuthFromConfigAdapter,
   detectRubyDatabaseConnectionsFromConfig as detectRubyDatabaseConnectionsFromConfigAdapter,
   detectRubyDatabaseYmlFromConfig as detectRubyDatabaseYmlFromConfigAdapter,
+  detectRubyExternalApisFromConfig as detectRubyExternalApisFromConfigAdapter,
   detectRubyRoutesFromConfig as detectRubyRoutesFromConfigAdapter,
   detectRubyServicesFromConfig as detectRubyServicesFromConfigAdapter,
 } from "./detectors/ruby";
@@ -55,6 +56,7 @@ import {
   detectJvmRoutesFromConfig as detectJvmRoutesFromConfigAdapter,
   detectJvmServerlessHandlersFromConfig as detectJvmServerlessHandlersFromConfigAdapter,
 } from "./detectors/jvm";
+import { evidenceLineRange } from "./detectors/helpers";
 import {
   detectTypeScriptJavaScriptExternalApisFromHttpClients as detectTypeScriptJavaScriptExternalApisFromHttpClientsAdapter,
   detectTypeScriptRoutesFromConfig as detectTypeScriptRoutesFromConfigAdapter,
@@ -68,6 +70,10 @@ import {
 export interface ImportLike {
   module: string;
   names: string[];
+  /** 1-based line of the import statement when known. */
+  startLine?: number;
+  /** 1-based inclusive end line; defaults to startLine when omitted. */
+  endLine?: number;
 }
 
 export interface PatternContext {
@@ -127,6 +133,13 @@ function findFirstLineMatch(
   return undefined;
 }
 
+function importMatchesFragment(imp: ImportLike, fragment: string): boolean {
+  return (
+    imp.module.includes(fragment) ||
+    imp.names.some((name) => name.includes(fragment))
+  );
+}
+
 function detectThirdPartyServicesFromImportsWithConfig(
   ctx: PatternContext,
   config: UnifiedPatternConfig,
@@ -137,29 +150,34 @@ function detectThirdPartyServicesFromImportsWithConfig(
   const findings: RawFinding[] = [];
 
   for (const svc of config.thirdParty.services) {
-    const hasImport = svc.importFragments.some((frag) =>
-      imports.some(
-        (imp) =>
-          imp.module.includes(frag) || imp.names.some((name) => name.includes(frag)),
-      ),
-    );
+    const seenSpans = new Set<string>();
 
-    if (!hasImport) continue;
+    for (const imp of imports) {
+      const matches = svc.importFragments.some((frag) =>
+        importMatchesFragment(imp, frag),
+      );
+      if (!matches) continue;
 
-    findings.push({
-      pattern: svc.patternId,
-      name: svc.serviceName,
-      confidence: svc.confidence,
-      location: {
-        filePath: ctx.file.path,
-        startLine: 1,
-        endLine: 1,
-      },
-      properties: {
-        client: svc.serviceName,
-        serviceName: svc.serviceName,
-      },
-    });
+      const { startLine, endLine } = evidenceLineRange(imp);
+      const spanKey = `${startLine}:${endLine}`;
+      if (seenSpans.has(spanKey)) continue;
+      seenSpans.add(spanKey);
+
+      findings.push({
+        pattern: svc.patternId,
+        name: svc.serviceName,
+        confidence: svc.confidence,
+        location: {
+          filePath: ctx.file.path,
+          startLine,
+          endLine,
+        },
+        properties: {
+          client: svc.serviceName,
+          serviceName: svc.serviceName,
+        },
+      });
+    }
   }
 
   return findings;
@@ -168,6 +186,9 @@ function detectThirdPartyServicesFromImportsWithConfig(
 /**
  * Detect known third-party services (catalog-backed `external_api_call`)
  * from a language-agnostic `imports` list.
+ *
+ * Each distinct import span that matches a service becomes its own finding.
+ * The classifier unions those findings into one component per service and file.
  *
  * This intentionally does not run other detectors (routes/DB/auth/env/etc).
  */
@@ -195,10 +216,14 @@ function detectActorsFromConfig(
   for (const rule of rules) {
     let lineMatch: { line: number; code: string } | undefined;
 
-    if (rule.filePathRegex && rule.filePathRegex.test(normalizedPath)) {
-      lineMatch = { line: 1, code: firstLine };
-    } else if (rule.contentRegex) {
+    if (rule.filePathRegex && !rule.filePathRegex.test(normalizedPath)) {
+      continue;
+    }
+
+    if (rule.contentRegex) {
       lineMatch = findFirstLineMatch(content, rule.contentRegex);
+    } else if (rule.filePathRegex) {
+      lineMatch = { line: 1, code: firstLine };
     }
 
     if (!lineMatch) continue;
@@ -230,9 +255,7 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
 
   const findings: RawFinding[] = [];
 
-  findings.push(
-    ...detectThirdPartyServicesFromImportsWithConfig(ctx, config),
-  );
+  findings.push(...detectThirdPartyServicesFromImportsWithConfig(ctx, config));
   findings.push(
     ...detectTypeScriptJavaScriptExternalApisFromHttpClientsAdapter(
       ctx,
@@ -283,12 +306,11 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(...detectPhpRoutesFromConfigAdapter(ctx, config));
   findings.push(...detectPhpServerlessHandlersFromConfigAdapter(ctx, config));
 
-  findings.push(
-    ...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config),
-  );
+  findings.push(...detectRubyDatabaseConnectionsFromConfigAdapter(ctx, config));
   findings.push(...detectRubyDatabaseYmlFromConfigAdapter(ctx, config));
   findings.push(...detectRubyAuthFromConfigAdapter(ctx, config));
   findings.push(...detectRubyRoutesFromConfigAdapter(ctx, config));
+  findings.push(...detectRubyExternalApisFromConfigAdapter(ctx, config));
   findings.push(...detectRubyServicesFromConfigAdapter(ctx, config));
 
   findings.push(...detectJvmDatabaseConnectionsFromConfigAdapter(ctx, config));
@@ -305,10 +327,7 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   findings.push(
     ...detectTypeScriptServerlessHandlersFromConfigAdapter(ctx, config),
   );
-  findings.push(
-    ...detectTypeScriptExternalApisFromConfigAdapter(ctx, config),
-  );
+  findings.push(...detectTypeScriptExternalApisFromConfigAdapter(ctx, config));
 
   return findings;
 }
-

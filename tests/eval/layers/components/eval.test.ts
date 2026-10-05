@@ -33,11 +33,11 @@ describe("eval/layers/components", () => {
     const jvmReport = scoreEvalCases(jvmCases, scanResults);
     expect(jvmReport.scores.denominators.matchedPositives).toBe(0);
 
-    const documentedGapMisses = report.caseResults.filter(
-      (result) => result.documentedGap && !result.matched,
+    // A documented gap that the scanner now matches must be un-flagged in cases.ts.
+    const staleDocumentedGaps = report.caseResults.filter(
+      (result) => result.documentedGap && result.matched,
     );
-    expect(documentedGapMisses.length).toBeGreaterThan(0);
-    expect(report.scores.recall).toBeLessThan(1);
+    expect(staleDocumentedGaps).toEqual([]);
 
     expect(report.scores.precision).not.toBeNull();
     expect(report.scores.precision as number).toBeLessThan(1);

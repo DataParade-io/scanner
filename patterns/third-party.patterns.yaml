@@ -47,6 +47,25 @@ services:
     url_host_patterns:
       - twilio.com
       - api.twilio.com
+  - serviceName: twitter
+    patternId: external_api_call
+    importFragments:
+      - twitter
+    confidence: 0.85
+    url_host_patterns:
+      - twitter.com
+      - api.twitter.com
+      - x.com
+      - api.x.com
+  - serviceName: google_identity
+    patternId: external_api_call
+    importFragments:
+      - googleauth
+      - google-api-client
+    confidence: 0.85
+    url_host_patterns:
+      - accounts.google.com
+      - oauth2.googleapis.com
   - serviceName: openai
     patternId: external_api_call
     importFragments:
@@ -58,7 +77,7 @@ services:
   - serviceName: anthropic
     patternId: external_api_call
     importFragments:
-      - '@anthropic-ai/'
+      - "@anthropic-ai/"
       - anthropic
     confidence: 0.85
     url_host_patterns:
@@ -68,7 +87,7 @@ services:
     patternId: external_api_call
     importFragments:
       - openrouter
-      - '@openrouter/'
+      - "@openrouter/"
     confidence: 0.85
     url_host_patterns:
       - openrouter.ai
@@ -76,9 +95,9 @@ services:
   - serviceName: google_ai
     patternId: external_api_call
     importFragments:
-      - '@google/genai'
-      - '@google-ai/'
-      - '@google-cloud/vertexai'
+      - "@google/genai"
+      - "@google-ai/"
+      - "@google-cloud/vertexai"
       - vertexai
     confidence: 0.85
     url_host_patterns:
@@ -176,4 +195,3 @@ services:
     url_host_patterns:
       - sentry.io
       - ingest.sentry.io
-

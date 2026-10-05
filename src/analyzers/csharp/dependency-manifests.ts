@@ -9,6 +9,7 @@ import {
   budgetStateFromOptions,
 } from "../shared/manifest-budgets";
 import { walkForManifests } from "../shared/manifest-fs";
+import type { ManifestPackageSpan } from "../shared/manifest-span";
 import {
   extractConnectionStringsFromAppSettings,
   extractPackagesFromPackagesConfig,
@@ -22,7 +23,7 @@ function toPosixPath(p: string): string {
 
 export interface DotnetManifestPackages {
   manifestRelativePath: string;
-  packages: string[];
+  packages: ManifestPackageSpan[];
 }
 
 const PROJECT_FILE_EXTENSIONS = [".csproj", ".fsproj", ".vbproj"];
@@ -53,7 +54,10 @@ function isAppSettingsName(name: string): boolean {
   return lower.startsWith("appsettings") && lower.endsWith(".json");
 }
 
-function extractPackages(manifestName: string, raw: string): string[] {
+function extractPackages(
+  manifestName: string,
+  raw: string,
+): ManifestPackageSpan[] {
   const lower = manifestName.toLowerCase();
 
   if (lower === "packages.config") {
@@ -107,7 +111,7 @@ export async function parseDotnetDependencyManifests(
 
     byManifest.push({
       manifestRelativePath,
-      packages: Array.from(new Set(packages)),
+      packages,
     });
   }
 
@@ -128,9 +132,11 @@ export async function detectDotnetPatternsFromManifests(
   const manifestPackages = await parseDotnetDependencyManifests(rootPath, opts);
   for (const manifest of manifestPackages) {
     const manifestFile = createManifestFileInfo(manifest.manifestRelativePath);
-    const imports = manifest.packages.map((p) => ({
-      module: p,
-      names: Array.from(new Set([p, p.toLowerCase()])),
+    const imports = manifest.packages.map((pkg) => ({
+      module: pkg.name,
+      names: Array.from(new Set([pkg.name, pkg.name.toLowerCase()])),
+      startLine: pkg.startLine,
+      endLine: pkg.endLine,
     }));
 
     findings.push(
@@ -189,7 +195,11 @@ async function detectAppSettingsConnectionStrings(
         pattern: "database_connection",
         name: connection.name,
         confidence: 0.85,
-        location: { filePath: relativePath, startLine: 1, endLine: 1 },
+        location: {
+          filePath: relativePath,
+          startLine: connection.startLine,
+          endLine: connection.endLine,
+        },
         properties: {
           client: "appsettings_connection_string",
           databaseType: connection.databaseType,

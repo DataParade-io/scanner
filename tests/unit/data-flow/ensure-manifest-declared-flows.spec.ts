@@ -45,6 +45,26 @@ describe("ensure-manifest-declared-flows", () => {
     expect(isManifestOnlyThirdPartyComponent(tp)).toBe(true);
   });
 
+  it("recognizes Gemfile evidence as manifest metadata", () => {
+    const tp = makeComponent({
+      id: "tp_ruby",
+      name: "Stripe",
+      type: "third_party",
+      detectedFrom: [
+        {
+          pattern: "external_api_call",
+          sourceLocation: {
+            filePath: "services/billing/Gemfile",
+            startLine: 1,
+            endLine: 1,
+          },
+        },
+      ],
+    });
+
+    expect(isManifestOnlyThirdPartyComponent(tp)).toBe(true);
+  });
+
   it("adds hub → manifest third_party when package section has a main app", () => {
     const components: DetectedComponent[] = [
       makeComponent({

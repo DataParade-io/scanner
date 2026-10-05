@@ -2,16 +2,39 @@ import {
   defaultServiceNameFromLiteralPublicUrl,
   shouldIgnoreExternalHttpUrl,
 } from "../../classifier/external-url-third-party";
-import type { PatternContext } from "../../patterns/engine";
+import type { ImportLike, PatternContext } from "../../patterns/engine";
 import type { UnifiedPatternConfig } from "../config";
 import type { RawFinding } from "../../core/types/detection";
+import type { SourceLocation } from "../../core/types/file";
 import {
   buildThirdPartyUrlHostPatterns,
   createLocationFromLine,
+  dedupeLocations,
   findLineMatches,
   inferServiceNameFromUrl,
+  locationsForContentRegexes,
+  locationsForMatchingImports,
+  locationsForSubstrings,
   sourceOf,
 } from "./helpers";
+
+function importMatchesFragment(imp: ImportLike, fragment: string): boolean {
+  return (
+    imp.module === fragment ||
+    imp.module.includes(fragment) ||
+    imp.names.some((name) => name === fragment || name.includes(fragment))
+  );
+}
+
+function matchingImportLocations(
+  ctx: PatternContext,
+  fragments: readonly string[],
+): SourceLocation[] {
+  if (fragments.length === 0) return [];
+  return locationsForMatchingImports(ctx.file, ctx.imports, (imp) =>
+    fragments.some((fragment) => importMatchesFragment(imp, fragment)),
+  );
+}
 
 export function detectTypeScriptJavaScriptExternalApisFromHttpClients(
   ctx: PatternContext,
@@ -243,14 +266,9 @@ export function detectTypeScriptDatabaseFromConfig(
   const tsCfg = config.typescript;
 
   for (const client of tsCfg.dbClients) {
-    const hasImport = client.importModules.some((mod) =>
-      (ctx.imports ?? []).some(
-        (imp) =>
-          imp.module === mod ||
-          imp.module.includes(mod) ||
-          imp.names.some((name) => name === mod || name.includes(mod)),
-      ),
-    );
+    const importLocations = matchingImportLocations(ctx, client.importModules);
+    const hasImport = importLocations.length > 0;
+    const seenSpans = new Set<string>();
 
     for (const regex of client.creationRegexes) {
       const matches = findLineMatches(content, regex);
@@ -262,11 +280,15 @@ export function detectTypeScriptDatabaseFromConfig(
         if (!hasImport && !hasClientHintInSnippet) {
           continue;
         }
+        const location = createLocationFromLine(ctx.file, line, match[0]);
+        const spanKey = `${location.startLine}:${location.endLine}`;
+        if (seenSpans.has(spanKey)) continue;
+        seenSpans.add(spanKey);
         findings.push({
           pattern: client.patternId,
           name: client.id,
           confidence: client.confidence,
-          location: createLocationFromLine(ctx.file, line, match[0]),
+          location,
           properties: {
             client: client.id,
             databaseType: client.databaseType,
@@ -275,12 +297,15 @@ export function detectTypeScriptDatabaseFromConfig(
       }
     }
 
-    if (hasImport) {
+    for (const location of importLocations) {
+      const spanKey = `${location.startLine}:${location.endLine}`;
+      if (seenSpans.has(spanKey)) continue;
+      seenSpans.add(spanKey);
       findings.push({
         pattern: client.patternId,
         name: client.id,
         confidence: Math.max(0.5, client.confidence - 0.2),
-        location: createLocationFromLine(ctx.file, 1),
+        location,
         properties: {
           client: client.id,
           databaseType: client.databaseType,
@@ -289,28 +314,22 @@ export function detectTypeScriptDatabaseFromConfig(
     }
   }
 
-  const hasAnyDbClientImport = tsCfg.dbClients.some((client) =>
-    client.importModules.some((mod) =>
-      (ctx.imports ?? []).some(
-        (imp) =>
-          imp.module === mod ||
-          imp.module.includes(mod) ||
-          imp.names.some((name) => name === mod || name.includes(mod)),
-      ),
-    ),
+  const hasAnyDbClientImport = tsCfg.dbClients.some(
+    (client) => matchingImportLocations(ctx, client.importModules).length > 0,
   );
 
-  if (
-    hasAnyDbClientImport &&
-    tsCfg.heuristics.sqlKeyword.regex.test(content)
-  ) {
-    findings.push({
-      pattern: tsCfg.heuristics.sqlKeyword.patternId,
-      name: "sql_query_detected",
-      confidence: tsCfg.heuristics.sqlKeyword.confidence,
-      location: createLocationFromLine(ctx.file, 1),
-      properties: { hint: "raw_sql_keyword" },
-    });
+  if (hasAnyDbClientImport) {
+    for (const location of locationsForContentRegexes(ctx.file, content, [
+      tsCfg.heuristics.sqlKeyword.regex,
+    ])) {
+      findings.push({
+        pattern: tsCfg.heuristics.sqlKeyword.patternId,
+        name: "sql_query_detected",
+        confidence: tsCfg.heuristics.sqlKeyword.confidence,
+        location,
+        properties: { hint: "raw_sql_keyword" },
+      });
+    }
   }
 
   return findings;
@@ -359,14 +378,11 @@ export function detectTypeScriptAuthFromConfig(
       }
     }
 
-    const hasLibraryImport = lib.importFragments.some((frag) =>
-      (ctx.imports ?? []).some(
-        (imp) =>
-          imp.module === frag ||
-          imp.module.includes(frag) ||
-          imp.names.some((name) => name === frag || name.includes(frag)),
-      ),
+    const libraryImportLocations = matchingImportLocations(
+      ctx,
+      lib.importFragments,
     );
+    const hasLibraryImport = libraryImportLocations.length > 0;
 
     if (!hasLibraryImport) continue;
 
@@ -392,23 +408,33 @@ export function detectTypeScriptAuthFromConfig(
       }
 
       if (!emittedSpecific) {
-        findings.push({
-          pattern: lib.patternId,
-          name: "passport",
-          confidence: lib.confidence - 0.15,
-          location: createLocationFromLine(ctx.file, 1),
-          properties: {
-            library: "passport",
-          },
-        });
+        for (const location of libraryImportLocations) {
+          findings.push({
+            pattern: lib.patternId,
+            name: "passport",
+            confidence: lib.confidence - 0.15,
+            location,
+            properties: {
+              library: "passport",
+            },
+          });
+        }
       }
     } else if (lib.id === "jsonwebtoken") {
-      if (content.includes("jwt.sign(") || content.includes("jwt.verify(")) {
+      const callLocations = locationsForSubstrings(ctx.file, content, [
+        "jwt.sign(",
+        "jwt.verify(",
+      ]);
+      if (callLocations.length === 0) continue;
+      for (const location of dedupeLocations([
+        ...libraryImportLocations,
+        ...callLocations,
+      ])) {
         findings.push({
           pattern: lib.patternId,
           name: "jwt",
           confidence: lib.confidence,
-          location: createLocationFromLine(ctx.file, 1),
+          location,
           properties: {
             library: "jsonwebtoken",
             ...(lib.strategy ? { strategy: lib.strategy } : {}),
@@ -416,28 +442,37 @@ export function detectTypeScriptAuthFromConfig(
         });
       }
     } else if (lib.id === "nest_auth") {
-      if (content.includes("UseGuards(")) {
+      const guardLocations = locationsForSubstrings(ctx.file, content, [
+        "UseGuards(",
+      ]);
+      if (guardLocations.length === 0) continue;
+      for (const location of dedupeLocations([
+        ...libraryImportLocations,
+        ...guardLocations,
+      ])) {
         findings.push({
           pattern: lib.patternId,
           name: "nest_auth_guard",
           confidence: lib.confidence,
-          location: createLocationFromLine(ctx.file, 1),
+          location,
           properties: {
             library: "nestjs_auth",
           },
         });
       }
     } else if (lib.id === "oauth2") {
-      findings.push({
-        pattern: lib.patternId,
-        name: lib.id,
-        confidence: lib.confidence,
-        location: createLocationFromLine(ctx.file, 1),
-        properties: {
-          library: lib.id,
-          ...(lib.strategy ? { strategy: lib.strategy } : {}),
-        },
-      });
+      for (const location of libraryImportLocations) {
+        findings.push({
+          pattern: lib.patternId,
+          name: lib.id,
+          confidence: lib.confidence,
+          location,
+          properties: {
+            library: lib.id,
+            ...(lib.strategy ? { strategy: lib.strategy } : {}),
+          },
+        });
+      }
     }
   }
 
@@ -500,30 +535,30 @@ export function detectTypeScriptEnvAndConfigFromConfig(
   }
 
   for (const loader of tsCfg.configLoaders) {
-    const hasLoaderImport = loader.importFragments.some((frag) =>
-      (ctx.imports ?? []).some(
-        (imp) =>
-          imp.module === frag ||
-          imp.module.includes(frag) ||
-          imp.names.some((name) => name === frag || name.includes(frag)),
-      ),
+    const importLocations = matchingImportLocations(ctx, loader.importFragments);
+    if (importLocations.length === 0) continue;
+
+    const callLocations = locationsForContentRegexes(
+      ctx.file,
+      content,
+      loader.callRegexes,
     );
-    if (!hasLoaderImport) continue;
+    if (loader.callRegexes.length > 0 && callLocations.length === 0) continue;
 
-    const hasCall =
-      loader.callRegexes.length === 0 ||
-      loader.callRegexes.some((regex) => regex.test(content));
-    if (!hasCall) continue;
-
-    findings.push({
-      pattern: loader.patternId,
-      name: loader.name,
-      confidence: loader.confidence,
-      location: createLocationFromLine(ctx.file, 1),
-      properties: {
-        loader: loader.id,
-      },
-    });
+    for (const location of dedupeLocations([
+      ...importLocations,
+      ...callLocations,
+    ])) {
+      findings.push({
+        pattern: loader.patternId,
+        name: loader.name,
+        confidence: loader.confidence,
+        location,
+        properties: {
+          loader: loader.id,
+        },
+      });
+    }
   }
 
   return findings;

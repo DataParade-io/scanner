@@ -1,0 +1,40 @@
+{
+  "id": "KDATAP-7856ca20-b75a-4ac0-94cd-ad19478fbe3f",
+  "title": "Implement cross-cutting Ruby data-action support",
+  "description": "Implement the Ruby eligibility and Rails pattern behavior specified by the sibling story. Add focused unit and fixture coverage. Do not change parser/detector config, manifests/pipeline, benchmark annotations, or project files directly.",
+  "type": "task",
+  "status": "in_progress",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-bfa0233c-c206-41ae-a6b1-7291f61d79f5",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "db4e7949-4542-47b6-bc11-7b6da955773a",
+      "author": "os",
+      "text": "Started implementation. First pass will add failing eligibility and Rails data-action specifications, then the minimal language/rule changes and focused fixture verification.",
+      "created_at": "2026-09-21T19:19:12.815469Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "15416881-be69-463a-915e-2389962119eb",
+      "author": "os",
+      "text": "Implemented Ruby personal-data eligibility and Ruby data-action rule language support. Added conservative Rails rules for strong params collect, ActiveRecord create/update/save store, destroy/delete erasure, render json display/return, PII-gated Rails logging, and PII-gated outbound HTTP disclosure. Added data-actions-ruby fixture plus focused unit/topology coverage. Verification: 4 Jest suites / 48 tests passed with --no-watchman; TypeScript noEmit passed; focused ESLint passed; IDE diagnostics clean; git diff --check passed. Task remains in_progress until the change lands.",
+      "created_at": "2026-09-21T19:28:23.629393Z",
+      "comment_type": "default"
+    },
+    {
+      "id": "7868c947-99ab-4a7c-93c0-05f40a49fb77",
+      "author": "os",
+      "text": "Implementation complete pending landing: Ruby is eligible for personal-data and data-action layers; conservative Rails collect/store/display/log/delete/disclose rules and fixtures added; Ruby component/flow/action/data-item/mention eval cases added; focused eval layers pass.",
+      "created_at": "2026-09-21T20:21:10.304800Z",
+      "comment_type": "default"
+    }
+  ],
+  "created_at": "2026-09-21T19:19:00.374632Z",
+  "updated_at": "2026-09-21T20:21:10.304800Z",
+  "closed_at": null,
+  "custom": {}
+}

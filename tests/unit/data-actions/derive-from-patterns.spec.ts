@@ -35,19 +35,22 @@ function makeAsset(
     subType: "api",
     confidence: 1,
     detectedFrom: [],
-    sourceLocations: [
-      { filePath, startLine: 1, endLine: 500 },
-    ],
+    sourceLocations: [{ filePath, startLine: 1, endLine: 500 }],
     properties: {},
     ...overrides,
   };
 }
 
 function verbs(component: DetectedComponent): DataAction[] {
-  return readDataActions(component).map((a) => a.action).sort() as DataAction[];
+  return readDataActions(component)
+    .map((a) => a.action)
+    .sort() as DataAction[];
 }
 
-function hasAsserted(component: DetectedComponent, action: DataAction): boolean {
+function hasAsserted(
+  component: DetectedComponent,
+  action: DataAction,
+): boolean {
   return readDataActions(component).some(
     (a) => a.action === action && (a.status ?? "asserted") === "asserted",
   );
@@ -59,10 +62,7 @@ describe("deriveFromPatterns", () => {
   describe("kill-switch", () => {
     it("emits nothing when enabled=false", () => {
       const asset = makeAsset("app", "log.ts");
-      const file = makeFile(
-        "log.ts",
-        'logger.info({ email: "a@b.com" });\n',
-      );
+      const file = makeFile("log.ts", 'logger.info({ email: "a@b.com" });\n');
       const proposed = deriveFromPatterns([asset], [file], { enabled: false });
       expect(proposed.size).toBe(0);
     });
@@ -75,8 +75,8 @@ describe("deriveFromPatterns", () => {
         "log.ts",
         [
           'logger.info({ event: "signup", email });',
-          'logger.error({ reason, ssn });',
-          'logger.debug({ phone });',
+          "logger.error({ reason, ssn });",
+          "logger.debug({ phone });",
         ].join("\n"),
       );
       runDataActionPhase([asset], [], [file]);
@@ -121,7 +121,7 @@ describe("deriveFromPatterns", () => {
       const asset = makeAsset("anon", "transform.ts");
       const file = makeFile(
         "transform.ts",
-        "export function anonymizeRecord(record) { return { ageBucket: \"x\" }; }\n",
+        'export function anonymizeRecord(record) { return { ageBucket: "x" }; }\n',
       );
       runDataActionPhase([asset], [], [file]);
       expect(hasAsserted(asset, "transform")).toBe(true);
@@ -145,7 +145,7 @@ describe("deriveFromPatterns", () => {
         "generate.ts",
         [
           "export function scoreUser(f) { return 1; }",
-          "export function inferRisk(email) { return \"low\"; }",
+          'export function inferRisk(email) { return "low"; }',
           "export function deriveProfileField(a,b) { return a+b; }",
         ].join("\n"),
       );
@@ -260,7 +260,7 @@ describe("deriveFromPatterns", () => {
         [
           'await db.query("INSERT INTO users (email) VALUES ($1)", [email]);',
           "await userRepo.save(user);",
-          "await s3.putObject({ Bucket: \"b\", Key: \"k\", Body: body });",
+          'await s3.putObject({ Bucket: "b", Key: "k", Body: body });',
         ].join("\n"),
       );
       runDataActionPhase([asset], [], [file]);
@@ -309,7 +309,7 @@ describe("deriveFromPatterns", () => {
         sourceLocations: [{ filePath: "log.ts", startLine: 1, endLine: 10 }],
         properties: {},
       };
-      const file = makeFile("log.ts", 'logger.info({ email });\n');
+      const file = makeFile("log.ts", "logger.info({ email });\n");
       runDataActionPhase([actor], [], [file]);
       expect(actor.properties.dataActions).toBeUndefined();
     });
@@ -319,7 +319,7 @@ describe("deriveFromPatterns", () => {
       const file = makeFile(
         "app.ts",
         [
-          'logger.info({ email });',
+          "logger.info({ email });",
           "export function mergeProfile(a,b) { return { ...a, ...b }; }",
         ].join("\n"),
       );
@@ -449,9 +449,10 @@ describe("deriveFromPatterns", () => {
       const asset = makeAsset("svc", "main.rs");
       const file = makeFile(
         "main.rs",
-        ['info!("email={}", email);', "let digest = Sha256::digest(data);"].join(
-          "\n",
-        ),
+        [
+          'info!("email={}", email);',
+          "let digest = Sha256::digest(data);",
+        ].join("\n"),
         "rust",
       );
       runDataActionPhase([asset], [], [file]);
@@ -468,6 +469,49 @@ describe("deriveFromPatterns", () => {
       );
       runDataActionPhase([asset], [], [file]);
       expect(hasAsserted(asset, "log")).toBe(true);
+    });
+
+    it("Rails idioms derive conservative Ruby privacy actions", () => {
+      const asset = makeAsset("users", "app/controllers/users_controller.rb");
+      const file = makeFile(
+        "app/controllers/users_controller.rb",
+        [
+          "attributes = params.require(:user).permit(:email, :phone)",
+          "user = User.create!(attributes)",
+          "user.update!(email: attributes[:email])",
+          "user.save!",
+          "user.destroy!",
+          "render json: { email: user.email }",
+          'Rails.logger.info("user email=#{user.email}")',
+          "Faraday.post(webhook_url, { email: user.email })",
+        ].join("\n"),
+        "ruby",
+      );
+
+      runDataActionPhase([asset], [], [file]);
+
+      expect(verbs(asset)).toEqual(
+        expect.arrayContaining([
+          "collect",
+          "store",
+          "delete",
+          "display",
+          "log",
+          "disclose",
+        ]),
+      );
+    });
+
+    it("does not disclose Ruby outbound calls without same-line PII", () => {
+      const asset = makeAsset("webhook", "app/services/webhook_service.rb");
+      const file = makeFile(
+        "app/services/webhook_service.rb",
+        "Faraday.post(webhook_url, payload)\n",
+        "ruby",
+      );
+
+      runDataActionPhase([asset], [], [file]);
+      expect(hasAsserted(asset, "disclose")).toBe(false);
     });
   });
 });

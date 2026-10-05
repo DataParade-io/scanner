@@ -6,6 +6,7 @@ import {
   dedupeComponents,
   injectApplicationAssetIfMissing,
   injectApplicationAssetsPerSectionIfMissing,
+  ensureApplicationHubsForOccupiedSections,
   injectActorIfMissing,
   mergeDatabaseAssetsByType,
   synthesizeSectionApiNodes,
@@ -109,8 +110,12 @@ export function runClassifierPhase(
     sections,
     { projectName: options.projectName },
   );
-  const withApplication = injectApplicationAssetIfMissing(
+  const withOccupiedSectionHubs = ensureApplicationHubsForOccupiedSections(
     withPerSectionApplication,
+    sections,
+  );
+  const withApplication = injectApplicationAssetIfMissing(
+    withOccupiedSectionHubs,
     { projectName: options.projectName },
   );
   const enhanced = enhanceComponents(withApplication);

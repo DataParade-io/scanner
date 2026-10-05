@@ -6,7 +6,8 @@ import {
 } from "../../../src/classifier/enhance";
 
 function makeComponent(
-  overrides: Partial<DetectedComponent> & Pick<DetectedComponent, "id" | "name" | "type">,
+  overrides: Partial<DetectedComponent> &
+    Pick<DetectedComponent, "id" | "name" | "type">,
 ): DetectedComponent {
   return {
     id: overrides.id,
@@ -14,8 +15,19 @@ function makeComponent(
     type: overrides.type,
     subType: overrides.subType,
     confidence: overrides.confidence ?? 0.9,
-    detectedFrom: overrides.detectedFrom ?? [],
-    sourceLocations: overrides.sourceLocations ?? [],
+    detectedFrom: overrides.detectedFrom ?? [
+      {
+        pattern: "test",
+        sourceLocation: {
+          filePath: "src/example.ts",
+          startLine: 1,
+          endLine: 1,
+        },
+      },
+    ],
+    sourceLocations: overrides.sourceLocations ?? [
+      { filePath: "src/example.ts", startLine: 1, endLine: 1 },
+    ],
     properties: overrides.properties ?? {},
     description: overrides.description,
     dataFlowIds: overrides.dataFlowIds,
@@ -131,6 +143,25 @@ describe("classifier/enhance - DP-P0-CLI-203", () => {
     expect(result.properties.hosting_type).toBe("saas");
   });
 
+  it("does not set heuristic values when the component has no locations", () => {
+    const component = makeComponent({
+      id: "cmp_1",
+      name: "Stripe",
+      type: "third_party",
+      subType: "payment_processor",
+      detectedFrom: [],
+      sourceLocations: [],
+      properties: {},
+    });
+
+    const result = enhanceComponent(component);
+
+    expect(result.properties.hosting_type).toBeNull();
+    expect(result.properties.integration_method).toBeNull();
+    expect(result.properties.vendor).toBeNull();
+    expect(result.properties.propertyEvidence).toBeUndefined();
+  });
+
   it("does not overwrite existing hosting_type for third_party", () => {
     const component = makeComponent({
       id: "cmp_1",
@@ -199,7 +230,9 @@ describe("classifier/enhance - DP-P0-CLI-203", () => {
 
     const result = enhanceComponents(components);
 
-    const withMain = result.filter((c) => c.properties.isMainApplication === true);
+    const withMain = result.filter(
+      (c) => c.properties.isMainApplication === true,
+    );
     expect(withMain.length).toBe(2);
     expect(withMain.map((c) => c.id).sort()).toEqual(["cmp_1", "cmp_2"]);
   });

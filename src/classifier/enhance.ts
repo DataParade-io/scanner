@@ -12,16 +12,28 @@ import {
   FRONTEND_FRAMEWORK_HINTS_SET,
   SERVER_FRAMEWORK_HINTS,
 } from "../patterns/frontend-frameworks";
+import {
+  appendPropertyEvidence,
+  heuristicEvidenceRefs,
+} from "./property-evidence";
 
-function setIfMissing<T>(
+function setHeuristicIfMissing<T>(
+  component: DetectedComponent,
   props: Record<string, unknown>,
   key: string,
   value: T,
+  fnName: string,
 ): void {
   const current = props[key];
-  if (current === undefined || current === "" || current === null) {
-    props[key] = value;
+  if (!(current === undefined || current === "" || current === null)) {
+    return;
   }
+  const refs = heuristicEvidenceRefs(component, fnName);
+  if (refs.length === 0) {
+    return;
+  }
+  props[key] = value;
+  appendPropertyEvidence(props, key, refs);
 }
 
 function toTitleCase(s: string): string {
@@ -106,39 +118,74 @@ function enhanceAsset(
   properties: Record<string, unknown>,
 ): void {
   const { subType } = component;
-  const { cloudAssetSubtypes, onPremAssetSubtypes, supportedOperationsBySubType } =
-    loadPropertyDetectionConfig().enhance;
+  const {
+    cloudAssetSubtypes,
+    onPremAssetSubtypes,
+    supportedOperationsBySubType,
+  } = loadPropertyDetectionConfig().enhance;
 
   // technology_stack: infer from databaseType or known name (only when we have a value)
   const techStack = inferTechnologyStack(component);
   if (techStack) {
-    setIfMissing(properties, "technology_stack", techStack);
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "technology_stack",
+      techStack,
+      "inferTechnologyStack",
+    );
   }
 
   // hosting_type: cloud for api/database/cache/etc., on_premise for config
   if (subType && cloudAssetSubtypes.has(subType)) {
-    setIfMissing(properties, "hosting_type", "cloud");
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "hosting_type",
+      "cloud",
+      "enhanceAsset",
+    );
   } else if (subType && onPremAssetSubtypes.has(subType)) {
-    setIfMissing(properties, "hosting_type", "on_premise");
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "hosting_type",
+      "on_premise",
+      "enhanceAsset",
+    );
   } else {
-    setIfMissing(properties, "hosting_type", "cloud");
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "hosting_type",
+      "cloud",
+      "enhanceAsset",
+    );
   }
 
   // database_engine: for database/cache, from databaseType
   if (subType === "database" || subType === "cache") {
     const dbType = component.properties.databaseType;
     if (typeof dbType === "string" && dbType.trim()) {
-      setIfMissing(
+      setHeuristicIfMissing(
+        component,
         properties,
         "database_engine",
         `${dbType.trim().charAt(0).toUpperCase()}${dbType.trim().slice(1).toLowerCase()}`,
+        "enhanceAsset",
       );
     }
   }
 
   // supported_operations: by subType from config
   if (subType && supportedOperationsBySubType[subType]?.length) {
-    setIfMissing(properties, "supported_operations", supportedOperationsBySubType[subType]);
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "supported_operations",
+      supportedOperationsBySubType[subType],
+      "enhanceAsset",
+    );
   }
 }
 
@@ -169,10 +216,28 @@ function enhanceThirdParty(
   properties: Record<string, unknown>,
 ): void {
   const { defaultThirdPartyHosting } = loadPropertyDetectionConfig().enhance;
-  setIfMissing(properties, "hosting_type", defaultThirdPartyHosting);
-  setIfMissing(properties, "integration_method", "api");
+  setHeuristicIfMissing(
+    component,
+    properties,
+    "hosting_type",
+    defaultThirdPartyHosting,
+    "enhanceThirdParty",
+  );
+  setHeuristicIfMissing(
+    component,
+    properties,
+    "integration_method",
+    "api",
+    "enhanceThirdParty",
+  );
   if (component.name && !properties.vendor) {
-    properties.vendor = toTitleCase(component.name.trim());
+    setHeuristicIfMissing(
+      component,
+      properties,
+      "vendor",
+      toTitleCase(component.name.trim()),
+      "enhanceThirdParty",
+    );
   }
 }
 
@@ -181,7 +246,11 @@ function enhanceActor(
   properties: Record<string, unknown>,
 ): void {
   if (component.subType === "customer") {
-    properties.isDataSubject = true; // override default false for customer
+    const refs = heuristicEvidenceRefs(component, "enhanceActor");
+    if (refs.length > 0) {
+      properties.isDataSubject = true; // override default false for customer
+      appendPropertyEvidence(properties, "isDataSubject", refs);
+    }
   }
 }
 
@@ -266,7 +335,8 @@ export function enhanceComponents(
   }
 
   const sectionIdFor = (c: DetectedComponent): string =>
-    typeof c.properties?.section_id === "string" && c.properties.section_id.trim()
+    typeof c.properties?.section_id === "string" &&
+    c.properties.section_id.trim()
       ? c.properties.section_id.trim()
       : "<unsectioned>";
 
@@ -303,11 +373,17 @@ export function enhanceComponents(
       if (isSingleRouteApiAsset(c)) {
         const list = bySectionSingleRoute.get(sid);
         if (list) list.push({ index: i, frameworkPriority: priority });
-        else bySectionSingleRoute.set(sid, [{ index: i, frameworkPriority: priority }]);
+        else
+          bySectionSingleRoute.set(sid, [
+            { index: i, frameworkPriority: priority },
+          ]);
       } else {
         const list = bySectionRegular.get(sid);
         if (list) list.push({ index: i, frameworkPriority: priority });
-        else bySectionRegular.set(sid, [{ index: i, frameworkPriority: priority }]);
+        else
+          bySectionRegular.set(sid, [
+            { index: i, frameworkPriority: priority },
+          ]);
       }
     }
   }
@@ -331,10 +407,8 @@ export function enhanceComponents(
     candidates.sort((a, b) => {
       const aCtx = updated[a.index]?.properties?.sourceContext;
       const bCtx = updated[b.index]?.properties?.sourceContext;
-      const aInj =
-        aCtx === INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT ? 0 : 1;
-      const bInj =
-        bCtx === INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT ? 0 : 1;
+      const aInj = aCtx === INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT ? 0 : 1;
+      const bInj = bCtx === INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT ? 0 : 1;
       if (aInj !== bInj) return aInj - bInj;
       if (a.frameworkPriority !== b.frameworkPriority) {
         return a.frameworkPriority - b.frameworkPriority;
@@ -351,7 +425,7 @@ export function enhanceComponents(
         : undefined;
     const preferredMainName =
       sid !== "<unsectioned>" && sid !== "root"
-        ? sectionLabel ?? sid
+        ? (sectionLabel ?? sid)
         : main.name;
     updated[pick.index] = {
       ...main,
