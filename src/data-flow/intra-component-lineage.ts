@@ -94,8 +94,7 @@ function isCommentLine(line: string): boolean {
   );
 }
 
-function buildContextSpan(content: string, centerLine: number): string {
-  const lines = content.split(/\r?\n/);
+function buildContextSpan(lines: string[], centerLine: number): string {
   const start = Math.max(0, centerLine - 1 - CONTEXT_LINE_RADIUS);
   const end = Math.min(lines.length, centerLine + CONTEXT_LINE_RADIUS);
   return lines.slice(start, end).join("\n");
@@ -391,24 +390,46 @@ function countIndent(line: string): number {
   return match ? match[1].replace(/\t/g, "  ").length : 0;
 }
 
+type EnclosingScope = { startLine: number; endLine: number; text: string };
+
+/**
+ * The enclosing scope of each line of one file. Scope headers are found in one pass and
+ * scope bodies are cached by header line, so a file costs linear time rather than a
+ * backward search and a forward brace scan for every line.
+ */
+function enclosingScopeFinder(lines: string[]): (lineIndex: number) => EnclosingScope {
+  const nearestHeader: number[] = new Array(lines.length);
+  let last = -1;
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index] ?? "";
+    if (
+      SCOPE_ENCLOSING_DEF_PATTERNS.some((pattern) => pattern.test(line)) ||
+      CLASS_DEF_PATTERNS.some((pattern) => pattern.test(line))
+    ) {
+      last = index;
+    }
+    nearestHeader[index] = last;
+  }
+  const cache = new Map<number, EnclosingScope | null>();
+  return (lineIndex) => {
+    const header = nearestHeader[lineIndex] ?? -1;
+    const scopeStart = header >= 0 ? header : lineIndex;
+    const cached = cache.get(scopeStart);
+    if (cached) return cached;
+    const scope = findEnclosingScope(lines, lineIndex, scopeStart);
+    // A Ruby scope without its closing `end` ends at the line asked about: not cacheable.
+    cache.set(scopeStart, scope.unclosed ? null : scope.result);
+    return scope.result;
+  };
+}
+
 function findEnclosingScope(
   lines: string[],
   lineIndex: number,
-): { startLine: number; endLine: number; text: string } {
-  let scopeStart = lineIndex;
+  scopeStart: number,
+): { result: EnclosingScope; unclosed: boolean } {
   let scopeEnd = lineIndex;
-
-  for (let index = lineIndex; index >= 0; index -= 1) {
-    const line = lines[index] ?? "";
-    if (SCOPE_ENCLOSING_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
-      scopeStart = index;
-      break;
-    }
-    if (CLASS_DEF_PATTERNS.some((pattern) => pattern.test(line))) {
-      scopeStart = index;
-      break;
-    }
-  }
+  let unclosed = false;
 
   const scopeLine = lines[scopeStart] ?? "";
   const isRubyScope = /^\s*(?:def|class|module)\s+/.test(scopeLine);
@@ -448,6 +469,7 @@ function findEnclosingScope(
 
   if (!foundOpenBrace) {
     if (isRubyScope) {
+      unclosed = true;
       const scopeIndent = countIndent(scopeLine);
       for (let index = scopeStart + 1; index < lines.length; index += 1) {
         const line = lines[index] ?? "";
@@ -456,6 +478,7 @@ function findEnclosingScope(
         }
         if (countIndent(line) === scopeIndent) {
           scopeEnd = index;
+          unclosed = false;
           break;
         }
       }
@@ -463,9 +486,12 @@ function findEnclosingScope(
   }
 
   return {
-    startLine: scopeStart + 1,
-    endLine: scopeEnd + 1,
-    text: lines.slice(scopeStart, scopeEnd + 1).join("\n"),
+    result: {
+      startLine: scopeStart + 1,
+      endLine: scopeEnd + 1,
+      text: lines.slice(scopeStart, scopeEnd + 1).join("\n"),
+    },
+    unclosed,
   };
 }
 
@@ -608,6 +634,7 @@ export function detectIntraComponentLineage(
     }
 
     const lines = file.content.split(/\r?\n/);
+    const enclosingScope = enclosingScopeFinder(lines);
 
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
       const spanLine = lineIndex + 1;
@@ -616,11 +643,11 @@ export function detectIntraComponentLineage(
         continue;
       }
 
-      const contextSpan = buildContextSpan(file.content, spanLine);
+      const contextSpan = buildContextSpan(lines, spanLine);
       if (isBareScopeHeaderSpan(span, contextSpan)) {
         continue;
       }
-      const scope = findEnclosingScope(lines, lineIndex);
+      const scope = enclosingScope(lineIndex);
       const enclosingRouteLine = findEnclosingPersonalDataRouteLine(lines, lineIndex);
       const insidePersonalDataRouteBlock =
         enclosingRouteLine !== undefined && spanLine > enclosingRouteLine;
@@ -630,7 +657,7 @@ export function detectIntraComponentLineage(
 
       if (insidePersonalDataRouteBlock) {
         flowSpan = lines[enclosingRouteLine - 1] ?? "";
-        flowContextSpan = buildContextSpan(file.content, enclosingRouteLine);
+        flowContextSpan = buildContextSpan(lines, enclosingRouteLine);
         if (!hasPersonalDataRouteReference(flowSpan, flowContextSpan)) {
           continue;
         }
