@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Scanner Pipeline",
+    "output": "docs/diagrams/scan-pipeline.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "repo", "type": "external", "label": "Repository files", "sublabel": "ingest: ignore rules, size caps", "pos": [40, 150], "size": [180, 66] },
+
+    { "id": "analyzers", "type": "backend", "label": "Analyzers + patterns", "sublabel": "per-language, YAML patterns", "pos": [330, 50], "size": [190, 66], "tag": "structural scan" },
+    { "id": "classifier", "type": "backend", "label": "Classifier", "sublabel": "service sections, components", "pos": [630, 50], "size": [190, 66] },
+    { "id": "flows", "type": "backend", "label": "Data flows + actions", "sublabel": "flow detection, data actions", "pos": [930, 50], "size": [190, 66] },
+    { "id": "scanresult", "type": "database", "label": "ScanResult", "sublabel": "components, dataFlows", "pos": [1230, 50], "size": [170, 66] },
+
+    { "id": "signals", "type": "security", "label": "PII signal matching", "sublabel": "email, phone ... in code or comments", "pos": [330, 250], "size": [190, 66], "tag": "personal data" },
+    { "id": "packs", "type": "security", "label": "Language packs", "sublabel": "tree-sitter: JS, TS, Python, Ruby", "pos": [630, 250], "size": [190, 66] },
+    { "id": "grouping", "type": "security", "label": "Occurrence grouping", "sublabel": "evidence joins into data items", "pos": [930, 250], "size": [190, 66] },
+    { "id": "layers", "type": "database", "label": "occurrences + dataItems", "sublabel": "each group names its evidence", "pos": [1230, 250], "size": [170, 66] },
+
+    { "id": "graphify", "type": "external", "label": "graphify (optional)", "sublabel": "code structure graph.json", "pos": [330, 450], "size": [190, 66] },
+    { "id": "graphjson", "type": "database", "label": "dataparade-graph.json", "sublabel": "optional, written by caller", "pos": [1230, 450], "size": [170, 66] }
+  ],
+  "connections": [
+    { "id": "to-analyzers", "from": "repo", "to": "analyzers", "label": "files", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "to-signals", "from": "repo", "to": "signals", "label": "files", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "to-graphify", "from": "repo", "to": "graphify", "label": "scan root", "variant": "dashed", "fromSide": "bottom", "toSide": "left" },
+    { "id": "findings", "from": "analyzers", "to": "classifier", "label": "findings", "variant": "emphasis" },
+    { "id": "components", "from": "classifier", "to": "flows", "label": "components", "variant": "emphasis" },
+    { "id": "assemble", "from": "flows", "to": "scanresult", "label": "assemble", "variant": "emphasis" },
+    { "id": "hits", "from": "signals", "to": "packs", "label": "hits", "variant": "default" },
+    { "id": "annotated", "from": "packs", "to": "grouping", "label": "annotated", "variant": "default" },
+    { "id": "group-out", "from": "grouping", "to": "layers", "label": "groups", "variant": "default" },
+    { "id": "structure", "from": "graphify", "to": "graphjson", "label": "structure nodes", "variant": "dashed" },
+    { "id": "project", "from": "layers", "to": "graphjson", "label": "projected", "variant": "dashed", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Two tracks inside scan()",
+      "items": [
+        "Top: system structure. Findings become components and data flows in the ScanResult",
+        "Middle: personal data. Signal hits become occurrences, grouped into data items",
+        "Deterministic. AI enrichment, upload and OCSF output live in the CLI, not here"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Optional parts (dashed)",
+      "items": [
+        "graphify runs only when configured; a failure is a scan warning, not an error",
+        "dataparade-graph.json is written by writeKnowledgeGraph(), called by the client; scan() does not write it"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "How Occurrences Become Data Items",
+    "output": "docs/diagrams/occurrence-grouping.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "qualifier", "type": "external", "label": "Name on the line", "sublabel": "sender_email, member.email", "pos": [40, 40], "size": [190, 66] },
+    { "id": "treesitter", "type": "external", "label": "Tree-sitter facts", "sublabel": "declarations, call links, receiver, table", "pos": [40, 190], "size": [190, 66] },
+    { "id": "catalog", "type": "external", "label": "Column catalog", "sublabel": "stored columns the repo declares", "pos": [40, 340], "size": [190, 66] },
+
+    { "id": "joins", "type": "backend", "label": "Joins, strongest first", "sublabel": "1 declaration, 2 name, 3 field, 4 call", "pos": [340, 190], "size": [210, 66], "tag": "assignDeclarationGroups" },
+    { "id": "votes", "type": "backend", "label": "Votes for unnamed sets", "sublabel": "5 receiver, 6 table, 7 weak-name, 8 file", "pos": [660, 190], "size": [210, 66] },
+    { "id": "guard", "type": "security", "label": "Cannot-link", "sublabel": "never merge two names or two columns", "pos": [340, 340], "size": [210, 66] },
+
+    { "id": "groups", "type": "database", "label": "Data item groups", "sublabel": "email:member, with groupBasis", "pos": [980, 190], "size": [190, 66] }
+  ],
+  "connections": [
+    { "id": "q-j", "from": "qualifier", "to": "joins", "label": "qualifier", "fromSide": "right", "toSide": "top" },
+    { "id": "t-j", "from": "treesitter", "to": "joins", "label": "declarations, links" },
+    { "id": "c-g", "from": "catalog", "to": "guard", "label": "declared columns" },
+    { "id": "g-j", "from": "guard", "to": "joins", "label": "refuses", "variant": "security", "fromSide": "top", "toSide": "bottom" },
+    { "id": "j-v", "from": "joins", "to": "votes", "label": "still unnamed", "variant": "emphasis" },
+    { "id": "v-g", "from": "votes", "to": "groups", "label": "named sets", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Why grouping exists",
+      "items": [
+        "One concept such as email covers several real data items: a member's email, a staff email, a sender address",
+        "Each occurrence ends with a group name and a groupBasis saying which evidence named it"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Column catalog sources",
+      "items": [
+        "ORM fields, schema objects, migrations, content types, TypeScript record types",
+        "Prisma models and SQL DDL read from schema files beside the source"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Phases in order (occurrence-group.ts)",
+      "items": [
+        "declaration, name, field, call, receiver-vote, table-vote, weak-name, file-vote",
+        "A set with no name is named after its declaration, else its location"
+      ]
+    }
+  ]
+}
