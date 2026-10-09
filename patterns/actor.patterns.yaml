@@ -16,6 +16,9 @@ regexes:
   # Backend: simple admin role checks
   ts_role_admin: "\\b(isAdmin|is_admin)\\b|\\brole[s]?\\s*[:=]\\s*['\"]admin['\"]"
 
+  # Razor, HTML, Vue, and Angular component files. Role checks there are UI, not actors.
+  ui_role_check_file: "\\.(?:cshtml|razor|html|vue|component\\.ts)$"
+
   # Ruby/Rails end-user model
   ruby_user_model_file: "(?:^|/)app/models/user\\.rb$"
 
@@ -54,6 +57,7 @@ rules:
     patternId: service_actor
     name: Admin user
     content_regex: ts_role_admin
+    exclude_file_path_regex: ui_role_check_file
     confidence: 0.8
     properties:
       actorType: employee
@@ -100,4 +104,3 @@ rules:
     properties:
       actorType: employee
       sourceContext: rails_redmine_user_model
-

@@ -28,9 +28,9 @@ describe("monorepo package sections", () => {
   });
 
   it("rollupSectionIdToMonorepoDepth trims nested package paths", () => {
-    expect(
-      rollupSectionIdToMonorepoDepth("packages/apps/nested", 2),
-    ).toBe("packages/apps");
+    expect(rollupSectionIdToMonorepoDepth("packages/apps/nested", 2)).toBe(
+      "packages/apps",
+    );
   });
 
   it("uses package.json name for section label and rolls up nested packages", async () => {
@@ -159,7 +159,7 @@ describe("monorepo package sections", () => {
             type: "asset",
             subType: "database",
             confidence: 1,
-            detectedFrom: [],
+            detectedFrom: [{ pattern: "express_route" }],
             sourceLocations: [],
             properties: { section_id: "packages/api" },
           },
@@ -170,8 +170,7 @@ describe("monorepo package sections", () => {
 
       const placeholderIds = injected
         .filter(
-          (c) =>
-            c.properties?.sourceContext === "injected_project_placeholder",
+          (c) => c.properties?.sourceContext === "injected_project_placeholder",
         )
         .map((c) => c.properties?.section_id)
         .sort();

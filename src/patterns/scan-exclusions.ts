@@ -84,6 +84,12 @@ export const DEFAULT_EXCLUDED_FILE_GLOBS: readonly string[] = [
   "*.g.i.cs",
   "**/*.AssemblyInfo.cs",
   "*.AssemblyInfo.cs",
+  "**/public/lib/**",
+  "public/lib/**",
+  "**/wwwroot/lib/**",
+  "wwwroot/lib/**",
+  "**/Migrations/**",
+  "Migrations/**",
 ];
 
 export function shouldSkipDirectoryName(dirName: string): boolean {

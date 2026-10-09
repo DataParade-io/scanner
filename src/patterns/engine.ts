@@ -209,7 +209,7 @@ function detectActorsFromConfig(
   const findings: RawFinding[] = [];
 
   const normalizedPath = (ctx.normalizedPath ?? ctx.file.path).toLowerCase();
-  const content = ctx.file.content ?? "";
+  const content = ctx.strippedContent ?? ctx.file.content ?? "";
   const lines = content.split(/\r?\n/);
   const firstLine = lines[0] ?? "";
 
@@ -217,6 +217,12 @@ function detectActorsFromConfig(
     let lineMatch: { line: number; code: string } | undefined;
 
     if (rule.filePathRegex && !rule.filePathRegex.test(normalizedPath)) {
+      continue;
+    }
+    if (
+      rule.excludeFilePathRegex &&
+      rule.excludeFilePathRegex.test(normalizedPath)
+    ) {
       continue;
     }
 

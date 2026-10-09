@@ -45,7 +45,9 @@ describe("section-runtime", () => {
         comp({
           id: "app1",
           detectedFrom: [{ pattern: "express_route" }],
-          sourceLocations: [{ filePath: "api/route.ts", startLine: 1, endLine: 2 }],
+          sourceLocations: [
+            { filePath: "api/route.ts", startLine: 1, endLine: 2 },
+          ],
         }),
       ),
     ).toBe(false);
@@ -57,7 +59,11 @@ describe("section-runtime", () => {
         id: "tf_rds",
         detectedFrom: [{ pattern: "terraform_resource" }],
         sourceLocations: [
-          { filePath: "terraform/modules/aurora/main.tf", startLine: 1, endLine: 10 },
+          {
+            filePath: "terraform/modules/aurora/main.tf",
+            startLine: 1,
+            endLine: 10,
+          },
         ],
         properties: {
           section_id: "terraform/modules/aurora",
@@ -76,7 +82,11 @@ describe("section-runtime", () => {
         id: "tf_rds",
         detectedFrom: [{ pattern: "terraform_resource" }],
         sourceLocations: [
-          { filePath: "terraform/modules/aurora/main.tf", startLine: 1, endLine: 5 },
+          {
+            filePath: "terraform/modules/aurora/main.tf",
+            startLine: 1,
+            endLine: 5,
+          },
         ],
         properties: { section_id: "terraform/modules/aurora" },
       }),
@@ -93,7 +103,12 @@ describe("section-runtime", () => {
         components,
       ),
     ).toBe(false);
-    expect(isTerraformStackSection({ id: "terraform/modules/aurora", sectionDir: "terraform/modules/aurora" })).toBe(true);
+    expect(
+      isTerraformStackSection({
+        id: "terraform/modules/aurora",
+        sectionDir: "terraform/modules/aurora",
+      }),
+    ).toBe(true);
   });
 
   it("sectionQualifiesForSyntheticApplication skips discovery-flagged terraform stacks", () => {
@@ -124,15 +139,21 @@ describe("section-runtime", () => {
       comp({
         id: "c1",
         detectedFrom: [{ pattern: "express_route" }],
-        sourceLocations: [{ filePath: "packages/api/src/routes.ts", startLine: 1, endLine: 2 }],
+        sourceLocations: [
+          { filePath: "packages/api/src/routes.ts", startLine: 1, endLine: 2 },
+        ],
         properties: { section_id: "packages/api" },
       }),
     ];
-    expect(sectionHasRuntimeCodeComponents(components, "packages/api")).toBe(true);
-    expect(sectionHasRuntimeCodeComponents(components, "packages/cli")).toBe(false);
+    expect(sectionHasRuntimeCodeComponents(components, "packages/api")).toBe(
+      true,
+    );
+    expect(sectionHasRuntimeCodeComponents(components, "packages/cli")).toBe(
+      false,
+    );
   });
 
-  it("sectionQualifiesForSyntheticApplication includes manifest package with classified components", () => {
+  it("sectionQualifiesForSyntheticApplication includes a third-party package with a manifest", () => {
     const components: DetectedComponent[] = [
       comp({
         id: "tp1",
@@ -149,6 +170,51 @@ describe("section-runtime", () => {
           sectionDir: "packages/twenty-companion",
           manifestPaths: ["packages/twenty-companion/package.json"],
           isPrimaryMonorepoPackage: true,
+        },
+        components,
+      ),
+    ).toBe(true);
+  });
+
+  it("sectionQualifiesForSyntheticApplication skips a class library that only has a database", () => {
+    const components: DetectedComponent[] = [
+      comp({
+        id: "db",
+        subType: "database",
+        properties: { section_id: "src/MyApp.ServiceInterface" },
+      }),
+    ];
+    expect(
+      sectionQualifiesForSyntheticApplication(
+        {
+          id: "src/MyApp.ServiceInterface",
+          label: "MyApp.ServiceInterface",
+          role: "service",
+          sectionDir: "src/MyApp.ServiceInterface",
+          manifestPaths: [],
+        },
+        components,
+      ),
+    ).toBe(false);
+  });
+
+  it("sectionQualifiesForSyntheticApplication includes a section that has routes", () => {
+    const components: DetectedComponent[] = [
+      comp({
+        id: "api",
+        subType: "api",
+        detectedFrom: [{ pattern: "express_route" }],
+        properties: { section_id: "packages/api" },
+      }),
+    ];
+    expect(
+      sectionQualifiesForSyntheticApplication(
+        {
+          id: "packages/api",
+          label: "api",
+          role: "service",
+          sectionDir: "packages/api",
+          manifestPaths: ["packages/api/package.json"],
         },
         components,
       ),
@@ -180,7 +246,9 @@ describe("section-runtime", () => {
           label: "TO-BE-GENERATED",
           role: "service",
           sectionDir: "packages/acme-cli/src/constants/template",
-          manifestPaths: ["packages/acme-cli/src/constants/template/package.json"],
+          manifestPaths: [
+            "packages/acme-cli/src/constants/template/package.json",
+          ],
           packageName: "TO-BE-GENERATED",
         },
         [],
@@ -194,7 +262,11 @@ describe("section-runtime", () => {
         id: "tf_rds",
         detectedFrom: [{ pattern: "terraform_resource" }],
         sourceLocations: [
-          { filePath: "terraform/modules/aurora/main.tf", startLine: 1, endLine: 5 },
+          {
+            filePath: "terraform/modules/aurora/main.tf",
+            startLine: 1,
+            endLine: 5,
+          },
         ],
         properties: { section_id: "terraform/modules/aurora" },
       }),

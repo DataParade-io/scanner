@@ -15,6 +15,7 @@ export interface ActorRule {
   patternId: PatternId;
   name: string;
   filePathRegex?: RegExp;
+  excludeFilePathRegex?: RegExp;
   contentRegex?: RegExp;
   confidence: number;
   properties: Record<string, unknown>;
@@ -30,6 +31,7 @@ interface RawRule {
   patternId: string;
   name?: string;
   file_path_regex?: string;
+  exclude_file_path_regex?: string;
   content_regex?: string;
   confidence?: number;
   properties?: Record<string, unknown>;
@@ -136,6 +138,11 @@ export function loadActorDetectionConfig(): ActorDetectionConfig {
         regexes,
         `actor-detection.rules['${rawRule.id}'].file_path_regex`,
       );
+      const excludeFilePathRegex = resolveRegex(
+        rawRule.exclude_file_path_regex,
+        regexes,
+        `actor-detection.rules['${rawRule.id}'].exclude_file_path_regex`,
+      );
       const contentRegex = resolveRegex(
         rawRule.content_regex,
         regexes,
@@ -152,6 +159,7 @@ export function loadActorDetectionConfig(): ActorDetectionConfig {
         patternId,
         name: rawRule.name ?? rawRule.id,
         filePathRegex,
+        excludeFilePathRegex,
         contentRegex,
         confidence: rawRule.confidence ?? 0.8,
         properties: rawRule.properties ?? {},

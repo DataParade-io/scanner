@@ -16,7 +16,8 @@ export function sectionHasPackageJsonManifest(
   section: Pick<ServiceSection, "manifestPaths">,
 ): boolean {
   return section.manifestPaths.some(
-    (p) => p.replace(/\\/g, "/").split("/").pop()?.toLowerCase() === "package.json",
+    (p) =>
+      p.replace(/\\/g, "/").split("/").pop()?.toLowerCase() === "package.json",
   );
 }
 
@@ -29,7 +30,9 @@ const GENERATOR_TEMPLATE_DIR_SEGMENTS = new Set([
 
 function sectionPathHasGeneratorTemplateLayout(sectionDir: string): boolean {
   const parts = sectionDir.replace(/\\/g, "/").split("/").filter(Boolean);
-  return parts.some((p) => GENERATOR_TEMPLATE_DIR_SEGMENTS.has(p.toLowerCase()));
+  return parts.some((p) =>
+    GENERATOR_TEMPLATE_DIR_SEGMENTS.has(p.toLowerCase()),
+  );
 }
 
 /**
@@ -68,22 +71,24 @@ export function sectionHasClassifiedComponents(
   return false;
 }
 
-export function isConcreteServiceSectionId(sectionId: string | undefined): boolean {
+export function isConcreteServiceSectionId(
+  sectionId: string | undefined,
+): boolean {
   if (!sectionId?.trim()) return false;
   const id = sectionId.trim();
   return id !== "root" && id !== "global" && id !== "<unsectioned>";
 }
 
-export {
-  TERRAFORM_DETECTED_FROM_PATTERNS,
-} from "../terraform/component-predicates";
+export { TERRAFORM_DETECTED_FROM_PATTERNS } from "../terraform/component-predicates";
 import {
   hasTerraformAddress,
   isTerraformDerivedFromPatterns,
 } from "../terraform/component-predicates";
 
 /** Classified from Terraform analysis (HCL or show-json), not application source code. */
-export function isTerraformDerivedComponent(component: DetectedComponent): boolean {
+export function isTerraformDerivedComponent(
+  component: DetectedComponent,
+): boolean {
   if (hasTerraformAddress(component)) return true;
   return isTerraformDerivedFromPatterns(component);
 }
@@ -93,7 +98,9 @@ export function isTerraformStackSection(
   section: Pick<ServiceSection, "id" | "sectionDir" | "isTerraformStack">,
 ): boolean {
   if (section.isTerraformStack === true) return true;
-  const dir = (section.sectionDir || section.id).replace(/\\/g, "/").toLowerCase();
+  const dir = (section.sectionDir || section.id)
+    .replace(/\\/g, "/")
+    .toLowerCase();
   if (!dir || dir === "root") return false;
   return (
     dir === "terraform" ||
@@ -108,7 +115,8 @@ export function sectionHasRuntimeCodeComponents(
   sectionId: string,
 ): boolean {
   for (const component of components) {
-    if (getSectionIdFromProperties(component.properties) !== sectionId) continue;
+    if (getSectionIdFromProperties(component.properties) !== sectionId)
+      continue;
     if (isTerraformDerivedComponent(component)) continue;
 
     if (component.subType === "database") return true;
@@ -123,7 +131,9 @@ export function sectionHasRuntimeCodeComponents(
     if (
       locations.some((loc) => {
         const fp = loc.filePath.replace(/\\/g, "/").toLowerCase();
-        return !MANIFEST_ONLY_PATH_SUFFIXES.some((suffix) => fp.endsWith(suffix));
+        return !MANIFEST_ONLY_PATH_SUFFIXES.some((suffix) =>
+          fp.endsWith(suffix),
+        );
       })
     ) {
       if (component.type === "asset" || component.type === "actor") {
@@ -134,12 +144,60 @@ export function sectionHasRuntimeCodeComponents(
   return false;
 }
 
+function isDependencyManifestComponent(component: DetectedComponent): boolean {
+  const raw = component.properties?.sourceContext;
+  if (raw === "dependency_manifest") return true;
+  return (
+    Array.isArray(raw) &&
+    raw.length > 0 &&
+    raw.every((value) => value === "dependency_manifest")
+  );
+}
+
+/**
+ * A real HTTP route or serverless handler. Frontend dependency manifests are
+ * emitted as `express_route` but are applications, not API routes.
+ */
+export function sectionHasHttpRouteOrHandler(
+  components: DetectedComponent[],
+  sectionId: string,
+): boolean {
+  for (const component of components) {
+    if (getSectionIdFromProperties(component.properties) !== sectionId)
+      continue;
+    if (isDependencyManifestComponent(component)) continue;
+    if (
+      component.detectedFrom?.some(
+        (ref) =>
+          ref.pattern === "express_route" || ref.pattern === "lambda_handler",
+      )
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Whether a workspace section should receive a synthetic application hub and
  * default User actor during primary package injection.
- * Occupied sections (including third_party-only tooling packages) are also
- * covered later by {@link ensureApplicationHubsForOccupiedSections}.
+ * A class library that only has a database or auth service does not qualify.
  */
+function sectionHasDatabaseOrAuth(
+  components: DetectedComponent[],
+  sectionId: string,
+): boolean {
+  return components.some((component) => {
+    if (getSectionIdFromProperties(component.properties) !== sectionId) {
+      return false;
+    }
+    return (
+      component.type === "asset" &&
+      (component.subType === "database" || component.subType === "auth_service")
+    );
+  });
+}
+
 export function sectionQualifiesForSyntheticApplication(
   section: ServiceSection,
   components: DetectedComponent[],
@@ -147,14 +205,14 @@ export function sectionQualifiesForSyntheticApplication(
   if (section.role !== "service") return false;
   if (isTerraformStackSection(section)) return false;
   if (isScaffoldOrTemplatePackageSection(section)) return false;
-  if (sectionHasRuntimeCodeComponents(components, section.id)) return true;
-  if (
+  if (sectionHasHttpRouteOrHandler(components, section.id)) return true;
+  // Tooling packages that only declare third parties still get a hub.
+  // A class library with a database or auth service and no routes does not.
+  if (sectionHasDatabaseOrAuth(components, section.id)) return false;
+  return (
     sectionHasPackageJsonManifest(section) &&
     sectionHasClassifiedComponents(components, section.id)
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
 export function shouldInjectUserActorForMainApp(
@@ -169,6 +227,5 @@ export function shouldInjectUserActorForMainApp(
   if (isTerraformStackSection({ id: sectionId, sectionDir: sectionId })) {
     return false;
   }
-  if (sectionHasRuntimeCodeComponents(components, sectionId)) return true;
-  return mainApp.properties?.is_primary_monorepo_package === true;
+  return sectionHasHttpRouteOrHandler(components, sectionId);
 }

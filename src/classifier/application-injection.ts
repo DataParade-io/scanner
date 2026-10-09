@@ -1,4 +1,7 @@
-import type { DetectedComponent, DetectedFromRef } from "../core/types/component";
+import type {
+  DetectedComponent,
+  DetectedFromRef,
+} from "../core/types/component";
 import type { SourceLocation } from "../core/types/file";
 import type { ServiceSection } from "../core/sectioning/discover-service-sections";
 import { loadPropertyDetectionConfig } from "../config/property-detection-config";
@@ -11,6 +14,7 @@ import {
   isConcreteServiceSectionId,
   isScaffoldOrTemplatePackageSection,
   isTerraformStackSection,
+  sectionHasHttpRouteOrHandler,
   sectionQualifiesForSyntheticApplication,
   shouldInjectUserActorForMainApp,
 } from "../core/sectioning/section-runtime";
@@ -86,7 +90,9 @@ function isLikelyBackendEntrypoint(mainApp: DetectedComponent): boolean {
     return true;
   }
 
-  const sectionId = getSectionIdFromProperties(mainApp.properties).toLowerCase();
+  const sectionId = getSectionIdFromProperties(
+    mainApp.properties,
+  ).toLowerCase();
   return sectionId.includes("backend") || sectionId.endsWith("-api");
 }
 
@@ -194,9 +200,7 @@ export function injectApplicationAssetsPerSectionIfMissing(
         section_id: sid,
         section_label: section.label,
         section_role: section.role,
-        ...(section.packageName
-          ? { package_name: section.packageName }
-          : {}),
+        ...(section.packageName ? { package_name: section.packageName } : {}),
         ...(section.isPrimaryMonorepoPackage === true
           ? { is_primary_monorepo_package: true }
           : {}),
@@ -263,7 +267,13 @@ export function ensureApplicationHubsForOccupiedSections(
     if (sectionHasMainAppHubCandidate(components, sid, mainAppSubtypes)) {
       continue;
     }
-    if (sectionHasMainAppHubCandidate([...components, ...synthetic], sid, mainAppSubtypes)) {
+    if (
+      sectionHasMainAppHubCandidate(
+        [...components, ...synthetic],
+        sid,
+        mainAppSubtypes,
+      )
+    ) {
       continue;
     }
 
@@ -279,13 +289,24 @@ export function ensureApplicationHubsForOccupiedSections(
 
     if (isTerraformStackSection(sectionProbe)) continue;
     if (isScaffoldOrTemplatePackageSection(sectionProbe)) continue;
+    if (
+      !sectionHasHttpRouteOrHandler(components, sid) &&
+      components.some(
+        (component) =>
+          getSectionIdFromProperties(component.properties) === sid &&
+          component.type === "asset" &&
+          (component.subType === "database" ||
+            component.subType === "auth_service"),
+      )
+    ) {
+      continue;
+    }
 
     const label =
       (discovered?.label && discovered.label.trim()) ||
       getSectionLabelFromProperties(
-        components.find(
-          (c) => getSectionIdFromProperties(c.properties) === sid,
-        )?.properties,
+        components.find((c) => getSectionIdFromProperties(c.properties) === sid)
+          ?.properties,
       ) ||
       sid;
 
@@ -330,10 +351,7 @@ export function injectApplicationAssetIfMissing(
   if (appIndex !== -1) {
     const cloned = [...components];
     const app = cloned[appIndex];
-    if (
-      app.name === "Route Handler" ||
-      app.name === "route handler"
-    ) {
+    if (app.name === "Route Handler" || app.name === "route handler") {
       const projectName =
         (opts?.projectName && opts.projectName.trim()) || "Application";
       cloned[appIndex] = {
@@ -344,8 +362,7 @@ export function injectApplicationAssetIfMissing(
     return cloned;
   }
 
-  const name =
-    (opts?.projectName && opts.projectName.trim()) || "Application";
+  const name = (opts?.projectName && opts.projectName.trim()) || "Application";
 
   const { mainAppSubtypes } = loadPropertyDetectionConfig().enhance;
 
@@ -468,7 +485,8 @@ export function synthesizeSectionApiNodes(
         }
       }
     }
-    if (routeEvidenceRefs.length === 0 || !hasNonManifestRouteEvidence) continue;
+    if (routeEvidenceRefs.length === 0 || !hasNonManifestRouteEvidence)
+      continue;
 
     routeEvidenceRefs.sort(compareDetectedFromRefs);
 
@@ -491,7 +509,8 @@ export function synthesizeSectionApiNodes(
     if (existingApi) continue;
 
     const sectionLabel =
-      getSectionLabelFromProperties(sectionComponents[0]?.properties) ?? sectionId;
+      getSectionLabelFromProperties(sectionComponents[0]?.properties) ??
+      sectionId;
     const sourceLocations = dedupeSourceLocations(
       routeEvidenceRefs
         .map((ref) => ref.sourceLocation)
@@ -518,4 +537,3 @@ export function synthesizeSectionApiNodes(
   if (synthetic.length === 0) return components;
   return [...components, ...synthetic];
 }
-
