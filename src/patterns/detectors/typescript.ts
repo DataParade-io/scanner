@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import {
   defaultServiceNameFromLiteralPublicUrl,
   shouldIgnoreExternalHttpUrl,
@@ -201,7 +204,9 @@ export function detectTypeScriptRoutesFromConfig(
               : routeRegex.defaultMethod;
           const method = rawMethod ? rawMethod.toUpperCase() : undefined;
           const routePath =
-            routeRegex.pathGroup != null ? match[routeRegex.pathGroup] : undefined;
+            routeRegex.pathGroup != null
+              ? match[routeRegex.pathGroup]
+              : undefined;
 
           findings.push({
             pattern: fw.patternId,
@@ -225,7 +230,6 @@ export function detectTypeScriptRoutesFromConfig(
   const normalizedPath = ctx.normalizedPath.toLowerCase();
   if (
     normalizedPath.includes("pages/api/") ||
-    normalizedPath.includes("/app/") ||
     normalizedPath.endsWith("route.ts") ||
     normalizedPath.endsWith("route.js")
   ) {
@@ -247,6 +251,97 @@ export function detectTypeScriptRoutesFromConfig(
     }
   }
 
+  findings.push(...detectServiceStackClientCalls(ctx, content));
+
+  return findings;
+}
+
+const SERVICE_STACK_CLIENT_CALL = /client\.api\(\s*new\s+([A-Za-z_][\w]*)\s*\(/;
+
+let angularUiScanRoot: string | undefined;
+const angularPackageCache = new Map<string, boolean>();
+
+/** Scan root used to see whether a relative path sits in an Angular package. */
+export function setAngularUiScanRoot(root: string | undefined): void {
+  angularUiScanRoot = root;
+  angularPackageCache.clear();
+}
+
+function packageDependsOnAngularCore(filePath: string): boolean {
+  if (!angularUiScanRoot) return false;
+  const root = path.resolve(angularUiScanRoot);
+  let dir = path.dirname(path.resolve(root, filePath));
+  while (true) {
+    const cached = angularPackageCache.get(dir);
+    if (cached !== undefined) return cached;
+    const manifestPath = path.join(dir, "package.json");
+    if (fs.existsSync(manifestPath)) {
+      let depends = false;
+      try {
+        const pkg = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as {
+          dependencies?: Record<string, string>;
+          devDependencies?: Record<string, string>;
+        };
+        depends = Boolean(
+          pkg.dependencies?.["@angular/core"] ||
+          pkg.devDependencies?.["@angular/core"],
+        );
+      } catch {
+        depends = false;
+      }
+      angularPackageCache.set(dir, depends);
+      return depends;
+    }
+    if (dir === root) return false;
+    const parent = path.dirname(dir);
+    if (parent === dir) return false;
+    dir = parent;
+  }
+}
+
+function isAngularUiSource(ctx: PatternContext): boolean {
+  const normalized = (ctx.normalizedPath ?? ctx.file.path)
+    .replace(/\\/g, "/")
+    .toLowerCase();
+  if (normalized.endsWith(".component.ts")) return true;
+  const underApp =
+    normalized.includes("/src/app/") || normalized.startsWith("src/app/");
+  if (!underApp) return false;
+  return packageDependsOnAngularCore(ctx.file.path);
+}
+
+function importsServiceStackClient(ctx: PatternContext): boolean {
+  return (ctx.imports ?? []).some(
+    (imp) =>
+      imp.module === "@servicestack/client" ||
+      imp.module.includes("@servicestack/client"),
+  );
+}
+
+function detectServiceStackClientCalls(
+  ctx: PatternContext,
+  content: string,
+): RawFinding[] {
+  if (!importsServiceStackClient(ctx)) return [];
+  const findings: RawFinding[] = [];
+  for (const { line, match } of findLineMatches(
+    content,
+    SERVICE_STACK_CLIENT_CALL,
+  )) {
+    const requestType = match[1];
+    if (!requestType) continue;
+    findings.push({
+      pattern: "external_api_call",
+      name: requestType,
+      confidence: 0.85,
+      location: createLocationFromLine(ctx.file, line, match[0]),
+      properties: {
+        link: "servicestack_request",
+        requestType,
+        client: "servicestack",
+      },
+    });
+  }
   return findings;
 }
 
@@ -352,6 +447,10 @@ export function detectTypeScriptAuthFromConfig(
 
   for (const lib of tsCfg.auth.libraries) {
     if (lib.filePathRegex && !lib.filePathRegex.test(ctx.normalizedPath)) {
+      continue;
+    }
+
+    if (lib.id === "bearer_token_header" && isAngularUiSource(ctx)) {
       continue;
     }
 
@@ -535,7 +634,10 @@ export function detectTypeScriptEnvAndConfigFromConfig(
   }
 
   for (const loader of tsCfg.configLoaders) {
-    const importLocations = matchingImportLocations(ctx, loader.importFragments);
+    const importLocations = matchingImportLocations(
+      ctx,
+      loader.importFragments,
+    );
     if (importLocations.length === 0) continue;
 
     const callLocations = locationsForContentRegexes(
@@ -656,4 +758,3 @@ export function detectTypeScriptExternalApisFromConfig(
 
   return findings;
 }
-

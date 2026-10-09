@@ -7,6 +7,7 @@ import {
   mergeGlobalIdentityProviderThirdParties,
   synthesizeSectionApiNodes,
   mergeDatabaseAssetsByType,
+  foldUnroutedInfrastructureIntoRoutedSection,
   injectApplicationAssetIfMissing,
   injectActorIfMissing,
 } from "../../../src/classifier/classify";
@@ -1787,6 +1788,90 @@ describe("classifier/dedupe & application asset - DP-P0-CLI-204", () => {
     expect(frontendDb?.properties.section_role).toBe("service");
     expect(backendDb?.properties.section_label).toBe("Backend");
     expect(backendDb?.properties.section_role).toBe("service");
+  });
+
+  it("folds a C# class-library database onto the only routed section and leaves other languages in place", () => {
+    const route = makeComponent({
+      id: "cmp_api",
+      name: "API",
+      type: "asset",
+      subType: "api",
+      detectedFrom: [{ pattern: "express_route" }],
+      sourceLocations: [
+        {
+          filePath: "MyApp.ServiceInterface/Todos.cs",
+          startLine: 1,
+          endLine: 4,
+        },
+      ],
+      properties: {
+        section_id: "MyApp.ServiceInterface",
+        section_role: "service",
+      },
+    });
+    const csharpDb = makeComponent({
+      id: "cmp_sqlite",
+      name: "Sqlite",
+      type: "asset",
+      subType: "database",
+      sourceLocations: [
+        {
+          filePath: "MyApp.ServiceModel/Configure.Db.cs",
+          startLine: 10,
+          endLine: 12,
+        },
+      ],
+      properties: {
+        databaseType: "sqlite",
+        section_id: "MyApp.ServiceModel",
+        section_role: "service",
+      },
+    });
+    const pythonDb = makeComponent({
+      id: "cmp_dynamo",
+      name: "Boto3 Dynamo",
+      type: "asset",
+      subType: "database",
+      sourceLocations: [
+        { filePath: "lambdas/handler.py", startLine: 3, endLine: 8 },
+      ],
+      properties: {
+        databaseType: "dynamodb",
+        section_id: "lambdas",
+        section_role: "service",
+      },
+    });
+    const terraformAuth = makeComponent({
+      id: "cmp_iam",
+      name: "project_editors (google_project_iam_binding)",
+      type: "asset",
+      subType: "auth_service",
+      sourceLocations: [
+        { filePath: "terraform/iam.tf", startLine: 1, endLine: 20 },
+      ],
+      properties: {
+        terraform_address: "google_project_iam_binding.project_editors",
+        section_id: "terraform",
+        section_role: "service",
+      },
+    });
+
+    const folded = foldUnroutedInfrastructureIntoRoutedSection([
+      route,
+      csharpDb,
+      pythonDb,
+      terraformAuth,
+    ]);
+
+    expect(
+      folded.find((c) => c.id === "cmp_sqlite")?.properties.section_id,
+    ).toBe("MyApp.ServiceInterface");
+    expect(
+      folded.find((c) => c.id === "cmp_dynamo")?.properties.section_id,
+    ).toBe("lambdas");
+    expect(folded.find((c) => c.id === "cmp_iam")?.properties.section_id).toBe(
+      "terraform",
+    );
   });
 });
 

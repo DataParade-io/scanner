@@ -3,10 +3,15 @@ import type {
   DetectedFromRef,
 } from "../core/types/component";
 import type { SourceLocation } from "../core/types/file";
+import {
+  isConcreteServiceSectionId,
+  sectionHasHttpRouteOrHandler,
+} from "../core/sectioning/section-runtime";
+import { hasTerraformAddress } from "../core/terraform/component-predicates";
 import { loadClassifierConfig, type NameNormalizationConfig } from "./config";
 import { normalizeComponentName, toDisplayName } from "./naming";
-import { getSectionIdFromProperties } from "./sectioning";
 import { mergePropertyEvidenceMaps } from "./property-evidence";
+import { getSectionIdFromProperties } from "./sectioning";
 
 function aggregateComponentConfidence(
   components: DetectedComponent[],
@@ -437,6 +442,75 @@ export function mergeGlobalIdentityProviderThirdParties(
   return out;
 }
 
+const SPECIFIC_EF_ENGINES = new Set([
+  "sqlite",
+  "postgres",
+  "mssql",
+  "mysql",
+  "cosmosdb",
+]);
+
+function clientIdsOf(component: DetectedComponent): string[] {
+  const raw = component.properties?.client;
+  if (typeof raw === "string" && raw.trim()) return [raw.trim()];
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((value): value is string => typeof value === "string");
+}
+
+/**
+ * A DbContext or package reference with no provider call is `sql`. When the
+ * same section also registers one Entity Framework engine, that generic node
+ * is the same database.
+ */
+export function alignGenericEntityFrameworkWithProvider(
+  components: DetectedComponent[],
+): DetectedComponent[] {
+  if (!components?.length) return [];
+
+  const bySection = new Map<string, DetectedComponent[]>();
+  for (const component of components) {
+    if (component.type !== "asset" || component.subType !== "database")
+      continue;
+    const sectionId = getSectionIdFromProperties(component.properties);
+    const list = bySection.get(sectionId);
+    if (list) list.push(component);
+    else bySection.set(sectionId, [component]);
+  }
+
+  const retarget = new Map<string, string>();
+  for (const group of bySection.values()) {
+    const engines = new Set<string>();
+    for (const component of group) {
+      if (!clientIdsOf(component).includes("entity_framework_core")) continue;
+      const dbType = component.properties?.databaseType;
+      if (typeof dbType === "string" && SPECIFIC_EF_ENGINES.has(dbType)) {
+        engines.add(dbType);
+      }
+    }
+    if (engines.size !== 1) continue;
+    const engine = [...engines][0];
+    for (const component of group) {
+      const clients = clientIdsOf(component);
+      if (clients.length !== 1 || clients[0] !== "entity_framework_core")
+        continue;
+      const dbType = component.properties?.databaseType;
+      if (dbType === "sql" || dbType == null || dbType === "") {
+        retarget.set(component.id, engine);
+      }
+    }
+  }
+  if (retarget.size === 0) return components;
+
+  return components.map((component) => {
+    const engine = retarget.get(component.id);
+    if (!engine) return component;
+    return {
+      ...component,
+      properties: { ...component.properties, databaseType: engine },
+    };
+  });
+}
+
 export function mergeDatabaseAssetsByType(
   components: DetectedComponent[],
 ): DetectedComponent[] {
@@ -566,4 +640,77 @@ export function compactAuthServiceComponents(
   });
 
   return dedupeComponents(canonicalized);
+}
+
+function isCSharpSourcePath(filePath: string): boolean {
+  const normalized = filePath.replace(/\\/g, "/").toLowerCase();
+  return normalized.endsWith(".cs") || normalized.endsWith(".csproj");
+}
+
+/**
+ * C# class libraries often hold the database and auth registration while the
+ * only HTTP routes live in another project. Other languages keep their own
+ * nodes: folding them would merge Terraform, PHP, and Python databases.
+ */
+function isFoldableCSharpInfrastructure(component: DetectedComponent): boolean {
+  if (hasTerraformAddress(component)) return false;
+  const paths = (component.sourceLocations ?? []).map((loc) => loc.filePath);
+  if (paths.length === 0) return false;
+  return paths.every(isCSharpSourcePath);
+}
+
+/**
+ * When exactly one section has HTTP routes, C# auth services and databases
+ * that were detected only in a section with no routes are moved onto that
+ * routed section. Two services that each expose routes keep their own nodes.
+ */
+export function foldUnroutedInfrastructureIntoRoutedSection(
+  components: DetectedComponent[],
+): DetectedComponent[] {
+  if (!components?.length) return [];
+
+  const routedSectionIds = new Set<string>();
+  for (const component of components) {
+    const sectionId = getSectionIdFromProperties(component.properties);
+    if (!isConcreteServiceSectionId(sectionId)) continue;
+    if (sectionHasHttpRouteOrHandler(components, sectionId)) {
+      routedSectionIds.add(sectionId);
+    }
+  }
+  if (routedSectionIds.size !== 1) return components;
+
+  const targetSectionId = [...routedSectionIds][0];
+  const targetSample = components.find(
+    (component) =>
+      getSectionIdFromProperties(component.properties) === targetSectionId,
+  );
+
+  return components.map((component) => {
+    if (!isFoldableCSharpInfrastructure(component)) return component;
+    if (component.type !== "asset") return component;
+    if (
+      component.subType !== "database" &&
+      component.subType !== "auth_service"
+    ) {
+      return component;
+    }
+    const sectionId = getSectionIdFromProperties(component.properties);
+    if (!isConcreteServiceSectionId(sectionId)) return component;
+    if (sectionId === targetSectionId) return component;
+    if (routedSectionIds.has(sectionId)) return component;
+
+    return {
+      ...component,
+      properties: {
+        ...component.properties,
+        section_id: targetSectionId,
+        ...(typeof targetSample?.properties?.section_label === "string"
+          ? { section_label: targetSample.properties.section_label }
+          : {}),
+        ...(typeof targetSample?.properties?.section_role === "string"
+          ? { section_role: targetSample.properties.section_role }
+          : {}),
+      },
+    };
+  });
 }

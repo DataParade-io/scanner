@@ -18,6 +18,7 @@ import {
 } from "../../ingest/file-system";
 import type { PathEligibilityOutcome } from "../../ingest/eligibility";
 import { runAnalyzers } from "../../analyzers/registry";
+import { setAngularUiScanRoot } from "../../patterns/detectors/typescript";
 import { buildTerraformModuleCallManifest } from "../../analyzers/terraform/terraform-module-manifest";
 import {
   mergeTerraformShowJsonFindings,
@@ -30,27 +31,13 @@ import { parseJvmSourceFile } from "../../analyzers/jvm/parser";
 import { parseCppTranslationUnit } from "../../analyzers/cpp/parser";
 import { parseCSharpCompilationUnit } from "../../analyzers/csharp/parser";
 import { parseRubySourceFile } from "../../analyzers/ruby/parser";
-import {
-  detectPythonPatternsFromDependencyManifests,
-} from "../../analyzers/python/dependency-manifests";
-import {
-  detectGoPatternsFromDependencyManifests,
-} from "../../analyzers/go/dependency-manifests";
-import {
-  detectJvmPatternsFromDependencyManifests,
-} from "../../analyzers/jvm/dependency-manifests";
-import {
-  detectCppPatternsFromDependencyManifests,
-} from "../../analyzers/cpp/dependency-manifests";
-import {
-  detectDotnetPatternsFromManifests,
-} from "../../analyzers/csharp/dependency-manifests";
-import {
-  detectTypeScriptPatternsFromDependencyManifests,
-} from "../../analyzers/typescript/dependency-manifests";
-import {
-  detectRubyPatternsFromDependencyManifests,
-} from "../../analyzers/ruby/dependency-manifests";
+import { detectPythonPatternsFromDependencyManifests } from "../../analyzers/python/dependency-manifests";
+import { detectGoPatternsFromDependencyManifests } from "../../analyzers/go/dependency-manifests";
+import { detectJvmPatternsFromDependencyManifests } from "../../analyzers/jvm/dependency-manifests";
+import { detectCppPatternsFromDependencyManifests } from "../../analyzers/cpp/dependency-manifests";
+import { detectDotnetPatternsFromManifests } from "../../analyzers/csharp/dependency-manifests";
+import { detectTypeScriptPatternsFromDependencyManifests } from "../../analyzers/typescript/dependency-manifests";
+import { detectRubyPatternsFromDependencyManifests } from "../../analyzers/ruby/dependency-manifests";
 import {
   discoverServiceSections,
   tagFindingsWithServiceSections,
@@ -108,7 +95,9 @@ function collectLanguageParserStats(
       functionsIndexed += counts.functionsIndexed;
       moduleLevelCallsIndexed += counts.callsIndexed;
       parserWarnings.push(
-        ...counts.warnings.map((w) => `${language}-parser (${file.path}): ${w}`),
+        ...counts.warnings.map(
+          (w) => `${language}-parser (${file.path}): ${w}`,
+        ),
       );
     } catch (err) {
       const message =
@@ -177,8 +166,12 @@ export async function runStructuralScanPhase(
   }
 
   if (config.excludePaths && config.excludePaths.length > 0) {
-    const regexes = config.excludePaths.map((pattern) => patternToRegex(pattern));
-    files = files.filter((file) => !regexes.some((regex) => regex.test(file.path)));
+    const regexes = config.excludePaths.map((pattern) =>
+      patternToRegex(pattern),
+    );
+    files = files.filter(
+      (file) => !regexes.some((regex) => regex.test(file.path)),
+    );
   }
 
   const filesScanned = files.length;
@@ -289,10 +282,16 @@ export async function runStructuralScanPhase(
     tfFiles.length > 0
       ? buildTerraformModuleCallManifest(scanRootDir, files)
       : undefined;
-  let findings = runAnalyzers(files, {
-    terraformModuleManifest,
-    terraformScanRootPath: scanRootDir,
-  });
+  setAngularUiScanRoot(scanRootDir);
+  let findings: RawFinding[];
+  try {
+    findings = runAnalyzers(files, {
+      terraformModuleManifest,
+      terraformScanRootPath: scanRootDir,
+    });
+  } finally {
+    setAngularUiScanRoot(undefined);
+  }
 
   const staticTfFiles = files.filter((f) => f.language === "terraform").length;
   const jsonInputParts: string[] = [];
@@ -592,10 +591,8 @@ export async function runStructuralScan(
   const errors: string[] = [];
   const start = Date.now();
 
-  const structural = await runStructuralScanPhase(
-    rootPath,
-    config,
-    (warning) => warnings.push(warning),
+  const structural = await runStructuralScanPhase(rootPath, config, (warning) =>
+    warnings.push(warning),
   );
   const {
     files,
@@ -655,4 +652,3 @@ export async function runStructuralScan(
     findings,
   };
 }
-
