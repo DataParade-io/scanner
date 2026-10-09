@@ -16,16 +16,48 @@ import {
 interface ParsedAttribute {
   name: string;
   firstStringArg?: string;
+  secondStringArg?: string;
 }
+
+const GENERIC_DATABASE_CALLS = new Set([
+  "ExecuteAsync",
+  "QueryAsync",
+  "QueryFirstOrDefaultAsync",
+]);
+
+const EF_PROVIDER_BY_CALL: Record<string, string> = {
+  UseSqlite: "sqlite",
+  UseNpgsql: "postgres",
+  UseSqlServer: "mssql",
+  UseMySql: "mysql",
+  UseMySQL: "mysql",
+  UseCosmos: "cosmosdb",
+};
+
+const SERVICESTACK_VERB_BY_INTERFACE: Record<string, string> = {
+  IGet: "GET",
+  IPost: "POST",
+  IPut: "PUT",
+  IDelete: "DELETE",
+  IPatch: "PATCH",
+  IHead: "HEAD",
+  IOptions: "OPTIONS",
+};
 
 /**
  * Parse an attribute as carried on `decorators`: `HttpGet("users/{id}")`
  * or a bare `Authorize`.
  */
 function parseAttribute(raw: string): ParsedAttribute {
-  const match = raw.match(/^([A-Za-z_][\w.]*)\s*(?:\(\s*@?"([^"]*)")?/);
+  const match = raw.match(
+    /^([A-Za-z_][\w.]*)\s*(?:\(\s*@?"([^"]*)"(?:\s*,\s*"([^"]*)")?)?/,
+  );
   if (!match) return { name: raw };
-  return { name: match[1], firstStringArg: match[2] };
+  return {
+    name: match[1],
+    firstStringArg: match[2],
+    secondStringArg: match[3],
+  };
 }
 
 function attributesOf(decorators: string[] | undefined): ParsedAttribute[] {
@@ -45,10 +77,7 @@ function usingLocations(
   );
 }
 
-function hasUsingNamespace(
-  ctx: PatternContext,
-  namespaces: string[],
-): boolean {
+function hasUsingNamespace(ctx: PatternContext, namespaces: string[]): boolean {
   return usingLocations(ctx, namespaces).length > 0;
 }
 
@@ -86,7 +115,17 @@ export function detectCSharpDatabaseConnectionsFromConfig(
         ),
       );
 
-    if (!hasUsing && !hasCall && !derivesFromDbType) continue;
+    if (!hasUsing && !derivesFromDbType) {
+      // Calls such as ExecuteAsync are shared with unrelated .NET APIs.
+      // They only count when the database namespace is imported or the call
+      // is specific to that client.
+      if (!hasCall || !hasSpecificDatabaseCall(content, db.callNames)) continue;
+    }
+
+    const provider =
+      db.id === "entity_framework_core"
+        ? matchedEntityFrameworkProvider(content, db.callNames)
+        : undefined;
 
     const callLocations =
       db.callNames.length > 0
@@ -112,12 +151,12 @@ export function detectCSharpDatabaseConnectionsFromConfig(
     )) {
       findings.push({
         pattern: db.patternId,
-        name: db.id,
+        name: provider ?? db.id,
         confidence: db.confidence,
         location,
         properties: {
           client: db.id,
-          databaseType: db.databaseType,
+          databaseType: provider ?? db.databaseType,
         },
       });
     }
@@ -140,7 +179,11 @@ export function detectCSharpAuthFromConfig(
     const hasCall =
       lib.callNames.length > 0 && callNameRegex(lib.callNames).test(content);
 
-    if (!hasUsing && !hasCall) continue;
+    if (lib.callNames.length > 0) {
+      if (!hasCall) continue;
+    } else if (!hasUsing) {
+      continue;
+    }
 
     const callLocations =
       lib.callNames.length > 0
@@ -305,6 +348,10 @@ function joinRouteSegments(
   prefix: string | undefined,
   suffix: string | undefined,
 ): string | undefined {
+  // A template that starts with `/` or `~/` replaces the controller prefix.
+  if (suffix && /^~?\//.test(suffix)) {
+    return suffix.replace(/^~\//, "").replace(/^\/+/, "");
+  }
   const left = prefix?.replace(/\/+$/, "");
   const right = suffix?.replace(/^\/+/, "");
   if (left && right) return `${left}/${right}`;
@@ -325,7 +372,8 @@ export function detectCSharpRoutesFromConfig(
 
   for (const fw of config.csharp.routes.frameworks) {
     const gated = fw.usingNamespaces.length > 0;
-    const supportsFramework = !gated || hasUsingNamespace(ctx, fw.usingNamespaces);
+    const supportsFramework =
+      !gated || hasUsingNamespace(ctx, fw.usingNamespaces);
     if (!supportsFramework) continue;
 
     if (fw.attributeRoutes.length > 0) {
@@ -366,7 +414,10 @@ export function detectCSharpRoutesFromConfig(
           );
           if (!match) continue;
 
-          const routePath = joinRouteSegments(routePrefix, match.firstStringArg);
+          const routePath = joinRouteSegments(
+            routePrefix,
+            match.firstStringArg,
+          );
           const httpMethod = attributeRoute.method;
           const name = httpMethod
             ? `${httpMethod} ${routePath ?? method.name}`
@@ -404,7 +455,9 @@ export function detectCSharpRoutesFromConfig(
             : routeRegex.defaultMethod;
         const method = rawMethod ? rawMethod.toUpperCase() : undefined;
         const routePath =
-          routeRegex.pathGroup != null ? match[routeRegex.pathGroup] : undefined;
+          routeRegex.pathGroup != null
+            ? match[routeRegex.pathGroup]
+            : undefined;
 
         findings.push({
           pattern: fw.patternId,
@@ -427,8 +480,97 @@ export function detectCSharpRoutesFromConfig(
         });
       }
     }
+
+    if (fw.id === "servicestack") {
+      findings.push(...detectServiceStackRequestRoutes(ctx, fw));
+    }
   }
 
+  return findings;
+}
+
+function hasSpecificDatabaseCall(
+  content: string,
+  callNames: string[],
+): boolean {
+  return callNames.some(
+    (name) =>
+      !GENERIC_DATABASE_CALLS.has(name) && callNameRegex([name]).test(content),
+  );
+}
+
+function matchedEntityFrameworkProvider(
+  content: string,
+  callNames: string[],
+): string | undefined {
+  for (const name of callNames) {
+    const provider = EF_PROVIDER_BY_CALL[name];
+    if (!provider) continue;
+    if (callNameRegex([name]).test(content)) return provider;
+  }
+  return undefined;
+}
+
+function isAspNetController(type: {
+  decorators?: string[];
+  baseTypes?: string[];
+}): boolean {
+  const attributes = attributesOf(type.decorators);
+  if (
+    attributes.some(
+      (attr) => attr.name === "ApiController" || attr.name === "Controller",
+    )
+  ) {
+    return true;
+  }
+  return (type.baseTypes ?? []).some((base) => {
+    const name = base.split("<")[0]?.trim();
+    return name === "Controller" || name === "ControllerBase";
+  });
+}
+
+function serviceStackVerb(
+  explicit: string | undefined,
+  baseTypes: string[] | undefined,
+): string {
+  const fromAttribute = explicit?.trim().toUpperCase();
+  if (fromAttribute && /^[A-Z]+$/.test(fromAttribute)) return fromAttribute;
+  for (const base of baseTypes ?? []) {
+    const name = base.split("<")[0]?.trim();
+    if (name && SERVICESTACK_VERB_BY_INTERFACE[name]) {
+      return SERVICESTACK_VERB_BY_INTERFACE[name];
+    }
+  }
+  return "GET";
+}
+
+function detectServiceStackRequestRoutes(
+  ctx: PatternContext,
+  fw: UnifiedPatternConfig["csharp"]["routes"]["frameworks"][number],
+): RawFinding[] {
+  const findings: RawFinding[] = [];
+  for (const type of ctx.types ?? []) {
+    if (isAspNetController(type)) continue;
+    for (const attr of attributesOf(type.decorators)) {
+      if (attr.name !== "Route" || !attr.firstStringArg) continue;
+      if (attr.firstStringArg.includes("[controller]")) continue;
+      const method = serviceStackVerb(attr.secondStringArg, type.baseTypes);
+      const routePath = attr.firstStringArg;
+      findings.push({
+        pattern: fw.patternId,
+        name: `${method} ${routePath}`,
+        confidence: fw.confidence,
+        location: type.location,
+        properties: {
+          framework: "servicestack",
+          httpMethods: [method],
+          path: routePath,
+          requestType: type.name,
+          handlerType: "request_dto",
+        },
+      });
+    }
+  }
   return findings;
 }
 

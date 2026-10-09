@@ -34,6 +34,7 @@ export function dropCrossSectionServiceFlows(
     ) {
       return true;
     }
+    if (flow.targetScopeReason === "servicestack-client-call") return true;
 
     return false;
   });

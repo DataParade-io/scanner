@@ -39,6 +39,73 @@ import { appendTerraformDataFlows } from "./terraform-flows";
 import { resolveAuthMiddlewareTarget } from "./auth-middleware-target";
 import { findApplicationHubForFlows } from "./application-hub";
 
+function linkServiceStackClientCall(
+  finding: RawFinding,
+  requestType: string,
+  findings: RawFinding[],
+  components: DetectedComponent[],
+  sourceComponent: DetectedComponent,
+  index: number,
+): DetectedDataFlow | undefined {
+  const route = findings.find(
+    (candidate) =>
+      candidate.pattern === "express_route" &&
+      candidate.properties?.framework === "servicestack" &&
+      candidate.properties?.requestType === requestType,
+  );
+  if (!route) return undefined;
+
+  const routeFile = (route.location?.filePath ?? "").replace(/\\/g, "/");
+  const routeLine = route.location?.startLine;
+  const target =
+    components.find((component) => {
+      if (component.type !== "asset" || component.subType !== "api")
+        return false;
+      return component.sourceLocations.some((loc) => {
+        const locFile = loc.filePath.replace(/\\/g, "/");
+        return locFile === routeFile && loc.startLine === routeLine;
+      });
+    }) ??
+    components.find((component) => {
+      if (component.type !== "asset" || component.subType !== "api")
+        return false;
+      if (component.properties?.sourceContext === "dependency_manifest")
+        return false;
+      return (
+        typeof route.properties?.section_id === "string" &&
+        component.properties?.section_id === route.properties.section_id
+      );
+    });
+  if (!target || target.id === sourceComponent.id) return undefined;
+
+  const methods = route.properties?.httpMethods;
+  const method = Array.isArray(methods)
+    ? methods.find((value) => typeof value === "string")
+    : undefined;
+  const routePath =
+    typeof route.properties?.path === "string"
+      ? route.properties.path
+      : undefined;
+  const flow = buildFlow(
+    sourceComponent.id,
+    target.id,
+    "api_call",
+    {
+      ...finding,
+      properties: {
+        ...finding.properties,
+        ...(typeof method === "string" ? { httpMethod: method } : {}),
+        ...(routePath ? { url: routePath } : {}),
+      },
+    },
+    index,
+    sourceComponent,
+    target,
+  );
+  flow.targetScopeReason = "servicestack-client-call";
+  return flow;
+}
+
 function isManifestOrNonRuntimeMetadataFile(normalizedPath: string): boolean {
   const fileName = path.posix.basename(normalizedPath).toLowerCase();
   if (NON_RUNTIME_METADATA_FILE_NAMES.has(fileName)) return true;
@@ -122,6 +189,22 @@ export function detectDataFlows(
           target,
         );
         flows.push(flow);
+      }
+      continue;
+    }
+
+    if (finding.properties?.link === "servicestack_request") {
+      const requestType = finding.properties.requestType;
+      if (typeof requestType === "string" && requestType.trim()) {
+        const linked = linkServiceStackClientCall(
+          finding,
+          requestType,
+          findings,
+          components,
+          sourceComponent,
+          ++flowIndex,
+        );
+        if (linked) flows.push(linked);
       }
       continue;
     }
