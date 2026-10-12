@@ -18,6 +18,7 @@ import { FRONTEND_FRAMEWORK_HINTS_SET } from "../../patterns/frontend-frameworks
 export interface ClassifierPhaseOptions {
   projectName: string;
   minimumConfidence: number;
+  organizationDomains?: readonly string[];
 }
 
 function frameworkValues(value: unknown): string[] {
@@ -100,7 +101,9 @@ export function runClassifierPhase(
   sections: ServiceSection[],
   options: ClassifierPhaseOptions,
 ): DetectedComponent[] {
-  const classified = classifyRawFindings(findings);
+  const classified = classifyRawFindings(findings, {
+    organizationDomains: options.organizationDomains,
+  });
   const dedupedComponents = dedupeComponents(classified);
   const compactedAuthComponents = compactAuthServiceComponents(dedupedComponents);
   const mergedDbComponents = mergeDatabaseAssetsByType(compactedAuthComponents);

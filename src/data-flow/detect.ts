@@ -38,6 +38,14 @@ import { detectIntraComponentLineage } from "./intra-component-lineage";
 import { appendTerraformDataFlows } from "./terraform-flows";
 import { resolveAuthMiddlewareTarget } from "./auth-middleware-target";
 import { findApplicationHubForFlows } from "./application-hub";
+import {
+  isOrganizationOwnedExternalApiFinding,
+  normalizeOrganizationDomains,
+} from "../classifier/external-url-third-party";
+
+export interface DetectDataFlowsOptions {
+  organizationDomains?: readonly string[];
+}
 
 function isManifestOrNonRuntimeMetadataFile(normalizedPath: string): boolean {
   const fileName = path.posix.basename(normalizedPath).toLowerCase();
@@ -75,7 +83,11 @@ export function detectDataFlows(
   components: DetectedComponent[],
   findings: RawFinding[],
   sections?: ServiceSection[],
+  options?: DetectDataFlowsOptions,
 ): DetectedDataFlow[] {
+  const organizationDomains = normalizeOrganizationDomains(
+    options?.organizationDomains,
+  );
   const defaultSource = findSourceComponent(components);
   if (!defaultSource) return [];
 
@@ -127,6 +139,9 @@ export function detectDataFlows(
     }
 
     if (finding.pattern === "external_api_call") {
+      if (isOrganizationOwnedExternalApiFinding(finding, organizationDomains)) {
+        continue;
+      }
       const target = findTargetThirdPartyComponent(finding, components);
       if (target) {
         const normalizedFindingPath = normalizeProjectPath(

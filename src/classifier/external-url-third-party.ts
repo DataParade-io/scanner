@@ -1,5 +1,6 @@
 import type { RawFinding } from "../core/types/detection";
 import { loadClassifierConfig } from "./config";
+import { getActiveOrganizationDomains } from "./organization-domains-scan-scope";
 
 /**
  * Structural heuristics (not a vendor list): URLs that are obviously templated or
@@ -7,27 +8,101 @@ import { loadClassifierConfig } from "./config";
  */
 const ENV_OR_DYNAMIC_URL = /\$\{|process\.env|import\.meta\.env|\bgetenv\s*\(/i;
 
-function extractLiteralHttpUrl(finding: RawFinding): string | undefined {
-  if (finding.pattern !== "external_api_call") {
-    return undefined;
-  }
+export interface ExternalHttpUrlOptions {
+  /** When set (including `[]`), only this list is used; when omitted, active scan scope applies. */
+  organizationDomains?: readonly string[];
+}
 
+export function normalizeOrganizationDomains(
+  input?: readonly string[],
+): string[] {
+  if (!input || input.length === 0) return [];
+  const result: string[] = [];
+  const seen = new Set<string>();
+  for (const raw of input) {
+    if (typeof raw !== "string") continue;
+    let d = raw.trim().toLowerCase();
+    if (!d) continue;
+    d = d.replace(/^https?:\/\//i, "");
+    const hostPart = d.split("/")[0] ?? d;
+    d = hostPart.split(":")[0] ?? hostPart;
+    if (d.startsWith("www.")) d = d.slice(4);
+    const labels = d.split(".").filter(Boolean);
+    if (labels.length < 2) continue;
+    if (seen.has(d)) continue;
+    seen.add(d);
+    result.push(d);
+  }
+  return result;
+}
+
+function resolveOrganizationDomains(
+  options?: ExternalHttpUrlOptions,
+): readonly string[] {
+  if (options && options.organizationDomains !== undefined) {
+    return normalizeOrganizationDomains(options.organizationDomains);
+  }
+  return getActiveOrganizationDomains() ?? [];
+}
+
+export function hostMatchesOrganizationDomains(
+  hostname: string,
+  organizationDomains: readonly string[],
+): boolean {
+  if (organizationDomains.length === 0) return false;
+  const host = hostname.toLowerCase().replace(/^www\./, "");
+  for (const domain of organizationDomains) {
+    const d = domain.toLowerCase();
+    if (host === d) return true;
+    if (host.endsWith(`.${d}`)) return true;
+  }
+  return false;
+}
+
+export function urlMatchesOrganizationDomains(
+  url: string,
+  organizationDomains: readonly string[],
+): boolean {
+  if (organizationDomains.length === 0) return false;
+  const t = url.trim();
+  if (!/^https?:\/\//i.test(t)) return false;
+  try {
+    const hostnameRaw = new URL(t).hostname;
+    if (hostnameRaw == null || !hostnameRaw) return false;
+    return hostMatchesOrganizationDomains(hostnameRaw, organizationDomains);
+  } catch {
+    return false;
+  }
+}
+
+export function externalApiCallFindingUrl(
+  finding: RawFinding,
+): string | undefined {
+  if (finding.pattern !== "external_api_call") return undefined;
   const props = finding.properties ?? {};
   const fromProp = typeof props.url === "string" ? props.url.trim() : "";
   const fromName =
     typeof finding.name === "string" && /^https?:\/\//i.test(finding.name)
       ? finding.name.trim()
       : "";
-
   const raw = fromProp || fromName;
-  if (!raw || !/^https?:\/\//i.test(raw)) {
-    return undefined;
-  }
-  if (ENV_OR_DYNAMIC_URL.test(raw)) {
-    return undefined;
-  }
-
+  if (!raw || !/^https?:\/\//i.test(raw)) return undefined;
+  if (ENV_OR_DYNAMIC_URL.test(raw)) return undefined;
   return raw;
+}
+
+export function isOrganizationOwnedExternalApiFinding(
+  finding: RawFinding,
+  organizationDomains: readonly string[],
+): boolean {
+  if (organizationDomains.length === 0) return false;
+  const url = externalApiCallFindingUrl(finding);
+  if (!url) return false;
+  return urlMatchesOrganizationDomains(url, organizationDomains);
+}
+
+function extractLiteralHttpUrl(finding: RawFinding): string | undefined {
+  return externalApiCallFindingUrl(finding);
 }
 
 function isLocalOrPrivateHost(hostname: string): boolean {
@@ -45,7 +120,10 @@ function isLocalOrPrivateHost(hostname: string): boolean {
   return false;
 }
 
-export function shouldIgnoreExternalHttpUrl(url: string | undefined): boolean {
+export function shouldIgnoreExternalHttpUrl(
+  url: string | undefined,
+  options?: ExternalHttpUrlOptions,
+): boolean {
   if (typeof url !== "string") return true;
   const t = url.trim();
   if (!/^https?:\/\//i.test(t)) return true;
@@ -57,10 +135,18 @@ export function shouldIgnoreExternalHttpUrl(url: string | undefined): boolean {
       return true;
     }
     const hostname = hostnameRaw.toLowerCase();
-    if (!/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i.test(hostname)) {
+    if (
+      !/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i.test(
+        hostname,
+      )
+    ) {
       return true;
     }
     if (isLocalOrPrivateHost(hostname)) return true;
+    const organizationDomains = resolveOrganizationDomains(options);
+    if (hostMatchesOrganizationDomains(hostname, organizationDomains)) {
+      return true;
+    }
   } catch {
     return true;
   }
@@ -82,7 +168,7 @@ export function deriveServiceKeyFromHostname(host: string): string {
 
 /**
  * Hostname + registrable domain keys from an absolute http(s) URL (for matching
- * external_api_call findings to third_party nodes by endpoint).
+ * external_api_call findings to third_party nodes by endpoint.
  */
 export function urlHostMatchKeys(url: string): Set<string> {
   const keys = new Set<string>();
@@ -111,8 +197,9 @@ export function urlHostMatchKeys(url: string): Set<string> {
  */
 export function defaultServiceNameFromLiteralPublicUrl(
   url: string | undefined,
+  options?: ExternalHttpUrlOptions,
 ): string | undefined {
-  if (shouldIgnoreExternalHttpUrl(url)) {
+  if (shouldIgnoreExternalHttpUrl(url, options)) {
     return undefined;
   }
   const t = (url as string).trim();
@@ -162,9 +249,10 @@ function inferSubTypeFromClassifierCatalog(hostname: string): string {
  */
 export function inferThirdPartyFromLiteralHttpUrl(
   finding: RawFinding,
+  options?: ExternalHttpUrlOptions,
 ): { serviceName: string; subType: string } | undefined {
   const urlString = extractLiteralHttpUrl(finding);
-  if (!urlString || shouldIgnoreExternalHttpUrl(urlString)) {
+  if (!urlString || shouldIgnoreExternalHttpUrl(urlString, options)) {
     return undefined;
   }
 

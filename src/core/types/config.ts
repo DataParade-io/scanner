@@ -3,6 +3,11 @@ import type { AiInferenceScope, AiProviderId } from "../../types/ai-config";
 
 export interface ScanConfiguration {
   projectName?: string;
+  /**
+   * Hostnames treated as part of the scanned organisation (not third parties).
+   * Subdomains of each entry match (e.g. `api.example.com` for `example.com`).
+   */
+  organizationDomains?: string[];
   excludePaths?: string[];
   enableAPIDetection: boolean;
   enableDatabaseDetection: boolean;

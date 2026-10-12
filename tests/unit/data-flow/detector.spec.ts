@@ -320,6 +320,40 @@ describe("data-flow/detector - DP-P0-CLI-301", () => {
       expect(flows[0].targetComponentId).toBe("tp_clip");
     });
 
+    it("skips third-party flows for organization-owned external_api_call URLs", () => {
+      const components: DetectedComponent[] = [
+        makeComponent({
+          id: "app",
+          name: "Application",
+          type: "asset",
+          subType: "api",
+          properties: { isMainApplication: true },
+        }),
+        makeComponent({
+          id: "tp_self",
+          name: "Dataparade",
+          type: "third_party",
+          subType: "saas_service",
+          properties: { serviceName: "dataparade.io" },
+        }),
+      ];
+      const findings: RawFinding[] = [
+        makeFinding({
+          pattern: "external_api_call",
+          name: "https://api.dataparade.io/v1/foo",
+          properties: {
+            client: "fetch",
+            url: "https://api.dataparade.io/v1/foo",
+            serviceName: "dataparade.io",
+          },
+        }),
+      ];
+      const flows = detectDataFlows(emptyFiles, components, findings, undefined, {
+        organizationDomains: ["dataparade.io"],
+      });
+      expect(flows).toHaveLength(0);
+    });
+
     it("attributes external_api_call to Express API route when handler module is imported from route file", () => {
       const devServer = `import express from 'express';
 import aiCompletionHandler from './api/ai-completion.js';

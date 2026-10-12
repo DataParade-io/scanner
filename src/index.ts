@@ -70,6 +70,10 @@ export {
 export { appendTerraformBareProviderAttachmentFlows } from "./data-flow/terraform-flows";
 export { dedupeDataFlows } from "./data-flow/dedupe";
 export { loadClassifierConfig } from "./classifier/config";
+export {
+  hostMatchesOrganizationDomains,
+  normalizeOrganizationDomains,
+} from "./classifier/external-url-third-party";
 export { DETECTABLE_PROPERTY_KEYS } from "./classifier/enhance-defaults";
 export { runAnalyzers } from "./analyzers/registry";
 

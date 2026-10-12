@@ -1,6 +1,8 @@
 import {
   defaultServiceNameFromLiteralPublicUrl,
+  hostMatchesOrganizationDomains,
   inferThirdPartyFromLiteralHttpUrl,
+  normalizeOrganizationDomains,
   shouldIgnoreExternalHttpUrl,
   urlHostMatchKeys,
 } from "../../../src/classifier/external-url-third-party";
@@ -139,5 +141,65 @@ describe("classifier/external-url-third-party", () => {
     );
     expect(out?.serviceName).toBe("example-saas.io");
     expect(out?.subType).toBe("saas_service");
+  });
+
+  it("normalizeOrganizationDomains strips schemes and rejects bare TLDs", () => {
+    expect(
+      normalizeOrganizationDomains([
+        "HTTPS://WWW.dataparade.io/path",
+        "dataparade.io",
+        "io",
+        "",
+      ]),
+    ).toEqual(["dataparade.io"]);
+  });
+
+  it("hostMatchesOrganizationDomains matches subdomains with suffix boundaries", () => {
+    const domains = ["dataparade.io"];
+    expect(hostMatchesOrganizationDomains("api.dataparade.io", domains)).toBe(
+      true,
+    );
+    expect(hostMatchesOrganizationDomains("dataparade.io", domains)).toBe(true);
+    expect(hostMatchesOrganizationDomains("evil-dataparade.io", domains)).toBe(
+      false,
+    );
+    expect(hostMatchesOrganizationDomains("notdataparade.io", domains)).toBe(
+      false,
+    );
+  });
+
+  it("treats organization domains like non-third-party URLs when configured", () => {
+    const opts = { organizationDomains: ["dataparade.io"] };
+    expect(
+      shouldIgnoreExternalHttpUrl("https://app.dataparade.io/v1", opts),
+    ).toBe(true);
+    expect(
+      inferThirdPartyFromLiteralHttpUrl(
+        makeExternalFinding({ url: "https://app.dataparade.io/v1" }),
+        opts,
+      ),
+    ).toBeUndefined();
+    expect(
+      shouldIgnoreExternalHttpUrl("https://api.stripe.com/v1/charges", opts),
+    ).toBe(false);
+    expect(
+      inferThirdPartyFromLiteralHttpUrl(
+        makeExternalFinding({ url: "https://api.stripe.com/v1/charges" }),
+        opts,
+      )?.serviceName,
+    ).toBe("stripe.com");
+  });
+
+  it("empty organizationDomains list behaves like unset for public hosts", () => {
+    const url = "https://api.weirdvendor.io/v1/foo";
+    expect(shouldIgnoreExternalHttpUrl(url, { organizationDomains: [] })).toBe(
+      false,
+    );
+    expect(
+      inferThirdPartyFromLiteralHttpUrl(
+        makeExternalFinding({ url }),
+        { organizationDomains: [] },
+      )?.serviceName,
+    ).toBe("weirdvendor.io");
   });
 });
