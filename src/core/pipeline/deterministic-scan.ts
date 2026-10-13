@@ -27,6 +27,7 @@ import { enrichOrchestratorResultWithPersonalDataLayers } from "./enrich-persona
 import { assignStableEntityIds } from "./stable-entity-ids";
 import { applyTerraformMinimalServiceScanResult } from "./terraform-minimal-services";
 import type { ServiceSection } from "../sectioning/discover-service-sections";
+import { normalizeOrganizationDomains } from "../../classifier/external-url-third-party";
 
 export function emitScanProgress(
   onProgress: ((progress: ScanProgress) => void) | undefined,
@@ -89,6 +90,9 @@ export async function runDeterministicScanPhases(
   const errors = workState?.errors ?? [];
 
   const projectNameFromPath = path.basename(rootPath.toString());
+  const organizationDomains = normalizeOrganizationDomains(
+    config.organizationDomains,
+  );
 
   emitScanProgress(onProgress, "ingest", 0.05, 0, `Ingesting files from ${rootPath}...`);
   emitScanProgress(onProgress, "analyze", 0.25, 0, "Running structural scan...");
@@ -121,6 +125,7 @@ export async function runDeterministicScanPhases(
   const components = runClassifierPhase(findings, sections, {
     projectName: config.projectName ?? projectNameFromPath,
     minimumConfidence: config.minimumConfidence,
+    organizationDomains,
   });
 
   let dataFlows: DetectedDataFlow[] = [];
@@ -137,6 +142,7 @@ export async function runDeterministicScanPhases(
       dataFlows = runDataFlowPhase(files, components, findings, sections, {
         enableDataFlowDetection: config.enableDataFlowDetection,
         minimumConfidence: config.minimumConfidence,
+        organizationDomains,
       });
     } catch (err) {
       const message =

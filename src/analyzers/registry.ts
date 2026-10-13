@@ -17,6 +17,7 @@ import type { TerraformModuleCallManifest } from "./terraform/terraform-module-m
 import { detectRubyDatabaseYmlFromConfig } from "../patterns/detectors/ruby";
 import { loadUnifiedPatternConfig } from "../patterns/config";
 import { isRailsDatabaseYmlPath, normalizeRubyPath } from "./ruby/parser";
+import { runWithOrganizationDomainsScope } from "../classifier/organization-domains-scan-scope";
 
 const typeScriptAnalyzer = createTypeScriptAnalyzer();
 const pythonAnalyzer = createPythonAnalyzer();
@@ -47,6 +48,7 @@ const registry = new Map<FileLanguage, Analyzer>([
 export interface RunAnalyzersOptions {
   terraformModuleManifest?: TerraformModuleCallManifest;
   terraformScanRootPath?: string;
+  organizationDomains?: readonly string[];
 }
 
 export function registerAnalyzer(
@@ -74,40 +76,42 @@ export function runAnalyzers(
         }
       : undefined;
 
-  for (const file of files) {
-    if (file.language === "terraform") {
-      findings.push(...detectTerraformPatterns(file, tfConfig, tfOpts));
-      continue;
-    }
+  return runWithOrganizationDomainsScope(opts?.organizationDomains, () => {
+    for (const file of files) {
+      if (file.language === "terraform") {
+        findings.push(...detectTerraformPatterns(file, tfConfig, tfOpts));
+        continue;
+      }
 
-    if (file.language === "yaml") {
-      const normalizedPath = normalizeRubyPath(file.path);
-      if (isRailsDatabaseYmlPath(normalizedPath)) {
-        const rubyConfig = loadUnifiedPatternConfig();
-        findings.push(
-          ...detectRubyDatabaseYmlFromConfig(
-            {
-              language: "ruby",
-              file,
-              normalizedPath,
-              strippedContent: file.content,
-            },
-            rubyConfig,
-          ),
-        );
+      if (file.language === "yaml") {
+        const normalizedPath = normalizeRubyPath(file.path);
+        if (isRailsDatabaseYmlPath(normalizedPath)) {
+          const rubyConfig = loadUnifiedPatternConfig();
+          findings.push(
+            ...detectRubyDatabaseYmlFromConfig(
+              {
+                language: "ruby",
+                file,
+                normalizedPath,
+                strippedContent: file.content,
+              },
+              rubyConfig,
+            ),
+          );
+        }
+      }
+
+      const analyzer = registry.get(file.language);
+      if (!analyzer) continue;
+
+      const result = analyzer.detect(file);
+      if (Array.isArray(result) && result.length > 0) {
+        findings.push(...result);
       }
     }
 
-    const analyzer = registry.get(file.language);
-    if (!analyzer) continue;
-
-    const result = analyzer.detect(file);
-    if (Array.isArray(result) && result.length > 0) {
-      findings.push(...result);
-    }
-  }
-
-  return findings;
+    return findings;
+  });
 }
 
 export async function runAnalyzersForRootPath(

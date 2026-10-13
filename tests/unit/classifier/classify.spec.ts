@@ -360,6 +360,25 @@ describe("classifier/classify - DP-P0-CLI-201", () => {
     expect(components[0].subType).toBe("saas_service");
   });
 
+  it("does not classify organization-owned https hosts as third_party when configured", () => {
+    const findings: RawFinding[] = [
+      makeFinding({
+        pattern: "external_api_call",
+        name: "https://api.dataparade.io/v1/foo",
+        confidence: 0.85,
+        properties: {
+          client: "fetch",
+          url: "https://api.dataparade.io/v1/foo",
+          serviceName: "dataparade.io",
+        },
+      }),
+    ];
+    const components = classifyRawFindings(findings, {
+      organizationDomains: ["dataparade.io"],
+    });
+    expect(components.filter((c) => c.type === "third_party")).toHaveLength(0);
+  });
+
   it("merges differing property values into arrays and aggregates confidence deterministically", () => {
     const findings: RawFinding[] = [
       makeFinding({

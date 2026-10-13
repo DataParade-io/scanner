@@ -5,6 +5,7 @@ import { detectDataFlows } from "../../data-flow";
 export interface DataFlowPhaseOptions {
   enableDataFlowDetection: boolean;
   minimumConfidence: number;
+  organizationDomains?: readonly string[];
 }
 
 export function runDataFlowPhase(
@@ -16,7 +17,9 @@ export function runDataFlowPhase(
 ): DetectedDataFlow[] {
   if (!options.enableDataFlowDetection) return [];
 
-  const flows = detectDataFlows(files, components, findings, sections);
+  const flows = detectDataFlows(files, components, findings, sections, {
+    organizationDomains: options.organizationDomains,
+  });
   return flows.filter((flow) => flow.confidence >= options.minimumConfidence);
 }
 

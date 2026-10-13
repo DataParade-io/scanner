@@ -292,6 +292,7 @@ export async function runStructuralScanPhase(
   let findings = runAnalyzers(files, {
     terraformModuleManifest,
     terraformScanRootPath: scanRootDir,
+    organizationDomains: config.organizationDomains,
   });
 
   const staticTfFiles = files.filter((f) => f.language === "terraform").length;

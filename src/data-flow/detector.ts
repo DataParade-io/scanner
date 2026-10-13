@@ -3,7 +3,10 @@ import type { DetectedDataFlow } from "../core/types/data-flow";
 import type { RawFinding } from "../core/types/detection";
 import type { FileInfo } from "../core/types/file";
 import type { ServiceSection } from "../core/sectioning/discover-service-sections";
-import { detectDataFlows as detectRawDataFlows } from "./detect";
+import {
+  detectDataFlows as detectRawDataFlows,
+  type DetectDataFlowsOptions,
+} from "./detect";
 import { postprocessDataFlows } from "./postprocess";
 
 /**
@@ -20,8 +23,9 @@ export function detectDataFlows(
   components: DetectedComponent[],
   findings: RawFinding[],
   sections?: ServiceSection[],
+  options?: DetectDataFlowsOptions,
 ): DetectedDataFlow[] {
-  const raw = detectRawDataFlows(files, components, findings, sections);
+  const raw = detectRawDataFlows(files, components, findings, sections, options);
   return postprocessDataFlows(components, raw);
 }
 

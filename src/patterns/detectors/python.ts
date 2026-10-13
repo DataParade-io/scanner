@@ -1,6 +1,10 @@
 import type { ImportLike, PatternContext } from "../engine";
 import type { UnifiedPatternConfig } from "../config";
-import { defaultServiceNameFromLiteralPublicUrl } from "../../classifier/external-url-third-party";
+import {
+  defaultServiceNameFromLiteralPublicUrl,
+  urlMatchesOrganizationDomains,
+} from "../../classifier/external-url-third-party";
+import { getActiveOrganizationDomains } from "../../classifier/organization-domains-scan-scope";
 import type { RawFinding } from "../../core/types/detection";
 import type { SourceLocation } from "../../core/types/file";
 import {
@@ -588,6 +592,15 @@ export function detectPythonExternalApisFromConfig(
       const snippet = call.argumentsSnippet ?? "";
       const match = client.urlRegex.exec(snippet);
       const url = match?.[1];
+      const orgDomains = getActiveOrganizationDomains();
+      if (
+        url &&
+        orgDomains &&
+        orgDomains.length > 0 &&
+        urlMatchesOrganizationDomains(url, orgDomains)
+      ) {
+        continue;
+      }
 
       const serviceName =
         inferServiceNameFromUrl(url, urlHostPatterns) ??

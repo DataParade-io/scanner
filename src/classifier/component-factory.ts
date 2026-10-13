@@ -14,8 +14,15 @@ import {
 } from "./config";
 import {
   inferThirdPartyFromLiteralHttpUrl,
+  isOrganizationOwnedExternalApiFinding,
+  normalizeOrganizationDomains,
   shouldIgnoreExternalHttpUrl,
+  type ExternalHttpUrlOptions,
 } from "./external-url-third-party";
+
+export interface ClassifyRawFindingsOptions {
+  organizationDomains?: readonly string[];
+}
 import {
   NON_RUNTIME_METADATA_EXTENSIONS,
   NON_RUNTIME_METADATA_FILE_NAMES,
@@ -323,8 +330,14 @@ function syntheticThirdPartyEntry(
 function findThirdPartyMatch(
   finding: RawFinding,
   config: ClassifierConfig,
+  urlOptions: ExternalHttpUrlOptions,
+  organizationDomains: readonly string[],
 ): ThirdPartyConfigEntry | undefined {
   if (finding.pattern !== "external_api_call") {
+    return undefined;
+  }
+
+  if (isOrganizationOwnedExternalApiFinding(finding, organizationDomains)) {
     return undefined;
   }
 
@@ -353,7 +366,7 @@ function findThirdPartyMatch(
     }
   }
 
-  const inferred = inferThirdPartyFromLiteralHttpUrl(finding);
+  const inferred = inferThirdPartyFromLiteralHttpUrl(finding, urlOptions);
   if (inferred)
     return syntheticThirdPartyEntry(inferred.serviceName, inferred.subType);
   return undefined;
@@ -465,6 +478,8 @@ function decideComponentTypeAndSubType(
   group: FindingGroup,
   config: ClassifierConfig,
   patternDefaultsById: Record<PatternId, PatternDefaultConfig | undefined>,
+  urlOptions: ExternalHttpUrlOptions,
+  organizationDomains: readonly string[],
 ): {
   type: ComponentType;
   subType?: string;
@@ -492,7 +507,12 @@ function decideComponentTypeAndSubType(
       }
     }
 
-    const tp = findThirdPartyMatch(finding, config);
+    const tp = findThirdPartyMatch(
+      finding,
+      config,
+      urlOptions,
+      organizationDomains,
+    );
     if (tp && !matchedThirdParty) matchedThirdParty = tp;
   }
 
@@ -523,8 +543,16 @@ function decideComponentTypeAndSubType(
 
 export function classifyRawFindings(
   rawFindings: RawFinding[],
+  options?: ClassifyRawFindingsOptions,
 ): DetectedComponent[] {
   if (!rawFindings || rawFindings.length === 0) return [];
+
+  const organizationDomains = normalizeOrganizationDomains(
+    options?.organizationDomains,
+  );
+  const urlOptions: ExternalHttpUrlOptions = {
+    organizationDomains,
+  };
 
   const findings = rawFindings.filter((f) => {
     if (f.pattern !== "terraform_resource") return true;
@@ -581,7 +609,18 @@ export function classifyRawFindings(
       group,
       config,
       patternDefaultsById,
+      urlOptions,
+      organizationDomains,
     );
+
+    if (
+      group.findings.length > 0 &&
+      group.findings.every((f) =>
+        isOrganizationOwnedExternalApiFinding(f, organizationDomains),
+      )
+    ) {
+      continue;
+    }
 
     if (
       type === "third_party" &&
@@ -617,7 +656,7 @@ export function classifyRawFindings(
             : typeof f.name === "string" && /^https?:\/\//i.test(f.name)
               ? f.name
               : undefined;
-        return shouldIgnoreExternalHttpUrl(urlRaw);
+        return shouldIgnoreExternalHttpUrl(urlRaw, urlOptions);
       })
     ) {
       continue;

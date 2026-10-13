@@ -1,4 +1,7 @@
-export { classifyRawFindings } from "./component-factory";
+export {
+  classifyRawFindings,
+  type ClassifyRawFindingsOptions,
+} from "./component-factory";
 export {
   dedupeComponents,
   mergeDatabaseAssetsByType,
