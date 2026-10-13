@@ -24,7 +24,7 @@ import {
 } from "./sorting";
 import type { OrchestratorScanResult } from "./orchestrator-result";
 import { enrichOrchestratorResultWithPersonalDataLayers } from "./enrich-personal-data-layers";
-import { assignStableComponentIds } from "./stable-component-ids";
+import { assignStableEntityIds } from "./stable-entity-ids";
 import { applyTerraformMinimalServiceScanResult } from "./terraform-minimal-services";
 import type { ServiceSection } from "../sectioning/discover-service-sections";
 
@@ -213,15 +213,13 @@ export function finalizeDeterministicScanResult(
     aiInferenceProposalDetails: input.aiInferenceProposalDetails,
     terraformScanSummary: work.terraformScanSummary,
   });
-  const stableIds = assignStableComponentIds(reduced.components, reduced.dataFlows);
-
-  const scanResult: ScanResult = {
+  // Content-derived component and flow ids (stable across re-scans); rewrites
+  // every component/flow reference, including AI summaries and proposal details.
+  const scanResult: ScanResult = assignStableEntityIds({
     ...reduced,
-    components: stableIds.components,
-    dataFlows: stableIds.dataFlows,
     aiInferenceSummary: input.aiInferenceSummary,
     structuralEnrichmentSummary: input.structuralEnrichmentSummary,
-  };
+  });
 
   const validation = validateScanResult(scanResult);
   if (!validation.ok) {

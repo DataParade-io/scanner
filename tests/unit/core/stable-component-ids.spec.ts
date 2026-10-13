@@ -1,9 +1,10 @@
 import type { DetectedComponent } from "../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../src/core/types/data-flow";
+import { stableComponentKey } from "../../../src/core/pipeline/stable-component-ids";
 import {
   assignStableComponentIds,
-  stableComponentKey,
-} from "../../../src/core/pipeline/stable-component-ids";
+  STABLE_COMPONENT_ID_PATTERN,
+} from "../../../src/core/pipeline/stable-entity-ids";
 import { testAsset as asset } from "../../helpers/scan-result-builders";
 
 function idsOf(components: DetectedComponent[]): string[] {
@@ -106,7 +107,7 @@ describe("stable-component-ids", () => {
       withExtra.components.find(
         (c) => c.properties.terraform_address === "module.db.aws_db_instance.main",
       )?.id,
-    ).toMatch(/^cmp_\d+$/);
+    ).toMatch(STABLE_COMPONENT_ID_PATTERN);
     expect(withExtra.components.some((c) => c.id === "cmp_rds")).toBe(false);
   });
 
@@ -145,8 +146,8 @@ describe("stable-component-ids", () => {
       (c) => c.properties.managed_service_key === "s3",
     )?.id;
 
-    expect(newProviderId).toMatch(/^cmp_\d+$/);
-    expect(newManagedId).toMatch(/^cmp_\d+$/);
+    expect(newProviderId).toMatch(STABLE_COMPONENT_ID_PATTERN);
+    expect(newManagedId).toMatch(STABLE_COMPONENT_ID_PATTERN);
     expect(out.components.find((c) => c.properties.managed_service_key === "s3")?.properties
       .managed_by_provider).toBe(newProviderId);
     expect(out.dataFlows[0]?.sourceComponentId).toBe(newProviderId);

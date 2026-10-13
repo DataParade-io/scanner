@@ -40,7 +40,26 @@ export {
   type DataParadeLink,
 } from "./graph/build-dataparade-graph";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
-export { stableComponentKey, assignStableComponentIds } from "./core/pipeline/stable-component-ids";
+export { stableComponentKey } from "./core/pipeline/stable-component-ids";
+export {
+  assignStableComponentIds,
+  assignStableEntityIds,
+  assignStableEntityIdsWithMaps,
+  buildComponentKeyById,
+  normalizeFlowEndpoint,
+  resolvedStableComponentKey,
+  stableComponentId,
+  stableFlowId,
+  stableFlowKey,
+  STABLE_COMPONENT_ID_PATTERN,
+  STABLE_COMPONENT_ID_PREFIX,
+  STABLE_FLOW_ID_PATTERN,
+  STABLE_FLOW_ID_PREFIX,
+} from "./core/pipeline/stable-entity-ids";
+export type {
+  ComponentKeyLookup,
+  StableEntityIdAssignment,
+} from "./core/pipeline/stable-entity-ids";
 export { sortDataFlowsDeterministically } from "./core/pipeline/sorting";
 export type {
   CollectEvalFindingsResult,

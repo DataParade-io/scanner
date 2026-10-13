@@ -1,6 +1,5 @@
 import { getSectionIdFromProperties } from "../../classifier/sectioning";
 import type { DetectedComponent } from "../types/component";
-import type { DetectedDataFlow } from "../types/data-flow";
 
 function normalizeName(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, " ");
@@ -10,13 +9,18 @@ function firstSourceFilePath(component: DetectedComponent): string {
   const paths = (component.sourceLocations ?? []).map((loc) =>
     loc.filePath.replace(/\\/g, "/"),
   );
-  paths.sort((a, b) => a.localeCompare(b));
+  // Code-unit order (not localeCompare) so keys do not depend on the runtime locale.
+  paths.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
   return paths[0] ?? "";
 }
 
 /**
- * Deterministic identity for remapping component ids after Terraform reduction.
+ * Deterministic identity of a component, hashed into its id by
+ * `stableComponentId` / `assignStableEntityIds` (see stable-entity-ids.ts).
  * Priority: terraform_address → managed service tuple → app surface tuple.
+ *
+ * The managed tuple embeds `managed_by_provider`, which is a component id; the
+ * id assigners resolve it to the provider's own key so the result is stable.
  */
 export function stableComponentKey(component: DetectedComponent): string {
   const addr = component.properties?.terraform_address;
@@ -40,49 +44,4 @@ export function stableComponentKey(component: DetectedComponent): string {
   const subType = component.subType ?? "";
   const filePath = firstSourceFilePath(component);
   return `app:${sid}|${component.type}|${subType}|${filePath}|${normalizeName(component.name)}`;
-}
-
-function compareComponentsForStableIds(
-  a: DetectedComponent,
-  b: DetectedComponent,
-): number {
-  const keyCmp = stableComponentKey(a).localeCompare(stableComponentKey(b));
-  if (keyCmp !== 0) return keyCmp;
-  return a.id.localeCompare(b.id);
-}
-
-/**
- * Reassign `cmp_1` … `cmp_n` from {@link stableComponentKey} ordering and rewrite
- * flow endpoints plus `managed_by_provider` references.
- */
-export function assignStableComponentIds(
-  components: DetectedComponent[],
-  dataFlows: DetectedDataFlow[],
-): { components: DetectedComponent[]; dataFlows: DetectedDataFlow[] } {
-  const sorted = [...components].sort(compareComponentsForStableIds);
-
-  const idRemap = new Map<string, string>();
-  sorted.forEach((component, index) => {
-    idRemap.set(component.id, `cmp_${index + 1}`);
-  });
-
-  const remappedComponents = components.map((component) => {
-    const newId = idRemap.get(component.id) ?? component.id;
-    const properties = { ...component.properties };
-    const managedBy = properties.managed_by_provider;
-    if (typeof managedBy === "string" && idRemap.has(managedBy)) {
-      properties.managed_by_provider = idRemap.get(managedBy);
-    }
-    return { ...component, id: newId, properties };
-  });
-
-  const remappedFlows = dataFlows.map((flow) => ({
-    ...flow,
-    sourceComponentId:
-      idRemap.get(flow.sourceComponentId) ?? flow.sourceComponentId,
-    targetComponentId:
-      idRemap.get(flow.targetComponentId) ?? flow.targetComponentId,
-  }));
-
-  return { components: remappedComponents, dataFlows: remappedFlows };
 }
