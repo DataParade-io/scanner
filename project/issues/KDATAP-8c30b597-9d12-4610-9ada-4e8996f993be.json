@@ -1,0 +1,32 @@
+{
+  "id": "KDATAP-8c30b597-9d12-4610-9ada-4e8996f993be",
+  "title": "Implement Cursor IDE discovery across both index schemas",
+  "description": "Implement discovery over ~/Library/Application Support/Cursor/User: globalStorage/state.vscdb (composerData and bubbleId keys in cursorDiskKV) plus workspaceStorage/<hash>/state.vscdb with workspace.json folder URIs for attribution. Union the Cursor 2.x per-workspace composer.composerData allComposers index, the 3.0+ central composer.composerHeaders index (with workspaceIdentifier), selectedComposerIds/lastFocusedComposerIds, and composerChatViewPane tab keys \u2014 the 3.0 migration is one-way and the central index misses old chats not re-opened since migration. Exclude subagent composers (task-tool style prefixed ids \u2014 verify on a real Mac). Open databases read-only with WAL present (never read state.vscdb without its -wal sidecar) and a busy timeout, with copy-then-read fallback while Cursor runs.\n\nDone when: discovery returns the same composer set from 2.x-shaped and 3.x-shaped fixture pairs, attributes project paths, and reads safely while a writer holds the DB.",
+  "type": "task",
+  "status": "open",
+  "priority": 2,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+  "labels": [],
+  "dependencies": [
+    {
+      "target": "KDATAP-09374a1a-a1ae-49a3-ba3a-b60e4ff774d5",
+      "type": "blocked-by"
+    }
+  ],
+  "comments": [],
+  "created_at": "2026-10-02T02:44:21.502323Z",
+  "updated_at": "2026-10-02T02:45:22.432823Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}
