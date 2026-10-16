@@ -32,6 +32,7 @@ import {
   ensureLocationEvidenceForValuedKeys,
   mergePropertyEvidenceMaps,
 } from "./property-evidence";
+import { FRONTEND_FRAMEWORK_HINTS_SET } from "../patterns/frontend-frameworks";
 
 interface FindingGroup {
   key: string;
@@ -235,7 +236,9 @@ function groupFindings(
           .toLowerCase();
         const frameworkRaw = finding.properties?.framework;
         const framework =
-          typeof frameworkRaw === "string" ? frameworkRaw.trim().toLowerCase() : "";
+          typeof frameworkRaw === "string"
+            ? frameworkRaw.trim().toLowerCase()
+            : "";
         const isRailsRouteDeclaration =
           framework === "rails" && filePath.endsWith("config/routes.rb");
         if (!isGenericRoute || isRailsRouteDeclaration) {
@@ -243,7 +246,9 @@ function groupFindings(
             ? `::L${finding.location.startLine}`
             : "";
           key = `${sectionId}::route::${routeLabel.toLowerCase()}::${filePath}${lineAnchor}`;
-          displayName = isRailsRouteDeclaration ? finding.name.trim() : routeLabel;
+          displayName = isRailsRouteDeclaration
+            ? finding.name.trim()
+            : routeLabel;
         } else {
           key = `${MERGED_HTTP_ROUTE_GROUP_KEY_PREFIX}:${sectionId}`;
           displayName = MERGED_HTTP_ROUTE_DISPLAY_NAME;
@@ -493,7 +498,8 @@ function decideComponentTypeAndSubType(
 
   for (const finding of group.findings) {
     const patternDefault = patternDefaultsById[finding.pattern] as
-      PatternDefaultConfig | undefined;
+      | PatternDefaultConfig
+      | undefined;
     if (patternDefault && patternDefault.priority < bestPriority) {
       bestPriority = patternDefault.priority;
       chosenType = patternDefault.type;
@@ -530,6 +536,13 @@ function decideComponentTypeAndSubType(
     if (mapped?.subType) chosenSubType = mapped.subType;
   }
 
+  if (
+    chosenType === "asset" &&
+    group.findings.some((finding) => isFrontendDependencyManifest(finding))
+  ) {
+    chosenSubType = "application";
+  }
+
   for (const finding of group.findings) {
     const explicit = finding.properties?.componentSubType;
     if (typeof explicit === "string" && explicit.trim()) {
@@ -539,6 +552,16 @@ function decideComponentTypeAndSubType(
   }
 
   return { type: chosenType, subType: chosenSubType };
+}
+
+function isFrontendDependencyManifest(finding: RawFinding): boolean {
+  if (finding.properties?.sourceContext !== "dependency_manifest") return false;
+  const framework = finding.properties?.framework;
+  const values = Array.isArray(framework) ? framework : [framework];
+  return values.some(
+    (value) =>
+      typeof value === "string" && FRONTEND_FRAMEWORK_HINTS_SET.has(value),
+  );
 }
 
 export function classifyRawFindings(
@@ -555,6 +578,7 @@ export function classifyRawFindings(
   };
 
   const findings = rawFindings.filter((f) => {
+    if (f.properties?.link === "servicestack_request") return false;
     if (f.pattern !== "terraform_resource") return true;
     const rt = f.properties?.resource_type;
     if (typeof rt !== "string") return true;

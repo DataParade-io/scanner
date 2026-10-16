@@ -10,26 +10,31 @@ import type {
  * catalog matches lowercase fragments (`stripe`, `sendgrid`), while .NET
  * namespaces are PascalCase, so the lowercased forms are carried alongside.
  */
-function usingsAsImports(model: CSharpCompilationUnitModel): ImportLike[] {
-  return model.usings.map((entry) => {
-    const namespaceName = entry.namespace;
-    const segments = namespaceName.split(".").filter(Boolean);
-    const names = Array.from(
-      new Set([
-        namespaceName,
-        namespaceName.toLowerCase(),
-        ...segments,
-        ...segments.map((segment) => segment.toLowerCase()),
-      ]),
-    ).filter(Boolean);
+export function usingEntryToImport(entry: {
+  namespace: string;
+  location: { startLine: number; endLine: number };
+}): ImportLike {
+  const namespaceName = entry.namespace;
+  const segments = namespaceName.split(".").filter(Boolean);
+  const names = Array.from(
+    new Set([
+      namespaceName,
+      namespaceName.toLowerCase(),
+      ...segments,
+      ...segments.map((segment) => segment.toLowerCase()),
+    ]),
+  ).filter(Boolean);
 
-    return {
-      module: namespaceName,
-      names,
-      startLine: entry.location.startLine,
-      endLine: entry.location.endLine,
-    };
-  });
+  return {
+    module: namespaceName,
+    names,
+    startLine: entry.location.startLine,
+    endLine: entry.location.endLine,
+  };
+}
+
+function usingsAsImports(model: CSharpCompilationUnitModel): ImportLike[] {
+  return model.usings.map((entry) => usingEntryToImport(entry));
 }
 
 /** Attributes are carried as decorator strings: both `HttpGet("x")` and `HttpGet`. */
@@ -44,13 +49,21 @@ function attributesAsDecorators(attributes: CSharpAttributeEntry[]): string[] {
 
 export function detectCSharpPatternsFromModel(
   model: CSharpCompilationUnitModel,
+  projectGlobalImports: ImportLike[] = [],
 ): RawFinding[] {
+  const imports = usingsAsImports(model);
+  for (const extra of projectGlobalImports) {
+    if (!imports.some((imp) => imp.module === extra.module)) {
+      imports.push(extra);
+    }
+  }
+
   return matchPatterns({
     language: "csharp",
     file: model.file,
     normalizedPath: model.normalizedPath,
     strippedContent: model.strippedContent,
-    imports: usingsAsImports(model),
+    imports,
     functions: model.methods.map((method) => ({
       name: method.name,
       decorators: attributesAsDecorators(method.attributes),

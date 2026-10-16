@@ -9,6 +9,8 @@ import {
   ensureApplicationHubsForOccupiedSections,
   injectActorIfMissing,
   mergeDatabaseAssetsByType,
+  alignGenericEntityFrameworkWithProvider,
+  foldUnroutedInfrastructureIntoRoutedSection,
   synthesizeSectionApiNodes,
 } from "../../classifier/classify";
 import { enhanceComponents } from "../../classifier/enhance";
@@ -31,7 +33,10 @@ function frameworkValues(value: unknown): string[] {
   return [];
 }
 
-function mergeUniqueStringValues(current: unknown, incoming: string[]): unknown {
+function mergeUniqueStringValues(
+  current: unknown,
+  incoming: string[],
+): unknown {
   const existing = frameworkValues(current);
   const merged = Array.from(new Set([...existing, ...incoming]));
   if (merged.length === 0) return current;
@@ -62,7 +67,10 @@ function collapseManifestFrontendFrameworkAssets(
   const updatesById = new Map<string, DetectedComponent>();
 
   for (const component of components) {
-    if (component.type !== "asset" || component.subType !== "api") continue;
+    if (component.type !== "asset") continue;
+    if (component.subType !== "api" && component.subType !== "application") {
+      continue;
+    }
     if (component.properties?.sourceContext !== "dependency_manifest") continue;
 
     const sectionId =
@@ -74,14 +82,17 @@ function collapseManifestFrontendFrameworkAssets(
     const main = mainBySection.get(sectionId);
     if (!main || main.id === component.id) continue;
 
-    const frameworks = frameworkValues(component.properties?.framework).filter((fw) =>
-      FRONTEND_FRAMEWORK_HINTS_SET.has(fw.toLowerCase()),
+    const frameworks = frameworkValues(component.properties?.framework).filter(
+      (fw) => FRONTEND_FRAMEWORK_HINTS_SET.has(fw.toLowerCase()),
     );
     if (frameworks.length === 0) continue;
 
     const currentMain = updatesById.get(main.id) ?? main;
     const nextProps = { ...currentMain.properties };
-    nextProps.framework = mergeUniqueStringValues(nextProps.framework, frameworks);
+    nextProps.framework = mergeUniqueStringValues(
+      nextProps.framework,
+      frameworks,
+    );
     nextProps.technology_stack = mergeUniqueStringValues(
       nextProps.technology_stack,
       frameworks,
@@ -105,11 +116,19 @@ export function runClassifierPhase(
     organizationDomains: options.organizationDomains,
   });
   const dedupedComponents = dedupeComponents(classified);
-  const compactedAuthComponents = compactAuthServiceComponents(dedupedComponents);
+  const compactedAuthComponents =
+    compactAuthServiceComponents(dedupedComponents);
   const mergedDbComponents = mergeDatabaseAssetsByType(compactedAuthComponents);
+  const foldedInfrastructure = dedupeComponents(
+    mergeDatabaseAssetsByType(
+      alignGenericEntityFrameworkWithProvider(
+        foldUnroutedInfrastructureIntoRoutedSection(mergedDbComponents),
+      ),
+    ),
+  );
 
   const withPerSectionApplication = injectApplicationAssetsPerSectionIfMissing(
-    mergedDbComponents,
+    foldedInfrastructure,
     sections,
     { projectName: options.projectName },
   );
@@ -122,11 +141,11 @@ export function runClassifierPhase(
     { projectName: options.projectName },
   );
   const enhanced = enhanceComponents(withApplication);
-  const mergedFrameworkHelpers = collapseManifestFrontendFrameworkAssets(enhanced);
+  const mergedFrameworkHelpers =
+    collapseManifestFrontendFrameworkAssets(enhanced);
   const withSectionApiNodes = synthesizeSectionApiNodes(mergedFrameworkHelpers);
 
   return enforceComponentTaxonomy(
     injectActorIfMissing(withSectionApiNodes),
   ).filter((component) => component.confidence >= options.minimumConfidence);
 }
-

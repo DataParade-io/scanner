@@ -175,7 +175,6 @@ auth:
       callNames:
         - AddMicrosoftIdentityWebApp
         - AddMicrosoftIdentityWebApi
-        - AddAuthentication
         - AddOpenIdConnect
         - AddOAuth
       strategy: oauth2
@@ -229,6 +228,12 @@ routes:
           pathGroup: 2
         - regex: '\.MapMethods\s*\(\s*@?"([^"]+)"'
           pathGroup: 1
+
+    - id: servicestack
+      patternId: express_route
+      usingNamespaces:
+        - ServiceStack
+      confidence: 0.85
 
     - id: aspnet_core_grpc
       patternId: express_route

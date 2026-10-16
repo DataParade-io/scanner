@@ -1,5 +1,6 @@
 import type { FileInfo } from "../../../../src/core/types/file";
 import { detectCSharpPatterns } from "../../../../src/analyzers/csharp/detector";
+import { runAnalyzers } from "../../../../src/analyzers/registry";
 
 function makeCSharpFile(content: string, path = "Program.cs"): FileInfo {
   return {
@@ -41,6 +42,27 @@ describe("C# analyzer patterns", () => {
     expect(routes[0].properties.framework).toBe("aspnet_core_mvc");
     expect(routes[0].properties.controller).toBe("UsersController");
     expect(routes[0].properties.handlerType).toBe("controller_action");
+  });
+
+  it("keeps an absolute action template off the controller prefix", () => {
+    const content = [
+      "using Microsoft.AspNetCore.Mvc;",
+      "",
+      "[ApiController]",
+      '[Route("v{v:apiVersion}/account")]',
+      "public class AccountController : ControllerBase",
+      "{",
+      '    [HttpPost("/account/oauth2/access_token")]',
+      "    public IActionResult Token() => Ok();",
+      "}",
+      "",
+    ].join("\n");
+
+    const findings = detectCSharpPatterns(makeCSharpFile(content));
+    const routes = findings.filter((f) => f.pattern === "express_route");
+    expect(routes.map((route) => route.name)).toEqual([
+      "POST account/oauth2/access_token",
+    ]);
   });
 
   it("detects minimal API route registrations", () => {
@@ -87,6 +109,55 @@ describe("C# analyzer patterns", () => {
     expect(dbs.map((d) => d.properties.client)).toContain(
       "entity_framework_core",
     );
+    expect(dbs.map((d) => d.properties.databaseType)).toContain("postgres");
+    expect(dbs.map((d) => d.name)).toContain("postgres");
+  });
+
+  it("detects ServiceStack request DTO routes and ignores MVC controllers", () => {
+    const content = [
+      "using ServiceStack;",
+      "using Microsoft.AspNetCore.Mvc;",
+      "",
+      '[Route("/todos", "GET")]',
+      "public class QueryTodos : IGet",
+      "{",
+      "}",
+      "",
+      '[Route("/hello/{Name}")]',
+      "public class Hello : IGet",
+      "{",
+      "}",
+      "",
+      "[ApiController]",
+      '[Route("api/[controller]")]',
+      "public class UsersController : ControllerBase",
+      "{",
+      '    [HttpGet("{id}")]',
+      "    public IActionResult Get(int id) => Ok();",
+      "}",
+      "",
+    ].join("\n");
+
+    const findings = detectCSharpPatterns(
+      makeCSharpFile(content, "ServiceModel/Todos.cs"),
+    );
+    const serviceStack = findings.filter(
+      (f) =>
+        f.pattern === "express_route" &&
+        f.properties.framework === "servicestack",
+    );
+
+    expect(serviceStack.map((f) => f.name).sort()).toEqual([
+      "GET /hello/{Name}",
+      "GET /todos",
+    ]);
+    expect(serviceStack.map((f) => f.properties.requestType).sort()).toEqual([
+      "Hello",
+      "QueryTodos",
+    ]);
+    expect(
+      findings.filter((f) => f.pattern === "express_route").map((f) => f.name),
+    ).toContain("GET api/Users/{id}");
   });
 
   it("detects HttpClient calls and resolves the third-party service", () => {
@@ -173,7 +244,7 @@ describe("C# analyzer patterns", () => {
       "public class OrderFunctions",
       "{",
       '    [Function("ProcessOrder")]',
-      "    public void Run([QueueTrigger(\"orders\")] string message)",
+      '    public void Run([QueueTrigger("orders")] string message)',
       "    {",
       "    }",
       "}",
@@ -212,8 +283,12 @@ describe("C# analyzer patterns", () => {
       "",
     ].join("\n");
 
-    const findings = detectCSharpPatterns(makeCSharpFile(content, "Program.cs"));
-    const authFindings = findings.filter((f) => f.pattern === "auth_middleware");
+    const findings = detectCSharpPatterns(
+      makeCSharpFile(content, "Program.cs"),
+    );
+    const authFindings = findings.filter(
+      (f) => f.pattern === "auth_middleware",
+    );
 
     expect(authFindings.length).toBeGreaterThanOrEqual(1);
     expect(authFindings[0].properties.strategy).toBe("oauth2");
@@ -231,7 +306,7 @@ describe("C# analyzer patterns", () => {
       "{",
       "    public async Task HandleAsync(IHttpFunction ctx, HttpContext context)",
       "    {",
-      "        await context.Response.WriteAsync(\"Hello World!\");",
+      '        await context.Response.WriteAsync("Hello World!");',
       "    }",
       "}",
       "",
@@ -256,5 +331,59 @@ describe("C# analyzer patterns", () => {
     };
 
     expect(detectCSharpPatterns(file)).toEqual([]);
+  });
+
+  it("applies a project global using to controllers in the same csproj", () => {
+    const csproj: FileInfo = {
+      path: "src/WebApi/WebApi.csproj",
+      name: "WebApi.csproj",
+      content: '<Project Sdk="Microsoft.NET.Sdk.Web"></Project>',
+      language: "json",
+      size: 48,
+    };
+    const globalUsings = makeCSharpFile(
+      "global using Microsoft.AspNetCore.Mvc;\n",
+      "src/WebApi/GlobalUsings.cs",
+    );
+    const controller = makeCSharpFile(
+      [
+        "namespace MyWarehouse.WebApi.API.V1;",
+        "",
+        "[ApiController]",
+        '[Route("v{v:apiVersion}/products")]',
+        "public class ProductController : ControllerBase",
+        "{",
+        '    [HttpGet("{id}")]',
+        "    public IActionResult Get(int id) => Ok();",
+        "}",
+        "",
+      ].join("\n"),
+      "src/WebApi/API/V1/ProductController.cs",
+    );
+    const otherProject = makeCSharpFile(
+      [
+        "[ApiController]",
+        '[Route("api/other")]',
+        "public class OtherController : ControllerBase",
+        "{",
+        "    [HttpGet]",
+        "    public IActionResult Get() => Ok();",
+        "}",
+        "",
+      ].join("\n"),
+      "src/Other/OtherController.cs",
+    );
+
+    const findings = runAnalyzers([
+      csproj,
+      globalUsings,
+      controller,
+      otherProject,
+    ]);
+    const routes = findings.filter((f) => f.pattern === "express_route");
+
+    expect(routes.map((route) => route.name)).toEqual([
+      "GET v{v:apiVersion}/products/{id}",
+    ]);
   });
 });

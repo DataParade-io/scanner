@@ -41,7 +41,9 @@ describe("classifier frontend framework grouping", () => {
     const frontend = components.find((c) => c.name === "React");
 
     expect(routeApi).toBeDefined();
+    expect(routeApi?.subType).toBe("api");
     expect(frontend).toBeDefined();
+    expect(frontend?.subType).toBe("application");
     expect(components.length).toBe(2);
   });
 });

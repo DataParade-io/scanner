@@ -1,17 +1,21 @@
 import type { FileInfo } from "../../core/types/file";
 import type { RawFinding } from "../../core/types/detection";
+import type { ImportLike } from "../../patterns/engine";
 import { getPropertiesFromFinding } from "../shared/property-inference";
 import { parseCSharpCompilationUnit } from "./parser";
 import { detectCSharpPatternsFromModel } from "./patterns";
 
-export function detectCSharpPatterns(file: FileInfo): RawFinding[] {
+export function detectCSharpPatterns(
+  file: FileInfo,
+  projectGlobalImports: ImportLike[] = [],
+): RawFinding[] {
   const model = parseCSharpCompilationUnit(file);
 
   if (model.file.language !== "csharp") {
     return [];
   }
 
-  const findings = detectCSharpPatternsFromModel(model);
+  const findings = detectCSharpPatternsFromModel(model, projectGlobalImports);
 
   // Merge pattern-matched component properties (from YAML) into each finding.
   for (const finding of findings) {

@@ -7,6 +7,11 @@ import { createGoAnalyzer } from "./go";
 import { createPhpAnalyzer } from "./php";
 import { createJvmAnalyzer } from "./jvm";
 import { createCSharpAnalyzer } from "./csharp";
+import { detectCSharpPatterns } from "./csharp/detector";
+import {
+  collectCSharpGlobalUsingScopes,
+  globalImportsForCSharpFile,
+} from "./csharp/global-usings";
 import { createPythonAnalyzer } from "./python";
 import { createTerraformAnalyzer } from "./terraform";
 import { createTypeScriptAnalyzer } from "./typescript";
@@ -67,6 +72,7 @@ export function runAnalyzers(
   opts?: RunAnalyzersOptions,
 ): RawFinding[] {
   const findings: RawFinding[] = [];
+  const csharpGlobalUsings = collectCSharpGlobalUsingScopes(files);
   const tfConfig = loadTerraformPatternConfig();
   const tfOpts =
     opts?.terraformModuleManifest && opts.terraformScanRootPath
@@ -101,6 +107,16 @@ export function runAnalyzers(
         }
       }
 
+      if (file.language === "csharp") {
+        findings.push(
+          ...detectCSharpPatterns(
+            file,
+            globalImportsForCSharpFile(file.path, csharpGlobalUsings),
+          ),
+        );
+        continue;
+      }
+
       const analyzer = registry.get(file.language);
       if (!analyzer) continue;
 
@@ -125,4 +141,3 @@ export async function runAnalyzersForRootPath(
 export function __clearAnalyzersForTest(): void {
   registry.clear();
 }
-
