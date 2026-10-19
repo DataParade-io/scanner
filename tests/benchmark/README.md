@@ -1,6 +1,6 @@
 # Scanner evaluation benchmark corpus
 
-Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release sync cannot delete this gold. The canonical home is this repo (`DataParade-io/scanner`), not the GPL publish mirror.
+Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release sync cannot delete this gold. The canonical home is this repo (`DataParade-io/scanner`), not the public CLI mirror.
 
 Versioned ground-truth data for deterministic scanner evaluation. Labels are curated independently of scanner output. Headline denominators use `review_state: accepted`.
 
