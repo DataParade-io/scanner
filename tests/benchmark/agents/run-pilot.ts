@@ -26,6 +26,9 @@ import { renderComparisonTable, renderCounts, type ArmResult } from "./report";
 
 const agentsSrcDir = path.join(findPackageRoot(__dirname), "tests/benchmark/agents");
 
+/** Approved test model. Anything else needs --allow-other-models. */
+const ALLOWED_MODEL = "openai/gpt-6-luna";
+
 function argValue(flag: string, fallback: string): string {
   const i = process.argv.indexOf(flag);
   return i >= 0 ? process.argv[i + 1] : fallback;
@@ -159,7 +162,11 @@ async function runRepo(repoKey: string, opts: { models: string[]; thinking: stri
 async function main(): Promise<void> {
   const repoKeys = process.argv.slice(2).filter((a, i, all) => !a.startsWith("--") && !all[i - 1]?.startsWith("--"));
   if (repoKeys.length === 0) throw new Error("usage: run-pilot <repoKey>... [--model m] [--thinking t] [--max-cost usd-per-run]");
-  const models = argValue("--models", argValue("--model", "openai/gpt-6-luna")).split(",");
+  const models = argValue("--models", argValue("--model", ALLOWED_MODEL)).split(",");
+  const disallowed = models.filter((m) => m !== ALLOWED_MODEL);
+  if (disallowed.length > 0 && !process.argv.includes("--allow-other-models")) {
+    throw new Error(`Refusing to run ${disallowed.join(", ")}: only ${ALLOWED_MODEL} is approved. Pass --allow-other-models to override explicitly.`);
+  }
   const tag = argValue("--tag", "pilot");
   const thinking = argValue("--thinking", "low");
   const maxCostUsd = Number(argValue("--max-cost", "1"));

@@ -2,14 +2,14 @@
 
 Models via Pi: `openai/gpt-6-luna`, `openai/gpt-6-sol`, thinking=high. Gold (accepted positives): discourse 40 components / 16 flows.
 Price openai/gpt-6-luna: standard tier, USD per 1M tokens input 0.1 / cached 0.01 / output 0.5; source https://developers.openai.com/api/docs/pricing, retrieved 2026-10-20.
-Price openai/gpt-6-sol: standard tier, USD per 1M tokens input 2 / cached 0.2 / output 10; source https://developers.openai.com/api/docs/pricing, retrieved 2026-10-21.
+Price openai/gpt-6-sol (HISTORY: this run should not have been made; only gpt-6-luna is approved for testing): standard tier, USD per 1M tokens input 2 / cached 0.2 / output 10; source https://developers.openai.com/api/docs/pricing, retrieved 2026-10-21.
 
 ## Accuracy and cost side by side
 
 | Repo | Arm | Comp P | Comp R | Flow P | Flow R | Strict comp P / R | Strict flow P / R | Input tok | Cached tok | Output tok | Total cost | Cost / correct comp | Cost / correct flow | Wall time | Requests | Tool calls |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | discourse | pi + gpt-6-luna (high) | 10% | 10% | 0% | 0% | 10% / 10% | 0% / 0% | 92148 | 1593952 | 26589 | $0.0384 | $0.00961 | n/a (0 correct) | 287.2s | 34 | 79 |
-| discourse | pi + gpt-6-sol (high) | 2% | 3% | 0% | 0% | 2% / 3% | 0% / 0% | 98655 | 1644308 | 12159 | $0.6478 | $0.64776 | n/a (0 correct) | 147.3s | 29 | 115 |
+| discourse | pi + gpt-6-sol (high) [run should not have been made] | 2% | 3% | 0% | 0% | 2% / 3% | 0% / 0% | 98655 | 1644308 | 12159 | $0.6478 | $0.64776 | n/a (0 correct) | 147.3s | 29 | 115 |
 | discourse | scanner (AI off) | 73% | 20% | 2% | 44% | 64% / 18% | 2% / 44% | 0 | 0 | 0 | $0.0000 | $0.00000 | $0.00000 | 105.4s | - | - |
 
 Match rule: same kind (component type:subType; for flows, the target's type:subType), same file, line ranges within 10 lines (overlap = 0), one-to-one, names only break ties. Precision is over items with evidence inside the reviewed scope files. The strict columns use the same rule with overlap required (0 lines). Cost per correct = total cost divided by in-scope items matched to a gold label.
@@ -18,8 +18,8 @@ Match rule: same kind (component type:subType; for flows, the target's type:subT
 |---|---|---|---|---|---|---|---|---|
 | discourse | pi + gpt-6-luna (high) | components | 40 | 48 | 40 | 4 | 4 | 4 |
 | discourse | pi + gpt-6-luna (high) | flows | 16 | 37 | 12 | 0 | 0 | 0 |
-| discourse | pi + gpt-6-sol (high) | components | 40 | 71 | 53 | 1 | 1 | 1 |
-| discourse | pi + gpt-6-sol (high) | flows | 16 | 62 | 19 | 0 | 0 | 0 |
+| discourse | pi + gpt-6-sol (high) [run should not have been made] | components | 40 | 71 | 53 | 1 | 1 | 1 |
+| discourse | pi + gpt-6-sol (high) [run should not have been made] | flows | 16 | 62 | 19 | 0 | 0 | 0 |
 | discourse | scanner (AI off) | components | 40 | 15 | 11 | 8 | 8 | 7 |
 | discourse | scanner (AI off) | flows | 16 | 444 | 373 | 7 | 7 | 7 |
 
@@ -74,3 +74,5 @@ False-positive flows (366): asset:api "API -> MATCH /404" @ config/routes.rb:24-
 - Thinking level `high` is supported by Pi 0.73.1 (`off, minimal, low, medium, high, xhigh`).
 - Run spend: luna $0.04, sol $0.65, total about $0.69 against the $5 cap. No run was aborted.
 - Cost per correct flow is n/a for both agents (0 correct).
+
+Note: the gpt-6-sol run above is kept as history only. It should not have been made; the runner now refuses any model other than gpt-6-luna unless `--allow-other-models` is passed, and the gpt-6-sol price entry was removed from `prices.json`.
