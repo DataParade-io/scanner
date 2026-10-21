@@ -19,7 +19,7 @@ describe("agent facts.json", () => {
     const bad = {
       ...valid,
       components: [{ name: "db", type: "asset", subType: "actor_thing", evidence: ev(6, 4) }],
-      dataFlows: [{ source: "db", target: "nope", type: "database_query", evidence: ev(1, 1) }],
+      dataFlows: [{ source: "anything is fine", target: "nope", type: "database_query", evidence: ev(1, 1) }],
     };
     const result = validateFactsText(JSON.stringify(bad));
     expect(result.ok).toBe(false);
@@ -34,8 +34,18 @@ describe("agent facts.json", () => {
     const score = scoreLayer(items.components, gold, ["app/models.py"]);
     expect(score.precision).toBe(1);
     expect(score.recall).toBe(1);
-    const miss = scoreLayer(items.components, [{ ...gold[0], evidence: ev(20, 30) }], ["app/models.py"]);
-    expect(miss.recall).toBe(0);
+    const near = scoreLayer(items.components, [{ ...gold[0], evidence: ev(12, 14) }], ["app/models.py"]);
+    expect(near.recall).toBe(1);
+    expect(near.strictRecall).toBe(0);
+    const far = scoreLayer(items.components, [{ ...gold[0], evidence: ev(20, 30) }], ["app/models.py"]);
+    expect(far.recall).toBe(0);
+  });
+
+  it("matches each gold label at most once", () => {
+    const item = { name: "a", kind: "asset:database", evidence: ev(4, 6) };
+    const score = scoreLayer([item, { ...item, name: "b" }], [{ name: "g", kind: "asset:database", evidence: ev(4, 6) }], ["app/models.py"]);
+    expect(score.truePositives).toBe(1);
+    expect(score.precision).toBe(0.5);
   });
 });
 

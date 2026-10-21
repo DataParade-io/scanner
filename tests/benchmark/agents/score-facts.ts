@@ -2,18 +2,19 @@
  * Evidence-based scoring of components and data flows, applied identically to every arm
  * (agent facts.json, scanner output) against the accepted benchmark gold.
  *
- * Match rule: same kind AND overlapping file/line evidence.
+ * Match rule: same kind, same file, and line ranges within MATCH_TOLERANCE_LINES of each other
+ * (overlap = distance 0). Matching is one-to-one: each gold label is matched at most once and each
+ * arm item is used at most once. Candidate pairs are taken closest first; names only break ties
+ * between equally close candidates.
  *  - component kind = `type:subType`
- *  - data-flow kind = `<source type:subType>-><target type:subType>` (names are resolved through
- *    the same arm's components; gold uses flow_canonical endpoints)
- * Names are only used to pick the primary pairing shown in the match detail; they never create
- * or block a match. Matching is many-to-many: a gold item is found if any item of the arm matches
- * it, and an arm item is correct if it matches any gold item. Precision counts only arm items
- * with evidence inside the layer's reviewed exhaustive scope files (layer-scopes.yaml), the same
- * closed-world rule the existing scorer uses; out-of-scope items are reported, not penalised.
- *
- * This differs from the existing identity-key scorer (tests/eval), which matches on
- * canonical identity keys; both are reported for the scanner so the difference is visible.
+ *  - data-flow kind = the TARGET's `type:subType` (what the data lands in). Gold flows carry
+ *    flow_canonical endpoints whose source and target kinds are identical, so the source side
+ *    carries no information; agent flows may name the data or model as their source.
+ * Precision counts only arm items with evidence inside the layer's reviewed exhaustive scope files
+ * (layer-scopes.yaml), the closed-world rule the existing scorer uses; out-of-scope items are
+ * reported, not penalised. The same algorithm with tolerance 0 gives the strict-overlap numbers,
+ * reported as a secondary column. The existing identity-key scorer (tests/eval) is run separately
+ * for the scanner as a reference.
  */
 import path from "path";
 
@@ -42,6 +43,7 @@ export interface LayerItems {
 export interface MatchPair {
   item: string;
   gold: string;
+  distance: number;
   nameMatch: boolean;
 }
 
@@ -50,26 +52,33 @@ export interface LayerScore {
   itemCount: number;
   inScopeCount: number;
   outOfScopeCount: number;
+  /** In-scope items matched to a gold label (tolerance MATCH_TOLERANCE_LINES). */
   truePositives: number;
   goldFound: number;
   precision: number | null;
   recall: number | null;
-  /** Same, but evidence only has to be in the same file (diagnostic for evidence strictness). */
-  relaxedPrecision: number | null;
-  relaxedRecall: number | null;
+  /** Same algorithm, but evidence must overlap (tolerance 0). */
+  strictTruePositives: number;
+  strictPrecision: number | null;
+  strictRecall: number | null;
   falsePositives: string[];
   missedGold: string[];
   pairs: MatchPair[];
 }
 
+export const MATCH_TOLERANCE_LINES = 10;
+
 const norm = (p: string): string => normalizeEvalPath(p);
 
-function spansOverlap(a: Span, b: Span): boolean {
-  return norm(a.filePath) === norm(b.filePath) && a.startLine <= b.endLine && b.startLine <= a.endLine;
+function spanDistance(a: Span, b: Span): number {
+  if (norm(a.filePath) !== norm(b.filePath)) return Infinity;
+  return Math.max(a.startLine - b.endLine, b.startLine - a.endLine, 0);
 }
 
-function sameFile(a: Span, b: Span): boolean {
-  return norm(a.filePath) === norm(b.filePath);
+function itemDistance(a: ScoredItem, b: ScoredItem): number {
+  let best = Infinity;
+  for (const x of a.evidence) for (const y of b.evidence) best = Math.min(best, spanDistance(x, y));
+  return best;
 }
 
 function sameName(a: string, b: string): boolean {
@@ -84,53 +93,60 @@ function rate(n: number, d: number): number | null {
 const describe = (item: ScoredItem): string =>
   `${item.kind} "${item.name}" @ ${item.evidence.map((e) => `${e.filePath}:${e.startLine}-${e.endLine}`).join(", ")}`;
 
+/** One-to-one matching, closest first, names break ties. Returns item index -> gold index. */
+export function matchOneToOne(items: ScoredItem[], gold: ScoredItem[], tolerance: number): Map<number, number> {
+  const candidates: Array<{ i: number; j: number; distance: number; name: boolean }> = [];
+  items.forEach((item, i) =>
+    gold.forEach((g, j) => {
+      if (item.kind !== g.kind) return;
+      const distance = itemDistance(item, g);
+      if (distance <= tolerance) candidates.push({ i, j, distance, name: sameName(item.name, g.name) });
+    }),
+  );
+  candidates.sort((a, b) => a.distance - b.distance || Number(b.name) - Number(a.name) || a.i - b.i || a.j - b.j);
+  const result = new Map<number, number>();
+  const usedGold = new Set<number>();
+  for (const c of candidates) {
+    if (result.has(c.i) || usedGold.has(c.j)) continue;
+    result.set(c.i, c.j);
+    usedGold.add(c.j);
+  }
+  return result;
+}
+
 export function scoreLayer(items: ScoredItem[], gold: ScoredItem[], scopeFiles: string[]): LayerScore {
   const scope = new Set(scopeFiles.map(norm));
-  const inScope = items.filter((item) => item.evidence.some((e) => scope.has(norm(e.filePath))));
-  const matches = (item: ScoredItem, g: ScoredItem, strict: boolean): boolean =>
-    item.kind === g.kind &&
-    item.evidence.some((a) => g.evidence.some((b) => (strict ? spansOverlap(a, b) : sameFile(a, b))));
+  const inScope = items.map((item) => item.evidence.some((e) => scope.has(norm(e.filePath))));
+  const inScopeCount = inScope.filter(Boolean).length;
 
-  const pairs: MatchPair[] = [];
-  const goldFoundSet = new Set<ScoredItem>();
-  const goldFoundRelaxed = new Set<ScoredItem>();
-  let tp = 0;
-  let tpRelaxed = 0;
-  const falsePositives: string[] = [];
-  for (const item of inScope) {
-    const hits = gold.filter((g) => matches(item, g, true));
-    hits.forEach((g) => goldFoundSet.add(g));
-    if (hits.length > 0) {
-      tp += 1;
-      const best = hits.find((g) => sameName(item.name, g.name)) ?? hits[0];
-      pairs.push({ item: describe(item), gold: describe(best), nameMatch: sameName(item.name, best.name) });
-    } else {
-      falsePositives.push(describe(item));
-    }
-    const relaxedHits = gold.filter((g) => matches(item, g, false));
-    relaxedHits.forEach((g) => goldFoundRelaxed.add(g));
-    if (relaxedHits.length > 0) tpRelaxed += 1;
-  }
-  // Gold found by out-of-scope items still counts for recall.
-  for (const item of items) {
-    if (inScope.includes(item)) continue;
-    gold.filter((g) => matches(item, g, true)).forEach((g) => goldFoundSet.add(g));
-    gold.filter((g) => matches(item, g, false)).forEach((g) => goldFoundRelaxed.add(g));
-  }
+  const loose = matchOneToOne(items, gold, MATCH_TOLERANCE_LINES);
+  const strict = matchOneToOne(items, gold, 0);
+  const tpOf = (m: Map<number, number>) => [...m.keys()].filter((i) => inScope[i]).length;
+  const tp = tpOf(loose);
+  const strictTp = tpOf(strict);
+  const foundGold = new Set(loose.values());
+
+  const pairs: MatchPair[] = [...loose.entries()].map(([i, j]) => ({
+    item: describe(items[i]),
+    gold: describe(gold[j]),
+    distance: itemDistance(items[i], gold[j]),
+    nameMatch: sameName(items[i].name, gold[j].name),
+  }));
 
   return {
     goldCount: gold.length,
     itemCount: items.length,
-    inScopeCount: inScope.length,
-    outOfScopeCount: items.length - inScope.length,
+    inScopeCount,
+    outOfScopeCount: items.length - inScopeCount,
     truePositives: tp,
-    goldFound: goldFoundSet.size,
-    precision: rate(tp, inScope.length),
-    recall: rate(goldFoundSet.size, gold.length),
-    relaxedPrecision: rate(tpRelaxed, inScope.length),
-    relaxedRecall: rate(goldFoundRelaxed.size, gold.length),
-    falsePositives,
-    missedGold: gold.filter((g) => !goldFoundSet.has(g)).map(describe),
+    goldFound: foundGold.size,
+    precision: rate(tp, inScopeCount),
+    recall: rate(foundGold.size, gold.length),
+    strictTruePositives: strictTp,
+    strictPrecision: rate(strictTp, inScopeCount),
+    strictRecall: rate(new Set(strict.values()).size, gold.length),
+    falsePositives: items.filter((_, i) => inScope[i] && !loose.has(i)).map(describe),
+    missedGold: gold.filter((_, j) => !foundGold.has(j)).map(describe),
     pairs,
   };
 }
@@ -166,10 +182,10 @@ export function loadGold(repoDir: string): GoldSet {
       skippedFlows += 1;
       continue;
     }
-    const { source, target } = fc.endpoints;
+    const { target } = fc.endpoints;
     flows.push({
       name: a.subject.name ?? a.subject.key,
-      kind: `${kindOf(source.component_type, source.component_subtype)}->${kindOf(target.component_type, target.component_subtype)}`,
+      kind: kindOf(target.component_type, target.component_subtype),
       flowType: fc.flow_type,
       evidence: evidenceOf(a),
     });
@@ -191,11 +207,10 @@ export function itemsFromFacts(facts: Facts): LayerItems {
   return {
     components: facts.components.map((c) => ({ name: c.name, kind: kindOf(c.type, c.subType), evidence: c.evidence })),
     flows: facts.dataFlows.map((f) => {
-      const s = byName.get(f.source);
       const t = byName.get(f.target);
       return {
         name: `${f.source} -> ${f.target}`,
-        kind: `${kindOf(s?.type ?? "?", s?.subType)}->${kindOf(t?.type ?? "?", t?.subType)}`,
+        kind: kindOf(t?.type ?? "?", t?.subType),
         flowType: f.type,
         evidence: f.evidence,
       };
@@ -229,7 +244,7 @@ export function itemsFromScanner(scan: ScannerLike): LayerItems {
       const locations = f.sourceLocations?.length ? f.sourceLocations : f.sourceLocation ? [f.sourceLocation] : [];
       return {
         name: `${s?.name ?? "?"} -> ${t?.name ?? "?"}`,
-        kind: `${kindOf(s?.type ?? "?", s?.subType)}->${kindOf(t?.type ?? "?", t?.subType)}`,
+        kind: kindOf(t?.type ?? "?", t?.subType),
         flowType: f.type,
         evidence: locations.map((l) => ({ filePath: l.filePath, startLine: l.startLine, endLine: l.endLine })),
       };

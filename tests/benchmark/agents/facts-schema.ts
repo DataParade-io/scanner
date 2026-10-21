@@ -4,6 +4,8 @@ import vocabulary from "./vocabulary.json";
 
 /**
  * Agent output format (DATAP-749): `facts.json`, components and data flows only.
+ * A flow's `source` is a free-text label for the data or model it starts from; `target` must be the
+ * name of a component (what stores or receives the data).
  * Vocabularies come from vocabulary.json (interim, replaced by the DATAP-740 ontology export).
  */
 
@@ -75,14 +77,12 @@ export const factsSchema = z
       names.add(component.name);
     });
     facts.dataFlows.forEach((flow, index) => {
-      for (const end of ["source", "target"] as const) {
-        if (!names.has(flow[end])) {
-          ctx.addIssue({
-            code: "custom",
-            path: ["dataFlows", index, end],
-            message: `${end} '${flow[end]}' is not the name of any component in this file`,
-          });
-        }
+      if (!names.has(flow.target)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["dataFlows", index, "target"],
+          message: `target '${flow.target}' is not the name of any component in this file`,
+        });
       }
     });
   });

@@ -29,12 +29,13 @@ const per = (cost: number | null, n: number): string =>
 
 export function renderComparisonTable(results: ArmResult[]): string {
   const header =
-    "| Arm | Comp P | Comp R | Flow P | Flow R | Input tok | Cached tok | Output tok | Total cost | Cost / correct comp | Cost / correct flow | Wall time |\n" +
-    "|---|---|---|---|---|---|---|---|---|---|---|---|\n";
+    "| Repo | Arm | Comp P | Comp R | Flow P | Flow R | Strict comp P / R | Strict flow P / R | Input tok | Cached tok | Output tok | Total cost | Cost / correct comp | Cost / correct flow | Wall time |\n" +
+    "|" + "---|".repeat(15) + "\n";
   const rows = results.map((r) => {
     const c = r.cost;
     return (
-      `| ${r.arm} | ${pct(r.components.precision)} | ${pct(r.components.recall)} | ${pct(r.flows.precision)} | ${pct(r.flows.recall)} ` +
+      `| ${r.repoKey} | ${r.arm} | ${pct(r.components.precision)} | ${pct(r.components.recall)} | ${pct(r.flows.precision)} | ${pct(r.flows.recall)} ` +
+      `| ${pct(r.components.strictPrecision)} / ${pct(r.components.strictRecall)} | ${pct(r.flows.strictPrecision)} / ${pct(r.flows.strictRecall)} ` +
       `| ${c.inputTokens} | ${c.cachedInputTokens} | ${c.outputTokens} | ${usd(c.usd)} ` +
       `| ${per(c.usd, r.components.truePositives)} | ${per(c.usd, r.flows.truePositives)} | ${c.wallSeconds.toFixed(1)}s |`
     );
@@ -44,11 +45,11 @@ export function renderComparisonTable(results: ArmResult[]): string {
 
 export function renderCounts(results: ArmResult[]): string {
   const header =
-    "| Arm | Layer | Gold | Items | In scope | Correct (TP) | Gold found | Relaxed P (same file) | Relaxed R (same file) |\n|---|---|---|---|---|---|---|---|---|\n";
+    "| Repo | Arm | Layer | Gold | Items | In scope | Correct (TP, within 10 lines) | Gold found | Strict TP (overlap) |\n|" + "---|".repeat(9) + "\n";
   const rows = results.flatMap((r) =>
     (["components", "flows"] as const).map((layer) => {
       const s = r[layer];
-      return `| ${r.arm} | ${layer} | ${s.goldCount} | ${s.itemCount} | ${s.inScopeCount} | ${s.truePositives} | ${s.goldFound} | ${pct(s.relaxedPrecision)} | ${pct(s.relaxedRecall)} |`;
+      return `| ${r.repoKey} | ${r.arm} | ${layer} | ${s.goldCount} | ${s.itemCount} | ${s.inScopeCount} | ${s.truePositives} | ${s.goldFound} | ${s.strictTruePositives} |`;
     }),
   );
   return header + rows.join("\n") + "\n";

@@ -51,14 +51,17 @@ function prepareWorkspace(materializedPath: string): { root: string; repo: strin
   return { root, repo };
 }
 
-async function main(): Promise<void> {
-  const repoKey = process.argv[2];
-  if (!repoKey || repoKey.startsWith("--")) throw new Error("usage: run-pilot <repoKey> [--model m] [--thinking t]");
-  const model = argValue("--model", "openai/gpt-6-luna");
-  const thinking = argValue("--thinking", "low");
-  const maxCostUsd = Number(argValue("--max-cost", "2"));
+interface RepoRun {
+  repoKey: string;
+  arms: ArmResult[];
+  gold: { components: number; flows: number };
+  existing: string[];
+  notes: string[];
+}
+
+async function runRepo(repoKey: string, opts: { model: string; thinking: string; maxCostUsd: number; date: string }): Promise<RepoRun> {
+  const { model, thinking, maxCostUsd, date } = opts;
   const modelId = model.split("/").pop()!;
-  const date = new Date().toISOString().slice(0, 10);
   const benchmarkRoot = resolveDefaultBenchmarkRoot();
 
   const materialized = assertMaterialized(repoKey);
@@ -78,7 +81,7 @@ async function main(): Promise<void> {
     thinking,
     transcriptPath: transcriptName(root),
     maxCostUsd,
-    timeoutMs: 20 * 60 * 1000,
+    timeoutMs: 25 * 60 * 1000,
     price,
   });
   if (run.aborted) notes.push(`Pi run aborted: ${run.aborted}.`);
@@ -96,12 +99,11 @@ async function main(): Promise<void> {
   if (fs.existsSync(factsPath)) {
     const result = validateFactsText(fs.readFileSync(factsPath, "utf8"));
     if (result.ok) {
-      validation = "valid";
-      const scored = scoreArm(itemsFromFacts(result.facts), gold);
+      validation = `valid (${result.facts.components.length} components, ${result.facts.dataFlows.length} flows)`;
       agentArm = {
         arm: `pi + ${modelId}`,
         repoKey,
-        ...scored,
+        ...scoreArm(itemsFromFacts(result.facts), gold),
         cost: {
           usd: costUsd,
           inputTokens: summary.inputTokens,
@@ -116,17 +118,16 @@ async function main(): Promise<void> {
       validation = `invalid: ${result.errors.slice(0, 5).join("; ")}`;
     }
   }
-  notes.push(`facts.json: ${validation}`);
+  notes.push(`facts.json: ${validation}; ${summary.requests} requests, ${summary.toolCalls} tool calls`);
 
   // ---- scanner arm (AI inference off => zero LLM tokens)
   const t0 = Date.now();
   const { scanResult } = await scan(materialized, createDefaultScanConfiguration({ enableAiInference: false }));
   const scannerWall = (Date.now() - t0) / 1000;
-  const scannerScored = scoreArm(itemsFromScanner(scanResult), gold);
   const scannerArm: ArmResult = {
     arm: "scanner (AI off)",
     repoKey,
-    ...scannerScored,
+    ...scoreArm(itemsFromScanner(scanResult), gold),
     cost: { usd: 0, inputTokens: 0, cachedInputTokens: 0, outputTokens: 0, wallSeconds: scannerWall, note: "no LLM calls" },
   };
 
@@ -134,18 +135,38 @@ async function main(): Promise<void> {
   const existing = await runBenchmarkRepo(repoKey, {
     scanRepo: (key, root2) => scanRepoByManifestLayers(key, root2, ["components", "data_flows"]),
   });
-  const ex = (layer: "components" | "data-flows") => existing.layerScores[layer]?.scores;
+  const f = (v: number | null | undefined) => (v == null ? "n/a" : `${(v * 100).toFixed(0)}%`);
   const exLine = (layer: "components" | "data-flows") => {
-    const s = ex(layer);
-    const f = (v: number | null | undefined) => (v == null ? "n/a" : `${(v * 100).toFixed(0)}%`);
-    return `${layer}: precision ${f(s?.precision)}, recall ${f(s?.recall)}`;
+    const s = existing.layerScores[layer]?.scores;
+    return `${repoKey} ${layer}: precision ${f(s?.precision)}, recall ${f(s?.recall)}`;
   };
 
-  const arms = [agentArm, scannerArm].filter((a): a is ArmResult => a !== null);
+  return {
+    repoKey,
+    arms: [agentArm, scannerArm].filter((a): a is ArmResult => a !== null),
+    gold: { components: gold.components.length, flows: gold.flows.length },
+    existing: [exLine("components"), exLine("data-flows")],
+    notes: notes.map((n) => `${repoKey}: ${n}`),
+  };
+}
+
+async function main(): Promise<void> {
+  const repoKeys = process.argv.slice(2).filter((a, i, all) => !a.startsWith("--") && !all[i - 1]?.startsWith("--"));
+  if (repoKeys.length === 0) throw new Error("usage: run-pilot <repoKey>... [--model m] [--thinking t] [--max-cost usd-per-run]");
+  const model = argValue("--model", "openai/gpt-6-luna");
+  const thinking = argValue("--thinking", "low");
+  const maxCostUsd = Number(argValue("--max-cost", "1"));
+  const date = new Date().toISOString().slice(0, 10);
+  const price = loadPrice(path.join(agentsSrcDir, "prices.json"), model.split("/").pop()!);
+
+  const runs: RepoRun[] = [];
+  for (const repoKey of repoKeys) runs.push(await runRepo(repoKey, { model, thinking, maxCostUsd, date }));
+  const arms = runs.flatMap((r) => r.arms);
+
   const md = [
-    `# Agent vs scanner pilot: ${repoKey} (${date})`,
+    `# Agent vs scanner pilot (${date})`,
     "",
-    `Model: \`${model}\` via Pi, thinking=${thinking}. Gold: accepted components ${gold.components.length}, data flows ${gold.flows.length}.`,
+    `Model: \`${model}\` via Pi, thinking=${thinking}. Gold (accepted positives): ${runs.map((r) => `${r.repoKey} ${r.gold.components} components / ${r.gold.flows} flows`).join("; ")}.`,
     price
       ? `Price: ${price.tier} tier, USD per 1M tokens input ${price.usdPerMillion.short.input} / cached ${price.usdPerMillion.short.cachedInput} / output ${price.usdPerMillion.short.output}; source ${price.sourceUrl}, retrieved ${price.retrievedOn}.`
       : "**PRICE UNKNOWN: dollar cost not computed.**",
@@ -153,28 +174,27 @@ async function main(): Promise<void> {
     "## Accuracy and cost side by side",
     "",
     renderComparisonTable(arms),
-    "Precision is over items with evidence inside the reviewed scope files; match = same type and overlapping file/line evidence (see score-facts.ts).",
+    "Match rule: same kind (component type:subType; for flows, the target's type:subType), same file, line ranges within 10 lines (overlap = 0), one-to-one, names only break ties. Precision is over items with evidence inside the reviewed scope files. The strict columns use the same rule with overlap required (0 lines). Cost per correct = total cost divided by in-scope items matched to a gold label.",
     "",
     renderCounts(arms),
     "## Existing identity-key scorer, scanner only (reference)",
     "",
-    `- ${exLine("components")}`,
-    `- ${exLine("data-flows")}`,
+    ...runs.flatMap((r) => r.existing.map((l) => `- ${l}`)),
     "",
     "## Run notes",
     "",
-    ...notes.map((n) => `- ${n}`),
+    ...runs.flatMap((r) => r.notes.map((n) => `- ${n}`)),
     "",
     ...arms.flatMap((a) => [
-      `## ${a.arm}: misses and false positives`,
+      `## ${a.repoKey} / ${a.arm}: misses and false positives`,
       "",
-      `Missed gold components: ${a.components.missedGold.join(" | ") || "none"}`,
+      `Missed gold components (${a.components.missedGold.length}): ${a.components.missedGold.slice(0, 15).join(" | ") || "none"}`,
       "",
-      `False-positive components: ${a.components.falsePositives.join(" | ") || "none"}`,
+      `False-positive components (${a.components.falsePositives.length}): ${a.components.falsePositives.slice(0, 15).join(" | ") || "none"}`,
       "",
-      `Missed gold flows: ${a.flows.missedGold.join(" | ") || "none"}`,
+      `Missed gold flows (${a.flows.missedGold.length}): ${a.flows.missedGold.slice(0, 15).join(" | ") || "none"}`,
       "",
-      `False-positive flows: ${a.flows.falsePositives.join(" | ") || "none"}`,
+      `False-positive flows (${a.flows.falsePositives.length}): ${a.flows.falsePositives.slice(0, 15).join(" | ") || "none"}`,
       "",
     ]),
   ].join("\n");
@@ -184,10 +204,9 @@ async function main(): Promise<void> {
   fs.writeFileSync(path.join(outDir, `${date}-pilot.md`), md);
   fs.writeFileSync(
     path.join(outDir, `${date}-pilot.json`),
-    `${JSON.stringify({ date, repoKey, model, thinking, price, arms, existingScorerScanner: { components: ex("components"), dataFlows: ex("data-flows") }, notes, usage: summary }, null, 2)}\n`,
+    `${JSON.stringify({ date, model, thinking, price, runs }, null, 2)}\n`,
   );
-  console.log(md.split("## Run notes")[0]);
-  console.log(`workspace (not committed): ${root}`);
+  console.log(md.split("## Existing identity-key")[0]);
 }
 
 main().catch((error) => {
