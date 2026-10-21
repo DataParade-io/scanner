@@ -29,10 +29,10 @@ A component is a building block of the software system that stores, handles or e
 
 Granularity rules, which the reference labels follow:
 - One data store per actual database or store, not one per model, table class or schema file. Ten model classes backed by one database are one `database` component.
-- Authentication, session and token handling counts as an `auth_service` component, one per distinct mechanism.
-- Route and controller surfaces count as `api` components.
+- Each authentication surface (a token class, a session store, an authentication controller) is its own `auth_service` component, one per code location.
+- Each route or controller surface is its own `api` component, one per code location. Do not merge several controllers or route groups into one component.
 - Each outside service the code calls is its own `third_party` component, with the subtype that fits its role.
-- Prefer fewer, well-evidenced components over many guesses. Do not create a component for every file, class or table.
+- Every component needs evidence from code you read. Leave out any item you could not confirm in the code.
 
 ## What counts as a data flow
 
@@ -45,7 +45,7 @@ Worked example, from an imaginary app that is not in this repository. A Flask ha
 Read the code before you report anything.
 - Open and read a file before you cite it as evidence. Never cite a line you have not read; a file name or a directory listing is not evidence.
 - Evidence spans must come from lines you actually saw, and must be the lines that show the item.
-- Prefer fewer, well-evidenced components and flows over many guesses. An item you could not confirm in the code should be left out.
+- Leave out any item you could not confirm in the code.
 
 ## Output format
 
@@ -69,7 +69,7 @@ Rules:
 - `type`, `subType` and the data flow `type` must come from `vocabulary.json` in this directory. Read it first. Each `subType` must be one listed under its component `type`.
 - A flow's `source` is a short free-text label for the data or model it starts from. Its `target` must be the `name` of a component in the same file. Component names must be unique.
 - `evidence` points to the code that shows the item: repository-relative `filePath` (no leading `/`) and 1-based `startLine` and `endLine`. Keep spans tight (the class, function or statement that shows it), and give at least one span per item.
-- Report one component per distinct thing in the code (for example each separate database model or table is its own component), not one summary component for the whole repository.
+- Report one component per code location for authentication surfaces and for route or controller surfaces, one component per outside service the code calls, and one data store per actual database. Do not write one summary component for the whole repository.
 
 ## Check your work
 
