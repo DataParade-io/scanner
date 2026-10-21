@@ -11,6 +11,8 @@ export interface ArmCost {
   cachedInputTokens: number;
   outputTokens: number;
   wallSeconds: number;
+  requests?: number;
+  toolCalls?: number;
   note?: string;
 }
 
@@ -29,15 +31,15 @@ const per = (cost: number | null, n: number): string =>
 
 export function renderComparisonTable(results: ArmResult[]): string {
   const header =
-    "| Repo | Arm | Comp P | Comp R | Flow P | Flow R | Strict comp P / R | Strict flow P / R | Input tok | Cached tok | Output tok | Total cost | Cost / correct comp | Cost / correct flow | Wall time |\n" +
-    "|" + "---|".repeat(15) + "\n";
+    "| Repo | Arm | Comp P | Comp R | Flow P | Flow R | Strict comp P / R | Strict flow P / R | Input tok | Cached tok | Output tok | Total cost | Cost / correct comp | Cost / correct flow | Wall time | Requests | Tool calls |\n" +
+    "|" + "---|".repeat(17) + "\n";
   const rows = results.map((r) => {
     const c = r.cost;
     return (
       `| ${r.repoKey} | ${r.arm} | ${pct(r.components.precision)} | ${pct(r.components.recall)} | ${pct(r.flows.precision)} | ${pct(r.flows.recall)} ` +
       `| ${pct(r.components.strictPrecision)} / ${pct(r.components.strictRecall)} | ${pct(r.flows.strictPrecision)} / ${pct(r.flows.strictRecall)} ` +
       `| ${c.inputTokens} | ${c.cachedInputTokens} | ${c.outputTokens} | ${usd(c.usd)} ` +
-      `| ${per(c.usd, r.components.truePositives)} | ${per(c.usd, r.flows.truePositives)} | ${c.wallSeconds.toFixed(1)}s |`
+      `| ${per(c.usd, r.components.truePositives)} | ${per(c.usd, r.flows.truePositives)} | ${c.wallSeconds.toFixed(1)}s | ${c.requests ?? "-"} | ${c.toolCalls ?? "-"} |`
     );
   });
   return header + rows.join("\n") + "\n";

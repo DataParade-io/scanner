@@ -59,19 +59,20 @@ interface RepoRun {
   notes: string[];
 }
 
-async function runRepo(repoKey: string, opts: { model: string; thinking: string; maxCostUsd: number; date: string }): Promise<RepoRun> {
-  const { model, thinking, maxCostUsd, date } = opts;
-  const modelId = model.split("/").pop()!;
+async function runRepo(repoKey: string, opts: { models: string[]; thinking: string; maxCostUsd: number; date: string; tag: string }): Promise<RepoRun> {
+  const { models, thinking, maxCostUsd, date, tag } = opts;
   const benchmarkRoot = resolveDefaultBenchmarkRoot();
 
   const materialized = assertMaterialized(repoKey);
   const gold = loadGold(repoDirFor(benchmarkRoot, repoKey));
-  const price = loadPrice(path.join(agentsSrcDir, "prices.json"), modelId);
   const notes: string[] = [];
-  if (!price) notes.push(`NO PRICE for ${modelId} in prices.json: tokens recorded, dollar cost UNKNOWN.`);
   if (gold.skippedFlows) notes.push(`${gold.skippedFlows} accepted gold flow(s) lack flow_canonical endpoints and were skipped.`);
 
-  // ---- agent arm
+  const agentArms: ArmResult[] = [];
+  for (const model of models) {
+    const modelId = model.split("/").pop()!;
+    const price = loadPrice(path.join(agentsSrcDir, "prices.json"), modelId);
+    if (!price) notes.push(`NO PRICE for ${modelId} in prices.json: tokens recorded, dollar cost UNKNOWN.`);
   const { root, repo } = prepareWorkspace(materialized);
   const prompt = fs.readFileSync(path.join(agentsSrcDir, "assignment.md"), "utf8");
   const run = await runPi({
@@ -101,7 +102,7 @@ async function runRepo(repoKey: string, opts: { model: string; thinking: string;
     if (result.ok) {
       validation = `valid (${result.facts.components.length} components, ${result.facts.dataFlows.length} flows)`;
       agentArm = {
-        arm: `pi + ${modelId}`,
+        arm: `pi + ${modelId} (${thinking})`,
         repoKey,
         ...scoreArm(itemsFromFacts(result.facts), gold),
         cost: {
@@ -110,15 +111,20 @@ async function runRepo(repoKey: string, opts: { model: string; thinking: string;
           cachedInputTokens: summary.cachedInputTokens,
           outputTokens: summary.outputTokens,
           wallSeconds: run.wallSeconds,
+          requests: summary.requests,
+          toolCalls: summary.toolCalls,
           note: `thinking=${thinking}, ${summary.requests} requests, ${summary.toolCalls} tool calls`,
         },
       };
-      fs.copyFileSync(factsPath, path.join(agentsSrcDir, "results", `${date}-${repoKey}-facts.json`));
+      fs.copyFileSync(factsPath, path.join(agentsSrcDir, "results", `${date}-${tag}-${repoKey}-${modelId}-facts.json`));
     } else {
       validation = `invalid: ${result.errors.slice(0, 5).join("; ")}`;
     }
   }
-  notes.push(`facts.json: ${validation}; ${summary.requests} requests, ${summary.toolCalls} tool calls`);
+  notes.push(`${modelId}: facts.json ${validation}; ${summary.requests} requests, ${summary.toolCalls} tool calls${run.aborted ? "; ABORTED " + run.aborted : ""}`);
+    if (agentArm) agentArms.push(agentArm);
+  }
+
 
   // ---- scanner arm (AI inference off => zero LLM tokens)
   const t0 = Date.now();
@@ -143,7 +149,7 @@ async function runRepo(repoKey: string, opts: { model: string; thinking: string;
 
   return {
     repoKey,
-    arms: [agentArm, scannerArm].filter((a): a is ArmResult => a !== null),
+    arms: [...agentArms, scannerArm],
     gold: { components: gold.components.length, flows: gold.flows.length },
     existing: [exLine("components"), exLine("data-flows")],
     notes: notes.map((n) => `${repoKey}: ${n}`),
@@ -153,23 +159,26 @@ async function runRepo(repoKey: string, opts: { model: string; thinking: string;
 async function main(): Promise<void> {
   const repoKeys = process.argv.slice(2).filter((a, i, all) => !a.startsWith("--") && !all[i - 1]?.startsWith("--"));
   if (repoKeys.length === 0) throw new Error("usage: run-pilot <repoKey>... [--model m] [--thinking t] [--max-cost usd-per-run]");
-  const model = argValue("--model", "openai/gpt-6-luna");
+  const models = argValue("--models", argValue("--model", "openai/gpt-6-luna")).split(",");
+  const tag = argValue("--tag", "pilot");
   const thinking = argValue("--thinking", "low");
   const maxCostUsd = Number(argValue("--max-cost", "1"));
   const date = new Date().toISOString().slice(0, 10);
-  const price = loadPrice(path.join(agentsSrcDir, "prices.json"), model.split("/").pop()!);
 
   const runs: RepoRun[] = [];
-  for (const repoKey of repoKeys) runs.push(await runRepo(repoKey, { model, thinking, maxCostUsd, date }));
+  for (const repoKey of repoKeys) runs.push(await runRepo(repoKey, { models, thinking, maxCostUsd, date, tag }));
   const arms = runs.flatMap((r) => r.arms);
 
   const md = [
     `# Agent vs scanner pilot (${date})`,
     "",
-    `Model: \`${model}\` via Pi, thinking=${thinking}. Gold (accepted positives): ${runs.map((r) => `${r.repoKey} ${r.gold.components} components / ${r.gold.flows} flows`).join("; ")}.`,
-    price
-      ? `Price: ${price.tier} tier, USD per 1M tokens input ${price.usdPerMillion.short.input} / cached ${price.usdPerMillion.short.cachedInput} / output ${price.usdPerMillion.short.output}; source ${price.sourceUrl}, retrieved ${price.retrievedOn}.`
-      : "**PRICE UNKNOWN: dollar cost not computed.**",
+    `Models via Pi: ${models.map((m) => `\`${m}\``).join(", ")}, thinking=${thinking}. Gold (accepted positives): ${runs.map((r) => `${r.repoKey} ${r.gold.components} components / ${r.gold.flows} flows`).join("; ")}.`,
+    ...models.map((m) => {
+      const price = loadPrice(path.join(agentsSrcDir, "prices.json"), m.split("/").pop()!);
+      return price
+        ? `Price ${m}: ${price.tier} tier, USD per 1M tokens input ${price.usdPerMillion.short.input} / cached ${price.usdPerMillion.short.cachedInput} / output ${price.usdPerMillion.short.output}; source ${price.sourceUrl}, retrieved ${price.retrievedOn}.`
+        : `**PRICE UNKNOWN for ${m}: dollar cost not computed.**`;
+    }),
     "",
     "## Accuracy and cost side by side",
     "",
@@ -201,10 +210,10 @@ async function main(): Promise<void> {
 
   const outDir = path.join(agentsSrcDir, "results");
   fs.mkdirSync(outDir, { recursive: true });
-  fs.writeFileSync(path.join(outDir, `${date}-pilot.md`), md);
+  fs.writeFileSync(path.join(outDir, `${date}-${tag}.md`), md);
   fs.writeFileSync(
-    path.join(outDir, `${date}-pilot.json`),
-    `${JSON.stringify({ date, model, thinking, price, runs }, null, 2)}\n`,
+    path.join(outDir, `${date}-${tag}.json`),
+    `${JSON.stringify({ date, models, thinking, runs }, null, 2)}\n`,
   );
   console.log(md.split("## Existing identity-key")[0]);
 }

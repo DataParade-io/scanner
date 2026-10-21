@@ -13,7 +13,10 @@ A data flow is personal data moving from where the code holds or produces it (a 
 
 Worked example, from an imaginary app that is not in this repository. A Flask handler builds a `Subscriber(email=form.email.data)` model and calls `db.session.add(subscriber)`; later it posts the same email to a mailing-list vendor with `requests.post(VENDOR_URL, json={"email": email})`. That is two flows: source "Subscriber email" into the target component "App database" (type `database_query`, evidence = the `db.session.add` lines), and source "Subscriber email" into the target component "Mailing-list vendor" (type `api_call`, evidence = the `requests.post` lines).
 
-Look at the actual code. Do not report components or flows you cannot point to in a file. Be complete, but do not invent items.
+Read the code before you report anything.
+- Open and read a file before you cite it as evidence. Never cite a line you have not read; a file name or a directory listing is not evidence.
+- Evidence spans must come from lines you actually saw, and must be the lines that show the item.
+- Prefer fewer, well-evidenced components and flows over many guesses. An item you could not confirm in the code should be left out.
 
 ## Output format
 

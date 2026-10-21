@@ -1,0 +1,517 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "Forum user",
+      "type": "actor",
+      "subType": "customer",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Forum administrator",
+      "type": "actor",
+      "subType": "admin",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 1497, "endLine": 1499 }]
+    },
+    {
+      "name": "PostgreSQL database",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "config/database.yml", "startLine": 8, "endLine": 10 }]
+    },
+    {
+      "name": "Inbound webhook API",
+      "type": "asset",
+      "subType": "api",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 31, "endLine": 39 }]
+    },
+    {
+      "name": "AWS webhook service",
+      "type": "third_party",
+      "subType": "saas_service",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 31, "endLine": 31 }]
+    },
+    {
+      "name": "Mailgun",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 32, "endLine": 32 }]
+    },
+    {
+      "name": "Mailjet",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 33, "endLine": 33 }]
+    },
+    {
+      "name": "Mailpace",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 34, "endLine": 34 }]
+    },
+    {
+      "name": "Mandrill",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 35, "endLine": 35 }]
+    },
+    {
+      "name": "Postmark",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 37, "endLine": 37 }]
+    },
+    {
+      "name": "SendGrid",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 38, "endLine": 38 }]
+    },
+    {
+      "name": "SparkPost",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [{ "filePath": "config/routes.rb", "startLine": 39, "endLine": 39 }]
+    },
+    {
+      "name": "Users table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "User emails table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_email.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "User profiles table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_profile.rb", "startLine": 3, "endLine": 6 }]
+    },
+    {
+      "name": "User stats table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_stat.rb", "startLine": 2, "endLine": 2 }]
+    },
+    {
+      "name": "User options table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_option.rb", "startLine": 3, "endLine": 3 }]
+    },
+    {
+      "name": "User visits table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_visit.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "User IP address history table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_ip_address_history.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Email tokens table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/email_token.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "User auth tokens table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_auth_token.rb", "startLine": 4, "endLine": 5 }]
+    },
+    {
+      "name": "User auth token logs table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_auth_token_log.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Email login codes table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/email_login_code.rb", "startLine": 3, "endLine": 3 }]
+    },
+    {
+      "name": "Drafts table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 3, "endLine": 10 }]
+    },
+    {
+      "name": "Draft sequences table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/draft_sequence.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Backup draft posts table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/backup_draft_post.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Backup draft topics table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/backup_draft_topic.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Posts table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/post.rb", "startLine": 6, "endLine": 7 }]
+    },
+    {
+      "name": "Category user preferences table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/category_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Tag user preferences table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/tag_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Group memberships table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/group_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Invites table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/invite.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Invite redemptions table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/invited_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Private topic access table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/topic_allowed_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Notifications table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/notification.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "User actions table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_action.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Search logs table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/search_log.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Topic link clicks table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/topic_link_click.rb", "startLine": 6, "endLine": 8 }]
+    },
+    {
+      "name": "Uploads table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/upload.rb", "startLine": 5, "endLine": 6 }]
+    },
+    {
+      "name": "User second factors table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_second_factor.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Screened emails table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/screened_email.rb", "startLine": 7, "endLine": 12 }]
+    },
+    {
+      "name": "Topic user tracking table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/topic_user.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Archived private messages table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/user_archived_message.rb", "startLine": 3, "endLine": 5 }]
+    },
+    {
+      "name": "Moderation review histories table",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [{ "filePath": "app/models/reviewable_history.rb", "startLine": 3, "endLine": 4 }]
+    },
+    {
+      "name": "Configured upload storage",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [{ "filePath": "app/models/upload.rb", "startLine": 596, "endLine": 598 }]
+    },
+    {
+      "name": "Redis cache",
+      "type": "asset",
+      "subType": "cache",
+      "evidence": [{ "filePath": "app/models/search_log.rb", "startLine": 94, "endLine": 94 }]
+    },
+    {
+      "name": "MessageBus",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [{ "filePath": "config/initializers/004-message_bus.rb", "startLine": 143, "endLine": 147 }]
+    },
+    {
+      "name": "Background job queue",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [{ "filePath": "app/models/user_auth_token.rb", "startLine": 134, "endLine": 139 }]
+    }
+  ],
+  "dataFlows": [
+    {
+      "source": "SSO-provided user attributes and IP address",
+      "target": "Users table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/discourse_connect.rb", "startLine": 137, "endLine": 153 }]
+    },
+    {
+      "source": "User's primary email address",
+      "target": "User emails table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/discourse_connect.rb", "startLine": 150, "endLine": 153 }]
+    },
+    {
+      "source": "SSO-provided biography, website, and location",
+      "target": "User profiles table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/discourse_connect.rb", "startLine": 158, "endLine": 172 }]
+    },
+    {
+      "source": "New user's ID",
+      "target": "User profiles table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 1771, "endLine": 1773 }]
+    },
+    {
+      "source": "New user's ID and signup timestamp",
+      "target": "User stats table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 2092, "endLine": 2094 }]
+    },
+    {
+      "source": "New user's ID and default preferences",
+      "target": "User options table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 2096, "endLine": 2098 }]
+    },
+    {
+      "source": "User email and signup-confirmation token",
+      "target": "Email tokens table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 2100, "endLine": 2100 }]
+    },
+    {
+      "source": "User visit date, post-reading count, and mobile flag",
+      "target": "User visits table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 1086, "endLine": 1092 }]
+    },
+    {
+      "source": "User ID and observed IP address",
+      "target": "User IP address history table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 1148, "endLine": 1154 }]
+    },
+    {
+      "source": "Authentication token, user agent, client IP, and user ID",
+      "target": "User auth tokens table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user_auth_token.rb", "startLine": 112, "endLine": 121 }]
+    },
+    {
+      "source": "Authentication event and client information",
+      "target": "User auth token logs table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user_auth_token.rb", "startLine": 55, "endLine": 55 }]
+    },
+    {
+      "source": "Email address and hashed one-time login code",
+      "target": "Email login codes table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/email_login_code.rb", "startLine": 24, "endLine": 31 }]
+    },
+    {
+      "source": "User draft content, owner, and sequence",
+      "target": "Drafts table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 65, "endLine": 89 }]
+    },
+    {
+      "source": "User ID and draft revision sequence",
+      "target": "Draft sequences table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 59, "endLine": 64 }]
+    },
+    {
+      "source": "Draft text copied into a private backup post",
+      "target": "Posts table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 280, "endLine": 293 }]
+    },
+    {
+      "source": "User ID and key for a backed-up draft post",
+      "target": "Backup draft posts table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 292, "endLine": 293 }]
+    },
+    {
+      "source": "User ID and private topic ID for backed-up drafts",
+      "target": "Backup draft topics table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/draft.rb", "startLine": 326, "endLine": 336 }]
+    },
+    {
+      "source": "User's default category notification preferences",
+      "target": "Category user preferences table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 2188, "endLine": 2202 }]
+    },
+    {
+      "source": "User's default tag notification preferences",
+      "target": "Tag user preferences table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user.rb", "startLine": 2207, "endLine": 2235 }]
+    },
+    {
+      "source": "Invited user's group membership",
+      "target": "Group memberships table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/invite_redeemer.rb", "startLine": 311, "endLine": 315 }]
+    },
+    {
+      "source": "Invitee email and invitation settings",
+      "target": "Invites table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/invite.rb", "startLine": 185, "endLine": 203 }]
+    },
+    {
+      "source": "Invite redemption time and invite ID",
+      "target": "Invite redemptions table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/invite_redeemer.rb", "startLine": 277, "endLine": 277 }]
+    },
+    {
+      "source": "Invited user's private-topic access grant",
+      "target": "Private topic access table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/invite_redeemer.rb", "startLine": 299, "endLine": 303 }]
+    },
+    {
+      "source": "Invite acceptance and invited user's identity",
+      "target": "Notifications table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/invite_redeemer.rb", "startLine": 322, "endLine": 331 }]
+    },
+    {
+      "source": "User's action record",
+      "target": "User actions table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user_action.rb", "startLine": 316, "endLine": 321 }]
+    },
+    {
+      "source": "User search term and search context",
+      "target": "Search logs table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/search_log.rb", "startLine": 81, "endLine": 91 }]
+    },
+    {
+      "source": "Short-lived search log key and term",
+      "target": "Redis cache",
+      "type": "data_transfer",
+      "evidence": [{ "filePath": "app/models/search_log.rb", "startLine": 94, "endLine": 94 }]
+    },
+    {
+      "source": "User ID or IP address and clicked topic link",
+      "target": "Topic link clicks table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/topic_link_click.rb", "startLine": 113, "endLine": 116 }]
+    },
+    {
+      "source": "User's TOTP secret and second-factor settings",
+      "target": "User second factors table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/concerns/second_factor_manager.rb", "startLine": 19, "endLine": 25 }]
+    },
+    {
+      "source": "Screened email address and associated signup IP address",
+      "target": "Screened emails table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/screened_email.rb", "startLine": 27, "endLine": 29 }]
+    },
+    {
+      "source": "User's topic visit timestamps and notification preferences",
+      "target": "Topic user tracking table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/topic_user.rb", "startLine": 257, "endLine": 265 }]
+    },
+    {
+      "source": "User ID and archived private-message topic ID",
+      "target": "Archived private messages table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/user_archived_message.rb", "startLine": 26, "endLine": 26 }]
+    },
+    {
+      "source": "Moderation review status, acting staff user, and edit details",
+      "target": "Moderation review histories table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/reviewable.rb", "startLine": 337, "endLine": 343 }]
+    },
+    {
+      "source": "Uploaded file content",
+      "target": "Configured upload storage",
+      "type": "file_transfer",
+      "evidence": [{ "filePath": "app/models/upload.rb", "startLine": 592, "endLine": 598 }]
+    },
+    {
+      "source": "Upload metadata and stored file URL",
+      "target": "Uploads table",
+      "type": "database_query",
+      "evidence": [{ "filePath": "app/models/upload.rb", "startLine": 596, "endLine": 598 }]
+    },
+    {
+      "source": "User action event identifier",
+      "target": "MessageBus",
+      "type": "message_queue",
+      "evidence": [{ "filePath": "app/models/user_action.rb", "startLine": 337, "endLine": 343 }]
+    },
+    {
+      "source": "Staff login IP address and user agent",
+      "target": "Background job queue",
+      "type": "message_queue",
+      "evidence": [{ "filePath": "app/models/user_auth_token.rb", "startLine": 134, "endLine": 139 }]
+    }
+  ]
+}
