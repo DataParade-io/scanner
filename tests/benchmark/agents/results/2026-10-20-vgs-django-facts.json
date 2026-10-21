@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {"name":"Customer","type":"actor","subType":"customer","evidence":[{"filePath":"app/templates/app/index.html","startLine":3,"endLine":10}]},
+    {"name":"Administrator","type":"actor","subType":"admin","evidence":[{"filePath":"idVerification/urls.py","startLine":23,"endLine":23}]},
+    {"name":"Django application","type":"asset","subType":"service","evidence":[{"filePath":"app/views.py","startLine":27,"endLine":34}]},
+    {"name":"Application API","type":"asset","subType":"api","evidence":[{"filePath":"app/urls.py","startLine":5,"endLine":11}]},
+    {"name":"PiiData table","type":"asset","subType":"database","evidence":[{"filePath":"app/models.py","startLine":4,"endLine":7}]},
+    {"name":"SQLite database","type":"asset","subType":"database","evidence":[{"filePath":"idVerification/settings.py","startLine":80,"endLine":85}]},
+    {"name":"Nginx reverse proxy","type":"asset","subType":"service","evidence":[{"filePath":"docker-compose.yml","startLine":10,"endLine":20}]},
+    {"name":"VGS proxy","type":"third_party","subType":"saas_service","evidence":[{"filePath":"idVerification/settings.py","startLine":30,"endLine":32}]},
+    {"name":"Checkr API","type":"third_party","subType":"saas_service","evidence":[{"filePath":"app/checker_client.py","startLine":44,"endLine":48}]},
+    {"name":"jQuery CDN","type":"third_party","subType":"saas_service","evidence":[{"filePath":"app/templates/app/detail.html","startLine":1,"endLine":1}]}
+  ],
+  "dataFlows": [
+    {"source":"Customer","target":"Nginx reverse proxy","type":"api_call","evidence":[{"filePath":"docker-compose.yml","startLine":14,"endLine":18}]},
+    {"source":"Nginx reverse proxy","target":"Django application","type":"api_call","evidence":[{"filePath":"docker-compose.yml","startLine":17,"endLine":18}]},
+    {"source":"Customer","target":"Application API","type":"api_call","evidence":[{"filePath":"app/templates/app/index.html","startLine":3,"endLine":10}]},
+    {"source":"Application API","target":"Django application","type":"data_transfer","evidence":[{"filePath":"app/urls.py","startLine":5,"endLine":11}]},
+    {"source":"Django application","target":"PiiData table","type":"database_query","evidence":[{"filePath":"app/views.py","startLine":91,"endLine":97}]},
+    {"source":"PiiData table","target":"SQLite database","type":"database_query","evidence":[{"filePath":"idVerification/settings.py","startLine":80,"endLine":85}]},
+    {"source":"Django application","target":"PiiData table","type":"database_query","evidence":[{"filePath":"app/views.py","startLine":27,"endLine":28}]},
+    {"source":"Django application","target":"Application API","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":47,"endLine":54}]},
+    {"source":"Application API","target":"Customer","type":"api_call","evidence":[{"filePath":"app/templates/app/detail.html","startLine":27,"endLine":34}]},
+    {"source":"Django application","target":"Checkr API","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":44,"endLine":48}]},
+    {"source":"Django application","target":"Checkr API","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":61,"endLine":65}]},
+    {"source":"Django application","target":"Checkr API","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":72,"endLine":81}]},
+    {"source":"Django application","target":"Checkr API","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":90,"endLine":99}]},
+    {"source":"Django application","target":"Checkr API","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":109,"endLine":112}]},
+    {"source":"Django application","target":"VGS proxy","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":15,"endLine":18}]},
+    {"source":"VGS proxy","target":"Checkr API","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":68,"endLine":74}]},
+    {"source":"jQuery CDN","target":"Customer","type":"data_transfer","evidence":[{"filePath":"app/templates/app/detail.html","startLine":1,"endLine":1}]},
+    {"source":"Administrator","target":"Django application","type":"api_call","evidence":[{"filePath":"idVerification/urls.py","startLine":23,"endLine":23}]}
+  ]
+}
