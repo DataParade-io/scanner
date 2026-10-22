@@ -47,10 +47,14 @@ function normalizeUserPattern(pattern: string): string {
   return toPosixPath(pattern.replace(/^\.\/+/, "").trim());
 }
 
-function isExcludedByUserPatterns(
+/**
+ * True when a path relative to the scan root matches one of the exclude patterns
+ * (defaults plus `--exclude`). Walks call it on directories to prune them.
+ */
+export function isExcludedByUserPatterns(
   relativePath: string,
   isDirectory: boolean,
-  excludePaths: string[],
+  excludePaths: readonly string[],
 ): boolean {
   const rel = toPosixPath(relativePath);
   for (const rawPattern of excludePaths) {

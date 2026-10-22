@@ -1,7 +1,16 @@
 import { promises as fs } from "fs";
 import * as path from "path";
-import { shouldSkipDirectoryName } from "../patterns/scan-exclusions";
-import { toPosixPath } from "./gitignore";
+import {
+  DEFAULT_EXCLUDED_FILE_GLOBS,
+  shouldSkipDirectoryName,
+} from "../patterns/scan-exclusions";
+import { isExcludedByUserPatterns } from "./file-system";
+import {
+  gitignoreRulesForDir,
+  isPathIgnored,
+  type IgnoreRule,
+  toPosixPath,
+} from "./gitignore";
 
 /**
  * Storage schema files (KDATAP-fded10): Prisma schemas, SQL DDL, and Rails and Laravel
@@ -38,14 +47,29 @@ export function schemaFileKind(filePath: string): SchemaFile["kind"] | undefined
   return undefined;
 }
 
-/** Every `*.prisma` and `*.sql` file under the root, outside excluded, test and fixture directories. */
-export async function readSchemaFiles(rootPath: string): Promise<SchemaFile[]> {
+export interface ReadSchemaFilesOptions {
+  /** The scan's exclude patterns (`--exclude`); the default file globs are always added. */
+  excludePaths?: readonly string[];
+}
+
+/**
+ * Every `*.prisma` and `*.sql` file under the root, outside excluded, test and fixture
+ * directories. Uses the same pruning as ingest: default excluded directories, the exclude
+ * patterns and `.gitignore` are applied to each directory before it is entered.
+ */
+export async function readSchemaFiles(
+  rootPath: string,
+  options: ReadSchemaFilesOptions = {},
+): Promise<SchemaFile[]> {
   const root = path.resolve(rootPath);
+  const excludePaths = [...DEFAULT_EXCLUDED_FILE_GLOBS, ...(options.excludePaths ?? [])];
   const out: SchemaFile[] = [];
-  const walk = async (dir: string): Promise<void> => {
+  const walk = async (dir: string, parentRules: IgnoreRule[]): Promise<void> => {
     if (out.length >= MAX_SCHEMA_FILES) return;
     let entries;
+    let rules: IgnoreRule[];
     try {
+      rules = await gitignoreRulesForDir(dir, parentRules);
       entries = await fs.readdir(dir, { withFileTypes: true });
     } catch {
       return;
@@ -53,16 +77,21 @@ export async function readSchemaFiles(rootPath: string): Promise<SchemaFile[]> {
     entries.sort((a, b) => a.name.localeCompare(b.name));
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
+      const rel = toPosixPath(path.relative(root, full));
       if (entry.isDirectory()) {
         if (shouldSkipDirectoryName(entry.name) || NON_APP_DIR.test(entry.name)) continue;
-        await walk(full);
+        if (isExcludedByUserPatterns(rel, true, excludePaths)) continue;
+        if (isPathIgnored(full, true, rules)) continue;
+        await walk(full, rules);
       } else if (entry.isFile()) {
-        const kind = schemaFileKind(path.relative(root, full));
+        const kind = schemaFileKind(rel);
         if (!kind) continue;
+        if (isExcludedByUserPatterns(rel, false, excludePaths)) continue;
+        if (isPathIgnored(full, false, rules)) continue;
         try {
           const stat = await fs.stat(full);
           if (stat.size > MAX_SCHEMA_FILE_BYTES) continue;
-          out.push({ path: toPosixPath(path.relative(root, full)), content: await fs.readFile(full, "utf8"), kind });
+          out.push({ path: rel, content: await fs.readFile(full, "utf8"), kind });
         } catch {
           /* unreadable files are skipped */
         }
@@ -70,6 +99,6 @@ export async function readSchemaFiles(rootPath: string): Promise<SchemaFile[]> {
       }
     }
   };
-  await walk(root);
+  await walk(root, []);
   return out;
 }
