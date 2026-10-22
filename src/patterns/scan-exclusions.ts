@@ -13,7 +13,14 @@ export const DEFAULT_EXCLUDED_DIRS = new Set([
   ".git",
   "dist",
   "build",
+  // Framework build output and tool caches. Hidden directories are skipped anyway (see
+  // shouldSkipDirectoryName); they are listed so the default stays explicit.
   ".next",
+  ".nuxt",
+  ".svelte-kit",
+  ".turbo",
+  ".vercel",
+  ".cache",
   "out",
   "coverage",
   ".vscode",

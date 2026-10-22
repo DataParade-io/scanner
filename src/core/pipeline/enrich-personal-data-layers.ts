@@ -16,7 +16,9 @@ export async function enrichOrchestratorResultWithPersonalDataLayers(
     ? buildPersonalDataInventoryFromIngest(
         result.ledgerContext.allIngestedFiles,
         result.ledgerContext.ingestOutcomes,
-        await readSchemaFiles(rootPath),
+        await readSchemaFiles(rootPath, {
+          excludePaths: result.ledgerContext.config.excludePaths,
+        }),
       )
     : await buildPersonalDataInventory(rootPath);
   const { occurrences, dataItems } = buildScanPersonalDataLayers(inventory);
