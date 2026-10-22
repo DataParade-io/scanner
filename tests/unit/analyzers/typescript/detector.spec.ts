@@ -121,7 +121,7 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
     const file = makeFile(
       `
         async function callApi() {
-          const res = await fetch("https://api.example.com/users");
+          const res = await fetch("https://api.acme-vendor.com/users");
           return res.json();
         }
       `,
@@ -132,7 +132,7 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
 
     expect(apiFindings.length).toBeGreaterThan(0);
     const first = apiFindings[0];
-    expect(first.properties.url).toBe("https://api.example.com/users");
+    expect(first.properties.url).toBe("https://api.acme-vendor.com/users");
   });
 
   it("ignores localhost templated URLs for external_api_call detection", () => {
@@ -525,7 +525,7 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
     const file = makeFile(
       `
         import axios from "axios";
-        const res = await axios.get("https://api.example.com/users");
+        const res = await axios.get("https://api.acme-vendor.com/users");
       `,
     );
     const findings = detectPatterns(file);
@@ -538,7 +538,7 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
     const file = makeFile(
       `
         import fetch from "node-fetch";
-        const res = await fetch("https://api.example.com/data");
+        const res = await fetch("https://api.acme-vendor.com/data");
       `,
     );
     const findings = detectPatterns(file);

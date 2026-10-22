@@ -120,6 +120,34 @@ function isLocalOrPrivateHost(hostname: string): boolean {
   return false;
 }
 
+/**
+ * RFC 2606 / RFC 6761 reserved names: example.com/.org/.net (and subdomains) plus
+ * the .test, .example, .invalid and .localhost TLDs. These are documentation
+ * placeholders, never real vendors.
+ */
+const RESERVED_PLACEHOLDER_DOMAINS = [
+  "example.com",
+  "example.org",
+  "example.net",
+] as const;
+const RESERVED_PLACEHOLDER_TLDS = [
+  "test",
+  "example",
+  "invalid",
+  "localhost",
+] as const;
+
+export function isReservedPlaceholderHost(hostname: string): boolean {
+  const h = hostname.toLowerCase().replace(/\.$/, "");
+  if (!h) return false;
+  for (const d of RESERVED_PLACEHOLDER_DOMAINS) {
+    if (h === d || h.endsWith(`.${d}`)) return true;
+  }
+  const labels = h.split(".");
+  const tld = labels[labels.length - 1] ?? "";
+  return (RESERVED_PLACEHOLDER_TLDS as readonly string[]).includes(tld);
+}
+
 export function shouldIgnoreExternalHttpUrl(
   url: string | undefined,
   options?: ExternalHttpUrlOptions,
@@ -143,6 +171,7 @@ export function shouldIgnoreExternalHttpUrl(
       return true;
     }
     if (isLocalOrPrivateHost(hostname)) return true;
+    if (isReservedPlaceholderHost(hostname)) return true;
     const organizationDomains = resolveOrganizationDomains(options);
     if (hostMatchesOrganizationDomains(hostname, organizationDomains)) {
       return true;
@@ -267,7 +296,7 @@ export function inferThirdPartyFromLiteralHttpUrl(
     return undefined;
   }
 
-  if (isLocalOrPrivateHost(hostname)) {
+  if (isLocalOrPrivateHost(hostname) || isReservedPlaceholderHost(hostname)) {
     return undefined;
   }
 

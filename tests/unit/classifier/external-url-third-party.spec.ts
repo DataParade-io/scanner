@@ -30,19 +30,19 @@ describe("classifier/external-url-third-party", () => {
     expect(shouldIgnoreExternalHttpUrl(undefined)).toBe(true);
     expect(shouldIgnoreExternalHttpUrl("https://...")).toBe(true);
     expect(shouldIgnoreExternalHttpUrl("http://localhost:3000/")).toBe(true);
-    expect(shouldIgnoreExternalHttpUrl("https://api.example.com/v1")).toBe(
+    expect(shouldIgnoreExternalHttpUrl("https://api.acme-vendor.com/v1")).toBe(
       false,
     );
   });
 
   it("shouldIgnoreExternalHttpUrl ignores null hostname without throwing", () => {
-    const url = new URL("https://api.example.com/v1");
+    const url = new URL("https://api.acme-vendor.com/v1");
     Object.defineProperty(url, "hostname", { get: () => null });
     const parseSpy = jest.spyOn(globalThis, "URL").mockImplementation(
       () => url as unknown as URL,
     );
     try {
-      expect(shouldIgnoreExternalHttpUrl("https://api.example.com/v1")).toBe(
+      expect(shouldIgnoreExternalHttpUrl("https://api.acme-vendor.com/v1")).toBe(
         true,
       );
     } finally {
@@ -53,9 +53,9 @@ describe("classifier/external-url-third-party", () => {
   it("defaultServiceNameFromLiteralPublicUrl derives registrable host without YAML", () => {
     expect(
       defaultServiceNameFromLiteralPublicUrl(
-        "https://api.weirdvendor.example.net/v1",
+        "https://api.weirdvendor.vendor-corp.net/v1",
       ),
-    ).toBe("example.net");
+    ).toBe("vendor-corp.net");
     expect(
       defaultServiceNameFromLiteralPublicUrl(
         "https://clipdrop-api.co/remove-background/v1",
@@ -119,7 +119,7 @@ describe("classifier/external-url-third-party", () => {
     expect(
       inferThirdPartyFromLiteralHttpUrl(
         makeExternalFinding({
-          url: 'https://api.example.com${process.env.FOO}',
+          url: 'https://api.acme-vendor.com${process.env.FOO}',
         }),
       ),
     ).toBeUndefined();
