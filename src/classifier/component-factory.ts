@@ -33,6 +33,7 @@ import {
   mergePropertyEvidenceMaps,
 } from "./property-evidence";
 import { FRONTEND_FRAMEWORK_HINTS_SET } from "../patterns/frontend-frameworks";
+import { toDisplayName } from "./naming";
 
 interface FindingGroup {
   key: string;
@@ -88,18 +89,6 @@ function getSectionIdFromProperties(
   const raw = properties?.section_id;
   if (typeof raw === "string" && raw.trim()) return raw.trim();
   return "<unsectioned>";
-}
-
-function toDisplayName(normalized: string, fallback: string): string {
-  const base = normalized || fallback.trim();
-  if (!base) return "<unknown>";
-
-  return base
-    .split(/\s+/)
-    .map((part) =>
-      part.length === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1),
-    )
-    .join(" ");
 }
 
 function normalizeApiDisplayName(

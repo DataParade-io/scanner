@@ -57,6 +57,15 @@ services:
       - api.twitter.com
       - x.com
       - api.x.com
+  - serviceName: notion
+    patternId: external_api_call
+    importFragments:
+      - "@notionhq/client"
+    confidence: 0.85
+    url_host_patterns:
+      - notion.so
+      - notion.com
+      - api.notion.com
   - serviceName: google_identity
     patternId: external_api_call
     importFragments:

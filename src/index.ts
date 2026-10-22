@@ -94,6 +94,11 @@ export {
   normalizeOrganizationDomains,
 } from "./classifier/external-url-third-party";
 export { DETECTABLE_PROPERTY_KEYS } from "./classifier/enhance-defaults";
+export {
+  canonicalFrameworkId,
+  frameworkDisplayName,
+} from "./patterns/frontend-frameworks";
+export { toDisplayName } from "./classifier/naming";
 export { runAnalyzers } from "./analyzers/registry";
 
 export * from "./core/schema";
