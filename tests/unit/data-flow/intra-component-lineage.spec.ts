@@ -3,7 +3,10 @@ import type { FileInfo } from "../../../src/core/types/file";
 import fs from "fs";
 import path from "path";
 import { resolveComponentForEvidence } from "../../../src/data-flow/component-evidence-resolution";
-import { detectIntraComponentLineage } from "../../../src/data-flow/intra-component-lineage";
+import {
+  detectIntraComponentLineage,
+  enclosingScopeFinder,
+} from "../../../src/data-flow/intra-component-lineage";
 import {
   hasIntraComponentTransformationEvidence,
   hasPersonalDataRouteReference,
@@ -1045,6 +1048,158 @@ describe("data-flow/intra-component-lineage", () => {
         );
         expect(hit).toBeDefined();
       }
+    });
+  });
+
+  describe("enclosing scopes", () => {
+    // The scope rules before the linear-time rewrite: a backward search for the nearest
+    // header, then a forward brace (or Ruby `end`) scan for every line.
+    function naiveScope(lines: string[], lineIndex: number) {
+      const headers = [
+        /^\s*(export\s+)?(async\s+)?function\s+\w+/,
+        /^\s*(?:public|private|protected|internal|static|final|abstract)\s+function\s+\w+/,
+        /^\s*def\s+\w+/,
+        /^\s*(export\s+)?class\s+\w+/,
+        /^\s*module\s+\w+/,
+      ];
+      let scopeStart = lineIndex;
+      for (let index = lineIndex; index >= 0; index -= 1) {
+        if (headers.some((pattern) => pattern.test(lines[index] ?? ""))) {
+          scopeStart = index;
+          break;
+        }
+      }
+      const scopeLine = lines[scopeStart] ?? "";
+      const indent = (line: string) => (line.match(/^(\s*)/)?.[1] ?? "").replace(/\t/g, "  ").length;
+      if (/^\s*(?:def|class|module)\s+/.test(scopeLine)) {
+        for (let index = scopeStart + 1; index < lines.length; index += 1) {
+          const line = lines[index] ?? "";
+          if (/^\s*end\b/.test(line) && indent(line) === indent(scopeLine)) {
+            return { startLine: scopeStart + 1, endLine: index + 1 };
+          }
+        }
+        return { startLine: scopeStart + 1, endLine: lineIndex + 1 };
+      }
+      let bodyStart = scopeStart;
+      for (let index = scopeStart; index < lines.length; index += 1) {
+        if ((lines[index] ?? "").includes("{")) {
+          bodyStart = index;
+          break;
+        }
+      }
+      let depth = 0;
+      let opened = false;
+      let scopeEnd = lineIndex;
+      for (let index = bodyStart; index < lines.length; index += 1) {
+        for (const char of lines[index] ?? "") {
+          if (char === "{") {
+            depth += 1;
+            opened = true;
+          } else if (char === "}") {
+            depth -= 1;
+          }
+        }
+        scopeEnd = index;
+        if (opened && depth <= 0 && index > bodyStart) break;
+      }
+      return { startLine: scopeStart + 1, endLine: scopeEnd + 1 };
+    }
+
+    const sources: Record<string, string> = {
+      php: [
+        "<?php",
+        "$config = [",
+        "  'a' => 1,",
+        "];",
+        "class Account {",
+        "  public function setPassword($password) {",
+        "    if ($password) { $this->hash = password_hash($password); }",
+        "  }",
+        "  private function token() { return 1; }",
+        "}",
+        "$tail = ['x' => '}'];",
+      ].join("\n"),
+      js: [
+        "const x = 1;",
+        "export function save(user) {",
+        "  db.insert({",
+        "    email: user.email,",
+        "  });",
+        "}",
+        "} } {",
+        "function unclosed() {",
+        "  return {",
+      ].join("\n"),
+      ruby: [
+        "module Accounts",
+        "  def create(email)",
+        "    User.create!(email: email)",
+        "  end",
+        "  def dangling",
+        "    1",
+        "end",
+        "def last",
+        "  2",
+      ].join("\n"),
+    };
+
+    it.each(Object.keys(sources))("matches the per-line scope scan on %s", (name) => {
+      const lines = sources[name]!.split("\n");
+      const scopeOf = enclosingScopeFinder(lines);
+      for (let index = 0; index < lines.length; index += 1) {
+        const expected = naiveScope(lines, index);
+        const scope = scopeOf(index);
+        expect({ line: index, startLine: scope.startLine, endLine: scope.endLine }).toEqual({
+          line: index,
+          ...expected,
+        });
+        expect(scope.text).toBe(lines.slice(expected.startLine - 1, expected.endLine).join("\n"));
+      }
+    });
+
+    it("scans a large header-less PHP array without keeping a scope text per line", () => {
+      // Shape of drupal core/.phpstan-baseline.php: thousands of `$ignoreErrors[] = [...]`
+      // statements, no function or class header, so every line is its own scope start and
+      // its scope runs to the end of the file. Caching the text of each of those scopes
+      // retained O(lines^2) bytes and ran a 2 GB heap out of memory on a 1.7 MB file.
+      const entry = [
+        "$ignoreErrors[] = [",
+        "\t'message' => '#^Method Drupal\\\\Core\\\\Action\\\\EmailAction\\:\\:execute\\(\\) has no return type specified\\.$#',",
+        "\t'identifier' => 'missingType.return',",
+        "\t'count' => 1,",
+        "\t'path' => __DIR__ . '/lib/Drupal/Core/Action/Plugin/Action/EmailAction.php',",
+        "];",
+      ];
+      const lines = ["<?php declare(strict_types = 1);", "", "$ignoreErrors = [];"];
+      for (let index = 0; index < 5000; index += 1) lines.push(...entry);
+      lines.push("return ['parameters' => ['ignoreErrors' => $ignoreErrors]];");
+      const content = lines.join("\n");
+
+      const scopeOf = enclosingScopeFinder(lines);
+      const before = process.memoryUsage().heapUsed;
+      const ends = lines.map((_, index) => scopeOf(index).endLine);
+      const growth = process.memoryUsage().heapUsed - before;
+      expect(ends.every((end) => end === lines.length)).toBe(true);
+      // The scope texts of this file would sum to ~25 GB; only line numbers are kept.
+      expect(growth).toBeLessThan(64 * 1024 * 1024);
+
+      const file: FileInfo = {
+        path: "core/.phpstan-baseline.php",
+        name: ".phpstan-baseline.php",
+        language: "php",
+        size: content.length,
+        content,
+      };
+      const components = [
+        makeComponent({
+          id: "auth_service",
+          name: "Auth Service",
+          type: "asset",
+          subType: "auth_service",
+          sourceLocations: [{ filePath: file.path, startLine: 1, endLine: lines.length }],
+        }),
+      ];
+      expect(() => detectIntraComponentLineage([file], components, 0)).not.toThrow();
     });
   });
 });
