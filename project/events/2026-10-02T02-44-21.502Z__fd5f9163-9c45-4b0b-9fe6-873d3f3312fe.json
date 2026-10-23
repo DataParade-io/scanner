@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "fd5f9163-9c45-4b0b-9fe6-873d3f3312fe",
+  "issue_id": "KDATAP-8c30b597-9d12-4610-9ada-4e8996f993be",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:21.502Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement Cursor IDE discovery across both index schemas",
+    "description": "Implement discovery over ~/Library/Application Support/Cursor/User: globalStorage/state.vscdb (composerData and bubbleId keys in cursorDiskKV) plus workspaceStorage/<hash>/state.vscdb with workspace.json folder URIs for attribution. Union the Cursor 2.x per-workspace composer.composerData allComposers index, the 3.0+ central composer.composerHeaders index (with workspaceIdentifier), selectedComposerIds/lastFocusedComposerIds, and composerChatViewPane tab keys — the 3.0 migration is one-way and the central index misses old chats not re-opened since migration. Exclude subagent composers (task-tool style prefixed ids — verify on a real Mac). Open databases read-only with WAL present (never read state.vscdb without its -wal sidecar) and a busy timeout, with copy-then-read fallback while Cursor runs.\n\nDone when: discovery returns the same composer set from 2.x-shaped and 3.x-shaped fixture pairs, attributes project paths, and reads safely while a writer holds the DB.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

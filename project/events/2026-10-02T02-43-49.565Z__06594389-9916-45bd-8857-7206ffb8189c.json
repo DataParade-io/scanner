@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "06594389-9916-45bd-8857-7206ffb8189c",
+  "issue_id": "KDATAP-11c4f090-412b-4138-aef8-c05c2058abd1",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:43:49.565Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement Claude Code discovery",
+    "description": "Implement discovery of Claude Code transcripts: ~/.claude/projects/<encoded-cwd>/<session-id>.jsonl where the encoded cwd replaces non-alphanumeric characters with dashes (over 200 chars: truncated plus a path hash — per the official docs); honor CLAUDE_CONFIG_DIR and configured archive roots; exclude subagent transcripts; attribute session and project from sessionId and cwd per record.\n\nDone when: discovery finds synthetic fixture sessions under a fake home, decodes the project path, skips subagent files, and tolerates a missing root.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-5d5c3f80-06ba-4392-b121-c4f457a629a2",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

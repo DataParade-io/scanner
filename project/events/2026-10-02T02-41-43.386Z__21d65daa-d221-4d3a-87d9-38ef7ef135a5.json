@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "21d65daa-d221-4d3a-87d9-38ef7ef135a5",
+  "issue_id": "KDATAP-5ee1c57f-f1a6-4e1b-bd25-698614b9634e",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:43.386Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Codex adapter",
+    "description": "Purpose: extract human-authored messages from OpenAI Codex CLI rollout files at ~/.codex/sessions/YYYY/MM/DD/rollout-<timestamp>-<uuid>.jsonl (CODEX_HOME honored; archived_sessions covered).\n\nScope: discovery walk of sessions and archived rollouts; extraction of user-role response_item messages (input_text blocks) with rejection of harness-injected user content (instruction/environment wrappers); never double-count event_msg user_message mirrors of response_item messages; session and project attribution from session_meta (id, cwd); dedup of forked/resumed rollouts using forked_from_id and forked_from_ordinal_exclusive (inherited messages count once) and of the same rollout in sessions plus archived_sessions by session_meta id; incremental watermarks. The codex CLI is open source, so format claims cite the openai/codex rollout source.\n\nDone when: golden extraction tests pass on fixtures including mirrors, forks, archives, and malformed lines; a resumed rollout counts inherited human messages exactly once; doctor reports on a real Mac's roots.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

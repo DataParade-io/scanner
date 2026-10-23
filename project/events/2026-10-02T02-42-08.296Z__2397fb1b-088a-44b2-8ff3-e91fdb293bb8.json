@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "2397fb1b-088a-44b2-8ff3-e91fdb293bb8",
+  "issue_id": "KDATAP-ed972734-6e82-4bf0-a59b-a1a4e3f79ef3",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:42:08.296Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Define HumanMessageRecord schema and timestamp normalization",
+    "description": "Define the shared normalized record all adapters emit, as a Zod schema in the scanner's public API: source (claude-code, cursor-ide, cursor-agent, codex, grok-bot reserved), sessionId, recordId (native id when stable), projectPath, timestamp (RFC 3339 UTC), role (human), text (code fences already stripped), dedupKey (sha256 identity tuple), provenance (file, line, key). Include timestamp normalization helpers for the three native representations: ISO-8601 with Z (Claude Code), Unix epoch milliseconds (Cursor), RFC 3339 with milliseconds (Codex).\n\nDone when: the schema and helpers are exported from src/index.ts; unit tests cover each timestamp representation and reject invalid ones.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-7299f867-88f0-4997-99ca-3ffef6e32e38",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
