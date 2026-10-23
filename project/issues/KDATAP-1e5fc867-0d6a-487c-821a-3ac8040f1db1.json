@@ -3,7 +3,7 @@
   "title": "Implement Ruby detector topology rules",
   "description": "",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -31,10 +31,19 @@
       "text": "Implementation complete pending landing: Rails models/concerns/services no longer emit components; routes collapse to one section API; concrete auth mechanisms compact by strategy; actor path+content rules now require both; ungrounded HTTP clients no longer create nodes; diagram mapping suppresses self-loop lineage. Added ruby-basic regression and verified gathersight at 10 components/7 edges/0 self-loops.",
       "created_at": "2026-09-21T20:21:10.293128Z",
       "comment_type": "default"
+    },
+    {
+      "id": "12609dea-adaa-4ff2-99e9-0f3fe05355d8",
+      "author": "home",
+      "text": "Complete. Ruby topology rules landed in scanner PR #84 (merge commit d0be0320, 2026-09-24) and commit a89f3fea (develop, 2026-09-25, Treat Rails app classes as evidence). Models, concerns and services emit no components; spec, test, vendor and db/migrate are excluded; Rails routes give an API boundary; Net::HTTP, HTTParty, Faraday and RestClient evidence is covered. Test: tests/unit/core/ruby-scan.spec.ts on the ruby-basic fixture. Note: self-loop suppression is narrower than the earlier comment says. Intra-component lineage self-loops are intended (PR #70); all other self-loops are asserted absent.",
+      "created_at": "2026-10-23T17:34:28.170464Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-21T19:25:36.473153Z",
-  "updated_at": "2026-09-21T20:21:10.293128Z",
-  "closed_at": null,
+  "updated_at": "2026-10-23T17:34:28.223926Z",
+  "closed_at": "2026-10-23T17:34:28.223890Z",
+  "right_now_summary": null,
+  "right_now_updated_at": null,
   "custom": {}
 }

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "81504710-95e1-4560-b62a-b973df83470f",
+  "issue_id": "KDATAP-00d3ffc4-c02b-4596-a4b1-914217685dab",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-23T17:33:58.961Z",
+  "actor_id": "home",
+  "payload": {
+    "title": "Scan runs out of heap on a large Next.js app: .gitignore rules and quadratic occurrence work",
+    "description": "CLI 0.0.26 scan of a Next.js app with about 300 API routes ran out of heap at 4 GB and 8 GB. Causes: .gitignore rules did not follow git anchoring, so a gitignored generated client was ingested (1.2M of 1.29M occurrences); buildScanPersonalDataLayers split file text once per occurrence and de-duplicated ids with Array#includes; readSchemaFiles ignored --exclude and .gitignore. Jira: [DATAP-768](https://anthus.atlassian.net/browse/DATAP-768).",
+    "issue_type": "bug",
+    "status": "open",
+    "priority": 0,
+    "assignee": null,
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "labels": [],
+    "agent": {
+      "platform": "claude_code",
+      "model": "claude-sonnet-5-5",
+      "name": "Claude"
+    }
+  }
+}
