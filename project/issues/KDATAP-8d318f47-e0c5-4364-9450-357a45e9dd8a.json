@@ -3,7 +3,7 @@
   "title": "Collapse duplicate auth_service assets per section",
   "description": "",
   "type": "task",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -17,10 +17,19 @@
       "text": "buildComponentDedupeKey keys asset auth_service components by primary source file (added in 81ad021, #68), so one library detected in N files yields N nodes. Scanning dataPARADE produced 4 identical Passport assets in the backend section (package.json, auth0.strategy.ts, jwt.strategy.ts, auth0.guard.ts). Fix: key on section + normalized name like other assets, keeping distinct auth libraries (e.g. Jwt) separate. Guarding against component recall/precision regression with the four-layer scorecard, since #68 tied the per-file key to those numbers.",
       "created_at": "2026-09-16T14:28:35.692186Z",
       "comment_type": "default"
+    },
+    {
+      "id": "a5fa8485-3bc4-4cc0-a7b4-c3747663e073",
+      "author": "home",
+      "text": "Complete. Landed in commit 4da7bb36 (fix(scanner): collapse auth_service assets by name per section, 2026-09-16), now on develop. buildComponentDedupeKey in src/classifier/postprocessing.ts keys auth_service on section plus normalized name; tests added in tests/unit/classifier/classify.spec.ts. Component eval unchanged per the commit message.",
+      "created_at": "2026-10-23T17:34:30.393990Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-16T14:13:09.657506Z",
-  "updated_at": "2026-09-16T14:28:35.692186Z",
-  "closed_at": null,
+  "updated_at": "2026-10-23T17:34:30.475162Z",
+  "closed_at": "2026-10-23T17:34:30.475129Z",
+  "right_now_summary": null,
+  "right_now_updated_at": null,
   "custom": {}
 }
