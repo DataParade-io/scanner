@@ -1,0 +1,38 @@
+{
+  "id": "KDATAP-20e1e9cc-807a-46e3-b143-12b7f5b44166",
+  "title": "Scan hangs on long quoted strings: PATH_OR_PROSE_STRING backtracks cubically",
+  "description": "CLI 0.0.28 scan never finishes on dubinc/dub (killed after 30-40 min). One 6 KB .tsx with one inline SVG path takes 18 s. CPU profile: 78% in PATH_OR_PROSE_STRING (src/pii-signals/match-pii-signals.ts:210-211, added in 19ce1d13). The prose branch has three adjacent \"any non-quote char\" runs separated by \\s, and that class also matches whitespace, so a quoted string that starts with a capital and does not end in .!? backtracks O(n^3). Fix: make the match linear with identical results; audit other regexes in src/pii-signals and src/patterns for the same shape.",
+  "type": "bug",
+  "status": "in_progress",
+  "priority": 0,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "ccce17c1-056e-4ccb-a047-c2ac49648714",
+      "author": "home",
+      "text": "Root cause: PATH_OR_PROSE_STRING (src/pii-signals/match-pii-signals.ts:210, from 19ce1d13) had three adjacent runs that all take whitespace, so a quoted capitalised string not ending in .!? backtracked O(n^3). Same shape found in IMPORT_LINE (`from a import` + spaces), isJavaFieldDeclarationLine (`private` + spaces) and the localCopy pattern in occurrence-group.ts (type annotation + spaces), all cubic; `validates(?:_\\w+)*` was exponential; the PascalCase phone check and the assigned-function check were quadratic. Fix: rewrite each so no two adjacent runs share characters; matches (and capture groups) unchanged, checked by old-vs-new fuzzing. Results: 6 KB SVG fixture 18.6 s -> 0.5 s; dubinc/dub (HEAD 20ca899) never finished before, now 95 s, 899 MB peak RSS. calcom, chatwoot, saleor, medusa, directus outputs byte-identical to develop apart from scanDurationMs. 1613 jest tests pass, tsc and lint clean. Not changed: python.ts DRF decorator `\\[\\s*([^\\]]+)\\]`, jvm.ts annotation-arg regexes, occurrence-group receiver chain (quadratic only, on short decorator/annotation text or start positions). PR pending.",
+      "created_at": "2026-10-23T03:51:30.159369Z",
+      "comment_type": "default",
+      "agent": {
+        "platform": "claude_code",
+        "model": "claude-opus-5-5",
+        "name": "Claude Code"
+      }
+    }
+  ],
+  "created_at": "2026-10-23T03:23:48.155715Z",
+  "updated_at": "2026-10-23T03:51:41.292047Z",
+  "closed_at": null,
+  "agent": {
+    "platform": "claude_code",
+    "model": "claude-opus-5-5",
+    "name": "claude_code"
+  },
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {}
+}

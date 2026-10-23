@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "event_id": "d578490d-7a40-47ec-8820-ad5664f8c6db",
+  "issue_id": "KDATAP-20e1e9cc-807a-46e3-b143-12b7f5b44166",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-23T03:23:48.155Z",
+  "actor_id": "home",
+  "payload": {
+    "title": "Scan hangs on long quoted strings: PATH_OR_PROSE_STRING backtracks cubically",
+    "description": "CLI 0.0.28 scan never finishes on dubinc/dub (killed after 30-40 min). One 6 KB .tsx with one inline SVG path takes 18 s. CPU profile: 78% in PATH_OR_PROSE_STRING (src/pii-signals/match-pii-signals.ts:210-211, added in 19ce1d13). Three adjacent [^'\"`\n]* runs separated by \\s, where the class also matches whitespace, so a quoted string that starts with a capital and does not end in .!? backtracks O(n^3). Fix: make the match linear with identical results; audit other regexes in src/pii-signals and src/patterns for the same shape.",
+    "issue_type": "bug",
+    "status": "open",
+    "priority": 0,
+    "assignee": null,
+    "parent": "KDATAP-baca471f-bbb6-41ad-a650-0fe00b130673",
+    "labels": []
+  }
+}

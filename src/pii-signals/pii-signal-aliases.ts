@@ -131,7 +131,9 @@ export function isBareAddressFieldDeclaration(
     /\b(?:String|CharField|TextField|varchar|text)\s+address\b/i.test(line) ||
     /\baddress\s*=\s*models\./i.test(line) ||
     /\bprivate\s+\w+\s+address\s*;/.test(line) ||
-    /\bvalidates(?:_\w+)*\s+:\w*address\b/i.test(line)
+    // `(?:_\w+)?` matches what `(?:_\w+)*` did (`_` is a word character) without
+    // exponential backtracking on `validates_a_a_a...`.
+    /\bvalidates(?:_\w+)?\s+:\w*address\b/i.test(line)
   );
 }
 
@@ -270,7 +272,8 @@ export function resolveAliasRuleIdsForToken(
     if (
       ruleId === "phone_number" &&
       (NOT_PHONE_LAST_WORD.has(splitCamelCaseParts(token).slice(-1)[0] ?? "") ||
-        (/^[A-Z][A-Za-z0-9]*[a-z][A-Za-z0-9]*$/.test(token) && splitCamelCaseParts(token).length > 1))
+        // `[A-Z0-9]*` stops at the first lowercase letter: same matches, linear time.
+        (/^[A-Z][A-Z0-9]*[a-z][A-Za-z0-9]*$/.test(token) && splitCamelCaseParts(token).length > 1))
     ) {
       continue;
     }
