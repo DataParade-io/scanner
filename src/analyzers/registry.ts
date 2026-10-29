@@ -23,6 +23,7 @@ import { detectRubyDatabaseYmlFromConfig } from "../patterns/detectors/ruby";
 import { loadUnifiedPatternConfig } from "../patterns/config";
 import { isRailsDatabaseYmlPath, normalizeRubyPath } from "./ruby/parser";
 import { runWithOrganizationDomainsScope } from "../classifier/organization-domains-scan-scope";
+import { runWithPythonModuleIndex } from "../patterns/detectors/python-module-index";
 
 const typeScriptAnalyzer = createTypeScriptAnalyzer();
 const pythonAnalyzer = createPythonAnalyzer();
@@ -82,7 +83,7 @@ export function runAnalyzers(
         }
       : undefined;
 
-  return runWithOrganizationDomainsScope(opts?.organizationDomains, () => {
+  return runWithOrganizationDomainsScope(opts?.organizationDomains, () => runWithPythonModuleIndex(files, () => {
     for (const file of files) {
       if (file.language === "terraform") {
         findings.push(...detectTerraformPatterns(file, tfConfig, tfOpts));
@@ -127,7 +128,7 @@ export function runAnalyzers(
     }
 
     return findings;
-  });
+  }));
 }
 
 export async function runAnalyzersForRootPath(

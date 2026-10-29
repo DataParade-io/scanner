@@ -46,10 +46,19 @@ export interface ThirdPartyUrlRoute {
   rules: ThirdPartyUrlRouteRule[];
 }
 
+/** LLM gateway model prefix (`groq/llama-3.1-8b`) naming the provider (DATAP-818). */
+export interface LlmModelPrefix {
+  prefix: string;
+  serviceName: string;
+}
+
 export interface ThirdPartyDetectionConfig {
   httpClients: ThirdPartyHttpClientConfig[];
   services: ThirdPartyServiceConfig[];
   urlRoutes: ThirdPartyUrlRoute[];
+  /** Rules for URLs whose host is only known at runtime (`https://{shop}/api/mcp`): path and hint required. */
+  urlPathRoutes: ThirdPartyUrlRouteRule[];
+  llmModelPrefixes: LlmModelPrefix[];
 }
 
 interface RawHttpClient {
@@ -76,6 +85,8 @@ interface RawConfig {
   http_clients?: RawHttpClient[];
   services?: RawService[];
   url_routes?: RawUrlRoute[];
+  url_path_routes?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
+  llm_model_prefixes?: Record<string, string>;
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -198,7 +209,23 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
     }
   }
 
-  cached = { httpClients, services, urlRoutes };
+  const urlPathRoutes: ThirdPartyUrlRouteRule[] = (parsed.url_path_routes ?? []).map((rule) => {
+    if (!rule.serviceName || !rule.path || !rule.hint) {
+      throw new Error("third-party-detection.url_path_routes rules need path, hint and serviceName.");
+    }
+    return {
+      serviceName: rule.serviceName,
+      path: new RegExp(rule.path, "i"),
+      hint: new RegExp(rule.hint, "i"),
+      ...(rule.subType ? { subType: rule.subType } : {}),
+    };
+  });
+
+  const llmModelPrefixes: LlmModelPrefix[] = Object.entries(parsed.llm_model_prefixes ?? {}).map(
+    ([prefix, serviceName]) => ({ prefix: prefix.toLowerCase().replace(/\/$/, ""), serviceName: String(serviceName) }),
+  );
+
+  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes };
   return cached;
 }
 

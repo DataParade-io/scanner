@@ -319,6 +319,8 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     ...unified.thirdParty.urlRoutes.flatMap((route) =>
       route.rules.map((rule) => rule.serviceName),
     ),
+    ...unified.thirdParty.urlPathRoutes.map((rule) => rule.serviceName),
+    ...unified.thirdParty.llmModelPrefixes.map((entry) => entry.serviceName),
   ].map((name) => name.toLowerCase());
   const classifierServiceNames = unified.classifier.thirdParties.map((s) =>
     s.serviceName.toLowerCase(),

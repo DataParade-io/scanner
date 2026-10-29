@@ -264,9 +264,22 @@ services:
       - api.cerebras.ai
   - serviceName: arize_phoenix
     patternId: external_api_call
+    importFragments:
+      - phoenix.otel
     confidence: 0.85
     url_host_patterns:
       - phoenix.arize.com
+  - serviceName: groq
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.groq.com
+  - serviceName: together_ai
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.together.xyz
+      - api.together.ai
 
 # url_routes: hosts that serve several products. Rules run in order; the first rule whose
 # `path` (URL path, no query) and `hint` (file path, class, function and URL expression of
@@ -291,3 +304,29 @@ url_routes:
       - path: "/messages/?$"
         serviceName: facebook_messenger
       - serviceName: facebook_graph
+
+# url_path_routes: URLs whose host is only known at runtime (`https://{self.domain}/api/mcp`).
+# A rule names the service when the URL path matches `path` and the calling code or the
+# class/module the URL was built in matches `hint`. Both are required: a path alone is
+# too weak to name a vendor.
+url_path_routes:
+  # Shopify Storefront MCP: every shop serves it at https://{shop}/api/mcp; the host is the
+  # merchant's domain, so only Shopify-named code (ShopifyStore, shopify_store.py) counts.
+  - path: "^/api/mcp/?$"
+    hint: "shopify"
+    serviceName: shopify
+
+# llm_model_prefixes: LiteLLM routes `provider/model` to the provider. Only providers in the
+# classifier catalog are listed.
+llm_model_prefixes:
+  groq: groq
+  together_ai: together_ai
+  openrouter: openrouter
+  cerebras: cerebras
+  anthropic: anthropic
+  openai: openai
+  gemini: google_ai
+  vertex_ai: google_ai
+  bedrock: aws
+  sagemaker: aws
+  azure: azure

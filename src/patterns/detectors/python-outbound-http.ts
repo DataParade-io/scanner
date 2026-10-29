@@ -11,13 +11,22 @@
 import type { RawFinding } from "../../core/types/detection";
 import type { SourceLocation } from "../../core/types/file";
 import type { UnifiedPatternConfig } from "../config";
-import type { ThirdPartyUrlRoute } from "../../config/third-party-detection-config";
+import type {
+  LlmModelPrefix,
+  ThirdPartyUrlRoute,
+  ThirdPartyUrlRouteRule,
+} from "../../config/third-party-detection-config";
 import {
   defaultServiceNameFromLiteralPublicUrl,
   hostMatchesOrganizationDomains,
   shouldIgnoreExternalHttpUrl,
 } from "../../classifier/external-url-third-party";
 import { getActiveOrganizationDomains } from "../../classifier/organization-domains-scan-scope";
+import {
+  pythonModuleSource,
+  pythonModuleIndexGeneration,
+  resolvePythonModulePath,
+} from "./python-module-index";
 import {
   buildPySourceModel,
   dottedName,
@@ -39,6 +48,7 @@ const REQUEST_VERBS = new Set(["get", "post", "put", "patch", "delete", "head", 
 const METHOD_FIRST_VERBS = new Set(["request", "stream"]);
 const STRING_METHODS = new Set(["rstrip", "strip", "lstrip", "lower", "format", "removesuffix", "removeprefix", "encode"]);
 const OPENAI_CLIENTS = new Set(["OpenAI", "AsyncOpenAI"]);
+const LITELLM_CALLS = new Set(["completion", "acompletion", "text_completion", "atext_completion", "embedding", "aembedding", "responses", "aresponses"]);
 const MCP_URL_CALLS = new Set(["streamablehttp_client", "streamable_http_client", "sse_client"]);
 const MCP_URL_PARAMS = new Set(["StreamableHTTPServerParams", "SseServerParams", "StreamableHTTPConnectionParams", "SseConnectionParams"]);
 /** Packages that are plumbing, never destinations, besides the configured HTTP clients. */
@@ -52,7 +62,14 @@ interface Site {
 interface Val {
   text: string;
   sites: Site[];
+  /** Class and module names the value came through (`ShopifyStore shopify_store.py`), for routing hints. */
+  hint: string;
 }
+
+/** A class (or an instance of it) or a module a dotted name refers to. */
+type Sym = { kind: "class"; scope: PyScope } | { kind: "module"; root: PyScope };
+
+const MAX_SYMBOL_DEPTH = 8;
 
 interface EvalCtx {
   scope: PyScope;
@@ -82,12 +99,52 @@ interface Destination {
 
 class Resolver {
   private readonly active = new Set<string>();
+  /** Module scope -> its model and repo-relative path (the scanned file and imported modules). */
+  private readonly modules = new Map<PyScope, { model: PySourceModel; path: string; id: number }>();
+  private readonly loaded = new Map<string, PyScope | undefined>();
 
-  constructor(private readonly model: PySourceModel) {}
+  constructor(
+    private readonly model: PySourceModel,
+    filePath: string,
+  ) {
+    this.modules.set(model.module, { model, path: filePath, id: 0 });
+    this.loaded.set(filePath, model.module);
+  }
+
+  private rootOf(scope: PyScope): PyScope {
+    let current = scope;
+    while (current.parent) current = current.parent;
+    return current;
+  }
+
+  private moduleOf(scope: PyScope): { model: PySourceModel; path: string; id: number } {
+    return this.modules.get(this.rootOf(scope)) ?? { model: this.model, path: "", id: 0 };
+  }
+
+  private text(scope: PyScope, expr: PyExpr): string {
+    return exprText(this.moduleOf(scope).model, expr);
+  }
+
+  /** Module scope of a same-repo import seen from `fromScope`'s file, loaded on demand. */
+  private loadModule(fromScope: PyScope, spec: string): PyScope | undefined {
+    const from = this.moduleOf(fromScope).path;
+    const path = resolvePythonModulePath(from, spec);
+    if (!path) return undefined;
+    if (this.loaded.has(path)) return this.loaded.get(path);
+    const source = pythonModuleSource(path);
+    let root: PyScope | undefined;
+    if (source !== undefined) {
+      const model = buildPySourceModel(source);
+      root = model.module;
+      this.modules.set(root, { model, path, id: this.modules.size });
+    }
+    this.loaded.set(path, root);
+    return root;
+  }
 
   eval(expr: PyExpr, ctx: EvalCtx): Val[] {
     if (ctx.depth > MAX_DEPTH) return [];
-    const key = `${expr.start}:${expr.end}:${ctx.hops}:${ctx.bindings ? [...ctx.bindings.keys()].join(",") : ""}`;
+    const key = `${this.moduleOf(ctx.scope).id}:${expr.start}:${expr.end}:${ctx.hops}:${ctx.bindings ? [...ctx.bindings.keys()].join(",") : ""}`;
     if (this.active.has(key)) return [];
     this.active.add(key);
     try {
@@ -100,14 +157,14 @@ class Resolver {
   private evalInner(expr: PyExpr, ctx: EvalCtx): Val[] {
     switch (expr.kind) {
       case "str": {
-        let acc: Val[] = [{ text: "", sites: [] }];
+        let acc: Val[] = [{ text: "", sites: [], hint: "" }];
         for (const part of expr.parts) {
           if (typeof part === "string") {
-            acc = acc.map((v) => ({ text: v.text + part, sites: v.sites }));
+            acc = acc.map((v) => ({ ...v, text: v.text + part }));
             continue;
           }
           const values = this.eval(part, ctx);
-          const pieces = values.length > 0 ? values : [{ text: `{${exprText(this.model, part)}}`, sites: [] }];
+          const pieces = values.length > 0 ? values : [placeholder(this.text(ctx.scope, part))];
           acc = product(acc, pieces);
         }
         return acc;
@@ -117,8 +174,17 @@ class Resolver {
       case "attr": {
         const base = dottedName(expr.object);
         if (base === "self" || base === "cls") return this.resolveSelfAttr(expr.attr, ctx);
+        // `settings.BASE_URL` where `settings` is a class, an instance or a module (DATAP-818).
+        const sym = this.symbolOf(expr.object, ctx.scope, ctx.line, 0);
+        if (sym?.kind === "class") return this.classAttr(sym.scope, expr.attr, ctx);
+        if (sym?.kind === "module") return this.resolveName(expr.attr, { scope: sym.root, line: Number.MAX_SAFE_INTEGER, hops: 0, depth: ctx.depth });
         return [];
       }
+      case "coll":
+        return expr.elts.flatMap((e) => this.eval(e, ctx));
+      case "subscript":
+        // `MODELS[tier]`: every value the container can hold.
+        return this.eval(expr.value, ctx);
       case "call":
         return this.evalCall(expr, ctx);
       case "binop": {
@@ -127,8 +193,8 @@ class Resolver {
         const left = this.eval(expr.left, ctx);
         const right = this.eval(expr.right, ctx);
         if (left.length === 0 && right.length === 0) return [];
-        const l = left.length > 0 ? left : [{ text: `{${exprText(this.model, expr.left)}}`, sites: [] }];
-        const r = right.length > 0 ? right : [{ text: `{${exprText(this.model, expr.right)}}`, sites: [] }];
+        const l = left.length > 0 ? left : [placeholder(this.text(ctx.scope, expr.left))];
+        const r = right.length > 0 ? right : [placeholder(this.text(ctx.scope, expr.right))];
         return product(l, r);
       }
       case "boolop":
@@ -155,7 +221,7 @@ class Resolver {
     if (callee && /(^|\.)urljoin$/.test(callee) && expr.args.length >= 2) {
       const base = this.eval(expr.args[0], ctx);
       const rel = this.eval(expr.args[1], ctx);
-      return product(base, rel.length > 0 ? rel : [{ text: "/{…}", sites: [] }]);
+      return product(base, rel.length > 0 ? rel : [placeholder("…", "/")]);
     }
     if (expr.func.kind === "attr" && STRING_METHODS.has(expr.func.attr)) {
       const receiver = this.eval(expr.func.object, ctx);
@@ -167,15 +233,27 @@ class Resolver {
     // Same-file function or method: evaluate its return values with the arguments bound.
     const func = expr.func;
     let target: PyScope | undefined;
-    if (func.kind === "name") target = this.lookupFunction(func.id, ctx.scope);
+    let hint = "";
+    if (func.kind === "name") target = this.lookupFunction(func.id, ctx.scope) ?? this.importedFunction(func.id, ctx.scope);
     else if (func.kind === "attr" && (dottedName(func.object) === "self" || dottedName(func.object) === "cls")) {
       target = this.enclosingClass(ctx.scope)?.children.find((c) => c.kind === "function" && c.name === func.attr);
+    } else if (func.kind === "attr") {
+      // `store.mcp_endpoint()` on a same-repo class, `module.helper()` on a same-repo module.
+      const sym = this.symbolOf(func.object, ctx.scope, ctx.line, 0);
+      if (sym?.kind === "class") {
+        target = sym.scope.children.find((c) => c.kind === "function" && c.name === func.attr);
+        hint = this.hintOf(sym.scope);
+      } else if (sym?.kind === "module") {
+        target = sym.root.children.find((c) => c.kind === "function" && c.name === func.attr);
+      }
     }
     if (!target) return [];
-    const bindings = this.bindArguments(target, expr, ctx);
-    return target.returns.flatMap((ret) =>
-      this.eval(ret, { scope: target!, line: this.model.lineOf(ret.start), bindings, hops: 0, depth: ctx.depth }),
-    );
+    const fn = target;
+    const bindings = this.bindArguments(fn, expr, ctx);
+    const lineOf = this.moduleOf(fn).model.lineOf;
+    return fn.returns
+      .flatMap((ret) => this.eval(ret, { scope: fn, line: lineOf(ret.start), bindings, hops: 0, depth: ctx.depth }))
+      .map((v) => (hint ? { ...v, hint: `${v.hint} ${hint}` } : v));
   }
 
   private bindArguments(fn: PyScope, call: Extract<PyExpr, { kind: "call" }>, ctx: EvalCtx): Map<string, { expr: PyExpr; ctx: EvalCtx }> {
@@ -215,10 +293,115 @@ class Resolver {
         const chosen = before.length > 0 ? [before[before.length - 1]] : assigned;
         return chosen.flatMap((a) => this.eval(a.value, { scope: a.scope, line: a.line, hops: first ? ctx.hops : 0, depth: ctx.depth, bindings: first ? ctx.bindings : undefined }));
       }
+      if (!scope.parent) return this.importedName(id, scope, ctx);
       scope = scope.parent;
       first = false;
     }
     return [];
+  }
+
+  /** A module-level name bound by `from M import name` in a same-repo module. */
+  private importedName(id: string, root: PyScope, ctx: EvalCtx): Val[] {
+    const imp = this.moduleOf(root).model.imports.find((i) => i.names.length > 0 && i.aliases.has(id));
+    if (!imp) return [];
+    const target = this.loadModule(root, imp.module);
+    if (!target || target === root) return [];
+    const name = imp.aliases.get(id)!;
+    return this.resolveName(name, { scope: target, line: Number.MAX_SAFE_INTEGER, hops: 0, depth: ctx.depth + 1 });
+  }
+
+  private importedFunction(id: string, scope: PyScope): PyScope | undefined {
+    const root = this.rootOf(scope);
+    const imp = this.moduleOf(root).model.imports.find((i) => i.names.length > 0 && i.aliases.has(id));
+    if (!imp) return undefined;
+    const target = this.loadModule(root, imp.module);
+    const name = imp.aliases.get(id)!;
+    return target?.children.find((c) => c.kind === "function" && c.name === name);
+  }
+
+  /** Class, instance or module a name or dotted expression refers to, across same-repo imports. */
+  symbolOf(expr: PyExpr, scope: PyScope, line: number, depth: number): Sym | undefined {
+    if (depth > MAX_SYMBOL_DEPTH) return undefined;
+    if (expr.kind === "call") {
+      const sym = this.symbolOf(expr.func, scope, line, depth + 1);
+      return sym?.kind === "class" ? sym : undefined;
+    }
+    if (expr.kind === "attr") {
+      const base = this.symbolOf(expr.object, scope, line, depth + 1);
+      if (base?.kind === "module") return this.symbolOfName(expr.attr, base.root, Number.MAX_SAFE_INTEGER, depth + 1);
+      return undefined;
+    }
+    if (expr.kind === "name") return this.symbolOfName(expr.id, scope, line, depth + 1);
+    return undefined;
+  }
+
+  private symbolOfName(id: string, start: PyScope, line: number, depth: number): Sym | undefined {
+    if (depth > MAX_SYMBOL_DEPTH) return undefined;
+    let scope: PyScope | undefined = start;
+    let first = true;
+    while (scope) {
+      if (scope.kind !== "class" || first) {
+        if (scope.kind === "function") {
+          const param = scope.params.find((p) => p.name === id);
+          if (param) return param.annotation ? this.symbolOfAnnotation(param.annotation, scope, depth + 1) : undefined;
+        }
+        const cls = scope.children.find((c) => c.kind === "class" && c.name === id);
+        if (cls) return { kind: "class", scope: cls };
+        const assigned = scope.assignments.filter((a) => a.target === id);
+        if (assigned.length > 0) {
+          const before = first ? assigned.filter((a) => a.line <= line) : assigned;
+          const chosen = (before.length > 0 ? before : assigned).slice(-1)[0];
+          return this.symbolOf(chosen.value, chosen.scope, chosen.line, depth + 1);
+        }
+      }
+      if (!scope.parent) return this.importedSymbol(id, scope, depth + 1);
+      scope = scope.parent;
+      first = false;
+    }
+    return undefined;
+  }
+
+  private symbolOfAnnotation(annotation: string, scope: PyScope, depth: number): Sym | undefined {
+    const name = /^["']?([A-Za-z_][\w.]*)/.exec(annotation.trim())?.[1];
+    if (!name) return undefined;
+    const [head, ...rest] = name.split(".");
+    let sym = this.symbolOfName(head, scope, Number.MAX_SAFE_INTEGER, depth + 1);
+    for (const part of rest) {
+      if (sym?.kind !== "module") return undefined;
+      sym = this.symbolOfName(part, sym.root, Number.MAX_SAFE_INTEGER, depth + 1);
+    }
+    return sym;
+  }
+
+  private importedSymbol(id: string, root: PyScope, depth: number): Sym | undefined {
+    const imports = this.moduleOf(root).model.imports;
+    for (const imp of imports) {
+      const target = imp.aliases.get(id);
+      if (target === undefined) continue;
+      if (imp.names.length === 0) {
+        const mod = this.loadModule(root, target);
+        return mod ? { kind: "module", root: mod } : undefined;
+      }
+      const mod = this.loadModule(root, imp.module);
+      if (mod && mod !== root) {
+        const sym = this.symbolOfName(target, mod, Number.MAX_SAFE_INTEGER, depth + 1);
+        if (sym) return sym;
+      }
+      // `from pkg import settings` where `settings` is itself a module.
+      const sub = this.loadModule(root, `${imp.module}${imp.module.endsWith(".") ? "" : "."}${target}`);
+      return sub ? { kind: "module", root: sub } : undefined;
+    }
+    return undefined;
+  }
+
+  private hintOf(cls: PyScope): string {
+    return `${cls.name} ${this.moduleOf(cls).path}`.toLowerCase();
+  }
+
+  /** Values of `obj.attr` on a class or instance: class attributes, `self.attr = ...`, `@property`. */
+  private classAttr(cls: PyScope, attr: string, ctx: EvalCtx): Val[] {
+    const hint = this.hintOf(cls);
+    return this.attrValues(cls, attr, ctx).map((v) => ({ ...v, hint: `${v.hint} ${hint}` }));
   }
 
   /** Values a parameter takes at same-file call sites of its function, with those sites. */
@@ -236,7 +419,7 @@ class Resolver {
       if (!arg) continue;
       const site = { startLine: call.startLine, endLine: call.endLine };
       const values = this.eval(arg, { scope: call.scope, line: call.startLine, hops: ctx.hops - 1, depth: ctx.depth });
-      for (const v of values) out.push({ text: v.text, sites: [...v.sites, site] });
+      for (const v of values) out.push({ ...v, sites: [...v.sites, site] });
     }
     return out;
   }
@@ -244,12 +427,17 @@ class Resolver {
   resolveSelfAttr(attr: string, ctx: EvalCtx): Val[] {
     const cls = this.enclosingClass(ctx.scope);
     if (!cls) return [];
+    return this.attrValues(cls, attr, ctx);
+  }
+
+  private attrValues(cls: PyScope, attr: string, ctx: EvalCtx): Val[] {
+    const lineOf = this.moduleOf(cls).model.lineOf;
     const out: Val[] = [];
     for (const member of cls.children) {
       if (member.kind !== "function") continue;
       if (member.name === attr && member.decorators.some((d) => /(^|\.)(property|cached_property)$/.test(d))) {
         for (const ret of member.returns) {
-          out.push(...this.eval(ret, { scope: member, line: this.model.lineOf(ret.start), hops: 0, depth: ctx.depth }));
+          out.push(...this.eval(ret, { scope: member, line: lineOf(ret.start), hops: 0, depth: ctx.depth }));
         }
       }
       for (const a of member.assignments) {
@@ -324,11 +512,15 @@ function product(left: Val[], right: Val[]): Val[] {
   const out: Val[] = [];
   for (const l of left) {
     for (const r of right) {
-      out.push({ text: l.text + r.text, sites: [...l.sites, ...r.sites] });
+      out.push({ text: l.text + r.text, sites: [...l.sites, ...r.sites], hint: `${l.hint} ${r.hint}`.trim() });
       if (out.length >= MAX_VALUES) return out;
     }
   }
   return out;
+}
+
+function placeholder(text: string, prefix = ""): Val {
+  return { text: `${prefix}{${text}}`, sites: [], hint: "" };
 }
 
 function cap(values: Val[]): Val[] {
@@ -370,6 +562,8 @@ function hostMatches(host: string, pattern: string): boolean {
 export class DestinationRouter {
   private readonly hostPatterns: Array<{ pattern: string; serviceName: string }>;
   private readonly routes: ThirdPartyUrlRoute[];
+  private readonly pathRoutes: ThirdPartyUrlRouteRule[];
+  private readonly modelPrefixes: LlmModelPrefix[];
   private readonly catalogSubTypes = new Map<string, string>();
   private readonly libraryNames: Set<string>;
 
@@ -378,6 +572,8 @@ export class DestinationRouter {
       svc.urlHostPatterns.map((pattern) => ({ pattern, serviceName: svc.serviceName })),
     );
     this.routes = config.thirdParty.urlRoutes;
+    this.pathRoutes = config.thirdParty.urlPathRoutes;
+    this.modelPrefixes = config.thirdParty.llmModelPrefixes;
     for (const tp of config.classifier.thirdParties) {
       if (!this.catalogSubTypes.has(tp.serviceName.toLowerCase())) {
         this.catalogSubTypes.set(tp.serviceName.toLowerCase(), tp.subType);
@@ -397,7 +593,14 @@ export class DestinationRouter {
     fallback: boolean,
   ): { serviceName: string; subType?: string } | "unknown" | "organization" {
     const parsed = parseUrl(url);
-    if (!parsed) return "unknown";
+    if (!parsed) {
+      // Host known only at runtime: a path route needs both its path and its hint.
+      const runtimeHost = /^(?:https?|wss?):\/\/[^/?#\s]*\{[^}]*\}[^/?#\s]*([^?#\s]*)/i.exec(url.trim());
+      if (!runtimeHost) return "unknown";
+      const path = runtimeHost[1] || "/";
+      const rule = this.pathRoutes.find((r) => r.path?.test(path) && r.hint?.test(hint));
+      return rule ? this.named(rule.serviceName, rule.subType) : "unknown";
+    }
     const organizationDomains = getActiveOrganizationDomains() ?? [];
     if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return "organization";
     const concrete = `https://${parsed.host}${parsed.path.replace(/\{[^}]*\}/g, "x")}`;
@@ -422,6 +625,14 @@ export class DestinationRouter {
     if (!fallback) return "unknown";
     const derived = defaultServiceNameFromLiteralPublicUrl(concrete);
     return derived ? this.named(derived) : "unknown";
+  }
+
+  /** Provider of an LLM gateway model id (`groq/llama-3.1-8b-instant` -> groq). */
+  routeModel(model: string): { serviceName: string; subType?: string } | "unknown" {
+    const prefix = model.trim().toLowerCase().split("/")[0];
+    if (!prefix || prefix === model.trim().toLowerCase()) return "unknown";
+    const entry = this.modelPrefixes.find((p) => p.prefix === prefix);
+    return entry ? this.named(entry.serviceName) : "unknown";
   }
 
   isLibrary(name: string): boolean {
@@ -458,7 +669,7 @@ export interface PythonOutboundHttpResult {
 const resultCache = new Map<string, PythonOutboundHttpResult>();
 
 export function detectPythonOutboundHttp(input: PythonOutboundHttpInput): PythonOutboundHttpResult {
-  const key = `${input.filePath}\u0000${input.content}`;
+  const key = `${pythonModuleIndexGeneration()}\u0000${input.filePath}\u0000${input.content}`;
   const cached = resultCache.get(key);
   if (cached) return cached;
   let result: PythonOutboundHttpResult;
@@ -476,11 +687,11 @@ export function detectPythonOutboundHttp(input: PythonOutboundHttpInput): Python
 function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResult {
   const { filePath, content, libraries } = input;
   const empty = { findings: [], openAiClientsRedirected: false };
-  if (!/\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content)) {
+  if (!/\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content)) {
     return empty;
   }
   const model = buildPySourceModel(content);
-  const resolver = new Resolver(model);
+  const resolver = new Resolver(model, filePath);
   const router = new DestinationRouter(input.config, libraries.map((l) => l.name));
   const lines = content.split(/\r?\n/);
   const findings: RawFinding[] = [];
@@ -541,7 +752,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
           location: location(site),
           properties: {
             serviceName: d.serviceName,
-            url: d.url,
+            ...(d.url ? { url: d.url } : {}),
             ...(d.subType ? { thirdPartySubType: d.subType } : {}),
             ...extra,
           },
@@ -556,7 +767,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     let organization = false;
     const seen = new Set<string>();
     for (const v of values) {
-      const routed = router.route(v.text, hintFor(call, v.text), fallback);
+      const routed = router.route(v.text, `${hintFor(call, v.text)} ${v.hint}`, fallback);
       if (routed === "organization") {
         organization = true;
         continue;
@@ -585,8 +796,8 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
         .eval(client.baseUrl.expr, { scope: client.baseUrl.scope, line: client.baseUrl.line, hops: 0, depth: 0 })
         .filter((v) => parseUrl(v.text));
       if (bases.length > 0) {
-        const rel = direct.length > 0 ? direct : [{ text: urlExpr ? `{${exprText(model, urlExpr)}}` : "", sites: [] }];
-        const joined = bases.flatMap((b) => rel.map((r) => ({ text: joinUrl(b.text, r.text), sites: [...b.sites, ...r.sites] })));
+        const rel = direct.length > 0 ? direct : [urlExpr ? placeholder(exprText(model, urlExpr)) : { text: "", sites: [], hint: "" }];
+        const joined = bases.flatMap((b) => rel.map((r) => ({ text: joinUrl(b.text, r.text), sites: [...b.sites, ...r.sites], hint: `${b.hint} ${r.hint}` })));
         return destinationsFor(call, joined, fallback);
       }
     }
@@ -594,6 +805,9 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
       const viaCallers = resolver.eval(urlExpr, ctxFor(call, MAX_CALLER_HOPS)).filter((v) => parseUrl(v.text));
       if (viaCallers.length > 0) return { ...destinationsFor(call, viaCallers, fallback), literalUrl: viaCallers[0]?.text };
     }
+    // Absolute URL whose host is only known at runtime (`https://{shop}/api/mcp`): path routes.
+    const runtimeHost = direct.filter((v) => /^(?:https?|wss?):\/\/[^/?#\s]*\{/i.test(v.text));
+    if (runtimeHost.length > 0) return destinationsFor(call, runtimeHost, false);
     return { known: [], organization: false };
   };
 
@@ -625,12 +839,41 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
   let openAiRedirected = 0;
   const openAiImported = imported("openai");
   const mcpImported = imported("mcp") || imported("google.adk");
-  const phoenixRegister = new Set<string>(["phoenix.otel.register", "px.otel.register"]);
+  // Phoenix tracing: `register(...)`, `phoenix.otel.BatchSpanProcessor(...)` and the other
+  // phoenix.otel entry points send spans to Arize Phoenix whatever the endpoint value.
+  const phoenixModuleAliases = new Set<string>();
+  const phoenixNames = new Set<string>();
   for (const imp of model.imports) {
-    if (imp.module === "phoenix.otel") {
-      for (const [alias, name] of imp.aliases) if (name === "register") phoenixRegister.add(alias);
+    if (imp.module !== "phoenix.otel" && !imp.module.startsWith("phoenix.otel.")) {
+      if (imp.module === "phoenix" && imp.names.includes("otel")) {
+        for (const [alias, name] of imp.aliases) if (name === "otel") phoenixModuleAliases.add(alias);
+      }
+      continue;
+    }
+    if (imp.names.length === 0) {
+      for (const [alias, target] of imp.aliases) phoenixModuleAliases.add(alias === "phoenix" ? "phoenix.otel" : alias === target ? target : alias);
+    } else {
+      for (const alias of imp.aliases.keys()) phoenixNames.add(alias);
     }
   }
+  const isPhoenixCall = (callee: string): boolean => {
+    if (phoenixNames.has(callee)) return true;
+    const dot = callee.lastIndexOf(".");
+    return dot > 0 && phoenixModuleAliases.has(callee.slice(0, dot));
+  };
+  // LiteLLM: completion(model="groq/...") names the provider from the model prefix.
+  const litellmAliases = new Set<string>();
+  const litellmNames = new Set<string>();
+  for (const imp of model.imports) {
+    if (imp.module !== "litellm" && !imp.module.startsWith("litellm.")) continue;
+    if (imp.names.length === 0) for (const alias of imp.aliases.keys()) litellmAliases.add(alias);
+    else for (const [alias, name] of imp.aliases) if (LITELLM_CALLS.has(name)) litellmNames.add(alias);
+  }
+  const isLitellmCall = (callee: string): boolean => {
+    if (litellmNames.has(callee)) return true;
+    const dot = callee.lastIndexOf(".");
+    return dot > 0 && litellmAliases.has(callee.slice(0, dot)) && LITELLM_CALLS.has(callee.slice(dot + 1));
+  };
 
   for (const call of model.calls) {
     const { node } = call;
@@ -694,16 +937,27 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
       continue;
     }
 
-    // 4. Phoenix tracing (phoenix.otel.register(endpoint=...)).
-    if (phoenixRegister.has(callee)) {
-      const endpoint = node.kwargs.find((k) => k.name === "endpoint")?.value;
-      if (!endpoint) continue;
-      const { known } = resolveRequestUrl(call, endpoint, undefined, false);
-      emit(call, known, { transport: "otlp" }, "external_api_call", 0.85);
+    // 4. Phoenix tracing.
+    if (isPhoenixCall(callee)) {
+      emit(call, [{ serviceName: "arize_phoenix", url: "", sites: [] }], { transport: "otlp" }, "external_api_call", 0.85);
       continue;
     }
 
-    // 5. Unresolved `(method, url)` helpers such as nexus_call("POST", url, ...): only
+    // 5. LiteLLM provider prefixes.
+    if (isLitellmCall(callee)) {
+      const modelExpr = node.kwargs.find((k) => k.name === "model")?.value ?? node.args[0];
+      if (!modelExpr) continue;
+      const providers: Destination[] = [];
+      for (const v of resolver.eval(modelExpr, ctxFor(call, 0))) {
+        const routed = router.routeModel(v.text);
+        if (routed === "unknown" || providers.some((p) => p.serviceName === routed.serviceName)) continue;
+        providers.push({ ...routed, url: "", sites: [] });
+      }
+      emit(call, providers, { client: "litellm" }, "external_api_call", 0.85);
+      continue;
+    }
+
+    // 6. Unresolved `(method, url)` helpers such as nexus_call("POST", url, ...): only
     //    catalog hosts count, so ordinary two-string calls do not become destinations.
     const methodArg = node.args[0];
     if (methodArg?.kind === "str" && node.args[1] && methodArg.parts.length === 1 && typeof methodArg.parts[0] === "string" && HTTP_METHODS.has(methodArg.parts[0].toUpperCase())) {

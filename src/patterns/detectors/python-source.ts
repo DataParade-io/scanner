@@ -25,6 +25,8 @@ export type PyExpr =
   | (PyNodeBase & { kind: "boolop"; op: "or" | "and"; values: PyExpr[] })
   | (PyNodeBase & { kind: "ifexp"; body: PyExpr; orelse: PyExpr })
   | (PyNodeBase & { kind: "tuple"; elts: PyExpr[] })
+  /** List, set or dict literal; `elts` are the values (dict keys are dropped). */
+  | (PyNodeBase & { kind: "coll"; elts: PyExpr[] })
   | (PyNodeBase & { kind: "subscript"; value: PyExpr })
   | (PyNodeBase & { kind: "const"; value: string })
   | (PyNodeBase & { kind: "other" });
@@ -36,6 +38,8 @@ export interface PyKeyword {
 
 export interface PyParam {
   name: string;
+  /** Annotation text (`ShopifyStore`, `str | None`). */
+  annotation?: string;
   defaultExpr?: PyExpr;
 }
 
@@ -493,6 +497,36 @@ export class PyExprParser {
     }
   }
 
+  /** `[a, b]`, `{a, b}` or `{k: v}`; comprehensions throw and fall back to `other`. */
+  private parseCollection(): PyExpr {
+    const open = this.next();
+    const close = OPEN[open.text];
+    const elts: PyExpr[] = [];
+    while (!this.isOp(close)) {
+      if (this.isOp("**")) {
+        this.next();
+        this.parseExpr();
+      } else {
+        const first = this.parseExpr();
+        if (first.kind === "other" && this.isName("for", 0)) throw new ParseError("comprehension");
+        if (this.isOp(":")) {
+          this.next();
+          elts.push(this.parseExpr());
+        } else {
+          elts.push(first);
+        }
+      }
+      if (this.isName("for")) throw new ParseError("comprehension");
+      if (this.isOp(",")) {
+        this.next();
+        continue;
+      }
+      if (!this.isOp(close)) throw new ParseError("collection");
+    }
+    const end = this.next().end;
+    return { kind: "coll", elts, start: open.start, end };
+  }
+
   private parseCallArgs(func: PyExpr): PyExpr {
     this.expectOp("(");
     const args: PyExpr[] = [];
@@ -554,9 +588,15 @@ export class PyExprParser {
       return { ...inner, start: open.start, end: close.end };
     }
     if (t.text === "[" || t.text === "{") {
-      const start = t.start;
-      const end = this.skipGroup();
-      return { kind: "other", start, end };
+      const saved = this.pos;
+      try {
+        return this.parseCollection();
+      } catch {
+        this.pos = saved;
+        const start = t.start;
+        const end = this.skipGroup();
+        return { kind: "other", start, end };
+      }
     }
     throw new ParseError(`unexpected ${t.text}`);
   }
@@ -765,8 +805,11 @@ function parseParams(src: string, from: number, to: number): PyParam[] {
     if (!nameTok || tokens[0]?.text === "*" && tokens.length === 1) continue;
     if (tokens[0]?.kind === "op" && tokens[0].text === "/") continue;
     const eq = tokens.find((t, idx) => t.kind === "op" && t.text === "=" && idx > 0);
+    const colon = tokens.find((t, idx) => t.kind === "op" && t.text === ":" && idx > 0);
+    const annotation = colon ? src.slice(colon.end, eq ? eq.start : b).trim() : "";
     params.push({
       name: nameTok.text,
+      ...(annotation ? { annotation } : {}),
       ...(eq ? { defaultExpr: PyExprParser.parseRange(src, eq.end, b) } : {}),
     });
   }

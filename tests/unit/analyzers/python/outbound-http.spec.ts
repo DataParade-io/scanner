@@ -3,6 +3,7 @@ import type { RawFinding } from "../../../../src/core/types/detection";
 import { detectPythonPatterns } from "../../../../src/analyzers/python/detector";
 import { classifyRawFindings, dedupeComponents } from "../../../../src/classifier/classify";
 import { componentScannerIdentityKey } from "../../../../src/eval/canonical/scanner/components";
+import { runWithPythonModuleIndex } from "../../../../src/patterns/detectors/python-module-index";
 
 /** DATAP-818: raw-HTTP destinations in Python resolve to the host the call reaches. */
 
@@ -15,6 +16,15 @@ function pythonFile(lines: string[], path = "app.py"): FileInfo {
 
 function outbound(lines: string[], path?: string): RawFinding[] {
   return detectPythonPatterns(pythonFile(lines, path)).filter((f) => f.pattern === "external_api_call");
+}
+
+/** Detect one file of a small repo, with the other files available for imports. */
+function outboundInRepo(files: Record<string, string[]>, target: string): RawFinding[] {
+  const infos = Object.entries(files).map(([path, lines]) => pythonFile(lines, path));
+  const file = infos.find((f) => f.path === target)!;
+  return runWithPythonModuleIndex(infos, () =>
+    detectPythonPatterns(file).filter((f) => f.pattern === "external_api_call"),
+  );
 }
 
 function services(findings: RawFinding[]): string[] {
@@ -310,7 +320,7 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
         "    )",
       ]);
       expect(services(findings)).toEqual(["arize_phoenix"]);
-      expect(span(findings[0])).toBe("6-9");
+      expect(findings.map(span).sort()).toEqual(["2-2", "6-9"]);
     });
   });
 
@@ -367,6 +377,163 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
         "third_party:instagram/saas_service",
         "third_party:meta_conversions_api/analytics",
       ]);
+    });
+  });
+
+  describe("same-repo imports", () => {
+    const settings = [
+      "import os",
+      "",
+      "class Settings:",
+      '    FAST_LLM_BASE_URL = os.environ.get("FAST_LLM_BASE_URL", "https://api.cerebras.ai/v1")',
+      '    ROUTER_BASE_URL = os.environ.get("ROUTER_BASE_URL", "https://openrouter.ai/api/v1")',
+      "",
+      "settings = Settings()",
+    ];
+
+    it("resolves a settings attribute imported with a relative import", () => {
+      const findings = outboundInRepo(
+        {
+          "app/settings.py": settings,
+          "app/llm.py": [
+            "from openai import AsyncOpenAI",
+            "from .settings import settings",
+            "",
+            "fast = AsyncOpenAI(base_url=settings.FAST_LLM_BASE_URL)",
+            "router = AsyncOpenAI(base_url=settings.ROUTER_BASE_URL)",
+          ],
+        },
+        "app/llm.py",
+      );
+      expect(services(findings)).toEqual(["cerebras", "openrouter"]);
+      expect(findings.find((f) => f.properties.serviceName === "cerebras")?.location.startLine).toBe(4);
+    });
+
+    it("resolves a class attribute and a module constant through absolute imports", () => {
+      const findings = outboundInRepo(
+        {
+          "src/app/settings.py": settings,
+          "src/app/endpoints.py": ['TELEGRAM_API = "https://api.telegram.org"'],
+          "src/app/notify.py": [
+            "import httpx",
+            "from app.settings import Settings",
+            "from app import endpoints",
+            "",
+            "def send(text):",
+            '    httpx.post(f"{endpoints.TELEGRAM_API}/bot1/sendMessage", json={"text": text})',
+            "    httpx.post(Settings.ROUTER_BASE_URL)",
+          ],
+        },
+        "src/app/notify.py",
+      );
+      expect(services(findings)).toEqual(["openrouter", "telegram"]);
+    });
+
+    it("does not resolve across files without the module index", () => {
+      const findings = outbound([
+        "from openai import AsyncOpenAI",
+        "from .settings import settings",
+        "fast = AsyncOpenAI(base_url=settings.FAST_LLM_BASE_URL)",
+      ]);
+      // The base URL stays unknown, so only the OpenAI SDK import is reported.
+      expect(services(findings)).toEqual(["openai"]);
+    });
+
+    it("maps a runtime-host /api/mcp URL built by a Shopify class to shopify", () => {
+      const repo = {
+        "app/shopify_store.py": [
+          "from dataclasses import dataclass",
+          "",
+          "@dataclass",
+          "class ShopifyStore:",
+          "    domain: str",
+          "    endpoint_override: str | None = None",
+          "",
+          "    def mcp_endpoint(self) -> str:",
+          '        return self.endpoint_override or f"https://{self.domain}/api/mcp"',
+        ],
+        "app/store_agent.py": [
+          "from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams",
+          "from .shopify_store import ShopifyStore",
+          "",
+          "def tools(store: ShopifyStore):",
+          "    return StreamableHTTPServerParams(url=store.mcp_endpoint())",
+        ],
+      };
+      const findings = outboundInRepo(repo, "app/store_agent.py");
+      expect(services(findings)).toEqual(["shopify"]);
+      expect(findings[0].location.startLine).toBe(5);
+    });
+
+    it("needs a Shopify name for the /api/mcp path rule", () => {
+      const findings = outboundInRepo(
+        {
+          "app/store.py": [
+            "class Store:",
+            "    def mcp_endpoint(self) -> str:",
+            '        return f"https://{self.domain}/api/mcp"',
+          ],
+          "app/agent.py": [
+            "from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams",
+            "from .store import Store",
+            "",
+            "def tools(store: Store):",
+            "    return StreamableHTTPServerParams(url=store.mcp_endpoint())",
+          ],
+        },
+        "app/agent.py",
+      );
+      expect(findings).toEqual([]);
+    });
+  });
+
+  describe("LiteLLM model prefixes", () => {
+    it("names the provider of a literal model and of every value in a model table", () => {
+      const findings = outbound([
+        "import litellm",
+        "from litellm import completion",
+        "",
+        "MODELS = {",
+        '    "cheap": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo",',
+        '    "fast": "groq/llama-3.1-8b-instant",',
+        "}",
+        "",
+        "async def classify(text, tier):",
+        "    return await litellm.acompletion(",
+        "        model=MODELS[tier],",
+        '        messages=[{"role": "user", "content": text}],',
+        "    )",
+        "",
+        "def summarize(text):",
+        '    return completion(model="anthropic/claude-sonnet-4", messages=[])',
+      ]);
+      expect(services(findings)).toEqual(["anthropic", "groq", "together_ai"]);
+      expect(findings.filter((f) => f.properties.serviceName === "groq").map(span)).toEqual(["10-13"]);
+    });
+
+    it("ignores models without a known provider prefix", () => {
+      const findings = outbound([
+        "import litellm",
+        'litellm.completion(model="gpt-4o-mini", messages=[])',
+        'litellm.completion(model="someone/custom-model", messages=[])',
+      ]);
+      expect(services(findings)).toEqual([]);
+    });
+  });
+
+  describe("Phoenix package", () => {
+    it("names Arize Phoenix for phoenix.otel calls with a configured endpoint", () => {
+      const findings = outbound([
+        "from opentelemetry.sdk.trace import TracerProvider",
+        "import phoenix.otel",
+        "from .settings import settings",
+        "",
+        "def install():",
+        "    provider = TracerProvider()",
+        "    provider.add_span_processor(phoenix.otel.BatchSpanProcessor(endpoint=settings.TRACES_ENDPOINT))",
+      ]);
+      expect(services(findings)).toEqual(["arize_phoenix"]);
+      expect(findings.map((f) => f.location.startLine).sort((a, b) => a - b)).toEqual([2, 7]);
     });
   });
 });
