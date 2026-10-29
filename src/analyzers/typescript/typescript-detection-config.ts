@@ -58,6 +58,13 @@ interface RawExternalApiClientConfig extends RawWithPatternId {
   clientName: string;
   importFragments?: string[];
   regexes?: string[];
+  rawHttp?: {
+    modules: string[];
+    callable?: boolean;
+    namedFunctions?: string[];
+    instanceFactories?: string[];
+    baseUrlKeys?: string[];
+  };
 }
 
 interface RawConfigLoaderConfig extends RawWithPatternId {
@@ -160,12 +167,30 @@ export interface ServerlessHandlerConfig extends WithPatternId {
   confidence: number;
 }
 
+/**
+ * A raw HTTP library whose request URLs the TS/JS AST detector resolves (DATAP-818). Its
+ * line regexes then stay off, so the library is never reported as a destination.
+ */
+export interface RawHttpClientConfig {
+  /** Import specifiers that load it (`axios`, `node-fetch`). */
+  modules: string[];
+  /** The default import is itself a request function (`axios(url)`, `got(url)`). */
+  callable: boolean;
+  /** Named exports that are request functions (`fetch` from undici). */
+  namedFunctions: string[];
+  /** Factory methods returning a configured instance (`axios.create`, `got.extend`). */
+  instanceFactories: string[];
+  /** Option keys that hold the instance base URL (`baseURL`, `prefixUrl`). */
+  baseUrlKeys: string[];
+}
+
 export interface ExternalApiClientConfig extends WithPatternId {
   id: string;
   clientName: string;
   importFragments: string[];
   callRegexes: RegExp[];
   confidence: number;
+  rawHttp?: RawHttpClientConfig;
 }
 
 export interface ConfigLoaderConfig extends WithPatternId {
@@ -337,6 +362,17 @@ function normalizeRawConfig(raw: RawTypeScriptPatternConfig): TypeScriptPatternC
         importFragments: client.importFragments ?? [],
         callRegexes: compileRegexList(client.regexes),
         confidence: client.confidence ?? DEFAULT_CONFIDENCE,
+        ...(client.rawHttp
+          ? {
+              rawHttp: {
+                modules: client.rawHttp.modules,
+                callable: client.rawHttp.callable ?? false,
+                namedFunctions: client.rawHttp.namedFunctions ?? [],
+                instanceFactories: client.rawHttp.instanceFactories ?? [],
+                baseUrlKeys: client.rawHttp.baseUrlKeys ?? [],
+              },
+            }
+          : {}),
       };
     }) ?? [];
 

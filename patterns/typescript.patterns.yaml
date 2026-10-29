@@ -257,6 +257,8 @@ serverless:
       confidence: 0.9
 
 external_apis:
+  # rawHttp: libraries whose request URLs the TS/JS AST detector resolves (DATAP-818). The
+  # global fetch() is always handled; these libraries are never destinations.
   httpClients:
     - id: grpc_client
       patternId: external_api_call
@@ -279,6 +281,11 @@ external_apis:
         - "\\baxios\\.(get|post|put|delete|patch|request)\\s*\\("
         - "\\baxios\\.create\\s*\\("
       confidence: 0.85
+      rawHttp:
+        modules: [axios]
+        callable: true
+        instanceFactories: [create]
+        baseUrlKeys: [baseURL]
 
     - id: node_fetch
       patternId: external_api_call
@@ -290,6 +297,10 @@ external_apis:
       regexes:
         - "\\bfetch\\s*\\("
       confidence: 0.8
+      rawHttp:
+        modules: [node-fetch, cross-fetch, undici]
+        callable: true
+        namedFunctions: [fetch, request]
 
     - id: got
       patternId: external_api_call
@@ -300,6 +311,11 @@ external_apis:
         - "\\bgot\\.(get|post|put|delete|patch)\\s*\\("
         - "\\bgot\\.extend\\s*\\("
       confidence: 0.85
+      rawHttp:
+        modules: [got]
+        callable: true
+        instanceFactories: [extend]
+        baseUrlKeys: [prefixUrl]
 
     - id: ky
       patternId: external_api_call
@@ -310,6 +326,11 @@ external_apis:
         - "\\bky\\.(get|post|put|delete|patch)\\s*\\("
         - "\\bky\\.create\\s*\\("
       confidence: 0.8
+      rawHttp:
+        modules: [ky]
+        callable: true
+        instanceFactories: [create, extend]
+        baseUrlKeys: [prefixUrl]
 
 config_loaders:
   - id: dotenv

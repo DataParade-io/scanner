@@ -23,7 +23,7 @@ import { detectRubyDatabaseYmlFromConfig } from "../patterns/detectors/ruby";
 import { loadUnifiedPatternConfig } from "../patterns/config";
 import { isRailsDatabaseYmlPath, normalizeRubyPath } from "./ruby/parser";
 import { runWithOrganizationDomainsScope } from "../classifier/organization-domains-scan-scope";
-import { runWithPythonModuleIndex } from "../patterns/detectors/python-module-index";
+import { runWithPythonModuleIndex } from "../patterns/detectors/source-module-index";
 
 const typeScriptAnalyzer = createTypeScriptAnalyzer();
 const pythonAnalyzer = createPythonAnalyzer();

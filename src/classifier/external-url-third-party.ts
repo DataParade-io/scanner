@@ -196,6 +196,30 @@ export function deriveServiceKeyFromHostname(host: string): string {
 }
 
 /**
+ * Second-level public suffixes (`co.uk`): the registrable domain then has three labels.
+ * A short list of the common ones; anything else is treated as a one-label suffix.
+ */
+const TWO_LABEL_PUBLIC_SUFFIXES = new Set([
+  "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk", "ltd.uk",
+  "com.au", "net.au", "org.au", "edu.au", "gov.au",
+  "co.nz", "org.nz", "co.jp", "ne.jp", "or.jp", "co.kr", "co.in", "co.za", "co.id", "co.il",
+  "com.br", "com.mx", "com.ar", "com.sg", "com.hk", "com.tw", "com.cn", "com.tr", "com.my", "com.ph",
+]);
+
+/**
+ * Vendor key for a host the catalog does not know: the registrable domain without its
+ * public suffix (`api.dramaboxdb.com` -> `dramaboxdb`, `shop.example.co.uk` -> `example`),
+ * so components are named after a vendor, not a domain (DATAP-818).
+ */
+export function vendorNameFromHostname(host: string): string {
+  const parts = host.replace(/^www\./, "").toLowerCase().split(".").filter(Boolean);
+  if (parts.length < 2) return parts[0] ?? host.toLowerCase();
+  const lastTwo = parts.slice(-2).join(".");
+  const suffixLabels = parts.length >= 3 && TWO_LABEL_PUBLIC_SUFFIXES.has(lastTwo) ? 2 : 1;
+  return parts[parts.length - 1 - suffixLabels] ?? lastTwo;
+}
+
+/**
  * Hostname + registrable domain keys from an absolute http(s) URL (for matching
  * external_api_call findings to third_party nodes by endpoint.
  */
@@ -237,7 +261,7 @@ export function defaultServiceNameFromLiteralPublicUrl(
     if (hostname == null || !hostname) {
       return undefined;
     }
-    return deriveServiceKeyFromHostname(hostname);
+    return vendorNameFromHostname(hostname);
   } catch {
     return undefined;
   }
@@ -300,7 +324,7 @@ export function inferThirdPartyFromLiteralHttpUrl(
     return undefined;
   }
 
-  const serviceName = deriveServiceKeyFromHostname(hostname);
+  const serviceName = vendorNameFromHostname(hostname);
   if (!serviceName) {
     return undefined;
   }

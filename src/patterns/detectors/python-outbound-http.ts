@@ -27,7 +27,7 @@ import {
   pythonModuleSource,
   pythonModuleIndexGeneration,
   resolvePythonModulePath,
-} from "./python-module-index";
+} from "./source-module-index";
 import {
   buildPySourceModel,
   dottedName,
@@ -90,11 +90,16 @@ export interface RawHttpLibrary {
   confidence: number;
 }
 
-interface Destination {
+export interface Destination {
   serviceName: string;
   subType?: string;
   url: string;
   sites: Site[];
+  /**
+   * Set for the scanned organization's own hosts: the call is kept as a first-party API
+   * (an asset, not a third party) so cross-repo flows are not lost (DATAP-818).
+   */
+  firstPartyHost?: string;
 }
 
 // ── Value resolution ──────────────────────────────────────────────────────
@@ -664,13 +669,13 @@ export class DestinationRouter {
   /**
    * Service for a URL. `fallback` allows the registrable host (`acme.io`) for public hosts
    * the catalog does not know. Returns "unknown" for local, placeholder and dynamic hosts,
-   * and "organization" for the scanned organization's own domains.
+   * and `{ organizationHost }` for the scanned organization's own domains.
    */
   route(
     url: string,
     hint: string,
     fallback: boolean,
-  ): { serviceName: string; subType?: string } | "unknown" | "organization" {
+  ): { serviceName: string; subType?: string } | "unknown" | { organizationHost: string } {
     const parsed = parseUrl(url);
     if (!parsed) {
       // Host known only at runtime: a path route needs both its path and its hint.
@@ -681,7 +686,7 @@ export class DestinationRouter {
       return rule ? this.named(rule.serviceName, rule.subType) : "unknown";
     }
     const organizationDomains = getActiveOrganizationDomains() ?? [];
-    if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return "organization";
+    if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return { organizationHost: parsed.host };
     const concrete = `https://${parsed.host}${parsed.path.replace(/\{[^}]*\}/g, "x")}`;
     if (shouldIgnoreExternalHttpUrl(concrete)) return "unknown";
 
@@ -772,6 +777,8 @@ interface ModuleInfo {
   isPhoenixCall(callee: string): boolean;
   isLitellmCall(callee: string): boolean;
   isAdkLiteLlm(callee: string): boolean;
+  /** `googleapiclient.discovery.build` (also imported inside a function body). */
+  isGoogleBuild(callee: string): boolean;
 }
 
 const moduleInfoCache = new WeakMap<PySourceModel, ModuleInfo>();
@@ -834,6 +841,19 @@ function moduleInfoFor(model: PySourceModel, libraries: RawHttpLibrary[]): Modul
     for (const [alias, name] of imp.aliases) if (name === "LiteLlm") adkLiteLlmNames.add(alias);
   }
 
+  // Google API clients: `from googleapiclient.discovery import build` (often inside a function).
+  const googleBuildNames = new Set<string>();
+  const googleDiscoveryModules = new Set<string>();
+  for (const imp of model.imports) {
+    if (imp.module === "googleapiclient.discovery" && imp.names.length > 0) {
+      for (const [alias, name] of imp.aliases) if (name === "build") googleBuildNames.add(alias);
+    } else if (imp.module === "googleapiclient" && imp.names.includes("discovery")) {
+      for (const [alias, name] of imp.aliases) if (name === "discovery") googleDiscoveryModules.add(alias);
+    } else if (imp.module === "googleapiclient.discovery") {
+      for (const alias of imp.aliases.keys()) googleDiscoveryModules.add(alias === "googleapiclient" ? "googleapiclient.discovery" : alias);
+    }
+  }
+
   const info: ModuleInfo = {
     importedLibraries,
     moduleAliases,
@@ -851,6 +871,11 @@ function moduleInfoFor(model: PySourceModel, libraries: RawHttpLibrary[]): Modul
       return dot > 0 && litellmAliases.has(callee.slice(0, dot)) && LITELLM_CALLS.has(callee.slice(dot + 1));
     },
     isAdkLiteLlm: (callee) => adkLiteLlmNames.has(callee) || /(^|\.)lite_llm\.LiteLlm$/.test(callee),
+    isGoogleBuild: (callee) => {
+      if (googleBuildNames.has(callee)) return true;
+      const dot = callee.lastIndexOf(".");
+      return dot > 0 && callee.slice(dot + 1) === "build" && googleDiscoveryModules.has(callee.slice(0, dot));
+    },
   };
   moduleInfoCache.set(model, info);
   return info;
@@ -866,7 +891,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
   const empty = { findings: [], openAiClientsRedirected: false };
   // Files that import nothing outbound can still call a same-repo wrapper (call_model(**kw)),
   // so with the module index active any file with a same-repo-looking import is analyzed.
-  const mentionsOutbound = /\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content);
+  const mentionsOutbound = /\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm|googleapiclient)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content);
   const mayCallWrapper = pythonModuleIndexSize() > 1 && /^\s*(from\s+[\w.]+\s+import|import\s+\w)/m.test(content);
   if (!mentionsOutbound && !mayCallWrapper) {
     return empty;
@@ -904,6 +929,10 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     confidence: number,
   ): void => {
     for (const d of destinations) {
+      if (d.firstPartyHost) {
+        emitFirstParty(call, d, extra, patternId, confidence);
+        continue;
+      }
       const name = d.subType ? `${d.serviceName} ${d.subType}` : d.serviceName;
       const sites = [{ startLine: call.startLine, endLine: call.endLine }, ...d.sites];
       for (const site of sites) {
@@ -926,6 +955,29 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     }
   };
 
+  /** A call to one of the organization's own hosts: a first-party API, never a vendor. */
+  const emitFirstParty = (
+    call: PyCall,
+    d: Destination,
+    extra: Record<string, unknown>,
+    patternId: RawFinding["pattern"],
+    confidence: number,
+  ): void => {
+    const host = d.firstPartyHost!;
+    for (const site of [{ startLine: call.startLine, endLine: call.endLine }, ...d.sites]) {
+      const dedupe = `first_party|${host}|${site.startLine}|${site.endLine}`;
+      if (emitted.has(dedupe)) continue;
+      emitted.add(dedupe);
+      findings.push({
+        pattern: patternId,
+        name: host,
+        confidence,
+        location: location(site),
+        properties: { firstParty: true, host, url: d.url, ...extra },
+      });
+    }
+  };
+
   /** Destinations for URL values; `fallback` allows hosts outside the catalog. */
   const destinationsFor = (call: PyCall, values: Val[], fallback: boolean): { known: Destination[]; organization: boolean } => {
     const known: Destination[] = [];
@@ -933,11 +985,13 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     const seen = new Set<string>();
     for (const v of values) {
       const routed = router.route(v.text, `${hintFor(call, v.text)} ${v.hint}`, fallback);
-      if (routed === "organization") {
+      if (routed === "unknown") continue;
+      if ("organizationHost" in routed) {
         organization = true;
+        const host = routed.organizationHost;
+        if (!known.some((d) => d.firstPartyHost === host)) known.push({ serviceName: "", url: v.text, sites: v.sites, firstPartyHost: host });
         continue;
       }
-      if (routed === "unknown") continue;
       const key = `${routed.serviceName}|${routed.subType ?? ""}|${v.sites.map((s) => s.startLine).join(",")}`;
       if (seen.has(key)) continue;
       seen.add(key);
@@ -1026,7 +1080,6 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
           ? (node.args[1] ?? node.kwargs.find((k) => k.name === "url")?.value)
           : (node.args[0] ?? node.kwargs.find((k) => k.name === "url" || k.name === "str_or_url")?.value);
         const resolved = resolveUrl(urlExpr, client === "module" ? undefined : client, true);
-        if (resolved.organization && resolved.known.length === 0) return true;
         if (resolved.known.length > 0) {
           emit(site, resolved.known, { httpClientLibrary: library.name }, library.patternId, library.confidence);
         } else if (!viaWrapper) {
@@ -1104,7 +1157,19 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
       return true;
     }
 
-    // 6. Unresolved `(method, url)` helpers such as nexus_call("POST", url, ...): only
+    // 6. Google API clients: build("gmail", "v1", ...) names the Google product.
+    if (info.isGoogleBuild(callee)) {
+      const apiExpr = node.args[0] ?? node.kwargs.find((k) => k.name === "serviceName")?.value;
+      const services: Destination[] = [];
+      for (const v of apiExpr ? resolver.eval(apiExpr, ctx) : []) {
+        const serviceName = input.config.thirdParty.googleApiServices.get(v.text.toLowerCase());
+        if (serviceName && !services.some((s) => s.serviceName === serviceName)) services.push({ serviceName, url: "", sites: [] });
+      }
+      emit(site, services, { client: "googleapiclient" }, "external_api_call", 0.85);
+      return true;
+    }
+
+    // 7. Unresolved `(method, url)` helpers such as nexus_call("POST", url, ...): only
     //    catalog hosts count, so ordinary two-string calls do not become destinations.
     const methodArg = node.args[0];
     if (methodArg?.kind === "str" && node.args[1] && methodArg.parts.length === 1 && typeof methodArg.parts[0] === "string" && HTTP_METHODS.has(methodArg.parts[0].toUpperCase())) {
@@ -1120,7 +1185,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     const ctx = ctxFor(call, 0);
     if (handle(call, mainInfo, ctx, call, false)) continue;
 
-    // 7. Pass-through wrappers: a same-repo function whose parameters (named or **kwargs)
+    // 8. Pass-through wrappers: a same-repo function whose parameters (named or **kwargs)
     //    reach an outbound call. Evaluate that inner call with this call's arguments bound
     //    and report at this call, where the destination is chosen (one level of wrapping).
     const target = resolver.callTarget(call.node, ctx);

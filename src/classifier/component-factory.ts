@@ -334,6 +334,9 @@ function findThirdPartyMatch(
   if (isOrganizationOwnedExternalApiFinding(finding, organizationDomains)) {
     return undefined;
   }
+  if (finding.properties?.firstParty === true) {
+    return undefined;
+  }
 
   const props = finding.properties ?? {};
   const candidates: string[] = [];
@@ -642,7 +645,10 @@ export function classifyRawFindings(
       group.findings.length > 0 &&
       group.findings.every((f) =>
         isOrganizationOwnedExternalApiFinding(f, organizationDomains),
-      )
+      ) &&
+      // Detectors that keep a call to the organization's own host mark it first-party:
+      // it stays as an API asset for the remote service (DATAP-818).
+      !group.findings.some((f) => f.properties?.firstParty === true)
     ) {
       continue;
     }

@@ -1,9 +1,10 @@
 import type { FileInfo } from "../../core/types/file";
 
 /**
- * The Python files of the scan, by repo-relative path, while analyzers run. Detectors use
- * it to follow same-repo imports (`from .settings import settings`) when they resolve a
- * value (DATAP-818). Outside a scan the index is empty and resolution stays in one file.
+ * The Python, TypeScript and JavaScript files of the scan, by repo-relative path, while
+ * analyzers run. Detectors use it to follow same-repo imports (`from .settings import
+ * settings`, `import { X } from "./settings"`) when they resolve a value (DATAP-818).
+ * Outside a scan the index is empty and resolution stays in one file.
  */
 let activeIndex: ReadonlyMap<string, string> | undefined;
 let generation = 0;
@@ -16,7 +17,9 @@ export function runWithPythonModuleIndex<T>(files: readonly FileInfo[], fn: () =
   const prev = activeIndex;
   const index = new Map<string, string>();
   for (const file of files) {
-    if (file.language === "python" || file.path.endsWith(".py")) index.set(normalize(file.path), file.content);
+    if (file.language === "python" || file.language === "typescript" || file.language === "javascript" || /\.(py|[cm]?[jt]sx?)$/.test(file.path)) {
+      index.set(normalize(file.path), file.content);
+    }
   }
   activeIndex = index;
   generation += 1;
@@ -34,7 +37,31 @@ export function pythonModuleIndexGeneration(): number {
 }
 
 export function pythonModuleIndexSize(): number {
-  return activeIndex?.size ?? 0;
+  if (!activeIndex) return 0;
+  let n = 0;
+  for (const key of activeIndex.keys()) if (key.endsWith(".py")) n += 1;
+  return n;
+}
+
+const TS_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".mts", ".cts", ".mjs", ".cjs"];
+
+/** Repo-relative file of a relative TS/JS import (`./settings`, `../lib/http`), seen from `fromFile`. */
+export function resolveTsModulePath(fromFile: string, spec: string): string | undefined {
+  if (!activeIndex || !spec.startsWith(".")) return undefined;
+  const parts = dirname(normalize(fromFile)).split("/").filter(Boolean);
+  for (const segment of spec.split("/")) {
+    if (segment === "." || segment === "") continue;
+    if (segment === "..") parts.pop();
+    else parts.push(segment);
+  }
+  const base = parts.join("/");
+  const stem = base.replace(/\.(?:[cm]?js|jsx)$/, "");
+  const candidates = [base, ...TS_EXTENSIONS.map((e) => `${stem}${e}`), ...TS_EXTENSIONS.map((e) => `${base}/index${e}`)];
+  return candidates.find((p) => activeIndex!.has(p));
+}
+
+export function sourceModule(filePath: string): string | undefined {
+  return activeIndex?.get(normalize(filePath));
 }
 
 export function pythonModuleSource(filePath: string): string | undefined {

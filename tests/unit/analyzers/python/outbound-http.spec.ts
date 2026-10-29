@@ -3,7 +3,8 @@ import type { RawFinding } from "../../../../src/core/types/detection";
 import { detectPythonPatterns } from "../../../../src/analyzers/python/detector";
 import { classifyRawFindings, dedupeComponents } from "../../../../src/classifier/classify";
 import { componentScannerIdentityKey } from "../../../../src/eval/canonical/scanner/components";
-import { runWithPythonModuleIndex } from "../../../../src/patterns/detectors/python-module-index";
+import { runWithPythonModuleIndex } from "../../../../src/patterns/detectors/source-module-index";
+import { runWithOrganizationDomainsScope } from "../../../../src/classifier/organization-domains-scan-scope";
 
 /** DATAP-818: raw-HTTP destinations in Python resolve to the host the call reaches. */
 
@@ -725,6 +726,77 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
       );
       expect(services(findings)).toEqual(["cerebras", "openrouter"]);
       expect([...new Set(findings.map(span))]).toEqual(["6-6"]);
+    });
+  });
+
+  describe("Google API clients and vendor names", () => {
+    it("routes googleapiclient build() calls imported inside function bodies", () => {
+      const file = pythonFile(
+        [
+          "def send(credentials, raw):",
+          "    from googleapiclient.discovery import build",
+          '    gmail = build("gmail", "v1", credentials=credentials)',
+          '    gmail.users().messages().send(userId="me", body={"raw": raw}).execute()',
+          "",
+          "def store(credentials):",
+          "    from googleapiclient import discovery",
+          '    drive = discovery.build("drive", "v3", credentials=credentials)',
+          '    sheets = discovery.build(serviceName="sheets", version="v4", credentials=credentials)',
+          '    calendar = discovery.build("calendar", "v3", credentials=credentials)',
+          '    docs = discovery.build("docs", "v1", credentials=credentials)',
+          '    other = discovery.build("youtube", "v3", credentials=credentials)',
+        ],
+        "app/workspace.py",
+      );
+      const all = detectPythonPatterns(file);
+      // The line parser keeps indented imports too.
+      expect(all.length).toBeGreaterThan(0);
+      const findings = all.filter((f) => f.pattern === "external_api_call");
+      expect(services(findings)).toEqual(["gmail", "google_calendar", "google_docs", "google_drive", "google_sheets"]);
+      expect(findings.find((f) => f.properties.serviceName === "gmail")?.location.startLine).toBe(3);
+      const subtypes = Object.fromEntries(
+        dedupeComponents(classifyRawFindings(findings)).map((c) => [componentScannerIdentityKey(c), c.subType]),
+      );
+      expect(subtypes["third_party:gmail"]).toBe("email_provider");
+      expect(subtypes["third_party:google_drive"]).toBe("saas_service");
+    });
+
+    it("names catalog vendors whose host differs from their name", () => {
+      const findings = outbound([
+        "import httpx",
+        'httpx.post("https://api.perplexity.ai/chat/completions")',
+        'httpx.post("https://api.firecrawl.dev/v1/scrape")',
+        'httpx.post("https://tavusapi.com/v2/conversations")',
+        'httpx.post("https://discord.com/api/webhooks/1/abc")',
+        'httpx.get("https://api.dramaboxdb.com/v1/titles")',
+      ]);
+      expect(services(findings)).toEqual(["discord", "dramaboxdb", "firecrawl", "perplexity", "tavus"]);
+    });
+
+    it("names every Instagram host instagram, as one component", () => {
+      const findings = outbound([
+        "import httpx",
+        'httpx.get("https://graph.instagram.com/v21.0/me")',
+        'httpx.get("https://api.instagram.com/oauth/access_token")',
+        'httpx.get("https://www.instagram.com/p/abc/")',
+      ]);
+      expect(services(findings)).toEqual(["instagram"]);
+      const components = dedupeComponents(classifyRawFindings(findings)).filter((c) => c.type === "third_party");
+      expect(components.map((c) => componentScannerIdentityKey(c))).toEqual(["third_party:instagram"]);
+    });
+  });
+
+  describe("organization domains", () => {
+    it("keeps a call to the organization's own host as a first-party API component", () => {
+      const findings = runWithOrganizationDomainsScope(["acme.io"], () =>
+        outbound(["import httpx", "", "def sync(body):", '    return httpx.post("https://api.acme.io/v1/sync", json=body)']),
+      );
+      expect(findings).toHaveLength(1);
+      expect(findings[0].properties).toMatchObject({ firstParty: true, host: "api.acme.io", httpClientLibrary: "httpx" });
+      expect(findings[0].properties.serviceName).toBeUndefined();
+      const components = dedupeComponents(classifyRawFindings(findings, { organizationDomains: ["acme.io"] }));
+      expect(components).toHaveLength(1);
+      expect(components[0]).toMatchObject({ type: "asset", subType: "api" });
     });
   });
 });

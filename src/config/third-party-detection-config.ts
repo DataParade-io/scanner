@@ -59,6 +59,8 @@ export interface ThirdPartyDetectionConfig {
   /** Rules for URLs whose host is only known at runtime (`https://{shop}/api/mcp`): path and hint required. */
   urlPathRoutes: ThirdPartyUrlRouteRule[];
   llmModelPrefixes: LlmModelPrefix[];
+  /** `googleapiclient.discovery.build("<api>", ...)` API name -> service (DATAP-818). */
+  googleApiServices: Map<string, string>;
 }
 
 interface RawHttpClient {
@@ -87,6 +89,7 @@ interface RawConfig {
   url_routes?: RawUrlRoute[];
   url_path_routes?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
   llm_model_prefixes?: Record<string, string>;
+  google_api_services?: Record<string, string>;
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -225,7 +228,11 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
     ([prefix, serviceName]) => ({ prefix: prefix.toLowerCase().replace(/\/$/, ""), serviceName: String(serviceName) }),
   );
 
-  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes };
+  const googleApiServices = new Map(
+    Object.entries(parsed.google_api_services ?? {}).map(([api, serviceName]) => [api.toLowerCase(), String(serviceName)]),
+  );
+
+  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes, googleApiServices };
   return cached;
 }
 

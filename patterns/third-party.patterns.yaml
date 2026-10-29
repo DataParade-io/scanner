@@ -218,6 +218,8 @@ services:
     confidence: 0.85
     url_host_patterns:
       - graph.instagram.com
+      - api.instagram.com
+      - instagram.com
   - serviceName: linkedin
     patternId: external_api_call
     confidence: 0.85
@@ -281,6 +283,49 @@ services:
       - api.together.xyz
       - api.together.ai
 
+  - serviceName: perplexity
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.perplexity.ai
+  - serviceName: firecrawl
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.firecrawl.dev
+  - serviceName: tavus
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - tavusapi.com
+  - serviceName: discord
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - discord.com
+      - discordapp.com
+  - serviceName: mistral
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.mistral.ai
+  - serviceName: airtable
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.airtable.com
+  - serviceName: hubspot
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.hubapi.com
+  - serviceName: slack
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - hooks.slack.com
+      - slack.com
+
 # url_routes: hosts that serve several products. Rules run in order; the first rule whose
 # `path` (URL path, no query) and `hint` (file path, class, function and URL expression of
 # the calling code) both match names the service. A rule's subType overrides the catalog one.
@@ -330,3 +375,12 @@ llm_model_prefixes:
   bedrock: aws
   sagemaker: aws
   azure: azure
+
+# google_api_services: googleapiclient.discovery.build("<api>", ...) names the Google
+# product it calls. Keys are the discovery API names.
+google_api_services:
+  gmail: gmail
+  drive: google_drive
+  sheets: google_sheets
+  calendar: google_calendar
+  docs: google_docs

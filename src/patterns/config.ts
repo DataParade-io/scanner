@@ -321,6 +321,7 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
     ),
     ...unified.thirdParty.urlPathRoutes.map((rule) => rule.serviceName),
     ...unified.thirdParty.llmModelPrefixes.map((entry) => entry.serviceName),
+    ...unified.thirdParty.googleApiServices.values(),
   ].map((name) => name.toLowerCase());
   const classifierServiceNames = unified.classifier.thirdParties.map((s) =>
     s.serviceName.toLowerCase(),
