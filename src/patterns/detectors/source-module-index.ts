@@ -1,3 +1,4 @@
+import { collectRepoDeclaredDomains } from "./repo-declared-domains";
 import type { FileInfo } from "../../core/types/file";
 
 /**
@@ -7,6 +8,7 @@ import type { FileInfo } from "../../core/types/file";
  * Outside a scan the index is empty and resolution stays in one file.
  */
 let activeIndex: ReadonlyMap<string, string> | undefined;
+let activeDeclaredDomains: readonly string[] = [];
 let generation = 0;
 
 function normalize(filePath: string): string {
@@ -21,14 +23,22 @@ export function runWithPythonModuleIndex<T>(files: readonly FileInfo[], fn: () =
       index.set(normalize(file.path), file.content);
     }
   }
+  const prevDomains = activeDeclaredDomains;
   activeIndex = index;
+  activeDeclaredDomains = collectRepoDeclaredDomains(files);
   generation += 1;
   try {
     return fn();
   } finally {
     activeIndex = prev;
+    activeDeclaredDomains = prevDomains;
     generation += 1;
   }
+}
+
+/** Domains the scanned repository declares as its own (see repo-declared-domains.ts). */
+export function repoDeclaredDomains(): readonly string[] {
+  return activeDeclaredDomains;
 }
 
 /** Changes whenever the active index changes, for cache keys. */

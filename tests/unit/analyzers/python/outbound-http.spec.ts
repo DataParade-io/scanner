@@ -799,4 +799,57 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
       expect(components[0]).toMatchObject({ type: "asset", subType: "api" });
     });
   });
+
+  describe("platform hosts, declared domains, outgoing auth headers", () => {
+    it("names no vendor for Cloud Run and other platform hosts", () => {
+      const findings = outbound([
+        "import httpx",
+        'httpx.post("https://svc-123.europe-west1.run.app/chat")',
+        'httpx.get("https://abc123.execute-api.eu-west-1.amazonaws.com/prod/items")',
+        'httpx.get("https://my-app.herokuapp.com/health")',
+      ]);
+      expect(services(findings)).toEqual([]);
+      expect(findings.map((f) => f.properties.platform)).toEqual(["gcp/cloud_run", "aws/api_gateway", "heroku"]);
+      expect(classifyRawFindings(findings).every((c) => c.type === "asset" && c.subType === "api")).toBe(true);
+    });
+
+    it("uses site URL settings as organization domains only when none are configured", () => {
+      const repo = {
+        ".env.example": ["NEXT_PUBLIC_SITE_URL=https://www.acme-learning.com", "STRIPE_API_URL=https://api.stripe.com"],
+        "app/client.py": ["import httpx", 'httpx.get("https://api.acme-learning.com/v1/courses")', 'httpx.get("https://api.stripe.com/v1/charges")'],
+      };
+      const infos = Object.entries(repo).map(([path, lines]) => pythonFile(lines, path));
+      infos[0] = { ...infos[0], language: "env" };
+      const detect = () =>
+        runWithPythonModuleIndex(infos, () => detectPythonPatterns(infos[1]).filter((f) => f.pattern === "external_api_call"));
+      const inferred = detect();
+      expect(inferred.map((f) => f.properties.firstParty ?? f.properties.serviceName)).toEqual([true, "stripe"]);
+      // Configured organization domains take precedence over declared ones.
+      const configured = runWithOrganizationDomainsScope(["other.io"], detect);
+      expect(configured.map((f) => f.properties.serviceName)).toEqual(["acme-learning", "stripe"]);
+    });
+
+    it("does not report Authorization headers sent on outbound requests as an auth service", () => {
+      const findings = detectPythonPatterns(
+        pythonFile([
+          "import httpx",
+          "",
+          "async def send(token, body):",
+          '    headers = {"Authorization": f"Bearer {token}"}',
+          "    async with httpx.AsyncClient() as client:",
+          '        await client.post("https://api.x.com/2/tweets", json=body, headers=headers)',
+          "",
+          "def check(request):",
+          '    return request.headers.get("Authorization", "").startswith("Bearer ")',
+        ]),
+      );
+      const auth = findings.filter((f) => f.pattern === "auth_middleware");
+      expect(auth.map((f) => f.location.startLine)).toEqual([9]);
+    });
+
+    it("does not treat instrumentation packages as calls to the vendor", () => {
+      const findings = outbound(["from openinference.instrumentation.openai import OpenAIInstrumentor", "OpenAIInstrumentor().instrument()"]);
+      expect(services(findings)).toEqual([]);
+    });
+  });
 });

@@ -186,6 +186,8 @@ auth:
         - '"Authorization"'
         - "Authorization\\s*:\\s*['\"]Bearer"
       strategy: bearer_token
+      # Not reported when the header is sent on an outbound request (DATAP-818).
+      outgoingHeader: true
       confidence: 0.7
 
     - id: oauth2

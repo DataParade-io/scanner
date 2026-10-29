@@ -22,8 +22,10 @@ import {
   shouldIgnoreExternalHttpUrl,
 } from "../../classifier/external-url-third-party";
 import { getActiveOrganizationDomains } from "../../classifier/organization-domains-scan-scope";
+import { platformOfHost } from "../../config/third-party-detection-config";
 import {
   pythonModuleIndexSize,
+  repoDeclaredDomains,
   pythonModuleSource,
   pythonModuleIndexGeneration,
   resolvePythonModulePath,
@@ -96,10 +98,18 @@ export interface Destination {
   url: string;
   sites: Site[];
   /**
-   * Set for the scanned organization's own hosts: the call is kept as a first-party API
-   * (an asset, not a third party) so cross-repo flows are not lost (DATAP-818).
+   * Set when the host is a service of its own rather than a vendor: one of the
+   * organization's hosts (`firstParty`) or a host on a shared hosting platform
+   * (`platform`, e.g. gcp/cloud_run). The call is kept as an API asset for that remote
+   * service, never a third party, so cross-repo flows are not lost (DATAP-818).
    */
-  firstPartyHost?: string;
+  remote?: RemoteService;
+}
+
+export interface RemoteService {
+  host: string;
+  firstParty?: true;
+  platform?: string;
 }
 
 // ── Value resolution ──────────────────────────────────────────────────────
@@ -669,13 +679,14 @@ export class DestinationRouter {
   /**
    * Service for a URL. `fallback` allows the registrable host (`acme.io`) for public hosts
    * the catalog does not know. Returns "unknown" for local, placeholder and dynamic hosts,
-   * and `{ organizationHost }` for the scanned organization's own domains.
+   * and `{ remote }` for a service of its own: the organization's domains (including the
+   * ones the repository declares) or a shared hosting platform host.
    */
   route(
     url: string,
     hint: string,
     fallback: boolean,
-  ): { serviceName: string; subType?: string } | "unknown" | { organizationHost: string } {
+  ): { serviceName: string; subType?: string } | "unknown" | { remote: RemoteService } {
     const parsed = parseUrl(url);
     if (!parsed) {
       // Host known only at runtime: a path route needs both its path and its hint.
@@ -685,8 +696,13 @@ export class DestinationRouter {
       const rule = this.pathRoutes.find((r) => r.path?.test(path) && r.hint?.test(hint));
       return rule ? this.named(rule.serviceName, rule.subType) : "unknown";
     }
-    const organizationDomains = getActiveOrganizationDomains() ?? [];
-    if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return { organizationHost: parsed.host };
+    // Configured organization domains win; without them, the domains the repository
+    // declares as its own (package.json homepage, site URL settings) stand in.
+    const configured = getActiveOrganizationDomains() ?? [];
+    const organizationDomains = configured.length > 0 ? configured : repoDeclaredDomains();
+    if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return { remote: { host: parsed.host, firstParty: true } };
+    const platform = platformOfHost(parsed.host);
+    if (platform) return { remote: { host: parsed.host, platform } };
     const concrete = `https://${parsed.host}${parsed.path.replace(/\{[^}]*\}/g, "x")}`;
     if (shouldIgnoreExternalHttpUrl(concrete)) return "unknown";
 
@@ -746,6 +762,11 @@ export interface PythonOutboundHttpInput {
 
 export interface PythonOutboundHttpResult {
   findings: RawFinding[];
+  /**
+   * Lines of outbound request calls, HTTP client constructors and the header dicts passed
+   * to them: an `Authorization` header there is a credential sent to an API.
+   */
+  outgoingRequestLines: number[];
   /** True when the file builds OpenAI clients and every one points at a non-OpenAI host. */
   openAiClientsRedirected: boolean;
 }
@@ -761,7 +782,7 @@ export function detectPythonOutboundHttp(input: PythonOutboundHttpInput): Python
     result = detectUncached(input);
   } catch {
     // Resolution is best effort: a construct the small parser cannot follow must not fail the scan.
-    result = { findings: [], openAiClientsRedirected: false };
+    result = { findings: [], outgoingRequestLines: [], openAiClientsRedirected: false };
   }
   resultCache.clear();
   resultCache.set(key, result);
@@ -888,7 +909,7 @@ function isWithin(scope: PyScope, fn: PyScope): boolean {
 
 function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResult {
   const { filePath, content, libraries } = input;
-  const empty = { findings: [], openAiClientsRedirected: false };
+  const empty = { findings: [], outgoingRequestLines: [], openAiClientsRedirected: false };
   // Files that import nothing outbound can still call a same-repo wrapper (call_model(**kw)),
   // so with the module index active any file with a same-repo-looking import is analyzed.
   const mentionsOutbound = /\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm|googleapiclient)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content);
@@ -929,8 +950,8 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     confidence: number,
   ): void => {
     for (const d of destinations) {
-      if (d.firstPartyHost) {
-        emitFirstParty(call, d, extra, patternId, confidence);
+      if (d.remote) {
+        emitRemoteService(call, d, extra, patternId, confidence);
         continue;
       }
       const name = d.subType ? `${d.serviceName} ${d.subType}` : d.serviceName;
@@ -955,17 +976,18 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     }
   };
 
-  /** A call to one of the organization's own hosts: a first-party API, never a vendor. */
-  const emitFirstParty = (
+  /** A call to a service of its own (organization host, hosting platform): an API asset, never a vendor. */
+  const emitRemoteService = (
     call: PyCall,
     d: Destination,
     extra: Record<string, unknown>,
     patternId: RawFinding["pattern"],
     confidence: number,
   ): void => {
-    const host = d.firstPartyHost!;
+    const remote = d.remote!;
+    const host = remote.host;
     for (const site of [{ startLine: call.startLine, endLine: call.endLine }, ...d.sites]) {
-      const dedupe = `first_party|${host}|${site.startLine}|${site.endLine}`;
+      const dedupe = `remote|${host}|${site.startLine}|${site.endLine}`;
       if (emitted.has(dedupe)) continue;
       emitted.add(dedupe);
       findings.push({
@@ -973,7 +995,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
         name: host,
         confidence,
         location: location(site),
-        properties: { firstParty: true, host, url: d.url, ...extra },
+        properties: remoteServiceProperties(remote, d.url, extra),
       });
     }
   };
@@ -986,10 +1008,10 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     for (const v of values) {
       const routed = router.route(v.text, `${hintFor(call, v.text)} ${v.hint}`, fallback);
       if (routed === "unknown") continue;
-      if ("organizationHost" in routed) {
-        organization = true;
-        const host = routed.organizationHost;
-        if (!known.some((d) => d.firstPartyHost === host)) known.push({ serviceName: "", url: v.text, sites: v.sites, firstPartyHost: host });
+      if ("remote" in routed) {
+        if (routed.remote.firstParty) organization = true;
+        const host = routed.remote.host;
+        if (!known.some((d) => d.remote?.host === host)) known.push({ serviceName: "", url: v.text, sites: v.sites, remote: routed.remote });
         continue;
       }
       const key = `${routed.serviceName}|${routed.subType ?? ""}|${v.sites.map((s) => s.startLine).join(",")}`;
@@ -1181,9 +1203,28 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     return false;
   };
 
+  const outgoingLines = new Set<number>();
+  const recordOutgoing = (call: PyCall): void => {
+    for (let l = call.startLine; l <= call.endLine; l += 1) outgoingLines.add(l);
+    const headers = call.node.kwargs.find((k) => k.name === "headers")?.value;
+    const name = headers ? dottedName(headers) : undefined;
+    if (!name) return;
+    for (const binding of resolver.bindingsOf(name, call.scope, call.startLine)) {
+      const lineOf = resolver.moduleModelOf(binding.scope) === model ? model.lineOf : undefined;
+      if (!lineOf) continue;
+      const end = lineOf(Math.max(binding.value.start, binding.value.end - 1));
+      for (let l = binding.line; l <= end; l += 1) outgoingLines.add(l);
+    }
+  };
+
   for (const call of model.calls) {
     const ctx = ctxFor(call, 0);
-    if (handle(call, mainInfo, ctx, call, false)) continue;
+    const callee = call.callee ?? "";
+    if (mainInfo.constructorLibrary(callee)) recordOutgoing(call);
+    if (handle(call, mainInfo, ctx, call, false)) {
+      recordOutgoing(call);
+      continue;
+    }
 
     // 8. Pass-through wrappers: a same-repo function whose parameters (named or **kwargs)
     //    reach an outbound call. Evaluate that inner call with this call's arguments bound
@@ -1215,7 +1256,20 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
 
   return {
     findings,
+    outgoingRequestLines: [...outgoingLines].sort((a, b) => a - b),
     openAiClientsRedirected: openAiClients > 0 && openAiRedirected === openAiClients,
+  };
+}
+
+/** Properties of a finding for a remote service of its own (see `Destination.remote`). */
+export function remoteServiceProperties(remote: RemoteService, url: string, extra: Record<string, unknown>): Record<string, unknown> {
+  return {
+    remoteService: true,
+    host: remote.host,
+    url,
+    ...(remote.firstParty ? { firstParty: true } : {}),
+    ...(remote.platform ? { platform: remote.platform } : {}),
+    ...extra,
   };
 }
 

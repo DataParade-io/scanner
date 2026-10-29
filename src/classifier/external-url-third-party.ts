@@ -1,6 +1,7 @@
 import type { RawFinding } from "../core/types/detection";
 import { loadClassifierConfig } from "./config";
 import { getActiveOrganizationDomains } from "./organization-domains-scan-scope";
+import { platformOfHost } from "../config/third-party-detection-config";
 
 /**
  * Structural heuristics (not a vendor list): URLs that are obviously templated or
@@ -206,6 +207,15 @@ const TWO_LABEL_PUBLIC_SUFFIXES = new Set([
   "com.br", "com.mx", "com.ar", "com.sg", "com.hk", "com.tw", "com.cn", "com.tr", "com.my", "com.ph",
 ]);
 
+/** Registrable domain of a host (`www.shop.example.co.uk` -> `example.co.uk`). */
+export function registrableDomainOf(host: string): string {
+  const parts = host.replace(/^www\./, "").toLowerCase().split(".").filter(Boolean);
+  if (parts.length < 2) return parts.join(".");
+  const lastTwo = parts.slice(-2).join(".");
+  const labels = parts.length >= 3 && TWO_LABEL_PUBLIC_SUFFIXES.has(lastTwo) ? 3 : 2;
+  return parts.slice(-labels).join(".");
+}
+
 /**
  * Vendor key for a host the catalog does not know: the registrable domain without its
  * public suffix (`api.dramaboxdb.com` -> `dramaboxdb`, `shop.example.co.uk` -> `example`),
@@ -261,6 +271,8 @@ export function defaultServiceNameFromLiteralPublicUrl(
     if (hostname == null || !hostname) {
       return undefined;
     }
+    // A shared hosting host (`*.run.app`) is someone's own service, not a vendor.
+    if (platformOfHost(hostname)) return undefined;
     return vendorNameFromHostname(hostname);
   } catch {
     return undefined;
@@ -321,6 +333,10 @@ export function inferThirdPartyFromLiteralHttpUrl(
   }
 
   if (isLocalOrPrivateHost(hostname) || isReservedPlaceholderHost(hostname)) {
+    return undefined;
+  }
+
+  if (platformOfHost(hostname)) {
     return undefined;
   }
 

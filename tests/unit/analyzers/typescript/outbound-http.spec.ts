@@ -111,7 +111,8 @@ describe("typescript outbound HTTP destinations (DATAP-818)", () => {
       "  return fetch(process.env.LEGACY_API_URL!);",
       "}",
     ]);
-    expect(findings.map((f) => f.name)).toEqual(["outbound_http_call", "outbound_http_call"]);
+    // Named after the setting that holds the URL.
+    expect(findings.map((f) => f.name)).toEqual(["VITE_ORDERS_API_URL", "LEGACY_API_URL"]);
     expect(findings.map((f) => f.location.startLine)).toEqual([4, 7]);
     for (const f of findings) expect(f.properties.serviceName).toBeUndefined();
     expectNoLibraryDestination(findings);
@@ -156,5 +157,82 @@ describe("typescript outbound HTTP destinations (DATAP-818)", () => {
     const components = dedupeComponents(classifyRawFindings(findings, { organizationDomains: ["acme.io"] }));
     expect(components).toHaveLength(1);
     expect(components[0]).toMatchObject({ type: "asset", subType: "api" });
+  });
+
+  it("treats a shared hosting platform host as the team's own API, never a vendor", () => {
+    const findings = outbound([
+      'import axios from "axios";',
+      'const DEFAULT_AGENT_API = "https://shop-agent-482913.europe-west1.run.app";',
+      "export async function send(message: string, apiBase = DEFAULT_AGENT_API) {",
+      "  return axios.post(`${apiBase}/agent/chat`, { message });",
+      "}",
+    ]);
+    expect(findings).toHaveLength(1);
+    expect(findings[0].properties).toMatchObject({
+      remoteService: true,
+      platform: "gcp/cloud_run",
+      host: "shop-agent-482913.europe-west1.run.app",
+    });
+    expect(findings[0].properties.serviceName).toBeUndefined();
+    const components = classifyRawFindings(findings);
+    expect(components.map((c) => `${c.type}:${c.subType}`)).toEqual(["asset:api"]);
+  });
+
+  it("resolves an axios instance exported by another module, including re-exports", () => {
+    const repo = {
+      "src/lib/http.ts": [
+        'import axios from "axios";',
+        "export const backend = axios.create({ baseURL: import.meta.env.VITE_BACKEND_URL });",
+        'const payments = axios.create({ baseURL: "https://api.airtable.com/v0" });',
+        "export { payments as records };",
+        'const crm = axios.create({ baseURL: "https://api.hubapi.com" });',
+        "export default crm;",
+      ],
+      "src/api/profile.ts": [
+        'import crm, { backend, records } from "../lib/http";',
+        "export async function update(userId: string, phone: string) {",
+        "  await backend.patch(`/users/${userId}`, { phone });",
+        '  await records.post("/base/Table", { phone });',
+        '  await crm.post("/crm/v3/objects/contacts", { phone });',
+        "}",
+      ],
+    };
+    const findings = outboundInRepo(repo, "src/api/profile.ts");
+    expect(findings.map((f) => `${f.location.startLine}:${f.properties.serviceName ?? f.name}`)).toEqual([
+      "3:VITE_BACKEND_URL",
+      "4:airtable",
+      "5:hubspot",
+    ]);
+    expect(findings[0].properties).toMatchObject({ destination: "unknown", envVar: "VITE_BACKEND_URL" });
+  });
+
+  it("keeps two env-configured backends as two API assets", () => {
+    const findings = outbound([
+      'import axios from "axios";',
+      "const orders = axios.create({ baseURL: import.meta.env.VITE_ORDERS_API_URL });",
+      "const users = axios.create({ baseURL: import.meta.env.VITE_USERS_API_URL });",
+      'export const a = () => orders.post("/orders");',
+      'export const b = () => users.get("/me");',
+    ]);
+    const components = dedupeComponents(classifyRawFindings(findings));
+    expect(components.filter((c) => c.type === "asset" && c.subType === "api")).toHaveLength(2);
+  });
+
+  it("treats hosts on a domain the repo declares as first-party when no organization domains are configured", () => {
+    const repo: Record<string, string[]> = {
+      "package.json": ['{ "name": "site", "homepage": "https://www.mindovermedia.com" }'],
+      "src/api.ts": [
+        'export const load = () => fetch("https://api.mindovermedia.com/v1/courses");',
+        'export const other = () => fetch("https://api.dramaboxdb.com/v1/titles");',
+      ],
+    };
+    const infos = Object.entries(repo).map(([path, lines]) => tsFile(lines, path));
+    const findings = runWithPythonModuleIndex(infos, () =>
+      detectPatterns(infos[1]).filter((f) => f.pattern === "external_api_call"),
+    );
+    expect(findings.map((f) => [f.location.startLine, f.properties.firstParty ?? false, f.properties.serviceName])).toEqual([
+      [1, true, undefined],
+      [2, false, "dramaboxdb"],
+    ]);
   });
 });

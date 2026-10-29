@@ -384,3 +384,48 @@ google_api_services:
   sheets: google_sheets
   calendar: google_calendar
   docs: google_docs
+
+# platform_hosts: shared hosting suffixes. A host on one of these is someone's own service
+# (usually the scanned team's), never a vendor named after the platform label ("run", "web").
+# Calls to them become outbound API assets with the platform recorded as metadata.
+platform_hosts:
+  - pattern: "\\.run\\.app$"
+    platform: gcp/cloud_run
+  - pattern: "\\.cloudfunctions\\.net$"
+    platform: gcp/cloud_functions
+  - pattern: "\\.appspot\\.com$"
+    platform: gcp/app_engine
+  - pattern: "\\.web\\.app$|\\.firebaseapp\\.com$"
+    platform: gcp/firebase_hosting
+  - pattern: "\\.azurewebsites\\.net$"
+    platform: azure/app_service
+  - pattern: "\\.azurecontainerapps\\.io$"
+    platform: azure/container_apps
+  - pattern: "\\.azure-api\\.net$"
+    platform: azure/api_management
+  - pattern: "\\.herokuapp\\.com$"
+    platform: heroku
+  - pattern: "\\.vercel\\.app$"
+    platform: vercel
+  - pattern: "\\.netlify\\.app$"
+    platform: netlify
+  - pattern: "\\.fly\\.dev$"
+    platform: fly
+  - pattern: "\\.onrender\\.com$"
+    platform: render
+  - pattern: "\\.workers\\.dev$|\\.pages\\.dev$"
+    platform: cloudflare/workers
+  - pattern: "\\.up\\.railway\\.app$"
+    platform: railway
+  - pattern: "\\.execute-api\\.[a-z0-9-]+\\.amazonaws\\.com$"
+    platform: aws/api_gateway
+  - pattern: "\\.lambda-url\\.[a-z0-9-]+\\.on\\.aws$"
+    platform: aws/lambda_url
+  - pattern: "\\.elasticbeanstalk\\.com$"
+    platform: aws/elastic_beanstalk
+  - pattern: "\\.awsapprunner\\.com$"
+    platform: aws/app_runner
+  - pattern: "\\.ngrok(-free)?\\.(app|io|dev)$"
+    platform: ngrok
+  - pattern: "\\.github\\.io$"
+    platform: github_pages

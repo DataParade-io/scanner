@@ -61,6 +61,8 @@ export interface ThirdPartyDetectionConfig {
   llmModelPrefixes: LlmModelPrefix[];
   /** `googleapiclient.discovery.build("<api>", ...)` API name -> service (DATAP-818). */
   googleApiServices: Map<string, string>;
+  /** Shared hosting suffixes (`*.run.app`): own services, never vendors (DATAP-818). */
+  platformHosts: Array<{ pattern: RegExp; platform: string }>;
 }
 
 interface RawHttpClient {
@@ -90,6 +92,7 @@ interface RawConfig {
   url_path_routes?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
   llm_model_prefixes?: Record<string, string>;
   google_api_services?: Record<string, string>;
+  platform_hosts?: Array<{ pattern: string; platform: string }>;
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -232,7 +235,17 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
     Object.entries(parsed.google_api_services ?? {}).map(([api, serviceName]) => [api.toLowerCase(), String(serviceName)]),
   );
 
-  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes, googleApiServices };
+  const platformHosts = (parsed.platform_hosts ?? []).map((entry) => ({
+    pattern: compileRegex(entry.pattern),
+    platform: String(entry.platform),
+  }));
+
+  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes, googleApiServices, platformHosts };
   return cached;
 }
 
+/** Platform of a host on a shared hosting suffix (`gcp/cloud_run`), or undefined. */
+export function platformOfHost(host: string): string | undefined {
+  const h = host.toLowerCase();
+  return loadThirdPartyDetectionConfig().platformHosts.find((entry) => entry.pattern.test(h))?.platform;
+}

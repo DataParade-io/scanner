@@ -41,6 +41,7 @@ interface RawPythonPatternConfig {
       importModules?: string[];
       contentRegexes?: string[];
       strategy?: string;
+      outgoingHeader?: boolean;
       confidence?: number;
     }>;
   };
@@ -134,6 +135,12 @@ export interface PythonPatternConfig {
       importModules: string[];
       contentRegexes: RegExp[];
       strategy?: string;
+      /**
+       * The match is a request header (`Authorization: Bearer ...`). When the header is sent
+       * on an outbound request it is a credential for that API, not an auth service of this
+       * code, so it is not reported (DATAP-818).
+       */
+      outgoingHeader: boolean;
       confidence: number;
     }>;
   };
@@ -275,6 +282,7 @@ function normalizeRawConfig(raw: RawPythonPatternConfig): PythonPatternConfig {
       contentRegexes: (lib.contentRegexes ?? []).map((p) => new RegExp(p)),
       importModules: lib.importModules ?? [],
       strategy: lib.strategy,
+      outgoingHeader: lib.outgoingHeader ?? false,
       confidence: lib.confidence ?? DEFAULT_CONFIDENCE,
     })) ?? [];
 

@@ -155,13 +155,22 @@ export function detectPythonAuthFromConfig(
     }
   }
 
+  const outgoing = authConfig.libraries.some((lib) => lib.outgoingHeader)
+    ? new Set(outboundHttpFor(ctx, config).outgoingRequestLines)
+    : new Set<number>();
   for (const lib of authConfig.libraries) {
     const importLocations = pythonImportLocations(ctx, lib.importModules);
-    const contentLocations = locationsForContentRegexes(
+    let contentLocations = locationsForContentRegexes(
       ctx.file,
       content,
       lib.contentRegexes,
     );
+    if (lib.outgoingHeader) {
+      const before = contentLocations.length;
+      contentLocations = contentLocations.filter((loc) => !outgoing.has(loc.startLine));
+      // Every match is a header sent on an outbound request: nothing to report.
+      if (before > 0 && contentLocations.length === 0 && importLocations.length === 0) continue;
+    }
     const hasImport = importLocations.length > 0;
     const matchesContent = lib.contentRegexes.some((re) => re.test(content));
     if (!hasImport && !matchesContent) continue;

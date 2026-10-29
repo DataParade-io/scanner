@@ -334,7 +334,7 @@ function findThirdPartyMatch(
   if (isOrganizationOwnedExternalApiFinding(finding, organizationDomains)) {
     return undefined;
   }
-  if (finding.properties?.firstParty === true) {
+  if (finding.properties?.remoteService === true || finding.properties?.firstParty === true) {
     return undefined;
   }
 

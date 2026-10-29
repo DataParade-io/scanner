@@ -19,7 +19,7 @@ import * as ts from "typescript";
 import type { RawFinding } from "../../core/types/detection";
 import type { UnifiedPatternConfig } from "../config";
 import type { RawHttpClientConfig } from "../../analyzers/typescript/typescript-detection-config";
-import { DestinationRouter, OUTBOUND_HTTP_UNKNOWN_FINDING_NAME } from "./python-outbound-http";
+import { DestinationRouter, OUTBOUND_HTTP_UNKNOWN_FINDING_NAME, remoteServiceProperties } from "./python-outbound-http";
 import { resolveTsModulePath, sourceModule } from "./source-module-index";
 
 const REQUEST_VERBS = new Set(["get", "post", "put", "patch", "delete", "head", "options", "request"]);
@@ -233,6 +233,140 @@ function propertyName(p: ts.ObjectLiteralElementLike): string | undefined {
   return undefined;
 }
 
+/** Local names bound to a library (default/namespace import or require) and to its request functions. */
+function libraryBindings(sf: ts.SourceFile, libs: Lib[]): { libByName: Map<string, Lib>; fnByName: Map<string, Lib> } {
+  const libByName = new Map<string, Lib>();
+  const fnByName = new Map<string, Lib>();
+  const libForModule = (spec: string): Lib | undefined => libs.find((l) => l.config.modules.includes(spec));
+  for (const stmt of sf.statements) {
+    if (!ts.isImportDeclaration(stmt) || !ts.isStringLiteral(stmt.moduleSpecifier)) continue;
+    const lib = libForModule(stmt.moduleSpecifier.text);
+    const clause = stmt.importClause;
+    if (!lib || !clause) continue;
+    if (clause.name) libByName.set(clause.name.text, lib);
+    const nb = clause.namedBindings;
+    if (nb && ts.isNamespaceImport(nb)) libByName.set(nb.name.text, lib);
+    if (nb && ts.isNamedImports(nb)) {
+      for (const el of nb.elements) {
+        const imported = (el.propertyName ?? el.name).text;
+        if (imported === "default") libByName.set(el.name.text, lib);
+        else if (lib.config.namedFunctions.includes(imported)) fnByName.set(el.name.text, lib);
+      }
+    }
+  }
+  const visitRequires = (node: ts.Node): void => {
+    if (ts.isVariableDeclaration(node) && node.initializer) {
+      const init = unwrap(node.initializer);
+      if (ts.isCallExpression(init) && ts.isIdentifier(init.expression) && init.expression.text === "require") {
+        const arg = init.arguments[0];
+        const lib = arg && ts.isStringLiteral(arg) ? libForModule(arg.text) : undefined;
+        if (lib && ts.isIdentifier(node.name)) libByName.set(node.name.text, lib);
+        if (lib && ts.isObjectBindingPattern(node.name)) {
+          for (const el of node.name.elements) {
+            const imported = (el.propertyName && ts.isIdentifier(el.propertyName) ? el.propertyName : el.name) as ts.Identifier;
+            if (ts.isIdentifier(el.name) && lib.config.namedFunctions.includes(imported.text)) fnByName.set(el.name.text, lib);
+          }
+        }
+      }
+    }
+    ts.forEachChild(node, visitRequires);
+  };
+  visitRequires(sf);
+  return { libByName, fnByName };
+}
+
+const bindingsCache = new WeakMap<ts.SourceFile, ReturnType<typeof libraryBindings>>();
+
+function bindingsOf(sf: ts.SourceFile, libs: Lib[]): ReturnType<typeof libraryBindings> {
+  let cached = bindingsCache.get(sf);
+  if (!cached) {
+    cached = libraryBindings(sf, libs);
+    bindingsCache.set(sf, cached);
+  }
+  return cached;
+}
+
+/** Top-level `const NAME = ...` in a file. */
+function topLevelConst(sf: ts.SourceFile, name: string): ts.VariableDeclaration | undefined {
+  for (const stmt of sf.statements) {
+    if (!ts.isVariableStatement(stmt)) continue;
+    for (const d of stmt.declarationList.declarations) if (ts.isIdentifier(d.name) && d.name.text === name) return d;
+  }
+  return undefined;
+}
+
+/**
+ * The expression a same-repo module exports under `exported` ("default" for the default
+ * export): `export const X = ...`, `export { local as X }`, `export default local`, or
+ * `export default <expression>`.
+ */
+function exportedExpression(sf: ts.SourceFile, exported: string): ts.Expression | undefined {
+  for (const stmt of sf.statements) {
+    if (exported === "default" && ts.isExportAssignment(stmt) && !stmt.isExportEquals) return stmt.expression;
+    if (ts.isExportDeclaration(stmt) && !stmt.moduleSpecifier && stmt.exportClause && ts.isNamedExports(stmt.exportClause)) {
+      const el = stmt.exportClause.elements.find((e) => e.name.text === exported);
+      if (el) return ts.factory.createIdentifier((el.propertyName ?? el.name).text);
+    }
+  }
+  const decl = exported !== "default" ? topLevelConst(sf, exported) : undefined;
+  return decl?.initializer;
+}
+
+function instanceFor(expr: ts.Expression, sf: ts.SourceFile, libs: Lib[], depth: number): Instance | undefined {
+  if (depth > 4) return undefined;
+  const n = unwrap(expr);
+  let init: ts.Expression | undefined;
+  let home = sf;
+  if (ts.isIdentifier(n)) {
+    // Local binding first (synthesized identifiers from re-exports have no parent).
+    const local = n.parent ? new TsResolver(sf.fileName).declarationOf(n) : topLevelConst(sf, n.text);
+    if (local?.initializer) init = local.initializer;
+    else {
+      const imported = importedBinding(sf, n.text);
+      if (!imported) return undefined;
+      const path = resolveTsModulePath(sf.fileName, imported.spec);
+      const source = path ? sourceModule(path) : undefined;
+      if (!path || source === undefined) return undefined;
+      home = parse(path, source);
+      const target = exportedExpression(home, imported.exported);
+      if (!target) return undefined;
+      if (ts.isIdentifier(target)) return instanceFor(target, home, libs, depth + 1);
+      init = target;
+    }
+  } else {
+    init = n;
+  }
+  const call = unwrap(init);
+  if (!ts.isCallExpression(call) || !ts.isPropertyAccessExpression(call.expression)) {
+    return ts.isIdentifier(call) && call !== n ? instanceFor(call, home, libs, depth + 1) : undefined;
+  }
+  const owner = unwrap(call.expression.expression);
+  const lib = ts.isIdentifier(owner) ? bindingsOf(home, libs).libByName.get(owner.text) : undefined;
+  if (!lib || !lib.config.instanceFactories.includes(call.expression.name.text)) return undefined;
+  const resolver = new TsResolver(home.fileName);
+  const options = call.arguments[0] ? resolver.objectLiteralOf(call.arguments[0], 0) : undefined;
+  const baseProp = options?.properties.find(
+    (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && lib.config.baseUrlKeys.includes(propertyName(p) ?? ""),
+  );
+  return { lib, ...(baseProp ? { base: baseProp.initializer } : {}) };
+}
+
+/** `import X from "./m"` / `import { Y as X } from "./m"` -> where X comes from. */
+function importedBinding(sf: ts.SourceFile, local: string): { spec: string; exported: string } | undefined {
+  for (const stmt of sf.statements) {
+    if (!ts.isImportDeclaration(stmt) || !ts.isStringLiteral(stmt.moduleSpecifier)) continue;
+    const clause = stmt.importClause;
+    if (!clause) continue;
+    if (clause.name?.text === local) return { spec: stmt.moduleSpecifier.text, exported: "default" };
+    const nb = clause.namedBindings;
+    if (nb && ts.isNamedImports(nb)) {
+      const el = nb.elements.find((e) => e.name.text === local);
+      if (el) return { spec: stmt.moduleSpecifier.text, exported: (el.propertyName ?? el.name).text };
+    }
+  }
+  return undefined;
+}
+
 export function detectTsOutboundHttp(input: {
   filePath: string;
   content: string;
@@ -243,7 +377,10 @@ export function detectTsOutboundHttp(input: {
   const libs: Lib[] = config.typescript.externalApis.httpClients
     .filter((c) => c.rawHttp)
     .map((c) => ({ name: c.clientName, config: c.rawHttp! }));
-  if (!/\bfetch\s*\(/.test(content) && !libs.some((l) => l.config.modules.some((m) => content.includes(m)))) return empty;
+  // A file may also call an instance created in another module (`import { backend } from "../lib/http"`).
+  const mentionsHttp = /\bfetch\s*\(/.test(content) || libs.some((l) => l.config.modules.some((m) => content.includes(m)));
+  const relativeImport = /\bfrom\s+["']\.{1,2}\//.test(content);
+  if (!mentionsHttp && !relativeImport) return empty;
 
   let sf: ts.SourceFile;
   try {
@@ -254,56 +391,10 @@ export function detectTsOutboundHttp(input: {
   const resolver = new TsResolver(filePath);
   const router = new DestinationRouter(config, [...libs.map((l) => l.name), ...libs.flatMap((l) => l.config.modules), "fetch"]);
 
-  // Local names bound to a library (default/namespace import or require) and to its request functions.
-  const libByName = new Map<string, Lib>();
-  const fnByName = new Map<string, Lib>();
-  const libForModule = (spec: string): Lib | undefined => libs.find((l) => l.config.modules.includes(spec));
-  for (const stmt of sf.statements) {
-    if (ts.isImportDeclaration(stmt) && ts.isStringLiteral(stmt.moduleSpecifier)) {
-      const lib = libForModule(stmt.moduleSpecifier.text);
-      const clause = stmt.importClause;
-      if (!lib || !clause) continue;
-      if (clause.name) libByName.set(clause.name.text, lib);
-      const nb = clause.namedBindings;
-      if (nb && ts.isNamespaceImport(nb)) libByName.set(nb.name.text, lib);
-      if (nb && ts.isNamedImports(nb)) {
-        for (const el of nb.elements) {
-          const imported = (el.propertyName ?? el.name).text;
-          if (imported === "default") libByName.set(el.name.text, lib);
-          else if (lib.config.namedFunctions.includes(imported)) fnByName.set(el.name.text, lib);
-        }
-      }
-    }
-  }
-  const visitRequires = (node: ts.Node): void => {
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-      const init = unwrap(node.initializer);
-      if (ts.isCallExpression(init) && ts.isIdentifier(init.expression) && init.expression.text === "require") {
-        const arg = init.arguments[0];
-        const lib = arg && ts.isStringLiteral(arg) ? libForModule(arg.text) : undefined;
-        if (lib) libByName.set(node.name.text, lib);
-      }
-    }
-    ts.forEachChild(node, visitRequires);
-  };
-  visitRequires(sf);
+  const { libByName, fnByName } = libraryBindings(sf, libs);
 
-  // Instances: const api = axios.create({ baseURL: ... })
-  const instanceOf = (expr: ts.Expression): Instance | undefined => {
-    const n = unwrap(expr);
-    if (!ts.isIdentifier(n)) return undefined;
-    const decl = resolver.declarationOf(n);
-    const init = decl?.initializer ? unwrap(decl.initializer) : undefined;
-    if (!init || !ts.isCallExpression(init) || !ts.isPropertyAccessExpression(init.expression)) return undefined;
-    const owner = unwrap(init.expression.expression);
-    const lib = ts.isIdentifier(owner) ? libByName.get(owner.text) : undefined;
-    if (!lib || !lib.config.instanceFactories.includes(init.expression.name.text)) return undefined;
-    const options = init.arguments[0] ? resolver.objectLiteralOf(init.arguments[0], 0) : undefined;
-    const baseProp = options?.properties.find(
-      (p): p is ts.PropertyAssignment => ts.isPropertyAssignment(p) && lib.config.baseUrlKeys.includes(propertyName(p) ?? ""),
-    );
-    return { lib, ...(baseProp ? { base: baseProp.initializer } : {}) };
-  };
+  // Instances: `const api = axios.create({ baseURL })`, here or exported by a same-repo module.
+  const instanceOf = (expr: ts.Expression): Instance | undefined => instanceFor(expr, sf, libs, 0);
 
   const findings: RawFinding[] = [];
   const coveredSpans: TsOutboundHttpResult["coveredSpans"] = [];
@@ -336,8 +427,17 @@ export function detectTsOutboundHttp(input: {
     const absolute = urlValues.filter((v) => /^(https?|wss?):\/\//i.test(v.text));
     let candidates: Val[] = absolute;
     let envOnly = urlValues.length > 0 && urlValues.every((v) => v.text.startsWith(ENV_PREFIX));
+    const envNames = new Set<string>();
+    const noteEnv = (values: Val[]): void => {
+      for (const v of values) {
+        const m = /^\{env:([^}]+)\}/.exec(v.text);
+        if (m) envNames.add(m[1]);
+      }
+    };
+    noteEnv(urlValues);
     if (candidates.length === 0 && base) {
-      const bases = resolver.eval(base);
+      const bases = new TsResolver(base.getSourceFile().fileName).eval(base);
+      noteEnv(bases);
       const absoluteBases = bases.filter((v) => /^(https?|wss?):\/\//i.test(v.text));
       if (absoluteBases.length > 0) {
         const rel = urlValues.length > 0 ? urlValues : [{ text: urlExpr ? `{${urlExpr.getText()}}` : "" }];
@@ -352,17 +452,17 @@ export function detectTsOutboundHttp(input: {
     for (const v of candidates) {
       const routed = router.route(v.text, hintFor(call), true);
       if (routed === "unknown") continue;
-      if ("organizationHost" in routed) {
-        const host = routed.organizationHost;
-        if (seen.has(`fp:${host}`)) continue;
-        seen.add(`fp:${host}`);
+      if ("remote" in routed) {
+        const host = routed.remote.host;
+        if (seen.has(`remote:${host}`)) continue;
+        seen.add(`remote:${host}`);
         reported = true;
         findings.push({
           pattern: "external_api_call",
           name: host,
           confidence: 0.85,
           location,
-          properties: { firstParty: true, host, url: v.text, client: lib, httpClientLibrary: lib },
+          properties: remoteServiceProperties(routed.remote, v.text, { client: lib, httpClientLibrary: lib }),
         });
         continue;
       }
@@ -386,12 +486,15 @@ export function detectTsOutboundHttp(input: {
     // Outbound with no vendor: the URL or base exists only in the environment, or the URL is
     // absolute with a host the router cannot name. Same-origin relative calls stay silent.
     if (!reported && (envOnly || candidates.length > 0)) {
+      // Name the remote service after the setting that holds its URL, so two env-configured
+      // backends stay two API assets.
+      const envVar = [...envNames].sort()[0];
       findings.push({
         pattern: "external_api_call",
-        name: OUTBOUND_HTTP_UNKNOWN_FINDING_NAME,
+        name: envVar && envOnly ? envVar : OUTBOUND_HTTP_UNKNOWN_FINDING_NAME,
         confidence: 0.8,
         location,
-        properties: { client: lib, httpClientLibrary: lib, destination: "unknown" },
+        properties: { client: lib, httpClientLibrary: lib, destination: "unknown", ...(envVar && envOnly ? { envVar } : {}) },
       });
     }
   };
