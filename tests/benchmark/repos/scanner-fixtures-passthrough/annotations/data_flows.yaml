@@ -1,0 +1,73 @@
+annotations:
+- id: scanner-fixtures-passthrough-openrouter-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:openrouter
+    name: Service to openrouter
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_passthrough/triage.py
+    start_line: 8
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: triage unpacks completion_kwargs into call_model, which forwards to litellm.acompletion; the gateway
+    branch sends to openrouter.ai (providers.py lines 6 and 13).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-service
+    target_entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-openrouter
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: openrouter
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+    - email
+- id: scanner-fixtures-passthrough-cerebras-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:cerebras
+    name: Service to cerebras
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_passthrough/triage.py
+    start_line: 8
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: triage unpacks completion_kwargs into call_model, which forwards to litellm.acompletion; the direct
+    branch sends to api.cerebras.ai (providers.py lines 7 and 14).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-service
+    target_entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-cerebras
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: cerebras
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+    - email
