@@ -33,8 +33,8 @@ export function pythonModuleIndexGeneration(): number {
   return generation;
 }
 
-export function pythonModulePaths(): string[] {
-  return activeIndex ? [...activeIndex.keys()] : [];
+export function pythonModuleIndexSize(): number {
+  return activeIndex?.size ?? 0;
 }
 
 export function pythonModuleSource(filePath: string): string | undefined {

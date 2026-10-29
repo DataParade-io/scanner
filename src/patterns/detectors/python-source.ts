@@ -55,6 +55,8 @@ export interface PyParam {
   name: string;
   /** Annotation text (`ShopifyStore`, `str | None`). */
   annotation?: string;
+  /** `*args` or `**kwargs`. */
+  star?: "args" | "kwargs";
   defaultExpr?: PyExpr;
 }
 
@@ -830,8 +832,10 @@ function parseParams(src: string, from: number, to: number): PyParam[] {
     const eq = tokens.find((t, idx) => t.kind === "op" && t.text === "=" && idx > 0);
     const colon = tokens.find((t, idx) => t.kind === "op" && t.text === ":" && idx > 0);
     const annotation = colon ? src.slice(colon.end, eq ? eq.start : b).trim() : "";
+    const star = tokens[0]?.text === "**" ? "kwargs" : tokens[0]?.text === "*" ? "args" : undefined;
     params.push({
       name: nameTok.text,
+      ...(star ? { star } : {}),
       ...(annotation ? { annotation } : {}),
       ...(eq ? { defaultExpr: PyExprParser.parseRange(src, eq.end, b) } : {}),
     });

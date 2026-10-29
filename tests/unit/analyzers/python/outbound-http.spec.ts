@@ -631,4 +631,100 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
       expect(findings.map((f) => f.location.startLine).sort((a, b) => a - b)).toEqual([6, 11]);
     });
   });
+
+  describe("pass-through wrappers", () => {
+    const providers = [
+      "import os",
+      'BACKEND = os.getenv("LLM_BACKEND", "gateway")',
+      'GATEWAY_URL = os.getenv("GATEWAY_URL", "https://openrouter.ai/api/v1")',
+      'DIRECT_URL = os.getenv("DIRECT_URL", "https://api.cerebras.ai/v1")',
+      'MODEL = os.getenv("LLM_MODEL", "gpt-oss-120b")',
+      "",
+      "def completion_kwargs() -> dict:",
+      '    if BACKEND == "gateway":',
+      '        return {"model": f"openrouter/openai/{MODEL}", "api_base": GATEWAY_URL}',
+      '    return {"model": f"cerebras/{MODEL}", "api_base": DIRECT_URL}',
+    ];
+    const client = [
+      "import litellm",
+      "",
+      "async def call_model(**kwargs):",
+      "    try:",
+      "        return await litellm.acompletion(**kwargs)",
+      "    except litellm.exceptions.RateLimitError:",
+      '        return await litellm.acompletion(**{**kwargs, "num_retries": 2})',
+    ];
+
+    it("resolves every return branch of a kwargs helper passed through an imported wrapper, at the caller", () => {
+      const findings = outboundInRepo(
+        {
+          "app/providers.py": providers,
+          "app/llm_client.py": client,
+          "app/triage.py": [
+            "from .llm_client import call_model",
+            "from .providers import completion_kwargs",
+            "",
+            "async def triage(text: str) -> str:",
+            "    response = await call_model(",
+            "        **completion_kwargs(),",
+            "        temperature=0,",
+            '        messages=[{"role": "user", "content": text}],',
+            "    )",
+            "    return response",
+          ],
+        },
+        "app/triage.py",
+      );
+      expect(services(findings)).toEqual(["cerebras", "openrouter"]);
+      expect([...new Set(findings.map(span))]).toEqual(["5-9"]);
+    });
+
+    it("reports nothing at the caller when the wrapper's arguments do not resolve", () => {
+      const findings = outboundInRepo(
+        {
+          "app/llm_client.py": client,
+          "app/use.py": ["from .llm_client import call_model", "", "async def go(model):", "    return await call_model(model=model, messages=[])"],
+        },
+        "app/use.py",
+      );
+      expect(findings).toEqual([]);
+    });
+
+    it("follows named wrapper parameters into an HTTP call", () => {
+      const findings = outboundInRepo(
+        {
+          "app/http_util.py": ["import httpx", "", "def fetch(url: str, **kw):", "    return httpx.get(url, **kw)"],
+          "app/notify.py": [
+            "from .http_util import fetch",
+            'TELEGRAM = "https://api.telegram.org"',
+            "",
+            "def ping():",
+            '    return fetch(f"{TELEGRAM}/bot1/getMe", timeout=5)',
+          ],
+        },
+        "app/notify.py",
+      );
+      expect(services(findings)).toEqual(["telegram"]);
+      expect(findings[0].location.startLine).toBe(5);
+    });
+
+    it("keeps {**helper(), extra} merges for ADK LiteLlm(**model_kwargs)", () => {
+      const findings = outboundInRepo(
+        {
+          "app/providers.py": providers,
+          "app/agent.py": [
+            "from google.adk.models.lite_llm import LiteLlm",
+            "from .providers import completion_kwargs",
+            "",
+            "def agent_model() -> LiteLlm:",
+            '    model_kwargs = {**completion_kwargs(), "temperature": 0}',
+            "    return LiteLlm(**model_kwargs)",
+          ],
+        },
+        "app/agent.py",
+      );
+      expect(services(findings)).toEqual(["cerebras", "openrouter"]);
+      expect([...new Set(findings.map(span))]).toEqual(["6-6"]);
+    });
+  });
 });

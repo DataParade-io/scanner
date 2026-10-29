@@ -23,6 +23,7 @@ import {
 } from "../../classifier/external-url-third-party";
 import { getActiveOrganizationDomains } from "../../classifier/organization-domains-scan-scope";
 import {
+  pythonModuleIndexSize,
   pythonModuleSource,
   pythonModuleIndexGeneration,
   resolvePythonModulePath,
@@ -120,6 +121,10 @@ class Resolver {
 
   private moduleOf(scope: PyScope): { model: PySourceModel; path: string; id: number } {
     return this.modules.get(this.rootOf(scope)) ?? { model: this.model, path: "", id: 0 };
+  }
+
+  moduleModelOf(scope: PyScope): PySourceModel {
+    return this.moduleOf(scope).model;
   }
 
   private text(scope: PyScope, expr: PyExpr): string {
@@ -247,7 +252,7 @@ class Resolver {
   }
 
   /** The same-repo function a call runs, with its arguments bound. */
-  private callTarget(
+  callTarget(
     expr: Extract<PyExpr, { kind: "call" }>,
     ctx: EvalCtx,
   ): { fn: PyScope; bindings: Map<string, { expr: PyExpr; ctx: EvalCtx }>; hint: string } | undefined {
@@ -758,19 +763,23 @@ export function detectPythonOutboundHttp(input: PythonOutboundHttpInput): Python
   return result;
 }
 
-function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResult {
-  const { filePath, content, libraries } = input;
-  const empty = { findings: [], openAiClientsRedirected: false };
-  if (!/\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content)) {
-    return empty;
-  }
-  const model = buildPySourceModel(content);
-  const resolver = new Resolver(model, filePath);
-  const router = new DestinationRouter(input.config, libraries.map((l) => l.name));
-  const lines = content.split(/\r?\n/);
-  const findings: RawFinding[] = [];
-  const emitted = new Set<string>();
+interface ModuleInfo {
+  importedLibraries: RawHttpLibrary[];
+  moduleAliases: Map<string, RawHttpLibrary>;
+  constructorLibrary(ctor: string): RawHttpLibrary | undefined;
+  openAiImported: boolean;
+  mcpImported: boolean;
+  isPhoenixCall(callee: string): boolean;
+  isLitellmCall(callee: string): boolean;
+  isAdkLiteLlm(callee: string): boolean;
+}
 
+const moduleInfoCache = new WeakMap<PySourceModel, ModuleInfo>();
+
+/** What a module imports that marks outbound calls (HTTP libraries, SDKs). */
+function moduleInfoFor(model: PySourceModel, libraries: RawHttpLibrary[]): ModuleInfo {
+  const cached = moduleInfoCache.get(model);
+  if (cached) return cached;
   const imported = (prefix: string): boolean =>
     model.imports.some((imp) => imp.module === prefix || imp.module.startsWith(`${prefix}.`));
   const importedLibraries = libraries.filter((lib) => lib.importModules.some((mod) => imported(mod)));
@@ -786,6 +795,88 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
       for (const [alias, name] of imp.aliases) if (lib.constructors.includes(name)) constructorAliases.set(alias, lib);
     }
   }
+  const constructorLibrary = (ctor: string): RawHttpLibrary | undefined => {
+    const dot = ctor.lastIndexOf(".");
+    if (dot === -1) return constructorAliases.get(ctor);
+    const lib = moduleAliases.get(ctor.slice(0, dot));
+    return lib && lib.constructors.includes(ctor.slice(dot + 1)) ? lib : undefined;
+  };
+
+  // Phoenix tracing: `register(...)`, `phoenix.otel.BatchSpanProcessor(...)` and the other
+  // phoenix.otel entry points send spans to Arize Phoenix whatever the endpoint value.
+  const phoenixModuleAliases = new Set<string>();
+  const phoenixNames = new Set<string>();
+  for (const imp of model.imports) {
+    if (imp.module !== "phoenix.otel" && !imp.module.startsWith("phoenix.otel.")) {
+      if (imp.module === "phoenix" && imp.names.includes("otel")) {
+        for (const [alias, name] of imp.aliases) if (name === "otel") phoenixModuleAliases.add(alias);
+      }
+      continue;
+    }
+    if (imp.names.length === 0) {
+      for (const [alias, target] of imp.aliases) phoenixModuleAliases.add(alias === "phoenix" ? "phoenix.otel" : alias === target ? target : alias);
+    } else {
+      for (const alias of imp.aliases.keys()) phoenixNames.add(alias);
+    }
+  }
+  // LiteLLM: completion(model="groq/...") names the provider from the model prefix.
+  const litellmAliases = new Set<string>();
+  const litellmNames = new Set<string>();
+  for (const imp of model.imports) {
+    if (imp.module !== "litellm" && !imp.module.startsWith("litellm.")) continue;
+    if (imp.names.length === 0) for (const alias of imp.aliases.keys()) litellmAliases.add(alias);
+    else for (const [alias, name] of imp.aliases) if (LITELLM_CALLS.has(name)) litellmNames.add(alias);
+  }
+  // Google ADK's LiteLlm(model="provider/...") wraps LiteLLM.
+  const adkLiteLlmNames = new Set<string>();
+  for (const imp of model.imports) {
+    if (!imp.module.startsWith("google.adk")) continue;
+    for (const [alias, name] of imp.aliases) if (name === "LiteLlm") adkLiteLlmNames.add(alias);
+  }
+
+  const info: ModuleInfo = {
+    importedLibraries,
+    moduleAliases,
+    constructorLibrary,
+    openAiImported: imported("openai"),
+    mcpImported: imported("mcp") || imported("google.adk"),
+    isPhoenixCall: (callee) => {
+      if (phoenixNames.has(callee)) return true;
+      const dot = callee.lastIndexOf(".");
+      return dot > 0 && phoenixModuleAliases.has(callee.slice(0, dot));
+    },
+    isLitellmCall: (callee) => {
+      if (litellmNames.has(callee)) return true;
+      const dot = callee.lastIndexOf(".");
+      return dot > 0 && litellmAliases.has(callee.slice(0, dot)) && LITELLM_CALLS.has(callee.slice(dot + 1));
+    },
+    isAdkLiteLlm: (callee) => adkLiteLlmNames.has(callee) || /(^|\.)lite_llm\.LiteLlm$/.test(callee),
+  };
+  moduleInfoCache.set(model, info);
+  return info;
+}
+
+function isWithin(scope: PyScope, fn: PyScope): boolean {
+  for (let s: PyScope | undefined = scope; s; s = s.parent) if (s === fn) return true;
+  return false;
+}
+
+function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResult {
+  const { filePath, content, libraries } = input;
+  const empty = { findings: [], openAiClientsRedirected: false };
+  // Files that import nothing outbound can still call a same-repo wrapper (call_model(**kw)),
+  // so with the module index active any file with a same-repo-looking import is analyzed.
+  const mentionsOutbound = /\b(httpx|requests|aiohttp|openai|mcp|phoenix|google\.adk|litellm)\b|['"](GET|POST|PUT|PATCH|DELETE)['"]/.test(content);
+  const mayCallWrapper = pythonModuleIndexSize() > 1 && /^\s*(from\s+[\w.]+\s+import|import\s+\w)/m.test(content);
+  if (!mentionsOutbound && !mayCallWrapper) {
+    return empty;
+  }
+  const model = buildPySourceModel(content);
+  const resolver = new Resolver(model, filePath);
+  const router = new DestinationRouter(input.config, libraries.map((l) => l.name));
+  const lines = content.split(/\r?\n/);
+  const findings: RawFinding[] = [];
+  const emitted = new Set<string>();
 
   const location = (site: Site): SourceLocation => ({
     filePath,
@@ -892,16 +983,16 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     return { known: [], organization: false };
   };
 
-  const clientOf = (receiver: PyExpr, call: PyCall): ClientInfo | "module" | undefined => {
+  const clientOf = (receiver: PyExpr, call: PyCall, info: ModuleInfo): ClientInfo | "module" | undefined => {
     const name = dottedName(receiver);
     if (!name) return undefined;
-    if (moduleAliases.has(name)) return "module";
+    if (info.moduleAliases.has(name)) return "module";
     for (const binding of resolver.bindingsOf(name, call.scope, call.startLine)) {
       const value = binding.value;
       if (value.kind !== "call") continue;
       const ctor = dottedName(value.func);
       if (!ctor) continue;
-      const lib = constructorLibrary(ctor);
+      const lib = info.constructorLibrary(ctor);
       if (!lib) continue;
       const baseUrl = value.kwargs.find((k) => k.name === "base_url")?.value;
       return { library: lib, ...(baseUrl ? { baseUrl: { expr: baseUrl, scope: binding.scope, line: binding.line } } : {}) };
@@ -909,79 +1000,36 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     return undefined;
   };
 
-  const constructorLibrary = (ctor: string): RawHttpLibrary | undefined => {
-    const dot = ctor.lastIndexOf(".");
-    if (dot === -1) return constructorAliases.get(ctor);
-    const lib = moduleAliases.get(ctor.slice(0, dot));
-    return lib && lib.constructors.includes(ctor.slice(dot + 1)) ? lib : undefined;
-  };
-
   let openAiClients = 0;
   let openAiRedirected = 0;
-  const openAiImported = imported("openai");
-  const mcpImported = imported("mcp") || imported("google.adk");
-  // Phoenix tracing: `register(...)`, `phoenix.otel.BatchSpanProcessor(...)` and the other
-  // phoenix.otel entry points send spans to Arize Phoenix whatever the endpoint value.
-  const phoenixModuleAliases = new Set<string>();
-  const phoenixNames = new Set<string>();
-  for (const imp of model.imports) {
-    if (imp.module !== "phoenix.otel" && !imp.module.startsWith("phoenix.otel.")) {
-      if (imp.module === "phoenix" && imp.names.includes("otel")) {
-        for (const [alias, name] of imp.aliases) if (name === "otel") phoenixModuleAliases.add(alias);
-      }
-      continue;
-    }
-    if (imp.names.length === 0) {
-      for (const [alias, target] of imp.aliases) phoenixModuleAliases.add(alias === "phoenix" ? "phoenix.otel" : alias === target ? target : alias);
-    } else {
-      for (const alias of imp.aliases.keys()) phoenixNames.add(alias);
-    }
-  }
-  const isPhoenixCall = (callee: string): boolean => {
-    if (phoenixNames.has(callee)) return true;
-    const dot = callee.lastIndexOf(".");
-    return dot > 0 && phoenixModuleAliases.has(callee.slice(0, dot));
-  };
-  // LiteLLM: completion(model="groq/...") names the provider from the model prefix.
-  const litellmAliases = new Set<string>();
-  const litellmNames = new Set<string>();
-  for (const imp of model.imports) {
-    if (imp.module !== "litellm" && !imp.module.startsWith("litellm.")) continue;
-    if (imp.names.length === 0) for (const alias of imp.aliases.keys()) litellmAliases.add(alias);
-    else for (const [alias, name] of imp.aliases) if (LITELLM_CALLS.has(name)) litellmNames.add(alias);
-  }
-  // Google ADK's LiteLlm(model="provider/...") wraps LiteLLM.
-  const adkLiteLlmNames = new Set<string>();
-  for (const imp of model.imports) {
-    if (!imp.module.startsWith("google.adk")) continue;
-    for (const [alias, name] of imp.aliases) if (name === "LiteLlm") adkLiteLlmNames.add(alias);
-  }
-  const isAdkLiteLlm = (callee: string): boolean => adkLiteLlmNames.has(callee) || /(^|\.)lite_llm\.LiteLlm$/.test(callee);
-  const isLitellmCall = (callee: string): boolean => {
-    if (litellmNames.has(callee)) return true;
-    const dot = callee.lastIndexOf(".");
-    return dot > 0 && litellmAliases.has(callee.slice(0, dot)) && LITELLM_CALLS.has(callee.slice(dot + 1));
-  };
+  const mainInfo = moduleInfoFor(model, libraries);
 
-  for (const call of model.calls) {
+  /**
+   * Detect one outbound call. `ctx` evaluates its arguments; `site` is where findings go
+   * (the call itself, or the caller of a wrapper the call sits in). Returns true when the
+   * call is an outbound call kind, resolved or not.
+   */
+  const handle = (call: PyCall, info: ModuleInfo, ctx: EvalCtx, site: PyCall, viaWrapper: boolean): boolean => {
     const { node } = call;
     const callee = call.callee ?? "";
     const last = callee.slice(callee.lastIndexOf(".") + 1);
+    const resolveUrl = (urlExpr: PyExpr | undefined, client: ClientInfo | undefined, fallback: boolean, exprCtx?: EvalCtx) =>
+      resolveRequestUrl(site, urlExpr, client, fallback, exprCtx ?? ctx);
 
     // 1. Raw HTTP library request calls.
-    if (importedLibraries.length > 0 && node.func.kind === "attr" && REQUEST_VERBS.has(node.func.attr)) {
-      const client = clientOf(node.func.object, call);
+    if (info.importedLibraries.length > 0 && node.func.kind === "attr" && REQUEST_VERBS.has(node.func.attr)) {
+      const client = clientOf(node.func.object, call, info);
       if (client) {
-        const library = client === "module" ? moduleAliases.get(dottedName(node.func.object)!)! : client.library;
-        if (client === "module" && library.name === "aiohttp" && node.func.attr !== "request") continue;
+        const library = client === "module" ? info.moduleAliases.get(dottedName(node.func.object)!)! : client.library;
+        if (client === "module" && library.name === "aiohttp" && node.func.attr !== "request") return true;
         const urlExpr = METHOD_FIRST_VERBS.has(node.func.attr)
           ? (node.args[1] ?? node.kwargs.find((k) => k.name === "url")?.value)
           : (node.args[0] ?? node.kwargs.find((k) => k.name === "url" || k.name === "str_or_url")?.value);
-        const resolved = resolveRequestUrl(call, urlExpr, client === "module" ? undefined : client, true);
-        if (resolved.organization && resolved.known.length === 0) continue;
+        const resolved = resolveUrl(urlExpr, client === "module" ? undefined : client, true);
+        if (resolved.organization && resolved.known.length === 0) return true;
         if (resolved.known.length > 0) {
-          emit(call, resolved.known, { httpClientLibrary: library.name }, library.patternId, library.confidence);
-        } else {
+          emit(site, resolved.known, { httpClientLibrary: library.name }, library.patternId, library.confidence);
+        } else if (!viaWrapper) {
           const dedupe = `${OUTBOUND_HTTP_UNKNOWN_FINDING_NAME}|${call.startLine}|${call.endLine}`;
           if (!emitted.has(dedupe)) {
             emitted.add(dedupe);
@@ -998,51 +1046,49 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
             });
           }
         }
-        continue;
+        return true;
       }
     }
 
     // 2. OpenAI-compatible clients pointed at another provider.
-    if (openAiImported && OPENAI_CLIENTS.has(last) && (callee === last || callee === `openai.${last}`)) {
-      openAiClients += 1;
-      const baseUrl = node.kwargs.find((k) => k.name === "base_url")?.value;
-      if (!baseUrl) continue;
-      const { known } = resolveRequestUrl(call, baseUrl, undefined, true);
+    if (info.openAiImported && OPENAI_CLIENTS.has(last) && (callee === last || callee === `openai.${last}`)) {
+      if (!viaWrapper) openAiClients += 1;
+      const baseUrls = resolver.kwargExprs(node, "base_url", ctx);
+      const known = baseUrls.flatMap((b) => resolveUrl(b.expr, undefined, true, b.ctx).known);
       const elsewhere = known.filter((d) => d.serviceName.toLowerCase() !== "openai");
-      if (elsewhere.length > 0 && elsewhere.length === known.length) openAiRedirected += 1;
-      emit(call, known, { client: "openai_compatible" }, "external_api_call", 0.85);
-      continue;
+      if (!viaWrapper && elsewhere.length > 0 && elsewhere.length === known.length) openAiRedirected += 1;
+      emit(site, known, { client: "openai_compatible" }, "external_api_call", 0.85);
+      return true;
     }
 
     // 3. MCP over HTTP.
-    if (mcpImported && (MCP_URL_CALLS.has(last) || MCP_URL_PARAMS.has(last))) {
+    if (info.mcpImported && (MCP_URL_CALLS.has(last) || MCP_URL_PARAMS.has(last))) {
       // `url=` directly, as the first argument, or inside a `**params` dict.
-      const urlSources: Array<{ expr: PyExpr; ctx?: EvalCtx }> =
-        !MCP_URL_PARAMS.has(last) && node.args[0]
-          ? [{ expr: node.args[0] }]
-          : resolver.kwargExprs(node, "url", ctxFor(call, 0)).map((k) => ({ expr: k.expr, ctx: k.ctx }));
-      const known = urlSources.flatMap((source) => resolveRequestUrl(call, source.expr, undefined, true, source.ctx).known);
-      emit(call, known, { transport: "mcp_http" }, "external_api_call", 0.85);
-      continue;
+      const urlSources: Array<{ expr: PyExpr; ctx: EvalCtx }> =
+        !MCP_URL_PARAMS.has(last) && node.args[0] ? [{ expr: node.args[0], ctx }] : resolver.kwargExprs(node, "url", ctx);
+      const known = urlSources.flatMap((source) => resolveUrl(source.expr, undefined, true, source.ctx).known);
+      emit(site, known, { transport: "mcp_http" }, "external_api_call", 0.85);
+      return true;
     }
 
-    // 4. Phoenix tracing.
-    if (isPhoenixCall(callee)) {
-      emit(call, [{ serviceName: "arize_phoenix", url: "", sites: [] }], { transport: "otlp" }, "external_api_call", 0.85);
-      continue;
+    // 4. Phoenix tracing (not followed through wrappers: the package is the vendor).
+    if (info.isPhoenixCall(callee)) {
+      if (!viaWrapper) emit(site, [{ serviceName: "arize_phoenix", url: "", sites: [] }], { transport: "otlp" }, "external_api_call", 0.85);
+      return true;
     }
 
     // 5. LiteLLM provider prefixes.
-    if (isLitellmCall(callee) || isAdkLiteLlm(callee)) {
-      const ctx = ctxFor(call, 0);
+    if (info.isLitellmCall(callee) || info.isAdkLiteLlm(callee)) {
       // The request goes to api_base when it is set, whatever provider the model prefix
       // names (an OpenAI-compatible gateway serving "groq/..." is still the gateway). So a
       // known api_base host decides; the model prefix only counts when api_base is unknown.
+      // A helper with several return branches gives one api_base per branch, so each
+      // branch that names a host contributes its vendor.
       const bases = ["api_base", "base_url"].flatMap((name) => resolver.kwargExprs(node, name, ctx));
-      const viaBase = bases.flatMap((b) => resolveRequestUrl(call, b.expr, undefined, true, b.ctx).known);
+      const viaBase = bases.flatMap((b) => resolveUrl(b.expr, undefined, true, b.ctx).known);
       if (viaBase.length > 0) {
-        emit(call, viaBase, { client: "litellm" }, "external_api_call", 0.85);
-        continue;
+        emit(site, viaBase, { client: "litellm" }, "external_api_call", 0.85);
+        return true;
       }
       const models = resolver.kwargExprs(node, "model", ctx);
       if (models.length === 0 && node.args[0]) models.push({ expr: node.args[0], ctx });
@@ -1054,17 +1100,51 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
           providers.push({ ...routed, url: "", sites: [] });
         }
       }
-      emit(call, providers, { client: "litellm" }, "external_api_call", 0.85);
-      continue;
+      emit(site, providers, { client: "litellm" }, "external_api_call", 0.85);
+      return true;
     }
 
     // 6. Unresolved `(method, url)` helpers such as nexus_call("POST", url, ...): only
     //    catalog hosts count, so ordinary two-string calls do not become destinations.
     const methodArg = node.args[0];
     if (methodArg?.kind === "str" && node.args[1] && methodArg.parts.length === 1 && typeof methodArg.parts[0] === "string" && HTTP_METHODS.has(methodArg.parts[0].toUpperCase())) {
-      if (node.func.kind === "attr" && clientOf(node.func.object, call)) continue;
-      const { known } = resolveRequestUrl(call, node.args[1], undefined, false);
-      emit(call, known, { client: last || "http_helper" }, "external_api_call", 0.8);
+      if (node.func.kind === "attr" && clientOf(node.func.object, call, info)) return true;
+      const { known } = resolveUrl(node.args[1], undefined, false);
+      emit(site, known, { client: last || "http_helper" }, "external_api_call", 0.8);
+      return known.length > 0;
+    }
+    return false;
+  };
+
+  for (const call of model.calls) {
+    const ctx = ctxFor(call, 0);
+    if (handle(call, mainInfo, ctx, call, false)) continue;
+
+    // 7. Pass-through wrappers: a same-repo function whose parameters (named or **kwargs)
+    //    reach an outbound call. Evaluate that inner call with this call's arguments bound
+    //    and report at this call, where the destination is chosen (one level of wrapping).
+    const target = resolver.callTarget(call.node, ctx);
+    if (!target) continue;
+    const { fn, bindings } = target;
+    const varkw = fn.params.find((p) => p.star === "kwargs");
+    if (varkw) {
+      const { node } = call;
+      const passed: PyExpr = {
+        kind: "coll",
+        elts: node.kwargs.map((k) => k.value),
+        entries: node.kwargs.map((k) => ({ key: k.name, value: k.value })),
+        spreads: node.starKwargs,
+        start: node.start,
+        end: node.end,
+      };
+      bindings.set(varkw.name, { expr: passed, ctx });
+    }
+    if (bindings.size === 0) continue;
+    const owner = resolver.moduleModelOf(fn);
+    const innerInfo = owner === model ? mainInfo : moduleInfoFor(owner, libraries);
+    for (const inner of owner.calls) {
+      if (!isWithin(inner.scope, fn)) continue;
+      handle(inner, innerInfo, { scope: inner.scope, line: inner.startLine, hops: 0, depth: 0, bindings }, call, true);
     }
   }
 
