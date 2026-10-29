@@ -12,12 +12,15 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: InstagramAdapter._post_with_retry posts captions and media URLs with the access_token query parameter to the Instagram Graph API for IGAA tokens; the adapter is library code with no HTTP handler
-    in scope, so the source is asset:service.
+  rationale: InstagramAdapter._post_with_retry posts captions and media URLs with the access_token query parameter
+    to the Instagram Graph API for IGAA tokens; the adapter is library code with no HTTP handler in scope, so the
+    source is asset:service.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
@@ -50,11 +53,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: TokenManager.exchange_for_long_lived sends the app id, app secret and short-lived token to graph.facebook.com /oauth/access_token; no HTTP handler is in scope, so the source is asset:service.
+  rationale: TokenManager.exchange_for_long_lived sends the app id, app secret and short-lived token to graph.facebook.com
+    /oauth/access_token; no HTTP handler is in scope, so the source is asset:service.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
@@ -86,11 +92,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: LinkedInAPIClient._create_post sends the author URN and post commentary with a Bearer token to api.linkedin.com /rest/posts; no HTTP handler is in scope, so the source is asset:service.
+  rationale: LinkedInAPIClient._create_post sends the author URN and post commentary with a Bearer token to api.linkedin.com
+    /rest/posts; no HTTP handler is in scope, so the source is asset:service.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
@@ -123,11 +132,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: RedditClient._post sends post titles, text and comments with the reddit_session cookie to www.reddit.com; no HTTP handler is in scope, so the source is asset:service.
+  rationale: RedditClient._post sends post titles, text and comments with the reddit_session cookie to www.reddit.com;
+    no HTTP handler is in scope, so the source is asset:service.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge

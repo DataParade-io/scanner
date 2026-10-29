@@ -17,7 +17,9 @@ annotations:
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:messaging
     disposition_candidate: graph_edge
@@ -47,12 +49,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: whatsapp_business_create_message posts a body with the recipient number in to and the message text to the Graph
-    API messages endpoint; source is asset:service because no HTTP handler is in scope.
+  rationale: whatsapp_business_create_message posts a body with the recipient number in to and the message text
+    to the Graph API messages endpoint; source is asset:service because no HTTP handler is in scope.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:messaging
     disposition_candidate: graph_edge
@@ -83,12 +87,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: stripe_get_customer sends the customer_id to the Stripe customers endpoint and reads back email and name; source
-    is asset:service because no HTTP handler is in scope.
+  rationale: stripe_get_customer sends the customer_id to the Stripe customers endpoint and reads back email and
+    name; source is asset:service because no HTTP handler is in scope.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:payment_processor
     disposition_candidate: graph_edge
@@ -120,12 +126,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: linkedin_create_post posts a ugcPosts payload with the author_urn and the post text through the _post helper
-    on line 21; source is asset:service because no HTTP handler is in scope.
+  rationale: linkedin_create_post posts a ugcPosts payload with the author_urn and the post text through the _post
+    helper on line 21; source is asset:service because no HTTP handler is in scope.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge

@@ -12,13 +12,15 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: send_message posts the reply text to the recipient WhatsApp id (the phone number) with a
-    Bearer access token; the adapter is called by backend services, not directly by an in-scope HTTP handler,
-    so the source is asset:service.
+  rationale: send_message posts the reply text to the recipient WhatsApp id (the phone number) with a Bearer access
+    token; the adapter is called by backend services, not directly by an in-scope HTTP handler, so the source is
+    asset:service.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:messaging
     disposition_candidate: graph_edge
@@ -51,12 +53,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: send_message posts the reply text and the recipient page-scoped user id, with the page access
-    token in the query string; source is asset:service because no in-scope HTTP handler calls it.
+  rationale: send_message posts the reply text and the recipient page-scoped user id, with the page access token
+    in the query string; source is asset:service because no in-scope HTTP handler calls it.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:messaging
     disposition_candidate: graph_edge
@@ -89,12 +93,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: publish_post sends the post body or caption and an optional media URL with the page access
-    token in the query string; source is asset:service because no in-scope HTTP handler calls it.
+  rationale: publish_post sends the post body or caption and an optional media URL with the page access token in
+    the query string; source is asset:service because no in-scope HTTP handler calls it.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
@@ -126,12 +132,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: send_message posts the DM text and the recipient Instagram user id with a Bearer access token;
-    source is asset:service because no in-scope HTTP handler calls it.
+  rationale: send_message posts the DM text and the recipient Instagram user id with a Bearer access token; source
+    is asset:service because no in-scope HTTP handler calls it.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:messaging
     disposition_candidate: graph_edge
@@ -164,12 +172,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: publish_post sends the image URL and caption to create a media container with a Bearer access
-    token; source is asset:service because no in-scope HTTP handler calls it.
+  rationale: publish_post sends the image URL and caption to create a media container with a Bearer access token;
+    source is asset:service because no in-scope HTTP handler calls it.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
@@ -201,13 +211,14 @@ annotations:
     status: positive
     labels:
     - data_flow
-  rationale: _post_tweet posts the tweet text and optional reply-to tweet id with an OAuth 1.0a header
-    signed with the user access token; source is asset:service because no in-scope HTTP handler calls
-    it.
+  rationale: _post_tweet posts the tweet text and optional reply-to tweet id with an OAuth 1.0a header signed with
+    the user access token; source is asset:service because no in-scope HTTP handler calls it.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
-    review_state: proposed
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
   flow_canonical:
     identity_key: flow:asset:service->third_party:saas_service
     disposition_candidate: graph_edge
