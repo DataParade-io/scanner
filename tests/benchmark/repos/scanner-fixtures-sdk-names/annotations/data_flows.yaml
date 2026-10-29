@@ -1,0 +1,140 @@
+annotations:
+- id: scanner-fixtures-sdk-names-gmail-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:gmail
+    name: Service to gmail
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py
+    start_line: 15
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: send_login_code builds a Gmail client with a lazily imported googleapiclient and sends the code to
+    the user's address.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:email_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-service
+    target_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-gmail
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: gmail
+        component_subtype: email_provider
+    data_categories:
+    - email
+    - access_token
+- id: scanner-fixtures-sdk-names-google-drive-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:google_drive
+    name: Service to google_drive
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py
+    start_line: 23
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: archive_transcript uploads a transcript file to Google Drive with a lazily imported googleapiclient.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-service
+    target_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-google-drive
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: google_drive
+        component_subtype: saas_service
+    data_categories:
+    - message_content
+- id: scanner-fixtures-sdk-names-perplexity-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:perplexity
+    name: Service to perplexity
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 10
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: ask_with_sources posts the question to api.perplexity.ai; the vendor is Perplexity, not the domain
+    name.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-service
+    target_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-perplexity
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: perplexity
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+- id: scanner-fixtures-sdk-names-firecrawl-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:firecrawl
+    name: Service to firecrawl
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 20
+    end_line: 24
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: fetch_page_markdown posts a URL to api.firecrawl.dev; the vendor is Firecrawl, not the domain name.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-service
+    target_entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-firecrawl
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: firecrawl
+        component_subtype: saas_service
+    data_categories:
+    - message_content

@@ -1,0 +1,19 @@
+repository: DataParade-io/scanner-fixtures
+commit: 94fc5164bc212173387e47aba56cc6837086d214
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/typescript/src/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - typescript
+  domains:
+    - ai
+    - crm
+    - messaging
+selection_rationale: >-
+  DataParade-authored TypeScript fixtures for raw HTTP: fetch with a literal URL, axios with a template literal on a defaulted parameter, axios.create baseURL with relative paths, a webhook URL exported by another module, and a base URL known only from build-time env (DATAP-818).
+annotation_version: 1

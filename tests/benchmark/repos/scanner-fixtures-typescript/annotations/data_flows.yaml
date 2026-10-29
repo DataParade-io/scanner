@@ -1,0 +1,180 @@
+annotations:
+- id: scanner-fixtures-typescript-mistral-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:mistral
+    name: Service to mistral
+  evidence:
+    file_path: raw-http-integrations/typescript/src/chatProxy.ts
+    start_line: 6
+    end_line: 13
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: chatProxy posts the visitor's messages and id to api.mistral.ai with fetch.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    target_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-mistral
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: mistral
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+    - user_id
+- id: scanner-fixtures-typescript-airtable-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:airtable
+    name: Service to airtable
+  evidence:
+    file_path: raw-http-integrations/typescript/src/recordsApi.ts
+    start_line: 11
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: saveSignup posts email and name to `${apiBase}/...`, where apiBase defaults to DEFAULT_API_BASE on
+    api.airtable.com (line 5).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    target_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-airtable
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: airtable
+        component_subtype: saas_service
+    data_categories:
+    - email
+    - name
+- id: scanner-fixtures-typescript-hubspot-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:hubspot
+    name: Service to hubspot
+  evidence:
+    file_path: raw-http-integrations/typescript/src/crmClient.ts
+    start_line: 10
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: upsertContact posts contact details through the crm axios instance whose baseURL is api.hubapi.com
+    (line 5).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:crm
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    target_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-hubspot
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: hubspot
+        component_subtype: crm
+    data_categories:
+    - email
+    - name
+    - phone_number
+- id: scanner-fixtures-typescript-slack-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:slack
+    name: Service to slack
+  evidence:
+    file_path: raw-http-integrations/typescript/src/notifyOps.ts
+    start_line: 5
+    end_line: 9
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: notifyOps posts the order id and customer email to ALERTS_WEBHOOK_URL, imported from settings.ts, default
+    hooks.slack.com.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:messaging
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    target_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-slack
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: slack
+        component_subtype: messaging
+    data_categories:
+    - email
+    - message_content
+- id: scanner-fixtures-typescript-unknown-orders-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:unknown
+    name: Service to unknown
+  evidence:
+    file_path: raw-http-integrations/typescript/src/ordersClient.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: ambiguous
+    labels:
+    - data_flow
+  rationale: placeOrder posts the cart and shipping address to a base URL defined only by VITE_ORDERS_API_URL; a
+    real destination whose vendor is not knowable.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: needs_adjudication
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    target_entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-unknown-orders
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: unknown
+        component_subtype: saas_service
+    data_categories:
+    - address

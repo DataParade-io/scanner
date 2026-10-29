@@ -1,0 +1,145 @@
+annotations:
+- id: scanner-fixtures-sdk-names-gmail
+  layer: components
+  subject:
+    key: third_party:gmail
+    name: gmail
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py
+    start_line: 15
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - email_provider
+  rationale: send_login_code builds a Gmail client with a lazily imported googleapiclient and sends the code to
+    the user's address.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-gmail
+    identity_key: third_party:email_provider
+    component_type: third_party
+    component_subtype: email_provider
+    vendor: gmail
+- id: scanner-fixtures-sdk-names-google-drive
+  layer: components
+  subject:
+    key: third_party:google_drive
+    name: google_drive
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py
+    start_line: 23
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: archive_transcript uploads a transcript file to Google Drive with a lazily imported googleapiclient.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-google-drive
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: google_drive
+- id: scanner-fixtures-sdk-names-perplexity
+  layer: components
+  subject:
+    key: third_party:perplexity
+    name: perplexity
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 10
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: ask_with_sources posts the question to api.perplexity.ai; the vendor is Perplexity, not the domain
+    name.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-perplexity
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: perplexity
+- id: scanner-fixtures-sdk-names-firecrawl
+  layer: components
+  subject:
+    key: third_party:firecrawl
+    name: firecrawl
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 20
+    end_line: 24
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: fetch_page_markdown posts a URL to api.firecrawl.dev; the vendor is Firecrawl, not the domain name.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-firecrawl
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: firecrawl
+- id: scanner-fixtures-sdk-names-httpx-research
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: rejected
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-httpx-research
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+- id: scanner-fixtures-sdk-names-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/sdk_and_names/research_tools.py
+    start_line: 8
+    end_line: 15
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: needs_adjudication
+  canonical:
+    entity_id: scanner-fixtures-sdk-names::scanner-fixtures-sdk-names-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
