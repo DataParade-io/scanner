@@ -47,6 +47,12 @@ services:
     url_host_patterns:
       - twilio.com
       - api.twilio.com
+  # X API v2. Listed before twitter so api.x.com resolves to x.
+  - serviceName: x
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.x.com
   - serviceName: twitter
     patternId: external_api_call
     importFragments:
@@ -204,3 +210,84 @@ services:
     url_host_patterns:
       - sentry.io
       - ingest.sentry.io
+
+  # Raw-HTTP destinations without an SDK import (DATAP-818). Python request calls
+  # resolve their URL in the same file and match these hosts.
+  - serviceName: instagram
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - graph.instagram.com
+  - serviceName: linkedin
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.linkedin.com
+      - www.linkedin.com
+  - serviceName: reddit
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - reddit.com
+  - serviceName: crisp
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.crisp.chat
+  - serviceName: telegram
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.telegram.org
+  - serviceName: google_analytics
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - google-analytics.com
+  - serviceName: make
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - hook.eu1.make.com
+      - hook.eu2.make.com
+      - hook.us1.make.com
+      - hook.us2.make.com
+  - serviceName: shopify
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - myshopify.com
+  - serviceName: cerebras
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.cerebras.ai
+  - serviceName: arize_phoenix
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - phoenix.arize.com
+
+# url_routes: hosts that serve several products. Rules run in order; the first rule whose
+# `path` (URL path, no query) and `hint` (file path, class, function and URL expression of
+# the calling code) both match names the service. A rule's subType overrides the catalog one.
+url_routes:
+  - host: graph.facebook.com
+    rules:
+      # Conversions API: POST /{pixel_id}/events.
+      - path: "/events/?$"
+        serviceName: meta_conversions_api
+      # Instagram content publishing: /{ig_user_id}/media and /media_publish.
+      - path: "/media(_publish)?/?$"
+        serviceName: instagram
+        subType: saas_service
+      # WhatsApp Cloud API calls go through the Graph host with a phone number id.
+      - hint: "whatsapp|phone_number_id|(^|[^a-z])wa_"
+        serviceName: whatsapp
+      - path: "/messages/?$"
+        hint: "instagram|(^|[^a-z])ig_"
+        serviceName: instagram
+        subType: messaging
+      - path: "/messages/?$"
+        serviceName: facebook_messenger
+      - serviceName: facebook_graph

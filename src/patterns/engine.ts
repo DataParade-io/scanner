@@ -8,6 +8,7 @@ import {
   detectPythonExternalApisFromConfig as detectPythonExternalApisFromConfigAdapter,
   detectPythonRoutesFromConfig as detectPythonRoutesFromConfigAdapter,
   detectPythonServerlessHandlersFromConfig as detectPythonServerlessHandlersFromConfigAdapter,
+  dropRedirectedOpenAiImportFindings,
 } from "./detectors/python";
 import {
   detectCppAuthFromConfig as detectCppAuthFromConfigAdapter,
@@ -335,5 +336,5 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   );
   findings.push(...detectTypeScriptExternalApisFromConfigAdapter(ctx, config));
 
-  return findings;
+  return dropRedirectedOpenAiImportFindings(ctx, config, findings);
 }

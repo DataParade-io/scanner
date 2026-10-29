@@ -3,12 +3,20 @@ import { buildScannerFinding } from "../record-factory";
 import type { CanonicalScannerFinding, EvidenceLocation, ObservedTokenCandidate } from "../types";
 import { resolveScannerAdapterMapVersion } from "./manifest";
 
+/**
+ * Gold vendor keys are snake_case (`facebook_messenger`); scanner display names and the
+ * vendor property are title case with spaces (`Facebook Messenger`).
+ */
+export function thirdPartyVendorKey(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, "_");
+}
+
 export function componentScannerIdentityKey(component: DetectedComponent): string {
   const nameKey = component.name.toLowerCase();
   const subtype = component.subType?.trim().toLowerCase();
 
   if (component.type === "third_party") {
-    return `${component.type}:${nameKey}`;
+    return `${component.type}:${thirdPartyVendorKey(nameKey)}`;
   }
 
   if (component.type === "asset" || component.type === "actor") {
@@ -56,7 +64,7 @@ function resolveOptionalVendor(component: DetectedComponent): string | undefined
   if (typeof vendor !== "string" || vendor.trim().length === 0) {
     return undefined;
   }
-  return vendor.trim().toLowerCase();
+  return thirdPartyVendorKey(vendor);
 }
 
 export function adaptDetectedComponent(

@@ -354,6 +354,14 @@ function findThirdPartyMatch(
     candidates.push(finding.name.toLowerCase());
   }
 
+  // A detector that already named the service (e.g. from a resolved URL host) wins over
+  // substring keys of earlier catalog entries matching the URL (DATAP-818).
+  if (typeof serviceName === "string" && serviceName.trim()) {
+    const exact = serviceName.trim().toLowerCase();
+    const named = config.thirdParties.find((tp) => tp.serviceName.toLowerCase() === exact);
+    if (named) return named;
+  }
+
   for (const tp of config.thirdParties) {
     for (const key of tp.matchKeys) {
       if (candidates.some((c) => c.includes(key))) return tp;
@@ -512,9 +520,13 @@ function decideComponentTypeAndSubType(
   }
 
   if (matchedThirdParty && config.resolution.preferThirdPartyOverAsset) {
+    // A route can give one service a different subtype per endpoint (DATAP-818).
+    const routed = group.findings
+      .map((f) => f.properties?.thirdPartySubType)
+      .find((v): v is string => typeof v === "string" && v.trim().length > 0);
     return {
       type: "third_party",
-      subType: matchedThirdParty.subType,
+      subType: routed?.trim() ?? matchedThirdParty.subType,
       thirdParty: matchedThirdParty,
     };
   }
@@ -722,10 +734,13 @@ export function classifyRawFindings(
     if (component.type === "third_party") {
       const svc = mergedProperties.serviceName;
       if (typeof svc === "string" && svc.trim()) {
-        const normalizedService = normalizeComponentName(
-          svc,
-          config.nameNormalization,
-        );
+        // A catalog service name is already canonical: keep suffixes such as `_api`
+        // (meta_conversions_api) that name normalization would strip.
+        const catalogName =
+          thirdParty?.serviceName.toLowerCase() === svc.trim().toLowerCase();
+        const normalizedService = catalogName
+          ? svc.trim().toLowerCase()
+          : normalizeComponentName(svc, config.nameNormalization);
         component.name = toDisplayName(normalizedService, svc);
       }
     }

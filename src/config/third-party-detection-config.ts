@@ -28,9 +28,28 @@ export interface ThirdPartyServiceConfig {
   urlHostPatterns: string[];
 }
 
+/**
+ * One rule for a host shared by several products (DATAP-818). `path` is tested against the
+ * URL path (no query); `hint` against the calling code's names (file path, class, function,
+ * URL expression). The first rule whose tests all pass names the service.
+ */
+export interface ThirdPartyUrlRouteRule {
+  path?: RegExp;
+  hint?: RegExp;
+  serviceName: string;
+  /** Overrides the catalog subtype for this route (e.g. Instagram messaging vs publishing). */
+  subType?: string;
+}
+
+export interface ThirdPartyUrlRoute {
+  host: string;
+  rules: ThirdPartyUrlRouteRule[];
+}
+
 export interface ThirdPartyDetectionConfig {
   httpClients: ThirdPartyHttpClientConfig[];
   services: ThirdPartyServiceConfig[];
+  urlRoutes: ThirdPartyUrlRoute[];
 }
 
 interface RawHttpClient {
@@ -48,9 +67,15 @@ interface RawService {
   url_host_patterns?: string[];
 }
 
+interface RawUrlRoute {
+  host: string;
+  rules?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
+}
+
 interface RawConfig {
   http_clients?: RawHttpClient[];
   services?: RawService[];
+  url_routes?: RawUrlRoute[];
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -150,7 +175,30 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
     }
   }
 
-  cached = { httpClients, services };
+  const urlRoutes: ThirdPartyUrlRoute[] = [];
+  if (Array.isArray(parsed.url_routes)) {
+    for (const route of parsed.url_routes) {
+      if (!route?.host || !Array.isArray(route.rules)) {
+        throw new Error(`third-party-detection.url_routes entries need host and rules (${configPath}).`);
+      }
+      urlRoutes.push({
+        host: route.host.toLowerCase(),
+        rules: route.rules.map((rule) => {
+          if (!rule.serviceName) {
+            throw new Error(`third-party-detection.url_routes['${route.host}'] rule is missing serviceName.`);
+          }
+          return {
+            serviceName: rule.serviceName,
+            ...(rule.path ? { path: new RegExp(rule.path, "i") } : {}),
+            ...(rule.hint ? { hint: new RegExp(rule.hint, "i") } : {}),
+            ...(rule.subType ? { subType: rule.subType } : {}),
+          };
+        }),
+      });
+    }
+  }
+
+  cached = { httpClients, services, urlRoutes };
   return cached;
 }
 

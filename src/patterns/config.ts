@@ -314,9 +314,12 @@ function validateUnifiedPatternConfig(unified: UnifiedPatternConfig): void {
   }
 
   // Ensure third-party service catalog alignment (serviceName label).
-  const patternServiceNames = unified.thirdParty.services.map((s) =>
-    s.serviceName.toLowerCase(),
-  );
+  const patternServiceNames = [
+    ...unified.thirdParty.services.map((s) => s.serviceName),
+    ...unified.thirdParty.urlRoutes.flatMap((route) =>
+      route.rules.map((rule) => rule.serviceName),
+    ),
+  ].map((name) => name.toLowerCase());
   const classifierServiceNames = unified.classifier.thirdParties.map((s) =>
     s.serviceName.toLowerCase(),
   );

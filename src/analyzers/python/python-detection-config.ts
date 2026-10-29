@@ -93,6 +93,7 @@ interface RawPythonPatternConfig {
       clientName: string;
       importModules?: string[];
       callNames?: string[];
+      clientConstructors?: string[];
       urlRegex?: string;
       confidence?: number;
     }>;
@@ -185,6 +186,11 @@ export interface PythonPatternConfig {
       clientName: string;
       importModules: string[];
       callNames: string[];
+      /**
+       * Session/client classes of a raw HTTP library (`AsyncClient`, `Session`). When set,
+       * request calls are resolved to their destination host in the same file (DATAP-818).
+       */
+      clientConstructors: string[];
       urlRegex: RegExp;
       confidence: number;
     }>;
@@ -354,6 +360,7 @@ function normalizeRawConfig(raw: RawPythonPatternConfig): PythonPatternConfig {
       clientName: client.clientName,
       importModules: client.importModules ?? [],
       callNames: client.callNames ?? [],
+      clientConstructors: client.clientConstructors ?? [],
       urlRegex: new RegExp(
         client.urlRegex ??
           "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]",

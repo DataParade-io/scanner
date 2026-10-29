@@ -313,6 +313,9 @@ external_apis:
       clientName: requests
       importModules:
         - requests
+      clientConstructors:
+        - Session
+        - session
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 
@@ -321,6 +324,9 @@ external_apis:
       clientName: httpx
       importModules:
         - httpx
+      clientConstructors:
+        - Client
+        - AsyncClient
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 
@@ -329,6 +335,8 @@ external_apis:
       clientName: aiohttp
       importModules:
         - aiohttp
+      clientConstructors:
+        - ClientSession
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 
