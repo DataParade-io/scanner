@@ -5,6 +5,15 @@ import { classifyRawFindings, dedupeComponents } from "../../../../src/classifie
 import { componentScannerIdentityKey } from "../../../../src/eval/canonical/scanner/components";
 import { runWithPythonModuleIndex } from "../../../../src/patterns/detectors/source-module-index";
 import { runWithOrganizationDomainsScope } from "../../../../src/classifier/organization-domains-scan-scope";
+import {
+  normalizeOrganizationName,
+  ownerFromRemoteUrl,
+  readGitRemoteOwner,
+} from "../../../../src/patterns/detectors/git-remote-owner";
+import { platformServiceDisplayName } from "../../../../src/config/third-party-detection-config";
+import fs from "fs";
+import os from "os";
+import path from "path";
 
 /** DATAP-818: raw-HTTP destinations in Python resolve to the host the call reaches. */
 
@@ -850,6 +859,71 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
     it("does not treat instrumentation packages as calls to the vendor", () => {
       const findings = outbound(["from openinference.instrumentation.openai import OpenAIInstrumentor", "OpenAIInstrumentor().instrument()"]);
       expect(services(findings)).toEqual([]);
+    });
+  });
+
+  describe("git remote owner and platform display names", () => {
+    const client = ["import httpx", 'httpx.get("https://api.acmewidgets.ai/v1/courses")'];
+    const detectWithOwner = (owner: string | undefined, orgDomains?: string[]) => {
+      const infos = [pythonFile(client, "app/client.py")];
+      const run = () =>
+        runWithPythonModuleIndex(infos, () => detectPythonPatterns(infos[0]).filter((f) => f.pattern === "external_api_call"), {
+          gitRemoteOwner: owner,
+        });
+      return orgDomains ? runWithOrganizationDomainsScope(orgDomains, run) : run();
+    };
+
+    it("marks a host whose domain label matches the git remote owner as first-party", () => {
+      const findings = detectWithOwner("Acme-Widgets-AI");
+      expect(findings[0].properties).toMatchObject({ firstParty: true, host: "api.acmewidgets.ai" });
+      expect(findings[0].properties.serviceName).toBeUndefined();
+    });
+
+    it("keeps the vendor name on a near miss, with no remote, or when organization domains are configured", () => {
+      expect(detectWithOwner("acme-widget")[0].properties.serviceName).toBe("acmewidgets");
+      expect(detectWithOwner(undefined)[0].properties.serviceName).toBe("acmewidgets");
+      expect(detectWithOwner("Acme-Widgets-AI", ["other.io"])[0].properties.serviceName).toBe("acmewidgets");
+    });
+
+    it("never turns a catalog vendor host first-party because of the owner name", () => {
+      const infos = [pythonFile(["import httpx", 'httpx.get("https://api.stripe.com/v1/charges")'], "app/pay.py")];
+      const findings = runWithPythonModuleIndex(infos, () => detectPythonPatterns(infos[0]).filter((f) => f.pattern === "external_api_call"), {
+        gitRemoteOwner: "stripe",
+      });
+      expect(findings[0].properties.serviceName).toBe("stripe");
+    });
+
+    it("reads the origin owner from a git config, including worktrees", () => {
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), "owner-"));
+      fs.mkdirSync(path.join(root, "repo/.git"), { recursive: true });
+      fs.writeFileSync(
+        path.join(root, "repo/.git/config"),
+        '[core]\n\tbare = false\n[remote "upstream"]\n\turl = https://github.com/someone/fork.git\n[remote "origin"]\n\turl = git@github.com:Acme-Widgets-AI/site.git\n',
+      );
+      fs.mkdirSync(path.join(root, "repo/web/src"), { recursive: true });
+      expect(readGitRemoteOwner(path.join(root, "repo/web/src"))).toBe("Acme-Widgets-AI");
+      fs.mkdirSync(path.join(root, "repo/.git/worktrees/wt"), { recursive: true });
+      fs.writeFileSync(path.join(root, "repo/.git/worktrees/wt/commondir"), "../..\n");
+      fs.mkdirSync(path.join(root, "wt"));
+      fs.writeFileSync(path.join(root, "wt/.git"), `gitdir: ${path.join(root, "repo/.git/worktrees/wt")}\n`);
+      expect(readGitRemoteOwner(path.join(root, "wt"))).toBe("Acme-Widgets-AI");
+      expect(readGitRemoteOwner(fs.mkdtempSync(path.join(os.tmpdir(), "no-git-")))).toBeUndefined();
+      expect(ownerFromRemoteUrl("https://gitlab.com/group/sub/project")).toBe("sub");
+      expect(normalizeOrganizationName("Acme-Widgets-AI")).toBe("acmewidgets");
+      expect(normalizeOrganizationName("DataParade-io")).toBe("dataparade");
+      expect(normalizeOrganizationName("io")).toBe("io");
+    });
+
+    it("names platform-hosted services after the service label and platform", () => {
+      expect(platformServiceDisplayName("mom-skipify-328574824807.us-central1.run.app")).toBe("mom-skipify (Cloud Run)");
+      expect(platformServiceDisplayName("checkout-abcd1234ef-uc.a.run.app")).toBe("checkout (Cloud Run)");
+      expect(platformServiceDisplayName("my-app-1a2b3c4d5e6f.herokuapp.com")).toBe("my-app (Heroku)");
+      expect(platformServiceDisplayName("shop-web.vercel.app")).toBe("shop-web (Vercel)");
+      expect(platformServiceDisplayName("api.acme.com")).toBeUndefined();
+      const findings = outbound(["import httpx", 'httpx.post("https://mom-skipify-328574824807.us-central1.run.app/chat")']);
+      expect(findings[0].name).toBe("mom-skipify (Cloud Run)");
+      const components = classifyRawFindings(findings);
+      expect(components.map((c) => c.name)).toEqual(["mom-skipify (Cloud Run)"]);
     });
   });
 });

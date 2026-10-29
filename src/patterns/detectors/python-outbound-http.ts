@@ -20,12 +20,15 @@ import {
   defaultServiceNameFromLiteralPublicUrl,
   hostMatchesOrganizationDomains,
   shouldIgnoreExternalHttpUrl,
+  vendorNameFromHostname,
 } from "../../classifier/external-url-third-party";
 import { getActiveOrganizationDomains } from "../../classifier/organization-domains-scan-scope";
-import { platformOfHost } from "../../config/third-party-detection-config";
+import { platformOfHost, platformServiceDisplayName } from "../../config/third-party-detection-config";
+import { normalizeOrganizationName } from "./git-remote-owner";
 import {
   pythonModuleIndexSize,
   repoDeclaredDomains,
+  repoOwnerKey,
   pythonModuleSource,
   pythonModuleIndexGeneration,
   resolvePythonModulePath,
@@ -701,6 +704,17 @@ export class DestinationRouter {
     const configured = getActiveOrganizationDomains() ?? [];
     const organizationDomains = configured.length > 0 ? configured : repoDeclaredDomains();
     if (hostMatchesOrganizationDomains(parsed.host, organizationDomains)) return { remote: { host: parsed.host, firstParty: true } };
+    // Without configured domains, a host whose domain label is the git remote owner's name
+    // (owner `Acme-Widgets-AI`, host `api.acmewidgets.ai`) is the organization's own, unless
+    // the catalog knows the host as a vendor.
+    const owner = configured.length > 0 ? undefined : repoOwnerKey();
+    if (
+      owner &&
+      normalizeOrganizationName(vendorNameFromHostname(parsed.host)) === owner &&
+      !this.hostPatterns.some((c) => hostMatches(parsed.host, c.pattern))
+    ) {
+      return { remote: { host: parsed.host, firstParty: true } };
+    }
     const platform = platformOfHost(parsed.host);
     if (platform) return { remote: { host: parsed.host, platform } };
     const concrete = `https://${parsed.host}${parsed.path.replace(/\{[^}]*\}/g, "x")}`;
@@ -992,7 +1006,7 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
       emitted.add(dedupe);
       findings.push({
         pattern: patternId,
-        name: host,
+        name: remoteServiceName(remote),
         confidence,
         location: location(site),
         properties: remoteServiceProperties(remote, d.url, extra),
@@ -1263,14 +1277,21 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
 
 /** Properties of a finding for a remote service of its own (see `Destination.remote`). */
 export function remoteServiceProperties(remote: RemoteService, url: string, extra: Record<string, unknown>): Record<string, unknown> {
+  const displayName = remote.platform ? platformServiceDisplayName(remote.host) : undefined;
   return {
     remoteService: true,
     host: remote.host,
     url,
     ...(remote.firstParty ? { firstParty: true } : {}),
     ...(remote.platform ? { platform: remote.platform } : {}),
+    ...(displayName ? { displayName } : {}),
     ...extra,
   };
+}
+
+/** Finding name for a remote service of its own: the platform display name, else the host. */
+export function remoteServiceName(remote: RemoteService): string {
+  return (remote.platform ? platformServiceDisplayName(remote.host) : undefined) ?? remote.host;
 }
 
 function joinUrl(base: string, path: string): string {

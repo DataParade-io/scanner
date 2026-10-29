@@ -19,7 +19,12 @@ import * as ts from "typescript";
 import type { RawFinding } from "../../core/types/detection";
 import type { UnifiedPatternConfig } from "../config";
 import type { RawHttpClientConfig } from "../../analyzers/typescript/typescript-detection-config";
-import { DestinationRouter, OUTBOUND_HTTP_UNKNOWN_FINDING_NAME, remoteServiceProperties } from "./python-outbound-http";
+import {
+  DestinationRouter,
+  OUTBOUND_HTTP_UNKNOWN_FINDING_NAME,
+  remoteServiceName,
+  remoteServiceProperties,
+} from "./python-outbound-http";
 import { resolveTsModulePath, sourceModule } from "./source-module-index";
 
 const REQUEST_VERBS = new Set(["get", "post", "put", "patch", "delete", "head", "options", "request"]);
@@ -459,7 +464,7 @@ export function detectTsOutboundHttp(input: {
         reported = true;
         findings.push({
           pattern: "external_api_call",
-          name: host,
+          name: remoteServiceName(routed.remote),
           confidence: 0.85,
           location,
           properties: remoteServiceProperties(routed.remote, v.text, { client: lib, httpClientLibrary: lib }),

@@ -1,3 +1,4 @@
+import { normalizeOrganizationName } from "./git-remote-owner";
 import { collectRepoDeclaredDomains } from "./repo-declared-domains";
 import type { FileInfo } from "../../core/types/file";
 
@@ -9,13 +10,19 @@ import type { FileInfo } from "../../core/types/file";
  */
 let activeIndex: ReadonlyMap<string, string> | undefined;
 let activeDeclaredDomains: readonly string[] = [];
+let activeOwnerKey: string | undefined;
 let generation = 0;
 
 function normalize(filePath: string): string {
   return filePath.replace(/\\/g, "/").replace(/^\.\/+/, "");
 }
 
-export function runWithPythonModuleIndex<T>(files: readonly FileInfo[], fn: () => T): T {
+export interface SourceScopeOptions {
+  /** Owner of the repository's git `origin` remote (see git-remote-owner.ts). */
+  gitRemoteOwner?: string;
+}
+
+export function runWithPythonModuleIndex<T>(files: readonly FileInfo[], fn: () => T, options: SourceScopeOptions = {}): T {
   const prev = activeIndex;
   const index = new Map<string, string>();
   for (const file of files) {
@@ -24,16 +31,24 @@ export function runWithPythonModuleIndex<T>(files: readonly FileInfo[], fn: () =
     }
   }
   const prevDomains = activeDeclaredDomains;
+  const prevOwner = activeOwnerKey;
   activeIndex = index;
   activeDeclaredDomains = collectRepoDeclaredDomains(files);
+  activeOwnerKey = options.gitRemoteOwner ? normalizeOrganizationName(options.gitRemoteOwner) || undefined : undefined;
   generation += 1;
   try {
     return fn();
   } finally {
     activeIndex = prev;
     activeDeclaredDomains = prevDomains;
+    activeOwnerKey = prevOwner;
     generation += 1;
   }
+}
+
+/** Normalized owner name of the repository's git remote, when known. */
+export function repoOwnerKey(): string | undefined {
+  return activeOwnerKey;
 }
 
 /** Domains the scanned repository declares as its own (see repo-declared-domains.ts). */

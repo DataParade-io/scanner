@@ -55,6 +55,8 @@ export interface RunAnalyzersOptions {
   terraformModuleManifest?: TerraformModuleCallManifest;
   terraformScanRootPath?: string;
   organizationDomains?: readonly string[];
+  /** Owner of the scanned repository's git `origin` remote, a first-party signal. */
+  gitRemoteOwner?: string;
 }
 
 export function registerAnalyzer(
@@ -128,7 +130,7 @@ export function runAnalyzers(
     }
 
     return findings;
-  }));
+  }, { gitRemoteOwner: opts?.gitRemoteOwner }));
 }
 
 export async function runAnalyzersForRootPath(

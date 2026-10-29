@@ -387,45 +387,66 @@ google_api_services:
 
 # platform_hosts: shared hosting suffixes. A host on one of these is someone's own service
 # (usually the scanned team's), never a vendor named after the platform label ("run", "web").
-# Calls to them become outbound API assets with the platform recorded as metadata.
+# Calls to them become outbound API assets with the platform recorded as metadata, named
+# "<service> (<name>)": the first host label without project numbers or deploy hashes.
 platform_hosts:
   - pattern: "\\.run\\.app$"
     platform: gcp/cloud_run
+    name: "Cloud Run"
   - pattern: "\\.cloudfunctions\\.net$"
     platform: gcp/cloud_functions
+    name: "Cloud Functions"
   - pattern: "\\.appspot\\.com$"
     platform: gcp/app_engine
+    name: "App Engine"
   - pattern: "\\.web\\.app$|\\.firebaseapp\\.com$"
     platform: gcp/firebase_hosting
+    name: "Firebase Hosting"
   - pattern: "\\.azurewebsites\\.net$"
     platform: azure/app_service
+    name: "Azure App Service"
   - pattern: "\\.azurecontainerapps\\.io$"
     platform: azure/container_apps
+    name: "Azure Container Apps"
   - pattern: "\\.azure-api\\.net$"
     platform: azure/api_management
+    name: "Azure API Management"
   - pattern: "\\.herokuapp\\.com$"
     platform: heroku
+    name: "Heroku"
   - pattern: "\\.vercel\\.app$"
     platform: vercel
+    name: "Vercel"
   - pattern: "\\.netlify\\.app$"
     platform: netlify
+    name: "Netlify"
   - pattern: "\\.fly\\.dev$"
     platform: fly
+    name: "Fly.io"
   - pattern: "\\.onrender\\.com$"
     platform: render
+    name: "Render"
   - pattern: "\\.workers\\.dev$|\\.pages\\.dev$"
     platform: cloudflare/workers
+    name: "Cloudflare Workers"
   - pattern: "\\.up\\.railway\\.app$"
     platform: railway
+    name: "Railway"
   - pattern: "\\.execute-api\\.[a-z0-9-]+\\.amazonaws\\.com$"
     platform: aws/api_gateway
+    name: "API Gateway"
   - pattern: "\\.lambda-url\\.[a-z0-9-]+\\.on\\.aws$"
     platform: aws/lambda_url
+    name: "Lambda URL"
   - pattern: "\\.elasticbeanstalk\\.com$"
     platform: aws/elastic_beanstalk
+    name: "Elastic Beanstalk"
   - pattern: "\\.awsapprunner\\.com$"
     platform: aws/app_runner
+    name: "App Runner"
   - pattern: "\\.ngrok(-free)?\\.(app|io|dev)$"
     platform: ngrok
+    name: "ngrok"
   - pattern: "\\.github\\.io$"
     platform: github_pages
+    name: "GitHub Pages"

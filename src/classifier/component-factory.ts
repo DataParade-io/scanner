@@ -756,6 +756,12 @@ export function classifyRawFindings(
         component.name,
         mergedProperties,
       );
+      // A remote service on a hosting platform carries its own display name
+      // ("mom-skipify (Cloud Run)"); keep it as written (DATAP-818).
+      const displayName = group.findings
+        .map((f) => f.properties?.displayName)
+        .find((v): v is string => typeof v === "string" && v.trim().length > 0);
+      if (displayName) component.name = displayName;
     }
 
     components.push(component);

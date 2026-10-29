@@ -62,7 +62,7 @@ export interface ThirdPartyDetectionConfig {
   /** `googleapiclient.discovery.build("<api>", ...)` API name -> service (DATAP-818). */
   googleApiServices: Map<string, string>;
   /** Shared hosting suffixes (`*.run.app`): own services, never vendors (DATAP-818). */
-  platformHosts: Array<{ pattern: RegExp; platform: string }>;
+  platformHosts: Array<{ pattern: RegExp; platform: string; name: string }>;
 }
 
 interface RawHttpClient {
@@ -92,7 +92,7 @@ interface RawConfig {
   url_path_routes?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
   llm_model_prefixes?: Record<string, string>;
   google_api_services?: Record<string, string>;
-  platform_hosts?: Array<{ pattern: string; platform: string }>;
+  platform_hosts?: Array<{ pattern: string; platform: string; name?: string }>;
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -238,6 +238,7 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
   const platformHosts = (parsed.platform_hosts ?? []).map((entry) => ({
     pattern: compileRegex(entry.pattern),
     platform: String(entry.platform),
+    name: String(entry.name ?? entry.platform),
   }));
 
   cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes, googleApiServices, platformHosts };
@@ -248,4 +249,21 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
 export function platformOfHost(host: string): string | undefined {
   const h = host.toLowerCase();
   return loadThirdPartyDetectionConfig().platformHosts.find((entry) => entry.pattern.test(h))?.platform;
+}
+
+/**
+ * Display name for a service on a shared hosting platform: the first host label without
+ * project numbers, deploy hashes or region codes, plus the platform
+ * (`mom-skipify-328574824807.us-central1.run.app` -> "mom-skipify (Cloud Run)").
+ */
+export function platformServiceDisplayName(host: string): string | undefined {
+  const h = host.toLowerCase();
+  const entry = loadThirdPartyDetectionConfig().platformHosts.find((e) => e.pattern.test(h));
+  if (!entry) return undefined;
+  let label = h.split(".")[0] ?? h;
+  label = label
+    .replace(/-[a-z0-9]{8,12}-[a-z]{2}$/, "") // Cloud Run `service-<hash>-<region code>`
+    .replace(/-\d{6,}$/, "") // project number
+    .replace(/-[a-f0-9]{8,}$/, ""); // deploy hash
+  return `${label || h} (${entry.name})`;
 }
