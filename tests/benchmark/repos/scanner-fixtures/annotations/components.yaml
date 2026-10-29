@@ -469,3 +469,27 @@ annotations:
     identity_key: asset:service
     component_type: asset
     component_subtype: service
+- id: scanner-fixtures-outbound-helper
+  layer: components
+  subject:
+    key: asset:api
+    name: api
+  evidence:
+    file_path: raw-http-integrations/python/http_helpers.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - api
+  rationale: post_json makes a real outbound client.post(url, ...) call; its callers pass a URL known only from
+    configuration, so the host is unknown.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-outbound-helper
+    identity_key: asset:api
+    component_type: asset
+    component_subtype: api
