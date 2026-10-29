@@ -1,0 +1,21 @@
+repository: DataParade-io/scanner-fixtures
+commit: 442a3093d2d8635d7d26d08cbde8d92eceb64cd9
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/python/kwargs_builders/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - ai
+    - commerce
+selection_rationale: >-
+  DataParade-authored fixtures where the destination reaches the call through a kwargs dict:
+  LiteLLM model and api_base assembled in a helper and unpacked, Google ADK LiteLlm with a
+  validated config default, and an MCP URL passed through a helper into StreamableHTTPServerParams(**params)
+  (DATAP-818).
+annotation_version: 1

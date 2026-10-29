@@ -1,0 +1,106 @@
+annotations:
+- id: scanner-fixtures-kwargs-openrouter-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:openrouter
+    name: Service to openrouter
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/llm_kwargs.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: complete unpacks gateway_kwargs into litellm.acompletion; model is openrouter/... and api_base is openrouter.ai
+    (config.py lines 10-13).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-service
+    target_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-openrouter
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: openrouter
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+- id: scanner-fixtures-kwargs-cerebras-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:cerebras
+    name: Service to cerebras
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/llm_kwargs.py
+    start_line: 20
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: agent_model builds a Google ADK LiteLlm with Config.PRIMARY_MODEL, default cerebras/... (config.py
+    line 9), which LiteLLM routes to Cerebras.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:ai_provider
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-service
+    target_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-cerebras
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: cerebras
+        component_subtype: ai_provider
+    data_categories:
+    - message_content
+- id: scanner-fixtures-kwargs-shopify-flow
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:shopify
+    name: Service to shopify
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/store_tools.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: ShopifyCatalogTools passes https://{shop}/api/mcp (line 14) through _connection into StreamableHTTPServerParams(**params)
+    for an ADK McpToolset.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-service
+    target_entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-shopify
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: shopify
+        component_subtype: saas_service
+    data_categories:
+    - email

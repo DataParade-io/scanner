@@ -1,0 +1,100 @@
+annotations:
+- id: scanner-fixtures-kwargs-openrouter
+  layer: components
+  subject:
+    key: third_party:openrouter
+    name: openrouter
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/llm_kwargs.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: complete unpacks gateway_kwargs into litellm.acompletion; model is openrouter/... and api_base is openrouter.ai
+    (config.py lines 10-13).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-openrouter
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: openrouter
+- id: scanner-fixtures-kwargs-cerebras
+  layer: components
+  subject:
+    key: third_party:cerebras
+    name: cerebras
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/llm_kwargs.py
+    start_line: 20
+    end_line: 20
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: agent_model builds a Google ADK LiteLlm with Config.PRIMARY_MODEL, default cerebras/... (config.py
+    line 9), which LiteLLM routes to Cerebras.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-cerebras
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: cerebras
+- id: scanner-fixtures-kwargs-shopify
+  layer: components
+  subject:
+    key: third_party:shopify
+    name: shopify
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/store_tools.py
+    start_line: 15
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: ShopifyCatalogTools passes https://{shop}/api/mcp (line 14) through _connection into StreamableHTTPServerParams(**params)
+    for an ADK McpToolset.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-shopify
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: shopify
+- id: scanner-fixtures-kwargs-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_builders/llm_kwargs.py
+    start_line: 13
+    end_line: 16
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-kwargs::scanner-fixtures-kwargs-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
