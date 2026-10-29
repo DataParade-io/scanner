@@ -1,0 +1,598 @@
+annotations:
+- id: jarviscore-atoms-service
+  layer: components
+  subject:
+    key: asset:service
+    name: integration atoms
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_conversation.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: The atoms are async tool functions that an agent runtime calls through an injected nexus_call global; no HTTP
+    handler or service entry point is in scope, so asset:service is the closest calling component but reviewers may reject
+    it as a library of functions.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-atoms-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
+- id: jarviscore-crisp-create-conversation
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_conversation.py
+    start_line: 21
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_create_conversation builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a POST through _crisp_post (nexus_call on line 49).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-create-conversation
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-create-message
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_message.py
+    start_line: 24
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_create_message builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a POST through _crisp_post (nexus_call on line 52).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-create-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-get-conversation
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_get_conversation.py
+    start_line: 13
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_get_conversation builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a GET through _crisp_get (nexus_call on line 40).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-get-conversation
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-get-message
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_get_message.py
+    start_line: 16
+    end_line: 17
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_get_message builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1 on
+    line 2, and sends a GET through _crisp_get (nexus_call on line 43).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-get-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-list-conversations
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_list_conversations.py
+    start_line: 67
+    end_line: 68
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_list_conversations builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a GET through _crisp_get (nexus_call on line 33).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-list-conversations
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-list-messages
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_list_messages.py
+    start_line: 76
+    end_line: 77
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_list_messages builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a GET through _crisp_get (nexus_call on line 36).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-list-messages
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-search-records
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_search_records.py
+    start_line: 69
+    end_line: 70
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_search_records builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a GET through _crisp_get (nexus_call on line 35).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-search-records
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-update-conversation
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_update_conversation.py
+    start_line: 21
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_update_conversation builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a PATCH through _crisp_patch (nexus_call on line 49).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-update-conversation
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-crisp-update-message
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_update_message.py
+    start_line: 24
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_update_message builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a PATCH through _crisp_patch (nexus_call on line 52).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-update-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-whatsapp-create-message
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_create_message.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: whatsapp_business_create_message calls nexus_call with a POST to {root}/{pid}/messages to send a text message,
+    where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-whatsapp-create-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: jarviscore-whatsapp-get-message
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_get_message.py
+    start_line: 13
+    end_line: 13
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: whatsapp_business_get_message calls nexus_call with a GET to {root}/{message_id} to read one message, where root
+    comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-whatsapp-get-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: jarviscore-whatsapp-list-messages
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_list_messages.py
+    start_line: 14
+    end_line: 14
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: whatsapp_business_list_messages calls nexus_call with a GET to {root}/{waba}/message_templates to list message
+    templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-whatsapp-list-messages
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: jarviscore-whatsapp-search-records
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_search_records.py
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: whatsapp_business_search_records calls nexus_call with a GET to {root}/{waba}/message_templates to search message
+    templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-whatsapp-search-records
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: jarviscore-stripe-get-balance
+  layer: components
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_get_balance.py
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - payment_processor
+  rationale: stripe_get_balance sends a GET with the literal URL https://api.stripe.com/v1/balance through nexus_call.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-stripe-get-balance
+    identity_key: third_party:payment_processor
+    component_type: third_party
+    component_subtype: payment_processor
+    vendor: stripe
+- id: jarviscore-stripe-get-customer
+  layer: components
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_get_customer.py
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - payment_processor
+  rationale: stripe_get_customer sends a GET with the literal URL https://api.stripe.com/v1/customers/{customer_id} through
+    nexus_call.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-stripe-get-customer
+    identity_key: third_party:payment_processor
+    component_type: third_party
+    component_subtype: payment_processor
+    vendor: stripe
+- id: jarviscore-stripe-list-charges
+  layer: components
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_list_charges.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: positive
+    labels:
+    - payment_processor
+  rationale: stripe_list_charges sends a GET with the literal URL https://api.stripe.com/v1/charges through nexus_call.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-stripe-list-charges
+    identity_key: third_party:payment_processor
+    component_type: third_party
+    component_subtype: payment_processor
+    vendor: stripe
+- id: jarviscore-stripe-list-invoices
+  layer: components
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_list_invoices.py
+    start_line: 9
+    end_line: 9
+  expected:
+    status: positive
+    labels:
+    - payment_processor
+  rationale: stripe_list_invoices sends a GET with the literal URL https://api.stripe.com/v1/invoices through nexus_call.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-stripe-list-invoices
+    identity_key: third_party:payment_processor
+    component_type: third_party
+    component_subtype: payment_processor
+    vendor: stripe
+- id: jarviscore-linkedin-create-post
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_create_post.py
+    start_line: 21
+    end_line: 21
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_create_post calls the inner _post helper on line 44 for /ugcPosts, and _post sends nexus_call to f"{_base}{p}"
+    with _base https://api.linkedin.com/v2 set on line 11.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-create-post
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: jarviscore-linkedin-get-network-size
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_network_size.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_get_network_size calls the inner _get helper on line 35 for /networkSizes/urn:li:person:{person_id},
+    and _get sends nexus_call to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-get-network-size
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: jarviscore-linkedin-get-organization
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_organization.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_get_organization calls the inner _get helper on line 35 for /organizations/{organization_id}, and _get
+    sends nexus_call to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-get-organization
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: jarviscore-linkedin-get-profile
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_profile.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_get_profile calls the inner _get helper on line 35 for /me, and _get sends nexus_call to f"{_base}{p}"
+    with _base https://api.linkedin.com/v2 set on line 3.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-get-profile
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: jarviscore-linkedin-list-organization-posts
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_organization_posts.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_list_organization_posts calls the inner _get helper on line 36 for /ugcPosts, and _get sends nexus_call
+    to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-list-organization-posts
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: jarviscore-linkedin-list-posts
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_posts.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_list_posts calls the inner _get helper on line 35 for /ugcPosts, and _get sends nexus_call to f"{_base}{p}"
+    with _base https://api.linkedin.com/v2 set on line 3.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-list-posts
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin

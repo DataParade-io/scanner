@@ -1,0 +1,22 @@
+repository: DataParade-io/scanner-fixtures
+commit: e89694293940e8aaf2795b8cc3f4607194ea1d76
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/python/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - marketing
+    - messaging
+    - ai
+selection_rationale: >-
+  DataParade-authored fixtures for raw-HTTP patterns that open applications rarely show in one
+  place: credentials in the query string, webhook platforms, remote MCP over HTTP, retry transports,
+  OpenAI clients with a different base_url, trace exporters, a base URL on the class, and a URL known
+  only from configuration (DATAP-818).
+annotation_version: 1

@@ -1,0 +1,175 @@
+annotations:
+- id: omni-ai-automation-whatsapp-cloud-api
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: WhatsApp Cloud API
+  evidence:
+    file_path: backend/app/integrations/whatsapp/adapter.py
+    start_line: 235
+    end_line: 239
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: WhatsAppAdapter.send_message posts the text message with httpx to f"{self.base_url}/{self.phone_number_id}/messages"
+    (url built on line 233), where base_url (lines 72-74) is https://graph.facebook.com/{api_version}.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-whatsapp-cloud-api
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: omni-ai-automation-facebook-messenger
+  layer: components
+  subject:
+    key: third_party:facebook_messenger
+    name: Facebook Messenger Platform
+  evidence:
+    file_path: backend/app/integrations/facebook/adapter.py
+    start_line: 109
+    end_line: 115
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: FacebookAdapter.send_message posts a Messenger reply with httpx to f"{self.base_url}/{self.page_id}/messages"
+    with the page access token in the query string; base_url (lines 42-44) is https://graph.facebook.com/{api_version}.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-facebook-messenger
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: facebook_messenger
+- id: omni-ai-automation-facebook-page-publishing
+  layer: components
+  subject:
+    key: third_party:facebook_graph
+    name: Facebook Graph API page publishing
+  evidence:
+    file_path: backend/app/integrations/facebook/adapter.py
+    start_line: 133
+    end_line: 133
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: FacebookAdapter.publish_post posts page content with httpx to f"{self.base_url}/{self.page_id}/{endpoint}"
+    (feed or photos) on graph.facebook.com from base_url (lines 42-44).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-facebook-page-publishing
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: facebook_graph
+- id: omni-ai-automation-instagram-messaging
+  layer: components
+  subject:
+    key: third_party:instagram
+    name: Instagram Messaging
+  evidence:
+    file_path: backend/app/integrations/instagram/adapter.py
+    start_line: 147
+    end_line: 150
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: InstagramAdapter.send_message posts a DM with httpx to f"{self.base_url}/{self.ig_user_id}/messages"
+    (url built on line 144); base_url (lines 47-49) is https://graph.facebook.com/{api_version}.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-instagram-messaging
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: instagram
+- id: omni-ai-automation-instagram-content-publishing
+  layer: components
+  subject:
+    key: third_party:instagram
+    name: Instagram Content Publishing
+  evidence:
+    file_path: backend/app/integrations/instagram/adapter.py
+    start_line: 174
+    end_line: 178
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: InstagramAdapter.publish_post creates a media container with httpx at f"{self.base_url}/{self.ig_user_id}/media"
+    and then publishes it at /media_publish (lines 184-187), both on graph.facebook.com from base_url
+    (lines 47-49).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-instagram-content-publishing
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: instagram
+- id: omni-ai-automation-x-api
+  layer: components
+  subject:
+    key: third_party:x
+    name: X API v2
+  evidence:
+    file_path: backend/app/integrations/x/adapter.py
+    start_line: 214
+    end_line: 219
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: XAdapter._post_tweet posts a tweet with httpx to f"{API}/2/tweets" (line 210), where API
+    is the module constant https://api.x.com on line 37.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-x-api
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: x
+- id: omni-ai-automation-httpx-library
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: backend/app/integrations/whatsapp/adapter.py
+    start_line: 20
+    end_line: 20
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-httpx-library
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx

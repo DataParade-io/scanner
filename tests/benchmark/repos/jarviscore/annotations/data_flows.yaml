@@ -1,0 +1,145 @@
+annotations:
+- id: jarviscore-flow-atoms-to-crisp
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:crisp
+    name: integration atoms to crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_message.py
+    start_line: 24
+    end_line: 25
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: crisp_create_message posts the caller payload as a new message to the Crisp conversation/{session_id}/message
+    endpoint; source is asset:service because no HTTP handler is in scope.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:messaging
+    disposition_candidate: graph_edge
+    source_entity_id: jarviscore::jarviscore-atoms-service
+    target_entity_id: jarviscore::jarviscore-crisp-create-message
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: crisp
+        component_subtype: messaging
+    data_categories:
+    - message_content
+- id: jarviscore-flow-atoms-to-whatsapp
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:whatsapp
+    name: integration atoms to whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_create_message.py
+    start_line: 25
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: whatsapp_business_create_message posts a body with the recipient number in to and the message text to the Graph
+    API messages endpoint; source is asset:service because no HTTP handler is in scope.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:messaging
+    disposition_candidate: graph_edge
+    source_entity_id: jarviscore::jarviscore-atoms-service
+    target_entity_id: jarviscore::jarviscore-whatsapp-create-message
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: whatsapp
+        component_subtype: messaging
+    data_categories:
+    - phone_number
+    - message_content
+- id: jarviscore-flow-atoms-to-stripe
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:stripe
+    name: integration atoms to stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_get_customer.py
+    start_line: 4
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: stripe_get_customer sends the customer_id to the Stripe customers endpoint and reads back email and name; source
+    is asset:service because no HTTP handler is in scope.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:payment_processor
+    disposition_candidate: graph_edge
+    source_entity_id: jarviscore::jarviscore-atoms-service
+    target_entity_id: jarviscore::jarviscore-stripe-get-customer
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: stripe
+        component_subtype: payment_processor
+    data_categories:
+    - user_id
+    - email
+    - name
+- id: jarviscore-flow-atoms-to-linkedin
+  layer: data_flows
+  subject:
+    key: flow:asset:service->third_party:linkedin
+    name: integration atoms to linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_create_post.py
+    start_line: 43
+    end_line: 44
+  expected:
+    status: positive
+    labels:
+    - data_flow
+  rationale: linkedin_create_post posts a ugcPosts payload with the author_urn and the post text through the _post helper
+    on line 21; source is asset:service because no HTTP handler is in scope.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  flow_canonical:
+    identity_key: flow:asset:service->third_party:saas_service
+    disposition_candidate: graph_edge
+    source_entity_id: jarviscore::jarviscore-atoms-service
+    target_entity_id: jarviscore::jarviscore-linkedin-create-post
+    endpoints:
+      source:
+        component_type: asset
+        endpoint_key: service
+        component_subtype: service
+      target:
+        component_type: third_party
+        endpoint_key: linkedin
+        component_subtype: saas_service
+    data_categories:
+    - user_id
+    - message_content
