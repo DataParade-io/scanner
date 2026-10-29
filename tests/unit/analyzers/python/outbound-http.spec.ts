@@ -536,4 +536,99 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
       expect(findings.map((f) => f.location.startLine).sort((a, b) => a - b)).toEqual([2, 7]);
     });
   });
+
+  describe("kwargs builders", () => {
+    const config = [
+      "import os",
+      "from typing import cast",
+      "from pydantic import TypeAdapter",
+      "",
+      "class Config:",
+      '    PRIMARY_MODEL = TypeAdapter(str).validate_python(os.getenv("PRIMARY_MODEL", "cerebras/qwen-3-32b"))',
+      "    GATEWAY_BASE_URL = TypeAdapter(str).validate_python(",
+      '        os.getenv("GATEWAY_BASE_URL", "https://openrouter.ai/api/v1")',
+      "    )",
+      '    GATEWAY_MODEL = cast(str, os.getenv("GATEWAY_MODEL", "groq/llama-3.1-8b-instant"))',
+      '    FALLBACK_MODEL = str(os.getenv("FALLBACK_MODEL", "together_ai/meta-llama/Llama-3.3-70B"))',
+    ];
+
+    it("reads model and api_base from a merged kwargs dict; the api_base host wins", () => {
+      const findings = outboundInRepo(
+        {
+          "app/config.py": config,
+          "app/llm.py": [
+            "import litellm",
+            "from .config import Config",
+            "",
+            "def gateway_kwargs() -> dict:",
+            '    return {"model": Config.GATEWAY_MODEL, "api_base": Config.GATEWAY_BASE_URL}',
+            "",
+            "async def complete(messages, **overrides):",
+            "    kwargs = {**gateway_kwargs(), **overrides}",
+            "    return await litellm.acompletion(messages=messages, **kwargs)",
+            "",
+            "async def fallback(messages):",
+            '    params = {"model": Config.FALLBACK_MODEL}',
+            "    return await litellm.acompletion(messages=messages, **params)",
+          ],
+        },
+        "app/llm.py",
+      );
+      // groq/ prefix, but the request goes to the openrouter.ai api_base.
+      expect(findings.filter((f) => f.location.startLine === 9).map((f) => f.properties.serviceName)).toEqual(["openrouter"]);
+      expect(findings.filter((f) => f.location.startLine === 13).map((f) => f.properties.serviceName)).toEqual(["together_ai"]);
+    });
+
+    it("routes Google ADK LiteLlm(model=...) by prefix through a validator-wrapped default", () => {
+      const findings = outboundInRepo(
+        {
+          "app/config.py": config,
+          "app/agent.py": [
+            "from google.adk.models.lite_llm import LiteLlm",
+            "from .config import Config",
+            "",
+            "def agent_model() -> LiteLlm:",
+            "    return LiteLlm(model=Config.PRIMARY_MODEL)",
+          ],
+        },
+        "app/agent.py",
+      );
+      expect(services(findings)).toEqual(["cerebras"]);
+      expect(findings[0].location.startLine).toBe(5);
+    });
+
+    it("keeps os.getenv defaults through cast(...) and str(...)", () => {
+      const findings = outbound([
+        "import os",
+        "from typing import cast",
+        "import httpx",
+        'A = cast(str, os.getenv("A_URL", "https://api.telegram.org"))',
+        'B = str(os.environ.get("B_URL", "https://api.crisp.chat/v1"))',
+        "httpx.get(A)",
+        "httpx.get(B)",
+      ]);
+      expect(services(findings)).toEqual(["crisp", "telegram"]);
+    });
+
+    it("attributes MCP params built in a helper's **params dict to the helper's caller", () => {
+      const findings = outbound(
+        [
+          "from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams",
+          "from google.adk.tools.mcp_tool.mcp_toolset import McpToolset",
+          "",
+          "def _connection(url: str, timeout: float) -> StreamableHTTPServerParams:",
+          '    params = {"url": url, "timeout": timeout}',
+          "    return StreamableHTTPServerParams(**params)",
+          "",
+          "class ShopifyCatalogTools:",
+          "    def __init__(self, shop: str, url_override: str | None = None) -> None:",
+          '        endpoint = url_override or f"https://{shop}/api/mcp"',
+          "        self.toolset = McpToolset(connection_params=_connection(url=endpoint, timeout=20))",
+        ],
+        "tools/store_tools.py",
+      );
+      expect(services(findings)).toEqual(["shopify"]);
+      expect(findings.map((f) => f.location.startLine).sort((a, b) => a - b)).toEqual([6, 11]);
+    });
+  });
 });

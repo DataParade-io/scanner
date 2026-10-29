@@ -20,13 +20,28 @@ export type PyExpr =
   | (PyNodeBase & { kind: "str"; parts: PyStrPart[] })
   | (PyNodeBase & { kind: "name"; id: string })
   | (PyNodeBase & { kind: "attr"; object: PyExpr; attr: string })
-  | (PyNodeBase & { kind: "call"; func: PyExpr; args: PyExpr[]; kwargs: PyKeyword[] })
+  | (PyNodeBase & {
+      kind: "call";
+      func: PyExpr;
+      args: PyExpr[];
+      kwargs: PyKeyword[];
+      /** `**mapping` arguments, in order. */
+      starKwargs: PyExpr[];
+    })
   | (PyNodeBase & { kind: "binop"; op: string; left: PyExpr; right: PyExpr })
   | (PyNodeBase & { kind: "boolop"; op: "or" | "and"; values: PyExpr[] })
   | (PyNodeBase & { kind: "ifexp"; body: PyExpr; orelse: PyExpr })
   | (PyNodeBase & { kind: "tuple"; elts: PyExpr[] })
-  /** List, set or dict literal; `elts` are the values (dict keys are dropped). */
-  | (PyNodeBase & { kind: "coll"; elts: PyExpr[] })
+  /**
+   * List, set or dict literal; `elts` are the values. For a dict, `entries` keeps string-literal
+   * keys and `spreads` the `**other` parts.
+   */
+  | (PyNodeBase & {
+      kind: "coll";
+      elts: PyExpr[];
+      entries?: Array<{ key?: string; value: PyExpr }>;
+      spreads?: PyExpr[];
+    })
   | (PyNodeBase & { kind: "subscript"; value: PyExpr })
   | (PyNodeBase & { kind: "const"; value: string })
   | (PyNodeBase & { kind: "other" });
@@ -502,16 +517,21 @@ export class PyExprParser {
     const open = this.next();
     const close = OPEN[open.text];
     const elts: PyExpr[] = [];
+    const entries: Array<{ key?: string; value: PyExpr }> = [];
+    const spreads: PyExpr[] = [];
     while (!this.isOp(close)) {
       if (this.isOp("**")) {
         this.next();
-        this.parseExpr();
+        spreads.push(this.parseExpr());
       } else {
         const first = this.parseExpr();
         if (first.kind === "other" && this.isName("for", 0)) throw new ParseError("comprehension");
         if (this.isOp(":")) {
           this.next();
-          elts.push(this.parseExpr());
+          const value = this.parseExpr();
+          const key = first.kind === "str" && first.parts.length === 1 && typeof first.parts[0] === "string" ? first.parts[0] : undefined;
+          entries.push({ ...(key !== undefined ? { key } : {}), value });
+          elts.push(value);
         } else {
           elts.push(first);
         }
@@ -524,13 +544,15 @@ export class PyExprParser {
       if (!this.isOp(close)) throw new ParseError("collection");
     }
     const end = this.next().end;
-    return { kind: "coll", elts, start: open.start, end };
+    const isDict = open.text === "{" && (entries.length > 0 || spreads.length > 0);
+    return { kind: "coll", elts, ...(isDict ? { entries, spreads } : {}), start: open.start, end };
   }
 
   private parseCallArgs(func: PyExpr): PyExpr {
     this.expectOp("(");
     const args: PyExpr[] = [];
     const kwargs: PyKeyword[] = [];
+    const starKwargs: PyExpr[] = [];
     while (!this.isOp(")")) {
       if (this.peek()?.kind === "name" && this.isOp("=", 1)) {
         const name = this.next().text;
@@ -538,7 +560,7 @@ export class PyExprParser {
         kwargs.push({ name, value: this.parseExpr() });
       } else if (this.isOp("**")) {
         this.next();
-        this.parseExpr();
+        starKwargs.push(this.parseExpr());
       } else {
         args.push(this.parseExpr());
       }
@@ -549,7 +571,7 @@ export class PyExprParser {
       if (!this.isOp(")")) throw new ParseError("call args");
     }
     const close = this.expectOp(")");
-    return { kind: "call", func, args, kwargs, start: func.start, end: close.end };
+    return { kind: "call", func, args, kwargs, starKwargs, start: func.start, end: close.end };
   }
 
   private parseAtom(): PyExpr {
@@ -609,6 +631,7 @@ function collectCalls(node: PyExpr, out: Array<Extract<PyExpr, { kind: "call" }>
       collectCalls(node.func, out);
       for (const a of node.args) collectCalls(a, out);
       for (const k of node.kwargs) collectCalls(k.value, out);
+      for (const k of node.starKwargs) collectCalls(k, out);
       return;
     case "attr":
       collectCalls(node.object, out);

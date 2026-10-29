@@ -48,6 +48,7 @@ const REQUEST_VERBS = new Set(["get", "post", "put", "patch", "delete", "head", 
 const METHOD_FIRST_VERBS = new Set(["request", "stream"]);
 const STRING_METHODS = new Set(["rstrip", "strip", "lstrip", "lower", "format", "removesuffix", "removeprefix", "encode"]);
 const OPENAI_CLIENTS = new Set(["OpenAI", "AsyncOpenAI"]);
+const VALIDATOR_METHODS = new Set(["validate_python", "validate_strings", "validate_json", "parse_obj_as"]);
 const LITELLM_CALLS = new Set(["completion", "acompletion", "text_completion", "atext_completion", "embedding", "aembedding", "responses", "aresponses"]);
 const MCP_URL_CALLS = new Set(["streamablehttp_client", "streamable_http_client", "sse_client"]);
 const MCP_URL_PARAMS = new Set(["StreamableHTTPServerParams", "SseServerParams", "StreamableHTTPConnectionParams", "SseConnectionParams"]);
@@ -218,6 +219,11 @@ class Resolver {
       return fallback ? this.eval(fallback, ctx).filter((v) => v.text.length > 0) : [];
     }
     if (callee === "str" && expr.args[0]) return this.eval(expr.args[0], ctx);
+    // Validator wrappers keep the value: cast(str, x), TypeAdapter(str).validate_python(x).
+    if (callee && /(^|\.)cast$/.test(callee) && expr.args.length === 2) return this.eval(expr.args[1], ctx);
+    if (expr.func.kind === "attr" && VALIDATOR_METHODS.has(expr.func.attr) && expr.args.length === 1) {
+      return this.eval(expr.args[0], ctx);
+    }
     if (callee && /(^|\.)urljoin$/.test(callee) && expr.args.length >= 2) {
       const base = this.eval(expr.args[0], ctx);
       const rel = this.eval(expr.args[1], ctx);
@@ -231,6 +237,20 @@ class Resolver {
       return receiver;
     }
     // Same-file function or method: evaluate its return values with the arguments bound.
+    const target = this.callTarget(expr, ctx);
+    if (!target) return [];
+    const { fn, bindings, hint } = target;
+    const lineOf = this.moduleOf(fn).model.lineOf;
+    return fn.returns
+      .flatMap((ret) => this.eval(ret, { scope: fn, line: lineOf(ret.start), bindings, hops: 0, depth: ctx.depth }))
+      .map((v) => (hint ? { ...v, hint: `${v.hint} ${hint}` } : v));
+  }
+
+  /** The same-repo function a call runs, with its arguments bound. */
+  private callTarget(
+    expr: Extract<PyExpr, { kind: "call" }>,
+    ctx: EvalCtx,
+  ): { fn: PyScope; bindings: Map<string, { expr: PyExpr; ctx: EvalCtx }>; hint: string } | undefined {
     const func = expr.func;
     let target: PyScope | undefined;
     let hint = "";
@@ -247,13 +267,63 @@ class Resolver {
         target = sym.root.children.find((c) => c.kind === "function" && c.name === func.attr);
       }
     }
-    if (!target) return [];
-    const fn = target;
-    const bindings = this.bindArguments(fn, expr, ctx);
-    const lineOf = this.moduleOf(fn).model.lineOf;
-    return fn.returns
-      .flatMap((ret) => this.eval(ret, { scope: fn, line: lineOf(ret.start), bindings, hops: 0, depth: ctx.depth }))
-      .map((v) => (hint ? { ...v, hint: `${v.hint} ${hint}` } : v));
+    if (!target) return undefined;
+    return { fn: target, bindings: this.bindArguments(target, expr, ctx), hint };
+  }
+
+  /**
+   * Expressions a keyword reaches a call with: `name=...`, or the `name` entry of a `**mapping`
+   * built from dict literals, `{**a, **b}` merges, assigned names and helper returns.
+   */
+  kwargExprs(call: Extract<PyExpr, { kind: "call" }>, name: string, ctx: EvalCtx): Array<{ expr: PyExpr; ctx: EvalCtx }> {
+    const explicit = call.kwargs.find((k) => k.name === name);
+    if (explicit) return [{ expr: explicit.value, ctx }];
+    return call.starKwargs.flatMap((mapping) => this.dictEntryExprs(mapping, name, ctx, 0));
+  }
+
+  private dictEntryExprs(expr: PyExpr, key: string, ctx: EvalCtx, depth: number): Array<{ expr: PyExpr; ctx: EvalCtx }> {
+    if (depth > MAX_SYMBOL_DEPTH) return [];
+    const next = depth + 1;
+    if (expr.kind === "coll" && expr.entries) {
+      // Later entries override earlier ones; any of them may be the value at runtime.
+      return [
+        ...expr.entries.filter((e) => e.key === key).map((e) => ({ expr: e.value, ctx })),
+        ...(expr.spreads ?? []).flatMap((spread) => this.dictEntryExprs(spread, key, ctx, next)),
+      ];
+    }
+    if (expr.kind === "name") {
+      const bound = ctx.bindings?.get(expr.id);
+      if (bound) return this.dictEntryExprs(bound.expr, key, bound.ctx, next);
+      let scope: PyScope | undefined = ctx.scope;
+      let first = true;
+      while (scope) {
+        const assigned = scope.kind === "class" && !first ? [] : scope.assignments.filter((a) => a.target === expr.id);
+        if (assigned.length > 0) {
+          const before = first ? assigned.filter((a) => a.line <= ctx.line) : assigned;
+          const chosen = (before.length > 0 ? before : assigned).slice(-1)[0];
+          return this.dictEntryExprs(chosen.value, key, { scope: chosen.scope, line: chosen.line, hops: 0, depth: ctx.depth, bindings: first ? ctx.bindings : undefined }, next);
+        }
+        if (scope.kind === "function" && scope.params.some((p) => p.name === expr.id)) return [];
+        scope = scope.parent;
+        first = false;
+      }
+      return [];
+    }
+    if (expr.kind === "call") {
+      if (dottedName(expr.func) === "dict") {
+        return [
+          ...expr.kwargs.filter((k) => k.name === key).map((k) => ({ expr: k.value, ctx })),
+          ...[...expr.args, ...expr.starKwargs].flatMap((a) => this.dictEntryExprs(a, key, ctx, next)),
+        ];
+      }
+      const target = this.callTarget(expr, ctx);
+      if (!target) return [];
+      const lineOf = this.moduleOf(target.fn).model.lineOf;
+      return target.fn.returns.flatMap((ret) =>
+        this.dictEntryExprs(ret, key, { scope: target.fn, line: lineOf(ret.start), bindings: target.bindings, hops: 0, depth: ctx.depth }, next),
+      );
+    }
+    return [];
   }
 
   private bindArguments(fn: PyScope, call: Extract<PyExpr, { kind: "call" }>, ctx: EvalCtx): Map<string, { expr: PyExpr; ctx: EvalCtx }> {
@@ -419,7 +489,11 @@ class Resolver {
       if (!arg) continue;
       const site = { startLine: call.startLine, endLine: call.endLine };
       const values = this.eval(arg, { scope: call.scope, line: call.startLine, hops: ctx.hops - 1, depth: ctx.depth });
-      for (const v of values) out.push({ ...v, sites: [...v.sites, site] });
+      // The caller's class and function names count as routing hints (ShopifyCatalogTools).
+      const callerNames: string[] = [];
+      for (let s: PyScope | undefined = call.scope; s?.parent; s = s.parent) callerNames.push(s.name);
+      const hint = callerNames.join(" ").toLowerCase();
+      for (const v of values) out.push({ ...v, sites: [...v.sites, site], hint: `${v.hint} ${hint}`.trim() });
     }
     return out;
   }
@@ -784,8 +858,16 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
   const ctxFor = (call: PyCall, hops: number): EvalCtx => ({ scope: call.scope, line: call.startLine, hops, depth: 0 });
 
   /** Resolve a URL argument: literal/constant/attribute first, then base_url, then callers. */
-  const resolveRequestUrl = (call: PyCall, urlExpr: PyExpr | undefined, client: ClientInfo | undefined, fallback: boolean): { known: Destination[]; organization: boolean; literalUrl?: string } => {
-    const direct = urlExpr ? resolver.eval(urlExpr, ctxFor(call, 0)) : [];
+  const resolveRequestUrl = (
+    call: PyCall,
+    urlExpr: PyExpr | undefined,
+    client: ClientInfo | undefined,
+    fallback: boolean,
+    /** Where `urlExpr` lives when it came from a kwargs dict built elsewhere. */
+    exprCtx?: EvalCtx,
+  ): { known: Destination[]; organization: boolean; literalUrl?: string } => {
+    const at = (hops: number): EvalCtx => (exprCtx ? { ...exprCtx, hops } : ctxFor(call, hops));
+    const direct = urlExpr ? resolver.eval(urlExpr, at(0)) : [];
     const absolute = direct.filter((v) => parseUrl(v.text));
     if (absolute.length > 0) {
       const result = destinationsFor(call, absolute, fallback);
@@ -801,12 +883,11 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
         return destinationsFor(call, joined, fallback);
       }
     }
-    if (urlExpr) {
-      const viaCallers = resolver.eval(urlExpr, ctxFor(call, MAX_CALLER_HOPS)).filter((v) => parseUrl(v.text));
-      if (viaCallers.length > 0) return { ...destinationsFor(call, viaCallers, fallback), literalUrl: viaCallers[0]?.text };
-    }
+    const viaCallersAll = urlExpr ? resolver.eval(urlExpr, at(MAX_CALLER_HOPS)) : [];
+    const viaCallers = viaCallersAll.filter((v) => parseUrl(v.text));
+    if (viaCallers.length > 0) return { ...destinationsFor(call, viaCallers, fallback), literalUrl: viaCallers[0]?.text };
     // Absolute URL whose host is only known at runtime (`https://{shop}/api/mcp`): path routes.
-    const runtimeHost = direct.filter((v) => /^(?:https?|wss?):\/\/[^/?#\s]*\{/i.test(v.text));
+    const runtimeHost = [...direct, ...viaCallersAll].filter((v) => /^(?:https?|wss?):\/\/[^/?#\s]*\{/i.test(v.text));
     if (runtimeHost.length > 0) return destinationsFor(call, runtimeHost, false);
     return { known: [], organization: false };
   };
@@ -869,6 +950,13 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     if (imp.names.length === 0) for (const alias of imp.aliases.keys()) litellmAliases.add(alias);
     else for (const [alias, name] of imp.aliases) if (LITELLM_CALLS.has(name)) litellmNames.add(alias);
   }
+  // Google ADK's LiteLlm(model="provider/...") wraps LiteLLM.
+  const adkLiteLlmNames = new Set<string>();
+  for (const imp of model.imports) {
+    if (!imp.module.startsWith("google.adk")) continue;
+    for (const [alias, name] of imp.aliases) if (name === "LiteLlm") adkLiteLlmNames.add(alias);
+  }
+  const isAdkLiteLlm = (callee: string): boolean => adkLiteLlmNames.has(callee) || /(^|\.)lite_llm\.LiteLlm$/.test(callee);
   const isLitellmCall = (callee: string): boolean => {
     if (litellmNames.has(callee)) return true;
     const dot = callee.lastIndexOf(".");
@@ -928,11 +1016,12 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
 
     // 3. MCP over HTTP.
     if (mcpImported && (MCP_URL_CALLS.has(last) || MCP_URL_PARAMS.has(last))) {
-      const urlExpr = MCP_URL_PARAMS.has(last)
-        ? node.kwargs.find((k) => k.name === "url")?.value
-        : (node.args[0] ?? node.kwargs.find((k) => k.name === "url")?.value);
-      if (!urlExpr) continue;
-      const { known } = resolveRequestUrl(call, urlExpr, undefined, true);
+      // `url=` directly, as the first argument, or inside a `**params` dict.
+      const urlSources: Array<{ expr: PyExpr; ctx?: EvalCtx }> =
+        !MCP_URL_PARAMS.has(last) && node.args[0]
+          ? [{ expr: node.args[0] }]
+          : resolver.kwargExprs(node, "url", ctxFor(call, 0)).map((k) => ({ expr: k.expr, ctx: k.ctx }));
+      const known = urlSources.flatMap((source) => resolveRequestUrl(call, source.expr, undefined, true, source.ctx).known);
       emit(call, known, { transport: "mcp_http" }, "external_api_call", 0.85);
       continue;
     }
@@ -944,14 +1033,26 @@ function detectUncached(input: PythonOutboundHttpInput): PythonOutboundHttpResul
     }
 
     // 5. LiteLLM provider prefixes.
-    if (isLitellmCall(callee)) {
-      const modelExpr = node.kwargs.find((k) => k.name === "model")?.value ?? node.args[0];
-      if (!modelExpr) continue;
+    if (isLitellmCall(callee) || isAdkLiteLlm(callee)) {
+      const ctx = ctxFor(call, 0);
+      // The request goes to api_base when it is set, whatever provider the model prefix
+      // names (an OpenAI-compatible gateway serving "groq/..." is still the gateway). So a
+      // known api_base host decides; the model prefix only counts when api_base is unknown.
+      const bases = ["api_base", "base_url"].flatMap((name) => resolver.kwargExprs(node, name, ctx));
+      const viaBase = bases.flatMap((b) => resolveRequestUrl(call, b.expr, undefined, true, b.ctx).known);
+      if (viaBase.length > 0) {
+        emit(call, viaBase, { client: "litellm" }, "external_api_call", 0.85);
+        continue;
+      }
+      const models = resolver.kwargExprs(node, "model", ctx);
+      if (models.length === 0 && node.args[0]) models.push({ expr: node.args[0], ctx });
       const providers: Destination[] = [];
-      for (const v of resolver.eval(modelExpr, ctxFor(call, 0))) {
-        const routed = router.routeModel(v.text);
-        if (routed === "unknown" || providers.some((p) => p.serviceName === routed.serviceName)) continue;
-        providers.push({ ...routed, url: "", sites: [] });
+      for (const m of models) {
+        for (const v of resolver.eval(m.expr, m.ctx)) {
+          const routed = router.routeModel(v.text);
+          if (routed === "unknown" || providers.some((p) => p.serviceName === routed.serviceName)) continue;
+          providers.push({ ...routed, url: "", sites: [] });
+        }
       }
       emit(call, providers, { client: "litellm" }, "external_api_call", 0.85);
       continue;
