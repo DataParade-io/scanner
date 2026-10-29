@@ -12,9 +12,9 @@ annotations:
     status: ambiguous
     labels:
     - service
-  rationale: The atoms are async tool functions that an agent runtime calls through an injected nexus_call global; no HTTP
-    handler or service entry point is in scope, so asset:service is the closest calling component but reviewers may reject
-    it as a library of functions.
+  rationale: The atoms are async tool functions that an agent runtime calls through an injected nexus_call global;
+    no HTTP handler or service entry point is in scope, so asset:service is the closest calling component but reviewers
+    may reject it as a library of functions.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -112,8 +112,8 @@ annotations:
     status: positive
     labels:
     - messaging
-  rationale: crisp_get_message builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1 on
-    line 2, and sends a GET through _crisp_get (nexus_call on line 43).
+  rationale: crisp_get_message builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a GET through _crisp_get (nexus_call on line 43).
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -262,8 +262,8 @@ annotations:
     status: positive
     labels:
     - messaging
-  rationale: whatsapp_business_create_message calls nexus_call with a POST to {root}/{pid}/messages to send a text message,
-    where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  rationale: whatsapp_business_create_message calls nexus_call with a POST to {root}/{pid}/messages to send a text
+    message, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -287,8 +287,8 @@ annotations:
     status: positive
     labels:
     - messaging
-  rationale: whatsapp_business_get_message calls nexus_call with a GET to {root}/{message_id} to read one message, where root
-    comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  rationale: whatsapp_business_get_message calls nexus_call with a GET to {root}/{message_id} to read one message,
+    where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -312,8 +312,9 @@ annotations:
     status: positive
     labels:
     - messaging
-  rationale: whatsapp_business_list_messages calls nexus_call with a GET to {root}/{waba}/message_templates to list message
-    templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  rationale: whatsapp_business_list_messages calls nexus_call with a GET to {root}/{waba}/message_templates to list
+    message templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0
+    on line 2.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -337,8 +338,9 @@ annotations:
     status: positive
     labels:
     - messaging
-  rationale: whatsapp_business_search_records calls nexus_call with a GET to {root}/{waba}/message_templates to search message
-    templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+  rationale: whatsapp_business_search_records calls nexus_call with a GET to {root}/{waba}/message_templates to
+    search message templates, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0
+    on line 2.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -386,8 +388,8 @@ annotations:
     status: positive
     labels:
     - payment_processor
-  rationale: stripe_get_customer sends a GET with the literal URL https://api.stripe.com/v1/customers/{customer_id} through
-    nexus_call.
+  rationale: stripe_get_customer sends a GET with the literal URL https://api.stripe.com/v1/customers/{customer_id}
+    through nexus_call.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -459,8 +461,8 @@ annotations:
     status: positive
     labels:
     - saas_service
-  rationale: linkedin_create_post calls the inner _post helper on line 44 for /ugcPosts, and _post sends nexus_call to f"{_base}{p}"
-    with _base https://api.linkedin.com/v2 set on line 11.
+  rationale: linkedin_create_post calls the inner _post helper on line 44 for /ugcPosts, and _post sends nexus_call
+    to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 11.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -509,8 +511,8 @@ annotations:
     status: positive
     labels:
     - saas_service
-  rationale: linkedin_get_organization calls the inner _get helper on line 35 for /organizations/{organization_id}, and _get
-    sends nexus_call to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
+  rationale: linkedin_get_organization calls the inner _get helper on line 35 for /organizations/{organization_id},
+    and _get sends nexus_call to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -559,8 +561,8 @@ annotations:
     status: positive
     labels:
     - saas_service
-  rationale: linkedin_list_organization_posts calls the inner _get helper on line 36 for /ugcPosts, and _get sends nexus_call
-    to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
+  rationale: linkedin_list_organization_posts calls the inner _get helper on line 36 for /ugcPosts, and _get sends
+    nexus_call to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -584,8 +586,8 @@ annotations:
     status: positive
     labels:
     - saas_service
-  rationale: linkedin_list_posts calls the inner _get helper on line 35 for /ugcPosts, and _get sends nexus_call to f"{_base}{p}"
-    with _base https://api.linkedin.com/v2 set on line 3.
+  rationale: linkedin_list_posts calls the inner _get helper on line 35 for /ugcPosts, and _get sends nexus_call
+    to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 3.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'

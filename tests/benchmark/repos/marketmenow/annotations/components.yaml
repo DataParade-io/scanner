@@ -1,190 +1,220 @@
 annotations:
-  - id: marketmenow-instagram-graph-adapter
-    layer: components
-    subject:
-      key: third_party:instagram
-      name: instagram
-    evidence:
-      file_path: src/adapters/instagram/adapter.py
-      start_line: 284
-      end_line: 288
-    expected:
-      status: positive
-      labels:
-        - saas_service
-    rationale: InstagramAdapter posts media containers through an httpx.AsyncClient whose base_url comes from _base_url_for_token, which returns _IG_GRAPH_BASE (https://graph.instagram.com/v21.0, line 14) for IGAA tokens.
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-instagram-graph-adapter
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: instagram
-  - id: marketmenow-facebook-graph-adapter
-    layer: components
-    subject:
-      key: third_party:facebook_graph
-      name: facebook_graph
-    evidence:
-      file_path: src/adapters/instagram/adapter.py
-      start_line: 284
-      end_line: 288
-    expected:
-      status: positive
-      labels:
-        - saas_service
-    rationale: For EAA (Facebook Login) tokens _base_url_for_token returns _FB_GRAPH_BASE (https://graph.facebook.com/v21.0, line 13), so the same Instagram publishing requests go to the Facebook Graph API.
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-facebook-graph-adapter
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: facebook_graph
-  - id: marketmenow-facebook-graph-token-manager
-    layer: components
-    subject:
-      key: third_party:facebook_graph
-      name: facebook_graph
-    evidence:
-      file_path: src/adapters/instagram/token_manager.py
-      start_line: 30
-      end_line: 38
-    expected:
-      status: positive
-      labels:
-        - saas_service
-    rationale: TokenManager exchanges and refreshes tokens at /oauth/access_token on an httpx client whose base_url is _IG_GRAPH_BASE, which despite its name is https://graph.facebook.com/v21.0 (line 7).
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-facebook-graph-token-manager
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: facebook_graph
-  - id: marketmenow-linkedin-api-client
-    layer: components
-    subject:
-      key: third_party:linkedin
-      name: linkedin
-    evidence:
-      file_path: src/adapters/linkedin/api_client.py
-      start_line: 158
-      end_line: 158
-    expected:
-      status: positive
-      labels:
-        - saas_service
-    rationale: LinkedInAPIClient posts to /rest/posts on an httpx client created with base_url=_BASE_URL, which is https://api.linkedin.com (line 12).
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-linkedin-api-client
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: linkedin
-  - id: marketmenow-reddit-client
-    layer: components
-    subject:
-      key: third_party:reddit
-      name: reddit
-    evidence:
-      file_path: src/adapters/reddit/client.py
-      start_line: 170
-      end_line: 170
-    expected:
-      status: positive
-      labels:
-        - saas_service
-    rationale: RedditClient._post sends submit and comment requests to URLs built from the module constant _BASE (https://www.reddit.com, line 10), such as f"{_BASE}/api/submit".
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-reddit-client
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: reddit
-  - id: marketmenow-instagram-post-permalink
-    layer: components
-    subject:
-      key: third_party:instagram
-      name: instagram
-    evidence:
-      file_path: src/adapters/instagram/adapter.py
-      start_line: 348
-      end_line: 348
-    expected:
-      status: ambiguous
-      labels: []
-    rationale: The www.instagram.com/p/ URL is only returned as the public link to the new post and is never requested.
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-instagram-post-permalink
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: instagram
-  - id: marketmenow-facebook-developers-hint
-    layer: components
-    subject:
-      key: third_party:facebook_graph
-      name: facebook_graph
-    evidence:
-      file_path: src/adapters/instagram/adapter.py
-      start_line: 55
-      end_line: 55
-    expected:
-      status: ambiguous
-      labels: []
-    rationale: The developers.facebook.com URL appears only inside an error hint string telling the user where to generate a token.
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-facebook-developers-hint
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: facebook_graph
-  - id: marketmenow-httpx-library
-    layer: components
-    subject:
-      key: third_party:httpx
-      name: httpx
-    evidence:
-      file_path: src/adapters/instagram/adapter.py
-      start_line: 7
-      end_line: 7
-    expected:
-      status: negative
-      labels: []
-    rationale: HTTP client library, not a destination.
-    provenance:
-      proposed_by: claude-opus-5.5
-      proposed_at: 2026-10-29
-      review_state: proposed
-    canonical:
-      entity_id: marketmenow::marketmenow-httpx-library
-      identity_key: third_party:saas_service
-      component_type: third_party
-      component_subtype: saas_service
-      vendor: httpx
+- id: marketmenow-instagram-graph-adapter
+  layer: components
+  subject:
+    key: third_party:instagram
+    name: instagram
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 284
+    end_line: 288
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: InstagramAdapter posts media containers through an httpx.AsyncClient whose base_url comes from _base_url_for_token,
+    which returns _IG_GRAPH_BASE (https://graph.instagram.com/v21.0, line 14) for IGAA tokens.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-instagram-graph-adapter
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: instagram
+- id: marketmenow-facebook-graph-adapter
+  layer: components
+  subject:
+    key: third_party:facebook_graph
+    name: facebook_graph
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 284
+    end_line: 288
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: For EAA (Facebook Login) tokens _base_url_for_token returns _FB_GRAPH_BASE (https://graph.facebook.com/v21.0,
+    line 13), so the same Instagram publishing requests go to the Facebook Graph API.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-facebook-graph-adapter
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: facebook_graph
+- id: marketmenow-facebook-graph-token-manager
+  layer: components
+  subject:
+    key: third_party:facebook_graph
+    name: facebook_graph
+  evidence:
+    file_path: src/adapters/instagram/token_manager.py
+    start_line: 30
+    end_line: 38
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: TokenManager exchanges and refreshes tokens at /oauth/access_token on an httpx client whose base_url
+    is _IG_GRAPH_BASE, which despite its name is https://graph.facebook.com/v21.0 (line 7).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-facebook-graph-token-manager
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: facebook_graph
+- id: marketmenow-linkedin-api-client
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: src/adapters/linkedin/api_client.py
+    start_line: 158
+    end_line: 158
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: LinkedInAPIClient posts to /rest/posts on an httpx client created with base_url=_BASE_URL, which is
+    https://api.linkedin.com (line 12).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-linkedin-api-client
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin
+- id: marketmenow-reddit-client
+  layer: components
+  subject:
+    key: third_party:reddit
+    name: reddit
+  evidence:
+    file_path: src/adapters/reddit/client.py
+    start_line: 170
+    end_line: 170
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: RedditClient._post sends submit and comment requests to URLs built from the module constant _BASE (https://www.reddit.com,
+    line 10), such as f"{_BASE}/api/submit".
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-reddit-client
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: reddit
+- id: marketmenow-instagram-post-permalink
+  layer: components
+  subject:
+    key: third_party:instagram
+    name: instagram
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 348
+    end_line: 348
+  expected:
+    status: ambiguous
+    labels: []
+  rationale: The www.instagram.com/p/ URL is only returned as the public link to the new post and is never requested.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-instagram-post-permalink
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: instagram
+- id: marketmenow-facebook-developers-hint
+  layer: components
+  subject:
+    key: third_party:facebook_graph
+    name: facebook_graph
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 55
+    end_line: 55
+  expected:
+    status: ambiguous
+    labels: []
+  rationale: The developers.facebook.com URL appears only inside an error hint string telling the user where to
+    generate a token.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-facebook-developers-hint
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: facebook_graph
+- id: marketmenow-httpx-library
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: 2026-10-29
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-httpx-library
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx
+- id: marketmenow-adapter-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: src/adapters/instagram/adapter.py
+    start_line: 284
+    end_line: 288
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: marketmenow::marketmenow-adapter-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service

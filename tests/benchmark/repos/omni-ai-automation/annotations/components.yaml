@@ -113,8 +113,7 @@ annotations:
     labels:
     - saas_service
   rationale: InstagramAdapter.publish_post creates a media container with httpx at f"{self.base_url}/{self.ig_user_id}/media"
-    and then publishes it at /media_publish (lines 184-187), both on graph.facebook.com from base_url
-    (lines 47-49).
+    and then publishes it at /media_publish (lines 184-187), both on graph.facebook.com from base_url (lines 47-49).
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -138,8 +137,8 @@ annotations:
     status: positive
     labels:
     - saas_service
-  rationale: XAdapter._post_tweet posts a tweet with httpx to f"{API}/2/tweets" (line 210), where API
-    is the module constant https://api.x.com on line 37.
+  rationale: XAdapter._post_tweet posts a tweet with httpx to f"{API}/2/tweets" (line 210), where API is the module
+    constant https://api.x.com on line 37.
   provenance:
     proposed_by: claude-opus-5.5
     proposed_at: '2026-10-29'
@@ -173,3 +172,27 @@ annotations:
     component_type: third_party
     component_subtype: saas_service
     vendor: httpx
+- id: omni-ai-automation-backend-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: backend/app/integrations/whatsapp/adapter.py
+    start_line: 235
+    end_line: 239
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: omni-ai-automation::omni-ai-automation-backend-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service

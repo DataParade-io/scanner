@@ -409,3 +409,27 @@ annotations:
     component_type: third_party
     component_subtype: saas_service
     vendor: httpx
+- id: scanner-fixtures-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/ad_conversions.py
+    start_line: 34
+    end_line: 34
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
