@@ -7,9 +7,10 @@ import {
 describe("materialization validation report", () => {
   it("reports materialization status for the corpus benchmark root", () => {
     const report = buildMaterializationValidationReport();
-    expect(report.totalPackets).toBe(31);
+    // DATAP-818: 38 packets after the seven raw-HTTP packets.
+    expect(report.totalPackets).toBe(38);
     if (report.validCount === 0) {
-      expect(report.failures).toHaveLength(31);
+      expect(report.failures).toHaveLength(38);
       expect(report.failures.every((failure) => failure.validationStatus === "missing")).toBe(
         true,
       );
