@@ -14,3 +14,6 @@ export const SECTION_BLOCK_WIDTH = Math.max(
   NODES_PER_ROW * NODE_HORIZONTAL_SPACING,
   5 * TERRAFORM_LANE_X_STEP + MANAGED_NODE_X_OFFSET + 120,
 );
+
+/** Space between the last column of one section and the first column of the next (one empty lane). */
+export const SECTION_GAP_X = 2 * TERRAFORM_LANE_X_STEP;

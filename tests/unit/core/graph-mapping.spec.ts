@@ -558,6 +558,46 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     expect(frontUser?.x ?? 0).toBeGreaterThan(appsMain?.x ?? 0);
   });
 
+  it("packs a sparse section next to the following one instead of a fixed block width", () => {
+    const component = (
+      id: string,
+      type: "actor" | "asset" | "third_party",
+      sectionId: string,
+      properties: Record<string, unknown> = {},
+    ) => ({
+      id,
+      name: id,
+      type,
+      confidence: 0.9,
+      detectedFrom: [],
+      sourceLocations: [],
+      properties: { section_id: sectionId, ...properties },
+    });
+    const scanResult: ScanResult = {
+      components: [
+        component("tp_dynamo", "third_party", "packages/a"),
+        component("actor_b", "actor", "packages/b"),
+        component("app_b", "asset", "packages/b", { isMainApplication: true }),
+        component("tp_sentry", "third_party", "packages/b"),
+      ],
+      dataFlows: [],
+      filesScanned: 1,
+      filesSkipped: 0,
+      totalLines: 1,
+      scanDurationMs: 1,
+      warnings: [],
+      errors: [],
+    };
+
+    const graph = buildDiagramGraphFromScanResult(scanResult);
+    const x = (id: string) => graph.nodes.find((n) => n.id === id)?.position.x ?? NaN;
+
+    // Section b keeps its own columns but starts one empty lane after section a.
+    expect(x("actor_b") - x("tp_dynamo")).toBe(800);
+    expect(x("app_b") - x("actor_b")).toBe(400);
+    expect(x("tp_sentry") - x("app_b")).toBe(800);
+  });
+
   it("monorepo Terraform sections keep provider left of managed resources with vertical spacing", () => {
     const scanResult: ScanResult = {
       components: [
