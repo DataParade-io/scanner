@@ -28,9 +28,41 @@ export interface ThirdPartyServiceConfig {
   urlHostPatterns: string[];
 }
 
+/**
+ * One rule for a host shared by several products (DATAP-818). `path` is tested against the
+ * URL path (no query); `hint` against the calling code's names (file path, class, function,
+ * URL expression). The first rule whose tests all pass names the service.
+ */
+export interface ThirdPartyUrlRouteRule {
+  path?: RegExp;
+  hint?: RegExp;
+  serviceName: string;
+  /** Overrides the catalog subtype for this route (e.g. Instagram messaging vs publishing). */
+  subType?: string;
+}
+
+export interface ThirdPartyUrlRoute {
+  host: string;
+  rules: ThirdPartyUrlRouteRule[];
+}
+
+/** LLM gateway model prefix (`groq/llama-3.1-8b`) naming the provider (DATAP-818). */
+export interface LlmModelPrefix {
+  prefix: string;
+  serviceName: string;
+}
+
 export interface ThirdPartyDetectionConfig {
   httpClients: ThirdPartyHttpClientConfig[];
   services: ThirdPartyServiceConfig[];
+  urlRoutes: ThirdPartyUrlRoute[];
+  /** Rules for URLs whose host is only known at runtime (`https://{shop}/api/mcp`): path and hint required. */
+  urlPathRoutes: ThirdPartyUrlRouteRule[];
+  llmModelPrefixes: LlmModelPrefix[];
+  /** `googleapiclient.discovery.build("<api>", ...)` API name -> service (DATAP-818). */
+  googleApiServices: Map<string, string>;
+  /** Shared hosting suffixes (`*.run.app`): own services, never vendors (DATAP-818). */
+  platformHosts: Array<{ pattern: RegExp; platform: string; name: string }>;
 }
 
 interface RawHttpClient {
@@ -48,9 +80,19 @@ interface RawService {
   url_host_patterns?: string[];
 }
 
+interface RawUrlRoute {
+  host: string;
+  rules?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
+}
+
 interface RawConfig {
   http_clients?: RawHttpClient[];
   services?: RawService[];
+  url_routes?: RawUrlRoute[];
+  url_path_routes?: Array<{ path?: string; hint?: string; serviceName: string; subType?: string }>;
+  llm_model_prefixes?: Record<string, string>;
+  google_api_services?: Record<string, string>;
+  platform_hosts?: Array<{ pattern: string; platform: string; name?: string }>;
 }
 
 const DEFAULT_CONFIDENCE = 0.8;
@@ -150,7 +192,78 @@ export function loadThirdPartyDetectionConfig(): ThirdPartyDetectionConfig {
     }
   }
 
-  cached = { httpClients, services };
+  const urlRoutes: ThirdPartyUrlRoute[] = [];
+  if (Array.isArray(parsed.url_routes)) {
+    for (const route of parsed.url_routes) {
+      if (!route?.host || !Array.isArray(route.rules)) {
+        throw new Error(`third-party-detection.url_routes entries need host and rules (${configPath}).`);
+      }
+      urlRoutes.push({
+        host: route.host.toLowerCase(),
+        rules: route.rules.map((rule) => {
+          if (!rule.serviceName) {
+            throw new Error(`third-party-detection.url_routes['${route.host}'] rule is missing serviceName.`);
+          }
+          return {
+            serviceName: rule.serviceName,
+            ...(rule.path ? { path: new RegExp(rule.path, "i") } : {}),
+            ...(rule.hint ? { hint: new RegExp(rule.hint, "i") } : {}),
+            ...(rule.subType ? { subType: rule.subType } : {}),
+          };
+        }),
+      });
+    }
+  }
+
+  const urlPathRoutes: ThirdPartyUrlRouteRule[] = (parsed.url_path_routes ?? []).map((rule) => {
+    if (!rule.serviceName || !rule.path || !rule.hint) {
+      throw new Error("third-party-detection.url_path_routes rules need path, hint and serviceName.");
+    }
+    return {
+      serviceName: rule.serviceName,
+      path: new RegExp(rule.path, "i"),
+      hint: new RegExp(rule.hint, "i"),
+      ...(rule.subType ? { subType: rule.subType } : {}),
+    };
+  });
+
+  const llmModelPrefixes: LlmModelPrefix[] = Object.entries(parsed.llm_model_prefixes ?? {}).map(
+    ([prefix, serviceName]) => ({ prefix: prefix.toLowerCase().replace(/\/$/, ""), serviceName: String(serviceName) }),
+  );
+
+  const googleApiServices = new Map(
+    Object.entries(parsed.google_api_services ?? {}).map(([api, serviceName]) => [api.toLowerCase(), String(serviceName)]),
+  );
+
+  const platformHosts = (parsed.platform_hosts ?? []).map((entry) => ({
+    pattern: compileRegex(entry.pattern),
+    platform: String(entry.platform),
+    name: String(entry.name ?? entry.platform),
+  }));
+
+  cached = { httpClients, services, urlRoutes, urlPathRoutes, llmModelPrefixes, googleApiServices, platformHosts };
   return cached;
 }
 
+/** Platform of a host on a shared hosting suffix (`gcp/cloud_run`), or undefined. */
+export function platformOfHost(host: string): string | undefined {
+  const h = host.toLowerCase();
+  return loadThirdPartyDetectionConfig().platformHosts.find((entry) => entry.pattern.test(h))?.platform;
+}
+
+/**
+ * Display name for a service on a shared hosting platform: the first host label without
+ * project numbers, deploy hashes or region codes, plus the platform
+ * (`mom-skipify-328574824807.us-central1.run.app` -> "mom-skipify (Cloud Run)").
+ */
+export function platformServiceDisplayName(host: string): string | undefined {
+  const h = host.toLowerCase();
+  const entry = loadThirdPartyDetectionConfig().platformHosts.find((e) => e.pattern.test(h));
+  if (!entry) return undefined;
+  let label = h.split(".")[0] ?? h;
+  label = label
+    .replace(/-[a-z0-9]{8,12}-[a-z]{2}$/, "") // Cloud Run `service-<hash>-<region code>`
+    .replace(/-\d{6,}$/, "") // project number
+    .replace(/-[a-f0-9]{8,}$/, ""); // deploy hash
+  return `${label || h} (${entry.name})`;
+}

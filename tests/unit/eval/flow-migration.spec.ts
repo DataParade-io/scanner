@@ -227,17 +227,18 @@ describe("flow candidate loader integration", () => {
 });
 
 describe("flow migration ledger accounting", () => {
-  it("accounts for all 436 corpus flow rows", () => {
+  // DATAP-818: +35 flow rows in the seven raw-HTTP packets (436 -> 471).
+  it("accounts for all 471 corpus flow rows", () => {
     const ledger = buildFlowMigrationLedger();
     expect(ledger.task).toBe(FLOW_MIGRATION_TASK);
-    expect(ledger.totalRows).toBe(436);
+    expect(ledger.totalRows).toBe(471);
     const bucketSum =
       ledger.buckets.graph_edge +
       ledger.buckets.intra_component_lineage +
       ledger.buckets.rejection +
       ledger.buckets.unresolved;
-    expect(bucketSum).toBe(436);
-    expect(ledger.entries).toHaveLength(436);
+    expect(bucketSum).toBe(471);
+    expect(ledger.entries).toHaveLength(471);
   });
 
   it("round-trips candidate endpoints through asserted flow endpoints", () => {

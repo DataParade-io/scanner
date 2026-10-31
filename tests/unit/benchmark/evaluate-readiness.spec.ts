@@ -201,7 +201,8 @@ describe("evaluateBaselineReadiness dry run", () => {
       expect.objectContaining({
         code: "LAYER_BELOW_ACCEPTED_FLOOR",
         layer: "components",
-        message: "components: acceptedCanonicalCount 390 < floor 450",
+        // DATAP-818: +34 accepted raw-HTTP third_party components (390 -> 424).
+        message: "components: acceptedCanonicalCount 424 < floor 450",
       }),
     ]);
   });

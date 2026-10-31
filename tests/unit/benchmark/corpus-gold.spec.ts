@@ -63,8 +63,10 @@ describe("imported corpus gold", () => {
 
   // KDATAP-973b69: +1 held-out packet (chatwoot, occurrence gold only).
   // KDATAP-b8e4a8: +1 held-out packet (calcom, occurrence gold only).
-  it("ships 31 pinned packets", () => {
-    expect(repoKeys).toHaveLength(31);
+  // DATAP-818: +7 raw-HTTP packets (omni-ai-automation, marketmenow, jarviscore, scanner-fixtures,
+  // scanner-fixtures-cross-file, scanner-fixtures-kwargs, scanner-fixtures-passthrough).
+  it("ships 38 pinned packets", () => {
+    expect(repoKeys).toHaveLength(38);
   });
 
   it("loads accepted annotations for every declared layer", () => {
@@ -99,7 +101,8 @@ describe("imported corpus gold", () => {
     // KDATAP-1c4998: -6 accepted occurrence:email records superseded by the proposed email labeling packets.
     // KDATAP-3ccf91: -1 accepted occurrence:phone_number record (saleor-phone-pii-signal) superseded by the phone labeling packets.
     // Rails ActiveRecord models are no longer components (a89f3fea): -129 accepted components.
-    expect(acceptedEvalCases).toBe(872);
+    // DATAP-818: +34 accepted third_party components and +34 accepted flows in the seven raw-HTTP packets.
+    expect(acceptedEvalCases).toBe(940);
   });
 
   it("emits canonical gold expectations from corpus annotations (KDATAP-521953)", () => {
@@ -169,7 +172,8 @@ describe("imported corpus gold", () => {
       }
     }
 
-    expect(scopedPackets).toBe(29);
+    // DATAP-818: +7 raw-HTTP packets with reviewed components and data_flows scopes.
+    expect(scopedPackets).toBe(36);
   });
 
   it("does not use actor:user in component gold (KDATAP-ea44fe)", () => {

@@ -1,0 +1,310 @@
+annotations:
+- id: scanner-fixtures-typescript-mistral
+  layer: components
+  subject:
+    key: third_party:mistral
+    name: mistral
+  evidence:
+    file_path: raw-http-integrations/typescript/src/chatProxy.ts
+    start_line: 6
+    end_line: 13
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: chatProxy posts the visitor's messages and id to api.mistral.ai with fetch.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-mistral
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: mistral
+- id: scanner-fixtures-typescript-airtable
+  layer: components
+  subject:
+    key: third_party:airtable
+    name: airtable
+  evidence:
+    file_path: raw-http-integrations/typescript/src/recordsApi.ts
+    start_line: 11
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: saveSignup posts email and name to `${apiBase}/...`, where apiBase defaults to DEFAULT_API_BASE on
+    api.airtable.com (line 5).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-airtable
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: airtable
+- id: scanner-fixtures-typescript-hubspot
+  layer: components
+  subject:
+    key: third_party:hubspot
+    name: hubspot
+  evidence:
+    file_path: raw-http-integrations/typescript/src/crmClient.ts
+    start_line: 10
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - crm
+  rationale: upsertContact posts contact details through the crm axios instance whose baseURL is api.hubapi.com
+    (line 5).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-hubspot
+    identity_key: third_party:crm
+    component_type: third_party
+    component_subtype: crm
+    vendor: hubspot
+- id: scanner-fixtures-typescript-slack
+  layer: components
+  subject:
+    key: third_party:slack
+    name: slack
+  evidence:
+    file_path: raw-http-integrations/typescript/src/notifyOps.ts
+    start_line: 5
+    end_line: 9
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: notifyOps posts the order id and customer email to ALERTS_WEBHOOK_URL, imported from settings.ts, default
+    hooks.slack.com.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-slack
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: slack
+- id: scanner-fixtures-typescript-unknown-orders
+  layer: components
+  subject:
+    key: third_party:unknown
+    name: unknown
+  evidence:
+    file_path: raw-http-integrations/typescript/src/ordersClient.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: ambiguous
+    labels:
+    - saas_service
+  rationale: placeOrder posts the cart and shipping address to a base URL defined only by VITE_ORDERS_API_URL; a
+    real destination whose vendor is not knowable.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: needs_adjudication
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-unknown-orders
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: unknown
+- id: scanner-fixtures-typescript-axios-records
+  layer: components
+  subject:
+    key: third_party:axios
+    name: axios
+  evidence:
+    file_path: raw-http-integrations/typescript/src/recordsApi.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: rejected
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-axios-records
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+- id: scanner-fixtures-typescript-axios-crm
+  layer: components
+  subject:
+    key: third_party:axios
+    name: axios
+  evidence:
+    file_path: raw-http-integrations/typescript/src/crmClient.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: rejected
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-axios-crm
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+- id: scanner-fixtures-typescript-axios-orders
+  layer: components
+  subject:
+    key: third_party:axios
+    name: axios
+  evidence:
+    file_path: raw-http-integrations/typescript/src/ordersClient.ts
+    start_line: 2
+    end_line: 2
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: rejected
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-axios-orders
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+- id: scanner-fixtures-typescript-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/typescript/src/chatProxy.ts
+    start_line: 4
+    end_line: 14
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: needs_adjudication
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
+- id: scanner-fixtures-typescript-outbound-orders
+  layer: components
+  subject:
+    key: asset:api
+    name: api
+  evidence:
+    file_path: raw-http-integrations/typescript/src/ordersClient.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - api
+  rationale: placeOrder posts to an axios instance whose base URL comes only from VITE_ORDERS_API_URL; the scanner
+    must show an outbound API call with an unknown host.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-outbound-orders
+    identity_key: asset:api
+    component_type: asset
+    component_subtype: api
+- id: scanner-fixtures-typescript-outbound-profile
+  layer: components
+  subject:
+    key: asset:api
+    name: api
+  evidence:
+    file_path: raw-http-integrations/typescript/src/api/profile.ts
+    start_line: 5
+    end_line: 5
+  expected:
+    status: positive
+    labels:
+    - api
+  rationale: updateProfile calls the shared axios instance exported by lib/http.ts, whose base URL comes only from
+    VITE_BACKEND_URL; an outbound API call with an unknown host.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-outbound-profile
+    identity_key: asset:api
+    component_type: asset
+    component_subtype: api
+- id: scanner-fixtures-typescript-outbound-agent
+  layer: components
+  subject:
+    key: asset:api
+    name: api
+  evidence:
+    file_path: raw-http-integrations/typescript/src/api/agentChat.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - api
+  rationale: sendToAgent posts the user's message to the team's own service on a *.run.app host (line 4); an outbound
+    API call to a first-party service on Google Cloud Run.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-outbound-agent
+    identity_key: asset:api
+    component_type: asset
+    component_subtype: api
+- id: scanner-fixtures-typescript-not-run
+  layer: components
+  subject:
+    key: third_party:run
+    name: run
+  evidence:
+    file_path: raw-http-integrations/typescript/src/api/agentChat.ts
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels: []
+  rationale: run.app is Google Cloud Run hosting; there is no vendor called Run.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: rejected
+  canonical:
+    entity_id: scanner-fixtures-typescript::scanner-fixtures-typescript-not-run
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: run

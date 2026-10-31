@@ -5,6 +5,7 @@ import {
   normalizeOrganizationDomains,
   shouldIgnoreExternalHttpUrl,
   urlHostMatchKeys,
+  vendorNameFromHostname,
 } from "../../../src/classifier/external-url-third-party";
 import type { RawFinding } from "../../../src/core/types/detection";
 
@@ -50,17 +51,24 @@ describe("classifier/external-url-third-party", () => {
     }
   });
 
-  it("defaultServiceNameFromLiteralPublicUrl derives registrable host without YAML", () => {
+  // DATAP-818: the vendor key is the registrable domain without its public suffix.
+  it("defaultServiceNameFromLiteralPublicUrl derives the vendor from the registrable host without YAML", () => {
     expect(
       defaultServiceNameFromLiteralPublicUrl(
         "https://api.weirdvendor.vendor-corp.net/v1",
       ),
-    ).toBe("vendor-corp.net");
+    ).toBe("vendor-corp");
     expect(
       defaultServiceNameFromLiteralPublicUrl(
         "https://clipdrop-api.co/remove-background/v1",
       ),
-    ).toBe("clipdrop-api.co");
+    ).toBe("clipdrop-api");
+  });
+
+  it("strips two-label public suffixes from fallback vendor names (DATAP-818)", () => {
+    expect(defaultServiceNameFromLiteralPublicUrl("https://api.dramaboxdb.com/v1")).toBe("dramaboxdb");
+    expect(defaultServiceNameFromLiteralPublicUrl("https://shop.example-vendor.co.uk/api")).toBe("example-vendor");
+    expect(vendorNameFromHostname("www.acme.com.au")).toBe("acme");
   });
 
   it("defaultServiceNameFromLiteralPublicUrl returns undefined for placeholder template URLs", () => {
@@ -100,7 +108,7 @@ describe("classifier/external-url-third-party", () => {
         client: "fetch",
       }),
     );
-    expect(out?.serviceName).toBe("clipdrop-api.co");
+    expect(out?.serviceName).toBe("clipdrop-api");
     expect(out?.subType).toBe("ai_provider");
   });
 
@@ -111,7 +119,7 @@ describe("classifier/external-url-third-party", () => {
         client: "fetch",
       }),
     );
-    expect(out?.serviceName).toBe("openai.com");
+    expect(out?.serviceName).toBe("openai");
     expect(out?.subType).toBe("ai_provider");
   });
 
@@ -139,7 +147,7 @@ describe("classifier/external-url-third-party", () => {
         url: "https://payments.example-saas.io/v1/charges",
       }),
     );
-    expect(out?.serviceName).toBe("example-saas.io");
+    expect(out?.serviceName).toBe("example-saas");
     expect(out?.subType).toBe("saas_service");
   });
 
@@ -187,7 +195,7 @@ describe("classifier/external-url-third-party", () => {
         makeExternalFinding({ url: "https://api.stripe.com/v1/charges" }),
         opts,
       )?.serviceName,
-    ).toBe("stripe.com");
+    ).toBe("stripe");
   });
 
   it("empty organizationDomains list behaves like unset for public hosts", () => {
@@ -200,6 +208,6 @@ describe("classifier/external-url-third-party", () => {
         makeExternalFinding({ url }),
         { organizationDomains: [] },
       )?.serviceName,
-    ).toBe("weirdvendor.io");
+    ).toBe("weirdvendor");
   });
 });

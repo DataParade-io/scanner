@@ -17,6 +17,7 @@ import {
   sourceOf,
   spansOrFileStart,
 } from "./helpers";
+import { detectPythonOutboundHttp, type RawHttpLibrary } from "./python-outbound-http";
 
 function pythonImportLocations(
   ctx: PatternContext,
@@ -154,13 +155,22 @@ export function detectPythonAuthFromConfig(
     }
   }
 
+  const outgoing = authConfig.libraries.some((lib) => lib.outgoingHeader)
+    ? new Set(outboundHttpFor(ctx, config).outgoingRequestLines)
+    : new Set<number>();
   for (const lib of authConfig.libraries) {
     const importLocations = pythonImportLocations(ctx, lib.importModules);
-    const contentLocations = locationsForContentRegexes(
+    let contentLocations = locationsForContentRegexes(
       ctx.file,
       content,
       lib.contentRegexes,
     );
+    if (lib.outgoingHeader) {
+      const before = contentLocations.length;
+      contentLocations = contentLocations.filter((loc) => !outgoing.has(loc.startLine));
+      // Every match is a header sent on an outbound request: nothing to report.
+      if (before > 0 && contentLocations.length === 0 && importLocations.length === 0) continue;
+    }
     const hasImport = importLocations.length > 0;
     const matchesContent = lib.contentRegexes.some((re) => re.test(content));
     if (!hasImport && !matchesContent) continue;
@@ -553,6 +563,46 @@ export function detectPythonRoutesFromConfig(
   return findings;
 }
 
+function outboundHttpFor(ctx: PatternContext, config: UnifiedPatternConfig) {
+  const libraries: RawHttpLibrary[] = config.python.externalApis.httpClients
+    .filter((client) => client.clientConstructors.length > 0)
+    .map((client) => ({
+      name: client.clientName,
+      importModules: client.importModules,
+      constructors: client.clientConstructors,
+      patternId: client.patternId,
+      confidence: client.confidence,
+    }));
+  return detectPythonOutboundHttp({
+    filePath: ctx.file.path,
+    content: ctx.file.content ?? "",
+    libraries,
+    config,
+  });
+}
+
+/**
+ * Drop the `openai` import finding when every OpenAI client in the file is built with a
+ * `base_url` on another provider's host (OpenRouter, Cerebras ...): the code imports the
+ * OpenAI SDK but does not call OpenAI (DATAP-818).
+ */
+export function dropRedirectedOpenAiImportFindings(
+  ctx: PatternContext,
+  config: UnifiedPatternConfig,
+  findings: RawFinding[],
+): RawFinding[] {
+  if (ctx.language !== "python") return findings;
+  if (!outboundHttpFor(ctx, config).openAiClientsRedirected) return findings;
+  return findings.filter(
+    (f) =>
+      !(
+        f.pattern === "external_api_call" &&
+        f.properties?.client === "openai" &&
+        f.properties?.serviceName === "openai"
+      ),
+  );
+}
+
 export function detectPythonExternalApisFromConfig(
   ctx: PatternContext,
   config: UnifiedPatternConfig,
@@ -563,11 +613,16 @@ export function detectPythonExternalApisFromConfig(
   const calls = ctx.moduleLevelCalls ?? [];
   const findings: RawFinding[] = [];
 
+  // Raw HTTP libraries (httpx, requests, aiohttp): resolve each request call's destination
+  // in the same file; the library itself is never the destination (DATAP-818).
+  findings.push(...outboundHttpFor(ctx, config).findings);
+
   if (calls.length === 0) return findings;
 
   const urlHostPatterns = buildThirdPartyUrlHostPatterns(config);
 
   for (const client of config.python.externalApis.httpClients) {
+    if (client.clientConstructors.length > 0) continue;
     const hasImport =
       client.importModules.length === 0
         ? true

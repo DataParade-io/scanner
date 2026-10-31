@@ -1,4 +1,5 @@
 import path from "path";
+import { readGitRemoteOwner } from "../../patterns/detectors/git-remote-owner";
 
 import type {
   DetectedDataFlow,
@@ -289,6 +290,7 @@ export async function runStructuralScanPhase(
       terraformModuleManifest,
       terraformScanRootPath: scanRootDir,
       organizationDomains: config.organizationDomains,
+      gitRemoteOwner: readGitRemoteOwner(scanRootDir),
     });
   } finally {
     setAngularUiScanRoot(undefined);

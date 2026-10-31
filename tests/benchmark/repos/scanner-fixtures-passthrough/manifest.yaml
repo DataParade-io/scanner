@@ -1,0 +1,19 @@
+repository: DataParade-io/scanner-fixtures
+commit: c3e6111d99b032b96db3b3cdb5da079ff529cdbe
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/python/kwargs_passthrough/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - ai
+selection_rationale: >-
+  DataParade-authored fixtures where a provider-switch helper returns different LiteLLM kwargs per
+  branch and another module unpacks them into a wrapper that forwards **kwargs to litellm.acompletion
+  (DATAP-818).
+annotation_version: 1

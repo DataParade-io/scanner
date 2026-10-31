@@ -186,6 +186,8 @@ auth:
         - '"Authorization"'
         - "Authorization\\s*:\\s*['\"]Bearer"
       strategy: bearer_token
+      # Not reported when the header is sent on an outbound request (DATAP-818).
+      outgoingHeader: true
       confidence: 0.7
 
     - id: oauth2
@@ -313,6 +315,9 @@ external_apis:
       clientName: requests
       importModules:
         - requests
+      clientConstructors:
+        - Session
+        - session
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 
@@ -321,6 +326,9 @@ external_apis:
       clientName: httpx
       importModules:
         - httpx
+      clientConstructors:
+        - Client
+        - AsyncClient
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 
@@ -329,6 +337,8 @@ external_apis:
       clientName: aiohttp
       importModules:
         - aiohttp
+      clientConstructors:
+        - ClientSession
       urlRegex: "['\\\"](https?:\\/\\/[^\\s'\\\"]+)['\\\"]"
       confidence: 0.85
 

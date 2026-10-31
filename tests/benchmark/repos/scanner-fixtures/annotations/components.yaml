@@ -1,0 +1,495 @@
+annotations:
+- id: scanner-fixtures-meta-conversions
+  layer: components
+  subject:
+    key: third_party:meta_conversions_api
+    name: meta_conversions_api
+  evidence:
+    file_path: raw-http-integrations/python/ad_conversions.py
+    start_line: 34
+    end_line: 34
+  expected:
+    status: positive
+    labels:
+    - analytics
+  rationale: report_signup posts hashed email and phone, IP and user agent to CONVERSIONS_URL on graph.facebook.com
+    (line 13), with the token in the query string.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-meta-conversions
+    identity_key: third_party:analytics
+    component_type: third_party
+    component_subtype: analytics
+    vendor: meta_conversions_api
+- id: scanner-fixtures-google-analytics
+  layer: components
+  subject:
+    key: third_party:google_analytics
+    name: google_analytics
+  evidence:
+    file_path: raw-http-integrations/python/measurement.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - analytics
+  rationale: track_purchase posts user and order data to COLLECT_ENDPOINT on www.google-analytics.com (line 10),
+    with the API secret in the query string.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-google-analytics
+    identity_key: third_party:analytics
+    component_type: third_party
+    component_subtype: analytics
+    vendor: google_analytics
+- id: scanner-fixtures-make-webhook
+  layer: components
+  subject:
+    key: third_party:make
+    name: make
+  evidence:
+    file_path: raw-http-integrations/python/lead_webhook.py
+    start_line: 22
+    end_line: 27
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: forward_lead posts the lead's name, email, phone and message to LEAD_HOOK_URL, whose default host is
+    hook.eu1.make.com (line 8).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-make-webhook
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: make
+- id: scanner-fixtures-shopify-mcp
+  layer: components
+  subject:
+    key: third_party:shopify
+    name: shopify
+  evidence:
+    file_path: raw-http-integrations/python/storefront_mcp.py
+    start_line: 16
+    end_line: 16
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: add_to_cart opens a streamable-HTTP MCP session to https://{shop}/api/mcp on a myshopify.com domain
+    (lines 8 and 12) and sends the buyer email.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-shopify-mcp
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: shopify
+- id: scanner-fixtures-telegram
+  layer: components
+  subject:
+    key: third_party:telegram
+    name: telegram
+  evidence:
+    file_path: raw-http-integrations/python/notify_with_retries.py
+    start_line: 15
+    end_line: 18
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: notify_customer posts a message to api.telegram.org through an httpx client with a retry transport.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-telegram
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: telegram
+- id: scanner-fixtures-cerebras
+  layer: components
+  subject:
+    key: third_party:cerebras
+    name: cerebras
+  evidence:
+    file_path: raw-http-integrations/python/llm_router.py
+    start_line: 7
+    end_line: 10
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: fast_client is an OpenAI client with base_url api.cerebras.ai; answer sends the user message and conversation
+    to it (line 21).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-cerebras
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: cerebras
+- id: scanner-fixtures-openrouter
+  layer: components
+  subject:
+    key: third_party:openrouter
+    name: openrouter
+  evidence:
+    file_path: raw-http-integrations/python/llm_router.py
+    start_line: 12
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: broad_client is an OpenAI client with base_url openrouter.ai; answer sends the user message and conversation
+    to it (line 21).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-openrouter
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: openrouter
+- id: scanner-fixtures-phoenix
+  layer: components
+  subject:
+    key: third_party:arize_phoenix
+    name: arize_phoenix
+  evidence:
+    file_path: raw-http-integrations/python/tracing.py
+    start_line: 14
+    end_line: 18
+  expected:
+    status: positive
+    labels:
+    - monitoring
+  rationale: start_tracing registers an exporter to PHOENIX_ENDPOINT, default app.phoenix.arize.com, and instruments
+    OpenAI so prompts and responses are sent.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-phoenix
+    identity_key: third_party:monitoring
+    component_type: third_party
+    component_subtype: monitoring
+    vendor: arize_phoenix
+- id: scanner-fixtures-crisp
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: raw-http-integrations/python/support_desk.py
+    start_line: 23
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: reply posts an operator message to api.crisp.chat; the base URL is stored on the class as api_root
+    (line 12) and joined in _url.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-crisp
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: scanner-fixtures-unknown-outbound
+  layer: components
+  subject:
+    key: third_party:unknown
+    name: unknown
+  evidence:
+    file_path: raw-http-integrations/python/outbound_unknown.py
+    start_line: 11
+    end_line: 11
+  expected:
+    status: ambiguous
+    labels:
+    - saas_service
+  rationale: sync_account sends user id, email and name to ACCOUNT_SYNC_URL, which only configuration defines; the
+    destination is real but its vendor is not knowable.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: needs_adjudication
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-unknown-outbound
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: unknown
+- id: scanner-fixtures-httpx-conversions
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: raw-http-integrations/python/ad_conversions.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-httpx-conversions
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx
+- id: scanner-fixtures-requests-measurement
+  layer: components
+  subject:
+    key: third_party:requests
+    name: requests
+  evidence:
+    file_path: raw-http-integrations/python/measurement.py
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-requests-measurement
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: requests
+- id: scanner-fixtures-requests-webhook
+  layer: components
+  subject:
+    key: third_party:requests
+    name: requests
+  evidence:
+    file_path: raw-http-integrations/python/lead_webhook.py
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-requests-webhook
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: requests
+- id: scanner-fixtures-httpx-notify
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: raw-http-integrations/python/notify_with_retries.py
+    start_line: 5
+    end_line: 5
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-httpx-notify
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx
+- id: scanner-fixtures-httpx-retries
+  layer: components
+  subject:
+    key: third_party:httpx_retries
+    name: httpx_retries
+  evidence:
+    file_path: raw-http-integrations/python/notify_with_retries.py
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-httpx-retries
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx_retries
+- id: scanner-fixtures-aiohttp-support
+  layer: components
+  subject:
+    key: third_party:aiohttp
+    name: aiohttp
+  evidence:
+    file_path: raw-http-integrations/python/support_desk.py
+    start_line: 6
+    end_line: 6
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-aiohttp-support
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: aiohttp
+- id: scanner-fixtures-httpx-helpers
+  layer: components
+  subject:
+    key: third_party:httpx
+    name: httpx
+  evidence:
+    file_path: raw-http-integrations/python/http_helpers.py
+    start_line: 3
+    end_line: 3
+  expected:
+    status: negative
+    labels: []
+  rationale: HTTP client library, not a destination.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: rejected
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-httpx-helpers
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: httpx
+- id: scanner-fixtures-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/ad_conversions.py
+    start_line: 34
+    end_line: 34
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: needs_adjudication
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
+- id: scanner-fixtures-outbound-helper
+  layer: components
+  subject:
+    key: asset:api
+    name: api
+  evidence:
+    file_path: raw-http-integrations/python/http_helpers.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - api
+  rationale: post_json makes a real outbound client.post(url, ...) call; its callers pass a URL known only from
+    configuration, so the host is unknown.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-30'
+    review_state: proposed
+  canonical:
+    entity_id: scanner-fixtures::scanner-fixtures-outbound-helper
+    identity_key: asset:api
+    component_type: asset
+    component_subtype: api

@@ -47,6 +47,12 @@ services:
     url_host_patterns:
       - twilio.com
       - api.twilio.com
+  # X API v2. Listed before twitter so api.x.com resolves to x.
+  - serviceName: x
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.x.com
   - serviceName: twitter
     patternId: external_api_call
     importFragments:
@@ -204,3 +210,243 @@ services:
     url_host_patterns:
       - sentry.io
       - ingest.sentry.io
+
+  # Raw-HTTP destinations without an SDK import (DATAP-818). Python request calls
+  # resolve their URL in the same file and match these hosts.
+  - serviceName: instagram
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - graph.instagram.com
+      - api.instagram.com
+      - instagram.com
+  - serviceName: linkedin
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.linkedin.com
+      - www.linkedin.com
+  - serviceName: reddit
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - reddit.com
+  - serviceName: crisp
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.crisp.chat
+  - serviceName: telegram
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.telegram.org
+  - serviceName: google_analytics
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - google-analytics.com
+  - serviceName: make
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - hook.eu1.make.com
+      - hook.eu2.make.com
+      - hook.us1.make.com
+      - hook.us2.make.com
+  - serviceName: shopify
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - myshopify.com
+  - serviceName: cerebras
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.cerebras.ai
+  - serviceName: arize_phoenix
+    patternId: external_api_call
+    importFragments:
+      - phoenix.otel
+    confidence: 0.85
+    url_host_patterns:
+      - phoenix.arize.com
+  - serviceName: groq
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.groq.com
+  - serviceName: together_ai
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.together.xyz
+      - api.together.ai
+
+  - serviceName: perplexity
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.perplexity.ai
+  - serviceName: firecrawl
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.firecrawl.dev
+  - serviceName: tavus
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - tavusapi.com
+  - serviceName: discord
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - discord.com
+      - discordapp.com
+  - serviceName: mistral
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.mistral.ai
+  - serviceName: airtable
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.airtable.com
+  - serviceName: hubspot
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - api.hubapi.com
+  - serviceName: slack
+    patternId: external_api_call
+    confidence: 0.85
+    url_host_patterns:
+      - hooks.slack.com
+      - slack.com
+
+# url_routes: hosts that serve several products. Rules run in order; the first rule whose
+# `path` (URL path, no query) and `hint` (file path, class, function and URL expression of
+# the calling code) both match names the service. A rule's subType overrides the catalog one.
+url_routes:
+  - host: graph.facebook.com
+    rules:
+      # Conversions API: POST /{pixel_id}/events.
+      - path: "/events/?$"
+        serviceName: meta_conversions_api
+      # Instagram content publishing: /{ig_user_id}/media and /media_publish.
+      - path: "/media(_publish)?/?$"
+        serviceName: instagram
+        subType: saas_service
+      # WhatsApp Cloud API calls go through the Graph host with a phone number id.
+      - hint: "whatsapp|phone_number_id|(^|[^a-z])wa_"
+        serviceName: whatsapp
+      - path: "/messages/?$"
+        hint: "instagram|(^|[^a-z])ig_"
+        serviceName: instagram
+        subType: messaging
+      - path: "/messages/?$"
+        serviceName: facebook_messenger
+      - serviceName: facebook_graph
+
+# url_path_routes: URLs whose host is only known at runtime (`https://{self.domain}/api/mcp`).
+# A rule names the service when the URL path matches `path` and the calling code or the
+# class/module the URL was built in matches `hint`. Both are required: a path alone is
+# too weak to name a vendor.
+url_path_routes:
+  # Shopify Storefront MCP: every shop serves it at https://{shop}/api/mcp; the host is the
+  # merchant's domain, so only Shopify-named code (ShopifyStore, shopify_store.py) counts.
+  - path: "^/api/mcp/?$"
+    hint: "shopify"
+    serviceName: shopify
+
+# llm_model_prefixes: LiteLLM routes `provider/model` to the provider. Only providers in the
+# classifier catalog are listed.
+llm_model_prefixes:
+  groq: groq
+  together_ai: together_ai
+  openrouter: openrouter
+  cerebras: cerebras
+  anthropic: anthropic
+  openai: openai
+  gemini: google_ai
+  vertex_ai: google_ai
+  bedrock: aws
+  sagemaker: aws
+  azure: azure
+
+# google_api_services: googleapiclient.discovery.build("<api>", ...) names the Google
+# product it calls. Keys are the discovery API names.
+google_api_services:
+  gmail: gmail
+  drive: google_drive
+  sheets: google_sheets
+  calendar: google_calendar
+  docs: google_docs
+
+# platform_hosts: shared hosting suffixes. A host on one of these is someone's own service
+# (usually the scanned team's), never a vendor named after the platform label ("run", "web").
+# Calls to them become outbound API assets with the platform recorded as metadata, named
+# "<service> (<name>)": the first host label without project numbers or deploy hashes.
+platform_hosts:
+  - pattern: "\\.run\\.app$"
+    platform: gcp/cloud_run
+    name: "Cloud Run"
+  - pattern: "\\.cloudfunctions\\.net$"
+    platform: gcp/cloud_functions
+    name: "Cloud Functions"
+  - pattern: "\\.appspot\\.com$"
+    platform: gcp/app_engine
+    name: "App Engine"
+  - pattern: "\\.web\\.app$|\\.firebaseapp\\.com$"
+    platform: gcp/firebase_hosting
+    name: "Firebase Hosting"
+  - pattern: "\\.azurewebsites\\.net$"
+    platform: azure/app_service
+    name: "Azure App Service"
+  - pattern: "\\.azurecontainerapps\\.io$"
+    platform: azure/container_apps
+    name: "Azure Container Apps"
+  - pattern: "\\.azure-api\\.net$"
+    platform: azure/api_management
+    name: "Azure API Management"
+  - pattern: "\\.herokuapp\\.com$"
+    platform: heroku
+    name: "Heroku"
+  - pattern: "\\.vercel\\.app$"
+    platform: vercel
+    name: "Vercel"
+  - pattern: "\\.netlify\\.app$"
+    platform: netlify
+    name: "Netlify"
+  - pattern: "\\.fly\\.dev$"
+    platform: fly
+    name: "Fly.io"
+  - pattern: "\\.onrender\\.com$"
+    platform: render
+    name: "Render"
+  - pattern: "\\.workers\\.dev$|\\.pages\\.dev$"
+    platform: cloudflare/workers
+    name: "Cloudflare Workers"
+  - pattern: "\\.up\\.railway\\.app$"
+    platform: railway
+    name: "Railway"
+  - pattern: "\\.execute-api\\.[a-z0-9-]+\\.amazonaws\\.com$"
+    platform: aws/api_gateway
+    name: "API Gateway"
+  - pattern: "\\.lambda-url\\.[a-z0-9-]+\\.on\\.aws$"
+    platform: aws/lambda_url
+    name: "Lambda URL"
+  - pattern: "\\.elasticbeanstalk\\.com$"
+    platform: aws/elastic_beanstalk
+    name: "Elastic Beanstalk"
+  - pattern: "\\.awsapprunner\\.com$"
+    platform: aws/app_runner
+    name: "App Runner"
+  - pattern: "\\.ngrok(-free)?\\.(app|io|dev)$"
+    platform: ngrok
+    name: "ngrok"
+  - pattern: "\\.github\\.io$"
+    platform: github_pages
+    name: "GitHub Pages"
