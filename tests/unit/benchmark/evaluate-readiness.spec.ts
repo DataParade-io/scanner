@@ -202,7 +202,7 @@ describe("evaluateBaselineReadiness dry run", () => {
         code: "LAYER_BELOW_ACCEPTED_FLOOR",
         layer: "components",
         // DATAP-818: +34 accepted raw-HTTP third_party components (390 -> 424).
-        message: "components: acceptedCanonicalCount 424 < floor 450",
+        message: "components: acceptedCanonicalCount 436 < floor 450",
       }),
     ]);
   });

@@ -232,15 +232,15 @@ describe("flow-adjudication", () => {
     ).toThrow(/Accept ceiling exceeded/);
   });
 
-  // DATAP-818: +35 flow rows in the seven raw-HTTP packets (436 -> 471).
-  it("accounts for all 471 corpus flow rows", () => {
+  // DATAP-818: +44 flow rows in the nine raw-HTTP packets (436 -> 480).
+  it("accounts for all 480 corpus flow rows", () => {
     const ledger = buildFlowAdjudicationLedger();
     expect(ledger.task).toBe(FLOW_ADJUDICATION_TASK);
-    expect(ledger.totalRows).toBe(471);
-    expect(ledger.entries).toHaveLength(471);
+    expect(ledger.totalRows).toBe(480);
+    expect(ledger.entries).toHaveLength(480);
     const sum =
       ledger.dispositions.accept + ledger.dispositions.reject + ledger.dispositions.unresolved;
-    expect(sum).toBe(471);
+    expect(sum).toBe(480);
   });
 
   it("never accepts negative components as flow carriers", () => {
