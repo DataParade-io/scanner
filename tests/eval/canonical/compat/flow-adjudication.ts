@@ -28,7 +28,8 @@ import type { TypedComponentEndpoint } from "../../../../src/eval/canonical/grap
 export const FLOW_ADJUDICATION_TASK =
   "KDATAP-47e33169-a94a-43f6-91c5-7afe1d8217da";
 
-export const ACCEPT_CEILING = 200;
+// DATAP-818: reviewed raw-HTTP flow gold takes accepts to 208.
+export const ACCEPT_CEILING = 210;
 
 export type FlowEvidenceValidation = "verified" | "unverified" | "contradicted" | "skipped";
 

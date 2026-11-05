@@ -1,0 +1,188 @@
+annotations:
+- id: scanner-fixtures-cross-file-cerebras
+  layer: components
+  subject:
+    key: third_party:cerebras
+    name: cerebras
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/llm.py
+    start_line: 7
+    end_line: 7
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: fast is an OpenAI client whose base_url is Settings.FAST_LLM_BASE_URL, default api.cerebras.ai (settings.py
+    line 7); summarize sends the transcript (line 12).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-cerebras
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: cerebras
+- id: scanner-fixtures-cross-file-openrouter
+  layer: components
+  subject:
+    key: third_party:openrouter
+    name: openrouter
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/llm.py
+    start_line: 8
+    end_line: 8
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: router is an OpenAI client whose base_url is Settings.ROUTER_BASE_URL, default openrouter.ai (settings.py
+    line 9); draft_reply sends the customer message (line 20).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-openrouter
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: openrouter
+- id: scanner-fixtures-cross-file-together-ai
+  layer: components
+  subject:
+    key: third_party:together_ai
+    name: together_ai
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/model_prefixes.py
+    start_line: 12
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: classify calls litellm.acompletion with a together_ai/ model prefix (line 6), which LiteLLM routes
+    to Together AI.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-together-ai
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: together_ai
+- id: scanner-fixtures-cross-file-groq
+  layer: components
+  subject:
+    key: third_party:groq
+    name: groq
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/model_prefixes.py
+    start_line: 12
+    end_line: 15
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: classify calls litellm.acompletion with a groq/ model prefix (line 7), which LiteLLM routes to Groq.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-groq
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: groq
+- id: scanner-fixtures-cross-file-phoenix
+  layer: components
+  subject:
+    key: third_party:arize_phoenix
+    name: arize_phoenix
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/tracing_setup.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - monitoring
+  rationale: install_tracing adds a phoenix.otel BatchSpanProcessor; the phoenix package exports spans to an Arize
+    Phoenix collector at a configured endpoint.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-phoenix
+    identity_key: third_party:monitoring
+    component_type: third_party
+    component_subtype: monitoring
+    vendor: arize_phoenix
+- id: scanner-fixtures-cross-file-shopify
+  layer: components
+  subject:
+    key: third_party:shopify
+    name: shopify
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/store_agent.py
+    start_line: 10
+    end_line: 10
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: storefront_tools connects Google ADK to the MCP URL from ShopifyStore.mcp_endpoint, https://{domain}/api/mcp
+    (shopify_store.py line 12).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-shopify
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: shopify
+- id: scanner-fixtures-cross-file-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/cross_file/llm.py
+    start_line: 11
+    end_line: 15
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: needs_adjudication
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-cross-file::scanner-fixtures-cross-file-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service

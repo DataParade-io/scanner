@@ -185,7 +185,7 @@ describe("analyzers/typescript/detector - DP-P0-CLI-104", () => {
         String(f.properties?.url ?? "").includes("vectorizer.ai"),
     );
     expect(hits.length).toBeGreaterThan(0);
-    expect(hits[0].properties?.serviceName).toBe("vectorizer.ai");
+    expect(hits[0].properties?.serviceName).toBe("vectorizer");
   });
 
   it("detects auth-related middleware as auth_middleware findings", () => {

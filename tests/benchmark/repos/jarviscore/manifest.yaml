@@ -1,0 +1,25 @@
+repository: Prescott-Data/jarviscore-framework
+commit: f21dc6efbbb9534c62413fcd9fa7b0dd17e5263b
+license: Apache-2.0
+scope:
+  include:
+    - jarviscore/integrations/atoms/crisp/
+    - jarviscore/integrations/atoms/whatsapp_business/
+    - jarviscore/integrations/atoms/stripe/
+    - jarviscore/integrations/atoms/linkedin/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - customer_support
+    - messaging
+    - payments
+selection_rationale: >-
+  Integration atoms call Crisp, WhatsApp Business (Meta Graph), Stripe and LinkedIn REST APIs with
+  raw URLs: module URL constants, a base-URL override helper, full URLs in the call, and a base
+  variable inside each function. Requests go through a framework-provided HTTP function, not an
+  SDK or an imported HTTP library (DATAP-818).
+annotation_version: 1

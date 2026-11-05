@@ -79,7 +79,9 @@ describe("Python analyzer patterns - DP-P0-CLI-703", () => {
 
     expect(apiFindings.length).toBeGreaterThan(0);
     const first = apiFindings[0];
-    expect(first.name).toBe("requests_call");
+    // example.com is a placeholder host: an outbound call with no vendor (DATAP-818).
+    expect(first.name).toBe("outbound_http_call");
+    expect(first.properties.serviceName).toBeUndefined();
     expect(first.properties.url).toBe("https://example.com/items");
   });
 
@@ -338,7 +340,7 @@ describe("Python analyzer patterns - DP-P0-CLI-703", () => {
     expect(apiFindings.length).toBeGreaterThan(0);
 
     const first = apiFindings[0];
-    expect(first.name).toBe("requests_call");
+    expect(first.name).toBe("openai");
     expect(first.properties.url).toBe(
       "https://api.openai.com/v1/chat/completions",
     );

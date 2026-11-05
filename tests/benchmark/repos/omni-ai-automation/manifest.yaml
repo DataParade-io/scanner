@@ -1,0 +1,20 @@
+repository: hamza01055/omni-ai-automation
+commit: 09cca06e9ab64c62e013eb3541e55e2abdaff461
+license: MIT
+scope:
+  include:
+    - backend/app/integrations/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - messaging
+    - social_media
+selection_rationale: >-
+  Channel adapters call the WhatsApp Cloud API, Messenger, Instagram and X with raw httpx and
+  no SDK. The base URL is an f-string property on the adapter class. Covers raw-HTTP third-party
+  detection and the rule that an HTTP client library is not a destination (DATAP-818).
+annotation_version: 1

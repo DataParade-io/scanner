@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 
+import { detectTsOutboundHttp } from "./typescript-outbound-http";
 import {
   defaultServiceNameFromLiteralPublicUrl,
   shouldIgnoreExternalHttpUrl,
@@ -54,10 +55,18 @@ export function detectTypeScriptJavaScriptExternalApisFromHttpClients(
   const findings: RawFinding[] = [];
   const urlHostPatterns = buildThirdPartyUrlHostPatterns(config);
 
+  // Request calls resolved on the AST (fetch, axios, got, ky ...; DATAP-818). The line
+  // regexes below only fill in lines the AST detector did not handle.
+  const resolved = detectTsOutboundHttp({ filePath: ctx.file.path, content, config });
+  findings.push(...resolved.findings);
+  const covered = (line: number): boolean =>
+    resolved.coveredSpans.some((span) => line >= span.startLine && line <= span.endLine);
+
   for (const client of config.thirdParty.httpClients) {
     for (const regex of client.callRegexes) {
       const httpMatches = findLineMatches(content, regex);
       for (const { line, match } of httpMatches) {
+        if (covered(line)) continue;
         const [, clientName, methodMaybe, url] = match;
         if (shouldIgnoreExternalHttpUrl(url)) {
           continue;
@@ -728,6 +737,9 @@ export function detectTypeScriptExternalApisFromConfig(
   const findings: RawFinding[] = [];
 
   for (const client of config.typescript.externalApis.httpClients) {
+    // Raw HTTP libraries are resolved per request call by the AST detector when line
+    // patterns run; a library-named `axios_call` would read as a destination (DATAP-818).
+    if (client.rawHttp && ctx.includeThirdPartyHttpLinePatterns) continue;
     const hasClientImport =
       client.importFragments.length === 0 ||
       client.importFragments.some((frag) =>

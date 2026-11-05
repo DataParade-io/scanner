@@ -1,0 +1,31 @@
+repository: DataParade-io/scanner-fixtures
+commit: c3e6111d99b032b96db3b3cdb5da079ff529cdbe
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/python/
+  exclude:
+    - path: raw-http-integrations/python/cross_file/
+      reason: scored separately as scanner-fixtures-cross-file
+    - path: raw-http-integrations/python/kwargs_builders/
+      reason: scored separately as scanner-fixtures-kwargs
+    - path: raw-http-integrations/python/kwargs_passthrough/
+      reason: scored separately as scanner-fixtures-passthrough
+    - path: raw-http-integrations/python/sdk_and_names/
+      reason: scored separately as scanner-fixtures-sdk-names
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - marketing
+    - messaging
+    - ai
+selection_rationale: >-
+  DataParade-authored fixtures for raw-HTTP patterns that open applications rarely show in one
+  place: credentials in the query string, webhook platforms, remote MCP over HTTP, retry transports,
+  OpenAI clients with a different base_url, trace exporters, a base URL on the class, and a URL known
+  only from configuration (DATAP-818).
+annotation_version: 1

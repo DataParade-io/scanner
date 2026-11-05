@@ -8,6 +8,7 @@ import {
   detectPythonExternalApisFromConfig as detectPythonExternalApisFromConfigAdapter,
   detectPythonRoutesFromConfig as detectPythonRoutesFromConfigAdapter,
   detectPythonServerlessHandlersFromConfig as detectPythonServerlessHandlersFromConfigAdapter,
+  dropRedirectedOpenAiImportFindings,
 } from "./detectors/python";
 import {
   detectCppAuthFromConfig as detectCppAuthFromConfigAdapter,
@@ -133,6 +134,8 @@ function findFirstLineMatch(
   return undefined;
 }
 
+const INSTRUMENTATION_PACKAGE = /(^|[./@-])instrumentation([./-]|$)/i;
+
 function importMatchesFragment(imp: ImportLike, fragment: string): boolean {
   return (
     imp.module.includes(fragment) ||
@@ -153,6 +156,9 @@ function detectThirdPartyServicesFromImportsWithConfig(
     const seenSpans = new Set<string>();
 
     for (const imp of imports) {
+      // Instrumentation packages for a vendor SDK (`openinference.instrumentation.openai`,
+      // `@opentelemetry/instrumentation-aws-sdk`) trace calls; they do not call the vendor.
+      if (INSTRUMENTATION_PACKAGE.test(imp.module)) continue;
       const matches = svc.importFragments.some((frag) =>
         importMatchesFragment(imp, frag),
       );
@@ -335,5 +341,5 @@ export function matchPatterns(ctx: PatternContext): RawFinding[] {
   );
   findings.push(...detectTypeScriptExternalApisFromConfigAdapter(ctx, config));
 
-  return findings;
+  return dropRedirectedOpenAiImportFindings(ctx, config, findings);
 }

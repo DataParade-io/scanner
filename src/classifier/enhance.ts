@@ -368,6 +368,11 @@ export function enhanceComponents(
       if (isTerraformModuleCallShellAsset(c)) {
         continue;
       }
+      // Outbound calls to another service (DATAP-818) describe that remote service, never
+      // this section's application: do not pick or rename them as the main application.
+      if (isRemoteOutboundApiAsset(c)) {
+        continue;
+      }
       const sid = sectionIdFor(c);
       const priority = getFrameworkPriority(c);
       if (isSingleRouteApiAsset(c)) {
@@ -443,4 +448,17 @@ export function enhanceComponents(
     }
     return component;
   });
+}
+
+function propertyIs(value: unknown, expected: unknown): boolean {
+  return Array.isArray(value) ? value.includes(expected) : value === expected;
+}
+
+/** API asset made from outbound calls (remote service or unknown destination), not an own API. */
+function isRemoteOutboundApiAsset(component: DetectedComponent): boolean {
+  return (
+    component.subType === "api" &&
+    (propertyIs(component.properties?.remoteService, true) ||
+      propertyIs(component.properties?.destination, "unknown"))
+  );
 }

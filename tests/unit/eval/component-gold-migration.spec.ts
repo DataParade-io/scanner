@@ -45,16 +45,17 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
   const benchmarkRoot = path.join(__dirname, "../../benchmark");
   const ledger = buildComponentMigrationLedger(benchmarkRoot);
 
-  it("accounts for all 390 accepted component rows after Ruby taxonomy correction", () => {
-    expect(ledger.totalRows).toBe(390);
-    expect(ledger.buckets.mechanical).toBe(344);
-    expect(ledger.buckets.vendor).toBe(16);
+  // DATAP-818: +46 accepted raw-HTTP rows, 42 with a vendor (390 -> 436, vendor 16 -> 58).
+  it("accounts for all 436 accepted component rows after Ruby taxonomy correction", () => {
+    expect(ledger.totalRows).toBe(436);
+    expect(ledger.buckets.mechanical).toBe(348);
+    expect(ledger.buckets.vendor).toBe(58);
     expect(ledger.buckets.actor_user_retarget).toBe(30);
     expect(
       ledger.buckets.mechanical +
         ledger.buckets.vendor +
         ledger.buckets.actor_user_retarget,
-    ).toBe(390);
+    ).toBe(436);
   });
 
   it("assigns distinct entityIds and shared identityKey for discourse asset:database", () => {
@@ -95,11 +96,11 @@ describe("component gold structured identity migration (KDATAP-8aed54)", () => {
     }
   });
 
-  it("asserts vendor on exactly 16 third_party rows (KDATAP-b702ea: 36 negative vendor decoys demoted)", () => {
+  it("asserts vendor on exactly 58 third_party rows (KDATAP-b702ea: 36 negative vendor decoys demoted; DATAP-818: +42)", () => {
     const vendorRows = ledger.entries.filter(
       (entry: ComponentMigrationLedgerEntry) => entry.bucket === "vendor",
     );
-    expect(vendorRows).toHaveLength(16);
+    expect(vendorRows).toHaveLength(58);
     for (const row of vendorRows) {
       expect(row.vendor).toBeTruthy();
       expect(row.identityKey).toMatch(/^third_party:/);

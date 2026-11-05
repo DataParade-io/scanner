@@ -192,3 +192,191 @@ third_parties:
       - "sentry_sdk"
     type: third_party
     subType: saas_service
+
+  # Raw-HTTP destinations (DATAP-818). Python request calls name these services from the
+  # resolved URL host; url_routes in third-party.patterns.yaml split graph.facebook.com.
+  - serviceName: x
+    matchKeys:
+      - "api.x.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: whatsapp
+    matchKeys:
+      - whatsapp
+    type: third_party
+    subType: messaging
+
+  - serviceName: facebook_messenger
+    matchKeys:
+      - facebook_messenger
+    type: third_party
+    subType: messaging
+
+  - serviceName: facebook_graph
+    matchKeys:
+      - "graph.facebook.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: meta_conversions_api
+    matchKeys:
+      - meta_conversions_api
+    type: third_party
+    subType: analytics
+
+  - serviceName: instagram
+    matchKeys:
+      - "graph.instagram.com"
+      - "api.instagram.com"
+      - "instagram.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: linkedin
+    matchKeys:
+      - "api.linkedin.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: reddit
+    matchKeys:
+      - "reddit.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: crisp
+    matchKeys:
+      - "api.crisp.chat"
+    type: third_party
+    subType: messaging
+
+  - serviceName: telegram
+    matchKeys:
+      - "api.telegram.org"
+    type: third_party
+    subType: messaging
+
+  - serviceName: google_analytics
+    matchKeys:
+      - "google-analytics.com"
+    type: third_party
+    subType: analytics
+
+  - serviceName: make
+    matchKeys:
+      - ".make.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: shopify
+    matchKeys:
+      - "myshopify.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: cerebras
+    matchKeys:
+      - "api.cerebras.ai"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: arize_phoenix
+    matchKeys:
+      - "phoenix.arize.com"
+    type: third_party
+    subType: monitoring
+
+  - serviceName: groq
+    matchKeys:
+      - "api.groq.com"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: together_ai
+    matchKeys:
+      - "api.together.xyz"
+      - "api.together.ai"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: perplexity
+    matchKeys:
+      - "api.perplexity.ai"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: firecrawl
+    matchKeys:
+      - "api.firecrawl.dev"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: tavus
+    matchKeys:
+      - "tavusapi.com"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: discord
+    matchKeys:
+      - "discord.com/api"
+      - "discordapp.com"
+    type: third_party
+    subType: messaging
+
+  - serviceName: mistral
+    matchKeys:
+      - "api.mistral.ai"
+    type: third_party
+    subType: ai_provider
+
+  - serviceName: airtable
+    matchKeys:
+      - "api.airtable.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: hubspot
+    matchKeys:
+      - "api.hubapi.com"
+    type: third_party
+    subType: crm
+
+  - serviceName: slack
+    matchKeys:
+      - "hooks.slack.com"
+      - "slack.com/api"
+    type: third_party
+    subType: messaging
+
+  - serviceName: gmail
+    matchKeys:
+      - "gmail.googleapis.com"
+    type: third_party
+    subType: email_provider
+
+  - serviceName: google_drive
+    matchKeys:
+      - "www.googleapis.com/drive"
+      - "drive.googleapis.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: google_sheets
+    matchKeys:
+      - "sheets.googleapis.com"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: google_calendar
+    matchKeys:
+      - "www.googleapis.com/calendar"
+    type: third_party
+    subType: saas_service
+
+  - serviceName: google_docs
+    matchKeys:
+      - "docs.googleapis.com"
+    type: third_party
+    subType: saas_service
