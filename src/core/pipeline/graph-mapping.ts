@@ -25,6 +25,7 @@ import {
   getSectionIdFromComponent,
   getSectionLabelFromComponent,
 } from "./diagram-layout/section-helpers";
+import { packSectionsHorizontally } from "./diagram-layout/section-packing";
 import { applyTerraformLaneLayout } from "./diagram-layout/terraform-lane-layout";
 import type { ComponentByIdMap } from "./diagram-layout/types";
 import {
@@ -421,6 +422,7 @@ export function buildDiagramGraphFromScanResult(
     applyTerraformLaneLayout(nodes, componentsById, sectionIds);
     applyAppSectionStackLayout(nodes, componentsById, sectionIds);
     repositionManagedProviderNodes(nodes, componentsById);
+    packSectionsHorizontally(nodes, componentsById, sectionIds);
   }
 
   for (const flow of scanResult.dataFlows) {
