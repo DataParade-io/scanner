@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "dc4792da-d9ef-4d90-b0ed-f0e66920958f",
+  "issue_id": "KDATAP-09374a1a-a1ae-49a3-ba3a-b60e4ff774d5",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:21.013Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Spike the SQLite reader decision",
+    "description": "Decide how the scanner reads Cursor's state.vscdb SQLite files: built-in node:sqlite (requires an engines floor bump — Node has no built-in SQLite in 20) vs an optional dependency (for example better-sqlite3, with native build burden). Constraint: the repo's dependency list is intentionally tiny; the reader must sit behind one interface so the choice is swappable; the decision affects the CI matrix. Do this first — it must not stall the epic late.\n\nDone when: the decision is recorded in a comment on this issue with the engines impact, CI matrix validation, and a reviewed spike; the reader interface exists.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

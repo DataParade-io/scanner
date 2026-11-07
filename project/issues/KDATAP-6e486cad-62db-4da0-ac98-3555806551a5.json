@@ -1,0 +1,42 @@
+{
+  "id": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+  "title": "Coding-session sentiment meter: thanks vs. F-bombs",
+  "description": "Scan Ryan's local AI coding sessions and show a meter that balances how often he says thanks against how many F-bombs he drops \u2014 an indicator of how a day of vibe coding is going. Everything stays local; output is counts only.\n\nSources (v1 adapters): Claude Code session transcripts (~/.claude/projects/**.jsonl, incl. subagent folders to exclude), Cursor (IDE state.vscdb SQLite under ~/Library/Application Support/Cursor/User plus agent transcripts under ~/.cursor), and OpenAI Codex CLI rollouts (~/.codex/sessions/**). Grok Bot (desktop AI assistant app) conversations are a required LATER source with its own adapter.\n\nRequirements:\n- Extract ONLY human-authored messages with timestamps from each source; injected content (tool results, system reminders, task notifications, interrupted-request markers, agent hand-backs) is excluded.\n- Shared normalized record (source, session id, project, timestamp, author role, text) emitted by all adapters.\n- Counting rules for thanks and F-bomb tokens: word lists in a YAML config, word boundaries, case-insensitive, quoted/pasted text and code blocks excluded; deterministic, no AI in the loop.\n- Time period is parameterizable: rolling windows (last 24h, N hours, N days) AND calendar windows (today, yesterday) with a configurable day-start time defaulting to local midnight (e.g. 4am means today runs 4am to 4am), with correct timezone and DST handling.\n- Deduplication across forked/resumed sessions, mirrored records, and repeated hand-backs; incremental re-scan without re-reading unchanged files.\n- Privacy: local only, no network I/O, no message text in output or scan state; fixtures are synthetic.\n- Meter output: counts, ratio gauge, bands; CLI with --window/--day-start/--timezone/--sources/--json flags.\n\nFormat claims must cite public docs or source code; unverifiable claims are assumptions verified against a real Mac. Milestones are delivered as the epics under this initiative, in order.",
+  "type": "initiative",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": null,
+  "labels": [],
+  "dependencies": [],
+  "comments": [
+    {
+      "id": "c6e79e49-f198-4e7f-a477-fb8aaa498822",
+      "author": "ubuntu",
+      "text": "Filed by cloud-agent (cursor / glm-5.3) as the step-by-step plan for this initiative. Structure: this initiative holds 9 epics in delivery order \u2014 A Foundations (KDATAP-7299f8), B Counting rules (KDATAP-ff3968), C Time windows (KDATAP-5219e2), D Claude Code adapter (KDATAP-5d5c3f), E Cursor adapter (KDATAP-3f3158), F Codex adapter (KDATAP-5ee1c5), G Meter and CLI (KDATAP-07c368), H Privacy/gold eval/release (KDATAP-d59959), and I Grok Bot later-source adapter (KDATAP-247294) \u2014 with 39 tasks carrying descriptions, done-when criteria, and blocked-by dependencies. Format claims in descriptions cite public docs or source (Claude Code session docs, openai/codex rollout source, Cursor reverse-engineering references); unverifiable claims are called out as assumptions with verify-on-a-real-Mac tasks (D1, E4, F2, I1). Earlier draft plan doc PR #96 was closed and its branch deleted by request; this Kanbus filing is the record of the plan now.",
+      "created_at": "2026-10-02T02:45:35.778324Z",
+      "comment_type": "default",
+      "data": {},
+      "agent": {
+        "platform": "cursor",
+        "model": "glm-5.3",
+        "name": "cloud-agent",
+        "settings": {}
+      }
+    }
+  ],
+  "created_at": "2026-10-02T02:41:14.571047Z",
+  "updated_at": "2026-10-02T02:45:42.795833Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}

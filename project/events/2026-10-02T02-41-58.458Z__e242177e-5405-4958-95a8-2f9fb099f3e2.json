@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "e242177e-5405-4958-95a8-2f9fb099f3e2",
+  "issue_id": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:58.458Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Privacy, gold eval, and release readiness",
+    "description": "Purpose: prove the privacy guarantees, validate counting accuracy against gold labels, and make the feature release-ready.\n\nScope: a static unit test asserting no network-capable imports under src/sentiment/**; tests asserting output and scan state contain no verbatim message text; a lint guard preventing real transcripts from being committed under tests/fixtures/sentiment/; one gold-labeling annotation pass over the fixture corpus (labels: thanks, fbomb, both, neither, excluded) with contested labels filed as findings (proposed until a person accepts); accuracy gates (exact match on synthetic fixtures; human-message recall sampled on Ryan's real Macs, aggregate numbers only) and paste-heuristic threshold tuning from the real corpus; docs (README section, wiki page, engines note if bumped).\n\nDone when: privacy tests are green in CI; the accuracy thresholds are met and recorded; the labeling pass and findings exist in Kanbus; docs are updated; the feature is release-ready per the repo's conventional-commit and semantic-release flow.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

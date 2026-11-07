@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "f87996df-cec2-48dd-846c-2da3c786096f",
+  "issue_id": "KDATAP-7299f867-88f0-4997-99ca-3ffef6e32e38",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:26.385Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Foundations: normalized records and adapter contract",
+    "description": "Purpose: build the source-agnostic core that every adapter and the meter depend on. Everything else in the initiative blocks on this epic.\n\nScope: shared HumanMessageRecord (source, session id, record id, project path, UTC timestamp, role, text, dedup key, provenance) as a Zod schema; the adapter contract (discover/extract, streaming, skip-and-count failure policy); the dedup-key and union framework; the incremental scan-state store; the synthetic fixture corpus skeleton.\n\nDone when: the record schema and adapter contract are exported from the scanner public API; malformed/unknown records are skipped and counted without failing a scan; dedup collapses identical records across copies; scan state holds only watermarks and fingerprints (never message text); tests/fixtures/sentiment/ exists with per-source subtrees; all unit tests pass.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 1,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "5a84bc66-9c5d-483c-af4d-bc097242f054",
+  "issue_id": "KDATAP-965c4a9f-83ce-4348-9bf1-9c686e42afc3",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:42:30.268Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement resolveWindow for rolling and calendar windows",
+    "description": "Implement the pure function resolveWindow(spec, now, timezone, dayStart) returning UTC millisecond bounds plus a human label. Specs: today, yesterday (calendar windows in the configured timezone at the configured day-start, default local midnight); last-24h, Nh, Nd (rolling, UTC-relative); all; absolute since/until bounds override the spec. Inclusion is start-inclusive, end-exclusive.\n\nDone when: a message at 03:59 with day-start 04:00 falls into yesterday and one at 04:00:00 falls into today; rolling windows ignore timezone; the label echoes the resolved window (for example: today 04:00-04:00 America/Los_Angeles).",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-5219e258-d02c-4075-885e-1882d394d67f",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
