@@ -3,7 +3,7 @@
   "title": "Root Application component id changes with the scan folder name",
   "description": "Without a configured project name, the scanner names the root Application component after the scanned folder (deterministic-scan.ts projectNameFromPath), and the name is part of its stable key, so the same commit scanned in two folders gives that component two ids (Jira DATAP-858). Expected: the key does not depend on the folder name; the display name may still be the folder name.",
   "type": "bug",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
@@ -17,11 +17,18 @@
       "text": "Spec features/folder-independent-ids.feature failed first (one component id differed between folders first-checkout and second-checkout). Fix: the root Application component, whose name comes from the project name or the scan folder, gets properties.name_from_project = true, and stableComponentKey uses the token <project> instead of the name. The display name is unchanged. The id of this one component changes once for every repository. jest 1679 passed; the 3 failing features (gold-import, canonical representation) also fail on develop without this change.",
       "created_at": "2026-11-11T17:47:07.586783Z",
       "comment_type": "default"
+    },
+    {
+      "id": "7614d53f-0cd1-4207-976b-31d11db47033",
+      "author": "home",
+      "text": "Fixed in PR #116 (merged to develop with this close). CI smoke-validation and test passed.",
+      "created_at": "2026-11-11T17:54:00.870823Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-11-11T17:42:13.662976Z",
-  "updated_at": "2026-11-11T17:47:07.587036Z",
-  "closed_at": null,
+  "updated_at": "2026-11-11T17:54:01.054349Z",
+  "closed_at": "2026-11-11T17:54:01.054047Z",
   "agent": {
     "platform": "claude_code",
     "model": "Opus 5.5",
