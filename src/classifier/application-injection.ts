@@ -29,6 +29,7 @@ import {
   compareSourceLocations,
   compareDetectedFromRefs,
 } from "./postprocessing";
+import { NAME_FROM_PROJECT_PROPERTY } from "../core/pipeline/stable-component-ids";
 
 /** Synthetic main app created when no code hub exists (e.g. IaC-only scan). */
 export const INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT =
@@ -357,6 +358,8 @@ export function injectApplicationAssetIfMissing(
       cloned[appIndex] = {
         ...app,
         name: projectName,
+        // The name comes from the project or the scan folder; keep it out of the stable id (KDATAP-296090).
+        properties: { ...app.properties, [NAME_FROM_PROJECT_PROPERTY]: true },
       };
     }
     return cloned;
@@ -396,6 +399,8 @@ export function injectApplicationAssetIfMissing(
       section_id: defaultSectionId,
       section_role: defaultSectionRole,
       sourceContext: INJECTED_PROJECT_PLACEHOLDER_SOURCE_CONTEXT,
+      // The name comes from the project or the scan folder; keep it out of the stable id (KDATAP-296090).
+      [NAME_FROM_PROJECT_PROPERTY]: true,
     },
   };
 
