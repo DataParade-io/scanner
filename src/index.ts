@@ -40,7 +40,7 @@ export {
   type DataParadeLink,
 } from "./graph/build-dataparade-graph";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
-export { stableComponentKey } from "./core/pipeline/stable-component-ids";
+export { NAME_FROM_PROJECT_PROPERTY, PROJECT_NAME_KEY_TOKEN, stableComponentKey } from "./core/pipeline/stable-component-ids";
 export {
   assignStableComponentIds,
   assignStableEntityIds,
