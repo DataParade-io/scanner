@@ -1,0 +1,706 @@
+version: third-party-labels/1
+scope_note: Vendors reached from src/wp-includes. The AI client and connector registry only list Anthropic, Google, OpenAI
+  and Akismet for plugins to implement; pingbacks, trackbacks, feeds, URL details, remote styles and the AI HTTP adapter
+  call user- or plugin-supplied URLs, and mail goes through PHPMailer to the configured host.
+vendors:
+- vendor: wordpress_org
+  subject_key: third_party:wordpress_org
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [configuration, telemetry, search_query, ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/update.php, line: 246}
+    - {file_path: src/wp-includes/update.php, line: 258}
+    - {file_path: src/wp-includes/update.php, line: 472}
+    - {file_path: src/wp-includes/update.php, line: 484}
+    - {file_path: src/wp-includes/update.php, line: 758}
+    - {file_path: src/wp-includes/update.php, line: 770}
+    - {file_path: src/wp-includes/rest-api/endpoints/class-wp-rest-pattern-directory-controller.php, line: 130}
+    - {file_path: src/wp-includes/fonts.php, line: 269}
+    - {file_path: src/wp-includes/fonts/class-wp-font-collection.php, line: 182}
+    - {file_path: src/wp-includes/formatting.php, line: 6042}
+    - {file_path: src/wp-includes/formatting.php, line: 6060}
+    - {file_path: src/wp-includes/formatting.php, line: 6167}
+  uncertain: false
+  rationale: update.php posts the WordPress, PHP and MySQL versions, locale, user and site counts, installed plugins and
+    themes and the site URL to api.wordpress.org; the pattern directory proxies searches to api.wordpress.org/patterns, the
+    font library fetches the Google Fonts collection from s.w.org, and emoji images load from the s.w.org CDN in visitors'
+    browsers.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: gravatar
+  subject_key: third_party:gravatar
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/link-template.php, line: 4619}
+  uncertain: false
+  rationale: get_avatar_data builds https://secure.gravatar.com/avatar/<email hash> for users and commenters, so every
+    browser that renders an avatar sends the hashed email and its IP address to Gravatar.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_fonts
+  subject_key: third_party:google_fonts
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "unknown"
+  data_categories: [ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/script-loader.php, line: 1614}
+    - {file_path: src/wp-includes/script-loader.php, line: 1693}
+    - {file_path: src/wp-includes/build/routes/font-list/content.js, line: 12551}
+  uncertain: true
+  rationale: script-loader registers the open-sans and wp-editor-font styles from fonts.googleapis.com, and the font library
+    downloads font files from the URLs in the Google Fonts collection in the admin's browser. Core no longer enqueues the two
+    styles, so Google is reached only when a theme or plugin enqueues them or an admin installs a Google font.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_hosted_libraries
+  subject_key: third_party:google_hosted_libraries
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "unknown"
+  data_categories: [ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/script-loader.php, line: 890}
+    - {file_path: src/wp-includes/script-loader.php, line: 891}
+  uncertain: true
+  rationale: script-loader registers the prototype and scriptaculous handles from ajax.googleapis.com, so visitors' browsers
+    fetch them from Google when a theme or plugin enqueues them; core itself does not enqueue them.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: youtube
+  subject_key: third_party:youtube
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 57}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers YouTube as a built-in oEmbed provider (https://www.youtube.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: vimeo
+  subject_key: third_party:vimeo
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 62}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Vimeo as a built-in oEmbed provider (https://vimeo.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: dailymotion
+  subject_key: third_party:dailymotion
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 63}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Dailymotion as a built-in oEmbed provider (https://www.dailymotion.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: flickr
+  subject_key: third_party:flickr
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 65}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Flickr as a built-in oEmbed provider (https://www.flickr.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: smugmug
+  subject_key: third_party:smugmug
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 67}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers SmugMug as a built-in oEmbed provider (https://api.smugmug.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: scribd
+  subject_key: third_party:scribd
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 68}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Scribd as a built-in oEmbed provider (https://www.scribd.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: wordpress_tv
+  subject_key: third_party:wordpress_tv
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 69}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers WordPress.tv as a built-in oEmbed provider (https://wordpress.tv) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: crowdsignal
+  subject_key: third_party:crowdsignal
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 70}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Crowdsignal as a built-in oEmbed provider (https://api.crowdsignal.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: twitter
+  subject_key: third_party:twitter
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 74}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Twitter/X as a built-in oEmbed provider (https://publish.twitter.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: soundcloud
+  subject_key: third_party:soundcloud
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 80}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers SoundCloud as a built-in oEmbed provider (https://soundcloud.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: spotify
+  subject_key: third_party:spotify
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 81}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Spotify as a built-in oEmbed provider (https://embed.spotify.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: imgur
+  subject_key: third_party:imgur
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 82}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Imgur as a built-in oEmbed provider (https://api.imgur.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: issuu
+  subject_key: third_party:issuu
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 83}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Issuu as a built-in oEmbed provider (https://issuu.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: mixcloud
+  subject_key: third_party:mixcloud
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 84}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Mixcloud as a built-in oEmbed provider (https://app.mixcloud.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: ted
+  subject_key: third_party:ted
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 85}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers TED as a built-in oEmbed provider (https://www.ted.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: animoto
+  subject_key: third_party:animoto
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 86}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Animoto as a built-in oEmbed provider (https://animoto.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: tumblr
+  subject_key: third_party:tumblr
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 87}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Tumblr as a built-in oEmbed provider (https://www.tumblr.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: kickstarter
+  subject_key: third_party:kickstarter
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 88}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Kickstarter as a built-in oEmbed provider (https://www.kickstarter.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cloudup
+  subject_key: third_party:cloudup
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 90}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Cloudup as a built-in oEmbed provider (https://cloudup.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: reverbnation
+  subject_key: third_party:reverbnation
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 91}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers ReverbNation as a built-in oEmbed provider (https://www.reverbnation.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: videopress
+  subject_key: third_party:videopress
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [configuration]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 92}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers VideoPress (WordPress.com) as a built-in oEmbed provider (https://public-api.wordpress.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post. The VideoPress endpoint also carries the site home URL in its for= parameter.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: reddit
+  subject_key: third_party:reddit
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 93}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Reddit as a built-in oEmbed provider (https://www.reddit.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: speakerdeck
+  subject_key: third_party:speakerdeck
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 94}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Speaker Deck as a built-in oEmbed provider (https://speakerdeck.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: amazon_kindle
+  subject_key: third_party:amazon_kindle
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 95}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 96}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 97}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 98}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 102}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Amazon Kindle as a built-in oEmbed provider (https://read.amazon.cn, https://read.amazon.co.uk, https://read.amazon.com, https://read.amazon.com.au, https://read.amazon.in) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: someecards
+  subject_key: third_party:someecards
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 105}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Someecards as a built-in oEmbed provider (https://www.someecards.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: tiktok
+  subject_key: third_party:tiktok
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 108}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers TikTok as a built-in oEmbed provider (https://www.tiktok.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: pinterest
+  subject_key: third_party:pinterest
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 110}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Pinterest as a built-in oEmbed provider (https://www.pinterest.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: wolfram_cloud
+  subject_key: third_party:wolfram_cloud
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 111}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Wolfram Cloud as a built-in oEmbed provider (https://www.wolframcloud.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: pocket_casts
+  subject_key: third_party:pocket_casts
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 112}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Pocket Casts as a built-in oEmbed provider (https://pca.st) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: anghami
+  subject_key: third_party:anghami
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 113}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Anghami as a built-in oEmbed provider (https://api.anghami.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: bluesky
+  subject_key: third_party:bluesky
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 114}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Bluesky as a built-in oEmbed provider (https://embed.bsky.app) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: canva
+  subject_key: third_party:canva
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 115}
+    - {file_path: src/wp-includes/class-wp-oembed.php, line: 634}
+  uncertain: false
+  rationale: WP_oEmbed registers Canva as a built-in oEmbed provider (https://canva.com) and
+    fetches it server side with wp_safe_remote_get, sending the public URL an author embedded in a post.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

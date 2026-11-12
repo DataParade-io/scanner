@@ -109,6 +109,34 @@ pnpm run benchmark:run --include-proposed vgs-django
 
 The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
 
+## Third-party vendor labels (opt-in, diagnostic)
+
+`repos/<key>/annotations/third_parties.yaml` holds one record per vendor that the packet's in-scope code sends data to (DATAP-789, DATAP-895). Types and validation live in `third-party-labels.ts`. A record names the vendor by its components-layer identity key (`third_party:<vendor>`), so it adds no node type. It adds:
+
+- `data_categories`: what the code sends, from a closed list in `third-party-labels.ts`.
+- `subprocessor`: `yes`, `no` or `unknown`.
+- `route`: `sdk`, `raw_http` or `both`.
+- `provenance`: the manifest entry, the imports and every in-scope call site, by file and line.
+- `uncertain`: true where the labeller was not sure.
+
+The labels are closed-world over the manifest scope. A vendor SDK declared in a manifest but never imported or called anywhere in the clone has a record with `sends_data: false`; it is listed apart and not scored. Supply-chain facts (dependency counts, CVEs, maintainers) are not labelled.
+
+`benchmark:run` prints a vendor block for packets that have the file. `benchmark:third-parties` scores every such packet and, with `--write-report`, writes `reports/third-party-vendors.{json,md}`:
+
+```bash
+pnpm run benchmark:third-parties                    # all packets with labels, proposed labels included
+pnpm run benchmark:third-parties -- --accepted-only # headline: accepted labels only
+pnpm run benchmark:third-parties -- --check-only    # check cited files and lines against the clones, no scan
+```
+
+Scoring is per vendor:
+
+- **Recall:** a gold vendor counts only when the scanner reports it at a file the label cites.
+- **Vendor recall:** counts the vendor wherever the scanner reports it.
+- **Precision:** reported in-scope vendors that are gold, over all reported in-scope vendors.
+
+Each miss gets one cause: `no_sdk_mapping` (SDK route, not reported), `raw_http_missed` (raw HTTP route, not reported), or `provenance_wrong` (reported, but only at files the label does not cite).
+
 ## Four-layer scorecard vector (opt-in)
 
 `benchmark:scorecard` emits the headline evaluation vector: `occurrences`, `data-items`, `components`, and `data-flows`. Raw hits are included only as a diagnostic sidecar and never participate in headline gates. Corpus and fixture `data-actions` remain diagnostic-only — scored by `benchmark:run` / `eval:data-actions`, excluded from `scorecard-vector/3` headlines, and not part of the `diagnostic.raw-hits` sidecar.

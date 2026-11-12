@@ -1,0 +1,75 @@
+version: third-party-labels/1
+scope_note: Vendors reached from raw-http-integrations/typescript/src/; ordersClient.ts and profile.ts call base URLs known only from build-time env, and agentChat.ts calls the team's own Cloud Run service, so they have no record.
+vendors:
+- vendor: mistral
+  subject_key: third_party:mistral
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/typescript/src/chatProxy.ts, line: 6}
+  uncertain: false
+  rationale: chatProxy forwards the visitor's chat messages and visitor id to api.mistral.ai/v1/chat/completions with
+    fetch.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: airtable
+  subject_key: third_party:airtable
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, person_name]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/typescript/src/recordsApi.ts, line: 11}
+  uncertain: false
+  rationale: saveSignup posts the email and full name with axios to a Signups table under apiBase, which defaults to
+    api.airtable.com/v0.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: hubspot
+  subject_key: third_party:hubspot
+  component_subtype: crm
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, person_name, phone_number]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/typescript/src/crmClient.ts, line: 10}
+  uncertain: false
+  rationale: upsertContact posts email, first name and phone to /crm/v3/objects/contacts through an axios instance whose
+    baseURL is api.hubapi.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: slack
+  subject_key: third_party:slack
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, order, message_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/typescript/src/notifyOps.ts, line: 5}
+  uncertain: false
+  rationale: notifyOps posts a message with the order id and customer email to ALERTS_WEBHOOK_URL from settings.ts,
+    whose default is a hooks.slack.com incoming webhook.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
