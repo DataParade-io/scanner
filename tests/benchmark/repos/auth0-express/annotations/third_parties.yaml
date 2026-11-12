@@ -1,0 +1,31 @@
+version: third-party-labels/1
+scope_note: lib/ is the Auth0 OIDC middleware; all identity-provider traffic goes through openid-client to the configured issuer, with Auth0-specific handling for *.auth0.com issuers.
+vendors:
+- vendor: auth0
+  subject_key: third_party:auth0
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [access_token, credentials, user_id]
+  provenance:
+    manifest:
+    - {file_path: package.json, line: 38, package: openid-client}
+    imports:
+    - {file_path: lib/client.js, line: 2, module: openid-client}
+    call_sites:
+    - {file_path: lib/client.js, line: 168}
+    - {file_path: lib/context.js, line: 79}
+    - {file_path: lib/context.js, line: 260}
+    - {file_path: lib/context.js, line: 413}
+    - {file_path: lib/context.js, line: 463}
+    - {file_path: lib/context.js, line: 598}
+    - {file_path: lib/context.js, line: 812}
+    - {file_path: lib/context.js, line: 1055}
+  uncertain: true
+  rationale: openid-client discovers the issuer and sends the client credentials, authorization codes, refresh and exchanged
+    tokens and access tokens (userinfo) to it, plus JWKS fetches. The issuer is configured by the operator; the code treats
+    *.auth0.com issuers as Auth0 (logout URL, Auth0-Client header), but any OIDC provider can be the target.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

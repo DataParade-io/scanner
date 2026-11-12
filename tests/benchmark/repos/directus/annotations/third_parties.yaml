@@ -1,0 +1,362 @@
+version: third-party-labels/1
+scope_note: The api/ package reaches AI providers, AI tracing services, email services, cloud storage drivers, deployment
+  hosts and Directus's own telemetry, license and marketplace services; OAuth2, OpenID, SAML, LDAP, SMTP, the openai-compatible
+  provider and the flow request operation use admin-configured endpoints and are not vendor records.
+vendors:
+- vendor: openai
+  subject_key: third_party:openai
+  component_subtype: ai_provider
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content, file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 72, package: '@ai-sdk/openai'}
+    imports:
+    - {file_path: api/src/ai/providers/registry.ts, line: 2, module: '@ai-sdk/openai'}
+    call_sites:
+    - {file_path: api/src/ai/providers/registry.ts, line: 57}
+    - {file_path: api/src/ai/chat/lib/create-ui-stream.ts, line: 87}
+    - {file_path: api/src/ai/chat/controllers/object.post.ts, line: 68}
+    - {file_path: api/src/ai/files/adapters/openai.ts, line: 10}
+    - {file_path: api/src/ai/files/lib/upload-to-provider.ts, line: 18}
+  uncertain: false
+  rationale: The AI chat and object endpoints stream user messages, system context and tool results to OpenAI through
+    @ai-sdk/openai, and the file upload adapter posts user files to https://api.openai.com/v1/files.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: anthropic
+  subject_key: third_party:anthropic
+  component_subtype: ai_provider
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content, file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 69, package: '@ai-sdk/anthropic'}
+    imports:
+    - {file_path: api/src/ai/providers/anthropic-file-support.ts, line: 1, module: '@ai-sdk/anthropic'}
+    call_sites:
+    - {file_path: api/src/ai/providers/anthropic-file-support.ts, line: 38}
+    - {file_path: api/src/ai/providers/anthropic-file-support.ts, line: 42}
+    - {file_path: api/src/ai/providers/anthropic-file-support.ts, line: 74}
+    - {file_path: api/src/ai/providers/registry.ts, line: 60}
+    - {file_path: api/src/ai/chat/lib/create-ui-stream.ts, line: 87}
+    - {file_path: api/src/ai/chat/controllers/object.post.ts, line: 68}
+    - {file_path: api/src/ai/files/adapters/anthropic.ts, line: 9}
+    - {file_path: api/src/ai/files/lib/upload-to-provider.ts, line: 26}
+  uncertain: false
+  rationale: The Anthropic provider wraps @ai-sdk/anthropic with a custom fetch and receives chat messages and prompts;
+    the upload adapter posts user files to https://api.anthropic.com/v1/files.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_gemini
+  subject_key: third_party:google_gemini
+  component_subtype: ai_provider
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content, file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 71, package: '@ai-sdk/google'}
+    imports:
+    - {file_path: api/src/ai/providers/registry.ts, line: 1, module: '@ai-sdk/google'}
+    call_sites:
+    - {file_path: api/src/ai/providers/registry.ts, line: 63}
+    - {file_path: api/src/ai/chat/lib/create-ui-stream.ts, line: 87}
+    - {file_path: api/src/ai/chat/controllers/object.post.ts, line: 68}
+    - {file_path: api/src/ai/files/adapters/google.ts, line: 13}
+    - {file_path: api/src/ai/files/adapters/google.ts, line: 45}
+    - {file_path: api/src/ai/files/lib/upload-to-provider.ts, line: 34}
+  uncertain: false
+  rationale: The Google provider from @ai-sdk/google receives chat messages and prompts, and the upload adapter sends user
+    files to the Gemini Files API at generativelanguage.googleapis.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: langfuse
+  subject_key: third_party:langfuse
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [telemetry, user_id, prompt_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 101, package: '@langfuse/otel'}
+    imports:
+    - {file_path: api/src/ai/telemetry/langfuse.ts, line: 88, module: '@langfuse/otel'}
+    call_sites:
+    - {file_path: api/src/ai/telemetry/langfuse.ts, line: 93}
+  uncertain: false
+  rationale: When AI telemetry is set to Langfuse, a LangfuseSpanProcessor exports AI SDK spans with provider, model, user
+    id and role metadata, and prompts and outputs when AI_TELEMETRY_RECORD_IO is on.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: braintrust
+  subject_key: third_party:braintrust
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [telemetry, user_id, prompt_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 100, package: '@braintrust/otel'}
+    - {file_path: api/package.json, line: 245, package: braintrust}
+    imports:
+    - {file_path: api/src/ai/telemetry/braintrust.ts, line: 26, module: '@braintrust/otel'}
+    call_sites:
+    - {file_path: api/src/ai/telemetry/braintrust.ts, line: 31}
+  uncertain: false
+  rationale: When AI telemetry is set to Braintrust, a BraintrustSpanProcessor exports AI SDK spans with user id and role
+    metadata, and prompts and outputs when AI_TELEMETRY_RECORD_IO is on.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: aws
+  subject_key: third_party:aws
+  component_subtype: cloud_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [email, message_content, file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 75, package: '@aws-sdk/client-sesv2'}
+    - {file_path: api/package.json, line: 94, package: '@directus/storage-driver-s3'}
+    imports:
+    - {file_path: api/src/mailer.ts, line: 27, module: '@aws-sdk/client-sesv2'}
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 5, module: '@directus/storage-driver-s3'}
+    call_sites:
+    - {file_path: api/src/mailer.ts, line: 31}
+    - {file_path: api/src/services/mail/index.ts, line: 108}
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 19}
+    - {file_path: api/src/services/files.ts, line: 151}
+    - {file_path: api/src/services/assets.ts, line: 450}
+  uncertain: false
+  rationale: The ses email transport sends mail (recipient addresses and message bodies) through the SESv2 client, and
+    the s3 storage driver writes uploaded files to S3; the S3 driver can also point at an S3-compatible endpoint.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: mailgun
+  subject_key: third_party:mailgun
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [email, message_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 248, package: nodemailer-mailgun-transport}
+    imports:
+    - {file_path: api/src/mailer.ts, line: 59, module: nodemailer-mailgun-transport}
+    call_sites:
+    - {file_path: api/src/mailer.ts, line: 62}
+    - {file_path: api/src/services/mail/index.ts, line: 108}
+  uncertain: false
+  rationale: The mailgun email transport sends mail through nodemailer-mailgun-transport to api.mailgun.net by default,
+    carrying recipient addresses and message bodies.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: mailtrap
+  subject_key: third_party:mailtrap
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [email, message_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 246, package: mailtrap}
+    imports:
+    - {file_path: api/src/mailer.ts, line: 71, module: mailtrap}
+    call_sites:
+    - {file_path: api/src/mailer.ts, line: 80}
+    - {file_path: api/src/services/mail/index.ts, line: 108}
+  uncertain: false
+  rationale: The mailtrap email transport sends mail through MailtrapTransport with the configured token, carrying recipient
+    addresses and message bodies.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_cloud_storage
+  subject_key: third_party:google_cloud_storage
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 92, package: '@directus/storage-driver-gcs'}
+    imports:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 7, module: '@directus/storage-driver-gcs'}
+    call_sites:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 19}
+    - {file_path: api/src/services/files.ts, line: 151}
+    - {file_path: api/src/services/assets.ts, line: 450}
+  uncertain: false
+  rationale: A storage location with the gcs driver loads @directus/storage-driver-gcs and the files and assets services
+    write uploaded files and transformed assets to Google Cloud Storage.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: azure
+  subject_key: third_party:azure
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 90, package: '@directus/storage-driver-azure'}
+    imports:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 8, module: '@directus/storage-driver-azure'}
+    call_sites:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 19}
+    - {file_path: api/src/services/files.ts, line: 151}
+    - {file_path: api/src/services/assets.ts, line: 450}
+  uncertain: false
+  rationale: A storage location with the azure driver loads @directus/storage-driver-azure and the files and assets services
+    write uploaded files and transformed assets to Azure Blob Storage.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cloudinary
+  subject_key: third_party:cloudinary
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 91, package: '@directus/storage-driver-cloudinary'}
+    imports:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 9, module: '@directus/storage-driver-cloudinary'}
+    call_sites:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 19}
+    - {file_path: api/src/services/files.ts, line: 151}
+    - {file_path: api/src/services/assets.ts, line: 450}
+  uncertain: false
+  rationale: A storage location with the cloudinary driver loads @directus/storage-driver-cloudinary and the files and assets
+    services upload files to Cloudinary.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: supabase
+  subject_key: third_party:supabase
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 95, package: '@directus/storage-driver-supabase'}
+    imports:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 6, module: '@directus/storage-driver-supabase'}
+    call_sites:
+    - {file_path: api/src/storage/get-storage-driver.ts, line: 19}
+    - {file_path: api/src/services/files.ts, line: 151}
+    - {file_path: api/src/services/assets.ts, line: 450}
+  uncertain: false
+  rationale: A storage location with the supabase driver loads @directus/storage-driver-supabase and the files and assets
+    services write files to Supabase Storage.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: netlify
+  subject_key: third_party:netlify
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [access_token, configuration]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 103, package: '@netlify/api'}
+    imports:
+    - {file_path: api/src/deployment/drivers/netlify.ts, line: 16, module: '@netlify/api'}
+    call_sites:
+    - {file_path: api/src/deployment/drivers/netlify.ts, line: 69}
+    - {file_path: api/src/deployment/drivers/netlify.ts, line: 238}
+    - {file_path: api/src/deployment/drivers/netlify.ts, line: 405}
+  uncertain: false
+  rationale: The Netlify deployment driver uses NetlifyAPI with the admin's access token to list sites, trigger builds and
+    register webhooks; it sends no end-user data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: vercel
+  subject_key: third_party:vercel
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, configuration]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: api/src/deployment/drivers/vercel.ts, line: 113}
+    - {file_path: api/src/deployment/drivers/vercel.ts, line: 318}
+    - {file_path: api/src/deployment/drivers/vercel.ts, line: 385}
+    - {file_path: api/src/deployment/deployment.ts, line: 60}
+  uncertain: false
+  rationale: The Vercel deployment driver calls https://api.vercel.com with axios and the admin's token to list projects,
+    create deployments and register webhooks; it sends no end-user data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: directus
+  subject_key: third_party:directus
+  component_subtype: saas_service
+  sends_data: true
+  route: both
+  subprocessor: "no"
+  data_categories: [email, telemetry, usage_events, credentials]
+  provenance:
+    manifest:
+    - {file_path: api/package.json, line: 84, package: '@directus/license'}
+    - {file_path: api/package.json, line: 82, package: '@directus/extensions-registry'}
+    imports:
+    - {file_path: api/src/license/manager.ts, line: 3, module: '@directus/license'}
+    - {file_path: api/src/controllers/extensions.ts, line: 4, module: '@directus/extensions-registry'}
+    - {file_path: api/src/services/extensions.ts, line: 3, module: '@directus/extensions-registry'}
+    - {file_path: api/src/extensions/lib/get-extensions-settings.ts, line: 3, module: '@directus/extensions-registry'}
+    - {file_path: api/src/extensions/lib/installation/manager.ts, line: 8, module: '@directus/extensions-registry'}
+    call_sites:
+    - {file_path: api/src/telemetry/lib/send-report.ts, line: 34}
+    - {file_path: api/src/license/manager.ts, line: 282}
+    - {file_path: api/src/license/manager.ts, line: 306}
+    - {file_path: api/src/license/manager.ts, line: 347}
+    - {file_path: api/src/license/manager.ts, line: 375}
+    - {file_path: api/src/license/manager.ts, line: 445}
+    - {file_path: api/src/license/manager.ts, line: 483}
+    - {file_path: api/src/license/manager.ts, line: 503}
+    - {file_path: api/src/license/manager.ts, line: 538}
+    - {file_path: api/src/license/manager.ts, line: 582}
+    - {file_path: api/src/controllers/extensions.ts, line: 111}
+    - {file_path: api/src/controllers/extensions.ts, line: 142}
+    - {file_path: api/src/controllers/extensions.ts, line: 173}
+    - {file_path: api/src/services/extensions.ts, line: 50}
+    - {file_path: api/src/extensions/lib/get-extensions-settings.ts, line: 86}
+    - {file_path: api/src/extensions/lib/installation/manager.ts, line: 40}
+  uncertain: false
+  rationale: The API posts usage metrics and the project owner report (owner email, org name, usage) to TELEMETRY_URL and
+    COMPLIANCE_URL (default https://telemetry.directus.io), calls the Directus license server through @directus/license
+    with the license key and seat counts, and queries the marketplace at https://registry.directus.io by default.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

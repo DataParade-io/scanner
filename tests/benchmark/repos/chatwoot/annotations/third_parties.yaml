@@ -1,0 +1,1563 @@
+version: third-party-labels/1
+scope_note: Rails app/, lib/ and config/ excluding the Vue frontend; enterprise/ (Stripe, Firecrawl, legacy OpenAI client,
+  ai-agents runner) is outside the scope, and generic webhooks, SMTP/IMAP hosts and S3-compatible storage are not vendor records.
+vendors:
+- vendor: facebook_graph
+  subject_key: third_party:facebook_graph
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - media
+  - user_id
+  - person_name
+  - profile
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 107
+      package: facebook-messenger
+    - file_path: Gemfile
+      line: 114
+      package: koala
+    imports: []
+    call_sites:
+    - file_path: app/builders/messages/facebook/message_builder.rb
+      line: 150
+    - file_path: app/builders/messages/instagram/messenger/message_builder.rb
+      line: 10
+    - file_path: app/models/channel/facebook_page.rb
+      line: 51
+    - file_path: app/models/channel/facebook_page.rb
+      line: 63
+    - file_path: app/controllers/api/v1/accounts/callbacks_controller.rb
+      line: 28
+    - file_path: app/controllers/api/v1/accounts/callbacks_controller.rb
+      line: 48
+    - file_path: app/controllers/api/v1/accounts/callbacks_controller.rb
+      line: 88
+    - file_path: app/services/facebook/send_on_facebook_service.rb
+      line: 37
+    - file_path: app/services/facebook/page_details_service.rb
+      line: 5
+    - file_path: app/services/instagram/messenger/message_text.rb
+      line: 11
+    - file_path: app/services/instagram/messenger/send_on_instagram_service.rb
+      line: 16
+  uncertain: false
+  rationale: The Messenger channel uses the koala and facebook-messenger gems against the Graph API to exchange page tokens,
+    subscribe pages, look up sender profiles and deliver agent replies; Instagram-via-page replies post to graph.facebook.com/v11.0/me/messages.
+    The contact chose the platform, so Meta acts as an independent party.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: instagram
+  subject_key: third_party:instagram
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - media
+  - user_id
+  - username
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/builders/messages/instagram/message_builder.rb
+      line: 11
+    - file_path: app/models/channel/instagram.rb
+      line: 47
+    - file_path: app/models/channel/instagram.rb
+      line: 60
+    - file_path: app/controllers/concerns/instagram_concern.rb
+      line: 5
+    - file_path: app/controllers/concerns/instagram_concern.rb
+      line: 45
+    - file_path: app/controllers/instagram/callbacks_controller.rb
+      line: 24
+    - file_path: app/services/instagram/message_text.rb
+      line: 13
+    - file_path: app/services/instagram/send_on_instagram_service.rb
+      line: 15
+    - file_path: app/services/instagram/user_details_service.rb
+      line: 14
+    - file_path: app/services/instagram/refresh_oauth_token_service.rb
+      line: 58
+  uncertain: false
+  rationale: HTTParty and an OAuth2 client call api.instagram.com and graph.instagram.com to exchange and refresh tokens,
+    subscribe webhooks, fetch user and story details and send agent replies with the access token.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: whatsapp
+  subject_key: third_party:whatsapp
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - phone_number
+  - message_content
+  - media
+  - user_id
+  - profile
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 12
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 25
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 38
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 53
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 63
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 73
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 82
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 91
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 101
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 113
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 125
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 134
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 154
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 164
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 179
+    - file_path: app/services/whatsapp/facebook_api_client.rb
+      line: 194
+    - file_path: app/services/whatsapp/csat_template_service.rb
+      line: 23
+    - file_path: app/services/whatsapp/csat_template_service.rb
+      line: 31
+    - file_path: app/services/whatsapp/csat_template_service.rb
+      line: 99
+    - file_path: app/services/whatsapp/business_profile_service.rb
+      line: 11
+    - file_path: app/services/whatsapp/incoming_message_service_helpers.rb
+      line: 3
+    - file_path: app/services/whatsapp/media_upload_service.rb
+      line: 41
+    - file_path: app/services/whatsapp/health_service.rb
+      line: 89
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_contact_info_request_service.rb
+      line: 7
+    - file_path: app/services/whatsapp/incoming_message_whatsapp_cloud_service.rb
+      line: 12
+    - file_path: app/services/whatsapp/incoming_message_whatsapp_cloud_service.rb
+      line: 22
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 26
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 50
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 66
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 71
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 129
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 149
+    - file_path: app/services/whatsapp/providers/whatsapp_cloud_service.rb
+      line: 246
+    - file_path: app/services/whatsapp/business_management_token_validation_service.rb
+      line: 10
+    - file_path: app/services/whatsapp/business_management_token_validation_service.rb
+      line: 41
+  uncertain: false
+  rationale: The WhatsApp Cloud API services use HTTParty and Faraday against WHATSAPP_CLOUD_BASE_URL, default https://graph.facebook.com,
+    to send messages and templates to contact phone numbers, upload and download media and manage the business account. Meta
+    processes Cloud API messages on the business's behalf.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: 360dialog
+  subject_key: third_party:360dialog
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - phone_number
+  - message_content
+  - media
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 14
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 30
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 35
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 61
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 83
+    - file_path: app/services/whatsapp/providers/whatsapp_360_dialog_service.rb
+      line: 116
+  uncertain: false
+  rationale: The 360dialog WhatsApp provider posts messages, media and templates to 360DIALOG_BASE_URL, default https://waba.360dialog.io/v1,
+    with the channel API key.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: x
+  subject_key: third_party:x
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - user_id
+  - username
+  - media
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 112
+      package: twitty
+    imports: []
+    call_sites:
+    - file_path: app/models/channel/twitter_profile.rb
+      line: 49
+    - file_path: app/models/channel/twitter_profile.rb
+      line: 63
+    - file_path: app/controllers/twitter/callbacks_controller.rb
+      line: 40
+    - file_path: app/controllers/twitter/callbacks_controller.rb
+      line: 61
+    - file_path: app/controllers/api/v1/accounts/twitter/authorizations_controller.rb
+      line: 7
+    - file_path: app/controllers/concerns/twitter_concern.rb
+      line: 15
+    - file_path: app/services/twitter/send_on_twitter_service.rb
+      line: 38
+    - file_path: app/services/twitter/send_on_twitter_service.rb
+      line: 53
+    - file_path: app/services/twitter/webhook_subscribe_service.rb
+      line: 9
+    - file_path: app/services/twitter/webhook_subscribe_service.rb
+      line: 40
+    - file_path: app/services/twitter/webhook_subscribe_service.rb
+      line: 45
+    - file_path: app/services/twitter/webhook_subscribe_service.rb
+      line: 50
+    - file_path: app/services/twitter/webhook_subscribe_service.rb
+      line: 55
+    - file_path: app/services/twitter/direct_message_parser_service.rb
+      line: 106
+  uncertain: false
+  rationale: The Twitter channel uses the twitty gem with base_url https://api.twitter.com for OAuth, webhook subscription,
+    direct messages and tweet replies to the contact.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: telegram
+  subject_key: third_party:telegram
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - media
+  - user_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/models/channel/telegram.rb
+      line: 46
+    - file_path: app/models/channel/telegram.rb
+      line: 56
+    - file_path: app/models/channel/telegram.rb
+      line: 86
+    - file_path: app/models/channel/telegram.rb
+      line: 96
+    - file_path: app/models/channel/telegram.rb
+      line: 97
+    - file_path: app/models/channel/telegram.rb
+      line: 162
+    - file_path: app/services/telegram/send_attachments_service.rb
+      line: 73
+    - file_path: app/services/telegram/send_attachments_service.rb
+      line: 123
+    - file_path: app/services/telegram/incoming_message_service.rb
+      line: 153
+  uncertain: false
+  rationale: HTTParty and Faraday call https://api.telegram.org/bot<token> to set webhooks, fetch profile photos and files
+    and send agent messages and attachments to the contact chat.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: line
+  subject_key: third_party:line
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - media
+  - user_id
+  - profile
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 108
+      package: line-bot-api
+    imports: []
+    call_sites:
+    - file_path: app/models/channel/line.rb
+      line: 39
+    - file_path: app/services/line/send_on_line_service.rb
+      line: 9
+    - file_path: app/services/line/incoming_message_service.rb
+      line: 78
+    - file_path: app/services/line/incoming_message_service.rb
+      line: 124
+  uncertain: false
+  rationale: The LINE channel builds a Line::Bot::Client to push agent replies to the contact user id, fetch message content
+    and read the sender profile.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: tiktok
+  subject_key: third_party:tiktok
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - message_content
+  - media
+  - user_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/tiktok/auth_client.rb
+      line: 7
+    - file_path: app/services/tiktok/auth_client.rb
+      line: 40
+    - file_path: app/services/tiktok/auth_client.rb
+      line: 68
+    - file_path: app/services/tiktok/auth_client.rb
+      line: 92
+    - file_path: app/services/tiktok/auth_client.rb
+      line: 106
+    - file_path: app/services/tiktok/client.rb
+      line: 12
+    - file_path: app/services/tiktok/client.rb
+      line: 31
+    - file_path: app/services/tiktok/client.rb
+      line: 47
+    - file_path: app/services/tiktok/client.rb
+      line: 87
+    - file_path: app/services/tiktok/client.rb
+      line: 104
+    - file_path: app/services/tiktok/messaging_helpers.rb
+      line: 83
+  uncertain: false
+  rationale: The TikTok channel calls https://business-api.tiktok.com/open_api with HTTParty and Faraday to exchange tokens,
+    send messages and media and download attachments.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: twilio
+  subject_key: third_party:twilio
+  component_subtype: messaging
+  sends_data: true
+  route: both
+  subprocessor: 'yes'
+  data_categories:
+  - phone_number
+  - message_content
+  - media
+  - credentials
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 109
+      package: twilio-ruby
+    imports: []
+    call_sites:
+    - file_path: app/models/channel/twilio_sms.rb
+      line: 67
+    - file_path: app/models/channel/twilio_sms.rb
+      line: 72
+    - file_path: app/models/channel/twilio_sms.rb
+      line: 74
+    - file_path: app/controllers/api/v1/accounts/channels/twilio_channels_controller.rb
+      line: 35
+    - file_path: app/services/twilio/send_on_twilio_service.rb
+      line: 33
+    - file_path: app/services/twilio/oneoff_sms_campaign_service.rb
+      line: 26
+    - file_path: app/services/twilio/template_sync_service.rb
+      line: 16
+    - file_path: app/services/twilio/webhook_setup_service.rb
+      line: 29
+    - file_path: app/services/twilio/webhook_setup_service.rb
+      line: 41
+    - file_path: app/services/twilio/webhook_setup_service.rb
+      line: 49
+    - file_path: app/services/twilio/health_service.rb
+      line: 56
+    - file_path: app/services/twilio/health_service.rb
+      line: 82
+    - file_path: app/services/twilio/health_service.rb
+      line: 88
+    - file_path: app/services/twilio/health_service.rb
+      line: 139
+    - file_path: app/services/twilio/csat_template_api_client.rb
+      line: 7
+    - file_path: app/services/twilio/csat_template_api_client.rb
+      line: 20
+    - file_path: app/services/twilio/csat_template_api_client.rb
+      line: 28
+    - file_path: app/services/twilio/csat_template_api_client.rb
+      line: 35
+    - file_path: app/services/twilio/csat_template_api_client.rb
+      line: 42
+    - file_path: app/services/twilio/media_download_service.rb
+      line: 59
+  uncertain: false
+  rationale: The Twilio SMS/WhatsApp channel uses Twilio::REST::Client to send messages and campaigns to contact phone numbers
+    and manage numbers and senders, and HTTParty to https://content.twilio.com for CSAT templates.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: bandwidth
+  subject_key: third_party:bandwidth
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - phone_number
+  - message_content
+  - media
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/models/channel/sms.rb
+      line: 60
+    - file_path: app/models/channel/sms.rb
+      line: 92
+    - file_path: app/services/sms/incoming_message_service.rb
+      line: 101
+  uncertain: false
+  rationale: The SMS channel posts messages and media to https://messaging.bandwidth.com/api/v2 with basic auth and downloads
+    inbound media with the same credentials.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: gmail
+  subject_key: third_party:gmail
+  component_subtype: email_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - email
+  - message_content
+  - file_content
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 49
+      package: gmail_xoauth
+    imports: []
+    call_sites:
+    - file_path: app/controllers/concerns/google_concern.rb
+      line: 8
+    - file_path: app/controllers/oauth_callback_controller.rb
+      line: 3
+    - file_path: app/services/base_refresh_oauth_token_service.rb
+      line: 31
+    - file_path: app/controllers/google/callbacks_controller.rb
+      line: 20
+    - file_path: app/mailers/conversation_reply_mailer_helper.rb
+      line: 43
+  uncertain: false
+  rationale: Google email inboxes get OAuth tokens from accounts.google.com, then fetch mail over IMAP from imap.gmail.com
+    and send replies through smtp.gmail.com with XOAUTH2.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: microsoft
+  subject_key: third_party:microsoft
+  component_subtype: email_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - email
+  - message_content
+  - file_content
+  - person_name
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/controllers/concerns/microsoft_concern.rb
+      line: 8
+    - file_path: lib/microsoft_graph_auth.rb
+      line: 38
+    - file_path: app/controllers/microsoft/callbacks_controller.rb
+      line: 15
+    - file_path: app/mailers/conversation_reply_mailer_helper.rb
+      line: 44
+  uncertain: false
+  rationale: Microsoft email inboxes get OAuth tokens from login.microsoftonline.com, read the display name from graph.microsoft.com,
+    fetch mail from outlook.office365.com over IMAP and send replies through smtp.office365.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_auth
+  subject_key: third_party:google_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - email
+  - person_name
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 190
+      package: omniauth-google-oauth2
+    imports: []
+    call_sites:
+    - file_path: config/initializers/omniauth.rb
+      line: 6
+  uncertain: false
+  rationale: OmniAuth registers the google_oauth2 provider so agents can sign in with Google; the OAuth flow exchanges codes
+    for the user profile and email.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: slack
+  subject_key: third_party:slack
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - message_content
+  - file_content
+  - person_name
+  - user_id
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 116
+      package: slack-ruby-client
+    imports: []
+    call_sites:
+    - file_path: lib/integrations/slack/send_on_slack_service.rb
+      line: 18
+    - file_path: lib/integrations/slack/send_on_slack_service.rb
+      line: 114
+    - file_path: lib/integrations/slack/send_on_slack_service.rb
+      line: 129
+    - file_path: lib/integrations/slack/channel_builder.rb
+      line: 44
+    - file_path: lib/integrations/slack/channel_builder.rb
+      line: 47
+    - file_path: lib/integrations/slack/channel_builder.rb
+      line: 66
+    - file_path: lib/integrations/slack/update_slack_message_service.rb
+      line: 11
+    - file_path: lib/integrations/slack/hook_builder.rb
+      line: 34
+    - file_path: lib/integrations/slack/slack_message_helper.rb
+      line: 92
+    - file_path: app/jobs/slack_unfurl_job.rb
+      line: 41
+  uncertain: false
+  rationale: The Slack integration uses Slack::Web::Client to post conversation messages and attachments into the workspace,
+    update and unfurl them and read Slack users.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_dialogflow
+  subject_key: third_party:google_dialogflow
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - message_content
+  - user_id
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 118
+      package: google-cloud-dialogflow-v2
+    imports:
+    - file_path: lib/integrations/dialogflow/processor_service.rb
+      line: 1
+      module: google/cloud/dialogflow/v2
+    call_sites:
+    - file_path: lib/integrations/dialogflow/processor_service.rb
+      line: 133
+  uncertain: false
+  rationale: The Dialogflow bot integration sends each contact message with a session id to detect_intent on the Dialogflow
+    Sessions client.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_translate
+  subject_key: third_party:google_translate
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - message_content
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 123
+      package: google-cloud-translate-v3
+    imports:
+    - file_path: lib/integrations/google_translate/processor_service.rb
+      line: 1
+      module: google/cloud/translate/v3
+    - file_path: lib/integrations/google_translate/detect_language_service.rb
+      line: 1
+      module: google/cloud/translate/v3
+    call_sites:
+    - file_path: lib/integrations/google_translate/processor_service.rb
+      line: 12
+    - file_path: lib/integrations/google_translate/detect_language_service.rb
+      line: 10
+  uncertain: false
+  rationale: The Google Translate integration sends message text to translate_text and detect_language on the Translation
+    Service client.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: openai
+  subject_key: third_party:openai
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - prompt_content
+  - message_content
+  - credentials
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 201
+      package: ruby-openai
+    - file_path: Gemfile
+      line: 202
+      package: ai-agents
+    - file_path: Gemfile
+      line: 205
+      package: ruby_llm
+    imports:
+    - file_path: lib/llm/config.rb
+      line: 1
+      module: ruby_llm
+    - file_path: config/initializers/ai_agents.rb
+      line: 3
+      module: agents
+    call_sites:
+    - file_path: lib/integrations/llm_base_service.rb
+      line: 107
+    - file_path: lib/integrations/llm_base_service.rb
+      line: 133
+    - file_path: lib/integrations/llm_base_service.rb
+      line: 136
+    - file_path: lib/captain/base_task_service.rb
+      line: 78
+    - file_path: lib/integrations/openai/key_validator.rb
+      line: 12
+  uncertain: true
+  rationale: Captain tasks (reply suggestions, summaries, rewrites, labels) send conversation messages through RubyLLM chat
+    with the OpenAI key to CAPTAIN_OPEN_AI_ENDPOINT, default https://api.openai.com; the key validator lists models there.
+    The endpoint is configurable, so a compatible provider may be used instead.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: openrouter
+  subject_key: third_party:openrouter
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - message_content
+  - prompt_content
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/captain/jev_client.rb
+      line: 38
+  uncertain: false
+  rationale: Captain::JevClient posts conversation state and classifier questions to https://openrouter.ai/api/v1/systemone
+    (overridable) for the conversation classifier and automation conditions.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: langfuse
+  subject_key: third_party:langfuse
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - prompt_content
+  - message_content
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 212
+      package: opentelemetry-exporter-otlp
+    imports:
+    - file_path: lib/opentelemetry_config.rb
+      line: 2
+      module: opentelemetry/exporter/otlp
+    call_sites:
+    - file_path: lib/opentelemetry_config.rb
+      line: 88
+  uncertain: false
+  rationale: When OTEL_PROVIDER is langfuse, an OTLP exporter sends LLM spans, including prompt and completion text, to LANGFUSE_BASE_URL,
+    default https://us.cloud.langfuse.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: linear
+  subject_key: third_party:linear
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - message_content
+  - person_name
+  - search_query
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/controllers/linear/callbacks_controller.rb
+      line: 7
+    - file_path: app/controllers/linear/callbacks_controller.rb
+      line: 24
+    - file_path: lib/linear.rb
+      line: 86
+    - file_path: lib/linear.rb
+      line: 151
+    - file_path: lib/integrations/linear/access_token_service.rb
+      line: 19
+    - file_path: lib/integrations/linear/access_token_service.rb
+      line: 40
+  uncertain: false
+  rationale: The Linear integration posts GraphQL to https://api.linear.app/graphql to create, link and search issues from
+    conversations, and exchanges or revokes OAuth tokens.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: notion
+  subject_key: third_party:notion
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/controllers/concerns/notion_concern.rb
+      line: 8
+    - file_path: app/controllers/oauth_callback_controller.rb
+      line: 3
+  uncertain: false
+  rationale: The Notion integration only runs the OAuth flow against api.notion.com and stores the token; no in-scope code
+    sends content.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: shopify
+  subject_key: third_party:shopify
+  component_subtype: saas_service
+  sends_data: true
+  route: both
+  subprocessor: unknown
+  data_categories:
+  - access_token
+  - email
+  - phone_number
+  - order
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 214
+      package: shopify_api
+    imports: []
+    call_sites:
+    - file_path: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+      line: 18
+    - file_path: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+      line: 84
+    - file_path: app/controllers/api/v1/accounts/integrations/shopify_controller.rb
+      line: 94
+    - file_path: app/controllers/shopify/callbacks_controller.rb
+      line: 45
+    - file_path: app/services/shopify/shop_identity.rb
+      line: 36
+    - file_path: app/services/shopify/partner_client.rb
+      line: 77
+  uncertain: false
+  rationale: The Shopify integration searches the merchant store for customers by contact email or phone and lists their orders
+    with ShopifyAPI, and HTTParty queries partners.shopify.com for app subscriptions.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: leadsquared
+  subject_key: third_party:leadsquared
+  component_subtype: crm
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - person_name
+  - email
+  - phone_number
+  - message_content
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/crm/leadsquared/api/base_client.rb
+      line: 28
+    - file_path: app/services/crm/leadsquared/api/base_client.rb
+      line: 42
+    - file_path: app/services/crm/leadsquared/setup_service.rb
+      line: 25
+  uncertain: false
+  rationale: The LeadSquared CRM integration posts contact leads and conversation activities to https://api.leadsquared.com/v2/
+    with the access and secret keys.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: intercom
+  subject_key: third_party:intercom
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/data_imports/intercom/client.rb
+      line: 56
+  uncertain: false
+  rationale: The Intercom data import pulls contacts and conversations from https://api.intercom.io with the admin bearer
+    token; it sends only the token and paging parameters.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: freshdesk
+  subject_key: third_party:freshdesk
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/services/data_imports/freshdesk/client.rb
+      line: 94
+  uncertain: false
+  rationale: The Freshdesk data import reads tickets and contacts from https://<domain>.freshdesk.com/api/v2 with the API
+    key; it sends only the key and paging parameters.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cloudflare
+  subject_key: third_party:cloudflare
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - person_name
+  - profile
+  - user_id
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: lib/dyte.rb
+      line: 81
+    - file_path: lib/dyte.rb
+      line: 90
+    - file_path: lib/integrations/cloudflare/realtime_kit_credentials_validator.rb
+      line: 25
+    - file_path: lib/integrations/cloudflare/realtime_kit_credentials_validator.rb
+      line: 59
+  uncertain: false
+  rationale: The Dyte video-call integration calls Cloudflare RealtimeKit at https://api.cloudflare.com/client/v4 to create
+    meetings and add participants with name, id and avatar URL.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: firebase
+  subject_key: third_party:firebase
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - device_id
+  - message_content
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 147
+      package: fcm
+    imports: []
+    call_sites:
+    - file_path: app/services/notification/fcm_service.rb
+      line: 11
+    - file_path: app/services/notification/push_notification_service.rb
+      line: 98
+    - file_path: app/services/notification/push_test_service.rb
+      line: 67
+  uncertain: false
+  rationale: Mobile push notifications go through the fcm gem send_v1 call to Firebase Cloud Messaging with the device token
+    and the notification title and body.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: chatwoot_hub
+  subject_key: third_party:chatwoot_hub
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - telemetry
+  - usage_events
+  - email
+  - person_name
+  - device_id
+  - message_content
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: lib/chatwoot_hub.rb
+      line: 89
+    - file_path: lib/chatwoot_hub.rb
+      line: 101
+    - file_path: lib/chatwoot_hub.rb
+      line: 118
+    - file_path: lib/chatwoot_hub.rb
+      line: 125
+  uncertain: false
+  rationale: 'RestClient posts to https://hub.2.chatwoot.com: instance pings with usage counts, registration with owner name
+    and email, telemetry events, and the push relay with FCM options carrying device tokens and notification text.'
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: hcaptcha
+  subject_key: third_party:hcaptcha
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - credentials
+  provenance:
+    manifest:
+    - file_path: package.json
+      line: 45
+      package: '@hcaptcha/vue3-hcaptcha'
+    imports: []
+    call_sites:
+    - file_path: lib/chatwoot_captcha.rb
+      line: 15
+  uncertain: false
+  rationale: Signup verification posts the captcha response token and server secret to https://hcaptcha.com/siteverify.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: gravatar
+  subject_key: third_party:gravatar
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - email
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/jobs/avatar/avatar_from_gravatar_job.rb
+      line: 11
+  uncertain: false
+  rationale: The avatar job builds https://www.gravatar.com/avatar/<md5 of email> and fetches it to set a contact or user
+    avatar.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_favicon
+  subject_key: third_party:google_favicon
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - non_personal
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/jobs/avatar/avatar_from_favicon_job.rb
+      line: 9
+  uncertain: false
+  rationale: The company avatar job fetches https://www.google.com/s2/favicons for the company domain.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: maxmind
+  subject_key: third_party:maxmind
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - credentials
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 152
+      package: geocoder
+    - file_path: Gemfile
+      line: 154
+      package: maxminddb
+    imports: []
+    call_sites:
+    - file_path: app/services/geocoder/setup_service.rb
+      line: 21
+  uncertain: false
+  rationale: On boot the geocoder setup downloads the GeoLite2-City database from download.maxmind.com with the license key;
+    IP lookups then run locally.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: aws
+  subject_key: third_party:aws
+  component_subtype: cloud_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - file_content
+  - media
+  - email
+  - telemetry
+  - message_content
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 56
+      package: aws-sdk-s3
+    - file_path: Gemfile
+      line: 57
+      package: aws-sdk-sesv2
+    - file_path: Gemfile
+      line: 63
+      package: aws-actionmailbox-ses
+    - file_path: Gemfile
+      line: 75
+      package: faraday_middleware-aws-sigv4
+    - file_path: Gemfile
+      line: 144
+      package: speedshop-cloudwatch
+    imports:
+    - file_path: app/services/email/ses_suppression_service.rb
+      line: 1
+      module: aws-sdk-sesv2
+    call_sites:
+    - file_path: config/storage.yml
+      line: 11
+    - file_path: app/services/email/ses_suppression_service.rb
+      line: 13
+    - file_path: app/services/email/ses_suppression_service.rb
+      line: 23
+    - file_path: config/initializers/sidekiq.rb
+      line: 65
+    - file_path: config/initializers/searchkick.rb
+      line: 18
+  uncertain: false
+  rationale: ActiveStorage can store attachments in S3 (storage.yml amazon service), the super admin SES suppression lookup
+    sends email addresses to SESv2, Sidekiq metrics go to CloudWatch, and Searchkick signs OpenSearch indexing requests with
+    AWS credentials.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_cloud_storage
+  subject_key: third_party:google_cloud_storage
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - file_content
+  - media
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 59
+      package: google-cloud-storage
+    imports: []
+    call_sites:
+    - file_path: config/storage.yml
+      line: 19
+  uncertain: false
+  rationale: The storage.yml google service lets ActiveStorage upload attachments and avatars to a GCS bucket when ACTIVE_STORAGE_SERVICE
+    is google.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: azure
+  subject_key: third_party:azure
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - file_content
+  - media
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 58
+      package: azure-blob
+    imports: []
+    call_sites:
+    - file_path: config/storage.yml
+      line: 26
+  uncertain: false
+  rationale: The storage.yml microsoft service lets ActiveStorage upload attachments and avatars to Azure Blob Storage when
+    ACTIVE_STORAGE_SERVICE is microsoft.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: sentry
+  subject_key: third_party:sentry
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - error_report
+  - user_id
+  - email
+  - ip_address
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 133
+      package: sentry-rails
+    - file_path: Gemfile
+      line: 134
+      package: sentry-ruby
+    - file_path: Gemfile
+      line: 135
+      package: sentry-sidekiq
+    - file_path: package.json
+      line: 55
+      package: '@sentry/vue'
+    imports:
+    - file_path: config/application.rb
+      line: 25
+      module: sentry-ruby
+    - file_path: config/application.rb
+      line: 26
+      module: sentry-rails
+    - file_path: config/application.rb
+      line: 27
+      module: sentry-sidekiq
+    call_sites:
+    - file_path: config/initializers/sentry.rb
+      line: 2
+    - file_path: lib/chatwoot_exception_tracker.rb
+      line: 29
+  uncertain: false
+  rationale: With SENTRY_DSN set, Sentry.init enables error capture with send_default_pii, and the exception tracker attaches
+    account id and user id and email before capture_exception.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: datadog
+  subject_key: third_party:datadog
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 128
+      package: datadog
+    imports:
+    - file_path: config/application.rb
+      line: 15
+      module: datadog
+    call_sites:
+    - file_path: config/initializers/datadog.rb
+      line: 2
+  uncertain: true
+  rationale: With DD_TRACE_AGENT_URL set, Datadog tracing instruments Rails and ships request traces to the agent. Traces
+    go through a Datadog agent the operator runs, so whether request data leaves depends on that setup.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: elastic_apm
+  subject_key: third_party:elastic_apm
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 129
+      package: elastic-apm
+    imports:
+    - file_path: config/application.rb
+      line: 16
+      module: elastic-apm
+    call_sites:
+    - file_path: config/application.rb
+      line: 16
+  uncertain: true
+  rationale: Requiring elastic-apm when ELASTIC_APM_SECRET_TOKEN is set starts the agent, which reports transactions to the
+    configured APM server. The APM server may be self-hosted Elastic rather than Elastic Cloud.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: scout_apm
+  subject_key: third_party:scout_apm
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 132
+      package: scout_apm
+    imports:
+    - file_path: config/application.rb
+      line: 17
+      module: scout_apm
+    call_sites:
+    - file_path: config/application.rb
+      line: 17
+  uncertain: false
+  rationale: Requiring scout_apm when SCOUT_KEY is set starts the agent configured in config/scout_apm.yml, which reports
+    request performance traces to Scout.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: newrelic
+  subject_key: third_party:newrelic
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 130
+      package: newrelic_rpm
+    - file_path: Gemfile
+      line: 131
+      package: newrelic-sidekiq-metrics
+    imports:
+    - file_path: config/application.rb
+      line: 20
+      module: newrelic-sidekiq-metrics
+    - file_path: config/application.rb
+      line: 21
+      module: newrelic_rpm
+    call_sites:
+    - file_path: config/application.rb
+      line: 21
+    - file_path: app/services/conversations/unread_counts/filtered_count_instrumentation.rb
+      line: 185
+  uncertain: false
+  rationale: Requiring newrelic_rpm when NEW_RELIC_LICENSE_KEY is set starts the agent configured in config/newrelic.yml with
+    distributed tracing; unread-count instrumentation records custom metrics through NewRelic::Agent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: judoscale
+  subject_key: third_party:judoscale
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: Gemfile
+      line: 225
+      package: judoscale-rails
+    - file_path: Gemfile
+      line: 226
+      package: judoscale-sidekiq
+    imports:
+    - file_path: config/application.rb
+      line: 32
+      module: judoscale-rails
+    - file_path: config/application.rb
+      line: 33
+      module: judoscale-sidekiq
+    call_sites:
+    - file_path: config/application.rb
+      line: 32
+  uncertain: false
+  rationale: Requiring judoscale when JUDOSCALE_URL is set starts the Heroku autoscaler adapter, which reports request queue
+    time and Sidekiq queue metrics.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_analytics
+  subject_key: third_party:google_analytics
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 16
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 21
+  uncertain: false
+  rationale: Portal analytics renders the GA4 gtag.js snippet from www.googletagmanager.com. The help center portal layout
+    renders this tag when a portal admin sets its id, so visitor browsers send page views and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_tag_manager
+  subject_key: third_party:google_tag_manager
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 9
+    - file_path: app/views/layouts/_portal_analytics_noscript.html.erb
+      line: 3
+  uncertain: false
+  rationale: Portal analytics renders the Google Tag Manager container script and noscript iframe. The help center portal
+    layout renders this tag when a portal admin sets its id, so visitor browsers send page views and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: hotjar
+  subject_key: third_party:hotjar
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 35
+  uncertain: false
+  rationale: Portal analytics renders the Hotjar loader from static.hotjar.com. The help center portal layout renders this
+    tag when a portal admin sets its id, so visitor browsers send page views and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: plausible
+  subject_key: third_party:plausible
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 41
+  uncertain: false
+  rationale: Portal analytics renders the plausible.io script for the configured domain. The help center portal layout renders
+    this tag when a portal admin sets its id, so visitor browsers send page views and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: amplitude
+  subject_key: third_party:amplitude
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest:
+    - file_path: package.json
+      line: 37
+      package: '@amplitude/analytics-browser'
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 46
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 47
+  uncertain: false
+  rationale: Portal analytics loads the Amplitude browser SDK from cdn.amplitude.com and calls amplitude.init with the portal
+    key. The help center portal layout renders this tag when a portal admin sets its id, so visitor browsers send page views
+    and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: microsoft_clarity
+  subject_key: third_party:microsoft_clarity
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 55
+  uncertain: false
+  rationale: Portal analytics renders the Microsoft Clarity tag from www.clarity.ms. The help center portal layout renders
+    this tag when a portal admin sets its id, so visitor browsers send page views and cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: meta_pixel
+  subject_key: third_party:meta_pixel
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - usage_events
+  - ip_address
+  - device_id
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 71
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 72
+    - file_path: app/views/layouts/_portal_analytics.html.erb
+      line: 74
+    - file_path: app/views/layouts/_portal_analytics_noscript.html.erb
+      line: 10
+  uncertain: false
+  rationale: Portal analytics renders the Meta Pixel fbevents.js and the facebook.com/tr noscript image and fires PageView.
+    The help center portal layout renders this tag when a portal admin sets its id, so visitor browsers send page views and
+    cookies to the vendor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

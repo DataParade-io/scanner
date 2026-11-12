@@ -1,0 +1,139 @@
+version: third-party-labels/1
+scope_note: The scope is the src/OrchardCore/ core libraries only. External-login, Azure email/SMS, SignalR and DataProtection vendor integrations live in src/OrchardCore.Modules/ and are out of scope.
+vendors:
+- vendor: aws
+  subject_key: third_party:aws
+  component_subtype: cloud_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content, media]
+  provenance:
+    manifest:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/OrchardCore.FileStorage.AmazonS3.csproj, line: 18, package: AWSSDK.S3}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/OrchardCore.FileStorage.AmazonS3.csproj, line: 19, package: AWSSDK.Extensions.NETCore.Setup}
+    imports:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 2, module: Amazon.S3}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 3, module: Amazon.S3.Model}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 4, module: Amazon.S3.Transfer}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsStorageOptionsBase.cs, line: 1, module: Amazon.Extensions.NETCore.Setup}
+    call_sites:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 119}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 141}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 181}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 231}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 256}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AmazonS3/AwsFileStorage.cs, line: 291}
+  uncertain: false
+  rationale: AwsFileStorage keeps media and other tenant files in an Amazon S3 bucket through IAmazonS3 (put, copy, delete,
+    read).
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: azure
+  subject_key: third_party:azure
+  component_subtype: cloud_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content, media, document, search_query, configuration]
+  provenance:
+    manifest:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/OrchardCore.FileStorage.AzureBlob.csproj, line: 18, package: Azure.Storage.Blobs}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/OrchardCore.FileStorage.AzureBlob.csproj, line: 19, package: Azure.Storage.Files.DataLake}
+    - {file_path: src/OrchardCore/OrchardCore.Configuration.KeyVault/OrchardCore.Configuration.KeyVault.csproj, line: 8, package: Azure.Extensions.AspNetCore.Configuration.Secrets}
+    - {file_path: src/OrchardCore/OrchardCore.Configuration.KeyVault/OrchardCore.Configuration.KeyVault.csproj, line: 9, package: Azure.Identity}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/OrchardCore.AzureAI.Core.csproj, line: 18, package: Azure.Search.Documents}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/OrchardCore.AzureAI.Core.csproj, line: 19, package: Microsoft.Extensions.Azure}
+    imports:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 4, module: Azure.Storage.Blobs}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 6, module: Azure.Storage.Files.DataLake}
+    - {file_path: src/OrchardCore/OrchardCore.Configuration.KeyVault/Extensions/AzureKeyVaultConfigurationExtension.cs, line: 2, module: Azure.Extensions.AspNetCore.Configuration.Secrets}
+    - {file_path: src/OrchardCore/OrchardCore.Configuration.KeyVault/Extensions/AzureKeyVaultConfigurationExtension.cs, line: 3, module: Azure.Identity}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAIClientFactory.cs, line: 3, module: Azure.Search.Documents}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchDocumentIndexManager.cs, line: 2, module: Azure.Search.Documents}
+    call_sites:
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 470}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 499}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 602}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 678}
+    - {file_path: src/OrchardCore/OrchardCore.FileStorage.AzureBlob/BlobFileStore.cs, line: 726}
+    - {file_path: src/OrchardCore/OrchardCore.Shells.Azure/Extensions/BlobShellsOrchardCoreBuilderExtensions.cs, line: 37}
+    - {file_path: src/OrchardCore/OrchardCore.Configuration.KeyVault/Extensions/AzureKeyVaultConfigurationExtension.cs, line: 84}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchIndexManager.cs, line: 53}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchDocumentIndexManager.cs, line: 45}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchDocumentIndexManager.cs, line: 98}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchDocumentIndexManager.cs, line: 172}
+    - {file_path: src/OrchardCore/OrchardCore.AzureAI.Core/Services/AzureAISearchDocumentIndexManager.cs, line: 206}
+  uncertain: false
+  rationale: BlobFileStore writes media and tenant files to Azure Blob Storage or Data Lake, and Shells.Azure keeps tenant
+    configuration there. Key Vault supplies configuration secrets, and the Azure AI Search clients upload indexed content
+    documents and run search queries.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: elasticsearch
+  subject_key: third_party:elasticsearch
+  component_subtype: search
+  sends_data: true
+  route: sdk
+  subprocessor: "unknown"
+  data_categories: [document, search_query]
+  provenance:
+    manifest:
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/OrchardCore.Elasticsearch.Core.csproj, line: 19, package: Elastic.Clients.Elasticsearch}
+    - {file_path: src/OrchardCore/OrchardCore.Search.Elasticsearch.Abstractions/OrchardCore.Search.Elasticsearch.Abstractions.csproj, line: 19, package: Elastic.Clients.Elasticsearch}
+    imports:
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchClientFactory.cs, line: 2, module: Elastic.Clients.Elasticsearch}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchDocumentIndexManager.cs, line: 2, module: Elastic.Clients.Elasticsearch}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchIndexManager.cs, line: 3, module: Elastic.Clients.Elasticsearch}
+    call_sites:
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchClientFactory.cs, line: 30}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchDocumentIndexManager.cs, line: 147}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchIndexManager.cs, line: 131}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Services/ElasticsearchIndexManager.cs, line: 346}
+    - {file_path: src/OrchardCore/OrchardCore.Elasticsearch.Core/Providers/ElasticsearchContentPickerResultProvider.cs, line: 64}
+  uncertain: true
+  rationale: The Elastic client bulk-indexes content documents and runs searches. The cluster can be Elastic Cloud (CloudConnectionPool
+    with a CloudId) or a self-hosted node URL, so whether a vendor is reached depends on configuration.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_recaptcha
+  subject_key: third_party:google_recaptcha
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [ip_address, session]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/OrchardCore/OrchardCore.ReCaptcha.Core/Services/ReCaptchaService.cs, line: 103}
+    - {file_path: src/OrchardCore/OrchardCore.ReCaptcha.Core/Services/ReCaptchaShape.cs, line: 48}
+  uncertain: false
+  rationale: ReCaptchaShape loads https://www.google.com/recaptcha/api.js in the visitor's browser, and ReCaptchaService
+    posts the secret key and the response token to the siteverify endpoint (default https://www.google.com/recaptcha/api/).
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: twilio
+  subject_key: third_party:twilio
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [phone_number, message_content, credentials]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/OrchardCore/OrchardCore.Sms.Core/ServiceCollectionExtensions.cs, line: 48}
+    - {file_path: src/OrchardCore/OrchardCore.Sms.Core/Services/TwilioSmsProvider.cs, line: 83}
+  uncertain: false
+  rationale: TwilioSmsProvider posts the recipient phone number and message body to https://api.twilio.com/2010-04-01/Accounts/{sid}/Messages.json
+    with the account credentials.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

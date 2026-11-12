@@ -1,0 +1,45 @@
+version: third-party-labels/1
+scope_note: The app sends candidate PII to Checkr over raw HTTP and routes the candidate request through the VGS outbound proxy; the jQuery CDN script tag in the templates is not labelled.
+vendors:
+- vendor: checkr
+  subject_key: third_party:checkr
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [person_name, email, phone_number, address, date_of_birth, government_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: app/checker_client.py, line: 44}
+    - {file_path: app/checker_client.py, line: 61}
+    - {file_path: app/checker_client.py, line: 73}
+    - {file_path: app/checker_client.py, line: 90}
+    - {file_path: app/checker_client.py, line: 109}
+  uncertain: false
+  rationale: CheckerClient uses requests against CHECKER_HOST https://api.checkr.com with the API key as basic auth. create_candidate
+    posts name, email, phone, zip code, date of birth, SSN and driver license number; the other calls create geos and reports
+    and fetch reports.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: vgs
+  subject_key: third_party:vgs
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [person_name, email, phone_number, address, date_of_birth, government_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: app/views.py, line: 17}
+    - {file_path: app/checker_client.py, line: 44}
+  uncertain: false
+  rationale: turn_on_outbound sets HTTPS_PROXY to the Very Good Security outbound route (verygoodproxy.com) around create_candidate,
+    so the Checkr candidate request with the stored SSN and driver license aliases passes through VGS, which reveals them.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

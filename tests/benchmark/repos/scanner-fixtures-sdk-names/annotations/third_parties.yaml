@@ -1,0 +1,77 @@
+version: third-party-labels/1
+scope_note: Vendors reached from raw-http-integrations/python/sdk_and_names/, with Google API clients imported inside functions and two raw-HTTP vendors. The repo has no Python dependency manifest.
+vendors:
+- vendor: gmail
+  subject_key: third_party:gmail
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [email, message_content, credentials]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py, line: 8, module: googleapiclient.discovery}
+    call_sites:
+    - {file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py, line: 16}
+  uncertain: false
+  rationale: send_login_code builds a Gmail v1 client with googleapiclient and sends a message with the recipient
+    address and the one-time sign-in code.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_drive
+  subject_key: third_party:google_drive
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content, document]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py, line: 20, module: googleapiclient.discovery}
+    - {file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py, line: 21, module: googleapiclient.http}
+    call_sites:
+    - {file_path: raw-http-integrations/python/sdk_and_names/workspace_mail.py, line: 24}
+  uncertain: false
+  rationale: archive_transcript builds a Drive v3 client with googleapiclient and uploads the transcript file into a
+    folder.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: perplexity
+  subject_key: third_party:perplexity
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [prompt_content, search_query]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/sdk_and_names/research_tools.py, line: 10}
+  uncertain: false
+  rationale: ask_with_sources posts the question as a chat message to api.perplexity.ai/chat/completions with httpx.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: firecrawl
+  subject_key: third_party:firecrawl
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/sdk_and_names/research_tools.py, line: 20}
+  uncertain: false
+  rationale: fetch_page_markdown posts a page URL to api.firecrawl.dev/v1/scrape with httpx to get its markdown; only
+    the URL is sent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

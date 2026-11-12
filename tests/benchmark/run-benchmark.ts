@@ -14,6 +14,12 @@ import {
   validateMaterializedRepo,
 } from "./validate-materialization";
 import {
+  loadThirdPartyLabels,
+  predictedVendorsFromFindings,
+  scoreThirdPartyVendors,
+  type ThirdPartyScore,
+} from "./third-party-labels";
+import {
   loadPacketCanonicalRecordsWithDiagnostics,
   type PacketCanonicalRecordWithDiagnostics,
 } from "./layer-report-accounting";
@@ -91,6 +97,8 @@ export interface BenchmarkRepoResult {
   scanResult: FixtureScanResult;
   layerScores: Partial<Record<EvalLayer, EvalScoreReport>>;
   canonicalRecords: PacketCanonicalRecordWithDiagnostics[];
+  /** Vendor-level third-party score, when the packet has annotations/third_parties.yaml (DATAP-895). */
+  thirdPartyScore?: ThirdPartyScore;
 }
 
 export interface RunBenchmarkOptions extends RunBenchmarkRepoOptions {
@@ -160,12 +168,29 @@ export async function runBenchmarkRepo(
 
   const repoDir = path.join(getReposMetadataRoot(options.benchmarkRoot), repoKey);
   const manifest = loadBenchmarkManifest(repoDir);
+  const thirdPartyLabels = loadThirdPartyLabels(repoDir);
+  const scanLayers =
+    thirdPartyLabels && !manifest.coverage.layers.includes("components")
+      ? [...manifest.coverage.layers, "components" as const]
+      : manifest.coverage.layers;
   const scanFn =
     options.scanRepo ??
     ((key: string, root: string) =>
-      scanRepoByManifestLayers(key, root, manifest.coverage.layers));
+      scanRepoByManifestLayers(key, root, scanLayers));
   const scanResult = await scanFn(repoKey, materializedPath);
   const layerScores = scoreEvalCasesByLayer(evalCases, [scanResult]);
+  const thirdPartyScore = thirdPartyLabels
+    ? scoreThirdPartyVendors(
+        thirdPartyLabels,
+        predictedVendorsFromFindings(scanResult.findings),
+        manifest,
+        {
+          reviewStates:
+            options.reviewStates ??
+            (options.includeProposed ? ["accepted", "proposed", "needs_adjudication"] : ["accepted"]),
+        },
+      )
+    : undefined;
   const canonicalRecords = loadPacketCanonicalRecordsWithDiagnostics(
     repoKey,
     options.benchmarkRoot,
@@ -178,6 +203,7 @@ export async function runBenchmarkRepo(
     scanResult,
     layerScores,
     canonicalRecords,
+    ...(thirdPartyScore ? { thirdPartyScore } : {}),
   };
 }
 
@@ -246,6 +272,26 @@ function printRepoResult(result: BenchmarkRepoResult): void {
         ? `Diagnostic ${layer}:`
         : `Layer ${layer}:`;
     printScoreBlock(label, layerScore, layerCases);
+  }
+
+  if (result.thirdPartyScore) {
+    const tp = result.thirdPartyScore;
+    console.log("Diagnostic third-party vendors:");
+    console.log(`  Gold vendors: ${tp.goldVendors}; predicted in scope: ${tp.predictedVendors}`);
+    console.log(`  Recall (at labelled provenance): ${formatRate(tp.recall)}`);
+    console.log(`  Vendor recall (anywhere): ${formatRate(tp.vendorRecall)}`);
+    console.log(`  Precision: ${formatRate(tp.precision)}`);
+    console.log(
+      `  Misses: no SDK mapping ${tp.missesByCause.no_sdk_mapping}, raw HTTP missed ${tp.missesByCause.raw_http_missed}, provenance wrong ${tp.missesByCause.provenance_wrong}`,
+    );
+    if (tp.falsePositives.length > 0) {
+      console.log(`  False positives: ${tp.falsePositives.join(", ")}`);
+    }
+    if (tp.declaredOnly.length > 0) {
+      console.log(
+        `  Declared only (not scored): ${tp.declaredOnly.map((d) => `${d.subject_key}${d.reported ? " (reported)" : ""}`).join(", ")}`,
+      );
+    }
   }
 
   const unreadCases = Object.values(layerScores).flatMap((layerScore) =>

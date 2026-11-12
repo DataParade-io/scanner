@@ -1,0 +1,173 @@
+version: third-party-labels/1
+scope_note: Vendors reached from the top-level Python fixtures; outbound_unknown.py posts to an operator-configured URL with no default vendor, so it has no record. The repo has no Python dependency manifest.
+vendors:
+- vendor: meta_conversions_api
+  subject_key: third_party:meta_conversions_api
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, phone_number, ip_address, device_id, usage_events, access_token]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/ad_conversions.py, line: 34}
+  uncertain: false
+  rationale: report_signup posts a CompleteRegistration event with hashed email and phone, client IP and user agent to
+    graph.facebook.com/{pixel}/events with httpx, with the CAPI token in the query string.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_analytics
+  subject_key: third_party:google_analytics
+  component_subtype: analytics
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [user_id, device_id, order, transaction, usage_events]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/measurement.py, line: 26}
+  uncertain: false
+  rationale: track_purchase posts a purchase event with client id, user id, order id and total to the GA4 Measurement
+    Protocol endpoint www.google-analytics.com/mp/collect with requests.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: make
+  subject_key: third_party:make
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [person_name, email, phone_number, message_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/lead_webhook.py, line: 22}
+  uncertain: false
+  rationale: forward_lead posts the lead's name, email, phone, company and message to LEAD_HOOK_URL, whose default is a
+    hook.eu1.make.com scenario webhook.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: shopify
+  subject_key: third_party:shopify
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, search_query, order]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/storefront_mcp.py, line: 16}
+    - {file_path: raw-http-integrations/python/storefront_mcp.py, line: 19}
+    - {file_path: raw-http-integrations/python/storefront_mcp.py, line: 21}
+  uncertain: false
+  rationale: add_to_cart opens a streamable-HTTP MCP session to https://{shop}/api/mcp on a myshopify.com store and
+    calls search_shop_catalog and update_cart with the search query, cart items and buyer email.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: telegram
+  subject_key: third_party:telegram
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [user_id, message_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/notify_with_retries.py, line: 15}
+  uncertain: false
+  rationale: notify_customer posts the chat id and message text to api.telegram.org/bot{token}/sendMessage through an
+    httpx client with a retry transport.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cerebras
+  subject_key: third_party:cerebras
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: raw-http-integrations/python/llm_router.py, line: 5, module: openai}
+    call_sites:
+    - {file_path: raw-http-integrations/python/llm_router.py, line: 21}
+  uncertain: false
+  rationale: fast_client is an OpenAI SDK client with base_url api.cerebras.ai; answer sends the user message and the
+    conversation to it when prefer_fast is set.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: openrouter
+  subject_key: third_party:openrouter
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [prompt_content, message_content]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: raw-http-integrations/python/llm_router.py, line: 5, module: openai}
+    call_sites:
+    - {file_path: raw-http-integrations/python/llm_router.py, line: 21}
+  uncertain: false
+  rationale: broad_client is an OpenAI SDK client with base_url openrouter.ai; answer sends the user message and the
+    conversation to it when prefer_fast is not set.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: arize_phoenix
+  subject_key: third_party:arize_phoenix
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [telemetry, prompt_content, message_content]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: raw-http-integrations/python/tracing.py, line: 5, module: openinference.instrumentation.openai}
+    - {file_path: raw-http-integrations/python/tracing.py, line: 6, module: phoenix.otel}
+    call_sites:
+    - {file_path: raw-http-integrations/python/tracing.py, line: 14}
+    - {file_path: raw-http-integrations/python/tracing.py, line: 19}
+  uncertain: false
+  rationale: start_tracing registers a phoenix.otel exporter to PHOENIX_ENDPOINT, default app.phoenix.arize.com, and
+    instruments OpenAI, so spans with prompts and responses are sent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: crisp
+  subject_key: third_party:crisp
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [message_content, session, credentials]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: raw-http-integrations/python/support_desk.py, line: 23}
+    - {file_path: raw-http-integrations/python/support_desk.py, line: 30}
+  uncertain: false
+  rationale: SupportDesk uses aiohttp against api.crisp.chat (api_root on the class); reply posts an operator message to
+    a visitor conversation and visitor_profile reads the visitor's email and nickname.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

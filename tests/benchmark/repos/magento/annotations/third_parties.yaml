@@ -1,0 +1,23 @@
+version: third-party-labels/1
+scope_note: The scope is the app/code/Magento/Customer/ module. Its only external service is the EU VIES VAT check; the AWS S3, Elasticsearch and OpenSearch clients are used in other modules, outside the scope.
+vendors:
+- vendor: eu_vies
+  subject_key: third_party:eu_vies
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [government_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: app/code/Magento/Customer/Model/Vat.php, line: 202}
+    - {file_path: app/code/Magento/Customer/Model/Vat.php, line: 236}
+  uncertain: false
+  rationale: Vat::checkVatNumber builds a SoapClient on the ec.europa.eu VIES WSDL and calls checkVatApprox with the customer's
+    VAT number and country plus the store's own VAT number. It runs when a customer address is saved and from the admin
+    validate action.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

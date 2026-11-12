@@ -1,0 +1,799 @@
+version: third-party-labels/1
+scope_note: packages/prisma, packages/features, packages/lib and apps/web/lib and server; vendors reached only through @calcom/app-store
+  wrappers (Stripe, Daily, Google and Office 365 calendar services, CRMs) or in other packages are out of scope, and generic
+  webhooks, SMTP and the self-hosted Sink shortener are not vendor records.
+vendors:
+- vendor: sentry
+  subject_key: third_party:sentry
+  component_subtype: monitoring
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - error_report
+  - telemetry
+  - user_id
+  provenance:
+    manifest:
+    - file_path: apps/web/package.json
+      line: 78
+      package: '@sentry/nextjs'
+    imports:
+    - file_path: packages/features/apps/repository/PrismaAppRepository.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/features/availability/lib/getUserAvailability.ts
+      line: 44
+      module: '@sentry/nextjs'
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 18
+      module: '@sentry/nextjs'
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 3
+      module: '@sentry/nextjs'
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 10
+      module: '@sentry/nextjs'
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 2
+      module: '@sentry/nextjs'
+    - file_path: packages/features/flags/features.repository.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/features/flags/operations/check-if-user-has-feature.controller.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/features/flags/operations/check-if-user-has-feature.use-case.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/features/flags/repositories/PrismaTeamFeatureRepository.ts
+      line: 4
+      module: '@sentry/nextjs'
+    - file_path: packages/features/flags/repositories/PrismaUserFeatureRepository.ts
+      line: 4
+      module: '@sentry/nextjs'
+    - file_path: packages/features/platform-oauth-client/platform-oauth-client.repository.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/features/users/users.repository.ts
+      line: 2
+      module: '@sentry/nextjs'
+    - file_path: packages/features/watchlist/lib/telemetry/sentry-span.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 1
+      module: '@sentry/nextjs'
+    - file_path: packages/lib/server/defaultResponder.ts
+      line: 46
+      module: '@sentry/nextjs'
+    - file_path: packages/lib/server/defaultResponder.ts
+      line: 68
+      module: '@sentry/nextjs'
+    call_sites:
+    - file_path: packages/features/apps/repository/PrismaAppRepository.ts
+      line: 33
+    - file_path: packages/features/availability/lib/getUserAvailability.ts
+      line: 443
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 153
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 161
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 171
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 186
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 190
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 194
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 200
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 204
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 282
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 299
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 310
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 313
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 330
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 340
+    - file_path: packages/features/calendar-subscription/lib/CalendarSubscriptionService.ts
+      line: 345
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 92
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 93
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 94
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 119
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 120
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 121
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 130
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 179
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 180
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 181
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 199
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 200
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 201
+    - file_path: packages/features/calendar-subscription/lib/cache/CalendarCacheWrapper.ts
+      line: 204
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 50
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 58
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 109
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 121
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 140
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 143
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 149
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 152
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 184
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 192
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 200
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 224
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 227
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 236
+    - file_path: packages/features/calendar-subscription/lib/sync/CalendarSyncService.ts
+      line: 239
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 84
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 92
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 100
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 149
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 157
+    - file_path: packages/features/calendar-subscription/lib/telemetry/CalendarTelemetryWrapper.ts
+      line: 165
+    - file_path: packages/features/flags/features.repository.ts
+      line: 109
+    - file_path: packages/features/flags/features.repository.ts
+      line: 151
+    - file_path: packages/features/flags/features.repository.ts
+      line: 192
+    - file_path: packages/features/flags/features.repository.ts
+      line: 241
+    - file_path: packages/features/flags/features.repository.ts
+      line: 277
+    - file_path: packages/features/flags/features.repository.ts
+      line: 332
+    - file_path: packages/features/flags/features.repository.ts
+      line: 383
+    - file_path: packages/features/flags/features.repository.ts
+      line: 444
+    - file_path: packages/features/flags/features.repository.ts
+      line: 471
+    - file_path: packages/features/flags/operations/check-if-user-has-feature.controller.ts
+      line: 13
+    - file_path: packages/features/flags/operations/check-if-user-has-feature.controller.ts
+      line: 27
+    - file_path: packages/features/flags/operations/check-if-user-has-feature.use-case.ts
+      line: 14
+    - file_path: packages/features/flags/repositories/PrismaTeamFeatureRepository.ts
+      line: 217
+    - file_path: packages/features/flags/repositories/PrismaUserFeatureRepository.ts
+      line: 171
+    - file_path: packages/features/flags/repositories/PrismaUserFeatureRepository.ts
+      line: 201
+    - file_path: packages/features/flags/repositories/PrismaUserFeatureRepository.ts
+      line: 241
+    - file_path: packages/features/flags/repositories/PrismaUserFeatureRepository.ts
+      line: 270
+    - file_path: packages/features/platform-oauth-client/platform-oauth-client.repository.ts
+      line: 20
+    - file_path: packages/features/users/users.repository.ts
+      line: 14
+    - file_path: packages/features/users/users.repository.ts
+      line: 33
+    - file_path: packages/features/watchlist/lib/telemetry/sentry-span.ts
+      line: 10
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 31
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 36
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 54
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 59
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 86
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 202
+    - file_path: packages/lib/sentryWrapper.ts
+      line: 247
+    - file_path: packages/lib/server/defaultResponder.ts
+      line: 47
+    - file_path: packages/lib/server/defaultResponder.ts
+      line: 69
+  uncertain: false
+  rationale: In-scope repositories, the API responder and the Sentry wrapper call captureException, startSpan and metrics
+    from @sentry/nextjs, so errors with request context, traces and calendar sync metrics go to Sentry.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: trigger_dev
+  subject_key: third_party:trigger_dev
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - configuration
+  - telemetry
+  provenance:
+    manifest:
+    - file_path: packages/features/package.json
+      line: 27
+      package: '@trigger.dev/sdk'
+    - file_path: packages/features/package.json
+      line: 55
+      package: trigger.dev
+    imports:
+    - file_path: packages/lib/tasker/Tasker.ts
+      line: 4
+      module: '@trigger.dev/sdk'
+    - file_path: packages/lib/triggerDevLogger.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/trigger.config.ts
+      line: 3
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/calendars/lib/tasker/trigger/ensure-default-calendars.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/bookings/lib/tasker/trigger/notifications/confirm.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/bookings/lib/tasker/trigger/notifications/request.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/bookings/lib/tasker/trigger/notifications/reschedule.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/bookings/lib/tasker/trigger/notifications/rr-reschedule.ts
+      line: 1
+      module: '@trigger.dev/sdk'
+    - file_path: packages/features/webhooks/lib/tasker/trigger/deliver-webhook.ts
+      line: 2
+      module: '@trigger.dev/sdk'
+    call_sites:
+    - file_path: packages/lib/tasker/Tasker.ts
+      line: 33
+    - file_path: packages/features/calendars/lib/tasker/CalendarsTriggerTasker.ts
+      line: 13
+    - file_path: packages/features/bookings/lib/tasker/BookingEmailAndSmsTriggerTasker.ts
+      line: 10
+    - file_path: packages/features/bookings/lib/tasker/BookingEmailAndSmsTriggerTasker.ts
+      line: 16
+    - file_path: packages/features/bookings/lib/tasker/BookingEmailAndSmsTriggerTasker.ts
+      line: 22
+    - file_path: packages/features/bookings/lib/tasker/BookingEmailAndSmsTriggerTasker.ts
+      line: 28
+    - file_path: packages/features/webhooks/lib/tasker/WebhookTriggerTasker.ts
+      line: 21
+    - file_path: packages/lib/triggerDevLogger.ts
+      line: 82
+    - file_path: packages/lib/triggerDevLogger.ts
+      line: 85
+    - file_path: packages/lib/triggerDevLogger.ts
+      line: 88
+    - file_path: packages/lib/triggerDevLogger.ts
+      line: 91
+  uncertain: true
+  rationale: When ENABLE_ASYNC_TASKER and TRIGGER_API_URL are set, booking notification, default-calendar and webhook delivery
+    tasks are queued to Trigger.dev with booking and webhook ids, and the tasks run and log in Trigger.dev workers. TRIGGER_API_URL
+    may point to a self-hosted Trigger.dev instance.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: upstash
+  subject_key: third_party:upstash
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - user_id
+  - configuration
+  provenance:
+    manifest:
+    - file_path: apps/web/package.json
+      line: 83
+      package: '@upstash/redis'
+    imports:
+    - file_path: packages/features/redis/RedisService.ts
+      line: 1
+      module: '@upstash/redis'
+    call_sites:
+    - file_path: packages/features/redis/RedisService.ts
+      line: 19
+    - file_path: packages/features/redis/RedisService.ts
+      line: 23
+    - file_path: packages/features/redis/RedisService.ts
+      line: 27
+    - file_path: packages/features/redis/RedisService.ts
+      line: 40
+    - file_path: packages/features/redis/RedisService.ts
+      line: 44
+  uncertain: false
+  rationale: RedisService uses the Upstash REST client from UPSTASH_REDIS_REST_URL/TOKEN to cache memoized lookups such as
+    feature flags and availability data keyed by user and team ids.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: dub
+  subject_key: third_party:dub
+  component_subtype: analytics
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - user_id
+  - person_name
+  - email
+  - profile
+  - usage_events
+  provenance:
+    manifest:
+    - file_path: packages/features/auth/package.json
+      line: 17
+      package: dub
+    imports:
+    - file_path: packages/features/auth/lib/dub.ts
+      line: 1
+      module: dub-package
+    call_sites:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 1197
+    - file_path: packages/features/auth/lib/dub.ts
+      line: 12
+    - file_path: packages/features/url-shortener/providers/DubShortener.ts
+      line: 15
+  uncertain: false
+  rationale: On cal.com sign-up the Dub SDK sends a lead event with the user id, name, email and avatar, looks up Dub customers
+    by user id, and the URL shortener creates Dub links for booking URLs.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_auth
+  subject_key: third_party:google_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - email
+  - person_name
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 318
+  uncertain: false
+  rationale: NextAuth registers GoogleProvider with calendar scopes so users sign in with Google; the OAuth flow returns the
+    profile and tokens.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_calendar
+  subject_key: third_party:google_calendar
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - user_id
+  - document
+  - non_personal
+  provenance:
+    manifest:
+    - file_path: apps/web/package.json
+      line: 58
+      package: '@googleapis/calendar'
+    imports:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 41
+      module: '@googleapis/calendar'
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 43
+      module: googleapis-common
+    call_sites:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 646
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 649
+    - file_path: packages/features/calendar-subscription/adapters/GoogleCalendarSubscription.adapter.ts
+      line: 63
+    - file_path: packages/features/calendar-subscription/adapters/GoogleCalendarSubscription.adapter.ts
+      line: 91
+    - file_path: packages/features/calendar-subscription/adapters/GoogleCalendarSubscription.adapter.ts
+      line: 136
+    - file_path: packages/lib/holidays/GoogleCalendarClient.ts
+      line: 60
+  uncertain: false
+  rationale: After Google sign-in the user's token is used with calendar_v3 to read the primary calendar; the calendar subscription
+    adapter watches, stops and lists the user's calendar events; the holidays client reads public holiday calendars from www.googleapis.com
+    with an API key.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: azure_ad
+  subject_key: third_party:azure_ad
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'no'
+  data_categories:
+  - access_token
+  - email
+  - person_name
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 335
+  uncertain: false
+  rationale: NextAuth registers AzureADProvider with calendar scopes so users sign in with Microsoft; the OAuth flow returns
+    the profile and tokens.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: microsoft_graph
+  subject_key: third_party:microsoft_graph
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - access_token
+  - user_id
+  - document
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/features/auth/lib/next-auth-options.ts
+      line: 690
+    - file_path: packages/features/calendar-subscription/adapters/Office365CalendarSubscription.adapter.ts
+      line: 250
+  uncertain: false
+  rationale: After Azure AD sign-in the code fetches the user's calendars from graph.microsoft.com, and the Office 365 subscription
+    adapter creates and deletes Graph subscriptions and lists calendar events with the user's bearer token.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: vercel
+  subject_key: third_party:vercel
+  component_subtype: cloud_provider
+  sends_data: true
+  route: both
+  subprocessor: 'yes'
+  data_categories:
+  - ip_address
+  - device_id
+  - configuration
+  provenance:
+    manifest:
+    - file_path: apps/web/package.json
+      line: 91
+      package: botid
+    imports:
+    - file_path: packages/features/bot-detection/BotDetectionService.ts
+      line: 1
+      module: botid/server
+    call_sites:
+    - file_path: packages/features/bot-detection/BotDetectionService.ts
+      line: 66
+    - file_path: packages/lib/domainManager/deploymentServices/vercel.ts
+      line: 24
+    - file_path: packages/lib/domainManager/deploymentServices/vercel.ts
+      line: 61
+  uncertain: false
+  rationale: Booking bot detection calls Vercel BotID checkBotId with the booker request headers, and the domain manager adds
+    and removes organization domains through api.vercel.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cloudflare
+  subject_key: third_party:cloudflare
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - ip_address
+  - configuration
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/lib/server/checkCfTurnstileToken.ts
+      line: 25
+    - file_path: packages/lib/domainManager/deploymentServices/cloudflare.ts
+      line: 186
+  uncertain: false
+  rationale: Turnstile verification posts the captcha token and the client remote IP to challenges.cloudflare.com, and the
+    domain manager manages DNS records for organization domains through api.cloudflare.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: sendgrid
+  subject_key: third_party:sendgrid
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - email
+  - person_name
+  - usage_events
+  - credentials
+  provenance:
+    manifest:
+    - file_path: packages/lib/package.json
+      line: 18
+      package: '@sendgrid/client'
+    imports:
+    - file_path: packages/lib/Sendgrid.ts
+      line: 1
+      module: '@sendgrid/client'
+    call_sites:
+    - file_path: packages/lib/Sendgrid.ts
+      line: 70
+    - file_path: packages/lib/sync/services/SendgridService.ts
+      line: 60
+  uncertain: false
+  rationale: The Sendgrid sync service upserts Cal.com users as SendGrid marketing contacts with email, name and booking custom
+    fields through @sendgrid/client.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: close
+  subject_key: third_party:close
+  component_subtype: crm
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - email
+  - person_name
+  - document
+  - access_token
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/lib/CloseCom.ts
+      line: 252
+    - file_path: packages/lib/CloseCom.ts
+      line: 474
+  uncertain: false
+  rationale: The CloseCom client (used by the Close CRM app) creates contacts, leads and custom activities with attendee names,
+    emails and booking details at https://api.close.com/api/v1 and refreshes OAuth tokens.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: formbricks
+  subject_key: third_party:formbricks
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - user_id
+  - email
+  - username
+  - message_content
+  provenance:
+    manifest:
+    - file_path: packages/lib/package.json
+      line: 16
+      package: '@formbricks/api'
+    imports:
+    - file_path: packages/lib/formbricks.ts
+      line: 1
+      module: '@formbricks/api'
+    call_sites:
+    - file_path: packages/lib/formbricks.ts
+      line: 26
+    - file_path: packages/lib/formbricks.ts
+      line: 35
+  uncertain: true
+  rationale: User feedback is sent to Formbricks as a survey response with the comment and rating, and the Formbricks person
+    is updated with email and username. The Formbricks host comes from NEXT_PUBLIC_FORMBRICKS_HOST_URL and may be self-hosted.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: unkey
+  subject_key: third_party:unkey
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - user_id
+  - ip_address
+  provenance:
+    manifest:
+    - file_path: packages/lib/package.json
+      line: 19
+      package: '@unkey/ratelimit'
+    imports:
+    - file_path: packages/lib/rateLimit.ts
+      line: 1
+      module: '@unkey/ratelimit'
+    call_sites:
+    - file_path: packages/lib/rateLimit.ts
+      line: 127
+    - file_path: packages/lib/rateLimit.ts
+      line: 130
+  uncertain: false
+  rationale: Rate limiting calls Unkey Ratelimit.limit with identifiers built from user ids and hashed IP addresses.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: lingo_dev
+  subject_key: third_party:lingo_dev
+  component_subtype: ai_provider
+  sends_data: true
+  route: sdk
+  subprocessor: 'yes'
+  data_categories:
+  - post_content
+  provenance:
+    manifest:
+    - file_path: packages/lib/package.json
+      line: 27
+      package: lingo.dev
+    imports:
+    - file_path: packages/lib/server/service/lingoDotDev.ts
+      line: 4
+      module: lingo.dev/sdk
+    call_sites:
+    - file_path: packages/lib/server/service/lingoDotDev.ts
+      line: 35
+    - file_path: packages/lib/server/service/lingoDotDev.ts
+      line: 65
+  uncertain: false
+  rationale: The translation service sends event type titles and descriptions to the Lingo.dev engine for localization.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: avatarapi
+  subject_key: third_party:avatarapi
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - email
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/features/auth/signup/utils/prefillAvatar.ts
+      line: 67
+  uncertain: false
+  rationale: On signup the code posts the new user's email to https://avatarapi.com/v2/api.aspx to find a profile picture.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: ui_avatars
+  subject_key: third_party:ui_avatars
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: 'no'
+  data_categories:
+  - person_name
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/lib/defaultAvatarImage.ts
+      line: 15
+  uncertain: false
+  rationale: getPlaceholderAvatar returns an eu.ui-avatars.com URL with the user or team name, which browsers then load as
+    the placeholder avatar.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: resend
+  subject_key: third_party:resend
+  component_subtype: email_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - email
+  - message_content
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/lib/serverConfig.ts
+      line: 11
+    - file_path: packages/features/auth/lib/sendVerificationRequest.ts
+      line: 30
+  uncertain: false
+  rationale: When RESEND_API_KEY is set the mail transport is smtp.resend.com, so verification emails with the recipient address
+    and magic link go through Resend.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: retell_ai
+  subject_key: third_party:retell_ai
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: 'yes'
+  data_categories:
+  - credentials
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - file_path: packages/lib/retellAIFetcher.ts
+      line: 4
+  uncertain: true
+  rationale: The fetcher calls https://api.retellai.com with the RETELL_AI_KEY bearer token; no caller was found in the repository,
+    so what is sent is unknown.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: prisma_accelerate
+  subject_key: third_party:prisma_accelerate
+  component_subtype: cloud_provider
+  sends_data: false
+  route: sdk
+  subprocessor: unknown
+  data_categories: []
+  provenance:
+    manifest:
+    - file_path: packages/prisma/package.json
+      line: 30
+      package: '@prisma/extension-accelerate'
+    imports: []
+    call_sites: []
+  uncertain: false
+  rationale: Declared in the prisma package but never imported anywhere in the repository; it only appears in a Vite externals
+    list.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

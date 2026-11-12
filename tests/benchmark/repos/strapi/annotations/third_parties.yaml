@@ -1,0 +1,138 @@
+version: third-party-labels/1
+scope_note: packages/core reaches Strapi's own analytics, license, AI and Cloud services, the npm registry, GitHub releases,
+  the Figma API, jsDelivr and possibly Mux; webhooks, email and upload providers, remote data transfer and URL imports use
+  admin-configured endpoints and are not vendor records.
+vendors:
+- vendor: strapi
+  subject_key: third_party:strapi
+  component_subtype: saas_service
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [email, person_name, user_id, device_id, telemetry, usage_events, credentials, prompt_content, file_content, message_content]
+  provenance:
+    manifest:
+    - {file_path: packages/core/strapi/package.json, line: 114, package: '@strapi/cloud-cli'}
+    - {file_path: packages/core/content-type-builder/package.json, line: 80, package: ai}
+    - {file_path: packages/core/content-type-builder/package.json, line: 69, package: '@ai-sdk/react'}
+    imports:
+    - {file_path: packages/core/strapi/src/cli/commands/index.ts, line: 1, module: '@strapi/cloud-cli'}
+    - {file_path: packages/core/content-type-builder/admin/src/components/AIChat/hooks/useAIFetch.ts, line: 12, module: ai}
+    call_sites:
+    - {file_path: packages/core/core/src/services/metrics/sender.ts, line: 109}
+    - {file_path: packages/core/core/src/ee/license.ts, line: 122}
+    - {file_path: packages/core/strapi/src/cli/utils/telemetry.ts, line: 6}
+    - {file_path: packages/core/strapi/src/cli/commands/index.ts, line: 72}
+    - {file_path: packages/core/admin/admin/src/features/Tracking.tsx, line: 56}
+    - {file_path: packages/core/admin/admin/src/features/Tracking.tsx, line: 558}
+    - {file_path: packages/core/admin/admin/src/components/NpsSurvey.tsx, line: 200}
+    - {file_path: packages/core/admin/admin/src/pages/UseCasePage.tsx, line: 85}
+    - {file_path: packages/core/admin/server/src/ai/services/ai.ts, line: 128}
+    - {file_path: packages/core/admin/server/src/ai/services/ai.ts, line: 216}
+    - {file_path: packages/core/upload/server/src/services/ai-metadata.ts, line: 315}
+    - {file_path: packages/core/content-type-builder/admin/src/components/AIChat/lib/aiClient.ts, line: 204}
+    - {file_path: packages/core/content-type-builder/admin/src/components/AIChat/hooks/useAIFetch.ts, line: 225}
+  uncertain: false
+  rationale: Server and admin code post telemetry events with hashed admin ids and device ids to analytics.strapi.io, and
+    the first-admin form sends email and first name; the license check posts the license key to license.strapi.io; the
+    Strapi AI server at strapi-ai.apps.strapi.io receives schema chat prompts, attachments and media images for metadata;
+    the CLI registers Strapi Cloud commands. Strapi AI processes the operator's content, so it acts as a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: npm
+  subject_key: third_party:npm
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest:
+    - {file_path: packages/core/core/package.json, line: 109, package: package-json}
+    - {file_path: packages/core/strapi/package.json, line: 151, package: get-latest-version}
+    imports:
+    - {file_path: packages/core/core/src/utils/update-notifier/index.ts, line: 60, module: package-json}
+    call_sites:
+    - {file_path: packages/core/core/src/utils/update-notifier/index.ts, line: 61}
+  uncertain: false
+  rationale: The update notifier looks up the latest @strapi/strapi version on the npm registry with package-json; it sends
+    only the package name. get-latest-version is declared but never imported.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: github
+  subject_key: third_party:github
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: packages/core/admin/admin/src/layouts/AuthenticatedLayout.tsx, line: 40}
+  uncertain: false
+  rationale: The admin panel fetches https://api.github.com/repos/strapi/strapi/releases/latest to show a release
+    notification; the request carries no personal data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: figma
+  subject_key: third_party:figma
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: packages/core/content-type-builder/admin/src/components/AIChat/hooks/useFigmaUpload.ts, line: 118}
+    - {file_path: packages/core/content-type-builder/admin/src/components/AIChat/hooks/useFigmaUpload.ts, line: 187}
+  uncertain: false
+  rationale: The AI chat Figma import calls https://api.figma.com with the admin's own X-Figma-Token to read file nodes
+    and render images; Figma acts for the admin, not for the operator.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: jsdelivr
+  subject_key: third_party:jsdelivr
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: packages/core/content-manager/server/src/preview/controllers/previewScript.js, line: 305}
+  uncertain: false
+  rationale: The preview script served into the preview iframe dynamically imports @vercel/stega from cdn.jsdelivr.net;
+    the request carries no personal data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: mux
+  subject_key: third_party:mux
+  component_subtype: analytics
+  sends_data: true
+  route: sdk
+  subprocessor: "unknown"
+  data_categories: [telemetry]
+  provenance:
+    manifest:
+    - {file_path: packages/core/upload/package.json, line: 73, package: '@mux/mux-player-react'}
+    imports:
+    - {file_path: packages/core/upload/admin/src/components/EditAssetDialog/PreviewBox/AssetPreview.tsx, line: 4, module: '@mux/mux-player-react'}
+    call_sites:
+    - {file_path: packages/core/upload/admin/src/components/EditAssetDialog/PreviewBox/AssetPreview.tsx, line: 52}
+  uncertain: true
+  rationale: The media library previews videos with MuxPlayer on the asset's own URL. Mux Player bundles Mux Data playback
+    analytics, but without a Mux playback id or env key it may send nothing, so whether Mux is reached is unclear.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
