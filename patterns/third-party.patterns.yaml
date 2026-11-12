@@ -321,10 +321,23 @@ services:
       - api.hubapi.com
   - serviceName: slack
     patternId: external_api_call
+    importFragments:
+      - slack_sdk
+      - slack_bolt
+      - "@slack/web-api"
+      - "@slack/bolt"
+      - "@slack/webhook"
     confidence: 0.85
     url_host_patterns:
       - hooks.slack.com
       - slack.com
+  - serviceName: voyage_ai
+    patternId: external_api_call
+    importFragments:
+      - voyageai
+    confidence: 0.85
+    url_host_patterns:
+      - api.voyageai.com
 
 # url_routes: hosts that serve several products. Rules run in order; the first rule whose
 # `path` (URL path, no query) and `hint` (file path, class, function and URL expression of
@@ -358,6 +371,18 @@ url_path_routes:
   # Shopify Storefront MCP: every shop serves it at https://{shop}/api/mcp; the host is the
   # merchant's domain, so only Shopify-named code (ShopifyStore, shopify_store.py) counts.
   - path: "^/api/mcp/?$"
+    hint: "shopify"
+    serviceName: shopify
+  # Shopify Storefront and Admin APIs on the merchant's own domain, called directly with an
+  # HTTP client: /api/{version}/graphql.json, /admin/api/..., /admin/oauth/access_token and the
+  # public catalogue /products.json. Same rule: only Shopify-named code counts.
+  - path: "^/api/[^/]+/graphql\\.json$"
+    hint: "shopify"
+    serviceName: shopify
+  - path: "^/admin/(api|oauth)/"
+    hint: "shopify"
+    serviceName: shopify
+  - path: "^/(products|collections/[^/]+/products)(\\.json|/[^/]+\\.json)$"
     hint: "shopify"
     serviceName: shopify
 
