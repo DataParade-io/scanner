@@ -192,11 +192,11 @@ auth:
 
     - id: oauth2
       patternId: auth_middleware
+      # google.oauth2 and google_auth_oauthlib are client credentials for calling Google
+      # APIs, not an auth service in this application.
       importModules:
         - oauthlib
         - authlib
-        - google.oauth2
-        - google_auth_oauthlib
       strategy: oauth2
       confidence: 0.85
 

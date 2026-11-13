@@ -693,6 +693,15 @@ export function classifyRawFindings(
       continue;
     }
 
+    // Outbound calls whose host is unknown name no destination: a generic "Outbound Http Call"
+    // node says nothing and wrongly becomes the hub for the application's flows.
+    if (
+      group.findings.length > 0 &&
+      group.findings.every(isUnknownDestinationCall)
+    ) {
+      continue;
+    }
+
     const confidence = aggregateConfidence(
       group.findings,
       config.resolution.confidenceAggregation,
@@ -774,4 +783,15 @@ export function classifyRawFindings(
   });
 
   return components;
+}
+
+/** An outbound HTTP call with no known host, service name or literal URL. */
+function isUnknownDestinationCall(finding: RawFinding): boolean {
+  const props = finding.properties ?? {};
+  if (props.destination !== "unknown") return false;
+  if (typeof props.serviceName === "string" && props.serviceName.trim()) return false;
+  if (typeof props.url === "string" && props.url.trim()) return false;
+  // A TS call whose host comes from one env var is named after it: that name is still useful.
+  if (typeof props.envVar === "string" && props.envVar.trim()) return false;
+  return true;
 }

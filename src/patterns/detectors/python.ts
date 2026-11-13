@@ -155,6 +155,7 @@ export function detectPythonAuthFromConfig(
     }
   }
 
+  const contentLines = content.split(/\r?\n/);
   const outgoing = authConfig.libraries.some((lib) => lib.outgoingHeader)
     ? new Set(outboundHttpFor(ctx, config).outgoingRequestLines)
     : new Set<number>();
@@ -167,7 +168,9 @@ export function detectPythonAuthFromConfig(
     );
     if (lib.outgoingHeader) {
       const before = contentLocations.length;
-      contentLocations = contentLocations.filter((loc) => !outgoing.has(loc.startLine));
+      contentLocations = contentLocations.filter(
+        (loc) => !outgoing.has(loc.startLine) && !isOutgoingHeaderDictLine(contentLines[loc.startLine - 1]),
+      );
       // Every match is a header sent on an outbound request: nothing to report.
       if (before > 0 && contentLocations.length === 0 && importLocations.length === 0) continue;
     }
@@ -733,3 +736,13 @@ export function detectPythonServerlessHandlersFromConfig(
   return findings;
 }
 
+
+/**
+ * A line that builds an `Authorization` header to send (`{"Authorization": f"Bearer {token}"}`)
+ * rather than reading one from a request. The header dict is often built away from the
+ * request call (a `_headers()` helper or a module constant), so the request line alone
+ * does not show it is outbound.
+ */
+function isOutgoingHeaderDictLine(line: string | undefined): boolean {
+  return line !== undefined && /["']Authorization["']\s*:/.test(line);
+}

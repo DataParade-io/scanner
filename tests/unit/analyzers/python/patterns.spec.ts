@@ -473,9 +473,13 @@ describe("Python analyzer patterns - DP-P0-CLI-703", () => {
     expect(routes[0].properties.handlerType).toBe("grpc_service");
   });
 
-  it("detects Bearer authorization headers as auth_middleware findings", () => {
+  it("detects reading the Authorization header as auth_middleware", () => {
     const content = [
-      'headers = {"Authorization": "Bearer secret-token"}',
+      "from fastapi import Request",
+      "",
+      "def require_token(request: Request) -> str:",
+      '    header = request.headers.get("Authorization", "")',
+      "    return header.removeprefix(\"Bearer \")",
       "",
     ].join("\n");
 
@@ -483,10 +487,39 @@ describe("Python analyzer patterns - DP-P0-CLI-703", () => {
     const findings = detectPythonPatterns(file);
     const authFindings = findings.filter((f) => f.pattern === "auth_middleware");
 
-    expect(authFindings.length).toBeGreaterThan(0);
     expect(authFindings.some((f) => f.properties.strategy === "bearer_token")).toBe(
       true,
     );
+  });
+
+  it("does not report an Authorization header built to send", () => {
+    const content = [
+      "def _headers(token: str) -> dict:",
+      '    return {"Authorization": f"Bearer {token}"}',
+      "",
+      'CLIENT_HEADERS = {"Authorization": "Bearer secret-token"}',
+      "",
+    ].join("\n");
+
+    const file = makePythonFile(content, "client_headers.py");
+    const findings = detectPythonPatterns(file);
+
+    expect(findings.filter((f) => f.pattern === "auth_middleware")).toEqual([]);
+  });
+
+  it("does not report Google client credentials as an auth service", () => {
+    const content = [
+      "from google.oauth2 import service_account",
+      "from googleapiclient.discovery import build",
+      "",
+      "creds = service_account.Credentials.from_service_account_file('sa.json')",
+      "",
+    ].join("\n");
+
+    const file = makePythonFile(content, "drive_tools.py");
+    const findings = detectPythonPatterns(file);
+
+    expect(findings.filter((f) => f.pattern === "auth_middleware")).toEqual([]);
   });
 
   it("detects pymysql as database_connection with databaseType mysql", () => {
