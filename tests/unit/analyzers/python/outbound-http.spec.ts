@@ -205,6 +205,25 @@ describe("python outbound HTTP destinations (DATAP-818)", () => {
       expect(findings[0].location.startLine).toBe(5);
     });
 
+    it("makes no component for a call whose host is unknown", () => {
+      const file = {
+        path: "tools/client.py",
+        name: "client.py",
+        language: "python" as const,
+        content: [
+          "import httpx",
+          "",
+          "async def post_json(url: str, body: dict) -> dict:",
+          "    async with httpx.AsyncClient(timeout=10) as client:",
+          "        response = await client.post(url, json=body)",
+          "        return response.json()",
+        ].join("\n"),
+        size: 0,
+      };
+      const components = classifyRawFindings(detectPythonPatterns(file));
+      expect(components.filter((c) => c.type === "asset" && c.subType === "api")).toEqual([]);
+    });
+
     it("never names the HTTP library as the destination", () => {
       const findings = outbound([
         "import os",
