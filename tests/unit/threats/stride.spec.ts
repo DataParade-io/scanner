@@ -39,6 +39,6 @@ describe("STRIDE per element", () => {
     const flow = strideThreatsForFlow();
     expect(categories(flow)).toEqual(["T", "I", "D"]);
     expect(flow.every((t) => t.status === "unknown" && t.framework === "stride")).toBe(true);
-    expect(flow[0]!.ruleId).toBe("stride/v1/data_flow");
+    expect(flow[0]!.ruleId).toBe("stride/v2/data_flow");
   });
 });

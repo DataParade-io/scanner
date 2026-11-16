@@ -67,20 +67,24 @@ export function loadFlowAuthenticationRules(): FlowAuthenticationRules {
   return cached;
 }
 
-const FUNCTION_START =
+export const FUNCTION_START =
   /^\s*(?:@\w+.*)?(?:async\s+)?def\s+\w+\s*\(|^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\b|^\s*(?:public|private|protected|static|async|\s)*[A-Za-z_$][\w$]*\s*\([^)]*\)\s*(?::\s*[^{=]+)?\{\s*$|=>\s*\{\s*$/;
 
-const IMPORT_LINE = /^\s*(?:from\s+[\w.]+\s+import\b|import\s+[\w.]+|import\b.*\bfrom\s+["']|const\s+\w+\s*=\s*require\()/;
+export const IMPORT_LINE = /^\s*(?:from\s+[\w.]+\s+import\b|import\s+[\w.]+|import\b.*\bfrom\s+["']|const\s+\w+\s*=\s*require\()/;
 
 /** Kinds that an SDK client takes as a constructor argument. */
 const SDK_CLIENT_KINDS = new Set(["api_key", "oauth"]);
 
-function escapeRegExp(value: string): string {
+export function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /** Line indexes (0-based) of the code around one request. */
-function requestWindow(lines: string[], index: number, rules: FlowAuthenticationRules): number[] {
+export function requestWindow(
+  lines: string[],
+  index: number,
+  rules: Pick<FlowAuthenticationRules, "maxLinesBefore" | "linesAfter">,
+): number[] {
   let start = index;
   const floor = Math.max(0, index - rules.maxLinesBefore);
   for (let i = index; i >= floor; i -= 1) {
@@ -97,7 +101,11 @@ function requestWindow(lines: string[], index: number, rules: FlowAuthentication
  * Line indexes of the definition of `name` elsewhere in the file: a function, or a
  * top-level constant. Local variables are already inside the request window.
  */
-function definitionLines(lines: string[], name: string, rules: FlowAuthenticationRules): number[] {
+export function definitionLines(
+  lines: string[],
+  name: string,
+  rules: Pick<FlowAuthenticationRules, "helperLines">,
+): number[] {
   const n = escapeRegExp(name);
   const def = new RegExp(
     `^\\s*(?:async\\s+)?def\\s+${n}\\s*\\(|^\\s*(?:export\\s+)?(?:async\\s+)?function\\s+${n}\\s*\\(|^(?:export\\s+)?(?:const|let|var)\\s+${n}\\b|^${n}\\s*(?::[^=]+)?=[^=]`,
@@ -149,7 +157,7 @@ function evidenceForLocation(
   return evidence;
 }
 
-function locationsOf(flow: DetectedDataFlow): SourceLocation[] {
+export function locationsOf(flow: DetectedDataFlow): SourceLocation[] {
   if (flow.sourceLocations && flow.sourceLocations.length > 0) return flow.sourceLocations;
   return flow.sourceLocation ? [flow.sourceLocation] : [];
 }

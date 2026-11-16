@@ -1,0 +1,68 @@
+# Control evidence on data flows (DATAP-915).
+#
+# Each control is a code signal near a request. effect "mitigates" means the signal is a
+# control (TLS, a timeout). effect "weakens" means the signal removes a control (plain
+# HTTP, certificate checks turned off). patterns/stride.rules.yaml maps controls to
+# threat statuses.
+#
+# The scan reads the same window as flow-authentication.rules.yaml: the enclosing
+# function, a few lines after the call, and top-level URL constants the window names.
+# When a flow cites an SDK import, the scan reads the whole file but keeps only the
+# controls marked sdk: true (a client constructor takes them).
+#
+# No match gives no evidence. It never means the control is missing.
+version: 1
+
+skip_flow_types: [database_query]
+
+# Top-level constants that hold a URL, such as CRISP_API_BASE or GITHUB_API_URL.
+url_constant: '\b([A-Z][A-Z0-9_]*(?:URL|URI|BASE|API|ENDPOINT|HOST)[A-Z0-9_]*)\b'
+
+# Lines that are comments are not read. Python docstrings are not read either.
+comment_line: '^\s*(?:#|//|\*|/\*)'
+
+controls:
+  - id: tls
+    effect: mitigates
+    patterns:
+      # Documentation links are not requests.
+      - 'https://(?!docs\.|developers?\.|help\.|support\.|github\.com/[\w.-]+/[\w.-]+/(?:blob|tree)/)'
+      - 'wss://'
+
+  - id: plaintext_http
+    effect: weakens
+    patterns:
+      # http:// to a remote host. Local and documentation hosts are not counted.
+      - 'http://(?!localhost\b|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|host\.docker\.internal|[\w.-]*\.local\b|[\w.-]*\.internal\b|[\w.-]*\.svc\b|example\.(?:com|org)|www\.w3\.org|schemas\.|json-schema\.org|\{|\$\{)[\w.-]+'
+      - 'ws://(?!localhost\b|127\.0\.0\.1|0\.0\.0\.0)[\w.-]+'
+
+  - id: tls_verify_disabled
+    effect: weakens
+    sdk: true
+    patterns:
+      - '\bverify\s*=\s*False\b'
+      - '\bssl\s*=\s*False\b'
+      - 'rejectUnauthorized\s*:\s*false'
+      - 'InsecureSkipVerify\s*:\s*true'
+      - '\bCERT_NONE\b'
+      - 'NODE_TLS_REJECT_UNAUTHORIZED'
+
+  - id: timeout
+    effect: mitigates
+    sdk: true
+    patterns:
+      - '\btimeout\s*[=:]\s*(?:[1-9]|0\.\d|httpx\.Timeout|aiohttp\.ClientTimeout|ClientTimeout|[A-Z][A-Z0-9_]*TIMEOUT)'
+      - 'AbortSignal\.timeout\('
+      - 'context\.WithTimeout\('
+      - '\bTimeout:\s*\d'
+      - '\.timeout\(\s*\d'
+      # Ruby Net::HTTP, Faraday and HTTParty.
+      - '\b(?:open|read|write)_timeout\s*[=:]\s*\d'
+
+  - id: timeout_disabled
+    effect: weakens
+    sdk: true
+    patterns:
+      - '\btimeout\s*=\s*None\b'
+      # axios, node-fetch and others read 0 as "no timeout".
+      - '\btimeout\s*[=:]\s*0\s*(?:[,)}]|$)'

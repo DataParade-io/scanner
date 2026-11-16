@@ -26,6 +26,19 @@ export interface FlowAuthentication {
   evidence: FlowAuthenticationEvidence[];
 }
 
+export type FlowControlEffect = "mitigates" | "weakens";
+
+/**
+ * One line of control evidence on a flow (DATAP-915): TLS, a timeout, plain HTTP.
+ * "weakens" means the line removes a control.
+ */
+export interface FlowControlEvidence {
+  control: string;
+  effect: FlowControlEffect;
+  filePath: string;
+  line: number;
+}
+
 export interface DetectedDataFlow {
   id: string;
   sourceComponentId: string;
@@ -48,5 +61,7 @@ export interface DetectedDataFlow {
   targetScopeConfidence?: "high" | "medium" | "low";
   targetScopeReason?: string;
   authentication?: FlowAuthentication;
+  /** Control evidence (DATAP-915). Empty when nothing was seen; absent when not checked. */
+  controls?: FlowControlEvidence[];
 }
 
