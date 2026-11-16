@@ -98,6 +98,16 @@ export const detectedDataFlowSchema = z.object({
       ),
     })
     .optional(),
+  controls: z
+    .array(
+      z.object({
+        control: z.string(),
+        effect: z.enum(["mitigates", "weakens"]),
+        filePath: z.string(),
+        line: z.number().int().positive(),
+      }),
+    )
+    .optional(),
 });
 
 export const languageParserStatsSchema = z.object({

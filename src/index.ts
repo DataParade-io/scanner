@@ -153,6 +153,8 @@ export {
   loadFlowAuthenticationRules,
 } from "./data-flow/flow-authentication";
 export type { FlowAuthenticationRules } from "./data-flow/flow-authentication";
+export { annotateFlowControls, flowControls, loadFlowControlRules } from "./data-flow/flow-controls";
+export type { FlowControlRules } from "./data-flow/flow-controls";
 export {
   loadStrideRules,
   strideComponentKind,
@@ -160,4 +162,11 @@ export {
   strideThreatsForFlow,
   strideThreatsForKind,
 } from "./threats/stride";
-export type { ElementThreat, StrideElementKind, StrideRules, ThreatStatus } from "./threats/stride";
+export type {
+  ElementThreat,
+  StrideElementKind,
+  StrideRules,
+  ThreatEvidence,
+  ThreatFlowInput,
+  ThreatStatus,
+} from "./threats/stride";

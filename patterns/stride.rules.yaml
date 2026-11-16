@@ -2,14 +2,15 @@
 #
 # Which STRIDE threat categories apply to each kind of diagram element. This table only
 # says which categories apply; it never says a threat is present. Every category starts
-# with status "unknown". Control evidence (DATAP-915) later sets "mitigated" or "open".
+# with status "unknown". The status rules below (DATAP-915) set "mitigated" or "open"
+# from control evidence.
 #
 # Categories: S spoofing, T tampering, R repudiation, I information disclosure,
 # D denial of service, E elevation of privilege.
 #
 # The scan stamps hash this file (catalogHash), so a change here makes scans
 # incomparable with scans made under the old table.
-version: 1
+version: 2
 framework: stride
 
 categories:
@@ -48,3 +49,32 @@ component_kinds:
     kind: data_store
   - when: { type: asset }
     kind: process
+
+# Status rules (DATAP-915). For each element kind and category:
+#   opened_by: a control with effect "weakens" (patterns/flow-controls.rules.yaml) sets "open".
+#   mitigated_by: a control with effect "mitigates", or an authentication kind written
+#     "auth:<kind>" (patterns/flow-authentication.rules.yaml), sets "mitigated".
+# "open" wins over "mitigated". With no matching evidence the status stays "unknown":
+# no evidence never sets "open".
+#
+# A data flow reads its own evidence. An external entity reads the flows to and from it:
+# "open" when one flow has a weakening control; "mitigated" only when every checked flow
+# has a mitigating control.
+#
+# Not covered yet, so these stay "unknown": route authorization, rate limits, audit logs,
+# data-store encryption, and every process and data-store category.
+status_rules:
+  data_flow:
+    T:
+      mitigated_by: [tls, "auth:signed_request", "auth:webhook_signature"]
+      opened_by: [plaintext_http, tls_verify_disabled]
+    I:
+      mitigated_by: [tls]
+      opened_by: [plaintext_http, tls_verify_disabled]
+    D:
+      mitigated_by: [timeout]
+      opened_by: [timeout_disabled]
+  external_entity:
+    S:
+      mitigated_by: [tls, "auth:signed_request", "auth:webhook_signature"]
+      opened_by: [plaintext_http, tls_verify_disabled]
