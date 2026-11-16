@@ -1,5 +1,7 @@
 import path from "path";
 
+import { annotateFlowAuthentication } from "../../data-flow/flow-authentication";
+
 import type {
   DetectedDataFlow,
   FileInfo,
@@ -152,6 +154,16 @@ export async function runDeterministicScanPhases(
       errors.push(`data-flow: ${message}`);
       dataFlows = [];
     }
+  }
+
+  try {
+    annotateFlowAuthentication(dataFlows, files);
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Unknown error during flow authentication.";
+    errors.push(`flow-authentication: ${message}`);
   }
 
   try {

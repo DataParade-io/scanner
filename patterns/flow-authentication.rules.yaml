@@ -1,0 +1,74 @@
+# Authentication evidence on data flows (DATAP-912).
+#
+# For each evidence location of a flow, the scanner reads the code around the request:
+# the enclosing function up to a few lines after the call, plus any helper function or
+# constant that the call passes as `headers=`, `auth=` or similar. It then applies these
+# patterns. A match records the kind and the line. No match gives "none_seen", which
+# means no evidence was found, not that the flow has no authentication.
+#
+# Flows of the types in `skip_flow_types` are not checked (database credentials are in
+# connection settings, which this rule set does not read yet).
+#
+# The scan stamps hash this file (catalogHash).
+version: 1
+
+window:
+  # Lines before the evidence line to search for the start of the enclosing function.
+  max_lines_before: 40
+  # Lines after the evidence line that still belong to the request call.
+  lines_after: 8
+  # Lines to read from a referenced helper function or constant.
+  helper_lines: 25
+
+skip_flow_types: [database_query]
+
+# Arguments that pass credentials or headers to a request. The value, when it is a name
+# or a call of a name defined in the same file, is followed to its definition.
+credential_arguments: [headers, auth, credentials, session, client_kwargs]
+
+kinds:
+  - id: bearer
+    patterns:
+      - "Authorization[\"']?\\s*[:=,]\\s*f?[\"'`]Bearer\\b"
+      - "[\"'`]Bearer [\"'`$\\{]"
+      - "\\bBearer \\{"
+      - "\\bBearer \\$\\{"
+  - id: basic
+    patterns:
+      - "Authorization[\"']?\\s*[:=,]\\s*f?[\"'`]Basic\\b"
+      - "\\b(HTTPBasicAuth|BasicAuth)\\s*\\("
+      - "\\bauth\\s*=\\s*\\("
+  - id: api_key
+    patterns:
+      - "Authorization[\"']?\\s*[:=,]\\s*f?[\"'`](Bot|Token|token|Key|ApiKey)\\b"
+      - "[\"'`][Xx]-[A-Za-z0-9-]*(Api-Key|API-Key|api-key|Access-Token|Auth-Token|Token|Key)[\"'`]"
+      - "[\"'`](api[-_]?key|apikey|x-api-key)[\"'`]\\s*:"
+      - "\\bapi_?[Kk]ey\\s*[=:]"
+      - "[?&](api_key|apikey|key|access_token|token)="
+      # Token in the URL path (Telegram Bot API).
+      - "/bot\\{|/bot\\$\\{"
+      # SDK client or helper given a token from configuration or a constant.
+      - "\\b(token|bot_token|app_token|access_token|auth_token)\\s*=\\s*(config|settings|os\\.environ|os\\.getenv|process\\.env|self\\.|[A-Z][A-Z0-9_]{2,}\\b)"
+      - "\\b\\w+_api_key\\b"
+      # Error-tracking DSNs carry the project key (Sentry).
+      - "\\bdsn\\s*[:=]"
+  - id: oauth
+    patterns:
+      - "\\bgoogle\\.oauth2\\b"
+      - "\\bservice_account\\.Credentials\\b"
+      - "\\bgoogle_auth_oauthlib\\b"
+      - "\\bOAuth2Session\\b"
+      - "/oauth2?/(access_)?token"
+      - "[\"']grant_type[\"']"
+      - "\\bclient_credentials\\b"
+  - id: signed_request
+    patterns:
+      - "\\b(SigV4Auth|AWS4Auth|aws4)\\b"
+      - "\\bsignRequest\\s*\\("
+  - id: webhook_signature
+    patterns:
+      - "\\bhmac\\.compare_digest\\s*\\("
+      - "\\btimingSafeEqual\\s*\\("
+      - "[\"'`][Xx]-(Hub-Signature(-256)?|Shopify-Hmac-Sha256|Slack-Signature|Signature|Twilio-Signature)[\"'`]"
+      - "\\bWebhook\\.construct_event\\s*\\("
+      - "\\bverify_?[Ss]ignature\\s*\\("

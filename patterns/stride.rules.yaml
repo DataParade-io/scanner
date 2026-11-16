@@ -1,0 +1,50 @@
+# STRIDE per element (DATAP-914).
+#
+# Which STRIDE threat categories apply to each kind of diagram element. This table only
+# says which categories apply; it never says a threat is present. Every category starts
+# with status "unknown". Control evidence (DATAP-915) later sets "mitigated" or "open".
+#
+# Categories: S spoofing, T tampering, R repudiation, I information disclosure,
+# D denial of service, E elevation of privilege.
+#
+# The scan stamps hash this file (catalogHash), so a change here makes scans
+# incomparable with scans made under the old table.
+version: 1
+framework: stride
+
+categories:
+  - id: S
+    name: Spoofing
+  - id: T
+    name: Tampering
+  - id: R
+    name: Repudiation
+  - id: I
+    name: Information disclosure
+  - id: D
+    name: Denial of service
+  - id: E
+    name: Elevation of privilege
+
+# Element kinds and the categories that apply to each.
+elements:
+  external_entity:
+    categories: [S, R]
+  process:
+    categories: [S, T, R, I, D, E]
+  data_store:
+    categories: [T, R, I, D]
+  data_flow:
+    categories: [T, I, D]
+
+# How a component maps to an element kind. Data flows are always data_flow.
+# The first matching rule wins.
+component_kinds:
+  - when: { type: actor }
+    kind: external_entity
+  - when: { type: third_party }
+    kind: external_entity
+  - when: { type: asset, subType: [database, cache, storage, config] }
+    kind: data_store
+  - when: { type: asset }
+    kind: process
