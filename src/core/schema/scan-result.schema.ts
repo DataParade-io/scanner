@@ -89,6 +89,15 @@ export const detectedDataFlowSchema = z.object({
     .optional(),
   targetScopeConfidence: z.enum(["high", "medium", "low"]).optional(),
   targetScopeReason: z.string().optional(),
+  authentication: z
+    .object({
+      status: z.enum(["seen", "none_seen"]),
+      kinds: z.array(z.string()),
+      evidence: z.array(
+        z.object({ kind: z.string(), filePath: z.string(), line: z.number().int().positive() }),
+      ),
+    })
+    .optional(),
 });
 
 export const languageParserStatsSchema = z.object({

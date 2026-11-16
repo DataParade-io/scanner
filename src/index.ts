@@ -146,3 +146,18 @@ export type {
 } from "./data-actions";
 
 
+
+export {
+  annotateFlowAuthentication,
+  flowAuthentication,
+  loadFlowAuthenticationRules,
+} from "./data-flow/flow-authentication";
+export type { FlowAuthenticationRules } from "./data-flow/flow-authentication";
+export {
+  loadStrideRules,
+  strideComponentKind,
+  strideThreatsForComponent,
+  strideThreatsForFlow,
+  strideThreatsForKind,
+} from "./threats/stride";
+export type { ElementThreat, StrideElementKind, StrideRules, ThreatStatus } from "./threats/stride";
