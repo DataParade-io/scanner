@@ -73,6 +73,12 @@ export const HUMAN_INTERACTION_CHANNELS = [
 
 export type HumanInteractionChannel = (typeof HUMAN_INTERACTION_CHANNELS)[number];
 
+export interface HumanInteractionChannelEvidence {
+  signal: string;
+  filePath: string;
+  line: number;
+}
+
 /** One line of authentication evidence on a flow (DATAP-912). */
 export interface FlowAuthenticationEvidence {
   kind: string;
@@ -132,5 +138,6 @@ export interface DetectedDataFlow {
   transport?: FlowTransport;
   client?: string;
   channel?: HumanInteractionChannel;
+  channelEvidence?: HumanInteractionChannelEvidence[];
 }
 
