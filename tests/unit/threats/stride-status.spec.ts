@@ -1,5 +1,10 @@
 import type { FlowControlEvidence } from "../../../src/core/types/data-flow";
-import { strideThreatsForComponent, strideThreatsForFlow, type ElementThreat } from "../../../src/threats/stride";
+import {
+  isStructuralFlowForStride,
+  strideThreatsForComponent,
+  strideThreatsForFlow,
+  type ElementThreat,
+} from "../../../src/threats/stride";
 
 /** Threat statuses from control evidence (DATAP-915). */
 
@@ -74,5 +79,35 @@ describe("STRIDE statuses", () => {
       ...strideThreatsForComponent({ type: "asset", subType: "database" }, flows),
     ];
     expect(threats.every((t) => t.status === "unknown")).toBe(true);
+  });
+});
+
+describe("structural flows", () => {
+  const tlsControl = { control: "tls", effect: "mitigates" as const, filePath: "app.ts", line: 3 };
+
+  it.each(["uses_in_process", "exposes", "depends_on", "provisions"] as const)(
+    "gives a %s flow no threats",
+    (relationship) => {
+      expect(isStructuralFlowForStride({ relationship })).toBe(true);
+      expect(strideThreatsForFlow({ relationship, controls: [tlsControl] })).toEqual([]);
+    },
+  );
+
+  it.each(["invokes", "queries", "interacts", "authenticates_via"] as const)(
+    "keeps threats on a %s flow",
+    (relationship) => {
+      expect(isStructuralFlowForStride({ relationship })).toBe(false);
+      expect(strideThreatsForFlow({ relationship }).map((threat) => threat.category)).toEqual(["T", "I", "D"]);
+    },
+  );
+
+  it("does not read a structural flow when deciding an external entity's status", () => {
+    const vendor = { type: "third_party", subType: "saas_service" };
+    const structuralFlowWithoutEvidence = { relationship: "depends_on" as const, controls: [] };
+    const realFlowWithTls = { relationship: "invokes" as const, controls: [tlsControl] };
+    const spoofing = strideThreatsForComponent(vendor, [realFlowWithTls, structuralFlowWithoutEvidence]).find(
+      (threat) => threat.category === "S",
+    );
+    expect(spoofing?.status).toBe("mitigated");
   });
 });

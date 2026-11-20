@@ -157,6 +157,7 @@ export { annotateFlowControls, flowControls, loadFlowControlRules } from "./data
 export type { FlowControlRules } from "./data-flow/flow-controls";
 export {
   loadStrideRules,
+  isStructuralFlowForStride,
   strideComponentKind,
   strideThreatsForComponent,
   strideThreatsForFlow,
