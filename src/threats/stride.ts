@@ -9,7 +9,8 @@ import path from "path";
 import YAML from "yaml";
 import { z } from "zod";
 
-import type { FlowAuthentication, FlowControlEvidence } from "../core/types/data-flow";
+import type { FlowAuthentication, FlowControlEvidence, FlowRelationship } from "../core/types/data-flow";
+import { FLOW_RELATIONSHIPS } from "../core/types/data-flow";
 
 export type StrideElementKind = "external_entity" | "process" | "data_store" | "data_flow";
 export type ThreatStatus = "unknown" | "mitigated" | "open";
@@ -39,6 +40,7 @@ export interface ThreatFlowInput {
   targetComponentId?: string;
   authentication?: FlowAuthentication;
   controls?: FlowControlEvidence[];
+  relationship?: FlowRelationship;
 }
 
 const MAX_THREAT_EVIDENCE = 6;
@@ -65,6 +67,7 @@ const rulesSchema = z.object({
       ),
     )
     .default({}),
+  structural_flow_relationships: z.array(z.enum(FLOW_RELATIONSHIPS)).default([]),
   component_kinds: z.array(
     z.object({
       when: z.object({ type: stringOrList.optional(), subType: stringOrList.optional() }),
@@ -134,6 +137,13 @@ export function strideThreatsForKind(kind: StrideElementKind, rules: StrideRules
     }));
 }
 
+export function isStructuralFlowForStride(
+  flow: ThreatFlowInput,
+  rules: StrideRules = loadStrideRules(),
+): boolean {
+  return flow.relationship !== undefined && rules.structural_flow_relationships.includes(flow.relationship);
+}
+
 /** Control and authentication evidence of one flow, as threat evidence with its effect. */
 function flowEvidence(flow: ThreatFlowInput): Array<ThreatEvidence & { weakens: boolean }> {
   const out: Array<ThreatEvidence & { weakens: boolean }> = [];
@@ -195,7 +205,7 @@ export function strideThreatsForComponent(
   const kind = strideComponentKind(component, rules);
   if (!kind) return [];
   const statusRules = rules.status_rules[kind] ?? {};
-  const checked = flows.filter(isChecked);
+  const checked = flows.filter((flow) => isChecked(flow) && !isStructuralFlowForStride(flow, rules));
   return strideThreatsForKind(kind, rules).map((threat) => {
     const rule = statusRules[threat.category];
     if (!rule || checked.length === 0) return threat;
@@ -213,6 +223,7 @@ export function strideThreatsForComponent(
 
 /** Threats of a data flow, with statuses from its control and authentication evidence. */
 export function strideThreatsForFlow(flow: ThreatFlowInput = {}, rules: StrideRules = loadStrideRules()): ElementThreat[] {
+  if (isStructuralFlowForStride(flow, rules)) return [];
   const statusRules = rules.status_rules.data_flow ?? {};
   return strideThreatsForKind("data_flow", rules).map((threat) => {
     const rule = statusRules[threat.category];
