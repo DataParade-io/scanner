@@ -7,6 +7,12 @@ import type {
   ScanResult,
   SourceLocation,
 } from "../types";
+import {
+  FLOW_PROTOCOLS,
+  FLOW_RELATIONSHIPS,
+  FLOW_TRANSPORTS,
+  HUMAN_INTERACTION_CHANNELS,
+} from "../types/data-flow";
 
 const fileLanguageEnum = z.enum([
   "typescript",
@@ -108,6 +114,11 @@ export const detectedDataFlowSchema = z.object({
       }),
     )
     .optional(),
+  relationship: z.enum(FLOW_RELATIONSHIPS).optional(),
+  protocol: z.enum(FLOW_PROTOCOLS).optional(),
+  transport: z.enum(FLOW_TRANSPORTS).optional(),
+  client: z.string().min(1).optional(),
+  channel: z.enum(HUMAN_INTERACTION_CHANNELS).optional(),
 });
 
 export const languageParserStatsSchema = z.object({

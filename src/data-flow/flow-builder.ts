@@ -1,6 +1,7 @@
 import type { DetectedComponent } from "../core/types/component";
 import type { DataFlowType, DetectedDataFlow } from "../core/types/data-flow";
 import type { RawFinding } from "../core/types/detection";
+import { describeFlowFromFinding } from "./flow-interaction-description";
 
 function getSectionIdFromMaybeUnknown(raw: unknown): string | undefined {
   if (typeof raw !== "string") return undefined;
@@ -92,6 +93,12 @@ export function buildFlow(
       ? finding.properties.url
       : undefined;
   const scope = inferTargetScope(sourceComponent, targetComponent);
+  const interactionDescription = describeFlowFromFinding(
+    finding,
+    type,
+    sourceComponent,
+    targetComponent,
+  );
   return {
     id: `flow_${index}`,
     sourceComponentId: sourceId,
@@ -104,6 +111,13 @@ export function buildFlow(
     targetScope: scope.targetScope,
     targetScopeConfidence: scope.targetScopeConfidence,
     targetScopeReason: scope.targetScopeReason,
+    ...definedPropertiesOnly(interactionDescription),
   };
+}
+
+function definedPropertiesOnly<T extends object>(value: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(value).filter(([, propertyValue]) => propertyValue !== undefined),
+  ) as Partial<T>;
 }
 
