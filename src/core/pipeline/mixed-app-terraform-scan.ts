@@ -73,6 +73,7 @@ function ensureMixedAppTerraformProviderToModuleShellFlows(
       type: "api_call",
       confidence: 0.72,
       description: "mixed_app_terraform_module_shell",
+      relationship: "provisions",
     });
   };
 

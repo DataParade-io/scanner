@@ -58,6 +58,7 @@ export function ensureHubToUnlinkedAssets(
         confidence: rule.confidence,
         description: rule.description,
         enrichmentNotes: rule.enrichmentNotes,
+        relationship: rule.relationship,
       });
     }
   }
