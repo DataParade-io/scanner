@@ -101,8 +101,9 @@ function describeOutboundCallFinding(finding: RawFinding): FlowInteractionDescri
   const findingTransportProperty = readStringProperty(properties, "transport");
   const httpClientLibrary = readStringProperty(properties, "httpClientLibrary");
   const clientProperty = readStringProperty(properties, "client");
-  const packageName =
-    readStringProperty(properties, "package_name") ?? readStringProperty(properties, "packageName");
+  // The SDK package the call imports. `package_name` is the scanned section's own package,
+  // so it never names the client.
+  const sdkPackage = readStringProperty(properties, "sdkPackage");
   const serviceName = readStringProperty(properties, "serviceName");
 
   const description: FlowInteractionDescription = { relationship: "invokes" };
@@ -128,7 +129,7 @@ function describeOutboundCallFinding(finding: RawFinding): FlowInteractionDescri
 
   description.client = callsThroughHttpClientLibrary
     ? (httpClientLibrary ?? clientProperty)
-    : (packageName ?? clientProperty ?? serviceName);
+    : (sdkPackage ?? clientProperty ?? serviceName);
 
   return description;
 }
@@ -166,10 +167,12 @@ export function describeFlowFromFinding(
   if (finding.pattern === "auth_middleware") return { relationship: "authenticates_via" };
   if (isInternalFetchFinding(finding)) {
     const url = readStringProperty(finding.properties, "url");
+    // A path alone does not say REST, so only GraphQL is named (DATAP-937).
     return {
       relationship: "invokes",
-      protocol: url && GRAPHQL_URL_PATTERN.test(url) ? "graphql" : "rest",
+      protocol: url && GRAPHQL_URL_PATTERN.test(url) ? "graphql" : "unknown",
       transport: transportFromUrlScheme(url),
+      client: "fetch",
     };
   }
   if (finding.pattern === "express_route") return { relationship: "exposes" };
