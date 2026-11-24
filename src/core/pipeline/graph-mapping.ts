@@ -244,11 +244,16 @@ const ENGINEERING_PROTOCOL_OPTIONS_THE_EDITOR_OFFERS = new Set([
   "smtp",
 ]);
 
+/**
+ * The editor's protocol for a flow, or undefined (unknown). An endpoint or HTTP method
+ * alone does not make a flow REST, so the inferred "rest" fallback is not used (DATAP-937).
+ */
 function engineeringProtocolForFlow(flow: DetectedDataFlow): string | undefined {
-  if (flow.protocol && ENGINEERING_PROTOCOL_OPTIONS_THE_EDITOR_OFFERS.has(flow.protocol)) {
-    return flow.protocol;
+  if (flow.protocol) {
+    return ENGINEERING_PROTOCOL_OPTIONS_THE_EDITOR_OFFERS.has(flow.protocol) ? flow.protocol : undefined;
   }
-  return inferDataFlowProtocol(flow);
+  const inferred = inferDataFlowProtocol(flow);
+  return inferred === "graphql" ? inferred : undefined;
 }
 
 function buildFlowName(

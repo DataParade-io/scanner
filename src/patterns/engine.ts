@@ -181,6 +181,7 @@ function detectThirdPartyServicesFromImportsWithConfig(
         properties: {
           client: svc.serviceName,
           serviceName: svc.serviceName,
+          sdkPackage: imp.module,
         },
       });
     }
