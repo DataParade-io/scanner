@@ -32,6 +32,8 @@ interface CodeSignal {
   channel: DetectedChannel;
   signal: string;
   pattern: RegExp;
+  /** Counts only in a file that is a real command-line entry point. */
+  entryPointOnly?: "python" | "go";
 }
 
 const CHANNEL_PRIORITY_FOR_HUMAN_ACTOR_EDGES: DetectedChannel[] = [
@@ -68,12 +70,11 @@ const CODE_SIGNALS: CodeSignal[] = [
   { channel: "mcp", signal: "MCP server (FastMCP)", pattern: /\bFastMCP\s*\(/ },
   { channel: "mcp", signal: "MCP server (Python SDK)", pattern: /^\s*from\s+mcp\.server\b/m },
   { channel: "mcp", signal: "MCP server (mcp-go)", pattern: /"github\.com\/mark3labs\/mcp-go\/server"/ },
-  { channel: "cli", signal: "click", pattern: /^\s*(?:import\s+click\b|from\s+click\s+import\b)/m },
-  { channel: "cli", signal: "typer", pattern: /^\s*(?:import\s+typer\b|from\s+typer\s+import\b)/m },
-  { channel: "cli", signal: "argparse", pattern: /\bargparse\.ArgumentParser\s*\(/ },
-  { channel: "cli", signal: "cobra", pattern: /"github\.com\/spf13\/cobra"/ },
-  { channel: "cli", signal: "urfave/cli", pattern: /"github\.com\/urfave\/cli(?:\/v\d+)?"/ },
-  { channel: "cli", signal: "Rails rake task", pattern: /^\s*task\s+[:\w]+\s*(?:=>|do\b)/m },
+  { channel: "cli", signal: "click", pattern: /^\s*(?:import\s+click\b|from\s+click\s+import\b)/m, entryPointOnly: "python" },
+  { channel: "cli", signal: "typer", pattern: /^\s*(?:import\s+typer\b|from\s+typer\s+import\b)/m, entryPointOnly: "python" },
+  { channel: "cli", signal: "argparse", pattern: /\bargparse\.ArgumentParser\s*\(/, entryPointOnly: "python" },
+  { channel: "cli", signal: "cobra", pattern: /"github\.com\/spf13\/cobra"/, entryPointOnly: "go" },
+  { channel: "cli", signal: "urfave/cli", pattern: /"github\.com\/urfave\/cli(?:\/v\d+)?"/, entryPointOnly: "go" },
   { channel: "web_gui", signal: "Go html/template", pattern: /"html\/template"/ },
   { channel: "api_direct", signal: "NestJS application", pattern: /\bNestFactory\.create\s*[<(]/ },
   { channel: "api_direct", signal: "Express application", pattern: /\bexpress\(\s*\)/ },
@@ -89,6 +90,57 @@ const CODE_SIGNALS: CodeSignal[] = [
   { channel: "api_direct", signal: "fiber", pattern: /"github\.com\/gofiber\/fiber(?:\/v\d+)?"/ },
   { channel: "api_direct", signal: "Rails API controller", pattern: /<\s*ActionController::API\b/ },
 ];
+
+const GO_MAIN_PACKAGE = /^\s*package\s+main\b/m;
+const GO_COMMAND_DIRECTORY = /(?:^|\/)cmd\//;
+const PYTHON_PACKAGING_FILE = /(?:^|\/)(?:pyproject\.toml|setup\.cfg|setup\.py)$/;
+const PYTHON_ENTRY_POINT_TARGET = /["']?\s*([A-Za-z_][\w.]*)\s*:\s*[A-Za-z_][\w.]*\s*["']?/g;
+
+/**
+ * Module paths (`pkg/cli`) that pyproject.toml `[project.scripts]` or
+ * `[tool.poetry.scripts]`, setup.cfg `console_scripts` or setup.py `console_scripts` name.
+ */
+export function pythonConsoleScriptModules(files: FileInfo[]): Set<string> {
+  const modules = new Set<string>();
+  for (const file of files) {
+    if (typeof file.content !== "string" || !PYTHON_PACKAGING_FILE.test(file.path)) continue;
+    const blocks: string[] = [];
+    if (file.path.endsWith("pyproject.toml")) {
+      for (const block of file.content.split(/^(?=\[)/m)) {
+        if (/^\[[^\]]*\bscripts\]/.test(block)) blocks.push(block.replace(/^\[[^\]]*\]/, ""));
+      }
+    } else {
+      const start = file.content.indexOf("console_scripts");
+      if (start === -1) continue;
+      const rest = file.content.slice(start + "console_scripts".length);
+      const end = file.path.endsWith("setup.cfg") ? rest.search(/^\S/m) : rest.indexOf("]");
+      blocks.push(end === -1 ? rest : rest.slice(0, end));
+    }
+    for (const block of blocks) {
+      for (const line of block.split("\n")) {
+        const assignment = line.indexOf("=");
+        if (assignment === -1) continue;
+        PYTHON_ENTRY_POINT_TARGET.lastIndex = 0;
+        const target = PYTHON_ENTRY_POINT_TARGET.exec(line.slice(assignment + 1));
+        if (target) modules.add(target[1]!.replace(/\./g, "/"));
+      }
+    }
+  }
+  return modules;
+}
+
+function isPythonCommandLineEntryPoint(filePath: string, consoleScriptModules: Set<string>): boolean {
+  if (filePath.endsWith("/__main__.py") || filePath === "__main__.py") return true;
+  const modulePath = filePath.replace(/\.py$/, "").replace(/\/__init__$/, "");
+  for (const module of consoleScriptModules) {
+    if (modulePath === module || modulePath.endsWith(`/${module}`)) return true;
+  }
+  return false;
+}
+
+function isGoCommandLineEntryPoint(file: FileInfo): boolean {
+  return GO_COMMAND_DIRECTORY.test(file.path) || GO_MAIN_PACKAGE.test(file.content);
+}
 
 const MCP_STDIO_TRANSPORT_PATTERN = /StdioServerTransport|stdio_server\s*\(|transport\s*=\s*["']stdio["']/;
 const MCP_HTTP_TRANSPORT_PATTERN =
@@ -167,10 +219,9 @@ function readPackageManifest(file: FileInfo): PackageManifestReading | undefined
   const exportsModule = ["main", "exports", "module"].some((fieldName) => fieldName in manifest);
   const isLibraryPackage = exportsModule && !declaresBinary && !hasRunnableScript;
 
-  const dependencyNames = new Set([
-    ...Object.keys((manifest.dependencies ?? {}) as Record<string, unknown>),
-    ...Object.keys((manifest.devDependencies ?? {}) as Record<string, unknown>),
-  ]);
+  // Only runtime dependencies say what the package ships. devDependencies are build,
+  // test and script tooling.
+  const dependencyNames = new Set(Object.keys((manifest.dependencies ?? {}) as Record<string, unknown>));
 
   const evidence: Array<[DetectedChannel, HumanInteractionChannelEvidence]> = [];
   if (declaresBinary) {
@@ -182,6 +233,8 @@ function readPackageManifest(file: FileInfo): PackageManifestReading | undefined
   for (const [channel, packageNames] of PACKAGE_DEPENDENCY_CHANNELS) {
     if (isLibraryPackage && CHANNELS_THAT_A_LIBRARY_DEPENDENCY_DOES_NOT_PROVE.has(channel)) continue;
     if (declaresBinary && CHANNELS_THAT_A_COMMAND_LINE_PACKAGE_DEPENDENCY_DOES_NOT_PROVE.has(channel)) continue;
+    // A CLI library without a `bin` entry is used by scripts, not shipped as a command.
+    if (channel === "cli" && !declaresBinary) continue;
     const dependencyName = packageNames.find((packageName) => dependencyNames.has(packageName));
     if (!dependencyName) continue;
     evidence.push([
@@ -215,6 +268,7 @@ export function detectSectionInteractionSurfaces(
     });
   }
 
+  const consoleScriptModules = pythonConsoleScriptModules(files);
   const sortedFiles = [...files].sort((left, right) => (left.path < right.path ? -1 : left.path > right.path ? 1 : 0));
   for (const file of sortedFiles) {
     const owningSection = findOwningSection(file.path, sectionsByLongestDirectoryFirst);
@@ -247,6 +301,8 @@ export function detectSectionInteractionSurfaces(
 
     for (const codeSignal of CODE_SIGNALS) {
       if (!codeSignal.pattern.test(file.content)) continue;
+      if (codeSignal.entryPointOnly === "python" && !isPythonCommandLineEntryPoint(file.path, consoleScriptModules)) continue;
+      if (codeSignal.entryPointOnly === "go" && !isGoCommandLineEntryPoint(file)) continue;
       addEvidence(surface, codeSignal.channel, {
         signal: codeSignal.signal,
         filePath: file.path,

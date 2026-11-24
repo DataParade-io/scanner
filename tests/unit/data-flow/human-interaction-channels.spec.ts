@@ -135,11 +135,72 @@ describe("detectSectionInteractionSurfaces", () => {
 
   it("gives a file to the section with the longest matching directory", () => {
     const surfaces = detectSectionInteractionSurfaces(
-      [makeFile("backend/lambdas/handler.go", 'import "github.com/spf13/cobra"\n')],
+      [makeFile("backend/lambdas/handler.go", 'package main\nimport "github.com/spf13/cobra"\n')],
       [makeSection("backend"), makeSection("backend/lambdas")],
     );
     expect(surfaces.get("backend/lambdas")?.evidenceByChannel.has("cli")).toBe(true);
     expect(surfaces.get("backend")?.evidenceByChannel.has("cli")).toBe(false);
+  });
+});
+
+describe("detectSectionInteractionSurfaces: command-line entry points", () => {
+  const cliSignals = (surfaces: ReturnType<typeof detectSectionInteractionSurfaces>, id: string) =>
+    surfaces.get(id)?.evidenceByChannel.get("cli")?.map((evidence) => evidence.signal);
+
+  it("does not count devDependencies, a CLI library without bin, or argparse in a script", () => {
+    const surfaces = detectSectionInteractionSurfaces(
+      [
+        makeFile("app/package.json", packageJson({ name: "app", scripts: { start: "node ." }, dependencies: { commander: "12" }, devDependencies: { yargs: "17", next: "15" } })),
+        makeFile("app/scripts/seed.py", 'import argparse\nif __name__ == "__main__":\n    argparse.ArgumentParser()\n'),
+        makeFile("app/lib/tasks/db.rake", "task :seed do\nend\n"),
+      ],
+      [makeSection("app")],
+    );
+    expect(cliSignals(surfaces, "app")).toBeUndefined();
+    expect(surfaces.get("app")?.evidenceByChannel.has("web_gui")).toBe(false);
+  });
+
+  it("counts Python CLI libraries in console_scripts targets and __main__ modules", () => {
+    const surfaces = detectSectionInteractionSurfaces(
+      [
+        makeFile("tool/pyproject.toml", '[project]\nname = "tool"\n\n[project.scripts]\ntool = "tool.cli:main"\n'),
+        makeFile("tool/src/tool/cli.py", "import click\n"),
+        makeFile("tool/src/tool/helpers.py", "import typer\n"),
+        makeFile("runner/runner/__main__.py", "import argparse\nargparse.ArgumentParser()\n"),
+      ],
+      [makeSection("tool"), makeSection("runner")],
+    );
+    expect(cliSignals(surfaces, "tool")).toEqual(["click"]);
+    expect(cliSignals(surfaces, "runner")).toEqual(["argparse"]);
+  });
+
+  it("reads console_scripts from setup.cfg and setup.py", () => {
+    const surfaces = detectSectionInteractionSurfaces(
+      [
+        makeFile("a/setup.cfg", "[options.entry_points]\nconsole_scripts =\n    a-tool = a.main:run\n"),
+        makeFile("a/a/main.py", "import click\n"),
+        makeFile("b/setup.py", 'setup(entry_points={"console_scripts": ["b-tool=b.cli:main"]})\n'),
+        makeFile("b/b/cli.py", "import typer\n"),
+      ],
+      [makeSection("a"), makeSection("b")],
+    );
+    expect(cliSignals(surfaces, "a")).toEqual(["click"]);
+    expect(cliSignals(surfaces, "b")).toEqual(["typer"]);
+  });
+
+  it("counts Go CLI libraries only in package main or under cmd/", () => {
+    const cobra = 'import "github.com/spf13/cobra"\n';
+    const surfaces = detectSectionInteractionSurfaces(
+      [
+        makeFile("svc/internal/flags.go", `package flags\n${cobra}`),
+        makeFile("tool/cmd/root.go", `package cmd\n${cobra}`),
+        makeFile("other/main.go", `package main\n${cobra}`),
+      ],
+      [makeSection("svc"), makeSection("tool"), makeSection("other")],
+    );
+    expect(cliSignals(surfaces, "svc")).toBeUndefined();
+    expect(cliSignals(surfaces, "tool")).toEqual(["cobra"]);
+    expect(cliSignals(surfaces, "other")).toEqual(["cobra"]);
   });
 });
 
@@ -254,5 +315,23 @@ describe("applyHumanInteractionChannels", () => {
       sections: [makeSection("packages/utils")],
     });
     expect(result.flows.map((flow) => flow.id)).toEqual(["flow_3"]);
+  });
+});
+
+describe("applyHumanInteractionChannels: no CLI edge without a CLI", () => {
+  it("adds no person -> app CLI edge for a yargs devDependency and an argparse seed script", () => {
+    const user = makeComponent({ id: "user", name: "User", type: "actor", subType: "customer", properties: { section_id: "app" } });
+    const app = makeApplicationHub("app_hub", "app");
+    const result = applyHumanInteractionChannels({
+      components: [user, app],
+      flows: [{ id: "flow_u", sourceComponentId: "user", targetComponentId: "app_hub", type: "api_call", confidence: 0.9 }],
+      files: [
+        makeFile("app/package.json", packageJson({ name: "app", scripts: { start: "node server.js" }, dependencies: { express: "4" }, devDependencies: { yargs: "17" } })),
+        makeFile("app/scripts/seed.py", 'import argparse\nif __name__ == "__main__":\n    argparse.ArgumentParser()\n'),
+      ],
+      sections: [makeSection("app")],
+    });
+    expect(result.flows.some((flow) => flow.channel === "cli")).toBe(false);
+    expect(result.flows.find((flow) => flow.id === "flow_u")).toMatchObject({ channel: "api_direct" });
   });
 });
