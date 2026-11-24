@@ -205,7 +205,8 @@ describe("core/pipeline/graph-mapping - DP-P0-CLI-402", () => {
     const properties = (edge.data as any).properties;
 
     expect(properties.engineering.transferType).toBe("api_call");
-    expect(properties.engineering.protocol).toBe("rest");
+    // An endpoint and method alone do not make a flow REST (DATAP-937).
+    expect(properties.engineering.protocol).toBeUndefined();
     expect(properties.engineering.name).toContain("Test Application");
     expect(properties.engineering.actions).toEqual(["read"]);
 

@@ -55,7 +55,7 @@ describe("describeFlowFromFinding", () => {
   it("names the vendor SDK for an outbound call made without an HTTP client library", () => {
     const finding = makeFinding({
       pattern: "external_api_call",
-      properties: { serviceName: "stripe", client: "stripe", package_name: "stripe", api_type: "rest" },
+      properties: { serviceName: "stripe", client: "stripe", sdkPackage: "stripe", api_type: "rest" },
     });
     expect(describeFlowFromFinding(finding, "api_call", application, stripe)).toEqual({
       relationship: "invokes",
@@ -63,6 +63,32 @@ describe("describeFlowFromFinding", () => {
       transport: undefined,
       client: "stripe",
     });
+  });
+
+  it("names the SDK package, not the scanned project's own package, as the client", () => {
+    const finding = makeFinding({
+      pattern: "external_api_call",
+      properties: { serviceName: "sendgrid", client: "sendgrid", sdkPackage: "@sendgrid/mail", package_name: "fx1" },
+    });
+    expect(describeFlowFromFinding(finding, "api_call", application, stripe).client).toBe("@sendgrid/mail");
+    const withoutImport = makeFinding({
+      pattern: "external_api_call",
+      properties: { serviceName: "stripe", client: "stripe", package_name: "fx1" },
+    });
+    expect(describeFlowFromFinding(withoutImport, "api_call", application, stripe).client).toBe("stripe");
+  });
+
+  it("does not call an internal fetch REST from its path alone", () => {
+    const finding = makeFinding({
+      pattern: "express_route",
+      name: "INTERNAL_FETCH /api/users",
+      properties: { httpMethod: "GET", url: "/api/users" },
+    });
+    const description = describeFlowFromFinding(finding, "api_call", application, application);
+    expect(description).toEqual({ relationship: "invokes", protocol: "unknown", transport: undefined, client: "fetch" });
+    expect(flowInteractionLabel(makeFlow(description))).toBe("HTTP request");
+    const graphql = makeFinding({ pattern: "express_route", name: "INTERNAL_FETCH /graphql", properties: { url: "/graphql" } });
+    expect(describeFlowFromFinding(graphql, "api_call", application, application).protocol).toBe("graphql");
   });
 
   it("does not treat the blanket api_type default as evidence of REST", () => {
