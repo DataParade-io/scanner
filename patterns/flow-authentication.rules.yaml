@@ -15,7 +15,8 @@ version: 1
 window:
   # Lines before the evidence line to search for the start of the enclosing function.
   max_lines_before: 40
-  # Lines after the evidence line that still belong to the request call.
+  # Lines after the evidence line that still belong to the request call. The window
+  # never runs past the end of the enclosing function.
   lines_after: 8
   # Lines to read from a referenced helper function or constant.
   helper_lines: 25

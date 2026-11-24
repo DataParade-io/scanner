@@ -1,5 +1,6 @@
 import type { DetectedDataFlow } from "../../../src/core/types/data-flow";
 import { flowControls } from "../../../src/data-flow/flow-controls";
+import { strideThreatsForFlow } from "../../../src/threats/stride";
 
 /** Control evidence on flows (DATAP-915). */
 
@@ -110,5 +111,31 @@ describe("flowControls", () => {
     const code = ["def go():", "    return client.get(path)"];
     expect(flowControls(flow([["a.py", 2]]), files({ "a.py": code }))).toEqual([]);
     expect(flowControls(flow([["a.py", 2]], { type: "database_query" }), files({ "a.py": code }))).toBeUndefined();
+  });
+
+  it("stops at the end of the enclosing function, so a neighbour's controls do not set STRIDE status", () => {
+    const py = [
+      "def fetch_feed():",
+      '    return requests.get("https://feed.example.net/items")',
+      "",
+      "def fetch_legacy():",
+      '    return requests.get("http://legacy.partner.net/feed", timeout=10, verify=False)',
+    ];
+    const e = flowControls(flow([["feeds.py", 2]]), files({ "feeds.py": py }));
+    expect(ids(e)).toEqual(["tls"]);
+    const byCategory = Object.fromEntries(strideThreatsForFlow({ controls: e }).map((t) => [t.category, t.status]));
+    expect(byCategory).toMatchObject({ T: "mitigated", I: "mitigated", D: "unknown" });
+
+    const ts = [
+      "export async function getItems() {",
+      "  return fetch(itemsUrl);",
+      "}",
+      "export async function getLegacy() {",
+      '  return axios.get("http://legacy.partner.net/feed", { timeout: 5000 });',
+      "}",
+    ];
+    expect(flowControls(flow([["feeds.ts", 2]]), files({ "feeds.ts": ts }))).toEqual([]);
+    // The neighbour's own call still reads its own controls.
+    expect(ids(flowControls(flow([["feeds.ts", 5]]), files({ "feeds.ts": ts })))).toEqual(["plaintext_http", "timeout"]);
   });
 });

@@ -77,6 +77,17 @@ describe("flowAuthentication", () => {
     expect(auth?.evidence.map((e) => e.line)).toEqual([lineOf(code, "Bot {bot_token}")]);
   });
 
+  it("does not read headers from the next function when the call is near its end", () => {
+    const code = [
+      "def public_status():",
+      "    return requests.get(STATUS_URL)",
+      "def private_items():",
+      '    return requests.get(ITEMS_URL, headers={"Authorization": f"Bearer {TOKEN}"})',
+    ];
+    expect(flowAuthentication(flow([["svc.py", 2]]), files({ "svc.py": code }))?.status).toBe("none_seen");
+    expect(flowAuthentication(flow([["svc.py", 4]]), files({ "svc.py": code }))?.status).toBe("seen");
+  });
+
   it("reports Google service-account credentials as oauth", () => {
     const code = [
       "def send(msg):",
