@@ -2,7 +2,7 @@
  * Authentication evidence on data flows (DATAP-912).
  *
  * For each evidence location of a flow, read the code around the request (the enclosing
- * function up to a few lines after the call) and any helper function or constant that the
+ * function, up to a few lines after the call and never past the end of that function) and any helper function or constant that the
  * call passes as `headers=`, `auth=` and similar. Apply the patterns in
  * patterns/flow-authentication.rules.yaml. Each match records its kind and line.
  *
@@ -86,15 +86,72 @@ export function requestWindow(
   rules: Pick<FlowAuthenticationRules, "maxLinesBefore" | "linesAfter">,
 ): number[] {
   let start = index;
+  let enclosing: number | undefined;
   const floor = Math.max(0, index - rules.maxLinesBefore);
   for (let i = index; i >= floor; i -= 1) {
     start = i;
-    if (FUNCTION_START.test(lines[i] ?? "")) break;
+    if (FUNCTION_START.test(lines[i] ?? "")) {
+      enclosing = i;
+      break;
+    }
   }
-  const end = Math.min(lines.length - 1, index + rules.linesAfter);
+  const limit = Math.min(lines.length - 1, index + rules.linesAfter);
+  const end = enclosing === undefined ? nextFunctionBound(lines, index, limit) : functionEnd(lines, enclosing, index, limit);
   const out: number[] = [];
   for (let i = start; i <= end; i += 1) out.push(i);
   return out;
+}
+
+const PY_DEF = /^(\s*)(?:async\s+)?def\s/;
+const DECORATOR = /^\s*@\w/;
+
+function indentOf(line: string): number {
+  return line.length - line.trimStart().length;
+}
+
+/** Last line before the next function definition, up to `limit`. */
+function nextFunctionBound(lines: string[], index: number, limit: number): number {
+  for (let i = index + 1; i <= limit; i += 1) {
+    if (FUNCTION_START.test(lines[i] ?? "") || DECORATOR.test(lines[i] ?? "")) return i - 1;
+  }
+  return limit;
+}
+
+/** Count of `{` minus `}` on a line, ignoring string literals and line comments. */
+function braceDelta(line: string): number {
+  const code = line.replace(/(["'`])(?:\\.|(?!\1).)*\1/g, "").replace(/\/\/.*$/, "");
+  let delta = 0;
+  for (const ch of code) {
+    if (ch === "{") delta += 1;
+    else if (ch === "}") delta -= 1;
+  }
+  return delta;
+}
+
+/**
+ * Last line of the function that starts at `start` and contains `index`, up to `limit`.
+ * Python functions end at the first non-blank line indented no deeper than the `def`.
+ * Brace functions end where the braces opened on the first line close.
+ */
+function functionEnd(lines: string[], start: number, index: number, limit: number): number {
+  const py = PY_DEF.exec(lines[start] ?? "");
+  if (py) {
+    const defIndent = py[1]!.length;
+    for (let i = index + 1; i <= limit; i += 1) {
+      const line = lines[i] ?? "";
+      if (line.trim() === "") continue;
+      if (indentOf(line) <= defIndent) return i - 1;
+    }
+    return limit;
+  }
+  let depth = 0;
+  let opened = false;
+  for (let i = start; i <= limit; i += 1) {
+    depth += braceDelta(lines[i] ?? "");
+    if (depth > 0) opened = true;
+    if (opened && depth <= 0 && i >= index) return i;
+  }
+  return nextFunctionBound(lines, index, limit);
 }
 
 /**
