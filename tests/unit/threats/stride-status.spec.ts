@@ -26,7 +26,7 @@ describe("STRIDE statuses", () => {
     const t = byCategory(strideThreatsForFlow({ controls: [control("tls", "mitigates", 4), control("timeout", "mitigates", 9)] }));
     expect(t.T!.status).toBe("mitigated");
     expect(t.I!.status).toBe("mitigated");
-    expect(t.I!.statusRuleId).toBe("stride/v2/data_flow/I");
+    expect(t.I!.statusRuleId).toBe("stride/v3/data_flow/I");
     expect(t.I!.evidence).toEqual([{ control: "tls", filePath: "app.py", line: 4 }]);
     expect(t.D!.status).toBe("mitigated");
     expect(t.D!.evidence).toEqual([{ control: "timeout", filePath: "app.py", line: 9 }]);
@@ -68,7 +68,7 @@ describe("STRIDE statuses", () => {
     expect(byCategory(strideThreatsForComponent(vendor, [])).S!.status).toBe("unknown");
     const open = byCategory(strideThreatsForComponent(vendor, [tls, { controls: [control("tls_verify_disabled", "weakens", 5)] }]));
     expect(open.S!.status).toBe("open");
-    expect(open.S!.statusRuleId).toBe("stride/v2/external_entity/S");
+    expect(open.S!.statusRuleId).toBe("stride/v3/external_entity/S");
     expect(open.R!.status).toBe("unknown");
   });
 
