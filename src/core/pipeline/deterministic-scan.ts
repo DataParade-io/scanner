@@ -2,6 +2,7 @@ import path from "path";
 
 import { annotateFlowAuthentication } from "../../data-flow/flow-authentication";
 import { annotateFlowControls } from "../../data-flow/flow-controls";
+import { completeFlowInteractionDescriptions } from "../../data-flow/flow-interaction-description";
 
 import type {
   DetectedDataFlow,
@@ -239,6 +240,7 @@ export function finalizeDeterministicScanResult(
     aiInferenceProposalDetails: input.aiInferenceProposalDetails,
     terraformScanSummary: work.terraformScanSummary,
   });
+  completeFlowInteractionDescriptions(reduced.dataFlows, reduced.components);
   // Content-derived component and flow ids (stable across re-scans); rewrites
   // every component/flow reference, including AI summaries and proposal details.
   const scanResult: ScanResult = assignStableEntityIds({

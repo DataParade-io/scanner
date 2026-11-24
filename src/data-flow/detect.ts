@@ -404,6 +404,7 @@ export function detectDataFlows(
       targetScope: "local",
       targetScopeConfidence: "high",
       targetScopeReason: "main-to-section-api",
+      relationship: "exposes",
     });
   }
 

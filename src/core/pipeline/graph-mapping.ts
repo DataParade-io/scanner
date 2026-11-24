@@ -32,6 +32,7 @@ import {
   isMixedAppTerraformScan,
   shouldUseTerraformMinimalServiceDiagramLayout,
 } from "./terraform-minimal-services";
+import { flowInteractionLabel } from "../../data-flow/flow-interaction-description";
 import { inferDataFlowProtocol } from "./infer-data-flow-protocol";
 
 function isAssertedDataAction(assignment: DataActionAssignment): boolean {
@@ -233,6 +234,28 @@ function normalizeTransformation(
   return "none";
 }
 
+const ENGINEERING_PROTOCOL_OPTIONS_THE_EDITOR_OFFERS = new Set([
+  "rest",
+  "graphql",
+  "grpc",
+  "kafka",
+  "amqp",
+  "mqtt",
+  "smtp",
+]);
+
+/**
+ * The editor's protocol for a flow, or undefined (unknown). An endpoint or HTTP method
+ * alone does not make a flow REST, so the inferred "rest" fallback is not used (DATAP-937).
+ */
+function engineeringProtocolForFlow(flow: DetectedDataFlow): string | undefined {
+  if (flow.protocol) {
+    return ENGINEERING_PROTOCOL_OPTIONS_THE_EDITOR_OFFERS.has(flow.protocol) ? flow.protocol : undefined;
+  }
+  const inferred = inferDataFlowProtocol(flow);
+  return inferred === "graphql" ? inferred : undefined;
+}
+
 function buildFlowName(
   flow: DetectedDataFlow,
   componentsById: ComponentByIdMap,
@@ -241,7 +264,7 @@ function buildFlowName(
   const target = componentsById.get(flow.targetComponentId);
   const sourceName = source?.name ?? flow.sourceComponentId;
   const targetName = target?.name ?? flow.targetComponentId;
-  return `${sourceName} → ${targetName} (${flow.type})`;
+  return `${sourceName} → ${targetName} (${flowInteractionLabel(flow)})`;
 }
 
 function mapDataFlowToEdge(
@@ -274,7 +297,7 @@ function mapDataFlowToEdge(
     engineering.actions = flow.actions;
   }
 
-  const protocol = inferDataFlowProtocol(flow);
+  const protocol = engineeringProtocolForFlow(flow);
   if (protocol) {
     engineering.protocol = protocol;
   }

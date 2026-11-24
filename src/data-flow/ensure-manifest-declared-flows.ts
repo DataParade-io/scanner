@@ -85,6 +85,7 @@ function appendHubToThirdPartyFlows(
       confidence,
       description,
       enrichmentNotes,
+      relationship: "depends_on",
     });
   }
 

@@ -9,6 +9,70 @@ export type DataFlowType =
   | "rpc"
   | "data_transfer";
 
+export const FLOW_RELATIONSHIPS = [
+  "invokes",
+  "queries",
+  "publishes",
+  "consumes",
+  "interacts",
+  "authenticates_via",
+  "exposes",
+  "uses_in_process",
+  "depends_on",
+  "provisions",
+] as const;
+
+export type FlowRelationship = (typeof FLOW_RELATIONSHIPS)[number];
+
+export const FLOW_PROTOCOLS = [
+  "rest",
+  "graphql",
+  "grpc",
+  "soap",
+  "json_rpc",
+  "mcp",
+  "sql",
+  "mongodb_wire",
+  "redis",
+  "kafka",
+  "amqp",
+  "mqtt",
+  "smtp",
+  "oauth_oidc",
+  "otlp",
+  "vendor_sdk",
+  "unknown",
+] as const;
+
+export type FlowProtocol = (typeof FLOW_PROTOCOLS)[number];
+
+export const FLOW_TRANSPORTS = [
+  "https",
+  "http",
+  "websocket",
+  "http2",
+  "tcp_tls",
+  "tcp",
+  "stdio",
+  "in_process",
+  "unknown",
+] as const;
+
+export type FlowTransport = (typeof FLOW_TRANSPORTS)[number];
+
+export const HUMAN_INTERACTION_CHANNELS = [
+  "web_gui",
+  "mobile_app",
+  "desktop_app",
+  "cli",
+  "mcp",
+  "api_direct",
+  "email",
+  "unknown",
+] as const;
+
+export type HumanInteractionChannel = (typeof HUMAN_INTERACTION_CHANNELS)[number];
+
 /** One line of authentication evidence on a flow (DATAP-912). */
 export interface FlowAuthenticationEvidence {
   kind: string;
@@ -63,5 +127,10 @@ export interface DetectedDataFlow {
   authentication?: FlowAuthentication;
   /** Control evidence (DATAP-915). Empty when nothing was seen; absent when not checked. */
   controls?: FlowControlEvidence[];
+  relationship?: FlowRelationship;
+  protocol?: FlowProtocol;
+  transport?: FlowTransport;
+  client?: string;
+  channel?: HumanInteractionChannel;
 }
 
