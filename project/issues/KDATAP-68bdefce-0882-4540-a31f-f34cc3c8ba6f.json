@@ -3,17 +3,25 @@
   "title": "SDK flow client is the scanned project's package name",
   "description": "flow-interaction-description.ts prefers package_name, which is the scanned project's own name, so SDK flows get client = repo name. Use the SDK or vendor package. Also stop hard-coding internal fetches and the engineering.protocol fallback as rest (DATAP-937).",
   "type": "bug",
-  "status": "open",
+  "status": "closed",
   "priority": 1,
   "assignee": null,
   "creator": null,
   "parent": "KDATAP-ea0f50b7-0c8a-4168-bfdb-af83a223d73a",
   "labels": [],
   "dependencies": [],
-  "comments": [],
+  "comments": [
+    {
+      "id": "e5382454-fe52-4b3e-a015-84cc50308a22",
+      "author": "ryan",
+      "text": "Merged with PR 122: SDK findings carry sdkPackage (imported module); client uses it, never package_name. Internal fetch: protocol unknown unless GraphQL, client fetch. engineering.protocol no longer falls back to inferred rest.",
+      "created_at": "2026-11-25T00:05:47.448731Z",
+      "comment_type": "default"
+    }
+  ],
   "created_at": "2026-11-24T17:38:29.000609Z",
-  "updated_at": "2026-11-24T17:38:29.000630Z",
-  "closed_at": null,
+  "updated_at": "2026-11-25T00:05:47.516577Z",
+  "closed_at": "2026-11-25T00:05:47.516553Z",
   "right_now_summary": null,
   "right_now_updated_at": null,
   "custom": {}
