@@ -1,5 +1,5 @@
 import type { DetectedDataFlow } from "../../../src/core/types/data-flow";
-import { flowAuthentication } from "../../../src/data-flow/flow-authentication";
+import { flowAuthentication, requestWindow } from "../../../src/data-flow/flow-authentication";
 
 /** Authentication evidence on flows (DATAP-912). */
 
@@ -158,5 +158,71 @@ describe("flowAuthentication", () => {
     ];
     const auth = flowAuthentication(flow([["gh.ts", 2]]), files({ "gh.ts": code }));
     expect(auth?.kinds).toEqual(["bearer"]);
+  });
+});
+
+describe("requestWindow", () => {
+  const rules = { maxLinesBefore: 40, linesAfter: 8 };
+  const windowAround = (code: string[], needle: string) => {
+    const w = requestWindow(code, lineOf(code, needle) - 1, rules);
+    return [code[w[0]!], code[w[w.length - 1]!]];
+  };
+
+  it("keeps a multi-line call after a callback that closed earlier in the same function", () => {
+    const code = [
+      "async function outer() {",
+      "  items.forEach((x) => {",
+      "    log(x);",
+      "  });",
+      "  const r = await client.post(",
+      "    url,",
+      "    { headers: { Authorization: `Bearer ${token}` } },",
+      "  );",
+      "}",
+    ];
+    expect(windowAround(code, "client.post")).toEqual(["async function outer() {", "}"]);
+    expect(flowAuthentication(flow([["a.ts", lineOf(code, "client.post")]]), files({ "a.ts": code }))?.status).toBe("seen");
+  });
+
+  it("keeps a multi-line call after a nested function that closed earlier", () => {
+    const code = [
+      "function outer() {",
+      "  function helper() {",
+      "    return 1;",
+      "  }",
+      "  const r = await axios.get(url,",
+      "    { headers: { Authorization: token }, timeout: 5000 });",
+      "  return r;",
+      "}",
+    ];
+    expect(windowAround(code, "axios.get")).toEqual(["function outer() {", "}"]);
+  });
+
+  it("stops at the end of a Go function", () => {
+    const code = [
+      "func a() {",
+      '\treq, _ := http.NewRequest("GET", url, nil)',
+      "\tresp, err := client.Do(req)",
+      "}",
+      "",
+      "func b() {",
+      "\tclient.Timeout = 3",
+      "}",
+    ];
+    expect(windowAround(code, "NewRequest")).toEqual(["func a() {", "}"]);
+  });
+
+  it("stops at the end of a Java method with a return type", () => {
+    const code = [
+      "public class Client {",
+      "  public Response fetch() {",
+      "    return http.get(url);",
+      "  }",
+      "  private void other() {",
+      '    conn.setRequestProperty("Authorization", token);',
+      "  }",
+      "}",
+    ];
+    expect(windowAround(code, "http.get")).toEqual(["  public Response fetch() {", "  }"]);
   });
 });

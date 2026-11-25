@@ -17,13 +17,17 @@ label in the parentheses now says what the flow is:
 | --- | --- | --- |
 | Vendor SDK call | api call | `Vendor SDK`, `Vendor SDK · HTTPS` |
 | HTTP client call | api call | `HTTPS request`, `HTTP request` |
-| GraphQL or REST call | api call | `GraphQL · HTTPS`, `REST · HTTPS` |
+| GraphQL call | api call | `GraphQL · HTTPS` |
 | MCP call | api call | `MCP · stdio`, `MCP` |
 | Database | database query | `SQL`, `Redis`, `MongoDB` |
 | Structural edge | api call | `uses`, `exposes`, `depends on`, `provisions` |
+| Auth middleware | api call | `authenticates via` |
 | Person to asset | api call | `Web GUI`, `CLI`, `Direct API`, `Mobile app`, `Desktop app`, `interacts` |
 
-A tool that matches on `(api call)` or parses the name must read the new fields instead.
+A call with no protocol, client or transport evidence still reads `api call`. No detector
+sets `protocol: "rest"` today, so `REST` labels appear only if a flow already carries that
+protocol. A tool that matches on `(api call)` or parses the name must read the new fields
+instead.
 
 ### New flow fields
 
@@ -78,6 +82,9 @@ of `stride/v2/...`. Statuses keyed on a v2 rule id do not carry over.
 
 ### Evidence window
 
-Authentication and control evidence now stops at the end of the enclosing function. A
-flow no longer takes a timeout, TLS or credential from the next function, so some
+Authentication and control evidence now stops at the end of the enclosing function:
+Python by indentation; JavaScript, TypeScript, Go, and Java or C# methods by braces. A
+nested function or callback that closes before the call does not count as the enclosing
+function. In other languages the window stops at the next detected function definition.
+A flow no longer takes a timeout, TLS or credential from the next function, so some
 statuses go from `mitigated` back to `unknown`.
