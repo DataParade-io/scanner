@@ -119,6 +119,9 @@ export const detectedDataFlowSchema = z.object({
   transport: z.enum(FLOW_TRANSPORTS).optional(),
   client: z.string().min(1).optional(),
   channel: z.enum(HUMAN_INTERACTION_CHANNELS).optional(),
+  channelEvidence: z
+    .array(z.object({ signal: z.string(), filePath: z.string(), line: z.number().int().positive() }))
+    .optional(),
 });
 
 export const languageParserStatsSchema = z.object({
