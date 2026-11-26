@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "db3c17fa-94c6-4ffc-b892-b5cfd118b795",
+  "issue_id": "KDATAP-edcee8dd-4a15-4508-97d9-be369785f84f",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:42:09.312Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Build the dedup-key and union framework",
+    "description": "Build the cross-copy deduplication framework: dedupKey = sha256(source + recordId) when a stable native id exists, else sha256(source + sessionId + timestamp + text hash). When the same session exists in multiple physical copies (active root plus archives, forks, mirrored sessions), union all copies and count identical records once, following the record timestamps rather than file order or mtimes (line order is not guaranteed chronological). The dedup set holds hashes only, never text.\n\nDone when: unit tests show duplicated records across two roots counting once, with both copies visible as provenance; dedup is idempotent across repeated scans.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-7299f867-88f0-4997-99ca-3ffef6e32e38",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

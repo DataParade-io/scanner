@@ -1,0 +1,27 @@
+{
+  "id": "KDATAP-efeb7546-01fb-4716-a61d-d3d73174e308",
+  "title": "Enforce no-network and no-text privacy tests",
+  "description": "Add privacy enforcement tests mirroring the existing no-source-code-leakage spec pattern: a static test asserting no network-capable imports (net, http, https, dgram, fetch, undici, axios) appear under src/sentiment/**; tests asserting all output builders (text and json) and the scan-state store contain no verbatim message text \u2014 counts, hashes, and watermarks only. Local-only is a product guarantee, not a convention.\n\nDone when: the tests are green in CI and fail if any network import or text leak is introduced.",
+  "type": "task",
+  "status": "open",
+  "priority": 1,
+  "assignee": null,
+  "creator": null,
+  "parent": "KDATAP-d59959c2-d422-4715-bd2d-7258bc9cd653",
+  "labels": [],
+  "dependencies": [],
+  "comments": [],
+  "created_at": "2026-10-02T02:44:49.158976Z",
+  "updated_at": "2026-10-02T02:44:49.159115Z",
+  "closed_at": null,
+  "right_now_summary": null,
+  "right_now_updated_at": null,
+  "custom": {},
+  "agent": {
+    "platform": "cursor",
+    "model": "glm-5.3",
+    "name": "cloud-agent",
+    "settings": {}
+  },
+  "agent_assignment": null
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "fb2ef566-4e3f-4f1a-8b48-eb087dcac1df",
+  "issue_id": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:41:42.925Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Cursor adapter",
+    "description": "Purpose: extract human-authored messages from Cursor on macOS — IDE agent/chat conversations in state.vscdb SQLite (globalStorage plus workspaceStorage) and agent-CLI transcripts under ~/.cursor/projects/<sanitized>/agent-transcripts.\n\nScope: SQLite reader decision (built-in node:sqlite with an engines bump vs an optional dependency) — highest-risk decision, spike first; discovery that unions the Cursor 2.x per-workspace composer.composerData index and the 3.x+ central composer.composerHeaders index (the 3.0 migration is one-way and the central index is incomplete for old chats); WAL-safe read-only access (never read state.vscdb without its -wal sidecar); project attribution via workspace.json and workspaceIdentifier URIs; extraction of type-1 user bubbles (text field) with injected-context discrimination; agent-transcript JSONL schema captured from a real Mac; subagent composers excluded; dedup by composer/bubble ids; incremental re-scan via createdAt watermarks. Cursor formats are undocumented and reverse-engineered — every claim must be pinned against a real Mac.\n\nDone when: golden extraction tests pass for both 2.x and 3.x fixture databases and for agent transcripts; reads are safe while Cursor is running; huge databases stream (no SELECT * on checkpoint or request-context blobs); doctor reports on a real Mac's roots.",
+    "issue_type": "epic",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-6e486cad-62db-4da0-ac98-3555806551a5",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

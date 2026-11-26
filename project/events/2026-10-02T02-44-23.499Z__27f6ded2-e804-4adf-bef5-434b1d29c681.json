@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "27f6ded2-e804-4adf-bef5-434b1d29c681",
+  "issue_id": "KDATAP-6c77106e-715a-4b3d-b99c-186d1a8b007a",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:23.499Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Wire Cursor dedup, incremental rescan, and doctor",
+    "description": "Wire the shared frameworks into the Cursor adapter: dedup by composerId and native bubbleId keys (a composer appearing in both old and new indexes is one conversation); incremental rescan via per-DB watermarks with a createdAt watermark plus overlap margin; stream queries by key prefix (never SELECT star; ignore checkpoint and messageRequestContext blobs — global DBs reach tens of GB); doctor checks reporting missing keys after Cursor updates.\n\nDone when: duplicated index entries count once; rescan equals cold scan; a large fixture streams without loading blobs; doctor runs on a real Mac.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-3f315870-b8c9-4d51-a819-e26f1f9b86fa",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

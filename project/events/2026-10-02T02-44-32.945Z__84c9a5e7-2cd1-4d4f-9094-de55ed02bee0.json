@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "84c9a5e7-2cd1-4d4f-9094-de55ed02bee0",
+  "issue_id": "KDATAP-06160bf9-2dab-4f29-a4a0-9cca23b9195c",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:32.945Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Wire Codex dedup, incremental rescan, and doctor",
+    "description": "Wire the shared frameworks into the Codex adapter: dedup the same rollout in sessions and archived_sessions by session_meta id; in forked/resumed rollouts skip inherited items using forked_from_id and forked_from_ordinal_exclusive (resumed/forked rollouts re-record inherited context — inherited human messages must count once), with the content-tuple dedup fallback absorbing residue; incremental watermarks per the append-only JSONL policy; doctor checks reporting the observed codex-cli versions.\n\nDone when: a fixture resumed rollout counts inherited messages exactly once; archived duplicates count once; rescan equals cold scan; doctor runs on a real Mac.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-5ee1c57f-f1a6-4e1b-bd25-698614b9634e",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}

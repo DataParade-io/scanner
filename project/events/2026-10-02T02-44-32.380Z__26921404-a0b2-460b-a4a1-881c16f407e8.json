@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "26921404-a0b2-460b-a4a1-881c16f407e8",
+  "issue_id": "KDATAP-6a67c9c6-01e3-4d32-8a53-668f4f88da1f",
+  "event_type": "issue_created",
+  "occurred_at": "2026-10-02T02:44:32.380Z",
+  "actor_id": "ubuntu",
+  "payload": {
+    "title": "Implement Codex human-message extraction",
+    "description": "Implement extraction: response_item records with payload type message and role user, concatenating input_text blocks; exclude harness-injected user content per the markers pinned in the verification task; never count event_msg user_message mirrors of response_item messages (community-verified on a real rollout that they are strict mirrors — counting both doubles the result); ignore turn_context, reasoning, function-call records, and unknown types tolerantly; every line must carry a timestamp per the rollout decoder.\n\nDone when: golden extraction tests pass on fixtures including mirrors, injected items, unknown types, and malformed lines; mirrors count exactly once.",
+    "issue_type": "task",
+    "status": "open",
+    "priority": 2,
+    "assignee": null,
+    "parent": "KDATAP-5ee1c57f-f1a6-4e1b-bd25-698614b9634e",
+    "labels": [],
+    "agent": {
+      "platform": "cursor",
+      "model": "glm-5.3",
+      "name": "cloud-agent"
+    }
+  }
+}
