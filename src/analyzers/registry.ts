@@ -23,6 +23,7 @@ import { detectRubyDatabaseYmlFromConfig } from "../patterns/detectors/ruby";
 import { loadUnifiedPatternConfig } from "../patterns/config";
 import { isRailsDatabaseYmlPath, normalizeRubyPath } from "./ruby/parser";
 import { runWithOrganizationDomainsScope } from "../classifier/organization-domains-scan-scope";
+import { runWithPythonModuleIndex } from "../patterns/detectors/source-module-index";
 
 const typeScriptAnalyzer = createTypeScriptAnalyzer();
 const pythonAnalyzer = createPythonAnalyzer();
@@ -54,6 +55,8 @@ export interface RunAnalyzersOptions {
   terraformModuleManifest?: TerraformModuleCallManifest;
   terraformScanRootPath?: string;
   organizationDomains?: readonly string[];
+  /** Owner of the scanned repository's git `origin` remote, a first-party signal. */
+  gitRemoteOwner?: string;
 }
 
 export function registerAnalyzer(
@@ -82,7 +85,7 @@ export function runAnalyzers(
         }
       : undefined;
 
-  return runWithOrganizationDomainsScope(opts?.organizationDomains, () => {
+  return runWithOrganizationDomainsScope(opts?.organizationDomains, () => runWithPythonModuleIndex(files, () => {
     for (const file of files) {
       if (file.language === "terraform") {
         findings.push(...detectTerraformPatterns(file, tfConfig, tfOpts));
@@ -127,7 +130,7 @@ export function runAnalyzers(
     }
 
     return findings;
-  });
+  }, { gitRemoteOwner: opts?.gitRemoteOwner }));
 }
 
 export async function runAnalyzersForRootPath(

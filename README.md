@@ -70,4 +70,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for Git Flow, Conventional Commits, Sem
 
 ## License
 
-GPL-3.0-or-later
+Apache-2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).

@@ -1,0 +1,85 @@
+version: third-party-labels/1
+scope_note: Vendors reached from the five in-scope adapter files. boto3 and openai are called only outside the scope.
+vendors:
+- vendor: instagram
+  subject_key: third_party:instagram
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, media, post_content, user_id, username]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/adapters/instagram/adapter.py, line: 166}
+    - {file_path: src/adapters/instagram/adapter.py, line: 176}
+    - {file_path: src/adapters/instagram/adapter.py, line: 284}
+    - {file_path: src/adapters/instagram/adapter.py, line: 310}
+    - {file_path: src/adapters/instagram/adapter.py, line: 315}
+  uncertain: false
+  rationale: The adapter's httpx client uses https://graph.instagram.com/v21.0 for IGAA tokens and posts media containers,
+    captions and the access token. Instagram publishes the user's own post, so it acts for the user, not as a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_graph
+  subject_key: third_party:facebook_graph
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, media, post_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/adapters/instagram/adapter.py, line: 284}
+    - {file_path: src/adapters/instagram/token_manager.py, line: 30}
+    - {file_path: src/adapters/instagram/token_manager.py, line: 48}
+    - {file_path: src/adapters/instagram/token_manager.py, line: 66}
+  uncertain: false
+  rationale: Non-IGAA tokens make the adapter use https://graph.facebook.com/v21.0, and the token manager exchanges and
+    inspects tokens there.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: linkedin
+  subject_key: third_party:linkedin
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, media, post_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/adapters/linkedin/api_client.py, line: 44}
+    - {file_path: src/adapters/linkedin/api_client.py, line: 55}
+    - {file_path: src/adapters/linkedin/api_client.py, line: 158}
+  uncertain: false
+  rationale: The httpx client with base_url https://api.linkedin.com registers and uploads images and posts the author's
+    content to /rest/posts.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: reddit
+  subject_key: third_party:reddit
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [post_content, session, username]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/adapters/reddit/client.py, line: 160}
+    - {file_path: src/adapters/reddit/client.py, line: 170}
+  uncertain: false
+  rationale: The httpx client reaches https://www.reddit.com and https://oauth.reddit.com with the session cookie and
+    submits comments and posts.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

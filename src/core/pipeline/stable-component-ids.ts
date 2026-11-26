@@ -22,6 +22,15 @@ function firstSourceFilePath(component: DetectedComponent): string {
  * The managed tuple embeds `managed_by_provider`, which is a component id; the
  * id assigners resolve it to the provider's own key so the result is stable.
  */
+/**
+ * Set on a component whose name is the project name, or the scan folder's name when no project
+ * name is configured (the root Application component). Its stable key uses
+ * {@link PROJECT_NAME_KEY_TOKEN} instead of the name, so the id does not depend on the folder the
+ * repository was checked out into (KDATAP-296090, DATAP-858).
+ */
+export const NAME_FROM_PROJECT_PROPERTY = "name_from_project";
+export const PROJECT_NAME_KEY_TOKEN = "<project>";
+
 export function stableComponentKey(component: DetectedComponent): string {
   const addr = component.properties?.terraform_address;
   if (typeof addr === "string" && addr.trim()) {
@@ -43,5 +52,6 @@ export function stableComponentKey(component: DetectedComponent): string {
   const sid = getSectionIdFromProperties(component.properties);
   const subType = component.subType ?? "";
   const filePath = firstSourceFilePath(component);
-  return `app:${sid}|${component.type}|${subType}|${filePath}|${normalizeName(component.name)}`;
+  const name = component.properties?.[NAME_FROM_PROJECT_PROPERTY] === true ? PROJECT_NAME_KEY_TOKEN : normalizeName(component.name);
+  return `app:${sid}|${component.type}|${subType}|${filePath}|${name}`;
 }

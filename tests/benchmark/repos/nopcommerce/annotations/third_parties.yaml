@@ -1,0 +1,641 @@
+version: third-party-labels/1
+scope_note: The scope is all of src/, so it covers the core libraries, Nop.Web and every bundled plugin. Static CDN assets (Google Fonts, ajax.googleapis.com model-viewer) and plain outbound links are not recorded; MaxMind GeoIP2 reads a local database file and sends nothing.
+vendors:
+- vendor: nopcommerce
+  subject_key: third_party:nopcommerce
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [email, configuration]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 71}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 97}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 125}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 151}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 173}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 206}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 224}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 241}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 258}
+    - {file_path: src/Libraries/Nop.Services/Common/NopHttpClient.cs, line: 284}
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Services/OnboardingHttpClient.cs, line: 46}
+  uncertain: false
+  rationale: NopHttpClient calls https://www.nopcommerce.com/ for warnings, license checks, news, extensions, the installation
+    callback and newsletter sign-up, sending the store URL, version and the admin email. The PayPal onboarding client also
+    asks nopcommerce.com for the merchant record.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: github
+  subject_key: third_party:github
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Presentation/Nop.Web/Areas/Admin/Factories/CommonModelFactory.cs, line: 790}
+  uncertain: false
+  rationale: The admin dashboard fetches the latest release from api.github.com/repos/nopSolutions/nopCommerce/releases/latest;
+    only a user agent with the nopCommerce version is sent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: hmrc
+  subject_key: third_party:hmrc
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [credentials, government_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Tax/CheckVatService.cs, line: 55}
+    - {file_path: src/Libraries/Nop.Services/Tax/CheckVatService.cs, line: 102}
+  uncertain: false
+  rationale: CheckVatService gets an OAuth token from the HMRC API (default https://api.service.hmrc.gov.uk) with the store's
+    client credentials and then validates a customer's UK VAT number there.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: eu_vies
+  subject_key: third_party:eu_vies
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [government_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Tax/CheckVatService.cs, line: 122}
+  uncertain: false
+  rationale: For non-UK VAT numbers CheckVatService calls the EU VIES SOAP service at ec.europa.eu with the customer's VAT
+    number and country code.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: openai
+  subject_key: third_party:openai
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [prompt_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/ChatGptHttpClientHelper.cs, line: 22}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/ChatGptHttpClientHelper.cs, line: 42}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/ArtificialIntelligenceHttpClient.cs, line: 64}
+  uncertain: false
+  rationale: With the ChatGPT provider selected, the AI client posts prompts to https://api.openai.com/v1/responses. The
+    prompts are built from product names, keywords and meta-tag text entered by the admin, not customer data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_gemini
+  subject_key: third_party:google_gemini
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [prompt_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/GeminiHttpClientHelper.cs, line: 21}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/GeminiHttpClientHelper.cs, line: 40}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/ArtificialIntelligenceHttpClient.cs, line: 64}
+  uncertain: false
+  rationale: With the Gemini provider selected, the AI client posts product-description and meta-tag prompts to
+    generativelanguage.googleapis.com.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: deepseek
+  subject_key: third_party:deepseek
+  component_subtype: ai_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [prompt_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/DeepSeekHttpClientHelper.cs, line: 22}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/DeepSeekHttpClientHelper.cs, line: 42}
+    - {file_path: src/Libraries/Nop.Services/ArtificialIntelligence/ArtificialIntelligenceHttpClient.cs, line: 64}
+  uncertain: false
+  rationale: With the DeepSeek provider selected, the AI client posts product-description and meta-tag prompts to
+    https://api.deepseek.com/chat/completions.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: deepl
+  subject_key: third_party:deepl
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest:
+    - {file_path: src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj, line: 15, package: DeepL.net}
+    imports:
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 2, module: DeepL}
+    call_sites:
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 204}
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 239}
+  uncertain: false
+  rationale: The pre-translate feature sends localizable catalog text (product, category and manufacturer fields) to DeepL
+    through the DeepL.net client.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_translate
+  subject_key: third_party:google_translate
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest:
+    - {file_path: src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj, line: 18, package: Google.Cloud.Translation.V2}
+    imports: []
+    call_sites:
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 196}
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 231}
+    - {file_path: src/Presentation/Nop.Web.Framework/Factories/TranslationModelFactory.cs, line: 232}
+  uncertain: false
+  rationale: The pre-translate feature sends localizable catalog text to Google Cloud Translation through the fully qualified
+    TranslationClient.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_recaptcha
+  subject_key: third_party:google_recaptcha
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [ip_address, session]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Presentation/Nop.Web.Framework/Security/Captcha/CaptchaHttpClient.cs, line: 62}
+    - {file_path: src/Presentation/Nop.Web.Framework/Security/Captcha/HtmlExtensions.cs, line: 63}
+  uncertain: false
+  rationale: The captcha widget loads the reCAPTCHA script from the configured API URL (default https://www.google.com/recaptcha/),
+    and CaptchaHttpClient verifies the response token with the private key and the visitor's IP address.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: gmail
+  subject_key: third_party:gmail
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [credentials, email, access_token]
+  provenance:
+    manifest:
+    - {file_path: src/Libraries/Nop.Services/Nop.Services.csproj, line: 17, package: Google.Apis.Auth}
+    imports:
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 3, module: Google.Apis.Auth.OAuth2}
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 4, module: Google.Apis.Auth.OAuth2.Flows}
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 5, module: Google.Apis.Auth.OAuth2.Web}
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 74}
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 80}
+  uncertain: false
+  rationale: For Gmail OAuth email accounts SmtpBuilder runs the Google authorization code flow with the account's client
+    id, secret and email for the https://mail.google.com/ scope, so store email is sent through Gmail.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: microsoft_365
+  subject_key: third_party:microsoft_365
+  component_subtype: email_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [credentials, email, access_token]
+  provenance:
+    manifest: []
+    imports:
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 9, module: Microsoft.Identity.Client}
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Messages/SmtpBuilder.cs, line: 103}
+  uncertain: false
+  rationale: For Microsoft OAuth email accounts SmtpBuilder gets a token from login.microsoftonline.com through MSAL for the
+    outlook.office365.com scope, so store email is sent through Exchange Online. MSAL comes in transitively, not as a direct
+    package reference.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_maps
+  subject_key: third_party:google_maps
+  component_subtype: maps
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Presentation/Nop.Web/Views/Checkout/_PickupPoints.cshtml, line: 109}
+    - {file_path: src/Presentation/Nop.Web/Views/Checkout/_PickupPoints.cshtml, line: 158}
+  uncertain: false
+  rationale: The checkout pickup-point map loads the Google Maps JavaScript API and geocodes the store's pickup-point addresses.
+    No customer address is sent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: sharethis
+  subject_key: third_party:sharethis
+  component_subtype: analytics
+  sends_data: true
+  route: sdk
+  subprocessor: "unknown"
+  data_categories: [ip_address, usage_events]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Libraries/Nop.Services/Installation/InstallRequiredData.cs, line: 1475}
+    - {file_path: src/Presentation/Nop.Web/Factories/ProductModelFactory.cs, line: 1592}
+  uncertain: true
+  rationale: The default PageShareCode setting embeds the ShareThis script from platform-api.sharethis.com, and product pages
+    render it, so visitors' browsers load it. It is a default the admin can change, so it is marked uncertain.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: paypal
+  subject_key: third_party:paypal
+  component_subtype: payment_processor
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [email, person_name, address, date_of_birth, user_id, order, transaction, payment_card, credentials]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Services/PayPalCommerceHttpClient.cs, line: 128}
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Services/PayPalCommerceServiceManager.cs, line: 1275}
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Views/Admin/Configure.cshtml, line: 160}
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Views/Public/_Buttons.cshtml, line: 33}
+  uncertain: false
+  rationale: The PayPal Commerce plugin calls api-m.paypal.com for orders, captures, refunds, vault tokens and webhooks with
+    payer name, email, birth date, billing and shipping addresses and order lines. The storefront loads the PayPal JS SDK,
+    whose card fields take card data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: apple_pay
+  subject_key: third_party:apple_pay
+  component_subtype: payment_processor
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [payment_card, transaction]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Views/Public/_Buttons.cshtml, line: 25}
+  uncertain: false
+  rationale: When Apple Pay is enabled in the PayPal plugin, the storefront loads the Apple Pay JS SDK from applepay.cdn-apple.com
+    to take wallet payments for the order amount.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_pay
+  subject_key: third_party:google_pay
+  component_subtype: payment_processor
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [payment_card, transaction]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Payments.PayPalCommerce/Views/Public/_Buttons.cshtml, line: 29}
+  uncertain: false
+  rationale: When Google Pay is enabled in the PayPal plugin, the storefront loads pay.google.com/gp/p/js/pay.js to take wallet
+    payments for the order amount.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: brevo
+  subject_key: third_party:brevo
+  component_subtype: email_provider
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [email, person_name, phone_number, address, order, message_content, usage_events]
+  provenance:
+    manifest:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Nop.Plugin.Misc.Brevo.csproj, line: 57, package: brevo_csharp}
+    imports:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 4, module: brevo_csharp.Api}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 5, module: brevo_csharp.Client}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 6, module: brevo_csharp.Model}
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 335}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 431}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 510}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 629}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 640}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 672}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 752}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 784}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 808}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 938}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 1339}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 1426}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 1455}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/BrevoManager.cs, line: 1459}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Services/MarketingAutomationHttpClient.cs, line: 54}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/BrevoPlugin.cs, line: 108}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Brevo/Components/WidgetsBrevoViewComponent.cs, line: 62}
+  uncertain: false
+  rationale: The Brevo plugin syncs subscriber contacts (email, names, phone, address attributes) through brevo_csharp, sends
+    transactional SMS and SMS campaigns, and posts cart and order events to in-automate.brevo.com. The storefront tracker
+    from sibautomation.com is given the customer's email.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: avalara
+  subject_key: third_party:avalara
+  component_subtype: saas_service
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [address, person_name, email, user_id, order, transaction]
+  provenance:
+    manifest:
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Nop.Plugin.Tax.Avalara.csproj, line: 103, package: Avalara.AvaTax}
+    imports:
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 3, module: Avalara.AvaTax.RestClient}
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 229}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 778}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 779}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 996}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1133}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1159}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1423}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1483}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1566}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/AvalaraTaxManager.cs, line: 1633}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Services/ItemClassificationHttpClient.cs, line: 86}
+    - {file_path: src/Plugins/Nop.Plugin.Tax.Avalara/Views/Customer/ExemptionCertificates.cshtml, line: 14}
+  uncertain: false
+  rationale: The Avalara plugin uses the AvaTaxClient to create, void and refund tax transactions with order lines and addresses,
+    validate addresses and manage exemption customers. It also calls the item classification API and loads the CertCapture
+    script for exemption certificates.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: ups
+  subject_key: third_party:ups
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [address, order, credentials]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Shipping.UPS/API/OAuth/OAuthClient.cs, line: 99}
+    - {file_path: src/Plugins/Nop.Plugin.Shipping.UPS/API/Track/TrackClient.cs, line: 115}
+    - {file_path: src/Plugins/Nop.Plugin.Shipping.UPS/API/Rates/RateClient.cs, line: 172}
+    - {file_path: src/Plugins/Nop.Plugin.Shipping.UPS/API/Rates/RateClient.cs, line: 375}
+  uncertain: false
+  rationale: The UPS plugin's generated clients call onlinetools.ups.com for OAuth tokens, rate quotes with the ship-to address
+    and package details, and shipment tracking.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: zettle
+  subject_key: third_party:zettle
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [credentials, non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Zettle/Services/ZettleHttpClient.cs, line: 110}
+  uncertain: false
+  rationale: The Zettle plugin calls the oauth, products, inventory, image, secure and pusher izettle.com APIs to sync the
+    catalog, stock and webhooks with the merchant's API key. It sends product data, not customer data.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: omnisend
+  subject_key: third_party:omnisend
+  component_subtype: email_provider
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, person_name, phone_number, address, order, usage_events]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Omnisend/Services/OmnisendHttpClient.cs, line: 101}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Omnisend/OmnisendPlugin.cs, line: 97}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.Omnisend/Components/CustomViewComponent.cs, line: 141}
+  uncertain: false
+  rationale: The Omnisend plugin posts contacts, carts, orders and products to https://api.omnisend.com/v3. The storefront
+    snippet from omnisnippet1.com tracks page and product views and identifies the contact by email.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: cloudflare
+  subject_key: third_party:cloudflare
+  component_subtype: storage
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [media]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.CloudflareImages/Services/CloudflareImagesHttpClient.cs, line: 57}
+  uncertain: false
+  rationale: The Cloudflare Images plugin uploads and deletes picture thumbnails through api.cloudflare.com/client/v4/accounts/{id}/images/v1.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: azure
+  subject_key: third_party:azure
+  component_subtype: storage
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [media]
+  provenance:
+    manifest:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Nop.Plugin.Misc.AzureBlob.csproj, line: 44, package: Azure.Storage.Blobs}
+    imports:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 1, module: Azure.Storage.Blobs}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 2, module: Azure.Storage.Blobs.Models}
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 78}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 133}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 212}
+    - {file_path: src/Plugins/Nop.Plugin.Misc.AzureBlob/Services/AzureThumbService.cs, line: 214}
+  uncertain: false
+  rationale: The AzureBlob plugin stores picture thumbnails in an Azure Blob Storage container through BlobServiceClient.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: twilio
+  subject_key: third_party:twilio
+  component_subtype: messaging
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [phone_number, message_content]
+  provenance:
+    manifest:
+    - {file_path: src/Plugins/Nop.Plugin.Sms.Twilio/Nop.Plugin.Sms.Twilio.csproj, line: 49, package: Twilio}
+    imports:
+    - {file_path: src/Plugins/Nop.Plugin.Sms.Twilio/Services/TwilioService.cs, line: 3, module: Twilio.Rest.Api.V2010.Account}
+    - {file_path: src/Plugins/Nop.Plugin.Sms.Twilio/Services/TwilioHttpClient.cs, line: 1, module: Twilio.Clients}
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Sms.Twilio/Services/TwilioService.cs, line: 47}
+    - {file_path: src/Plugins/Nop.Plugin.Sms.Twilio/Services/TwilioHttpClient.cs, line: 40}
+  uncertain: false
+  rationale: The Twilio SMS plugin sends notification texts to customer phone numbers with MessageResource.Create through
+    a TwilioRestClient.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_login
+  subject_key: third_party:facebook_login
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Nop.Plugin.ExternalAuth.Facebook.csproj, line: 61, package: Microsoft.AspNetCore.Authentication.Facebook}
+    imports:
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Infrastructure/FacebookAuthenticationRegistrar.cs, line: 2, module: Microsoft.AspNetCore.Authentication.Facebook}
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Controllers/FacebookAuthenticationController.cs, line: 3, module: Microsoft.AspNetCore.Authentication.Facebook}
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Infrastructure/FacebookAuthenticationRegistrar.cs, line: 21}
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Controllers/FacebookAuthenticationController.cs, line: 122}
+    - {file_path: src/Plugins/Nop.Plugin.ExternalAuth.Facebook/Controllers/FacebookAuthenticationController.cs, line: 128}
+  uncertain: false
+  rationale: The Facebook external-auth plugin registers the ASP.NET Core Facebook OAuth handler, which exchanges the app id,
+    secret and authorization code with Facebook and reads back the user's profile and email.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_pixel
+  subject_key: third_party:facebook_pixel
+  component_subtype: analytics
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [email, person_name, phone_number, address, user_id, ip_address, order, usage_events]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookConversionsHttpClient.cs, line: 51}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookPixelService.cs, line: 294}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookPixelService.cs, line: 373}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Services/FacebookPixelService.cs, line: 1073}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.FacebookPixel/Components/FacebookPixelViewComponent.cs, line: 47}
+  uncertain: false
+  rationale: The pixel script from connect.facebook.net tracks storefront events with advanced-matching user properties. The
+    Conversions API client posts events to graph.facebook.com with hashed email, names, phone, city and zip plus the client
+    IP address.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_analytics
+  subject_key: third_party:google_analytics
+  component_subtype: analytics
+  sends_data: true
+  route: both
+  subprocessor: "yes"
+  data_categories: [user_id, ip_address, order, transaction, usage_events]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.GoogleAnalytics/GoogleAnalyticsPlugin.cs, line: 91}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.GoogleAnalytics/Components/WidgetsGoogleAnalyticsViewComponent.cs, line: 55}
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.GoogleAnalytics/Api/GoogleAnalyticsHttpClient.cs, line: 56}
+  uncertain: false
+  rationale: The widget renders the gtag.js tag with the customer id as user_id, and the server posts purchase and refund
+    events to the Measurement Protocol at www.google-analytics.com/mp/collect.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: jotform
+  subject_key: third_party:jotform
+  component_subtype: saas_service
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [message_content, ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.Widgets.Jotform/Components/WidgetJotformViewComponent.cs, line: 41}
+  uncertain: true
+  rationale: The Jotform widget writes the admin-supplied Jotform AI agent embed code into storefront pages, so visitors chat
+    with the Jotform agent. The embed code is configured, not in the code, so it is marked uncertain.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: ecb
+  subject_key: third_party:ecb
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [non_personal]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: src/Plugins/Nop.Plugin.ExchangeRate.EcbExchange/EcbExchangeRateProvider.cs, line: 70}
+  uncertain: false
+  rationale: The ECB exchange-rate provider downloads the public daily euro reference rates from www.ecb.europa.eu (the
+    default EcbLink). Nothing personal is sent.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

@@ -95,17 +95,10 @@ export function appendTerraformDataFlows(
 
       flowIndex += 1;
       const finding = syntheticTerraformFinding(source);
-      flows.push(
-        buildFlow(
-          source.id,
-          dest.id,
-          flowType,
-          finding,
-          flowIndex,
-          source,
-          dest,
-        ),
-      );
+      flows.push({
+        ...buildFlow(source.id, dest.id, flowType, finding, flowIndex, source, dest),
+        relationship: "provisions",
+      });
     }
   }
 
@@ -207,6 +200,7 @@ export function appendTerraformBareProviderAttachmentFlows(input: {
       confidence: 0.72,
       sourceLocation: loc,
       description: `${prov.name} terraform provider attachment (${String(c.properties?.terraform_address ?? "")})`,
+      relationship: "provisions",
     });
   }
 }

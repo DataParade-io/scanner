@@ -1,5 +1,5 @@
 import type { DetectedComponent } from "../core/types/component";
-import type { DataFlowType } from "../core/types/data-flow";
+import type { DataFlowType, FlowRelationship } from "../core/types/data-flow";
 import type { DetectedDataFlow } from "../core/types/data-flow";
 
 export type HubLinkRuleId = "auth_service" | "section_api" | "unlinked_asset";
@@ -12,6 +12,7 @@ export interface HubLinkRule {
   enrichmentNotes: string;
   description: string;
   flowType?: DataFlowType;
+  relationship: FlowRelationship;
 }
 
 export function getSectionId(component: DetectedComponent): string {
@@ -74,6 +75,7 @@ export const DEFAULT_HUB_LINK_RULES: HubLinkRule[] = [
     confidence: 0.75,
     enrichmentNotes: "auth_service_hub_link",
     description: "Application hub to auth service",
+    relationship: "authenticates_via",
   },
   {
     id: "section_api",
@@ -84,6 +86,7 @@ export const DEFAULT_HUB_LINK_RULES: HubLinkRule[] = [
     confidence: 0.75,
     enrichmentNotes: "section_api_hub_link",
     description: "Section main to API surface",
+    relationship: "exposes",
   },
   {
     id: "unlinked_asset",
@@ -91,5 +94,6 @@ export const DEFAULT_HUB_LINK_RULES: HubLinkRule[] = [
     confidence: 0.55,
     enrichmentNotes: "unlinked_asset_hub_link",
     description: "Application hub to unlinked asset",
+    relationship: "uses_in_process",
   },
 ];

@@ -1,0 +1,20 @@
+repository: DataParade-io/scanner-fixtures
+commit: c3e6111d99b032b96db3b3cdb5da079ff529cdbe
+license: MIT
+scope:
+  include:
+    - raw-http-integrations/python/cross_file/
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - ai
+    - commerce
+selection_rationale: >-
+  DataParade-authored fixtures where the destination is known only across modules or from a
+  package: base URLs in a settings class, LiteLLM provider prefixes, a tracing vendor's package
+  with a configured endpoint, and a storefront MCP URL built in another module (DATAP-818).
+annotation_version: 1

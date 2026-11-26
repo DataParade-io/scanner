@@ -1,0 +1,101 @@
+version: third-party-labels/1
+scope_note: The Crisp, WhatsApp Business, Stripe and LinkedIn atoms call vendor REST URLs through the framework's nexus_call. The LLM and Azure SDKs in pyproject.toml are used only outside the scope.
+vendors:
+- vendor: crisp
+  subject_key: third_party:crisp
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [message_content, search_query, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_create_conversation.py, line: 49}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_create_message.py, line: 52}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_get_conversation.py, line: 40}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_get_message.py, line: 43}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_list_conversations.py, line: 33}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_list_messages.py, line: 36}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_search_records.py, line: 35}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_update_conversation.py, line: 49}
+    - {file_path: jarviscore/integrations/atoms/crisp/crisp_update_message.py, line: 52}
+  uncertain: false
+  rationale: Each atom builds a URL on CRISP_API (https://api.crisp.chat/v1, overridable by base_url) and calls nexus_call
+    to create, read, update and search conversations and messages, sending message payloads, session ids and search queries.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: whatsapp
+  subject_key: third_party:whatsapp
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [message_content, phone_number]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_create_message.py, line: 26}
+    - {file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_get_message.py, line: 13}
+    - {file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_list_messages.py, line: 14}
+    - {file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_search_records.py, line: 16}
+  uncertain: false
+  rationale: The atoms call the WhatsApp Cloud API at _WA_ROOT (https://graph.facebook.com/v19.0, overridable by base_url)
+    through nexus_call; create_message posts the recipient phone number and message text.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: stripe
+  subject_key: third_party:stripe
+  component_subtype: payment_processor
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [user_id, transaction]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: jarviscore/integrations/atoms/stripe/stripe_get_balance.py, line: 4}
+    - {file_path: jarviscore/integrations/atoms/stripe/stripe_get_customer.py, line: 4}
+    - {file_path: jarviscore/integrations/atoms/stripe/stripe_list_charges.py, line: 9}
+    - {file_path: jarviscore/integrations/atoms/stripe/stripe_list_invoices.py, line: 9}
+  uncertain: false
+  rationale: The atoms send GET requests with full https://api.stripe.com/v1 URLs through nexus_call, passing customer ids
+    and charge or invoice filters; they read customers, charges, invoices and the balance.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: linkedin
+  subject_key: third_party:linkedin
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, post_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_create_post.py, line: 21}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_create_post.py, line: 44}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_network_size.py, line: 7}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_network_size.py, line: 35}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_organization.py, line: 7}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_organization.py, line: 35}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_profile.py, line: 7}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_get_profile.py, line: 35}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_organization_posts.py, line: 7}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_organization_posts.py, line: 36}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_posts.py, line: 7}
+    - {file_path: jarviscore/integrations/atoms/linkedin/linkedin_list_posts.py, line: 35}
+  uncertain: false
+  rationale: Each atom sets _base to https://api.linkedin.com/v2 and calls nexus_call through local helpers; create_post
+    publishes the author's post text to /ugcPosts and the others read profile, network and post data by member or organization id.
+    It acts for the connected member, so it is not a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

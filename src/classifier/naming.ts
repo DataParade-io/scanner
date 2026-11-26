@@ -52,17 +52,19 @@ export function normalizeComponentName(
   return lower;
 }
 
+/**
+ * Human-readable display name: underscores (snake_case ids such as
+ * `google_identity`) and whitespace separate words, and each word is capitalized.
+ * Dots and hyphens inside a word are preserved (`notion.so`, `next-auth`).
+ */
 export function toDisplayName(normalized: string, fallback: string): string {
   const base = normalized || fallback.trim();
   if (!base) return "<unknown>";
 
   return base
-    .split(/\s+/)
-    .map((part) =>
-      part.length === 0
-        ? part
-        : part.charAt(0).toUpperCase() + part.slice(1),
-    )
+    .split(/[\s_]+/)
+    .filter((part) => part.length > 0)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 }
 

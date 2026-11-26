@@ -1,6 +1,6 @@
 # Scanner evaluation benchmark corpus
 
-Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release sync cannot delete this gold. The canonical home is this repo (`DataParade-io/scanner`), not the GPL publish mirror.
+Imported from the public `dataparade-cli` snapshot (2026-08-31) so a CLI release sync cannot delete this gold. The canonical home is this repo (`DataParade-io/scanner`), not the public CLI mirror.
 
 Versioned ground-truth data for deterministic scanner evaluation. Labels are curated independently of scanner output. Headline denominators use `review_state: accepted`.
 
@@ -108,6 +108,34 @@ pnpm run benchmark:run --include-proposed vgs-django
 `benchmark:run` materializes nothing. It scans `tests/benchmark/.cache/repos/<key>@<commit>/`, loads **accepted** annotations by default, and scores **each layer separately** via `tests/eval/score.ts` (see `tests/eval/README.md` for the identity and unread contract). The report prints per-layer recall, label accuracy, precision, and unread counts. Raw hits and corpus `data_actions` (privacy verbs) are labeled diagnostic. The fixture `data-actions` layer is the same diagnostic contract — scored by `eval:data-actions` and by `benchmark:run` when a packet declares `data_actions`, but never a scorecard headline gate. There is no cross-layer overall score.
 
 The corpus runner tags findings by layer (`scanRepoByManifestLayers`) so PII regex hits cannot pollute component precision. `pnpm run benchmark:run` compiles with `tsc` then executes `dist/tests/benchmark/run-benchmark.js`.
+
+## Third-party vendor labels (opt-in, diagnostic)
+
+`repos/<key>/annotations/third_parties.yaml` holds one record per vendor that the packet's in-scope code sends data to (DATAP-789, DATAP-895). Types and validation live in `third-party-labels.ts`. A record names the vendor by its components-layer identity key (`third_party:<vendor>`), so it adds no node type. It adds:
+
+- `data_categories`: what the code sends, from a closed list in `third-party-labels.ts`.
+- `subprocessor`: `yes`, `no` or `unknown`.
+- `route`: `sdk`, `raw_http` or `both`.
+- `provenance`: the manifest entry, the imports and every in-scope call site, by file and line.
+- `uncertain`: true where the labeller was not sure.
+
+The labels are closed-world over the manifest scope. A vendor SDK declared in a manifest but never imported or called anywhere in the clone has a record with `sends_data: false`; it is listed apart and not scored. Supply-chain facts (dependency counts, CVEs, maintainers) are not labelled.
+
+`benchmark:run` prints a vendor block for packets that have the file. `benchmark:third-parties` scores every such packet and, with `--write-report`, writes `reports/third-party-vendors.{json,md}`:
+
+```bash
+pnpm run benchmark:third-parties                    # all packets with labels, proposed labels included
+pnpm run benchmark:third-parties -- --accepted-only # headline: accepted labels only
+pnpm run benchmark:third-parties -- --check-only    # check cited files and lines against the clones, no scan
+```
+
+Scoring is per vendor:
+
+- **Recall:** a gold vendor counts only when the scanner reports it at a file the label cites.
+- **Vendor recall:** counts the vendor wherever the scanner reports it.
+- **Precision:** reported in-scope vendors that are gold, over all reported in-scope vendors.
+
+Each miss gets one cause: `no_sdk_mapping` (SDK route, not reported), `raw_http_missed` (raw HTTP route, not reported), or `provenance_wrong` (reported, but only at files the label does not cite).
 
 ## Four-layer scorecard vector (opt-in)
 

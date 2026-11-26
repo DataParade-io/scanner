@@ -1,6 +1,7 @@
 import type { RawFinding } from "../core/types/detection";
 import { loadClassifierConfig } from "./config";
 import { getActiveOrganizationDomains } from "./organization-domains-scan-scope";
+import { platformOfHost } from "../config/third-party-detection-config";
 
 /**
  * Structural heuristics (not a vendor list): URLs that are obviously templated or
@@ -120,6 +121,34 @@ function isLocalOrPrivateHost(hostname: string): boolean {
   return false;
 }
 
+/**
+ * RFC 2606 / RFC 6761 reserved names: example.com/.org/.net (and subdomains) plus
+ * the .test, .example, .invalid and .localhost TLDs. These are documentation
+ * placeholders, never real vendors.
+ */
+const RESERVED_PLACEHOLDER_DOMAINS = [
+  "example.com",
+  "example.org",
+  "example.net",
+] as const;
+const RESERVED_PLACEHOLDER_TLDS = [
+  "test",
+  "example",
+  "invalid",
+  "localhost",
+] as const;
+
+export function isReservedPlaceholderHost(hostname: string): boolean {
+  const h = hostname.toLowerCase().replace(/\.$/, "");
+  if (!h) return false;
+  for (const d of RESERVED_PLACEHOLDER_DOMAINS) {
+    if (h === d || h.endsWith(`.${d}`)) return true;
+  }
+  const labels = h.split(".");
+  const tld = labels[labels.length - 1] ?? "";
+  return (RESERVED_PLACEHOLDER_TLDS as readonly string[]).includes(tld);
+}
+
 export function shouldIgnoreExternalHttpUrl(
   url: string | undefined,
   options?: ExternalHttpUrlOptions,
@@ -143,6 +172,7 @@ export function shouldIgnoreExternalHttpUrl(
       return true;
     }
     if (isLocalOrPrivateHost(hostname)) return true;
+    if (isReservedPlaceholderHost(hostname)) return true;
     const organizationDomains = resolveOrganizationDomains(options);
     if (hostMatchesOrganizationDomains(hostname, organizationDomains)) {
       return true;
@@ -164,6 +194,39 @@ export function deriveServiceKeyFromHostname(host: string): string {
     return parts[0] ?? h;
   }
   return `${parts[parts.length - 2]}.${parts[parts.length - 1]}`;
+}
+
+/**
+ * Second-level public suffixes (`co.uk`): the registrable domain then has three labels.
+ * A short list of the common ones; anything else is treated as a one-label suffix.
+ */
+const TWO_LABEL_PUBLIC_SUFFIXES = new Set([
+  "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk", "ltd.uk",
+  "com.au", "net.au", "org.au", "edu.au", "gov.au",
+  "co.nz", "org.nz", "co.jp", "ne.jp", "or.jp", "co.kr", "co.in", "co.za", "co.id", "co.il",
+  "com.br", "com.mx", "com.ar", "com.sg", "com.hk", "com.tw", "com.cn", "com.tr", "com.my", "com.ph",
+]);
+
+/** Registrable domain of a host (`www.shop.example.co.uk` -> `example.co.uk`). */
+export function registrableDomainOf(host: string): string {
+  const parts = host.replace(/^www\./, "").toLowerCase().split(".").filter(Boolean);
+  if (parts.length < 2) return parts.join(".");
+  const lastTwo = parts.slice(-2).join(".");
+  const labels = parts.length >= 3 && TWO_LABEL_PUBLIC_SUFFIXES.has(lastTwo) ? 3 : 2;
+  return parts.slice(-labels).join(".");
+}
+
+/**
+ * Vendor key for a host the catalog does not know: the registrable domain without its
+ * public suffix (`api.dramaboxdb.com` -> `dramaboxdb`, `shop.example.co.uk` -> `example`),
+ * so components are named after a vendor, not a domain (DATAP-818).
+ */
+export function vendorNameFromHostname(host: string): string {
+  const parts = host.replace(/^www\./, "").toLowerCase().split(".").filter(Boolean);
+  if (parts.length < 2) return parts[0] ?? host.toLowerCase();
+  const lastTwo = parts.slice(-2).join(".");
+  const suffixLabels = parts.length >= 3 && TWO_LABEL_PUBLIC_SUFFIXES.has(lastTwo) ? 2 : 1;
+  return parts[parts.length - 1 - suffixLabels] ?? lastTwo;
 }
 
 /**
@@ -208,7 +271,9 @@ export function defaultServiceNameFromLiteralPublicUrl(
     if (hostname == null || !hostname) {
       return undefined;
     }
-    return deriveServiceKeyFromHostname(hostname);
+    // A shared hosting host (`*.run.app`) is someone's own service, not a vendor.
+    if (platformOfHost(hostname)) return undefined;
+    return vendorNameFromHostname(hostname);
   } catch {
     return undefined;
   }
@@ -267,11 +332,15 @@ export function inferThirdPartyFromLiteralHttpUrl(
     return undefined;
   }
 
-  if (isLocalOrPrivateHost(hostname)) {
+  if (isLocalOrPrivateHost(hostname) || isReservedPlaceholderHost(hostname)) {
     return undefined;
   }
 
-  const serviceName = deriveServiceKeyFromHostname(hostname);
+  if (platformOfHost(hostname)) {
+    return undefined;
+  }
+
+  const serviceName = vendorNameFromHostname(hostname);
   if (!serviceName) {
     return undefined;
   }

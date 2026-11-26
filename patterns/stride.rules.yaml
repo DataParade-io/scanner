@@ -1,0 +1,86 @@
+# STRIDE per element (DATAP-914).
+#
+# Which STRIDE threat categories apply to each kind of diagram element. This table only
+# says which categories apply; it never says a threat is present. Every category starts
+# with status "unknown". The status rules below (DATAP-915) set "mitigated" or "open"
+# from control evidence.
+#
+# Categories: S spoofing, T tampering, R repudiation, I information disclosure,
+# D denial of service, E elevation of privilege.
+#
+# Rule ids carry the version (stride/v<version>/...). Bump it whenever a change here
+# changes which threats or statuses a scan reports, so results from different tables
+# are never compared as if they were the same.
+version: 3
+framework: stride
+
+categories:
+  - id: S
+    name: Spoofing
+  - id: T
+    name: Tampering
+  - id: R
+    name: Repudiation
+  - id: I
+    name: Information disclosure
+  - id: D
+    name: Denial of service
+  - id: E
+    name: Elevation of privilege
+
+# Element kinds and the categories that apply to each.
+elements:
+  external_entity:
+    categories: [S, R]
+  process:
+    categories: [S, T, R, I, D, E]
+  data_store:
+    categories: [T, R, I, D]
+  data_flow:
+    categories: [T, I, D]
+
+# Flow relationships that describe structure rather than data crossing between elements.
+# A flow with one of these relationships is not a data_flow element: it gets no threats,
+# and it is not read when deciding the status of the components at its ends.
+structural_flow_relationships: [uses_in_process, exposes, depends_on, provisions]
+
+# How a component maps to an element kind. Data flows are always data_flow.
+# The first matching rule wins.
+component_kinds:
+  - when: { type: actor }
+    kind: external_entity
+  - when: { type: third_party }
+    kind: external_entity
+  - when: { type: asset, subType: [database, cache, storage, config] }
+    kind: data_store
+  - when: { type: asset }
+    kind: process
+
+# Status rules (DATAP-915). For each element kind and category:
+#   opened_by: a control with effect "weakens" (patterns/flow-controls.rules.yaml) sets "open".
+#   mitigated_by: a control with effect "mitigates", or an authentication kind written
+#     "auth:<kind>" (patterns/flow-authentication.rules.yaml), sets "mitigated".
+# "open" wins over "mitigated". With no matching evidence the status stays "unknown":
+# no evidence never sets "open".
+#
+# A data flow reads its own evidence. An external entity reads the flows to and from it:
+# "open" when one flow has a weakening control; "mitigated" only when every checked flow
+# has a mitigating control.
+#
+# Not covered yet, so these stay "unknown": route authorization, rate limits, audit logs,
+# data-store encryption, and every process and data-store category.
+status_rules:
+  data_flow:
+    T:
+      mitigated_by: [tls, "auth:signed_request", "auth:webhook_signature"]
+      opened_by: [plaintext_http, tls_verify_disabled]
+    I:
+      mitigated_by: [tls]
+      opened_by: [plaintext_http, tls_verify_disabled]
+    D:
+      mitigated_by: [timeout]
+      opened_by: [timeout_disabled]
+  external_entity:
+    S:
+      mitigated_by: [tls, "auth:signed_request", "auth:webhook_signature"]
+      opened_by: [plaintext_http, tls_verify_disabled]

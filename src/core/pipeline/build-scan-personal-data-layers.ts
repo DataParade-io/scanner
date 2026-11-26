@@ -5,8 +5,7 @@ import {
 import type { PersonalDataInventory } from "../../eval-layers/personal-data-inventory";
 import type { ScanDataItem, ScanOccurrence } from "./orchestrator-result";
 
-function lineSnippet(content: string, startLine: number, endLine: number): string | undefined {
-  const lines = content.split(/\r?\n/);
+function lineSnippet(lines: readonly string[], startLine: number, endLine: number): string | undefined {
   const slice = lines.slice(startLine - 1, endLine);
   if (slice.length === 0) {
     return undefined;
@@ -19,12 +18,25 @@ export function buildScanPersonalDataLayers(
   inventory: PersonalDataInventory,
 ): { occurrences: ScanOccurrence[]; dataItems: ScanDataItem[] } {
   const contentByPath = new Map(inventory.files.map((file) => [file.path, file.content]));
+  // Split each file into lines once, not once per occurrence: a file with thousands of
+  // occurrences (i18n catalogs, generated clients) otherwise re-splits its whole text for
+  // every one of them.
+  const linesByPath = new Map<string, string[]>();
+  const linesOf = (filePath: string): string[] | undefined => {
+    let lines = linesByPath.get(filePath);
+    if (lines) return lines;
+    const content = contentByPath.get(filePath);
+    if (content === undefined) return undefined;
+    lines = content.split(/\r?\n/);
+    linesByPath.set(filePath, lines);
+    return lines;
+  };
 
   const occurrences: ScanOccurrence[] = inventory.hits.map((hit) => {
-    const content = contentByPath.get(hit.evidence.filePath);
+    const lines = linesOf(hit.evidence.filePath);
     const code =
-      content !== undefined
-        ? lineSnippet(content, hit.evidence.startLine, hit.evidence.endLine)
+      lines !== undefined
+        ? lineSnippet(lines, hit.evidence.startLine, hit.evidence.endLine)
         : undefined;
 
     return {
@@ -52,7 +64,7 @@ export function buildScanPersonalDataLayers(
 
   const dataItemsById = new Map<
     string,
-    { labels: Set<string>; occurrenceIds: string[]; groups: Map<string, string[]> }
+    { labels: Set<string>; occurrenceIds: Set<string>; groups: Map<string, Set<string>> }
   >();
 
   // Data items roll up code matches; comment matches stay on the occurrence list as context.
@@ -65,23 +77,21 @@ export function buildScanPersonalDataLayers(
     );
     let entry = dataItemsById.get(id);
     if (!entry) {
-      entry = { labels: new Set(hit.labels), occurrenceIds: [], groups: new Map() };
+      entry = { labels: new Set(hit.labels), occurrenceIds: new Set(), groups: new Map() };
       dataItemsById.set(id, entry);
     } else {
       for (const label of hit.labels) {
         entry.labels.add(label);
       }
     }
-    if (!entry.occurrenceIds.includes(occurrenceId)) {
-      entry.occurrenceIds.push(occurrenceId);
-    }
+    // Sets keep first-seen order, as the arrays with an `includes` check did, without the
+    // quadratic scan.
+    entry.occurrenceIds.add(occurrenceId);
     // A location-named singleton (`email~file:line`) is a occurrence no evidence grouped; it
     // stays on the occurrence for external labels but is not listed as a data item group.
     if (hit.group && !hit.group.startsWith(`${hit.id}~`)) {
-      const groupOccurrences = entry.groups.get(hit.group) ?? [];
-      if (!groupOccurrences.includes(occurrenceId)) {
-        groupOccurrences.push(occurrenceId);
-      }
+      const groupOccurrences = entry.groups.get(hit.group) ?? new Set<string>();
+      groupOccurrences.add(occurrenceId);
       entry.groups.set(hit.group, groupOccurrences);
     }
   }
@@ -94,7 +104,7 @@ export function buildScanPersonalDataLayers(
       ...(entry.groups.size > 0
         ? {
             groups: [...entry.groups.entries()]
-              .map(([groupId, occurrenceIds]) => ({ id: groupId, occurrenceIds }))
+              .map(([groupId, occurrenceIds]) => ({ id: groupId, occurrenceIds: [...occurrenceIds] }))
               .sort((left, right) => left.id.localeCompare(right.id)),
           }
         : {}),

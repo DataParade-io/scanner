@@ -1,0 +1,237 @@
+version: third-party-labels/1
+scope_note: The scope is app/models and config; most vendor calls live in lib, app/services and plugins outside it, so
+  config-only vendors are marked uncertain. Email-provider webhooks (SendGrid, Mailgun, Mailjet, Mandrill, Postmark,
+  SparkPost, SNS) are inbound routes only, MaxMind lookups use a local database, and webhooks, topic embeds and remote
+  themes use admin- or user-entered URLs.
+vendors:
+- vendor: gravatar
+  subject_key: third_party:gravatar
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: app/models/user_avatar.rb, line: 47}
+    - {file_path: app/models/user.rb, line: 1215}
+    - {file_path: config/site_settings.yml, line: 1266}
+  uncertain: false
+  rationale: UserAvatar#update_gravatar! downloads https://www.gravatar.com/avatar/<email hash> (gravatar_base_url
+    default) for new users, since automatically_download_gravatars is on by default; User.gravatar_template builds the same
+    hashed-email URL for clients.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: aws
+  subject_key: third_party:aws
+  component_subtype: cloud_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [file_content, media]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 64, package: aws-sdk-s3}
+    - {file_path: Gemfile, line: 66, package: aws-sdk-sts}
+    - {file_path: Gemfile, line: 67, package: aws-sdk-mediaconvert}
+    imports: []
+    call_sites:
+    - {file_path: app/models/upload.rb, line: 596}
+    - {file_path: app/models/upload.rb, line: 214}
+    - {file_path: app/models/upload.rb, line: 506}
+    - {file_path: app/models/optimized_image.rb, line: 155}
+    - {file_path: app/models/optimized_video.rb, line: 49}
+    - {file_path: app/models/site_setting.rb, line: 346}
+    - {file_path: config/site_settings.yml, line: 2622}
+  uncertain: true
+  rationale: Upload and OptimizedImage store, remove and re-ACL user uploads through Discourse.store, which is the S3 store
+    (aws-sdk-s3 in lib/file_store) when enable_s3_uploads is on; the default endpoint is amazonaws.com. S3 is off by
+    default and s3_endpoint can point at another S3-compatible service.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_auth
+  subject_key: third_party:google_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 89, package: omniauth-google-oauth2}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 758}
+    - {file_path: config/site_settings.yml, line: 764}
+  uncertain: true
+  rationale: config/site_settings.yml defines the Google login switch and the client id and secret that the OmniAuth strategy
+    sends to Google during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: github_auth
+  subject_key: third_party:github_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 85, package: omniauth-github}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 820}
+    - {file_path: config/site_settings.yml, line: 827}
+  uncertain: true
+  rationale: config/site_settings.yml defines the GitHub login switch and the client id and secret that the OmniAuth strategy
+    sends to GitHub during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: twitter_auth
+  subject_key: third_party:twitter_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 84, package: omniauth-twitter}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 795}
+    - {file_path: config/site_settings.yml, line: 802}
+  uncertain: true
+  rationale: config/site_settings.yml defines the Twitter login switch and the client id and secret that the OmniAuth strategy
+    sends to Twitter during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_auth
+  subject_key: third_party:facebook_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 83, package: omniauth-facebook}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 807}
+    - {file_path: config/site_settings.yml, line: 815}
+  uncertain: true
+  rationale: config/site_settings.yml defines the Facebook login switch and the client id and secret that the OmniAuth strategy
+    sends to Facebook during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: discord_auth
+  subject_key: third_party:discord_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 87, package: omniauth-oauth2}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 832}
+    - {file_path: config/site_settings.yml, line: 838}
+  uncertain: true
+  rationale: config/site_settings.yml defines the Discord login switch and the client id and secret that the OmniAuth strategy
+    sends to Discord during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: linkedin_auth
+  subject_key: third_party:linkedin_auth
+  component_subtype: auth_provider
+  sends_data: true
+  route: sdk
+  subprocessor: "no"
+  data_categories: [credentials, access_token]
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 87, package: omniauth-oauth2}
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 847}
+    - {file_path: config/site_settings.yml, line: 855}
+  uncertain: true
+  rationale: config/site_settings.yml defines the LinkedIn login switch and the client id and secret that the OmniAuth strategy
+    sends to LinkedIn during the OAuth code exchange. The authenticator that makes the call is in lib/auth, outside the scope;
+    the provider authenticates the user at the user's direction.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: discourse_hub
+  subject_key: third_party:discourse_hub
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: config/site_settings.yml, line: 4522}
+  uncertain: true
+  rationale: allowed_user_api_auth_redirects defaults to https://api.discourse.org/api/auth_redirect, so the user API key
+    flow redirects the encrypted user API key payload to Discourse Hub for the mobile app. The redirect itself is issued by
+    a controller outside the scope.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: maxmind
+  subject_key: third_party:maxmind
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [credentials]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: config/discourse_defaults.conf, line: 313}
+    - {file_path: config/discourse_defaults.conf, line: 314}
+  uncertain: true
+  rationale: discourse_defaults.conf holds the MaxMind account id and license key used to download the GeoLite2 databases;
+    only these credentials go to MaxMind, and the download code is in lib, outside the scope. IP lookups are local.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: github
+  subject_key: third_party:github
+  component_subtype: saas_service
+  sends_data: false
+  route: sdk
+  subprocessor: "no"
+  data_categories: []
+  provenance:
+    manifest:
+    - {file_path: Gemfile, line: 303, package: octokit}
+    imports: []
+    call_sites: []
+  uncertain: false
+  rationale: The Gemfile declares octokit (GitHub API client), but no file in the repository at HEAD requires or calls
+    Octokit.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

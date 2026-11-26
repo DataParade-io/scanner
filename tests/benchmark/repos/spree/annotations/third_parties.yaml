@@ -1,0 +1,47 @@
+version: third-party-labels/1
+scope_note: Vendors reached from spree/core. OIDC, webhook endpoints and image import use admin-configured URLs, valvat only
+  runs offline checksums, and the YouTube/Vimeo embed and GitHub sample-data URLs are only built as links for storefronts
+  and the admin UI.
+vendors:
+- vendor: nominatim
+  subject_key: third_party:nominatim
+  component_subtype: maps
+  sends_data: true
+  route: sdk
+  subprocessor: "yes"
+  data_categories: [address]
+  provenance:
+    manifest:
+    - {file_path: spree/core/spree_core.gemspec, line: 43, package: geocoder}
+    imports:
+    - {file_path: spree/core/lib/spree/core.rb, line: 31, module: geocoder}
+    call_sites:
+    - {file_path: spree/core/app/jobs/spree/addresses/geocode_address_job.rb, line: 11}
+    - {file_path: spree/core/app/models/spree/address.rb, line: 384}
+  uncertain: true
+  rationale: Saving an address enqueues GeocodeAddressJob (geocode_addresses defaults to true), which calls
+    Geocoder.coordinates with the street, city, state and country. Spree does not configure a lookup, so the geocoder gem
+    default (OpenStreetMap Nominatim) is used unless the host app picks another service.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: google_fonts
+  subject_key: third_party:google_fonts
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "unknown"
+  data_categories: [ip_address]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: spree/core/app/views/spree/shared/_base_mailer_stylesheets.html.erb, line: 9}
+    - {file_path: spree/core/app/views/spree/shared/_base_mailer_stylesheets.html.erb, line: 30}
+  uncertain: true
+  rationale: The base mailer layout embeds @font-face rules that load Geist and Inter from fonts.gstatic.com, so the
+    recipient's mail client requests the fonts from Google and exposes its IP address. The request comes from the client,
+    not the server, and many clients strip the fonts.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

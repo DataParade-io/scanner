@@ -1,0 +1,25 @@
+repository: thearnavrustagi/marketmenow
+commit: 538bdd047ac648e2869450dc3e7766318288ef68
+license: MIT
+scope:
+  include:
+    - src/adapters/instagram/adapter.py
+    - src/adapters/instagram/token_manager.py
+    - src/adapters/facebook/orchestrator.py
+    - src/adapters/linkedin/api_client.py
+    - src/adapters/reddit/client.py
+coverage:
+  layers:
+    - components
+    - data_flows
+  languages:
+    - python
+  domains:
+    - social_media
+    - marketing
+selection_rationale: >-
+  Social adapters reach the Instagram and Facebook Graph APIs, LinkedIn and Reddit through
+  httpx.AsyncClient(base_url=...), a helper that picks the Graph host from the token, and
+  module-level URL constants, with no SDK. src/adapters/facebook/orchestrator.py makes no HTTP
+  calls and stays in scope as a precision check (DATAP-818).
+annotation_version: 1

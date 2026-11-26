@@ -99,7 +99,9 @@ function ruleById(rules: PiiSignalRule[]): Map<string, PiiSignalRule> {
 }
 
 function isJavaFieldDeclarationLine(line: string): boolean {
-  return /\b(?:private|protected)\s+[\w<>,\s\[\]]+\s+\w+\s*;/.test(line);
+  // Single `\s` around the type: the type class takes whitespace too, and `\s+` there
+  // backtracked O(n^3) on `private` followed by a long run of spaces. Same matches.
+  return /\b(?:private|protected)\s[\w<>,\s\[\]]+\s\w+\s*;/.test(line);
 }
 
 /**
@@ -206,9 +208,16 @@ const TRANSLATION_KEY = /(\b(?:I18n\.t|i18n\.t|translate|t|__|\$t)\(\s*)(['"`])[
  * (`'Email not found.'`): it names a file or tells a person something, not a value.
  * SQL, other strings and messages that interpolate a value (`"Logout failed for
  * #{channel.email}."`) keep matching.
+ *
+ * A prose message starts with a capital, holds at least two whitespace characters and
+ * ends in `.`, `!` or `?`. The first two runs exclude whitespace, so the two `\s` are
+ * always the first two whitespace characters and each run has one way to match. Runs
+ * that also matched whitespace backtracked O(n^3) on a long capitalised string that is
+ * not prose (an inline SVG path `d="M1.5 2.5 ..."`). Matches on a single line are the
+ * same as before.
  */
-const PATH_OR_PROSE_STRING =
-  /(['"`])(?:[\w.@-]*\/[\w./@-]*|[A-Z](?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*\s(?:(?![$#]\{)[^'"`\n])*[.!?])\1/g;
+export const PATH_OR_PROSE_STRING =
+  /(['"`])(?:[\w.@-]*\/[\w./@-]*|[A-Z](?:(?![$#]\{)[^'"`\s])*\s(?:(?![$#]\{)[^'"`\s])*\s(?:(?![$#]\{)[^'"`\n])*[.!?])\1/g;
 
 /**
  * A capitalized Email or Mail class reference (`Channel::Email`, `models.Email.findOne`,
@@ -221,9 +230,13 @@ const EMAIL_NAMESPACE = /\b(?:Email|Mail)(?=::)/g;
  * A whole import statement (`const mail = require('../mail');`, `import { isEmail } from
  * 'validator';`, `from email.mime.text import MIMEText`, `require 'mail'`): its names are
  * modules and bindings, not values.
+ *
+ * Whitespace runs never sit next to another run that also takes whitespace (`\s[^=]+`,
+ * `(?:\s*;)?`, `import\s(?:...)`): `from a import` followed by a long run of spaces
+ * backtracked O(n^3). Same matches as before.
  */
-const IMPORT_LINE =
-  /^\s*(?:(?:const|let|var)\s+[^=]+=\s*require\(\s*(['"`])[^'"`]*\1\s*\)(?:\(\s*(['"`])[^'"`]*\2\s*\))?(?:\.\w+)*\s*;?|import\b[^'"`]*\bfrom\s*(['"`])[^'"`]*\3\s*;?|import\s*(['"`])[^'"`]*\4\s*;?|from\s+[\w.]+\s+import\s+[\w\s,()*]+|import\s+[\w.]+(?:\s+as\s+\w+)?|require(?:_relative)?\s+(['"])[^'"]*\5)\s*$/;
+export const IMPORT_LINE =
+  /^\s*(?:(?:const|let|var)\s[^=]+=\s*require\(\s*(['"`])[^'"`]*\1\s*\)(?:\(\s*(['"`])[^'"`]*\2\s*\))?(?:\.\w+)*(?:\s*;)?|import\b[^'"`]*\bfrom\s*(['"`])[^'"`]*\3(?:\s*;)?|import\s*(['"`])[^'"`]*\4(?:\s*;)?|from\s+[\w.]+\s+import\s(?:[\w\s,()*]*[\w,()*]|\s)|import\s+[\w.]+(?:\s+as\s+\w+)?|require(?:_relative)?\s+(['"])[^'"]*\5)\s*$/;
 const NEVER = /(?!)/g;
 /** A Ruby predicate (`inbox.email?`, `mail?`) asks a yes/no question; it is not an address. */
 const EMAIL_PREDICATE = /(\.|\b)e?mails?\?(?!\?)/g;

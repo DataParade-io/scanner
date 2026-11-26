@@ -3,7 +3,7 @@
   "title": "Rails models emitted as database components",
   "description": "",
   "type": "bug",
-  "status": "in_progress",
+  "status": "closed",
   "priority": 2,
   "assignee": null,
   "creator": null,
@@ -17,10 +17,19 @@
       "text": "Observed behavior: Rails ActiveRecord models and concerns were emitted as database components, resources routes produced no API boundary, and Gemfile third parties such as Stripe were absent. Fix: keep model classes as evidence only, detect Rails route DSL boundaries, and map runtime Gemfile dependencies through canonical third-party detection. Proof: Ruby scanner tests pass (15/15), scanner builds and lints, and the consuming CLI suite passes (360/360). Commit: 4363d8ce2925e3457923432e3de1703e0f9ab46f.",
       "created_at": "2026-09-24T18:27:25.420053Z",
       "comment_type": "default"
+    },
+    {
+      "id": "c1f0de9c-28eb-403c-b5cf-79b738a5726d",
+      "author": "home",
+      "text": "Complete. Fix merged in scanner PR #84 (fix(scanner): model Rails runtime boundaries, merge commit d0be0320, 2026-09-24; fix commit 4363d8ce). Models stay evidence only, Rails route DSL gives an API boundary, runtime Gemfile gems map to canonical third parties. Covered on develop by tests/unit/core/ruby-scan.spec.ts.",
+      "created_at": "2026-10-23T17:34:27.122923Z",
+      "comment_type": "default"
     }
   ],
   "created_at": "2026-09-24T18:27:16.444920Z",
-  "updated_at": "2026-09-24T18:27:25.420053Z",
-  "closed_at": null,
+  "updated_at": "2026-10-23T17:34:27.181005Z",
+  "closed_at": "2026-10-23T17:34:27.180977Z",
+  "right_now_summary": null,
+  "right_now_updated_at": null,
   "custom": {}
 }

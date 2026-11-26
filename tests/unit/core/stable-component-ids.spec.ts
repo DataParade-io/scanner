@@ -1,6 +1,6 @@
 import type { DetectedComponent } from "../../../src/core/types/component";
 import type { DetectedDataFlow } from "../../../src/core/types/data-flow";
-import { stableComponentKey } from "../../../src/core/pipeline/stable-component-ids";
+import { NAME_FROM_PROJECT_PROPERTY, stableComponentKey } from "../../../src/core/pipeline/stable-component-ids";
 import {
   assignStableComponentIds,
   STABLE_COMPONENT_ID_PATTERN,
@@ -12,6 +12,13 @@ function idsOf(components: DetectedComponent[]): string[] {
 }
 
 describe("stable-component-ids", () => {
+  it("keeps a name taken from the project or folder out of the key (KDATAP-296090)", () => {
+    const fromFolder = (name: string) => asset("x", name, { section_id: "root", [NAME_FROM_PROJECT_PROPERTY]: true }, "application");
+    expect(stableComponentKey(fromFolder("first-checkout"))).toBe("app:root|asset|application||<project>");
+    expect(stableComponentKey(fromFolder("second-checkout"))).toBe(stableComponentKey(fromFolder("first-checkout")));
+    expect(stableComponentKey(asset("x", "first-checkout", { section_id: "root" }, "application"))).toBe("app:root|asset|application||first-checkout");
+  });
+
   it("stableComponentKey prefers terraform_address then managed tuple then app tuple", () => {
     expect(
       stableComponentKey(

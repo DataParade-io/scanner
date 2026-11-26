@@ -16,6 +16,27 @@ describe("patterns/scan-exclusions", () => {
     expect(shouldSkipDirectoryName("src")).toBe(false);
   });
 
+  it("skips dependency, build output and cache directories", () => {
+    for (const name of [
+      "node_modules",
+      ".next",
+      ".nuxt",
+      ".svelte-kit",
+      ".turbo",
+      ".vercel",
+      ".git",
+      "dist",
+      "build",
+      "out",
+      "coverage",
+      ".cache",
+      "vendor",
+      "storybook-static",
+    ]) {
+      expect(shouldSkipDirectoryName(name)).toBe(true);
+    }
+  });
+
   it("skips .storybook as a hidden directory", () => {
     expect(shouldSkipDirectoryName(".storybook")).toBe(true);
   });

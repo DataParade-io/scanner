@@ -7,6 +7,12 @@ import type {
   ScanResult,
   SourceLocation,
 } from "../types";
+import {
+  FLOW_PROTOCOLS,
+  FLOW_RELATIONSHIPS,
+  FLOW_TRANSPORTS,
+  HUMAN_INTERACTION_CHANNELS,
+} from "../types/data-flow";
 
 const fileLanguageEnum = z.enum([
   "typescript",
@@ -89,6 +95,33 @@ export const detectedDataFlowSchema = z.object({
     .optional(),
   targetScopeConfidence: z.enum(["high", "medium", "low"]).optional(),
   targetScopeReason: z.string().optional(),
+  authentication: z
+    .object({
+      status: z.enum(["seen", "none_seen"]),
+      kinds: z.array(z.string()),
+      evidence: z.array(
+        z.object({ kind: z.string(), filePath: z.string(), line: z.number().int().positive() }),
+      ),
+    })
+    .optional(),
+  controls: z
+    .array(
+      z.object({
+        control: z.string(),
+        effect: z.enum(["mitigates", "weakens"]),
+        filePath: z.string(),
+        line: z.number().int().positive(),
+      }),
+    )
+    .optional(),
+  relationship: z.enum(FLOW_RELATIONSHIPS).optional(),
+  protocol: z.enum(FLOW_PROTOCOLS).optional(),
+  transport: z.enum(FLOW_TRANSPORTS).optional(),
+  client: z.string().min(1).optional(),
+  channel: z.enum(HUMAN_INTERACTION_CHANNELS).optional(),
+  channelEvidence: z
+    .array(z.object({ signal: z.string(), filePath: z.string(), line: z.number().int().positive() }))
+    .optional(),
 });
 
 export const languageParserStatsSchema = z.object({

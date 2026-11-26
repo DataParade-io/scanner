@@ -390,14 +390,20 @@ function countIndent(line: string): number {
   return match ? match[1].replace(/\t/g, "  ").length : 0;
 }
 
-type EnclosingScope = { startLine: number; endLine: number; text: string };
+type EnclosingScope = { startLine: number; endLine: number; readonly text: string };
 
 /**
- * The enclosing scope of each line of one file. Scope headers are found in one pass and
- * scope bodies are cached by header line, so a file costs linear time rather than a
- * backward search and a forward brace scan for every line.
+ * The enclosing scope of each line of one file, in O(n log n) per file.
+ *
+ * A line with no scope header above it is its own scope start, so a file without
+ * function or class headers (a generated PHP baseline, a config array) has one scope
+ * per line, each running to the end of the file. Caching the joined text of those
+ * scopes kept O(lines^2) bytes alive and exhausted the heap on a 1.7 MB file. Only scope
+ * end lines are cached; `text` is joined on read and only for lines that need it. Scope
+ * ends come from a min segment tree over brace depth and a per-indent index of Ruby
+ * `end` lines, so no lookup scans forward through the file.
  */
-function enclosingScopeFinder(lines: string[]): (lineIndex: number) => EnclosingScope {
+export function enclosingScopeFinder(lines: string[]): (lineIndex: number) => EnclosingScope {
   const nearestHeader: number[] = new Array(lines.length);
   let last = -1;
   for (let index = 0; index < lines.length; index += 1) {
@@ -410,89 +416,125 @@ function enclosingScopeFinder(lines: string[]): (lineIndex: number) => Enclosing
     }
     nearestHeader[index] = last;
   }
-  const cache = new Map<number, EnclosingScope | null>();
+  const findScopeEnd = scopeEndFinder(lines);
+  // Scope start -> last line index of the scope; null for a Ruby scope without its `end`.
+  const ends = new Map<number, number | null>();
   return (lineIndex) => {
     const header = nearestHeader[lineIndex] ?? -1;
     const scopeStart = header >= 0 ? header : lineIndex;
-    const cached = cache.get(scopeStart);
-    if (cached) return cached;
-    const scope = findEnclosingScope(lines, lineIndex, scopeStart);
-    // A Ruby scope without its closing `end` ends at the line asked about: not cacheable.
-    cache.set(scopeStart, scope.unclosed ? null : scope.result);
-    return scope.result;
+    let end = ends.get(scopeStart);
+    if (end === undefined) {
+      end = findScopeEnd(scopeStart);
+      ends.set(scopeStart, end);
+    }
+    // A Ruby scope without its closing `end` ends at the line asked about.
+    const scopeEnd = end ?? lineIndex;
+    return {
+      startLine: scopeStart + 1,
+      endLine: scopeEnd + 1,
+      get text() {
+        return lines.slice(scopeStart, scopeEnd + 1).join("\n");
+      },
+    };
   };
 }
 
-function findEnclosingScope(
-  lines: string[],
-  lineIndex: number,
-  scopeStart: number,
-): { result: EnclosingScope; unclosed: boolean } {
-  let scopeEnd = lineIndex;
-  let unclosed = false;
-
-  const scopeLine = lines[scopeStart] ?? "";
-  const isRubyScope = /^\s*(?:def|class|module)\s+/.test(scopeLine);
-
-  let bodyStart = scopeStart;
-  if (!isRubyScope) {
-    for (let index = scopeStart; index < lines.length; index += 1) {
-      if ((lines[index] ?? "").includes("{")) {
-        bodyStart = index;
-        break;
-      }
+/**
+ * Last line index of the scope that starts at `scopeStart`, or null for a Ruby scope
+ * without a matching `end`.
+ *
+ * Brace scopes: the body starts at the first line at or after the scope start that holds
+ * a `{` and ends at the first later line where the running brace depth, counted from the
+ * body start, is back to zero or below. Without such a line (or without any `{`) the
+ * scope runs to the end of the file. Ruby scopes (`def`/`class`/`module`) end at the first
+ * later `end` line with the same indent.
+ */
+function scopeEndFinder(lines: string[]): (scopeStart: number) => number | null {
+  const count = lines.length;
+  const lastIndex = count - 1;
+  // depthAfter[i]: net `{` minus `}` over lines 0..i.
+  const depthAfter = new Int32Array(count);
+  // nextOpenLine[i]: first line index >= i that holds a `{`, or -1.
+  const nextOpenLine = new Int32Array(count + 1);
+  let depth = 0;
+  for (let index = 0; index < count; index += 1) {
+    const line = lines[index] ?? "";
+    for (let offset = 0; offset < line.length; offset += 1) {
+      const code = line.charCodeAt(offset);
+      if (code === 123) depth += 1;
+      else if (code === 125) depth -= 1;
     }
+    depthAfter[index] = depth;
   }
+  nextOpenLine[count] = -1;
+  for (let index = count - 1; index >= 0; index -= 1) {
+    nextOpenLine[index] = (lines[index] ?? "").includes("{") ? index : nextOpenLine[index + 1]!;
+  }
+  const firstDepthAtMost = firstAtMostFinder(depthAfter);
+  let rubyEndsByIndent: Map<number, number[]> | undefined;
 
-  let braceDepth = 0;
-  let foundOpenBrace = false;
-
-  if (!isRubyScope) {
-    for (let index = bodyStart; index < lines.length; index += 1) {
-      const line = lines[index] ?? "";
-      for (const char of line) {
-        if (char === "{") {
-          braceDepth += 1;
-          foundOpenBrace = true;
-        } else if (char === "}") {
-          braceDepth -= 1;
-        }
-      }
-
-      scopeEnd = index;
-
-      if (foundOpenBrace && braceDepth <= 0 && index > bodyStart) {
-        break;
-      }
+  return (scopeStart) => {
+    const scopeLine = lines[scopeStart] ?? "";
+    if (/^\s*(?:def|class|module)\s+/.test(scopeLine)) {
+      rubyEndsByIndent ??= rubyEndLinesByIndent(lines);
+      const candidates = rubyEndsByIndent.get(countIndent(scopeLine)) ?? [];
+      const position = firstGreaterThan(candidates, scopeStart);
+      return position < candidates.length ? candidates[position]! : null;
     }
-  }
-
-  if (!foundOpenBrace) {
-    if (isRubyScope) {
-      unclosed = true;
-      const scopeIndent = countIndent(scopeLine);
-      for (let index = scopeStart + 1; index < lines.length; index += 1) {
-        const line = lines[index] ?? "";
-        if (!/^\s*end\b/.test(line)) {
-          continue;
-        }
-        if (countIndent(line) === scopeIndent) {
-          scopeEnd = index;
-          unclosed = false;
-          break;
-        }
-      }
+    const bodyStart = nextOpenLine[scopeStart]!;
+    if (bodyStart < 0 || bodyStart >= lastIndex) {
+      return lastIndex;
     }
-  }
-
-  return {
-    result: {
-      startLine: scopeStart + 1,
-      endLine: scopeEnd + 1,
-      text: lines.slice(scopeStart, scopeEnd + 1).join("\n"),
-    },
-    unclosed,
+    const depthBeforeBody = bodyStart > 0 ? depthAfter[bodyStart - 1]! : 0;
+    const closing = firstDepthAtMost(bodyStart + 1, depthBeforeBody);
+    return closing >= 0 ? closing : lastIndex;
   };
+}
+
+function rubyEndLinesByIndent(lines: string[]): Map<number, number[]> {
+  const byIndent = new Map<number, number[]>();
+  lines.forEach((line, index) => {
+    if (!/^\s*end\b/.test(line)) return;
+    const indent = countIndent(line);
+    const list = byIndent.get(indent);
+    if (list) list.push(index);
+    else byIndent.set(indent, [index]);
+  });
+  return byIndent;
+}
+
+/** Position of the first value in ascending `values` that is greater than `target`. */
+function firstGreaterThan(values: number[], target: number): number {
+  let low = 0;
+  let high = values.length;
+  while (low < high) {
+    const middle = (low + high) >> 1;
+    if (values[middle]! > target) high = middle;
+    else low = middle + 1;
+  }
+  return low;
+}
+
+/**
+ * Returns a lookup for the first index >= `from` whose value is <= `limit` (or -1), in
+ * O(log n) per lookup over a min segment tree.
+ */
+function firstAtMostFinder(values: Int32Array): (from: number, limit: number) => number {
+  let size = 1;
+  while (size < values.length) size *= 2;
+  const tree = new Int32Array(size * 2).fill(0x7fffffff);
+  tree.set(values, size);
+  for (let node = size - 1; node >= 1; node -= 1) {
+    tree[node] = Math.min(tree[node * 2]!, tree[node * 2 + 1]!);
+  }
+  const search = (node: number, low: number, high: number, from: number, limit: number): number => {
+    if (high < from || tree[node]! > limit) return -1;
+    if (low === high) return low;
+    const middle = (low + high) >> 1;
+    const left = search(node * 2, low, middle, from, limit);
+    return left >= 0 ? left : search(node * 2 + 1, middle + 1, high, from, limit);
+  };
+  return (from, limit) => (from >= values.length ? -1 : search(1, 0, size - 1, from, limit));
 }
 
 function isClassScopeLine(line: string): boolean {

@@ -164,7 +164,10 @@ function buildComponentDedupeKey(
     const serviceName = component.properties.serviceName;
     if (typeof serviceName === "string" && serviceName.trim()) {
       const key = serviceName.trim().toLowerCase();
-      return `third_party:${sectionId}:${key}`;
+      // Endpoints of one service routed to another subtype stay separate (DATAP-818).
+      const routed = component.properties.thirdPartySubType;
+      const subtypeKey = typeof routed === "string" && routed.trim() ? `:${component.subType ?? routed}` : "";
+      return `third_party:${sectionId}:${key}${subtypeKey}`;
     }
 
     const normalized = normalizeComponentName(

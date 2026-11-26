@@ -5,7 +5,7 @@ import { buildScannerFinding } from "../record-factory";
 import { parseTypedFlowKey } from "../graph/endpoints";
 import type { AssertedFlowEndpoints } from "../graph/types";
 import type { CanonicalScannerFinding, EvidenceLocation } from "../types";
-import { componentScannerIdentityKey } from "./components";
+import { componentScannerIdentityKey, thirdPartyVendorKey } from "./components";
 import { resolveScannerAdapterMapVersion } from "./manifest";
 
 function flowComponentIdentityKey(component: DetectedComponent): string {
@@ -16,7 +16,7 @@ function flowComponentIdentityKey(component: DetectedComponent): string {
     }
     const vendor = component.properties?.vendor;
     if (typeof vendor === "string" && vendor.trim()) {
-      return `${component.type}:${vendor.trim().toLowerCase()}`;
+      return `${component.type}:${thirdPartyVendorKey(vendor)}`;
     }
     return componentScannerIdentityKey(component);
   }
@@ -127,7 +127,7 @@ function resolveFlowEndpointVendor(
   }
   const vendor = component?.properties?.vendor;
   if (typeof vendor === "string" && vendor.trim()) {
-    return vendor.trim().toLowerCase();
+    return thirdPartyVendorKey(vendor);
   }
   return undefined;
 }
@@ -212,9 +212,9 @@ function endpointKeyForFlowComponent(
     }
     const vendor = component.properties?.vendor;
     if (typeof vendor === "string" && vendor.trim()) {
-      return vendor.trim().toLowerCase();
+      return thirdPartyVendorKey(vendor);
     }
-    return component.name.trim().toLowerCase() || fallback;
+    return thirdPartyVendorKey(component.name) || fallback;
   }
   const subType = component.subType?.trim();
   if (subType) {

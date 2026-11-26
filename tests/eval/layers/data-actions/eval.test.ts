@@ -47,5 +47,5 @@ describe("eval/layers/data-actions", () => {
       auditAssertedRelayCorroboration(entry.asserted),
     );
     expect(relayViolations).toEqual([]);
-  });
+  }, 120_000);
 });

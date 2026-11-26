@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "Discourse Rails API",
+      "type": "asset",
+      "subType": "api",
+      "evidence": [
+        { "filePath": "config/routes.rb", "startLine": 645, "endLine": 650 },
+        { "filePath": "config/routes.rb", "startLine": 1136, "endLine": 1148 }
+      ]
+    },
+    {
+      "name": "PostgreSQL database",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [
+        { "filePath": "config/database.yml", "startLine": 8, "endLine": 14 }
+      ]
+    },
+    {
+      "name": "Redis cache and transient store",
+      "type": "asset",
+      "subType": "cache",
+      "evidence": [
+        { "filePath": "config/application.rb", "startLine": 181, "endLine": 189 },
+        { "filePath": "app/models/topic_view_item.rb", "startLine": 16, "endLine": 24 }
+      ]
+    },
+    {
+      "name": "Discourse runtime configuration",
+      "type": "asset",
+      "subType": "config",
+      "evidence": [
+        { "filePath": "config/database.yml", "startLine": 8, "endLine": 21 },
+        { "filePath": "config/discourse_defaults.conf", "startLine": 234, "endLine": 247 }
+      ]
+    },
+    {
+      "name": "User authentication and session service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "config/initializers/100-session_store.rb", "startLine": 5, "endLine": 16 },
+        { "filePath": "app/models/user_auth_token.rb", "startLine": 100, "endLine": 120 },
+        { "filePath": "config/initializers/009-omniauth.rb", "startLine": 13, "endLine": 26 }
+      ]
+    },
+    {
+      "name": "Discourse Connect SSO service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/discourse_connect.rb", "startLine": 10, "endLine": 27 },
+        { "filePath": "config/routes.rb", "startLine": 594, "endLine": 596 }
+      ]
+    },
+    {
+      "name": "Sidekiq background job queue",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [
+        { "filePath": "config/initializers/100-sidekiq.rb", "startLine": 10, "endLine": 19 }
+      ]
+    },
+    {
+      "name": "MessageBus real-time messaging",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [
+        { "filePath": "config/initializers/004-message_bus.rb", "startLine": 140, "endLine": 150 },
+        { "filePath": "app/models/user.rb", "startLine": 884, "endLine": 931 }
+      ]
+    },
+    {
+      "name": "Community member",
+      "type": "actor",
+      "subType": "customer",
+      "evidence": [
+        { "filePath": "README.md", "startLine": 13, "endLine": 23 },
+        { "filePath": "config/routes.rb", "startLine": 645, "endLine": 650 }
+      ]
+    },
+    {
+      "name": "Site administrator",
+      "type": "actor",
+      "subType": "admin",
+      "evidence": [
+        { "filePath": "config/routes.rb", "startLine": 98, "endLine": 110 }
+      ]
+    },
+    {
+      "name": "Configured Discourse Connect identity provider",
+      "type": "third_party",
+      "subType": "auth_provider",
+      "evidence": [
+        { "filePath": "app/models/discourse_connect.rb", "startLine": 10, "endLine": 27 },
+        { "filePath": "config/routes.rb", "startLine": 594, "endLine": 596 }
+      ]
+    },
+    {
+      "name": "AWS S3 object storage",
+      "type": "third_party",
+      "subType": "saas_service",
+      "evidence": [
+        { "filePath": "Gemfile", "startLine": 64, "endLine": 64 },
+        { "filePath": "config/discourse_defaults.conf", "startLine": 234, "endLine": 247 },
+        { "filePath": "config/routes.rb", "startLine": 1140, "endLine": 1148 }
+      ]
+    },
+    {
+      "name": "Configured SMTP email provider",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [
+        { "filePath": "config/discourse_defaults.conf", "startLine": 67, "endLine": 99 },
+        { "filePath": "app/models/global_setting.rb", "startLine": 265, "endLine": 288 }
+      ]
+    }
+  ],
+  "dataFlows": [
+    {
+      "source": "Discourse Connect user identity and profile attributes",
+      "target": "PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/discourse_connect.rb", "startLine": 142, "endLine": 179 }
+      ]
+    },
+    {
+      "source": "Authentication token and login metadata",
+      "target": "PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user_auth_token.rb", "startLine": 109, "endLine": 131 }
+      ]
+    },
+    {
+      "source": "User draft content and ownership metadata",
+      "target": "PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/draft.rb", "startLine": 65, "endLine": 91 }
+      ]
+    },
+    {
+      "source": "Topic view event (user ID or anonymous IP, topic, and date)",
+      "target": "PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/topic_view_item.rb", "startLine": 28, "endLine": 46 }
+      ]
+    },
+    {
+      "source": "Topic-view deduplication key containing user ID or IP",
+      "target": "Redis cache and transient store",
+      "type": "data_transfer",
+      "evidence": [
+        { "filePath": "app/models/topic_view_item.rb", "startLine": 16, "endLine": 24 }
+      ]
+    },
+    {
+      "source": "Staff login alert (user ID, client IP, and user agent)",
+      "target": "Sidekiq background job queue",
+      "type": "message_queue",
+      "evidence": [
+        { "filePath": "app/models/user_auth_token.rb", "startLine": 133, "endLine": 139 }
+      ]
+    },
+    {
+      "source": "User notification state and personal-message notification counts",
+      "target": "MessageBus real-time messaging",
+      "type": "message_queue",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 918, "endLine": 931 }
+      ]
+    },
+    {
+      "source": "Uploaded file content and upload metadata",
+      "target": "AWS S3 object storage",
+      "type": "file_transfer",
+      "evidence": [
+        { "filePath": "app/models/upload.rb", "startLine": 594, "endLine": 598 },
+        { "filePath": "config/discourse_defaults.conf", "startLine": 234, "endLine": 247 }
+      ]
+    }
+  ]
+}

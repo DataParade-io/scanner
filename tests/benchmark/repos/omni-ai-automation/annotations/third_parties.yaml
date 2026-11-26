@@ -1,0 +1,98 @@
+version: third-party-labels/1
+scope_note: The WhatsApp, Facebook, Instagram and X channel adapters call vendor APIs with raw httpx; openai in backend/requirements.txt sits outside the scope and the clone root, so it gets no declared-only record.
+vendors:
+- vendor: whatsapp
+  subject_key: third_party:whatsapp
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [access_token, message_content, phone_number]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: backend/app/integrations/whatsapp/adapter.py, line: 235}
+    - {file_path: backend/app/integrations/whatsapp/adapter.py, line: 257}
+  uncertain: false
+  rationale: WhatsAppAdapter posts the recipient's phone number and reply text with httpx to /{phone_number_id}/messages on
+    base_url https://graph.facebook.com/{api_version}, and resolves media ids there, with the bearer token.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_messenger
+  subject_key: third_party:facebook_messenger
+  component_subtype: messaging
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [access_token, message_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: backend/app/integrations/facebook/adapter.py, line: 109}
+  uncertain: false
+  rationale: FacebookAdapter.send_message posts the recipient's page-scoped id and reply text with httpx to /{page_id}/messages
+    on graph.facebook.com, with the page access token in the query string.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: facebook_graph
+  subject_key: third_party:facebook_graph
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, media, post_content]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: backend/app/integrations/facebook/adapter.py, line: 133}
+  uncertain: false
+  rationale: FacebookAdapter.publish_post posts the page's own feed message or photo URL and caption with httpx to
+    /{page_id}/feed or /photos on graph.facebook.com. It publishes to the operator's own page, so it is not a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: instagram
+  subject_key: third_party:instagram
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [access_token, media, message_content, post_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: backend/app/integrations/instagram/adapter.py, line: 147}
+    - {file_path: backend/app/integrations/instagram/adapter.py, line: 173}
+    - {file_path: backend/app/integrations/instagram/adapter.py, line: 183}
+  uncertain: false
+  rationale: InstagramAdapter posts DMs (recipient id and text) to /{ig_user_id}/messages and publishes media containers with
+    captions via /media and /media_publish on graph.facebook.com. The DMs carry customer messages, so it processes personal data
+    for the operator.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'
+- vendor: x
+  subject_key: third_party:x
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "no"
+  data_categories: [access_token, post_content, user_id]
+  provenance:
+    manifest: []
+    imports: []
+    call_sites:
+    - {file_path: backend/app/integrations/x/adapter.py, line: 163}
+    - {file_path: backend/app/integrations/x/adapter.py, line: 215}
+  uncertain: false
+  rationale: XAdapter polls /2/users/{user_id}/mentions and posts tweets or in-thread replies to /2/tweets on API
+    (https://api.x.com) with httpx. It posts as the operator's own account, so it is not a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

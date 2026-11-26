@@ -1,0 +1,81 @@
+annotations:
+- id: scanner-fixtures-passthrough-openrouter
+  layer: components
+  subject:
+    key: third_party:openrouter
+    name: openrouter
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_passthrough/triage.py
+    start_line: 8
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: triage unpacks completion_kwargs into call_model, which forwards to litellm.acompletion; the gateway
+    branch sends to openrouter.ai (providers.py lines 6 and 13).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-openrouter
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: openrouter
+- id: scanner-fixtures-passthrough-cerebras
+  layer: components
+  subject:
+    key: third_party:cerebras
+    name: cerebras
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_passthrough/triage.py
+    start_line: 8
+    end_line: 12
+  expected:
+    status: positive
+    labels:
+    - ai_provider
+  rationale: triage unpacks completion_kwargs into call_model, which forwards to litellm.acompletion; the direct
+    branch sends to api.cerebras.ai (providers.py lines 7 and 14).
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-cerebras
+    identity_key: third_party:ai_provider
+    component_type: third_party
+    component_subtype: ai_provider
+    vendor: cerebras
+- id: scanner-fixtures-passthrough-service
+  layer: components
+  subject:
+    key: asset:service
+    name: service
+  evidence:
+    file_path: raw-http-integrations/python/kwargs_passthrough/triage.py
+    start_line: 7
+    end_line: 13
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: Calling code for the outbound flows. No HTTP handler is in scope, so the source is a generic service;
+    ambiguous so it does not score.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: needs_adjudication
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: scanner-fixtures-passthrough::scanner-fixtures-passthrough-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service

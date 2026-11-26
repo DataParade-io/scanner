@@ -175,6 +175,7 @@ export function ensureTerraformMinimalHubAndManagedFlows(
       type,
       confidence: 0.72,
       description: "terraform_minimal_service_hub",
+      ...(provider && sourceId === provider.id ? { relationship: "provisions" as const } : {}),
     });
   };
 

@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "Discourse PostgreSQL database",
+      "type": "asset",
+      "subType": "database",
+      "evidence": [
+        { "filePath": "config/database.yml", "startLine": 8, "endLine": 12 }
+      ]
+    },
+    {
+      "name": "Discourse Redis cache and transient store",
+      "type": "asset",
+      "subType": "cache",
+      "evidence": [
+        { "filePath": "config/application.rb", "startLine": 181, "endLine": 186 },
+        { "filePath": "config/initializers/001-redis.rb", "startLine": 8, "endLine": 14 }
+      ]
+    },
+    {
+      "name": "Discourse runtime configuration",
+      "type": "asset",
+      "subType": "config",
+      "evidence": [
+        { "filePath": "config/discourse_defaults.conf", "startLine": 40, "endLine": 47 },
+        { "filePath": "config/discourse_defaults.conf", "startLine": 67, "endLine": 70 }
+      ]
+    },
+    {
+      "name": "Rails HTTP route surface",
+      "type": "asset",
+      "subType": "api",
+      "evidence": [
+        { "filePath": "config/routes.rb", "startLine": 551, "endLine": 555 },
+        { "filePath": "config/routes.rb", "startLine": 594, "endLine": 613 }
+      ]
+    },
+    {
+      "name": "MessageBus realtime delivery service",
+      "type": "asset",
+      "subType": "service",
+      "evidence": [
+        { "filePath": "config/initializers/004-message_bus.rb", "startLine": 140, "endLine": 150 },
+        { "filePath": "app/models/user.rb", "startLine": 918, "endLine": 931 }
+      ]
+    },
+    {
+      "name": "Forum members",
+      "type": "actor",
+      "subType": "customer",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 19, "endLine": 22 },
+        { "filePath": "config/routes.rb", "startLine": 648, "endLine": 653 }
+      ]
+    },
+    {
+      "name": "Forum administrators",
+      "type": "actor",
+      "subType": "admin",
+      "evidence": [
+        { "filePath": "config/routes.rb", "startLine": 98, "endLine": 107 }
+      ]
+    },
+    {
+      "name": "Cookie session store",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "config/initializers/100-session_store.rb", "startLine": 5, "endLine": 15 }
+      ]
+    },
+    {
+      "name": "OmniAuth authentication middleware",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "config/initializers/009-omniauth.rb", "startLine": 3, "endLine": 4 },
+        { "filePath": "config/initializers/009-omniauth.rb", "startLine": 13, "endLine": 24 }
+      ]
+    },
+    {
+      "name": "User authentication token service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/user_auth_token.rb", "startLine": 100, "endLine": 120 }
+      ]
+    },
+    {
+      "name": "User password authentication service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/user_password.rb", "startLine": 3, "endLine": 14 },
+        { "filePath": "app/models/user_password.rb", "startLine": 32, "endLine": 38 }
+      ]
+    },
+    {
+      "name": "Second-factor authentication service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/user_second_factor.rb", "startLine": 3, "endLine": 15 },
+        { "filePath": "app/models/user_second_factor.rb", "startLine": 25, "endLine": 30 }
+      ]
+    },
+    {
+      "name": "Global API key authentication service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/api_key.rb", "startLine": 3, "endLine": 9 },
+        { "filePath": "app/models/api_key.rb", "startLine": 20, "endLine": 27 }
+      ]
+    },
+    {
+      "name": "User API key authentication service",
+      "type": "asset",
+      "subType": "auth_service",
+      "evidence": [
+        { "filePath": "app/models/user_api_key.rb", "startLine": 3, "endLine": 13 },
+        { "filePath": "app/models/user_api_key.rb", "startLine": 19, "endLine": 25 }
+      ]
+    },
+    {
+      "name": "Configured SMTP email provider",
+      "type": "third_party",
+      "subType": "email_provider",
+      "evidence": [
+        { "filePath": "config/discourse_defaults.conf", "startLine": 67, "endLine": 70 }
+      ]
+    }
+  ],
+  "dataFlows": [
+    {
+      "source": "User authentication token, IP address, and user-agent metadata",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user_auth_token.rb", "startLine": 109, "endLine": 120 }
+      ]
+    },
+    {
+      "source": "Rehashed user password credential",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user_password.rb", "startLine": 65, "endLine": 72 }
+      ]
+    },
+    {
+      "source": "User IP address history",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 1148, "endLine": 1155 }
+      ]
+    },
+    {
+      "source": "User visit date and reading activity",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 1086, "endLine": 1094 }
+      ]
+    },
+    {
+      "source": "User-authored draft content and ownership metadata",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/draft.rb", "startLine": 77, "endLine": 91 }
+      ]
+    },
+    {
+      "source": "Profile view event (viewer user ID or IP address and timestamp)",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/user_profile_view.rb", "startLine": 23, "endLine": 50 }
+      ]
+    },
+    {
+      "source": "Topic view event (viewer user ID or IP address and timestamp)",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/topic_view_item.rb", "startLine": 26, "endLine": 46 }
+      ]
+    },
+    {
+      "source": "Browser pageview event payload including user ID, IP address, URL, and session ID",
+      "target": "Discourse Redis cache and transient store",
+      "type": "message_queue",
+      "evidence": [
+        { "filePath": "app/models/browser_pageview_event.rb", "startLine": 39, "endLine": 45 },
+        { "filePath": "app/models/browser_pageview_event.rb", "startLine": 170, "endLine": 180 }
+      ]
+    },
+    {
+      "source": "Queued browser pageview event records including user ID, IP address, URL, and session ID",
+      "target": "Discourse PostgreSQL database",
+      "type": "database_query",
+      "evidence": [
+        { "filePath": "app/models/browser_pageview_event.rb", "startLine": 131, "endLine": 138 },
+        { "filePath": "app/models/browser_pageview_event.rb", "startLine": 193, "endLine": 210 }
+      ]
+    },
+    {
+      "source": "Profile-view deduplication key containing viewer user ID or IP address",
+      "target": "Discourse Redis cache and transient store",
+      "type": "data_transfer",
+      "evidence": [
+        { "filePath": "app/models/user_profile_view.rb", "startLine": 10, "endLine": 21 }
+      ]
+    },
+    {
+      "source": "Topic-view deduplication key containing viewer user ID or IP address",
+      "target": "Discourse Redis cache and transient store",
+      "type": "data_transfer",
+      "evidence": [
+        { "filePath": "app/models/topic_view_item.rb", "startLine": 16, "endLine": 24 }
+      ]
+    },
+    {
+      "source": "User last-seen activity marker keyed by user ID and date",
+      "target": "Discourse Redis cache and transient store",
+      "type": "data_transfer",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 1189, "endLine": 1197 }
+      ]
+    },
+    {
+      "source": "User-specific notification and private-message summary",
+      "target": "MessageBus realtime delivery service",
+      "type": "message_queue",
+      "evidence": [
+        { "filePath": "app/models/user.rb", "startLine": 918, "endLine": 931 }
+      ]
+    }
+  ]
+}

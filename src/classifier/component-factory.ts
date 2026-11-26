@@ -33,6 +33,7 @@ import {
   mergePropertyEvidenceMaps,
 } from "./property-evidence";
 import { FRONTEND_FRAMEWORK_HINTS_SET } from "../patterns/frontend-frameworks";
+import { toDisplayName } from "./naming";
 
 interface FindingGroup {
   key: string;
@@ -88,18 +89,6 @@ function getSectionIdFromProperties(
   const raw = properties?.section_id;
   if (typeof raw === "string" && raw.trim()) return raw.trim();
   return "<unsectioned>";
-}
-
-function toDisplayName(normalized: string, fallback: string): string {
-  const base = normalized || fallback.trim();
-  if (!base) return "<unknown>";
-
-  return base
-    .split(/\s+/)
-    .map((part) =>
-      part.length === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1),
-    )
-    .join(" ");
 }
 
 function normalizeApiDisplayName(
@@ -345,6 +334,9 @@ function findThirdPartyMatch(
   if (isOrganizationOwnedExternalApiFinding(finding, organizationDomains)) {
     return undefined;
   }
+  if (finding.properties?.remoteService === true || finding.properties?.firstParty === true) {
+    return undefined;
+  }
 
   const props = finding.properties ?? {};
   const candidates: string[] = [];
@@ -363,6 +355,14 @@ function findThirdPartyMatch(
     /^https?:\/\//i.test(finding.name.trim())
   ) {
     candidates.push(finding.name.toLowerCase());
+  }
+
+  // A detector that already named the service (e.g. from a resolved URL host) wins over
+  // substring keys of earlier catalog entries matching the URL (DATAP-818).
+  if (typeof serviceName === "string" && serviceName.trim()) {
+    const exact = serviceName.trim().toLowerCase();
+    const named = config.thirdParties.find((tp) => tp.serviceName.toLowerCase() === exact);
+    if (named) return named;
   }
 
   for (const tp of config.thirdParties) {
@@ -523,9 +523,13 @@ function decideComponentTypeAndSubType(
   }
 
   if (matchedThirdParty && config.resolution.preferThirdPartyOverAsset) {
+    // A route can give one service a different subtype per endpoint (DATAP-818).
+    const routed = group.findings
+      .map((f) => f.properties?.thirdPartySubType)
+      .find((v): v is string => typeof v === "string" && v.trim().length > 0);
     return {
       type: "third_party",
-      subType: matchedThirdParty.subType,
+      subType: routed?.trim() ?? matchedThirdParty.subType,
       thirdParty: matchedThirdParty,
     };
   }
@@ -641,7 +645,10 @@ export function classifyRawFindings(
       group.findings.length > 0 &&
       group.findings.every((f) =>
         isOrganizationOwnedExternalApiFinding(f, organizationDomains),
-      )
+      ) &&
+      // Detectors that keep a call to the organization's own host mark it first-party:
+      // it stays as an API asset for the remote service (DATAP-818).
+      !group.findings.some((f) => f.properties?.firstParty === true)
     ) {
       continue;
     }
@@ -682,6 +689,15 @@ export function classifyRawFindings(
               : undefined;
         return shouldIgnoreExternalHttpUrl(urlRaw, urlOptions);
       })
+    ) {
+      continue;
+    }
+
+    // Outbound calls whose host is unknown name no destination: a generic "Outbound Http Call"
+    // node says nothing and wrongly becomes the hub for the application's flows.
+    if (
+      group.findings.length > 0 &&
+      group.findings.every(isUnknownDestinationCall)
     ) {
       continue;
     }
@@ -733,10 +749,13 @@ export function classifyRawFindings(
     if (component.type === "third_party") {
       const svc = mergedProperties.serviceName;
       if (typeof svc === "string" && svc.trim()) {
-        const normalizedService = normalizeComponentName(
-          svc,
-          config.nameNormalization,
-        );
+        // A catalog service name is already canonical: keep suffixes such as `_api`
+        // (meta_conversions_api) that name normalization would strip.
+        const catalogName =
+          thirdParty?.serviceName.toLowerCase() === svc.trim().toLowerCase();
+        const normalizedService = catalogName
+          ? svc.trim().toLowerCase()
+          : normalizeComponentName(svc, config.nameNormalization);
         component.name = toDisplayName(normalizedService, svc);
       }
     }
@@ -746,6 +765,12 @@ export function classifyRawFindings(
         component.name,
         mergedProperties,
       );
+      // A remote service on a hosting platform carries its own display name
+      // ("mom-skipify (Cloud Run)"); keep it as written (DATAP-818).
+      const displayName = group.findings
+        .map((f) => f.properties?.displayName)
+        .find((v): v is string => typeof v === "string" && v.trim().length > 0);
+      if (displayName) component.name = displayName;
     }
 
     components.push(component);
@@ -758,4 +783,15 @@ export function classifyRawFindings(
   });
 
   return components;
+}
+
+/** An outbound HTTP call with no known host, service name or literal URL. */
+function isUnknownDestinationCall(finding: RawFinding): boolean {
+  const props = finding.properties ?? {};
+  if (props.destination !== "unknown") return false;
+  if (typeof props.serviceName === "string" && props.serviceName.trim()) return false;
+  if (typeof props.url === "string" && props.url.trim()) return false;
+  // A TS call whose host comes from one env var is named after it: that name is still useful.
+  if (typeof props.envVar === "string" && props.envVar.trim()) return false;
+  return true;
 }

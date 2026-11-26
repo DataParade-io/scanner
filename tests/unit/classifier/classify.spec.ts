@@ -357,7 +357,7 @@ describe("classifier/classify - DP-P0-CLI-201", () => {
     const components = classifyRawFindings(findings);
     expect(components).toHaveLength(1);
     expect(components[0].type).toBe("third_party");
-    expect(components[0].properties.serviceName).toBe("weirdvendor.io");
+    expect(components[0].properties.serviceName).toBe("weirdvendor");
     expect(components[0].subType).toBe("saas_service");
   });
 

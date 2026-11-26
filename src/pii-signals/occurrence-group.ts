@@ -89,7 +89,8 @@ export function qualify(
     // `sendEmail: async (to) => ...`, `x = function (...)`.
     const isFunctionName =
       (/^\s*(\(|:\s*(async\s+)?function\b)/.test(after) ||
-        /^\s*[:=]\s*(async\s+)?(function\b|\([^)]*\)\s*(:\s*[^=]+)?=>|[A-Za-z_$][\w$]*\s*=>)/.test(after)) &&
+        // `:[^=]+` matches what `:\s*[^=]+` did (`[^=]` takes whitespace) in linear time.
+        /^\s*[:=]\s*(async\s+)?(function\b|\([^)]*\)\s*(:[^=]+)?=>|[A-Za-z_$][\w$]*\s*=>)/.test(after)) &&
       !assignsConcept;
     const words = identifierWords(identifier);
     // A getter named for whose value it returns keeps its qualifier:
@@ -126,8 +127,10 @@ export function qualify(
     // `const verificationEmail = user?.email ?? input.email` -> user. Only true locals;
     // `gift_card.used_by_email = user.email` stores a copy in another entity and keeps
     // its own name.
+    // The type annotation's runs never meet another run that takes the same whitespace
+    // (`: ` followed by a long run of spaces backtracked O(n^3)); same matches and groups.
     const localCopy = new RegExp(
-      `^\\s*(?:(?:const|let|var)\\s+)?([A-Za-z_]\\w*)\\s*(?::\\s*[\\w<>\\[\\]| ]+)?\\s*=\\s*(?:await\\s+)?(?:[\\w.]+\\s*\\?\\?\\s*)?([A-Za-z_]\\w*)\\s*(?:\\?\\.|\\.|\\[\\s*['"]|\\.get\\(\\s*['"])${conceptWords.map(escapeRegExp).join("_?")}\\b`,
+      `^\\s*(?:(?:const|let|var)\\s+)?([A-Za-z_]\\w*)\\s*(?::(?:\\s*[\\w<>\\[\\]|](?:[\\w<>\\[\\]| ]*[\\w<>\\[\\]|])?|[^\\S ]* )\\s*)?=\\s*(?:await\\s+)?(?:[\\w.]+\\s*\\?\\?\\s*)?([A-Za-z_]\\w*)\\s*(?:\\?\\.|\\.|\\[\\s*['"]|\\.get\\(\\s*['"])${conceptWords.map(escapeRegExp).join("_?")}\\b`,
       "i",
     ).exec(line);
     if (localCopy && conceptWords.every((word) => identifierWords(localCopy[1]).includes(word))) {

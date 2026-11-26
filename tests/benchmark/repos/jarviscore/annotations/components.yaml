@@ -1,0 +1,149 @@
+annotations:
+- id: jarviscore-atoms-service
+  layer: components
+  subject:
+    key: asset:service
+    name: integration atoms
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_conversation.py
+    start_line: 12
+    end_line: 12
+  expected:
+    status: ambiguous
+    labels:
+    - service
+  rationale: The atoms are async tool functions that an agent runtime calls through an injected nexus_call global;
+    no HTTP handler or service entry point is in scope, so asset:service is the closest calling component but reviewers
+    may reject it as a library of functions.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: needs_adjudication
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: jarviscore::jarviscore-atoms-service
+    identity_key: asset:service
+    component_type: asset
+    component_subtype: service
+- id: jarviscore-crisp-create-conversation
+  layer: components
+  subject:
+    key: third_party:crisp
+    name: crisp
+  evidence:
+    file_path: jarviscore/integrations/atoms/crisp/crisp_create_conversation.py
+    start_line: 21
+    end_line: 22
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: crisp_create_conversation builds a URL from _crisp_api_root, which defaults to CRISP_API https://api.crisp.chat/v1
+    on line 2, and sends a POST through _crisp_post (nexus_call on line 49). The same vendor is also called at jarviscore/integrations/atoms/crisp/crisp_create_message.py:24,
+    jarviscore/integrations/atoms/crisp/crisp_get_conversation.py:13, jarviscore/integrations/atoms/crisp/crisp_get_message.py:16,
+    jarviscore/integrations/atoms/crisp/crisp_list_conversations.py:67, jarviscore/integrations/atoms/crisp/crisp_list_messages.py:76,
+    jarviscore/integrations/atoms/crisp/crisp_search_records.py:69, jarviscore/integrations/atoms/crisp/crisp_update_conversation.py:21,
+    jarviscore/integrations/atoms/crisp/crisp_update_message.py:24; one record per vendor because the scanner models
+    one component per vendor.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: jarviscore::jarviscore-crisp-create-conversation
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: crisp
+- id: jarviscore-whatsapp-create-message
+  layer: components
+  subject:
+    key: third_party:whatsapp
+    name: whatsapp
+  evidence:
+    file_path: jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_create_message.py
+    start_line: 26
+    end_line: 26
+  expected:
+    status: positive
+    labels:
+    - messaging
+  rationale: whatsapp_business_create_message calls nexus_call with a POST to {root}/{pid}/messages to send a text
+    message, where root comes from _wa_root and defaults to _WA_ROOT https://graph.facebook.com/v19.0 on line 2.
+    The same vendor is also called at jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_get_message.py:13,
+    jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_list_messages.py:14, jarviscore/integrations/atoms/whatsapp_business/whatsapp_business_search_records.py:16;
+    one record per vendor because the scanner models one component per vendor.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: jarviscore::jarviscore-whatsapp-create-message
+    identity_key: third_party:messaging
+    component_type: third_party
+    component_subtype: messaging
+    vendor: whatsapp
+- id: jarviscore-stripe-get-balance
+  layer: components
+  subject:
+    key: third_party:stripe
+    name: stripe
+  evidence:
+    file_path: jarviscore/integrations/atoms/stripe/stripe_get_balance.py
+    start_line: 4
+    end_line: 4
+  expected:
+    status: positive
+    labels:
+    - payment_processor
+  rationale: stripe_get_balance sends a GET with the literal URL https://api.stripe.com/v1/balance through nexus_call.
+    The same vendor is also called at jarviscore/integrations/atoms/stripe/stripe_get_customer.py:4, jarviscore/integrations/atoms/stripe/stripe_list_charges.py:9,
+    jarviscore/integrations/atoms/stripe/stripe_list_invoices.py:9; one record per vendor because the scanner models
+    one component per vendor.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: jarviscore::jarviscore-stripe-get-balance
+    identity_key: third_party:payment_processor
+    component_type: third_party
+    component_subtype: payment_processor
+    vendor: stripe
+- id: jarviscore-linkedin-create-post
+  layer: components
+  subject:
+    key: third_party:linkedin
+    name: linkedin
+  evidence:
+    file_path: jarviscore/integrations/atoms/linkedin/linkedin_create_post.py
+    start_line: 21
+    end_line: 21
+  expected:
+    status: positive
+    labels:
+    - saas_service
+  rationale: linkedin_create_post calls the inner _post helper on line 44 for /ugcPosts, and _post sends nexus_call
+    to f"{_base}{p}" with _base https://api.linkedin.com/v2 set on line 11. The same vendor is also called at jarviscore/integrations/atoms/linkedin/linkedin_get_network_size.py:7,
+    jarviscore/integrations/atoms/linkedin/linkedin_get_organization.py:7, jarviscore/integrations/atoms/linkedin/linkedin_get_profile.py:7,
+    jarviscore/integrations/atoms/linkedin/linkedin_list_organization_posts.py:7, jarviscore/integrations/atoms/linkedin/linkedin_list_posts.py:7;
+    one record per vendor because the scanner models one component per vendor.
+  provenance:
+    proposed_by: claude-opus-5.5
+    proposed_at: '2026-10-29'
+    review_state: accepted
+    reviewed_by: ryan-porter
+    reviewed_at: '2026-10-29'
+  canonical:
+    entity_id: jarviscore::jarviscore-linkedin-create-post
+    identity_key: third_party:saas_service
+    component_type: third_party
+    component_subtype: saas_service
+    vendor: linkedin

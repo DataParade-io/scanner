@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {"name":"SQLite database","type":"asset","subType":"database","evidence":[{"filePath":"idVerification/settings.py","startLine":80,"endLine":84}]},
+    {"name":"PiiData table","type":"asset","subType":"database","evidence":[{"filePath":"app/models.py","startLine":4,"endLine":7}]},
+    {"name":"Application HTTP API","type":"asset","subType":"api","evidence":[{"filePath":"app/urls.py","startLine":5,"endLine":11}]},
+    {"name":"Customer","type":"actor","subType":"customer","evidence":[{"filePath":"app/templates/app/index.html","startLine":3,"endLine":9}]},
+    {"name":"Checkr","type":"third_party","subType":"saas_service","evidence":[{"filePath":"idVerification/settings.py","startLine":31,"endLine":32},{"filePath":"app/checker_client.py","startLine":44,"endLine":48}]},
+    {"name":"Very Good Security (VGS)","type":"third_party","subType":"saas_service","evidence":[{"filePath":"idVerification/settings.py","startLine":31,"endLine":31},{"filePath":"app/views.py","startLine":15,"endLine":18}]}
+  ],
+  "dataFlows": [
+    {"source":"Submitted Social Security Number and driver license number","target":"PiiData table","type":"database_query","evidence":[{"filePath":"app/views.py","startLine":91,"endLine":96}]},
+    {"source":"PiiData records (SSN and driver license number)","target":"Application HTTP API","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":47,"endLine":54}]},
+    {"source":"PiiData social security number and driver license number","target":"Checkr","type":"api_call","evidence":[{"filePath":"app/checker_client.py","startLine":30,"endLine":48}]},
+    {"source":"PiiData social security number and driver license number","target":"Very Good Security (VGS)","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":68,"endLine":74},{"filePath":"app/views.py","startLine":15,"endLine":18}]},
+    {"source":"PiiData social security number and driver license number","target":"Customer","type":"data_transfer","evidence":[{"filePath":"app/views.py","startLine":49,"endLine":54}]}
+  ]
+}

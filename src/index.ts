@@ -40,7 +40,7 @@ export {
   type DataParadeLink,
 } from "./graph/build-dataparade-graph";
 export { collectEvalFindings } from "./core/pipeline/collect-eval-findings";
-export { stableComponentKey } from "./core/pipeline/stable-component-ids";
+export { NAME_FROM_PROJECT_PROPERTY, PROJECT_NAME_KEY_TOKEN, stableComponentKey } from "./core/pipeline/stable-component-ids";
 export {
   assignStableComponentIds,
   assignStableEntityIds,
@@ -94,6 +94,11 @@ export {
   normalizeOrganizationDomains,
 } from "./classifier/external-url-third-party";
 export { DETECTABLE_PROPERTY_KEYS } from "./classifier/enhance-defaults";
+export {
+  canonicalFrameworkId,
+  frameworkDisplayName,
+} from "./patterns/frontend-frameworks";
+export { toDisplayName } from "./classifier/naming";
 export { runAnalyzers } from "./analyzers/registry";
 
 export * from "./core/schema";
@@ -141,3 +146,28 @@ export type {
 } from "./data-actions";
 
 
+
+export {
+  annotateFlowAuthentication,
+  flowAuthentication,
+  loadFlowAuthenticationRules,
+} from "./data-flow/flow-authentication";
+export type { FlowAuthenticationRules } from "./data-flow/flow-authentication";
+export { annotateFlowControls, flowControls, loadFlowControlRules } from "./data-flow/flow-controls";
+export type { FlowControlRules } from "./data-flow/flow-controls";
+export {
+  loadStrideRules,
+  isStructuralFlowForStride,
+  strideComponentKind,
+  strideThreatsForComponent,
+  strideThreatsForFlow,
+  strideThreatsForKind,
+} from "./threats/stride";
+export type {
+  ElementThreat,
+  StrideElementKind,
+  StrideRules,
+  ThreatEvidence,
+  ThreatFlowInput,
+  ThreatStatus,
+} from "./threats/stride";

@@ -1,0 +1,31 @@
+version: third-party-labels/1
+scope_note: The packages are the Supabase client SDK itself, so the only vendor is the Supabase project API; tests, docs and the realtime example app send to no other vendor.
+vendors:
+- vendor: supabase
+  subject_key: third_party:supabase
+  component_subtype: saas_service
+  sends_data: true
+  route: raw_http
+  subprocessor: "yes"
+  data_categories: [email, password, phone_number, access_token, session, credentials, user_id, profile, file_content, message_content]
+  provenance:
+    manifest:
+    - {file_path: package.json, line: 53, package: supabase}
+    imports: []
+    call_sites:
+    - {file_path: packages/core/supabase-js/src/lib/fetch.ts, line: 113}
+    - {file_path: packages/core/auth-js/src/lib/fetch.ts, line: 227}
+    - {file_path: packages/core/postgrest-js/src/PostgrestBuilder.ts, line: 336}
+    - {file_path: packages/core/storage-js/src/lib/common/fetch.ts, line: 158}
+    - {file_path: packages/core/storage-js/src/packages/StorageAnalyticsClient.ts, line: 385}
+    - {file_path: packages/core/functions-js/src/FunctionsClient.ts, line: 284}
+    - {file_path: packages/core/realtime-js/src/RealtimeClient.ts, line: 313}
+    - {file_path: packages/core/realtime-js/src/RealtimeClient.ts, line: 485}
+    - {file_path: packages/core/realtime-js/src/RealtimeChannel.ts, line: 1175}
+  uncertain: false
+  rationale: SupabaseClient builds auth, rest, storage, functions and realtime URLs from the project URL and every sub-client
+    sends to it with fetch or a WebSocket, carrying the API key, user JWTs, sign-in credentials, user metadata, table rows,
+    uploaded files and broadcast messages. Supabase hosts the operator's database and auth, so it acts as a subprocessor.
+  review_state: proposed
+  proposed_by: claude-opus-5.5
+  proposed_at: '2026-11-12'

@@ -1,5 +1,10 @@
 import path from "path";
 
+import { annotateFlowAuthentication } from "../../data-flow/flow-authentication";
+import { annotateFlowControls } from "../../data-flow/flow-controls";
+import { completeFlowInteractionDescriptions } from "../../data-flow/flow-interaction-description";
+import { applyHumanInteractionChannels } from "../../data-flow/human-interaction-channels";
+
 import type {
   DetectedDataFlow,
   FileInfo,
@@ -155,6 +160,23 @@ export async function runDeterministicScanPhases(
   }
 
   try {
+    annotateFlowAuthentication(dataFlows, files);
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Unknown error during flow authentication.";
+    errors.push(`flow-authentication: ${message}`);
+  }
+
+  try {
+    annotateFlowControls(dataFlows, files);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error during flow controls.";
+    errors.push(`flow-controls: ${message}`);
+  }
+
+  try {
     runDataActionPhase(components, dataFlows, files, findings);
   } catch (err) {
     const message =
@@ -219,6 +241,20 @@ export function finalizeDeterministicScanResult(
     aiInferenceProposalDetails: input.aiInferenceProposalDetails,
     terraformScanSummary: work.terraformScanSummary,
   });
+  try {
+    const withInteractionChannels = applyHumanInteractionChannels({
+      components: reduced.components,
+      flows: reduced.dataFlows,
+      files: work.files,
+      sections: work.sections,
+    });
+    reduced.components = withInteractionChannels.components;
+    reduced.dataFlows = withInteractionChannels.flows;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error during interaction channel detection.";
+    errors.push(`interaction-channels: ${message}`);
+  }
+  completeFlowInteractionDescriptions(reduced.dataFlows, reduced.components);
   // Content-derived component and flow ids (stable across re-scans); rewrites
   // every component/flow reference, including AI summaries and proposal details.
   const scanResult: ScanResult = assignStableEntityIds({
