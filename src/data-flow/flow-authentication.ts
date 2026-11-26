@@ -68,7 +68,7 @@ export function loadFlowAuthenticationRules(): FlowAuthenticationRules {
 }
 
 export const FUNCTION_START =
-  /^\s*(?:@\w+.*)?(?:async\s+)?def\s+\w+\s*\(|^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\b|^\s*(?:public|private|protected|static|async|\s)*[A-Za-z_$][\w$]*\s*\([^)]*\)\s*(?::\s*[^{=]+)?\{\s*$|=>\s*\{\s*$/;
+  /^\s*(?:@\w+.*)?(?:async\s+)?def\s+\w+\s*\(|^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\b|^\s*(?:public|private|protected|static|async|\s)*[A-Za-z_$][\w$]*\s*\([^)]*\)\s*(?::\s*[^{=]+)?\{\s*$|=>\s*\{\s*$|^\s*func\b.*\{\s*$|^\s*(?:(?:public|private|protected|internal|static|final|abstract|override|virtual|async|synchronized)\s+)+[\w<>\[\],.?\s]+?\s+\w+\s*\([^)]*\)\s*(?:throws\s+[\w.,\s]+)?\{\s*$/;
 
 export const IMPORT_LINE = /^\s*(?:from\s+[\w.]+\s+import\b|import\s+[\w.]+|import\b.*\bfrom\s+["']|const\s+\w+\s*=\s*require\()/;
 
@@ -90,7 +90,8 @@ export function requestWindow(
   const floor = Math.max(0, index - rules.maxLinesBefore);
   for (let i = index; i >= floor; i -= 1) {
     start = i;
-    if (FUNCTION_START.test(lines[i] ?? "")) {
+    // A nested function or callback that closes before the call does not enclose it.
+    if (FUNCTION_START.test(lines[i] ?? "") && !closesBefore(lines, i, index)) {
       enclosing = i;
       break;
     }
@@ -126,6 +127,28 @@ function braceDelta(line: string): number {
     else if (ch === "}") delta -= 1;
   }
   return delta;
+}
+
+/** True when the function that starts at `start` ends before line `index`. */
+function closesBefore(lines: string[], start: number, index: number): boolean {
+  if (start === index) return false;
+  const py = PY_DEF.exec(lines[start] ?? "");
+  if (py) {
+    const defIndent = py[1]!.length;
+    for (let i = start + 1; i < index; i += 1) {
+      const line = lines[i] ?? "";
+      if (line.trim() !== "" && indentOf(line) <= defIndent) return true;
+    }
+    return false;
+  }
+  let depth = 0;
+  let opened = false;
+  for (let i = start; i < index; i += 1) {
+    depth += braceDelta(lines[i] ?? "");
+    if (depth > 0) opened = true;
+    if (opened && depth <= 0) return true;
+  }
+  return false;
 }
 
 /**
